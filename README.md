@@ -1,11 +1,17 @@
-##FH
+## FH
 FH (Forms Handler) is a set of javascript and Java to help you create user friendly web applications.  
-##Quick start
+
+
+## Quick start
 Clone the repo, git clone git://github.com/assecopl/fh.git, or download the latest release.
-##Author
+
+
+## Author
 Asseco Poland S.A.
 https://pl.asseco.com/
-##Copyright and license
+
+
+## Copyright and license
 Copyright 2019 Asseco Poland S.A.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this work except in compliance with the License. You may obtain a copy of the License in the LICENSE file, or at:
