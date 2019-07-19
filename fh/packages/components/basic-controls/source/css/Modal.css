@@ -1,0 +1,19 @@
+.modal-open {
+}
+
+.modal-body {
+    overflow-y: auto;
+}
+
+.modal-xlg {
+    max-width: 1200px;
+}
+
+.modal-xxlg {
+    max-width: 1400px;
+}
+
+.fc.form.modal.show {
+    overflow-y: scroll;
+    word-break: break-word;
+}

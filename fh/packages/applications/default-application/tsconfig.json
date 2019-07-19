@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "target": "es5",
+    "outDir": "build",
+    "lib": ["es6", "dom", "esnext", "es2017"],
+    "types": ["reflect-metadata", "jquery", "jqueryui", "bootstrap"],
+    "module": "commonjs",
+    "baseUrl": "types",
+    "moduleResolution": "node",
+    "declaration": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  },
+  "exclude": ["node_modules", "target", "build"]
+}

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+	<groupId>pl.fhframework</groupId>
+    <artifactId>cache-standalone</artifactId>
+    <version>4.3-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>cache-standalone</name>
+    <description>Cache wersja wbudowana</description>
+
+    <parent>
+        <groupId>pl.fhframework</groupId>
+        <artifactId>fhCoreLite</artifactId>
+        <version>4.3-SNAPSHOT</version>
+    </parent>
+
+    <dependencies>
+
+    	<dependency>
+    		<groupId>pl.fhframework</groupId>
+			<artifactId>coreLite</artifactId>
+			<version>${fh.version}</version>
+    	</dependency>
+
+    	<dependency>
+			<groupId>org.springframework</groupId>
+  			<artifactId>spring-context</artifactId>
+    	</dependency>
+
+		<dependency>
+			<groupId>org.infinispan</groupId>
+			<artifactId>infinispan-core</artifactId>
+		</dependency>
+
+<!--
+        <dependency>
+            <groupId>javax.cache</groupId>
+            <artifactId>cache-api</artifactId>
+        </dependency>
+ -->
+
+
+    </dependencies>
+
+</project>

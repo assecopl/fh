@@ -1,0 +1,3 @@
+<subsystem name="fhPersistence" label="Fh Persistence" productLabel="Core" productUUID="557f04b2-0ccb-4800-89a1-6ef1bd531a6a" basePackage="pl.fhframework.fhPersistence">
+    <systemFunctionsMapper ref="pl.fhframework.fhPersistence.SystemFunctionsMapper"/>
+</subsystem>

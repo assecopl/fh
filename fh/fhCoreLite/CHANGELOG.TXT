@@ -1,0 +1,11 @@
+﻿- Dodanie możliwości przekazywania dodatkowych atrybutów użytkownika z Remote Security Data Provider do sesji użytkownika
+- Dodanie nowego typu dostawcy danych o użytkownikach i rolach (Rest Security Data Provider), pozwalającego na pozyskiwanie danych z usługi REST
+- Dodanie nowego typu dostawcy danych o użytkownikach i rolach (Cached Security Data Provider), pozwalającego na przetrzymywanie danych w skonfigurowanych cache'ach
+- Dodanie nowego typu dostawcy danych o użytkownikach i rolach (Remote Security Data Provider), pozwalającego na pozyskiwanie danych np. z usługi REST
+- Poprawa odczytu plików z zasobów podczas uruchamiania na serwerze aplikacyjnym
+- Poprawa funkcjonwania cache'y wykorzystywanych w ramach bezpieczeństwa
+- Poprawa obsługi ról użytkowników systemu dla LDAP Security Data Provider
+- Ustawienie domyślnych wersji zapytań użytkownika i ról w ramach JDBC Security Data Provider
+- Dodanie możliwości konfiguracji zapytań o użytkownika i jego role, podawane do Spring Security w ramach JDBC Security Data Provider
+- Dodanie obsługi zdarzenia onClick dla kontrolki OutputLabel
+- Dodanie możliwości szyfrowania wartości przekazywanych do aplikacji jako właściwości (properties)

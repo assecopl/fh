@@ -1,0 +1,41 @@
+allow-all: true
+#privileges:
+#
+#  # FH Designer
+#  - module:
+#      uuid: 06e72cae-5d0c-45de-a4e1-24c2825515d9
+#      permissions:
+#        - permission:
+#            type: ALLOW
+#            function: designer
+#        - permission:
+#            type: DENY
+#            function: designer/usecase
+#        - permission:
+#            type: DENY
+#            function: designer/service/export
+#
+#  # FH SAM
+#  - module:
+#      uuid: 6a01406b-62a8-49fd-af55-a79df19c8950
+#      permissions:
+#      - permission:
+#          type: ALLOW
+#          function: sam/security
+#      - permission:
+#          type: DENY
+#          function: sam/security/user/edit
+#      - permission:
+#          type: DENY
+#          function: sam/security/session
+#
+#    # FH Scheduler
+#  - module:
+#     uuid: 1885ce88-365a-4abd-99f0-b2cc7ec662fb
+#     permissions:
+#     - permission:
+#         type: ALLOW
+#         function: scheduler/batch_job
+#     - permission:
+#         type: DENY
+#         function: scheduler/batch_job/example

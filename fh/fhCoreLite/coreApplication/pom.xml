@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>coreApplication</artifactId>
+    <groupId>pl.fhframework</groupId>
+    <version>4.3-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>coreApplication</name>
+    <description>Fh Core Application</description>
+
+    <parent>
+        <groupId>pl.fhframework</groupId>
+        <artifactId>fh-boot-bom</artifactId>
+        <version>4.3-SNAPSHOT</version>
+        <relativePath>../../BOM/fh-boot-bom</relativePath>
+    </parent>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>1.8</java.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>pl.fhframework</groupId>
+            <artifactId>fh-boot-bom</artifactId>
+            <version>${fh.version}</version>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>pl.fhframework</groupId>
+            <artifactId>coreLite</artifactId>
+            <version>${fh.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>pl.fhframework</groupId>
+            <artifactId>basicControls</artifactId>
+            <version>${fh.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>pl.fhframework.persistence</groupId>
+            <artifactId>fhPersistenceLite</artifactId>
+            <version>${fh.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>pl.fhframework.core.security.provider</groupId>
+            <artifactId>securityDataProvider-jdbc</artifactId>
+            <version>${fh.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <excludes>
+                    <exclude>static/fonts/**</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <includes>
+                    <include>static/fonts/**</include>
+                </includes>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <delimiters>
+                        <delimiter>@@</delimiter>
+                    </delimiters>
+                    <useDefaultDelimiters>false</useDefaultDelimiters>
+                    <nonFilteredFileExtensions>
+                        <nonFilteredFileExtension>docx</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>pdf</nonFilteredFileExtension>
+                    </nonFilteredFileExtensions>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.coderplus.maven.plugins</groupId>
+                <artifactId>copy-rename-maven-plugin</artifactId>
+                <version>1.0.1</version>
+                <executions>
+                    <execution>
+                        <id>copy-file</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <sourceFile>
+                                ${project.build.outputDirectory}/${config.dir.name}/${application.properties.file}
+                            </sourceFile>
+                            <destinationFile>
+                                ${project.build.outputDirectory}/${config.dir.name}/fh-application.properties
+                            </destinationFile>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.build.directory}/generated-form-sources</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <phase>process-resources</phase>
+                        <configuration>
+                            <tasks>
+                                <copy todir="${project.build.outputDirectory}" preservelastmodified="true">
+                                    <fileset dir="src/main/java">
+                                        <include name="menu.xml"/>
+                                        <include name="module.xml"/>
+                                    </fileset>
+                                </copy>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.6</version>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

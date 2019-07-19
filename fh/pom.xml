@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>pl.fhframework</groupId>
+	<artifactId>fhFramework</artifactId>
+	<version>4.3-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>fhFramewrok</name>
+	<description>Fh framework</description>
+
+	<parent>
+		<groupId>pl.fhframework</groupId>
+		<artifactId>fh-compile-bom</artifactId>
+		<version>4.3-SNAPSHOT</version>
+		<relativePath>./BOM/fh-compile-bom</relativePath>
+	</parent>
+
+	<modules>
+		<module>BOM</module>
+		<module>fhCoreLite</module>
+	</modules>
+</project>

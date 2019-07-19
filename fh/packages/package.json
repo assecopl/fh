@@ -1,0 +1,22 @@
+{
+  "name": "fh-monorepo",
+  "version": "0.0.1",
+  "main": "index.js",
+  "repository": "",
+  "private": true,
+  "scripts": {
+    "clean": "lerna clean -f --yes && rm -rf node_modules",
+    "reset": "yarn run clean && yarn",
+    "default-application": "cd applications/default-application && yarn start"
+  },
+  "dependencies": {
+    "fh-forms-handler": "4.2.0-SNAPSHOT"
+  },
+  "devDependencies": {
+    "lerna": "^2.6.0"
+  },
+  "workspaces": [
+    "applications/*",
+    "components/*"
+  ]
+}
