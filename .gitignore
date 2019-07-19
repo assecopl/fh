@@ -1,1 +1,11 @@
 .svn
+target
+/fh/packages/applications/default-application/node_modules/.bin
+/fh/packages/applications/default-application/node_modules/.cache
+/fh/packages/components/basic-controls/node_modules/.bin
+/fh/packages/components/charts-controls/node_modules/.bin
+/fh/packages/components/core-lite/node_modules/.bin
+/fh/packages/node/node.exe
+/fh/packages/node/yarn
+/fh/packages/node_modules
+/fh/packages/yarn.lock
