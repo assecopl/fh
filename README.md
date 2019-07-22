@@ -3,7 +3,11 @@ FH (Forms Handler) is a set of javascript and Java to help you create user frien
 
 
 ## Quick start
-Clone the repo, git clone git://github.com/assecopl/fh.git, or download the latest release.
+Clone the repo 
+```
+git clone git://github.com/assecopl/fh.git
+```
+or download the latest release.
 
 
 ## Author
