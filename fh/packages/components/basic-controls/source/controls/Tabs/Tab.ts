@@ -168,10 +168,44 @@ class Tab extends HTMLFormComponent {
 
     // noinspection JSUnusedGlobalSymbols
     setPresentationStyle(presentationStyle) {
+        let nestedTabs = this.parent.parent.componentObj.type === 'Tab' ? true : false;
         ['border', 'border-success', 'border-info', 'border-warning', 'border-danger', 'is-invalid'].forEach(function (cssClass) {
             this.navElement.classList.remove(cssClass);
+            if (nestedTabs) {
+                this.parent.parent.navElement.classList.remove(cssClass);
+            }
         }.bind(this));
 
+        this.switchPresentationStyles(presentationStyle);
+
+        if (nestedTabs && presentationStyle) {
+            switch (presentationStyle) {
+                case 'BLOCKER':
+                case 'ERROR':
+                    ['is-invalid', 'border', 'border-danger'].forEach(function (cssClass) {
+                        this.parent.parent.navElement.classList.add(cssClass);
+                    }.bind(this));
+                    break;
+                case 'OK':
+                    ['border', 'border-success'].forEach(function (cssClass) {
+                        this.parent.parent.navElement.classList.add(cssClass);
+                    }.bind(this));
+                    break;
+                case 'INFO':
+                    ['border', 'border-info'].forEach(function (cssClass) {
+                        this.parent.parent.navElement.classList.add(cssClass);
+                    }.bind(this));
+                    break;
+                case 'WARNING':
+                    ['border', 'border-warning'].forEach(function (cssClass) {
+                        this.parent.parent.navElement.classList.add(cssClass);
+                    }.bind(this));
+                    break;
+            }
+        }
+    }
+
+    switchPresentationStyles(presentationStyle) {
         switch (presentationStyle) {
             case 'BLOCKER':
             case 'ERROR':
@@ -212,7 +246,8 @@ class Tab extends HTMLFormComponent {
     getAdditionalButtons(): AdditionalButton[] {
         return [
             new AdditionalButton('moveUp', 'arrow-left', 'Move left'),
-            new AdditionalButton('moveDown', 'arrow-right', 'Move right')
+            new AdditionalButton('moveDown', 'arrow-right', 'Move right'),
+            new AdditionalButton('addDefaultSubcomponent', 'plus', 'Add empty row'),
         ];
     }
 }

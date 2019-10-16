@@ -158,7 +158,7 @@ public class ModelProxyService {
             if (Collection.class.isInstance(oldValueOtherSide)) {
                 Collection collection = (Collection) ReflectionUtils.getRealObject(oldValueOtherSide);
                 collection.remove(target);
-            } else {
+            } else if (!Map.class.isInstance(oldValueOtherSide)){
                 setAttributeValue((BaseEntity) oldValue, otherSideFieldName, null, false);
             }
         }
@@ -168,7 +168,7 @@ public class ModelProxyService {
                 if (!collection.contains(target)) {
                     collection.add(target);
                 }
-            } else {
+            } else if (!Map.class.isInstance(newValueOtherSide)) {
                 setAttributeValue((BaseEntity) newValue, otherSideFieldName, target, false);
             }
         }
@@ -394,7 +394,7 @@ public class ModelProxyService {
 
     public void syncObjectCollections(BaseEntity baseEntity) {
         Class staticClass = baseEntity.getClass();
-        modelConfig.getClassFieldsAnnotations().get(staticClass).forEach((fieldName, fieldAnnotation) -> {
+        ((Map<String, ModelConfig.FieldAnnotation>)modelConfig.getClassFieldsAnnotationsForClass(staticClass)).forEach((fieldName, fieldAnnotation) -> {
             if (OneToMany.class.isAssignableFrom(fieldAnnotation.getRelation().getClass()) || ManyToMany.class.isAssignableFrom(fieldAnnotation.getRelation().getClass())) {
                 fieldAnnotation.getField().setAccessible(true);
                 try {

@@ -36,8 +36,8 @@
     </appender>
 
     <!-- enable debug of FH and PURA classes -->
-    <logger name="pl.fhframework" level="INFO" />
-    <logger name="pl.fhframework" level="INFO" />
+    <logger name="pl.fhframework" level="ERROR" />
+    <logger name="pl.fhframework" level="ERROR" />
     <logger name="com.atomikos" level="ERROR" />
 
     <root level="INFO">

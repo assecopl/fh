@@ -13,8 +13,7 @@ import pl.fhframework.model.dto.InMessageEventData;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Class represents container for tabs and extends <code>GroupingComponent</code> class. It does not
@@ -24,7 +23,7 @@ import java.util.Optional;
  * Example: <TabContainer></TabContainer>
  */
 @Control(parents = {PanelGroup.class, Column.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
-@DocumentedComponent(value = "TabContainer component which represents a containrt containing a single tabs", icon = "fa fa-window-maximize")
+@DocumentedComponent(value = "TabContainer component which represents a containrt containing a single tabs", icon = "fas fa-window-maximize")
 public class TabContainer extends GroupingComponent<Tab> implements IChangeableByClient, Boundable, CompactLayout, IDesignerEventListener {
 
     public static final String TYPE_NAME = "TabContainer";
@@ -80,8 +79,7 @@ public class TabContainer extends GroupingComponent<Tab> implements IChangeableB
                     activeTabIndex = calcTabIndexById(convertedActiveTabValue);
                 }
             }
-        }
-        else if (modelBinding != null) {
+        } else if (modelBinding != null) {
             BindingResult bindingResult = modelBinding.getBindingResult();
             if (bindingResult != null) {
                 Object activeTabIndexValue = bindingResult.getValue();
@@ -102,6 +100,43 @@ public class TabContainer extends GroupingComponent<Tab> implements IChangeableB
                 updateActiveTab();
             }
         }
+
+        if (!getForm().isDesignMode()) {
+            this.validateActiveTabIndexVisibility();
+        }
+
+    }
+
+    public void validateActiveTabIndexVisibility() {
+        List<Tab> subcomponents = this.getSubcomponents();
+        Tab activeTab = subcomponents.get(activeTabIndex);
+
+        if (activeTab.getAvailabilityModelBinding() != null) {
+            Boolean hiddenTab = activeTab.getAvailabilityModelBinding().getBindingExpression().equals("HIDDEN");
+            if (hiddenTab) {
+                this.modelBinding = null;
+                this.activeTabIndex = this.getFirstVisibleTab(activeTabIndex + 1);
+            }
+        }
+    }
+
+    public Integer getFirstVisibleTab(Integer activeTabIndex) {
+        List<Tab> subcomponents = this.getSubcomponents();
+        Integer subcomponentsLength = subcomponents.size();
+
+        for (int i = activeTabIndex; i < subcomponentsLength; i++) {
+            Tab activeTab = subcomponents.get(i);
+            if (activeTab.getAvailabilityModelBinding()!= null) {
+                Boolean tabAvailable = !activeTab.getAvailabilityModelBinding().getBindingExpression().equals("HIDDEN");
+                if (tabAvailable) {
+                    return i;
+                }
+            } else {
+                return i;
+            }
+        }
+
+        return activeTabIndex;
     }
 
     private int calcTabIndexById(String convertedActiveTabValue) {
@@ -199,6 +234,7 @@ public class TabContainer extends GroupingComponent<Tab> implements IChangeableB
         Tab tab = new Tab(getForm());
         tab.setLabelModelBinding(new StaticBinding<>("Tab " + nameSuffix));
         tab.setGroupingParentComponent(this);
+        tab.addSubcomponent(tab.createNewRow());
         tab.init();
         return tab;
     }

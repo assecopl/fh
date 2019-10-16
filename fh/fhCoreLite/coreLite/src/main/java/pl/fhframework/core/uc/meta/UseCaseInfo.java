@@ -31,7 +31,8 @@ public class UseCaseInfo {
     private List<UseCaseActionInfo> actions = new ArrayList<>();
     private List<UseCaseActionInfo> eventsCallback = new ArrayList<>();
     private UseCaseActionInfo start;
-    private String callbackClazz;
+    private String callbackClassStr;
+    private Class callbackClass;
     private List<Class> callbackGenericParam = new ArrayList<>();
     private List<Class<? extends IUseCase>> implementedInterfaces = new ArrayList<>();
     private List<UseCaseActionInfo> exits = new ArrayList<>();

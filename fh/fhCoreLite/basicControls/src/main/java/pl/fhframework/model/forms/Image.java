@@ -131,10 +131,12 @@ public class Image extends FormElement implements TableComponent<Image> {
     @Override
     public Optional<ActionBinding> getEventHandler(InMessageEventData eventData) {
         if (eventData.getEventType().startsWith(ATTR_ON_AREA_CLICK)) {
-            String id = eventData.getEventType();
-            id = id.substring(id.indexOf("#") + 1);
-            eventData.setEventType(ATTR_ON_AREA_CLICK);
-            eventData.setOptionalValue(id);
+            String[] splitEvent = eventData.getEventType().split("#");
+            eventData.setEventType(splitEvent[0]);
+            if (splitEvent.length == 2) {
+                eventData.setOptionalValue(splitEvent[1]);
+            }
+
             return Optional.ofNullable(onAreaClick);
         } else if (ATTR_ON_CLICK.equals(eventData.getEventType())) {
             return Optional.ofNullable(onClick);

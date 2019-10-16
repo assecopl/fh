@@ -45,6 +45,9 @@ public class ImageRepository implements ApplicationListener<ContextRefreshedEven
         ALLOWED_EXTENSIONS.put("JPG", MediaType.IMAGE_JPEG_VALUE);
         ALLOWED_EXTENSIONS.put("jpeg", MediaType.IMAGE_JPEG_VALUE);
         ALLOWED_EXTENSIONS.put("JPEG", MediaType.IMAGE_JPEG_VALUE);
+        ALLOWED_EXTENSIONS.put("md", MediaType.TEXT_PLAIN_VALUE);
+        ALLOWED_EXTENSIONS.put("MD", MediaType.TEXT_PLAIN_VALUE);
+
     }
 
     @Getter

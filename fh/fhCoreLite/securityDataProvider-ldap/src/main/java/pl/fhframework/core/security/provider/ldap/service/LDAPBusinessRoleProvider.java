@@ -1,5 +1,6 @@
 package pl.fhframework.core.security.provider.ldap.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ldap.core.AttributesMapper;
@@ -11,6 +12,7 @@ import pl.fhframework.core.security.provider.ldap.model.BusinessRole;
 import pl.fhframework.core.security.provider.service.BusinessRoleProvider;
 
 import javax.naming.NamingException;
+import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
 import java.util.List;
 
@@ -18,6 +20,7 @@ import java.util.List;
  * @author tomasz.kozlowski (created on 2018-06-13)
  */
 @Service
+@RequiredArgsConstructor
 public class LDAPBusinessRoleProvider implements BusinessRoleProvider {
 
     private static final String PROVIDER_TYPE = "LDAP";
@@ -27,8 +30,7 @@ public class LDAPBusinessRoleProvider implements BusinessRoleProvider {
     @Value("${fhframework.security.provider.ldap.group-object-class}")
     private String groupObjectClass;
 
-    @Autowired
-    private LdapTemplate ldapTemplate;
+    private final LdapTemplate ldapTemplate;
 
     @Override
     public IBusinessRole createSimpleBusinessRoleInstance(String roleName) {
@@ -84,7 +86,10 @@ public class LDAPBusinessRoleProvider implements BusinessRoleProvider {
         public IBusinessRole mapFromAttributes(Attributes attributes) throws NamingException {
             BusinessRole businessRole = new BusinessRole();
             businessRole.setRoleName((String)attributes.get("cn").get());
-            businessRole.setDescription((String)attributes.get("description").get());
+            Attribute description = attributes.get("description");
+            if (description != null) {
+                businessRole.setDescription((String)description.get());
+            }
             return businessRole;
         }
     }

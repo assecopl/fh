@@ -21,6 +21,7 @@ declare const ENV_IS_DEVELOPMENT: boolean;
 
 let {lazyInject} = getDecorators(FhContainer);
 
+//TODO Designer logic should be moved to Designer Module.
 @injectable()
 class FormsManager {
     @lazyInject('ApplicationLock')
@@ -42,6 +43,11 @@ class FormsManager {
     private currentMouseDownElement: HTMLElement = null;
     private formObj: any;
     public firedEventData: any;
+
+    // identyfikator ostatnio aktywnego elementu przy zamykaniu formatki
+    private lastActiveElementId: string = null;
+    // identyfikator ostatnio aktywnego formularza
+    private lastClosedFormId: string;
 
     constructor() {
         this.i18n.registerStrings('pl', FormsManagerPL);
@@ -68,9 +74,9 @@ class FormsManager {
         if (form.container !== null && form.container.id === 'formDesignerModelProperties') {
             this.showDesignerModelProperties();
 
-            let mainForm = this.layoutHandler.getLayoutContainer( "mainForm");
+            let mainForm = this.layoutHandler.getLayoutContainer("mainForm");
             // document.getElementById('mainForm');
-            let formDesignerContainers = this.layoutHandler.getLayoutContainer( "formDesigner");
+            let formDesignerContainers = this.layoutHandler.getLayoutContainer("formDesigner");
             // document.getElementById('formDesigner');
             if (!mainForm.contains(formDesignerContainers)) {
                 this.buildDesignerContainers();
@@ -80,10 +86,18 @@ class FormsManager {
 
         form.create();
 
+        /**
+         * Set Designer Behaviour.
+         *
+         */
+        if (form.container.id && form.container.id == "formDesignerComponents") {
+            (<any>FhContainer.get('Designer')).setBehaviour(form.componentObj.behaviour);
+        }
+
         if (form.id === 'designerComponents' || (form.container.id == 'designedFormContainer' && form.designMode)) {
             if (formObj.designContainerType && !formObj.modal) {
                 this.handleDesignerContainerWidth(formObj.designContainerType, formObj.designContainerWidth)
-            } else if (formObj.width && formObj.formType != 'MODAL' && formObj.formType != 'MODAL_OVERFLOW' ) {
+            } else if (formObj.width && formObj.formType != 'MODAL' && formObj.formType != 'MODAL_OVERFLOW') {
                 this.handleDesignerContainerWidthPx(formObj.width)
             } else {
                 this.handleDesignerContainerWidthDefault();
@@ -101,6 +115,16 @@ class FormsManager {
                     + this.usedContainers[formObj.container].id + '". It will be overwritten');
             }
             this.openForm(formObj);
+            if (this.lastActiveElementId && this.lastClosedFormId === formObj.id) {
+                let element = document.getElementById(this.lastActiveElementId);
+                if (element) {
+                    // skip menu's focus
+                    if (document.getElementById('menuForm').contains(element)) {
+                        return;
+                    }
+                    element.focus();
+                }
+            }
         }.bind(this));
     }
 
@@ -121,7 +145,10 @@ class FormsManager {
                 this.uncollapseMenuForm();
             }
         }
-
+        if(document.activeElement) {
+            this.lastActiveElementId = document.activeElement.id || null;
+        }
+        this.lastClosedFormId = form.id;
         form.destroy();
         form = null;
     }
@@ -225,12 +252,12 @@ class FormsManager {
         let form = this.findForm(formId);
         if (!serviceType && form === false && ENV_IS_DEVELOPMENT) {
             console.error('%cForm not found. EventType: %s, formId: %s, componentId: %s', 'background: #cc0000; color: #FFF', eventType, formId, componentId);
-            alert('Form not found. See console form more information.');
+            alert('Form not found. See console for more information.');
             return false;
         }
         if (!serviceType && form.container === undefined && ENV_IS_DEVELOPMENT) {
             console.error('%cForm container not found. EventType: %s, formId: %s, componentId: %s, form: %o', 'background: #cc0000; color: #FFF', eventType, formId, componentId, form);
-            alert('Form container not found. See console form more information.');
+            alert('Form container not found. See console for more information.');
             return false;
         }
 
@@ -263,7 +290,7 @@ class FormsManager {
 
         deferredEvent.deferred.promise().then(function () {
             let currentForm = this.findForm(formId);
-            if (!serviceType && (currentForm === false || deferredEvent.component.destroyed ||
+            if (!serviceType && (currentForm === false || (!deferredEvent.component.designMode && deferredEvent.component.destroyed) ||
                 (document.getElementById(componentId) == null && currentForm.findComponent(componentId, true, false, true) === false))) { // some components are not available in HTML (RuleDiagram) and some in findComponent (Table row components)
                 console.error('Component ' + componentId + ' on form ' + formId + ' is not available any more. Not sending event from this component to server.');
                 this.triggerQueue();
@@ -301,7 +328,7 @@ class FormsManager {
         let progress = $('#' + componentId).find('.progress-bar');
         progress.parent().get(0).classList.remove('d-none');
         progress.width(0).show(0);
-        let requestHandle = $.ajax({
+        let requestHandle = $.ajax(<any>{
             url: url,
             data: data,
             cache: false,
@@ -372,7 +399,7 @@ class FormsManager {
                 changes: [],
                 errors: [],
                 events: [],
-                layout:""
+                layout: ""
             };
             for (let singleResult of resultArray) {
                 if (singleResult.closeForm) mergedResult.closeForm = mergedResult.closeForm.concat(singleResult.closeForm);
@@ -392,11 +419,12 @@ class FormsManager {
             this.applicationLock.createErrorDialog(mergedResult.errors);
         }
         this.layoutHandler.startLayoutProcessing(mergedResult.layout);
+        this.layoutHandler.finishLayoutProcessing();
         this.closeForms(mergedResult.closeForm);
         this.openForms(mergedResult.openForm);
         this.applyChanges(mergedResult.changes);
         this.handleExternalEvents(mergedResult.events);
-        this.layoutHandler.finishLayoutProcessing();
+
 
         if (requestId) {
             this.applicationLock.disable(requestId);
@@ -409,6 +437,10 @@ class FormsManager {
         // clear awaiting to be clicked element after application lock is really disabled
         if (!this.applicationLock.isActive()) {
             this.currentMouseDownElement = null;
+        }
+
+        if (ENV_IS_DEVELOPMENT) {
+            console.log("Finished request processing");
         }
 
         this.triggerQueue();
@@ -479,8 +511,8 @@ class FormsManager {
     }
 
     buildDesignerContainers() {
-        let mainForm = this.layoutHandler.getLayoutContainer( "mainForm");
-        let formDesignerContainers = this.layoutHandler.getLayoutContainer( "formDesigner");
+        let mainForm = this.layoutHandler.getLayoutContainer("mainForm");
+        let formDesignerContainers = this.layoutHandler.getLayoutContainer("formDesigner");
         let formsContainer = mainForm.parentElement;
 
         if (mainForm !== undefined && mainForm.children.length > 0) {
@@ -507,13 +539,13 @@ class FormsManager {
     }
 
     removeDesignerContainers() {
-        let mainForm = this.layoutHandler.getLayoutContainer( "mainForm");
-        let menuForm = this.layoutHandler.getLayoutContainer( "menuForm");
+        let mainForm = this.layoutHandler.getLayoutContainer("mainForm");
+        let menuForm = this.layoutHandler.getLayoutContainer("menuForm");
         let menuFormInner = document.getElementById('menuFormInner');
-        let toolboxForm = this.layoutHandler.getLayoutContainer( "formDesignerToolbox");
-        let formDesignerContainers = this.layoutHandler.getLayoutContainer( "formDesigner");
+        let toolboxForm = this.layoutHandler.getLayoutContainer("formDesignerToolbox");
+        let formDesignerContainers = this.layoutHandler.getLayoutContainer("formDesigner");
 
-        let formDesignerComponents = this.layoutHandler.getLayoutContainer( "formDesignerComponents");
+        let formDesignerComponents = this.layoutHandler.getLayoutContainer("formDesignerComponents");
         let formsContainer = mainForm.parentElement;
 
         if (!mainForm.contains(formDesignerContainers)) {
@@ -541,17 +573,17 @@ class FormsManager {
         }
     }
 
-    public handleDesignerContainerWidth(dContainerType:string,width:string = null):void{
+    public handleDesignerContainerWidth(dContainerType: string, width: string = null): void {
         //Set parametr designer cintainer type for designer object
         (<any>FhContainer.get('Designer')).setDesignContainerType(dContainerType);
 
-        let formDesignerComponents = this.layoutHandler.getLayoutContainer( "designedFormContainer", true);
+        let formDesignerComponents = this.layoutHandler.getLayoutContainer("designedFormContainer", true);
 
-        if(formDesignerComponents.length > 0) {
+        if (formDesignerComponents.length > 0) {
             formDesignerComponents.removeClass(function (index, className) {
                 return (className.match(/(^|\s)fh-dc-\S+/g) || []).join(' ');
             });
-            if(width){
+            if (width) {
                 formDesignerComponents.css('width', width);
             } else {
                 formDesignerComponents.css('width', "");
@@ -560,32 +592,32 @@ class FormsManager {
         }
     }
 
-    private handleDesignerContainerWidthPx(width:string){
-        let formDesignerComponents = this.layoutHandler.getLayoutContainer( "designedFormContainer", true);
+    private handleDesignerContainerWidthPx(width: string) {
+        let formDesignerComponents = this.layoutHandler.getLayoutContainer("designedFormContainer", true);
 
-        if(formDesignerComponents.length > 0) {
+        if (formDesignerComponents.length > 0) {
             formDesignerComponents.removeClass(function (index, className) {
                 return (className.match(/(^|\s)fh-dc-\S+/g) || []).join(' ');
             });
-                formDesignerComponents.css('width', width);
+            formDesignerComponents.css('width', width);
         }
     }
 
-    private handleDesignerContainerWidthDefault(){
+    private handleDesignerContainerWidthDefault() {
         let currentDesigner = (<any>FhContainer.get('Designer')).designContainerType;
-        let formDesignerComponents = this.layoutHandler.getLayoutContainer( "designedFormContainer", true);
-       this.handleDesignerContainerWidth(currentDesigner);
+        let formDesignerComponents = this.layoutHandler.getLayoutContainer("designedFormContainer", true);
+        this.handleDesignerContainerWidth(currentDesigner);
     }
 
 
     showDesignerModelProperties() {
-        let formDesignerModelProperties = this.layoutHandler.getLayoutContainer( "formDesignerModelProperties");
+        let formDesignerModelProperties = this.layoutHandler.getLayoutContainer("formDesignerModelProperties");
         // document.getElementById('formDesignerModelProperties');
-        let formDesignerComponents = this.layoutHandler.getLayoutContainer( "formDesignerComponents");
+        let formDesignerComponents = this.layoutHandler.getLayoutContainer("formDesignerComponents");
         // document.getElementById('formDesignerComponents');
-        let toolbox = this.layoutHandler.getLayoutContainer( "designerToolbox");
+        let toolbox = this.layoutHandler.getLayoutContainer("designerToolbox");
         // document.getElementById('designerToolbox');
-        let properties = this.layoutHandler.getLayoutContainer( "designerProperties");
+        let properties = this.layoutHandler.getLayoutContainer("designerProperties");
         // document.getElementById('designerProperties');
 
         if (toolbox !== null && properties !== null) {
@@ -599,13 +631,13 @@ class FormsManager {
     }
 
     hideDesignerModelProperties() {
-        let formDesignerModelProperties = this.layoutHandler.getLayoutContainer( "formDesignerModelProperties");
+        let formDesignerModelProperties = this.layoutHandler.getLayoutContainer("formDesignerModelProperties");
         // document.getElementById('formDesignerModelProperties');
-        let formDesignerComponents = this.layoutHandler.getLayoutContainer( "formDesignerComponents");
+        let formDesignerComponents = this.layoutHandler.getLayoutContainer("formDesignerComponents");
         // document.getElementById('formDesignerComponents');
-        let toolbox = this.layoutHandler.getLayoutContainer( "designerToolbox");
+        let toolbox = this.layoutHandler.getLayoutContainer("designerToolbox");
         // document.getElementById('designerToolbox');
-        let properties = this.layoutHandler.getLayoutContainer( "designerProperties");
+        let properties = this.layoutHandler.getLayoutContainer("designerProperties");
         //document.getElementById('designerProperties');
 
         formDesignerModelProperties.classList.add('d-none');
@@ -620,11 +652,11 @@ class FormsManager {
     }
 
     collapseMenuForm() {
-        let mainForm = this.layoutHandler.getLayoutContainer( "mainForm");
+        let mainForm = this.layoutHandler.getLayoutContainer("mainForm");
         // document.getElementById('mainForm');
-        let menuForm = this.layoutHandler.getLayoutContainer( "menuForm");
+        let menuForm = this.layoutHandler.getLayoutContainer("menuForm");
         // document.getElementById('menuForm');
-        let formDesigner = this.layoutHandler.getLayoutContainer( "formDesigner").querySelector('.row');
+        let formDesigner = this.layoutHandler.getLayoutContainer("formDesigner").querySelector('.row');
         let formsContainer = mainForm.parentElement;
         let menuIcon = document.getElementById('menuToggler');
         let formDesignerToolbox = document.getElementById('formDesignerToolbox');
@@ -654,11 +686,11 @@ class FormsManager {
     }
 
     uncollapseMenuForm() {
-        let menuForm = this.layoutHandler.getLayoutContainer( "menuForm");
+        let menuForm = this.layoutHandler.getLayoutContainer("menuForm");
         // document.getElementById('menuForm');
-        let menuToggler = this.layoutHandler.getLayoutContainer( "menuToggler");
+        let menuToggler = this.layoutHandler.getLayoutContainer("menuToggler");
         // document.getElementById('menuToggler');
-        let formDesigner = this.layoutHandler.getLayoutContainer( "formDesigner").querySelector('.row');
+        let formDesigner = this.layoutHandler.getLayoutContainer("formDesigner").querySelector('.row');
 
         if (!menuForm.classList.contains('d-none')) {
             return;
@@ -674,11 +706,11 @@ class FormsManager {
     }
 
     toggleMenu() {
-        let menuForm = this.layoutHandler.getLayoutContainer( "menuForm");
+        let menuForm = this.layoutHandler.getLayoutContainer("menuForm");
         // document.getElementById('menuForm');
         let toolboxContainer = document.getElementById('formDesignerToolbox');
         // document.getElementById('formDesignerToolbox');
-        let toolbox = this.layoutHandler.getLayoutContainer( "designerToolbox");
+        let toolbox = this.layoutHandler.getLayoutContainer("designerToolbox");
         // document.getElementById('designerToolbox');
         let menuTogglerIcon = document.getElementById('menuTogglerIcon');
         // document.getElementById('menuTogglerIcon');

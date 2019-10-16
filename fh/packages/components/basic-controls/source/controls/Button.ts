@@ -8,7 +8,6 @@ class Button extends HTMLFormComponent {
     constructor(componentObj: any, parent: HTMLFormComponent) {
         super(componentObj, parent);
 
-
         this.style = this.componentObj.style;
         this.onClick = this.componentObj.onClick;
     }

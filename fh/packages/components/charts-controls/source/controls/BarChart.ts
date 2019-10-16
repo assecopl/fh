@@ -2,13 +2,13 @@ import * as Chart from 'chart.js';
 import { HTMLFormComponent } from 'fh-forms-handler';
 
 class BarChart extends HTMLFormComponent {
-    private title: any;
-    private axes: any;
-    private series: any;
-    private stacked: any;
-    private colors: any;
-    private canvas: any;
-    private chart: any;
+    protected title: any;
+    protected axes: any;
+    protected series: any;
+    protected stacked: any;
+    protected colors: any;
+    protected canvas: any;
+    protected chart: any;
 
     constructor(componentObj: any, parent: HTMLFormComponent) {
         super(componentObj, parent);

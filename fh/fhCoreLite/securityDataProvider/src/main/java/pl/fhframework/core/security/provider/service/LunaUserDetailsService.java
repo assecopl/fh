@@ -1,6 +1,6 @@
 package pl.fhframework.core.security.provider.service;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,10 +18,14 @@ import java.util.Set;
  */
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class LunaUserDetailsService implements UserDetailsService {
 
-    private final UserAccountProvider userAccountProvider;
+    private UserAccountProvider userAccountProvider;
+
+    @Autowired
+    public void setUserAccountProvider(UserAccountProvider userAccountProvider) {
+        this.userAccountProvider = userAccountProvider;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

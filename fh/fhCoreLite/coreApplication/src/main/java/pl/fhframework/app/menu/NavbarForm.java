@@ -19,6 +19,7 @@ public class NavbarForm extends Form<NavbarForm.Model> {
         private boolean fhCss;
         private boolean defaultCss;
         private List<String> cssIds;
+        private MenuService menuService;
 
         public String getId(int idx) {
             if (cssIds.size() > idx) {
@@ -27,6 +28,17 @@ public class NavbarForm extends Form<NavbarForm.Model> {
 
             return "";
         }
+    }
+
+    @Override
+    public String getContainer() {
+        if (getModel().getMenuService().isHidden()) {
+            getModel().getMenuService().hide();
+        } else {
+            getModel().getMenuService().show();
+        }
+
+        return super.getContainer();
     }
 
     public enum Language {

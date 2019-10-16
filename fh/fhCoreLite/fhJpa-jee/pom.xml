@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+	<groupId>pl.fhframework</groupId>
+    <artifactId>fhJpa-jee</artifactId>
+    <version>4.5-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>fhJpa-jee</name>
+    <description>Podstawowe elementy FH dla JPA (Data Source, PU itd.) wersja JEE</description>
+
+    <parent>
+        <groupId>pl.fhframework</groupId>
+        <artifactId>fhCoreLite</artifactId>
+        <version>4.5-SNAPSHOT</version>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>pl.fhframework.persistence</groupId>
+            <artifactId>fhPersistenceLite</artifactId>
+            <version>${fh.version}</version>
+        </dependency>
+
+        <dependency>
+			<groupId>org.springframework</groupId>
+  			<artifactId>spring-context</artifactId>
+    	</dependency>
+
+        <dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
+    	</dependency>
+
+        <dependency>
+            <groupId>org.hibernate.javax.persistence</groupId>
+            <artifactId>hibernate-jpa-2.0-api</artifactId>
+        </dependency>
+
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
+			<version>6.0</version>
+			<scope>provided</scope>
+		</dependency>
+
+    </dependencies>
+
+</project>

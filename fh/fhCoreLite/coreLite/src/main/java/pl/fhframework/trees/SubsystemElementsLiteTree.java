@@ -2,6 +2,7 @@ package pl.fhframework.trees;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -20,6 +21,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
 @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
+@ConditionalOnProperty(value = "fhframework.subsystem.menu.custom", havingValue = "false")
 public class SubsystemElementsLiteTree extends SubsystemElementsTree {
 
     protected List<ITreeElement> _allTreeElements = new ArrayList<>();

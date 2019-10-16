@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 /**
  * @author Paweł Domański pawel.domanski@asseco.pl
- * @desc Helper class that resolve use case layouts
+ * Helper class that resolve use case layouts
  */
 @Service
 public class UseCaseLayoutService {
@@ -16,7 +16,7 @@ public class UseCaseLayoutService {
     public static String mainLayout = "standard";
     public static String splitChar = ",";
 
-    @Value("${fhframework.layout.templates}")
+    @Value("${fhframework.layout.templates:full,panels}")
     private String templates;
 
     private UseCaseLayoutService() {

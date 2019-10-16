@@ -39,7 +39,7 @@ public class SelectComboMenu extends BaseInputFieldWithKeySupport {
     private static final String VALUES_ATTR = "values";
     protected static final String TEXT = "text";
     private static final String FILTERED_VALUES = "filteredValues";
-    private static final String HIGHLIGHTED_VALUES = "highlightedValues";
+    private static final String HIGHLIGHTED_VALUE = "highlightedValue";
     private static final String FILTER_FUNCTION_ATTR = "filterFunction";
     protected static final String SELECTED_INDEX_ATTR = "selectedIndex";
     private static final String FORMATTER_ATTR = "formatter";
@@ -118,7 +118,7 @@ public class SelectComboMenu extends BaseInputFieldWithKeySupport {
     protected Object selectedItem;
 
     @JsonIgnore
-    protected int selectedItemIndex;
+    protected Integer selectedItemIndex;
 
     @Getter
     protected String rawValue;
@@ -136,10 +136,10 @@ public class SelectComboMenu extends BaseInputFieldWithKeySupport {
     protected List<SelectComboItemDTO> filteredValues = new LinkedList<>();
 
     @JsonIgnore
-    private List<Object> highlightedObjectValues = new LinkedList<>();
+    private Object highlightedObjectValue = null;
 
     @Getter
-    protected List<SelectComboItemDTO> highlightedValues = new LinkedList<>();
+    protected SelectComboItemDTO highlightedValue = null;
 
     @JsonIgnore
     @Getter
@@ -349,9 +349,9 @@ public class SelectComboMenu extends BaseInputFieldWithKeySupport {
         filteredObjectValues.clear();
         filteredObjectValues.addAll(values);
 
-        List<Object> highlighted = values.stream().filter(d -> filterFunction.test(d, text)).collect(Collectors.toList());
-        highlightedObjectValues.clear();
-        highlightedObjectValues.addAll(highlighted);
+        highlightedObjectValue = values.stream()
+                .filter(d -> filterFunction.test(d, text))
+                .findAny().orElse(null);
 
         filterInvoked = true;
     }
@@ -426,11 +426,11 @@ public class SelectComboMenu extends BaseInputFieldWithKeySupport {
             result = true;
         }
         if (filterInvoked) {
-            this.highlightedValues = collectValues(highlightedObjectValues);
-            elementChanges.addChange(HIGHLIGHTED_VALUES, this.highlightedValues);
+            this.highlightedValue = collectValue(highlightedObjectValue);
+            elementChanges.addChange(HIGHLIGHTED_VALUE, this.highlightedValue);
 
             filterInvoked = false;
-            result= true;
+            result = true;
         }
 
         return result;
@@ -470,6 +470,26 @@ public class SelectComboMenu extends BaseInputFieldWithKeySupport {
             filteredConvertedValues.add(item);
         });
         return filteredConvertedValues;
+    }
+
+    private SelectComboItemDTO collectValue(Object value) {
+        if (value == null) {
+            if (this.emptyLabel) {
+                return new SelectComboItemDTO(this.emptyLabelText, -1L);
+            }
+            return null;
+        }
+
+        AtomicReference<Long> idx = new AtomicReference<>(0L);
+        SelectComboItemDTO item;
+        if (value instanceof IComboItem) {
+            item = new SelectComboItemDTO((IComboItem) value);
+            item.targetId = idx.get();
+        } else {
+            item = new SelectComboItemDTO(objectToString(value), idx.get());
+        }
+        idx.getAndSet(idx.get() + 1);
+        return item;
     }
 
     private String toRawValue(Object s) {

@@ -1,4 +1,5 @@
 import {HTMLFormComponent} from "fh-forms-handler";
+import {AdditionalButton} from "fh-forms-handler";
 
 class Group extends HTMLFormComponent {
     private readonly onClick: any;
@@ -45,6 +46,12 @@ class Group extends HTMLFormComponent {
             // @ts-ignore
             this.parent.setPresentationStyle(presentationStyle);
         }
+    }
+
+    getAdditionalButtons(): any[] {
+        return [
+            new AdditionalButton('addDefaultSubcomponent', 'plus', 'Add empty row')
+        ];
     }
 }
 

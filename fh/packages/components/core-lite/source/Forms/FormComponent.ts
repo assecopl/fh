@@ -25,7 +25,7 @@ abstract class FormComponent {
 
     private _id: string;
     protected _formId: string;
-    private _parent: FormComponent;
+    private _parent: FormComponent = null;
     private _componentObj: any;
 
     protected components: FormComponent[];
@@ -41,7 +41,7 @@ abstract class FormComponent {
         this._componentObj = componentObj;
 
         this._id = this.componentObj.id;
-        this._parent = parent;
+        this._parent = parent?parent:null;
         this.designDeletable = componentObj.designDeletable;
 
         if (this._parent) {
@@ -229,6 +229,8 @@ abstract class FormComponent {
 
         this.components.push(component);
         component.create();
+
+        return component;
     };
 
     protected addNonVisualComponent(componentObj) {

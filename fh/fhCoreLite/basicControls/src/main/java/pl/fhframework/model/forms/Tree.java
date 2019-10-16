@@ -302,6 +302,15 @@ public class Tree extends GroupingComponent<TreeElement> implements Boundable, C
         }
     }
 
+    void deselectAll() {
+        this.getSubcomponents().forEach(this::deselectAllChild);
+    }
+
+    private void deselectAllChild(TreeElement treeElement) {
+        treeElement.setSelected(false);
+        treeElement.getSubcomponents().forEach(this::deselectAllChild);
+    }
+
     public boolean isSelectionOn() {
         return selectedBinding != null;
     }

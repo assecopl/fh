@@ -5,7 +5,7 @@
 
     <artifactId>defaultApplication</artifactId>
     <groupId>pl.fhframework</groupId>
-    <version>4.3-SNAPSHOT</version>
+    <version>4.5-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>defaultApplication</name>
@@ -14,7 +14,7 @@
     <parent>
         <groupId>pl.fhframework</groupId>
         <artifactId>fh-boot-bom</artifactId>
-        <version>4.3-SNAPSHOT</version>
+        <version>4.5-SNAPSHOT</version>
         <relativePath>../../BOM/fh-boot-bom</relativePath>
     </parent>
 
@@ -109,13 +109,13 @@
                         </goals>
                     </execution>
                     <execution>
-                        <id>yarn run build</id>
+                        <id>yarn lerna run build</id>
                         <phase>generate-resources</phase>
                         <goals>
                             <goal>yarn</goal>
                         </goals>
                         <configuration>
-                            <arguments>--cwd applications/default-application run build</arguments>
+                            <arguments>lerna run build</arguments>
                         </configuration>
                     </execution>
                 </executions>

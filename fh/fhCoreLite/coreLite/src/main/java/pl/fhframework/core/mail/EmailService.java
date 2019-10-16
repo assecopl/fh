@@ -7,6 +7,7 @@ import pl.fhframework.core.FhException;
 import pl.fhframework.core.util.TemplateVariablesExpander;
 
 import javax.annotation.PostConstruct;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -42,8 +43,12 @@ public class EmailService {
     }
 
     public void sendTemplate(final String title, final String templateMsg, Map<String, Object> params, Map<String, Boolean> sections, final List<String> recipients) {
+        sendTemplate(title, templateMsg, params, sections, Collections.emptyMap(), recipients);
+    }
+
+    public void sendTemplate(final String title, final String templateMsg, Map<String, Object> params, Map<String, Boolean> sections, Map<String, TemplateVariablesExpander.LoopingSection> loopingSections, final List<String> recipients) {
         try {
-            mailClient.sendTo(templateVariablesExpander.expand(title, params, sections), templateVariablesExpander.expand(templateMsg, params, sections), recipients.toArray(new String[]{}));
+            mailClient.sendTo(templateVariablesExpander.expand(title, params, sections, loopingSections), templateVariablesExpander.expand(templateMsg, params, sections, loopingSections), recipients.toArray(new String[]{}));
         } catch (EmailException ex) {
             throw new FhException(ex);
         }

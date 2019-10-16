@@ -1,5 +1,6 @@
 package pl.fhframework.app;
 
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -21,6 +22,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import pl.fhframework.core.ResourceNotFoundException;
 import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.core.resource.ImageRepository;
+import pl.fhframework.core.resource.MarkdownRepository;
 import pl.fhframework.core.util.FileUtils;
 import pl.fhframework.core.util.StringUtils;
 import pl.fhframework.event.dto.ForcedLogoutEvent;
@@ -29,8 +31,10 @@ import pl.fhframework.subsystems.Subsystem;
 
 import javax.jws.WebParam;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -42,6 +46,9 @@ import java.util.Optional;
 public class HttpMappings extends WebMvcConfigurerAdapter {
     @Autowired
     private ImageRepository imageRepository;
+
+    @Autowired
+    private MarkdownRepository markdownRepository;
 
     @Value("${fh.web.guests.allowed:false}")
     private boolean guestsAllowed;
@@ -97,16 +104,19 @@ public class HttpMappings extends WebMvcConfigurerAdapter {
 
         ImageRepository.ImageEntry resource = imageRepository.getImage(subsystem.getName(), path).orElseThrow(ResourceNotFoundException::new);
 
-        try (FileInputStream stream = new FileInputStream(resource.getFile())) {
-            byte[] bytes = FileUtils.getAllBytes(stream);
-            return ResponseEntity.ok()
-                    .lastModified(resource.getFile().lastModified())
-                    .contentLength(resource.getFile().length())
-                    .body(bytes);
-        } catch (IOException e) {
-            FhLogger.error("Error while reading stream: " + e.getMessage(), e);
-            throw new ResourceNotFoundException();
-        }
+        return getFile(resource.getFile());
+    }
+
+    @RequestMapping(value = "/markdown", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public ResponseEntity markdown(
+            @WebParam(name = "module") String module,
+            @WebParam(name = "path") String path) throws ResourceNotFoundException {
+        Optional<Subsystem> subsystemOptional = ModuleRegistry.getLoadedModules().stream().filter(c -> c.getName().equals(module)).findAny();
+        Subsystem subsystem = subsystemOptional.orElseThrow(ResourceNotFoundException::new);
+
+        Optional<File> resource = markdownRepository.getFile(subsystem.getName(), path);
+        resource.orElseThrow(ResourceNotFoundException::new);
+        return getFile(resource.get());
     }
 
     @RequestMapping(value = "/sessionUsed", method = RequestMethod.GET)
@@ -127,7 +137,7 @@ public class HttpMappings extends WebMvcConfigurerAdapter {
 
     @RequestMapping(value = "/autologout", method = RequestMethod.GET)
     public ModelAndView timeout(@RequestParam(value = "reason", required = false) String reason,
-                               HttpServletRequest request) {
+                                HttpServletRequest request) {
         ModelAndView model = new ModelAndView();
 
         // todo: better condition for custom logout url
@@ -182,5 +192,30 @@ public class HttpMappings extends WebMvcConfigurerAdapter {
         }
 
         return error;
+    }
+
+    private ResponseEntity getFile(File file) throws ResourceNotFoundException {
+
+        try (FileInputStream stream = new FileInputStream(file)) {
+            byte[] bytes = FileUtils.getAllBytes(stream);
+            return ResponseEntity.ok()
+                    .lastModified(file.lastModified())
+                    .contentLength(file.length())
+                    .contentType(getFileContentType(file))
+                    .body(bytes);
+        } catch (IOException e) {
+            FhLogger.error("Error while reading stream: " + e.getMessage(), e);
+            throw new ResourceNotFoundException();
+        }
+    }
+
+    private MediaType getFileContentType(File file) {
+        if (FilenameUtils.isExtension(file.getName(), Arrays.asList("PNG", "png"))) {
+            return MediaType.IMAGE_PNG;
+        } else if (FilenameUtils.isExtension(file.getName(), Arrays.asList("GIF", "gif"))) {
+            return MediaType.IMAGE_GIF;
+        } else {
+            return MediaType.IMAGE_JPEG;
+        }
     }
 }

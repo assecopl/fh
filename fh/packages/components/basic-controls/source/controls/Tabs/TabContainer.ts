@@ -19,19 +19,19 @@ class TabContainer extends HTMLFormComponent {
     }
 
     create() {
-        var tabContainer = document.createElement('div');
+        let tabContainer = document.createElement('div');
         tabContainer.id = this.id;
         ['fc', 'tabContainer'].forEach(function (cssClass) {
             tabContainer.classList.add(cssClass);
         });
 
-        var nav = document.createElement('ul');
+        let nav = document.createElement('ul');
         ['nav', 'nav-tabs'].forEach(function (cssClass) {
             nav.classList.add(cssClass);
         });
         this.navElement = nav;
 
-        var body = document.createElement('div');
+        let body = document.createElement('div');
         ['tab-content', 'row', 'eq-row'].forEach(function (cssClass) {
             body.classList.add(cssClass);
         });
@@ -55,8 +55,8 @@ class TabContainer extends HTMLFormComponent {
     };
 
     findTab = function (tabId) {
-        for (var i = this.components.length - 1; i >= 0; i--) {
-            var tab = this.components[i];
+        for (let i = this.components.length - 1; i >= 0; i--) {
+            let tab = this.components[i];
             if (tab.id === tabId) {
                 return tab;
             }
@@ -66,10 +66,10 @@ class TabContainer extends HTMLFormComponent {
 
     onTabNavClick(event) {
         event.preventDefault();
-        var tabNav = event.target;
+        let tabNav = event.target;
         if (!tabNav.parentNode.classList.contains('active')) {
-            var tabId = tabNav.dataset.tabId;
-            var tab = this.findTab(tabId);
+            let tabId = tabNav.dataset.tabId;
+            let tab = this.findTab(tabId);
             this.changesQueue.queueValueChange(tab.tabIndex);
             if (this.onTabChange) {
                 this.fireEvent('onTabChange', this.onTabChange);
@@ -113,6 +113,8 @@ class TabContainer extends HTMLFormComponent {
 
         switch (accessibility) {
             case 'EDIT':
+                this.navElement.classList.remove('d-none');
+                this.navElement.classList.remove('invisible');
                 this.accessibilityResolve(this.component, 'EDIT');
                 break;
             case 'VIEW':

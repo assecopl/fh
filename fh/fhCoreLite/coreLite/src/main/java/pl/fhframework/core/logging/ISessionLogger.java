@@ -12,5 +12,9 @@ public interface ISessionLogger {
 
     void logSessionState(UserSession session);
 
+    void logSessionEndState(UserSession session);
+
     void logEvent(InMessageEventData eventData);
+
+    void logShowForm(Class<?> formClazz, Object model, String variantId);
 }

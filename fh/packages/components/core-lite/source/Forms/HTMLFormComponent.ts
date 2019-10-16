@@ -23,8 +23,8 @@ abstract class HTMLFormComponent extends FormComponent {
     public invisible: string;
     protected presentationStyle: string;
     protected requiredField: string;
-    protected component: any;
-    protected toolbox: HTMLElement;
+    public component: any;
+    public toolbox: HTMLElement;
     protected inputGroupElement: HTMLElement;
     protected labelElement: HTMLElement;
     protected requiredElement: HTMLElement;
@@ -32,14 +32,14 @@ abstract class HTMLFormComponent extends FormComponent {
     private readonly translationItems: any;
     private inputSize: any;
     public width: string[];
-    protected styleClasses: any;
+    protected styleClasses: string[] = [];
     protected readonly inlineStyle: string;
     protected readonly wrapperStyle: string;
     private readonly language: any;
     protected hint: any;
     protected hintPlacement: string;
     protected hintInitialized: boolean = false;
-    protected rawValue: any;
+    public rawValue: any;
     private areSubcomponentsRendered: boolean;
     protected oldValue: any;
     protected components: HTMLFormComponent[];
@@ -137,13 +137,12 @@ abstract class HTMLFormComponent extends FormComponent {
         this.setRequiredField(this.requiredField);
 
         if (this.designMode) {
-            this.htmlElement.appendChild(this.toolbox);
-            this.htmlElement.addEventListener('mouseover', function () {
-                this.showToolbox();
-            }.bind(this));
-            this.htmlElement.addEventListener('mouseout', function () {
-                this.hideToolbox();
-            }.bind(this));
+            (<any>FhContainer.get('Designer')).addToolboxListeners(this);
+
+            if (this.toolbox) {
+                this.htmlElement.appendChild(this.toolbox);
+            }
+
             if (this.component.classList.contains('tabContainer')) {
                 this.component.addEventListener('click', function (e) {
                     e.stopImmediatePropagation();
@@ -157,32 +156,70 @@ abstract class HTMLFormComponent extends FormComponent {
                     }
                 });
             }
-            this.htmlElement.addEventListener('click', function (e) {
-                e.stopImmediatePropagation();
-                e.preventDefault();
-                this.fireEvent('onformedit_elementedit', 'elementedit');
-            }.bind(this));
-            if (this.contentWrapper.classList.contains('button')) {
+            // click on Column Value Label opens Column properties
+            if (this.component.classList.contains('valueBasedLabel')) {
                 this.component.addEventListener('click', function (e) {
                     e.stopImmediatePropagation();
                     e.preventDefault();
+                    let columnId = this.component.dataset.columnId;
+                    let column = this.component.closest('.fc.table').querySelector('.' + columnId);
+                    column.click();
+                }.bind(this));
+            }
+            if (this.component.classList.contains('outputLabel')) {
+                this.component.addEventListener('click', function (e) {
+                    e.stopImmediatePropagation();
+                    e.preventDefault();
+                    this.component.focus();
                     this.fireEvent('onformedit_elementedit', 'elementedit');
+                    document.addEventListener('keyup', event => {
+                        this.handleDeleteBtnEvent(event);
+                    });
+                }.bind(this));
+            }
+            this.htmlElement.addEventListener('click', function (e) {
+                e.stopImmediatePropagation();
+                e.preventDefault();
+                this.component.focus();
+                this.fireEvent('onformedit_elementedit', 'elementedit');
+                document.addEventListener('keyup', event => {
+                    this.handleDeleteBtnEvent(event);
+                });
+            }.bind(this));
+            if (this.contentWrapper.classList.contains('button')) {
+                this.component.addEventListener('click', function (e) {
+                    this.component.focus();
+                    e.stopImmediatePropagation();
+                    e.preventDefault();
+                    this.fireEvent('onformedit_elementedit', 'elementedit');
+                    document.addEventListener('keyup', event => {
+                        this.handleDeleteBtnEvent(event);
+                    });
                 }.bind(this));
             }
             if (this.contentWrapper.classList.contains('selectOneMenu')) {
                 this.component.addEventListener('click', function (e) {
+                    this.component.focus();
                     e.stopImmediatePropagation();
                     this.fireEvent('onformedit_elementedit', 'elementedit');
+                    document.addEventListener('keyup', event => {
+                        this.handleDeleteBtnEvent(event);
+                    });
+                }.bind(this));
+            }
+            if (this.contentWrapper.classList.contains('fileUpload')) {
+                this.component.addEventListener('click', function (e) {
+                    this.component.focus();
+                    e.stopImmediatePropagation();
+                    e.preventDefault();
+                    this.fireEvent('onformedit_elementedit', 'elementedit');
+                    document.addEventListener('keyup', event => {
+                        this.handleDeleteBtnEvent(event);
+                    });
                 }.bind(this));
             }
         }
-        if (this.hint && this.hintElement) {
-            // this.hintElement.dataset.toggle = 'tooltip';
-            // this.hintElement.dataset.placement = 'auto right';
-            // this.hintElement.dataset.trigger = 'hover';
-            // // this.hintElement.dataset.container = 'body';
-            // this.hintElement.dataset.title = this.hint;
-        }
+
         this.container.appendChild(this.htmlElement);
         if (this.hint !== null) {
             this.initHint();
@@ -211,7 +248,7 @@ abstract class HTMLFormComponent extends FormComponent {
                 placement: this.hintPlacement,
                 title: this.hint,
                 html: true,
-                boundary: 'viewport'
+                boundary: 'window'
             };
 
             $(this.hintElement).tooltip(tooltipOptions);
@@ -240,7 +277,7 @@ abstract class HTMLFormComponent extends FormComponent {
                     this.parent.contentWrapper.removeChild(this.htmlElement);
                 }
             } catch (e) {
-                console.log("Error while destroying ", this, e);
+                // //console.log("Error while destroying ", this, e);
             }
         }
 
@@ -274,6 +311,8 @@ abstract class HTMLFormComponent extends FormComponent {
         }
 
         super.destroy(removeFromParent);
+
+        document.removeEventListener('keyup', this.handleDeleteBtnEvent);
     }
 
     /* Update component */
@@ -486,7 +525,6 @@ abstract class HTMLFormComponent extends FormComponent {
 
 
     addStyles() {
-
         this.handleHeight();
         this.resolveLabelPosition();
         this.addAlignStyles();
@@ -716,11 +754,11 @@ abstract class HTMLFormComponent extends FormComponent {
     }
 
     showToolbox() {
-        this.toolbox.classList.remove('d-none');
+        // this.toolbox.classList.remove('d-none');
     }
 
     hideToolbox() {
-        this.toolbox.classList.add('d-none');
+        // this.toolbox.classList.add('d-none');
     }
 
     public focusCurrentComponent(deferred, options) {
@@ -949,11 +987,7 @@ abstract class HTMLFormComponent extends FormComponent {
             elementTreeEquivalent = designerElementTree.querySelector('li[data-designer_element_equivalent=' + sourceElement + ']');
         }
 
-        if (elementTreeEquivalent === null) {
-            return;
-        }
-
-        if (elementTreeEquivalent) {
+        if (elementTreeEquivalent !== null) {
             let treeNode = elementTreeEquivalent.querySelector('.treeNodeBody');
             if (treeNode !== null) {
                 treeNode.classList.add('toolboxElementHighlight');
@@ -1047,6 +1081,35 @@ abstract class HTMLFormComponent extends FormComponent {
      */
     protected buildDesingerToolbox(){
         (<any>FhContainer.get('Designer')).buildToolbox(this.getAdditionalButtons(), this);
+
+    }
+
+    private handleDeleteBtnEvent(event) {
+        event.stopImmediatePropagation();
+        let keyCode = event.keyCode;
+        if (keyCode === 46) { // keyborad delete keycode
+            let deleteBtn = document.getElementById('designerDeleteFormElement');
+            let focusedElement = document.querySelector('.designerFocusedElement');
+            if (!focusedElement) {
+                console.error('%cElement to be removed was not found.', 'background: #cc0000; color: #FFF');
+                return;
+            } else {
+                /**
+                 * We need to check if delete button was pressed on for deleting focusedelement.
+                 * To do this we get activeElement (element that has current gloabl focus) and check if element is html input/select.
+                 * If it is select or input or textarea and it is not inside current edited form we should prevent delete.
+                 */
+                const activeElement = document.activeElement;
+                const activeElementTagName = activeElement.tagName.toLowerCase();
+                if(focusedElement.contains(activeElement) || (!focusedElement.contains(activeElement) &&
+                        (activeElementTagName !== 'input' &&
+                            activeElementTagName !== 'select' &&
+                            activeElementTagName !== 'textarea' &&
+                        !activeElement.classList.contains("form-control")))) {
+                    deleteBtn.click();
+                }
+            }
+        }
     }
 
 }

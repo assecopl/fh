@@ -1,0 +1,11 @@
+prepublish.js
+postpublish.js
+cached-package.json
+tsconfig.json
+node_modules
+Module.ts
+source/**/*.ts
+!source/**/*.d.ts
+source/**/*.css
+source/**/*.scss
+source/**/*.js

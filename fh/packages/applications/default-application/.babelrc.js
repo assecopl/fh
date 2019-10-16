@@ -17,8 +17,6 @@ module.exports = {
                 'last 3 Edge versions',
                 'Firefox ESR'
             ]
-        },
-        useBuiltIns: 'usage',
-        corejs: 2
+        }
     }]]
 };

@@ -80,7 +80,8 @@ public class UseCaseMetadataReader implements IUseCaseMetadataReader {
 
         List<Type> typesList = new LinkedList<>();
         Class callback = getCallback(clazz, typesList);
-        useCaseInfo.setCallbackClazz(callback.getCanonicalName());
+        useCaseInfo.setCallbackClassStr(callback.getCanonicalName());
+        useCaseInfo.setCallbackClass(callback);
         fillImplementedInterfacesInfo(useCaseInfo);
 
         Map<String, Type> resolvedTypes = resolveTypes(typesList);

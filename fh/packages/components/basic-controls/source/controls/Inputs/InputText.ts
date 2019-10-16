@@ -247,6 +247,8 @@ class InputText extends HTMLFormComponent {
             Inputmask.remove(this.input);
             this.inputmaskEnabled = false;
         }
+
+        this.input.removeEventListener('keydown', this.removeInputPlaceholder);
     }
 
     protected applyMask() {
@@ -280,9 +282,29 @@ class InputText extends HTMLFormComponent {
                 }
             }
 
-            // @ts-ignore
-            Inputmask(options).mask(this.input);
-            this.inputmaskEnabled = true;
+            try {
+                // @ts-ignore
+                Inputmask(options).mask(this.input);
+                this.inputmaskEnabled = true;
+            } catch (e) {
+                console.error('Invalidmask library error:');
+                console.error(e);
+            }
+
+            this.input.addEventListener('keydown', event => {
+                this.removeInputPlaceholder(event);
+            })
+        }
+    }
+
+    removeInputPlaceholder(event) {
+        const key = event.keyCode;
+        const targetAttributes = event.target.attributes;
+        if (key === 8 || key === 46) {
+            if (event.target.value.length === 0) {
+                const attributePlaceholder = targetAttributes.getNamedItem('placeholder');
+                attributePlaceholder.value = "";
+            }
         }
     }
 
@@ -332,6 +354,9 @@ class InputText extends HTMLFormComponent {
             $.each(change.changedAttributes, function (name, newValue) {
                 switch (name) {
                     case 'rawValue':
+                        if (!newValue && newValue !== 0) {
+                            this.input.placeholder = "";
+                        }
                         this.input.value = newValue;
                         this.lastValidMaskedValue = newValue;
                         break;

@@ -3,6 +3,7 @@ package pl.fhframework.event;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import pl.fhframework.SessionManager;
+import pl.fhframework.UserSession;
 import pl.fhframework.event.dto.*;
 import pl.fhframework.core.model.dto.client.AbstractClientOutputData;
 import pl.fhframework.model.forms.Component;
@@ -64,6 +65,14 @@ public class EventRegistry {
         getEvents().add(new RedirectEvent(uuid, url, newWindow));
     }
 
+    public void fireRedirectHomeEvent() {
+        UserSession session = SessionManager.getUserSession();
+        if (session != null) {
+            session.getUseCaseContainer().clear();
+        }
+        getEvents().add(new RedirectHomeEvent());
+    }
+
     public void fireRedirectEvent(String uuid, String url, boolean newWindow, boolean closeable) {
         getEvents().add(new RedirectEvent(uuid, url, newWindow, closeable));
     }
@@ -76,7 +85,7 @@ public class EventRegistry {
         getEvents().add(new ShutdownEvent(graceful));
     }
 
-    public void fireFrocedLogoutEvent(ForcedLogoutEvent.Reason reason){
+    public void fireFrocedLogoutEvent(ForcedLogoutEvent.Reason reason) {
         getEvents().add(new ForcedLogoutEvent(reason));
     }
 
@@ -122,6 +131,11 @@ public class EventRegistry {
     }
 
     private List<EventDTO> getEvents() {
+        UserSession session = SessionManager.getUserSession();
+        if (session == null) {
+            return new ArrayList<>();
+        }
+
         return SessionManager.getUserSession().getUseCaseRequestContext().getEvents();
     }
 

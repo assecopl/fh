@@ -1,5 +1,6 @@
 {
-  "lerna": "2.0.0-beta.37",
+  "packages": ["components/*", "applications/*"],
   "npmClient": "yarn",
-  "version": "0.0.0"
+  "useWorkspaces": true,
+  "version": "independent"
 }

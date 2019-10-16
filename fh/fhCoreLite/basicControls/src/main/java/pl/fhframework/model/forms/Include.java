@@ -10,14 +10,17 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ReflectionUtils;
-import org.springframework.util.StringUtils;
+import pl.fhframework.binding.AdHocModelBinding;
+import pl.fhframework.binding.StaticBinding;
 import pl.fhframework.core.FhException;
 import pl.fhframework.core.FhFormException;
+import pl.fhframework.core.dynamic.DynamicClassName;
 import pl.fhframework.core.events.OnEvent;
 import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.annotations.*;
 import pl.fhframework.annotations.composite.Composite;
 import pl.fhframework.binding.ModelBinding;
+import pl.fhframework.core.util.StringUtils;
 import pl.fhframework.forms.IFormsUtils;
 import pl.fhframework.helper.AutowireHelper;
 import pl.fhframework.model.dto.ElementChanges;
@@ -32,20 +35,23 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * Created by krzysztof.kobylarek on 2016-12-20.
  */
 
-@Control
+@Control(canBeDesigned = true)
+@DesignerControl
 @DocumentedComponent(value = "Component used to include xml templates into main form view", icon = "fa fa-cubes")
 @JsonIgnoreType
 @JsonSerialize(using = Include.Serializer.class)
-public class Include extends Component implements IGroupingComponent<Component>, Includeable {
+public class Include extends FormElement implements IGroupingComponent<Component>, Includeable {
 
     private static final String ATTR_REF = "ref";
     private static final String ATTR_MODEL = "model";
     private static final String ATTR_MODEL_VALUE = "modelValue";
+    private static final String ATTR_VARIANT = "variant";
 
     @Autowired
     private IFormsUtils formsManager;
@@ -60,7 +66,7 @@ public class Include extends Component implements IGroupingComponent<Component>,
     private ModelBinding<String> refBinding;
 
     @Getter
-    private String ref = "";
+    protected String ref = "";
 
     @JsonIgnore
     @Getter
@@ -70,7 +76,7 @@ public class Include extends Component implements IGroupingComponent<Component>,
     private ModelBinding<String> modelRefBinding;
 
     @Getter
-    private String modelRef = "";
+    protected String modelRef = "";
 
     @JsonIgnore
     @Getter
@@ -79,7 +85,17 @@ public class Include extends Component implements IGroupingComponent<Component>,
     @DocumentedComponentAttribute(value = "Model instance")
     private ModelBinding<?> modelValueBinding;
 
-    private CompositeForm includedComposite = null;
+    @JsonIgnore
+    @Getter
+    @Setter
+    @XMLProperty(value = ATTR_VARIANT, aliases = "variant", required = false)
+    @DocumentedComponentAttribute(value = "Reference to variant as a String.")
+    private ModelBinding<String> variantBinding;
+
+    @Getter
+    protected String variant;
+
+    protected Form includedComposite = null;
 
     @Getter
     @Setter
@@ -107,25 +123,59 @@ public class Include extends Component implements IGroupingComponent<Component>,
             return;
         }
 
-        FormReader formReader = FormReader.getInstance();
-        Class<? extends Form> compositeComponentClass = formReader.getCompositesClasses().get(ref);
-        if (compositeComponentClass == null) {
-            FhLogger.error(ref + " is not a valid included form.");
-            return;
-        }
-
-        includedComposite = (CompositeForm) formsManager.createFormInstance(compositeComponentClass);
+        readComposite();
 
         includedComposite.setId(getForm().getId());
-        includedComposite.setGroupingParentComponent(getForm());
+        includedComposite.setGroupingParentComponent(this);
         includedComposite.setUseCase(getForm().getAbstractUseCase());
 
+        includedComposite.setModelProvider(resolveModelProvider());
 
+        if (includedComposite instanceof CompositeForm) {
+            ((CompositeForm)includedComposite).addRegisteredEvents(registeredEvents);
+        }
+
+        if (!includedComposite.isInitDone()) {
+            includedComposite.init();
+        }
+
+        if (!getForm().getIncluded().contains(this)) {
+            getForm().getIncluded().add(this);
+        }
+
+        doActionForEverySubcomponent(component -> {
+            if (!component.isInitDone()) {
+                component.init();
+            }
+        });
+
+        includedComposite.setVariant(variant != null ? variant : getForm().getVariant());
+        includedComposite.setAvailabilityRules(includedComposite.getVariant());
+
+        doActionForEverySubcomponent(
+                (Component c) -> {
+                    if (c.getId() == null) {
+                        c.generateId();
+                    }
+                    if (!c.isGeneratedId()) {
+                        c.setRawId(c.getId());
+                        c.setId(c.getId() + "_" + incId.getAndIncrement());
+                    }
+                });
+
+        this.doActionForEverySubcomponent(c -> {
+            if (c instanceof FormElement) {
+                getForm().addToElementIdToFormElement((FormElement) c);
+            }
+        });
+    }
+
+    protected Supplier resolveModelProvider() {
         if (getForm().getModel() != null && getForm().getViewMode() == Form.ViewMode.NORMAL) {
             if (modelValueBinding != null) {
-                includedComposite.setModelProvider(() -> modelValueBinding.getBindingResult().getValue());
+                return () -> modelValueBinding.getBindingResult().getValue();
             } else if (modelRef != null) {
-                includedComposite.setModelProvider(() -> {
+                return () -> {
                     final String[] splittedModel = modelRef.split("\\.");
                     Object compositeModel = getForm().getModel();
                     Class<?> modelClass = getForm().getModel().getClass();
@@ -146,40 +196,28 @@ public class Include extends Component implements IGroupingComponent<Component>,
                         }
                     }
                     return compositeModel;
-                });
-            } else {
-                includedComposite.setModelProvider(() -> null);
+                };
             }
         }
+        return () -> null;
+    }
 
-        if (includedComposite instanceof CompositeForm) {
-            ((CompositeForm)includedComposite).addRegisteredEvents(registeredEvents);
+    protected void readComposite() {
+        FormReader formReader = FormReader.getInstance();
+        Class<? extends Form> compositeComponentClass = formReader.getCompositesClasses().get(ref);
+        if (compositeComponentClass != null) {
+            includedComposite = formsManager.createFormInstance(compositeComponentClass, getForm().getComponentBindingCreator(), getForm().getBindingMethodsCreator());
         }
-
-        includedComposite.init();
-        doActionForEverySubcomponent(component -> {
-            if (!component.isInitDone()) {
-                component.init();
+        else {
+            Class<? extends Form> formClass = formsManager.getFormById(ref);
+            if (formClass != null) {
+                includedComposite = formsManager.createFormInstance(formClass, getForm().getComponentBindingCreator(), getForm().getBindingMethodsCreator());
             }
-        });
-
-        includedComposite.setAvailabilityRules(getForm().getVariant());
-
-        doActionForEverySubcomponent(
-                (Component c) -> {
-                    if (c.getId() == null) {
-                        c.generateId();
-                    }
-                    if (!c.isGeneratedId()) {
-                        c.setId(c.getId() + "_" + incId.getAndIncrement());
-                    }
-                });
-
-        this.doActionForEverySubcomponent(c -> {
-            if (c instanceof FormElement) {
-                getForm().addToElementIdToFormElement((FormElement) c);
+            else {
+                FhLogger.error(ref + " is not a valid included form.");
+                return;
             }
-        });
+        }
     }
 
     private void resolveBinding() {
@@ -188,6 +226,9 @@ public class Include extends Component implements IGroupingComponent<Component>,
         }
         if(this.refBinding != null) {
             ref = (String) this.refBinding.resolveValue(ref);
+        }
+        if(this.variantBinding != null) {
+            variant = (String) this.variantBinding.resolveValue(variant);
         }
     }
 
@@ -199,6 +240,20 @@ public class Include extends Component implements IGroupingComponent<Component>,
                 ((IGroupingComponent) c).doActionForEverySubcomponent(action);
             }
         });
+    }
+
+    @Override
+    public void activateBindings() {
+        if (includedComposite != null) {
+            includedComposite.activateBindings();
+        }
+    }
+
+    @Override
+    public void deactivateBindings() {
+        if (includedComposite != null) {
+            includedComposite.deactivateBindings();
+        }
     }
 
     @Override
@@ -275,9 +330,10 @@ public class Include extends Component implements IGroupingComponent<Component>,
         @Override
         public void serialize(Include tag, JsonGenerator gen, SerializerProvider serializers) throws IOException {
             if (tag != null && tag.getSubcomponents() != null) {
-                for (Component c : tag.getSubcomponents()) {
-                    gen.writeObject(c);
-                }
+                Group group = new Group(tag.getForm());
+                group.setId(tag.getId());
+                group.getSubcomponents().addAll(tag.getSubcomponents());
+                gen.writeObject(group);
             }
         }
     }
@@ -292,5 +348,35 @@ public class Include extends Component implements IGroupingComponent<Component>,
         super.preConfigureClear();
         includedComposite = null;
         resetInitDone();
+    }
+
+    @Override
+    public String getStaticRef() {
+        if (!StringUtils.isNullOrEmpty(ref)) {
+            return ref;
+        }
+        String staticRefForm = null;
+        if (refBinding instanceof StaticBinding) {
+            staticRefForm =  ((StaticBinding<String>) refBinding).getStaticValue();
+        }
+        else if (refBinding instanceof AdHocModelBinding && ((AdHocModelBinding<String>) refBinding).isStaticValue()) {
+            staticRefForm = ((AdHocModelBinding<String>) refBinding).getStaticValueText();
+        }
+        if (!StringUtils.isNullOrEmpty(staticRefForm)) {
+            Class<?> compositeForm = FormReader.getInstance().getCompositesClasses().get(((AdHocModelBinding) refBinding).getStaticValueText());
+            if (compositeForm != null) {
+                return DynamicClassName.forClassName(compositeForm.getName()).toFullClassName();
+            }
+            return staticRefForm;
+        }
+        return null;
+    }
+
+    @Override
+    public void calculateAvailability() {
+        super.calculateAvailability();
+        if (includedComposite != null) {
+            includedComposite.calculateAvailability();
+        }
     }
 }

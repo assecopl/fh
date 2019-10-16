@@ -54,6 +54,10 @@ public class SelectOneMenu extends BaseInputListField {
         return new SelectOneMenu(getForm());
     }
 
+    public String getModelBindingText() {
+        return getModelBinding() == null ? "" : getModelBinding().getBindingExpression();
+    }
+
     @Override
     public void doCopy(Table table, Map<String, String> iteratorReplacements, BaseInputField baseClone) {
         super.doCopy(table, iteratorReplacements, baseClone);
@@ -79,6 +83,7 @@ public class SelectOneMenu extends BaseInputListField {
     @Override
     protected List<?> calculateBindingValues(List<?> value) {
         List<Object> values = new LinkedList<>(value);
+
         if (isEmptyLabel()) {
             values.add(0, this.emptyLabelText);
         }

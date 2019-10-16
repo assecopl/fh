@@ -87,7 +87,7 @@ public abstract class BaseInputField extends FormElementWithConfirmationSupport 
     @Getter
     @Setter
     @XMLProperty(value = VALIDATION_LABEL_ATTR)
-    @DesignerXMLProperty(commonUse = true, previewValueProvider = BindingExpressionDesignerPreviewProvider.class, priority = 100, functionalArea = CONTENT)
+    @DesignerXMLProperty(previewValueProvider = BindingExpressionDesignerPreviewProvider.class, priority = 100, functionalArea = CONTENT)
     @DocumentedComponentAttribute(boundable = true, value = "Represents label for created component used in validation messages. If not set, falls back to label attribute's value.")
     private ModelBinding validationLabelModelBinding;
 

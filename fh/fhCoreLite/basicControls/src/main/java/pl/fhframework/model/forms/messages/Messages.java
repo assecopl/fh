@@ -30,7 +30,9 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
 import lombok.Getter;
+import pl.fhframework.model.forms.attribute.FormType;
 
+import static pl.fhframework.model.forms.attribute.FormType.MODAL;
 import static pl.fhframework.model.forms.attribute.FormType.MODAL_OVERFLOW;
 
 /**
@@ -101,8 +103,28 @@ public class Messages implements IMessages {
      * @param message   actual message
      */
     public static MessagePopup showInfoMessage(UserSession session, String message) {
+        return showInfoMessage(session, message, false);
+    }
+
+    /**
+     * Helper method
+     * Shows simple message with default title
+     * @param session   user session
+     * @param message   actual message
+     */
+    public static MessagePopup showInfoMessageNoOverflow(UserSession session, String message) {
+        return showInfoMessage(session, message, true);
+    }
+
+    /**
+     * Helper method
+     * Shows simple message with default title
+     * @param session   user session
+     * @param message   actual message
+     */
+    protected static MessagePopup showInfoMessage(UserSession session, String message, boolean noOverflow) {
         String messageTitle = messageService.getAllBundles().getMessage(CoreKeysMessages.DIALOG_INFO_TITLE, "Information");
-        return showMessage(session, messageTitle, message, Severity.INFO);
+        return showMessage(session, messageTitle, message, Severity.INFO, noOverflow);
     }
 
     /**
@@ -145,6 +167,7 @@ public class Messages implements IMessages {
 
         return dialog;
     }
+
     /**
      * Helper method
      * Shows dialog with one close button
@@ -155,10 +178,37 @@ public class Messages implements IMessages {
      * @param severity    severity of message
      */
     public static MessagePopup showMessage(UserSession session, String dialogTitle, String message, Severity severity) {
+        return showMessage(session, dialogTitle, message, severity, false);
+    }
+
+    /**
+     * Helper method
+     * Shows dialog with one close button
+     *
+     * @param session     user session
+     * @param dialogTitle message dialog title
+     * @param message     actual message
+     * @param severity    severity of message
+     */
+    public static MessagePopup showMessageNoOverflow(UserSession session, String dialogTitle, String message, Severity severity) {
+        return showMessage(session, dialogTitle, message, severity, true);
+    }
+
+    /**
+     * Helper method
+     * Shows dialog with one close button
+     *
+     * @param session     user session
+     * @param dialogTitle message dialog title
+     * @param message     actual message
+     * @param severity    severity of message
+     */
+    protected static MessagePopup showMessage(UserSession session, String dialogTitle, String message, Severity severity, boolean noOverflow) {
         MessagePopup dialog = builder(session)
                 .withDialogTitle(dialogTitle)
                 .withMessage(message)
                 .withSeverityLevel(severity)
+                .withFormType(noOverflow ? MODAL : MODAL_OVERFLOW)
                 .build();
 
         UseCaseContainer.PopupMessageUseCaseContextMessage<?, ?> usecaseWrapper = ( UseCaseContainer.PopupMessageUseCaseContextMessage) dialog.getAbstractUseCase();
@@ -187,13 +237,33 @@ public class Messages implements IMessages {
      * @param error
      */
     public static MessagePopup showErrorMessage(UserSession session, String message, Throwable error) {
+        return showErrorMessage(session, message, error, false);
+    }
+
+    /**
+     * Helper method
+     * @param session
+     * @param message
+     * @param error
+     */
+    public static MessagePopup showErrorMessageNoOverflow(UserSession session, String message, Throwable error) {
+        return showErrorMessage(session, message, error, true);
+    }
+
+    /**
+     * Helper method
+     * @param session
+     * @param message
+     * @param error
+     */
+    protected static MessagePopup showErrorMessage(UserSession session, String message, Throwable error, boolean noOverflow) {
         StringBuilder sb = new StringBuilder();
         sb.append(StringUtils.nullToEmpty(message)).append(newline);
         if (error != null) {
             sb.append(newline).append("[ ").append(error.getMessage()).append(" ]");
         }
         String errorTitle = messageService.getAllBundles().getMessage(CoreKeysMessages.DIALOG_ERROR_TITLE, "Error");
-        return showMessage(session, errorTitle, message, Severity.ERROR);
+        return showMessage(session, errorTitle, message, Severity.ERROR, noOverflow);
     }
 
     /**
@@ -365,6 +435,8 @@ public class Messages implements IMessages {
 
         private Optional<Severity> severity = Optional.empty();
 
+        private Optional<FormType> formType = Optional.empty();
+
         private List<ActionButton> actions = new LinkedList<>();
         private UserSession session;
         private boolean bindableText = false;
@@ -406,9 +478,13 @@ public class Messages implements IMessages {
             this.bindableText = true;
             return this;
         }
+        public Builder withFormType(FormType formType){
+            this.formType = Optional.ofNullable(formType);
+            return this;
+        }
 
         public MessagePopup build(){
-            MessagePopup dialog = createDialog(session, dialogId, dialogTitle, messageTitle, messageData, severity);
+            MessagePopup dialog = createDialog(session, dialogId, dialogTitle, messageTitle, messageData, severity, formType);
 
             for (ActionButton actionButton : actions) {
                 Button button = new Button(dialog);
@@ -434,11 +510,11 @@ public class Messages implements IMessages {
          *  Creates internal structure of message dialog
          */
         private MessagePopup createDialog(UserSession session,
-                                         Optional<String> dialogId,
-                                         Optional<String> dialogTitle,
-                                         Optional<String> messageTitle,
-                                         Optional<String> messageData,
-                                         Optional<Severity> severity) {
+                                          Optional<String> dialogId,
+                                          Optional<String> dialogTitle,
+                                          Optional<String> messageTitle,
+                                          Optional<String> messageData,
+                                          Optional<Severity> severity, Optional<FormType> formType) {
 
             MessagePopup dialog = new MessagePopup();
 
@@ -449,7 +525,7 @@ public class Messages implements IMessages {
             }
             dialog.setDeclaredContainer(mainContainerName);
 
-            dialog.setFormType(MODAL_OVERFLOW); // by default Messages overflow other modal forms (if are any)
+            dialog.setFormType(formType.orElse(MODAL_OVERFLOW)); // by default Messages overflow other modal forms (if are any)
             dialog.setWidth("md-2");
             dialog.setLabelModelBinding(binding(dialogTitle.isPresent() ? dialogTitle.get() : "", dialog));
 

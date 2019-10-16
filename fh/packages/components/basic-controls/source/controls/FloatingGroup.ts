@@ -70,8 +70,6 @@ class FloatingGroup extends PanelGroup {
     create() {
         super.create();
 
-        console.log("isDraggable", this.isDraggable)
-
         if (this.hideHeader) {
             $(this.component).find('.card-header').remove();
         }

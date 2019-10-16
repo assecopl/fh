@@ -305,11 +305,12 @@ public class Column extends GroupingComponent<FormElement> implements CompactLay
     private List<FormElement> createTableCells(Column columnOrSubcolumn, LowLevelRowMetadata lowLevelRowMetadata) {
         List<FormElement> tableCells = new ArrayList<>();
         List<Column> subColumns = columnOrSubcolumn.getSubcolumns();
+        Form.ViewMode viewMode = table.getForm().getViewMode();
 
         if (subColumns.size() == 0) {
-            if (table.getForm().getViewMode() == Form.ViewMode.NORMAL) {
+            if (viewMode == Form.ViewMode.NORMAL) {
                 createTableCell(columnOrSubcolumn, lowLevelRowMetadata, getTable().getColumns()).ifPresent(tableCells::add);
-            } else if (table.getForm().getForm().getViewMode() == Form.ViewMode.PREVIEW) { // designer edit mode not supported yet
+            } else if (viewMode == Form.ViewMode.PREVIEW || viewMode == Form.ViewMode.DESIGN) {
                 createTableCellForDesigner(columnOrSubcolumn, lowLevelRowMetadata, getTable().getColumns()).ifPresent(tableCells::add);
             }
         } else {
@@ -356,7 +357,6 @@ public class Column extends GroupingComponent<FormElement> implements CompactLay
         tableCell.setProcessComponentStateChange(false);
         tableCell.setGroupingParentComponent(this);
 
-        // designer preview mode
         for (FormElement prototypeCellComponent : prototype.getSubcomponents()) {
             getForm().addToElementIdToFormElement(prototypeCellComponent);
             getTable().getBindedSubcomponents().add(new IterationContext(0, prototypeCellComponent));

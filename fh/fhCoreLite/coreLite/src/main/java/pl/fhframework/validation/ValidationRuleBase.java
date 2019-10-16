@@ -1,5 +1,6 @@
 package pl.fhframework.validation;
 
+import pl.fhframework.SessionManager;
 import pl.fhframework.core.FhException;
 import pl.fhframework.model.PresentationStyleEnum;
 import pl.fhframework.model.forms.Form;
@@ -45,16 +46,21 @@ public class ValidationRuleBase {
     }
 
     protected void addCustomMessage(Object parent, String attributeName, String message, PresentationStyleEnum presentationStyleEnum) {
-        if (getValidationResults() == null) {
-            throw new FhException("No validation context");
+        IValidationResults validationResults = getValidationResults();
+        if (validationResults == null) {
+            validationResults = SessionManager.getUserSession().getValidationResults();
+        }
+        Form form = getForm();
+        if (form == null) {
+            form = SessionManager.getUserSession().getUseCaseContainer().getCurrentUseCaseContext().getUseCase().getActiveForm();
         }
         if (parent == null) {
-            if (getForm() != null) {
-                parent = getForm().getModel();
+            if (form != null) {
+                parent = form.getModel();
             } else {
                 parent = "root";
             }
         }
-        getValidationResults().addCustomMessage(parent, attributeName, message, presentationStyleEnum);
+        validationResults.addCustomMessage(parent, attributeName, message, presentationStyleEnum);
     }
 }

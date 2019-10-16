@@ -5,7 +5,9 @@ import pl.fhframework.core.CoreSystemFunction;
 import pl.fhframework.core.security.annotations.SystemFunction;
 import pl.fhframework.core.services.ExcludeOperation;
 import pl.fhframework.core.services.FhService;
+import pl.fhframework.core.util.TemplateVariablesExpander;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +30,11 @@ public class EmailFhService {
 
     @ExcludeOperation
     public void sendTemplate(final String title, final String templateMsg, Map<String, Object> params, Map<String, Boolean> sections, final List<String> recipients) {
-        emailService.sendTemplate(title, templateMsg, params, sections, recipients);
+       sendTemplate(title, templateMsg, params, sections, Collections.emptyMap(), recipients);
+    }
+
+    @ExcludeOperation
+    public void sendTemplate(final String title, final String templateMsg, Map<String, Object> params, Map<String, Boolean> sections, Map<String, TemplateVariablesExpander.LoopingSection> loopingSections, final List<String> recipients) {
+        emailService.sendTemplate(title, templateMsg, params, sections, loopingSections, recipients);
     }
 }

@@ -16,6 +16,7 @@ import pl.fhframework.core.uc.UseCaseContainer;
 import pl.fhframework.core.uc.url.UseCaseUrl;
 import pl.fhframework.core.util.DebugUtils;
 import pl.fhframework.event.EventRegistry;
+import pl.fhframework.event.dto.ChatEvent;
 import pl.fhframework.event.dto.ForcedLogoutEvent;
 import pl.fhframework.event.dto.MessageEvent;
 import pl.fhframework.event.dto.ShutdownEvent;
@@ -224,6 +225,11 @@ public class UserSession extends Session {
     public void pushMessage(WebSocketContext context, String title, String message) {
         getUseCaseRequestContext().getEvents().add(new MessageEvent(title, message));
         formsHandler.finishEventHandling("MESSAGE", context);
+    }
+
+    public void pushChatInfo(WebSocketContext context, Long chatId) {
+        getUseCaseRequestContext().getEvents().add(new ChatEvent(chatId));
+        formsHandler.finishEventHandling("CHAT", context);
     }
 
     public UserSessionDescription getDescription(){

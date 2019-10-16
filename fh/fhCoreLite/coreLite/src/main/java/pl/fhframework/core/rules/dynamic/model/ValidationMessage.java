@@ -115,6 +115,7 @@ public class ValidationMessage extends Statement {
     }
 
     public enum ValidationLevelEnum {
+        Blocker("blocker"),
         Error("error"),
         Warning("warning"),
         Info("info"),

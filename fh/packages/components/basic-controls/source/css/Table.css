@@ -133,6 +133,10 @@ thead.tableFloatingHeaderOriginal > tr th {
     position: relative;
     display: none;
 }
+
+.hasHeight.containerTable, .hasHeight.containerTablePaged {
+    pointer-events: all;
+}
 .hasHeight .fc.table {
     overflow: hidden;
 }
@@ -172,12 +176,27 @@ thead.tableFloatingHeaderOriginal > tr th {
 .hasHeight .fc.table {
     margin-bottom: 0;
 }
-.tableFixedHeader.hasHeight .fc.table td .wrapper,
-.tableFixedHeader.hasHeight .fc.table td .wrapper *,
-.tableFixedHeader.hasHeight .fc.table td-a .wrapper,
-.tableFixedHeader.hasHeight .fc.table td-a .wrapper * {
-    position: static;
+
+.tableFixedHeader.hasHeight thead tr th {
+    position: relative;
+    background-color: white;
+    opacity: 0.99;
 }
+.tableFixedHeader.hasHeight thead tr th:after {
+    content: "";
+    display: block;
+    background-color: transparent;
+    position: absolute;
+    top:-1px;
+    left:-1px;
+    bottom: -1px;
+    right: -1px;
+    z-index: 1;
+    border: 1px solid #dee2e6;
+}
+
 .hasHeight.tableFixedHeader .fc.table th {
-    background: white;
+    background-color: white;
+    position: relative;
+    z-index: 1001;
 }

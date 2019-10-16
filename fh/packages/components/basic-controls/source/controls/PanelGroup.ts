@@ -240,7 +240,9 @@ class PanelGroup extends HTMLFormComponent {
                 new AdditionalButton('moveDown', 'arrow-down', 'Move down')
             ];
         } else {
-            return [];
+            return [
+                new AdditionalButton('addDefaultSubcomponent', 'plus', 'Add empty row')
+            ];
         }
     }
 }

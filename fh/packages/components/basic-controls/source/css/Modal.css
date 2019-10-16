@@ -13,6 +13,11 @@
     max-width: 1400px;
 }
 
+.modal-full {
+    max-width: none;
+    margin-left: 15px;
+}
+
 .fc.form.modal.show {
     overflow-y: scroll;
     word-break: break-word;

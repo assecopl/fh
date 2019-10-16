@@ -40,16 +40,12 @@ module.exports = function (cmdEnv) {
                     loader: 'css-loader'
                 }]
             }, {
-                test: /\.ts(x?)$/,
+                test: /\.tsx?$/,
                 exclude: /node_modules/,
                 use: [{
                     loader: 'babel-loader'
                 }, {
-                    loader: 'ts-loader',
-                    options: {
-                        transpileOnly: true,
-                        happyPackMode: true
-                    }
+                    loader: 'ts-loader'
                 }]
             }, {
                 test: /\.js$/,

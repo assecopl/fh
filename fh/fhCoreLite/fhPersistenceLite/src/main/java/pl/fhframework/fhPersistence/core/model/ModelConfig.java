@@ -20,8 +20,6 @@ import java.util.*;
 /**
  * Created by pawel.ruta on 2017-02-27.
  */
-@Getter
-@Setter
 @Component
 public class ModelConfig {
     protected final Map<Class, Map<String, FieldAnnotation>> classFieldsAnnotations = new HashMap<>();
@@ -334,7 +332,23 @@ public class ModelConfig {
             clacClass(entityClass);
         }
 
-        return getOtherSideRelations().get(entityClass);
+        return otherSideRelations.get(entityClass);
+    }
+
+    public Map<String, FieldAnnotation> getClassFieldsAnnotationsForClass(Class<? extends BaseEntity> entityClass) {
+        if (!classFieldsAnnotations.containsKey(entityClass)) {
+            clacClass(entityClass);
+        }
+
+        return classFieldsAnnotations.get(entityClass);
+    }
+
+    public Map<String, String> getNonOwningRelationsForClass(Class<? extends BaseEntity> entityClass) {
+        if (!nonOwningRelations.containsKey(entityClass)) {
+            clacClass(entityClass);
+        }
+
+        return nonOwningRelations.get(entityClass);
     }
 
     @Data

@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>pl.fhframework</groupId>
     <artifactId>fhTomcat-config</artifactId>
-    <version>4.3-SNAPSHOT</version>
+    <version>4.5-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>fhTomcat-config</name>
@@ -13,7 +13,7 @@
     <parent>
         <groupId>pl.fhframework</groupId>
         <artifactId>fhCoreLite</artifactId>
-        <version>4.3-SNAPSHOT</version>
+        <version>4.5-SNAPSHOT</version>
     </parent>
 
     <dependencies>

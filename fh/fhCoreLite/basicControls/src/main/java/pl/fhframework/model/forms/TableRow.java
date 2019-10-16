@@ -1,16 +1,14 @@
 package pl.fhframework.model.forms;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import lombok.Getter;
+import pl.fhframework.events.IEventSource;
 import pl.fhframework.model.dto.ElementChanges;
 import pl.fhframework.model.forms.table.LowLevelRowMetadata;
-import pl.fhframework.events.IEventSource;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
-import lombok.Getter;
 
 public class TableRow {
 

@@ -29,8 +29,11 @@ public abstract class XMLReader<READ_OBJECT_TYPE, ROOT_TYPE extends READ_OBJECT_
     }
 
     public ROOT_TYPE readObject(FhResource fileResource, ROOT_TYPE root) {
+        return readObject(fileResource.getContent(), fileResource, root);
+    }
+
+    public ROOT_TYPE readObject(byte[] content, FhResource fileResource, ROOT_TYPE root) {
         // read whole file - work around for self-closing ZipFileInflaterInputStream in case of jar urls
-        byte[] content = fileResource.getContent();
         try {
             XMLStreamReader reader = buildReader(new ByteArrayInputStream(content));
             try {
@@ -44,7 +47,7 @@ public abstract class XMLReader<READ_OBJECT_TYPE, ROOT_TYPE extends READ_OBJECT_
             }
         } catch (XMLStreamException e) {
             throw new FhException(String.format("Error during parsing file '%s' at %s %d",
-                    fileResource.toString(), e.getLocalizedMessage(),
+                    fileResource, e.getLocalizedMessage(),
                     e.getLocation() != null ? e.getLocation().getLineNumber() : null), e.getNestedException() != null ? e.getNestedException() : e);
         }
     }

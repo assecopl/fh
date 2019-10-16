@@ -1,26 +1,23 @@
 package pl.fhframework.model.forms;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import pl.fhframework.BindingResult;
+import pl.fhframework.annotations.*;
+import pl.fhframework.binding.IRowNumberOffsetSupplier;
+import pl.fhframework.binding.ModelBinding;
 import pl.fhframework.core.designer.JavaPropertyNameDesignerAttributeSupport;
 import pl.fhframework.core.forms.IterationContext;
 import pl.fhframework.core.forms.iterators.IRepeatableIteratorInfo;
 import pl.fhframework.core.forms.iterators.ISingleIteratorComponentFactory;
 import pl.fhframework.core.forms.iterators.ISingleIteratorRepeatable;
 import pl.fhframework.core.forms.iterators.RepeatableIteratorInfo;
-import pl.fhframework.BindingResult;
-import pl.fhframework.annotations.*;
-import pl.fhframework.annotations.Control;
-import pl.fhframework.binding.IRowNumberOffsetSupplier;
-import pl.fhframework.binding.ModelBinding;
 import pl.fhframework.model.dto.ElementChanges;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
 
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.CONTENT;
 

@@ -74,8 +74,8 @@ class InputTimestamp extends InputDate implements LanguageChangeObserver {
         $(this.inputGroupElement).data("DateTimePicker").date(
             InputDate.toDateOrLeave(this.rawValue, this.backendFormat, this.format));
 
-        $(this.input).on('blur', this.onInputEvent.bind(this));
-        $(this.input).on('change', this.onInputEvent.bind(this));
+        $(this.input).on('blur', this.inputBlurEvent.bind(this));
+        $(this.input).on('change', this.inputChangeEvent.bind(this));
     };
 
     applyDatepicker() {
@@ -117,8 +117,8 @@ class InputTimestamp extends InputDate implements LanguageChangeObserver {
     }
 
     destroy(removeFromParent: boolean) {
-        $(this.input).off('blur', this.onInputEvent.bind(this));
-        $(this.input).off('change', this.onInputEvent.bind(this));
+        $(this.input).off('blur', this.inputBlurEvent.bind(this));
+        $(this.input).off('change', this.inputChangeEvent.bind(this));
 
         let component = (<any>$(this.inputGroupElement));
         let data = component.data("DateTimePicker");

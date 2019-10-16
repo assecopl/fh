@@ -101,6 +101,22 @@ class Wizard extends HTMLFormComponent {
             if (this.designMode) {
                 Wizard.designerActiveTabs[this.componentObj.id] = tabId;
             }
+
+            if (this.component.children) {
+                let wizardTabs;
+                let tabs = this.component.children;
+                Array.from(tabs).forEach(element => {
+                    // @ts-ignore
+                    if (element.classList.contains('tab-content')) {
+                        // @ts-ignore
+                        wizardTabs = element.children;
+                    }
+                });
+                if (wizardTabs) {
+                    let activeTab = wizardTabs[tabId];
+                    activeTab.classList.add('active');
+                }
+            }
         }
     };
 

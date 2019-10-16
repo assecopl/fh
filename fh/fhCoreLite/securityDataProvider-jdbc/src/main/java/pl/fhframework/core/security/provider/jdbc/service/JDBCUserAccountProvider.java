@@ -18,6 +18,7 @@ import pl.fhframework.core.security.provider.service.UserAccountProvider;
 import pl.fhframework.core.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -100,6 +101,12 @@ public class JDBCUserAccountProvider implements UserAccountProvider {
                 pageRequest,
                 userAccountRepository.findAll(example, pageRequest)
         );
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<IUserAccount> findAllUserAccounts() {
+        return new ArrayList<>(userAccountRepository.findAll());
     }
 
     @Override

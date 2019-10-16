@@ -18,6 +18,7 @@ class FileUpload extends HTMLFormComponent {
     private labelSpanElement: HTMLElement;
     private readonly pendingUploadHandle: any;
     private inputFileButton: HTMLAnchorElement;
+    private readonly style: any;
 
     constructor(componentObj: any, parent: HTMLFormComponent) {
         super(componentObj, parent);
@@ -30,6 +31,7 @@ class FileUpload extends HTMLFormComponent {
         this.extensions = this.componentObj.extensions || '';
         this.fileNames = this.componentObj.fileNames || [];
         this.label = this.componentObj.label;
+        this.style = this.componentObj.style;
         this.inputHeight = this.componentObj.height || null;
         this.input = null;
         this.labelHidden = this.componentObj.labelHidden;
@@ -37,6 +39,7 @@ class FileUpload extends HTMLFormComponent {
         this.labelSpanElement = null;
         this.pendingUploadHandle = null;
         this.multiple = this.componentObj.multiple;
+        this.presentationStyle = this.style;
     }
 
     create() {
@@ -46,8 +49,10 @@ class FileUpload extends HTMLFormComponent {
             fileUpload.classList.add(cssClass);
         }.bind(this));
 
+
+
         this.inputFileButton = document.createElement('a');
-        ['fc', 'button', 'btn', 'btn-primary', 'btn-block'].forEach(function (cssClass) {
+        ['fc', 'button', 'btn', 'btn-' + this.style, 'btn-block'].forEach(function (cssClass) {
             this.inputFileButton.classList.add(cssClass);
         }.bind(this));
         if (this.inputHeight) {
@@ -149,7 +154,7 @@ class FileUpload extends HTMLFormComponent {
                     if (this.extensions && fileNameSplit.length == 1) {
                         FhContainer.get<NotificationEvent>('Events.NotificationEvent').fire({
                             level: 'error',
-                            message: this.__('no file extension', [this.extensions])
+                            message: this.__('no file extension', [this.extensions]).innerText
                         });
                         error = true;
                     }
@@ -161,7 +166,7 @@ class FileUpload extends HTMLFormComponent {
                         if (allowedExtensions.indexOf(sentFileExtension) === -1) {
                             FhContainer.get<NotificationEvent>('Events.NotificationEvent').fire({
                                 level: 'error',
-                                message: this.__('incorrect file extension', [this.extensions, sentFileExtension])
+                                message: this.__('incorrect file extension', [this.extensions, sentFileExtension]).innerText
                             });
                             error = true;
                         }
@@ -170,7 +175,7 @@ class FileUpload extends HTMLFormComponent {
                     if (file.size > this.componentObj.maxSize) {
                         FhContainer.get<NotificationEvent>('Events.NotificationEvent').fire({
                             level: 'error',
-                            message: this.__('max file exceeded', [FileUpload.toDisplaySize(this.componentObj.maxSize)])
+                            message: this.__('max file exceeded', [FileUpload.toDisplaySize(this.componentObj.maxSize)]).innerText
                         });
                         error = true;
                     }
@@ -202,14 +207,14 @@ class FileUpload extends HTMLFormComponent {
                         let level = 'error';
                         let msg;
                         if (status === 409) {
-                            msg = this.__('max file exceeded');
+                            msg = this.__('max file exceeded').innerText;
                         } else if (status === 400) {
-                            msg = this.__('incorrect file extension');
+                            msg = this.__('incorrect file extension').innerText;
                         } else if (status === -1) {
                             level = 'warning';
-                            msg = this.__('upload aborted');
+                            msg = this.__('upload aborted').innerText;
                         } else {
-                            msg = this.__('upload error');
+                            msg = this.__('upload error').innerText;
                         }
 
 
@@ -267,6 +272,11 @@ class FileUpload extends HTMLFormComponent {
                 case 'extensions':
                     this.extensions = newValue;
                     break;
+                case 'style':
+                    this.component.classList.remove('btn-' + this.style);
+                    this.component.classList.add('btn-' + newValue);
+                    this.style = newValue;
+                    break;
             }
             $(this.component).find('.progress-bar').hide(0).width(0);
             $(this.component).find('.progress-bar').parent().get(0).classList.add('d-none');
@@ -280,10 +290,9 @@ class FileUpload extends HTMLFormComponent {
     setPresentationStyle(presentationStyle: string) {
         let button = this.component.querySelector('.button');
 
-        button.classList.remove('btn-danger');
-        button.classList.remove('btn-primary');
+        button.classList.remove('btn-' + this.style);
 
-        switch (presentationStyle) {
+        switch (presentationStyle.toUpperCase()) {
             case 'BLOCKER':
             case 'ERROR':
                 button.classList.add('btn-danger');
@@ -291,10 +300,16 @@ class FileUpload extends HTMLFormComponent {
             case 'OK':
                 button.classList.add('btn-primary');
                 break;
+            case 'SUCCESS':
+                button.classList.add('btn-success');
+                break;
             case 'INFO':
                 button.classList.add('btn-info');
                 break;
             case 'WARNING':
+                button.classList.add('btn-warning');
+                break;
+            case 'DANGER':
                 button.classList.add('btn-danger');
                 break;
             default:
@@ -349,7 +364,7 @@ class FileUpload extends HTMLFormComponent {
         this.inputFileButton.classList.remove('disabled');
         switch (accessibility) {
             case 'EDIT':
-                this.input.disabled = this.getViewMode() != 'NORMAL';
+                this.input.disabled = false;
                 break;
             case 'VIEW':
                 this.inputFileButton.classList.add('disabled');

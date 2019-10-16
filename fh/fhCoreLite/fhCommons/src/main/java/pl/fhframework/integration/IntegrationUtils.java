@@ -30,7 +30,7 @@ public class IntegrationUtils {
     public static boolean isAbsolute(String url) {
         final URI u;
         try {
-            u = new URI(url);
+            u = new URI(url.split("\\?")[0]);
 
             return u.isAbsolute();
         } catch (URISyntaxException e) {

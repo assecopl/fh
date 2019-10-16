@@ -5,13 +5,6 @@
     cursor: pointer;
 }
 
-.fc.wrapper.inline.form-group {
-     display: flex;
-     flex-direction: column;
-     justify-content: flex-end;
-     padding: 0 15px;
-}
-
 .dropdown .btn.disabledElement {
     pointer-events: none;
     opacity: 0.65;

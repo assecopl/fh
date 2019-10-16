@@ -1,17 +1,17 @@
-import '../../external/jquery.resizableColumns.min';
 import {AdditionalButton, HTMLFormComponent, FhContainer} from "fh-forms-handler";
+import {TableFixedHeaderAndHorizontalScroll} from "./Abstract/TableFixedHeaderAndHorizontalScroll";
 
-class Table extends HTMLFormComponent {
-    private readonly visibleRows: any;
-    private readonly tableData: any;
-    private rows: any;
-    private readonly rowIndexMappings: any;
+class Table extends TableFixedHeaderAndHorizontalScroll {
+    protected readonly visibleRows: any;
+    protected readonly tableData: any;
+    protected rows: Array<any> = [];
+    protected readonly rowIndexMappings: any;
     private readonly rowStylesMapping: any;
     private readonly minRows: any;
     private readonly rowHeight: any;
     private readonly tableGrid: any;
     private readonly tableStripes: any;
-    private readonly onRowClick: any;
+    protected readonly onRowClick: any;
     private readonly onRowDoubleClick: any;
     private readonly multiselect: any;
     private readonly selectionCheckboxes: any;
@@ -19,11 +19,14 @@ class Table extends HTMLFormComponent {
     private readonly selectable: boolean;
     private ctrlIsPressed: any;
     public totalColumns: number;
-    private fixedHeader: boolean;
     protected ieFocusFixEnabled: boolean;
-    private table: HTMLTableElement;
-    private header: HTMLTableSectionElement;
+    protected table: HTMLTableElement;
+    protected header: HTMLTableSectionElement;
+    protected footer: HTMLTableSectionElement = null;
     private _dataWrapper: HTMLTableSectionElement;
+
+    private keyEventTimer: any;                //timer identifier
+    private doneEventInterval: number = 500;   //event delay in miliseconds
 
     constructor(componentObj: any, parent: HTMLFormComponent) {
         super(componentObj, parent);
@@ -34,10 +37,9 @@ class Table extends HTMLFormComponent {
         this.rowIndexMappings = this.componentObj.rowIndexMappings || null;
         this.rowStylesMapping = this.componentObj.rowStylesMapping || [];
         this.minRows = this.componentObj.minRows || null;
-        this.fixedHeader = this.componentObj.fixedHeader || false;
         this.rowHeight = this.componentObj.rowHeight || 'normal';
-        this.tableGrid = this.componentObj.tableGrid || 'show';
-        this.tableStripes = this.componentObj.tableStripes || 'show';
+        this.tableGrid = this.componentObj.tableGrid || 'hide';
+        this.tableStripes = this.componentObj.tableStripes || 'hide';
         this.ieFocusFixEnabled = this.componentObj.ieFocusFixEnabled || false;
         this.rawValue = this.componentObj.rawValue || this.componentObj.selectedRowsNumbers || [];
 
@@ -130,6 +132,7 @@ class Table extends HTMLFormComponent {
         this.display();
 
         if (this.componentObj.columns) {
+            this.totalColumns = this.componentObj.columns.length;
             this.addComponents(this.componentObj.columns);
         }
 
@@ -141,6 +144,7 @@ class Table extends HTMLFormComponent {
             row.appendChild(footCell);
             footer.appendChild(row);
             this.table.appendChild(footer);
+            this.footer = footer;
 
             this.contentWrapper = footCell;
             this.addComponent(this.componentObj.footer);
@@ -150,17 +154,8 @@ class Table extends HTMLFormComponent {
         this.refreshData();
         $(this.table).on('mousedown', this.tableMousedownEvent);
         this.calculateColumnWidths();
-        if (!this.componentObj.horizontalScrolling) {
-            // @ts-ignore
-            $(this.table).resizableColumns();
-            // @ts-ignore
-            $(this.table).resizableColumns('syncHandleWidths');
-        }
+        this.initFixedHeaderAndScrolling();
 
-        if (this.fixedHeader) {
-            this.component.classList.add('tableFixedHeader');
-            this.component.addEventListener('scroll', this.fixedHeaderEvent.bind(this));
-        }
     }
 
     update(change) {
@@ -210,16 +205,12 @@ class Table extends HTMLFormComponent {
         }
     }
 
-    tableKeyupEvent() {
-        this.ctrlIsPressed = false;
-    }
-
-    fixedHeaderEvent(e) {
-        const el = e.target;
-        $(this.header)
-            .find('th')
-            .css('transform', 'translateY(' + el.scrollTop + 'px)');
-    }
+    // fixedHeaderEvent(e) {
+    //     const el = e.target;
+    //     $(this.header)
+    //         .find('th')
+    //         .css('transform', 'translateY(' + el.scrollTop + 'px)');
+    // }
 
     onRowClickEvent(event) {
         if (this.accessibility != 'EDIT') return;
@@ -416,9 +407,7 @@ class Table extends HTMLFormComponent {
         if (this.onRowClick === '-' || !clearSelection) {
             this.highlightSelectedRows();
         }
-        if (!this.componentObj.horizontalScrolling) {
-            (<any>$(this.table)).resizableColumns('syncHandleWidths');
-        }
+
     };
 
     addMinRowRows() {
@@ -468,26 +457,6 @@ class Table extends HTMLFormComponent {
         return result;
     };
 
-    calculateColumnWidths() {
-        let total = 100;
-        let count = this.components.length;
-
-        this.components.forEach(function (column: any) {
-            if (column.width) {
-                column.component.style.width = column.width + '%';
-                total -= column.width;
-                count--;
-            }
-        });
-        if (count && total > count) {
-            this.components.forEach(function (column: any) {
-                if (!column.width) {
-                    column.width = total / count;
-                    column.component.style.width = column.width + '%';
-                }
-            });
-        }
-    };
 
     highlightSelectedRows() {
         let oldSelected = this.table.querySelectorAll('.table-primary');
@@ -504,7 +473,7 @@ class Table extends HTMLFormComponent {
             if (value != -1) {
                 let row = this.table.querySelector(('[data-main-id="' + value + '"]'));
                 row.classList.add('table-primary');
-                let container = $(this.htmlElement);
+                let container = $(this.component);
                 let scrollTo = $(row);
                 if (this.rawValue.length < 2) {
                     let containerHeight = container.height();
@@ -513,8 +482,8 @@ class Table extends HTMLFormComponent {
                     if (realPositionElement < containerScrollTop || realPositionElement
                         > containerScrollTop
                         + containerHeight) {
-                        container.animate({
-                            scrollTop: realPositionElement
+                        $(this.component).animate({
+                            scrollTop: realPositionElement - scrollTo.outerHeight()
                         });
                     }
                 }
@@ -562,48 +531,76 @@ class Table extends HTMLFormComponent {
         }
     };
 
+    tableKeyupEvent(e) {
+        this.ctrlIsPressed = false;
+        if (e.which == 9 && $(document.activeElement).is(":input")) {
+            let parent = $(document.activeElement).parents('tbody tr:not(.emptyRow)');
+
+            if (parent && parent.length > 0) {
+                parent.trigger('click');
+            }
+        }
+    }
+
     bindKeyboardEvents() {
         this.table.addEventListener('keydown', function (e) {
             if (document.activeElement == this.table) {
                 if (e.which == 40) { // strzalka w dol
+                    clearTimeout(this.keyEventTimer);
                     e.preventDefault();
+                    let current = $(this.htmlElement).find('tbody tr.table-primary');
+                    let next = null;
 
-                    let next = $(this.htmlElement).find('tbody tr.table-primary');
-                    if (next.length == 0) {
+                    if (current.length == 0) {
                         next = $(this.htmlElement).find('tbody tr:not(.emptyRow)').first();
                     } else {
-                        next = next.next('tr:not(.emptyRow)');
+                        next = current.next('tr:not(.emptyRow)');
+                    }
+                    //If there isn't next element we go back to first one.
+                    if (next && next.length == 0) {
+                        next = $(this.htmlElement).find('tbody tr:not(.emptyRow)').first();
                     }
 
                     if (next && next.length > 0) {
+                        current.removeClass('table-primary');
+                        next.addClass('table-primary');
                         let offset = $(next).position().top;
                         if (this.fixedHeader) {
                             offset -= this.header.clientHeight;
                         }
-                        $(this.component).scrollTop(offset);
-                        next.trigger('click');
+                        $(this.component).scrollTop(offset - (this.component.clientHeight / 2));
+                        this.keyEventTimer = setTimeout(function (elem) {
+                            elem.trigger('click');
+                        }, this.doneEventInterval, next);
                     }
                 } else if (e.which == 38) { // strzalka w gore
                     e.preventDefault();
+                    clearTimeout(this.keyEventTimer);
+                    let current = $(this.htmlElement).find('tbody tr.table-primary');
+                    let prev = null;
 
-                    let prev = $(this.htmlElement).find('tbody tr.table-primary');
-                    if (prev.length == 0) {
+                    if (current.length == 0) {
                         prev = $(this.htmlElement).find('tbody tr:not(.emptyRow)').first();
                     } else {
-                        prev = prev.prev('tr:not(.emptyRow)');
+                        prev = current.prev('tr:not(.emptyRow)');
                     }
 
                     if (prev && prev.length == 0) {
                         $(this.component).scrollTop(0);
                     } else if (prev && prev.length > 0) {
+                        current.removeClass('table-primary');
+                        prev.addClass('table-primary');
                         let offset = $(prev).position().top;
                         if (this.fixedHeader) {
                             offset -= this.header.clientHeight;
                         }
-                        $(this.component).scrollTop(offset);
-                        prev.trigger('click');
+                        $(this.component).scrollTop(offset - (this.component.clientHeight / 2));
+                        this.keyEventTimer = setTimeout(function (elem) {
+                            elem.trigger('click');
+                        }, this.doneEventInterval, prev);
+
                     }
-                } else if (e.which == 33 || e.which == 36) { // pgup i home
+                }else if (e.which == 33 || e.which == 36) { // pgup i home
                     e.preventDefault();
 
                     let first = $(this.htmlElement).find('tbody tr:not(.emptyRow)').first();
@@ -649,14 +646,6 @@ class Table extends HTMLFormComponent {
     }
 
     destroy(removeFromParent) {
-        if (!this.componentObj.horizontalScrolling) {
-            // @ts-ignore
-            $(this.table).resizableColumns('destroy');
-        }
-
-        if (this.fixedHeader) {
-            this.component.removeEventListener('scroll', this.fixedHeaderEvent.bind(this));
-        }
         $(this.table).off('mousedown', this.tableMousedownEvent);
 
         if (this.selectable && this.onRowClick) {
@@ -671,6 +660,14 @@ class Table extends HTMLFormComponent {
     public get dataWrapper(): HTMLTableSectionElement {
         return this._dataWrapper;
     }
+
+    render() {
+        super.render();
+        if (!this.onRowClick || this.onRowClick === '-') {
+            this.highlightSelectedRows();
+        }
+    }
+
 }
 
 export {Table};

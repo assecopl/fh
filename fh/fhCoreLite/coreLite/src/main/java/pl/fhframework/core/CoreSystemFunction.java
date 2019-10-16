@@ -15,7 +15,9 @@ public enum CoreSystemFunction implements ISystemFunctionId {
     FUN_CORE_SERVICES_NOTIFICATION(CoreSystemFunction.CORE_SERVICES_NOTIFICATION),
     FUN_CORE_SERVICES_USER(CoreSystemFunction.CORE_SERVICES_USER),
     FUN_CORE_MAIL_SENDING(CoreSystemFunction.CORE_MAIL_SENDING),
-    FUN_CORE_LOGS(CoreSystemFunction.CORE_LOGS);
+    FUN_CORE_LOGS(CoreSystemFunction.CORE_LOGS),
+    FUN_SESSION_NEVER_EXPIRES(CoreSystemFunction.SESSION_NEVER_EXPIRES),
+    ;
 
     // Functions names
     public static final String CORE_RULES_PERSISTENCE_WRITE = "core/rules/persistence/write";
@@ -25,7 +27,9 @@ public enum CoreSystemFunction implements ISystemFunctionId {
     public static final String CORE_SERVICES_USER = "core/services/user";
     public static final String CORE_MAIL_SENDING = "core/mail/sending";
     public static final String CORE_LOGS = "core/logs";
+    public static final String SESSION_NEVER_EXPIRES = "sessionNeverExpires";
 
+    public static final String CORE_MODULE_ID = "557f04b2-0ccb-4800-89a1-6ef1bd531a6a";
     @Getter
     private String name;
     @Getter

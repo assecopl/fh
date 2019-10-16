@@ -18,13 +18,13 @@ import org.springframework.core.ResolvableType;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.core.type.filter.AssignableTypeFilter;
+import pl.fhframework.annotations.Action;
 import pl.fhframework.core.*;
 import pl.fhframework.core.dynamic.DynamicClassName;
 import pl.fhframework.core.generator.GeneratedDynamicClass;
 import pl.fhframework.core.io.FhResource;
 import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.core.util.StringUtils;
-import pl.fhframework.annotations.Action;
 import pl.fhframework.model.forms.Form;
 import pl.fhframework.subsystems.ModuleRegistry;
 
@@ -244,12 +244,12 @@ public class ReflectionUtils {
         });
     }
 
-    public static void run(Method method, Object container, Object... AtributeValues) {
+    public static Object run(Method method, Object container, Object... AtributeValues) {
         if (method != null) {
             try {
                 boolean accessible = method.isAccessible();
                 if (!accessible) method.setAccessible(true);
-                method.invoke(container, AtributeValues);
+                return method.invoke(container, AtributeValues);
             } catch (IllegalAccessException e) {
                 FhLogger.error(e);
             } catch (IllegalArgumentException e) {
@@ -279,6 +279,7 @@ public class ReflectionUtils {
                 throw new ActionInvocationException(method.getName(), ex);
             }
         }
+        return null;
     }
 
     public static <A extends Annotation> A giveClassAnnotations(Class<?> clazz, Class<A> annotationClazz) {
@@ -565,6 +566,23 @@ public class ReflectionUtils {
      */
     public static <T> Optional<Constructor> findConstructor(Class<T> clazz, Class... argTypes) {
         for (Constructor constructor : clazz.getConstructors()) { // public only
+            if (Arrays.equals(argTypes, constructor.getParameterTypes())) {
+                return Optional.of(constructor);
+            }
+        }
+        for (Constructor constructor : clazz.getConstructors()) {
+            if (argTypes.length == constructor.getParameterTypes().length) {
+                boolean match = true;
+                for (int i = 0; i < argTypes.length; i++) {
+                    if (!constructor.getParameterTypes()[i].isAssignableFrom(argTypes[i])){
+                        match = false;
+                        break;
+                    }
+                }
+                if (match) {
+                    return Optional.of(constructor);
+                }
+            }
             if (Arrays.equals(argTypes, constructor.getParameterTypes())) {
                 return Optional.of(constructor);
             }
@@ -880,6 +898,32 @@ public class ReflectionUtils {
         }
     }
 
+    /**
+     * Finds first matching public method.
+     * @param clazz class
+     * @param methodName method name
+     * @return method (optional)
+     */
+    public static Optional<Method> findMatchingPublicMethod(Class<?> clazz, String methodName) {
+        methodLoop:
+        for (Method foundMethod : clazz.getMethods()) {
+            if (foundMethod.isBridge()) {
+                continue;
+            }
+            // name matches
+            if (!foundMethod.getName().equals(methodName)) {
+                continue;
+            }
+
+            return Optional.of(foundMethod);
+        }
+        if (clazz.isInterface()) {
+            return findMatchingPublicMethod(Object.class, methodName);
+        } else {
+            return Optional.empty();
+        }
+    }
+
     public static Class<?> resolveToRealClass(Class<?> clazz) {
         if (clazz != null && clazz.getName().contains("_$$_")) {
             return clazz.getSuperclass();
@@ -981,7 +1025,13 @@ public class ReflectionUtils {
                     classArgs.add(arg.getClass());
                 }
             }
-            return clazz.getDeclaredConstructor(classArgs.toArray(new Class<?>[classArgs.size()])).newInstance(args);
+            Optional<Constructor> constructor = findConstructor(clazz, classArgs.toArray(new Class<?>[classArgs.size()]));
+            if (constructor.isPresent()) {
+                return (T) constructor.get().newInstance(args);
+            }
+            else {
+                throw new NoSuchMethodException("No constructor for " + clazz + " : " + args);
+            }
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
@@ -1006,9 +1056,13 @@ public class ReflectionUtils {
     public static String getSimpleClassName(Class clazz) {
         GeneratedDynamicClass dynamicClass = (GeneratedDynamicClass) clazz.getAnnotation(GeneratedDynamicClass.class);
         if (dynamicClass != null) {
-            return DynamicClassName.forClassName(dynamicClass.value()).getBaseClassName();
+            return getSimpleClassName(dynamicClass.value());
         }
         return clazz.getSimpleName();
+    }
+
+    public static String getSimpleClassName(String clazz) {
+        return DynamicClassName.forClassName(clazz).getBaseClassName();
     }
 
     public static boolean isGeneratedDynamicClass(Class clazz) {

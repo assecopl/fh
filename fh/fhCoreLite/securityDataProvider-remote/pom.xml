@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>securityDataProvider-remote</artifactId>
+    <groupId>pl.fhframework.core.security.provider</groupId>
+    <version>4.5-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>securityDataProvider-remote</name>
+    <description>Implementation of a remote security data provider</description>
+
+    <parent>
+        <groupId>pl.fhframework</groupId>
+        <artifactId>fhCoreLite</artifactId>
+        <version>4.5-SNAPSHOT</version>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>pl.fhframework.core.security.provider</groupId>
+            <artifactId>securityDataProvider</artifactId>
+            <version>${fh.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+</project>

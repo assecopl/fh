@@ -20,7 +20,7 @@ class Util {
     }
 
     public getPath(resource) {
-        if (resource.startsWith('http://') || resource.startsWith('https://')) {
+        if (resource.startsWith('http://') || resource.startsWith('https://') || resource.startsWith('data:')) {
             return resource;
         }
 

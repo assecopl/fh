@@ -1,5 +1,6 @@
 package pl.fhframework.model.forms;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,8 +31,6 @@ public class CompositeForm<T> extends Form<T> {
     private Map<String, OnEvent> xmlHandledEventsMap = null;
     private Map<String, MethodContext> compositeActionMethods = new HashMap<>();
     private List<OnEvent> registeredEvents = new ArrayList<>();
-    @Setter
-    private Supplier<T> modelProvider;
 
     public CompositeForm() {
         org.springframework.util.ReflectionUtils.doWithMethods(
@@ -59,17 +58,17 @@ public class CompositeForm<T> extends Form<T> {
         }
     }
 
-    @Override
-    public T getModel() {
-        return modelProvider.get();
-    }
-
     public void setEvents(List<OnEvent> eventList) {
         this.xmlHandledEventsMap = eventList.stream().collect(Collectors.toMap(OnEvent::getEventName, Function.identity()));
     }
 
     public void addRegisteredEvents(List<OnEvent> eventList) {
         registeredEvents.addAll(eventList);
+    }
+
+    @JsonIgnore
+    public Form<?> getEventProcessingForm() {
+        return this;
     }
 
     @AllArgsConstructor

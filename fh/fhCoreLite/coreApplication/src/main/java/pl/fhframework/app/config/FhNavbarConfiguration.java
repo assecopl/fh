@@ -10,6 +10,7 @@ import java.util.Map;
 public interface FhNavbarConfiguration extends IFhConfiguration {
     String BOOTSWATCH_THEME_URL = "https://bootswatch.com/4/%s/bootstrap.css";
     String FH_CSS = "fh";
+    String MATERIA_CSS = "materia";
     String BASE_CSS = "default";
 
     /**

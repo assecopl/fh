@@ -28,6 +28,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -121,11 +122,11 @@ public class StoreAccessServiceImpl implements StoreAccessService {
         Class type = from.getTypeClass();
 
         for (DataAccess condition : conditions) {
-            if (Offset.class.isInstance(condition)) {
+            if (condition instanceof Offset) {
                 offset = (Offset) condition;
-            } else if (Limit.class.isInstance(condition)) {
+            } else if (condition instanceof Limit) {
                 limit = (Limit) condition;
-            } else if (Count.class.isInstance(condition)) {
+            } else if (condition instanceof Count) {
                 count = (Count) condition;
             }
         }
@@ -133,9 +134,9 @@ public class StoreAccessServiceImpl implements StoreAccessService {
         Query query = entityManagerRepository.getEntityManager().createQuery(queryStr);
         for (int paramIdx = 1; paramIdx <= queryParams.size(); paramIdx++) {
             Object value = queryParams.get(paramIdx - 1);
-            if (LocalDate.class.isInstance(value)) {
+            if (value instanceof LocalDate || value instanceof LocalDateTime) {
                 query.setParameter(paramIdx, value);
-            } else if (Date.class.isInstance(value)) {
+            } else if (value instanceof Date) {
                 query.setParameter(paramIdx, (Date) value, TemporalType.TIMESTAMP);
             } else {
                 query.setParameter(paramIdx, value);
@@ -723,6 +724,8 @@ public class StoreAccessServiceImpl implements StoreAccessService {
             return "dateValue";
         } else if (Date.class.isAssignableFrom(fieldType)) {
             return "dateAndTimeValue";
+        } else if (LocalDateTime.class.isAssignableFrom(fieldType)) {
+            return "localDateTimeValue";
         } else if (Enum.class.isAssignableFrom(fieldType)) {
             return "stringValue";
         }

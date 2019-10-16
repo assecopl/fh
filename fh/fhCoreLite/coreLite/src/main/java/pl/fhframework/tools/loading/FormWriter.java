@@ -73,7 +73,7 @@ public class FormWriter {
         }
     }
 
-    public static String toXml(Form form, boolean preserveIds) {
+    public static String toXml(Component form, boolean preserveIds) {
         return prettyPrintXml(elementToXml(form, preserveIds));
     }
 
@@ -222,7 +222,7 @@ public class FormWriter {
         return xmlEntry;
     }
 
-    private static String elementToXml(Component element, boolean preserveIds) {
+    public static String elementToXml(Component element, boolean preserveIds) {
         // remember already added immediate children to avoid getting the same component from different source (subcomponent, annotations etc.)
         Set<Component> alreadyAddedChildren = new HashSet<>();
 
@@ -242,7 +242,7 @@ public class FormWriter {
         if (element instanceof IRepeatableComponentsHolder) {
             elementsToXml(xml, IRepeatableComponentsHolder.class.cast(element).getRepeatedComponents(), alreadyAddedChildren, preserveIds);
         }
-        if (element instanceof IGroupingComponent) {
+        if (element instanceof IGroupingComponent && !(element instanceof Includeable)) {
             elementsToXml(xml, IGroupingComponent.class.cast(element).getSubcomponents(), alreadyAddedChildren, preserveIds);
             elementsToXml(xml, IGroupingComponent.class.cast(element).getNonVisualSubcomponents(), alreadyAddedChildren, preserveIds);
         }

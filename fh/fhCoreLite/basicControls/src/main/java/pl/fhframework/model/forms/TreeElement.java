@@ -15,6 +15,7 @@ import pl.fhframework.annotations.XMLMetadataSubelementParent;
 import pl.fhframework.annotations.XMLProperty;
 import pl.fhframework.binding.*;
 import pl.fhframework.model.dto.ElementChanges;
+import pl.fhframework.model.dto.ValueChange;
 import pl.fhframework.model.forms.designer.BindingExpressionDesignerPreviewProvider;
 import pl.fhframework.model.dto.InMessageEventData;
 
@@ -26,7 +27,7 @@ import java.util.Optional;
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.BEHAVIOR;
 
 @Control(parents = {Tree.class}, canBeDesigned = true)
-public class TreeElement extends GroupingComponent<TreeElement> implements IHasBoundableLabel {
+public class TreeElement extends GroupingComponent<TreeElement> implements IHasBoundableLabel, IChangeableByClient {
 
     private static final String ATTR_ICON = "icon";
     private static final String ATTR_URL = "url";
@@ -35,6 +36,7 @@ public class TreeElement extends GroupingComponent<TreeElement> implements IHasB
     private static final String ON_LAZY_LOAD = "onLazyLoad";
     private static final String ATTR_LABEL = "label";
     private static final String ATTR_SELECTED = "selected";
+    private static final String ATTR_COLLAPSED = "collapsed";
     private static final String ATTR_NEXT_LEVEL_EXPANDABLE = "nextLevelExpandable";
 
     @JsonIgnore
@@ -76,9 +78,10 @@ public class TreeElement extends GroupingComponent<TreeElement> implements IHasB
     private ActionBinding onIconClick;
 
     @Getter
-    private Boolean collapsed; // not used for now
+    private boolean collapsed = true;
 
     private boolean wasSelected = false;
+    private boolean wasCollapsed = true;
 
     @Getter
     @Setter
@@ -117,6 +120,10 @@ public class TreeElement extends GroupingComponent<TreeElement> implements IHasB
     @Setter
     private boolean nextLevelExpandable;
 
+    @Getter
+    @Setter
+    private boolean selected;
+
     @JsonIgnore
     private Expression nextLevelLazyExpandableExpression;
 
@@ -131,7 +138,7 @@ public class TreeElement extends GroupingComponent<TreeElement> implements IHasB
     @Override
     public Optional<ActionBinding> getEventHandler(InMessageEventData eventData) {
         if (ATTR_ON_LABEL_CLICK.equals(eventData.getEventType())) {
-            if(isSelectable()){
+            if (this.selected) {
                 tree.onSelectionClick(getBoundObject());
             }
             return Optional.ofNullable(onLabelClick);
@@ -159,6 +166,22 @@ public class TreeElement extends GroupingComponent<TreeElement> implements IHasB
 
         tree.processComponentsForLevel(indices, level + 1, this);
         childrenLoaded = true;
+    }
+
+    @Override
+    public void updateModel(ValueChange valueChange) {
+        if (valueChange.hasAttributeChanged(ATTR_SELECTED)) {
+            this.wasSelected = this.selected;
+            boolean newSelected = valueChange.getBooleanAttribute(ATTR_SELECTED);
+            if (newSelected) {
+                this.tree.deselectAll();
+            }
+            this.selected = newSelected;
+        }
+        if (valueChange.hasAttributeChanged(ATTR_COLLAPSED)) {
+            this.wasCollapsed = this.collapsed;
+            this.collapsed = valueChange.getBooleanAttribute(ATTR_COLLAPSED);
+        }
     }
 
     @Override
@@ -197,8 +220,14 @@ public class TreeElement extends GroupingComponent<TreeElement> implements IHasB
 
         boolean isSelected = tree.isSelected(getBoundObject());
         if (wasSelected != isSelected) {
+            this.selected = isSelected;
             wasSelected = isSelected;
-            elementChanges.addChange(ATTR_SELECTED, isSelected);
+            elementChanges.addChange(ATTR_SELECTED, this.selected);
+        }
+
+        if (wasCollapsed != collapsed) {
+            wasCollapsed = collapsed;
+            elementChanges.addChange(ATTR_COLLAPSED, this.collapsed);
         }
 
         Boolean newNextLevelExpandable;
@@ -237,14 +266,6 @@ public class TreeElement extends GroupingComponent<TreeElement> implements IHasB
             }
         }
         return null;
-    }
-
-    public boolean isSelected() {
-        return wasSelected;
-    }
-
-    public boolean isSelectable() {
-        return tree.isSelectionOn();
     }
 
     public void setOnLabelClick(ActionBinding onLabelClick) {

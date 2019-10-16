@@ -1,6 +1,7 @@
 package pl.fhframework.app;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -49,7 +50,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${server.logout.path:logout}")
     private String logoutPath;
 
-    @Autowired
     private SecurityProviderInitializer securityProviderInitializer;
 
     @Autowired(required = false)
@@ -57,6 +57,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     SingleLoginLockManager singleLoginManager;
+
+    @Autowired
+    public void setSecurityProviderInitializer(SecurityProviderInitializer securityProviderInitializer) {
+        this.securityProviderInitializer = securityProviderInitializer;
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -115,10 +120,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder(8);
     }
 
-    @Bean // Password encoder used for LDAP Security Data Provider
+    /*@Bean // Password encoder used for LDAP Security Data Provider
     public PasswordEncoder ldapPasswordEncoder() {
         return new LdapShaPasswordEncoder();
-    }
+    }*/
 
     @Bean
     public SessionRegistry sessionRegistry() {

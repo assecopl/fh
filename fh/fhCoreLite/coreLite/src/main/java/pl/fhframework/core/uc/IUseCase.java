@@ -255,11 +255,11 @@ public interface IUseCase<C extends IUseCaseOutputCallback> {
      * @param model
      * @return
      */
-    default AdHocForm showForm(String formId, Object model) {
+    default Form showForm(String formId, Object model) {
         return showForm(formId, model, "");
     }
 
-    default AdHocForm showForm(String formId, Object model, String variantId) {
+    default Form showForm(String formId, Object model, String variantId) {
         return getUserSession().getUseCaseContainer().showForm(this, formId, model, variantId);
     }
 

@@ -4,10 +4,9 @@
     <meta charset="UTF-8"/>
     <meta name="robots" content="noindex"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
-    <title th:text="${@environment.getProperty('fh.application.title')}">FH Application</title>
+    <title th:text="${@environment.getProperty('fh.application.title')}">LUNA Application</title>
 
     <script th:inline="javascript">
-        var exports = {};
         var contextRoot = [[@{
             /}]]; </script>
     <!-- bundles -->
@@ -23,12 +22,19 @@
 </head>
 
 <body>
-<div th:each="state : ${T(pl.fhframework.model.UseCaseLayoutEnum).values()}" th:id="${state.getCssId()}" class="fh-layout-div">
+<div  id="fh-layout-standard" class="fh-layout-div">
     <!--        <div id="${state}" th:insert="@{'fragments/' + ${state}} :: layout">-->
-    <div  th:replace="@{'layouts/' + ${#strings.toLowerCase(state)}} :: layout">
+    <div  th:replace="@{'layouts/standard'} :: layout">
         <!-- Here goes templates for layouts -->
-        <p>This section should disapear as it will be replace by Thymeleaf</p>
+        <p>This section should disapear as it will be replaced by Thymeleaf</p>
     </div>
+</div>
+<div th:each='state : ${(@environment.getProperty("fhframework.layout.templates")).split(",")}' th:id="${'fh-layout-' + state}" class="fh-layout-div d-none">
+<!--        <div id="${state}" th:insert="@{'fragments/' + ${state}} :: layout">-->
+        <div  th:replace="@{'layouts/' + ${#strings.toLowerCase(state)}} :: layout">
+            <!-- Here goes templates for layouts -->
+            <p>This section should disapear as it will be replace by Thymeleaf</p>
+        </div>
 </div>
 
 <footer id="fhFooter">

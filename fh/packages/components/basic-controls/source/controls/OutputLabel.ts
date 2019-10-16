@@ -30,6 +30,28 @@ class OutputLabel extends HTMLFormComponent {
             label = document.createElement('span');
         }
         label.id = this.id;
+
+        // output labels for table columns in Designer
+        if (this.designMode) {
+            let labelId = label.id.split("_");
+            let columnLabelMarkers = ['value', 'based', 'label'];
+            let columnValueLabel = "";
+
+            columnLabelMarkers.forEach(attribute => {
+                if (labelId.indexOf(attribute) !== -1) {
+                    columnValueLabel += attribute;
+                }
+            });
+
+            if (columnValueLabel === 'valuebasedlabel') {
+                label.classList.add('valueBasedLabel');
+            }
+
+            let columnId = labelId.slice(0,3).join("_");
+            label.dataset.columnId = columnId;
+        }
+
+
         ['fc', 'outputLabel'].forEach(function (cssClass) {
             label.classList.add(cssClass);
         });

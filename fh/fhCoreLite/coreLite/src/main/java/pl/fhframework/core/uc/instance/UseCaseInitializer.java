@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
+import pl.fhframework.ReflectionUtils;
 import pl.fhframework.core.FhException;
 import pl.fhframework.core.FhUseCaseException;
 import pl.fhframework.core.uc.*;
@@ -108,17 +109,12 @@ public class UseCaseInitializer {
     public IUseCaseOutputCallback createCallback(UseCaseInfo useCaseInfo) {
         Class<?> useCaseClass = getUseCaseClass(useCaseInfo);
 
-        Class<? extends IUseCaseOutputCallback> callbackClass = IUseCaseNoCallback.class;
-        Type superType = useCaseClass.getGenericInterfaces()[0];
-        if (superType instanceof ParameterizedType) {
-            ParameterizedType superParameterizedType = (ParameterizedType) useCaseClass.getGenericInterfaces()[0];
-            Class interfaceType = (Class) superParameterizedType.getRawType();
-
-            if (IUseCaseNoInput.class.isAssignableFrom(interfaceType)) {
-                callbackClass = (Class<? extends IUseCaseOutputCallback>) superParameterizedType.getActualTypeArguments()[0];
-            } else {
-                callbackClass = (Class<? extends IUseCaseOutputCallback>) superParameterizedType.getActualTypeArguments()[1];
-            }
+        Class<? extends IUseCaseOutputCallback> callbackClass = useCaseInfo.getCallbackClass();
+        if (useCaseInfo.isDynamic()) {
+            callbackClass = (Class<? extends IUseCaseOutputCallback>) ReflectionUtils.tryGetClassForName(useCaseClass.getName() + ".OutputCallback");
+        }
+        if (callbackClass == null) {
+            callbackClass = IUseCaseNoCallback.class;
         }
 
         return createCallback(callbackClass);

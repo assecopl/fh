@@ -1,5 +1,13 @@
 package pl.fhframework.fhPersistence.maps.features.geometry;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.locationtech.jts.geom.Geometry;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.referencing.CRS;
@@ -7,6 +15,7 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.TransformException;
+import pl.fhframework.binding.StaticBinding;
 import pl.fhframework.core.FhException;
 import pl.fhframework.core.maps.features.GeometryType;
 import pl.fhframework.core.maps.features.geometry.IGeometry;
@@ -15,8 +24,12 @@ import pl.fhframework.fhPersistence.maps.features.LineStringFeature;
 import pl.fhframework.fhPersistence.maps.features.PointFeature;
 import pl.fhframework.fhPersistence.maps.features.PolygonFeature;
 import pl.fhframework.ReflectionUtils;
+import pl.fhframework.model.forms.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 
@@ -159,6 +172,61 @@ public class SpatialService {
         }
     }
 
+    public Point createPointByAddress(String address, String urlOrEndpoint){
+        //Tymczasowa implementacja - adhoc przeniesienie kodu Michała Wiśniewskiego do serwisu.
+        try {
+            if (urlOrEndpoint==null){
+                urlOrEndpoint = "http://10.22.182.23:18080";
+            }
+            int radius =1;
+            CloseableHttpClient client = HttpClients.createDefault();
+            HttpPost httpPost = new HttpPost(urlOrEndpoint+"/spatial-data-pl/openLS/geocoding/freeform");
+
+            String json = "{\n " +
+                    "  \"freeFormValue\": \"" + address + "\",\n" +
+                    "  \"marginInMeterForBoundingBox\": " + radius + "\n" +
+                    "}";
+
+            StringEntity entity = new StringEntity(json, "UTF-8");
+            httpPost.setEntity(entity);
+            httpPost.setHeader("Content-type", "application/json;charset=UTF-8");
+            httpPost.setHeader("Accept", "application/json");
+
+
+            HttpResponse res = client.execute(httpPost);
+            res.getStatusLine().getStatusCode();
+
+            if (res.getStatusLine().getStatusCode() == 200) {
+                String body = EntityUtils.toString(res.getEntity());
+
+                ObjectMapper mapper = new ObjectMapper();
+
+                JsonNode pointData = mapper.readTree(body).path("points").get(0);
+
+
+
+                List<Double> point = new ArrayList<>();
+                point.add(pointData.path("coordinates").get(0).asDouble());
+                point.add(pointData.path("coordinates").get(1).asDouble());
+
+                Double longitude = pointData.path("coordinates").get(0).asDouble();
+                Double latitude = pointData.path("coordinates").get(1).asDouble();
+                Point result = new Point(longitude, latitude);
+
+                return result;
+            }else{
+                return new Point(21, 52);
+            }
+
+        }catch (Exception exc){
+            throw new RuntimeException(exc);
+        }
+    }
+
+    public Point createPointByCoordinates(Double longitute, Double latitude){
+        return newPoint().longitude(longitute).latitude(latitude).build();
+    }
+
     /**
      * Return a Coordinate Reference System for the given spatial reference identifier
      *
@@ -173,4 +241,5 @@ public class SpatialService {
             throw new FhException(e);
         }
     }
+
 }

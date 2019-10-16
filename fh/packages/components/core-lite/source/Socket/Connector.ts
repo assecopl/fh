@@ -43,6 +43,8 @@ class Connector {
     private maxHeadResponseRetry: number = 3;
     private runFunction: any = null;
     private pingInterval: () => void = null;
+    private _incomingMessageCallback: (data: string) => void = null;
+    private _outcomingMessageCallback: (data: string) => void = null;
 
     constructor(target: string,
                 reconnectCallback: () => void,
@@ -55,6 +57,14 @@ class Connector {
 
         this.i18n.registerStrings('pl', ConnectorPL, true);
         this.i18n.registerStrings('en', ConnectorEN, true);
+    }
+
+    set incomingMessageCallback(callback: (data: string) => void) {
+        this._incomingMessageCallback = callback;
+    }
+
+    set outcomingMessageCallback(callback: (data: string) => void) {
+        this._outcomingMessageCallback = callback;
     }
 
     connect(runFunction: any) {
@@ -116,8 +126,16 @@ class Connector {
         }
 
         if (this.ws) {
+            // console.log('wysylanie');
+
             var stringData = JSON.stringify(jsonData);
+
             this.ws.send(requestId + ':' + stringData);
+
+            if (this._outcomingMessageCallback) {
+                this._outcomingMessageCallback.call(this, stringData);
+            }
+
             if (ENV_IS_DEVELOPMENT) {
                 console.log('Running command: ' + command + ', reqId:' + requestId + ', payload: ', stringData);
             }
@@ -266,6 +284,11 @@ class Connector {
     }
 
     onMessage(event) {
+        if (this._incomingMessageCallback) {
+            this._incomingMessageCallback.call(this, event);
+        }
+
+        // console.log('odbieranie: ' + event);
         var i = event.data.indexOf(':');
         var requestId = event.data.slice(0, i);
         var stringData = event.data.slice(i + 1);

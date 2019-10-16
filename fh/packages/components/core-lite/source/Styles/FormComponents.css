@@ -142,3 +142,14 @@ span.required {
     position: absolute;
     top: 0;
 }
+.tooltip {
+    pointer-events: none;
+}
+#selectedElementDetailsGroup .fc.group > .card-body {
+    padding-top: 0;
+    padding-bottom: 0.1em;
+}
+
+#selectedElementDetailsGroup .fc.group .fc.table .table-heading th {
+    border-top: unset;
+}

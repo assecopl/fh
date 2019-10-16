@@ -8,7 +8,9 @@ public interface IPoint extends IGeometry {
     String TYPE = "Point";
 
     double getLongitude();
+    void setLongitude(double longitude);
     double getLatitude();
+    void setLatitude(double latitude);
 
     @Override
     default String getType() {

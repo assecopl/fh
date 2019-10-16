@@ -23,8 +23,9 @@ public final class FileService {
     public String save(MultipartFile file, UserSession userSession) throws IOException {
         String fileName = cutFileName(file.getOriginalFilename());
         Pair<String, TemporaryResource> temporaryResource = createNewTemporaryResource(fileName, userSession);
+        temporaryResource.getSecond().setContentType(file.getContentType());
         File temporaryFile = temporaryResource.getSecond().getFile();
-        file.transferTo(temporaryFile);
+        file.transferTo(temporaryFile.toPath());
         FhLogger.info(this.getClass(), "File {} ({} bytes) uploaded as {}", file.getOriginalFilename(), file.getSize(), temporaryFile.toString());
         return temporaryResource.getFirst();
     }

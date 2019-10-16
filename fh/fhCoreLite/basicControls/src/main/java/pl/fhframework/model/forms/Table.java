@@ -192,14 +192,14 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
     @Getter
     @Setter
     @XMLProperty
-    @DocumentedComponentAttribute(defaultValue = "show", value = "Displays or hides grid on tables")
+    @DocumentedComponentAttribute(defaultValue = "hide", value = "Displays or hides grid on tables")
     @DesignerXMLProperty(functionalArea = LOOK_AND_STYLE, priority = 71)
     private TableGrid tableGrid;
 
     @Getter
     @Setter
     @XMLProperty
-    @DocumentedComponentAttribute(defaultValue = "show", value = "Displays or hides gray stripes on table rows")
+    @DocumentedComponentAttribute(defaultValue = "hide", value = "Displays or hides gray stripes on table rows")
     @DesignerXMLProperty(functionalArea = LOOK_AND_STYLE, priority = 70)
     private TableStripes tableStripes;
 
@@ -294,7 +294,9 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
 
     @Override
     public void processComponents() {
-        if (getForm().getViewMode() == Form.ViewMode.NORMAL) {
+        Form.ViewMode viewMode = getForm().getViewMode();
+
+        if (viewMode == Form.ViewMode.NORMAL) {
             // build low level rows
             List<LowLevelRowMetadata> newTableRowMetadata = new ArrayList<>();
             if (getCollection() != null) {
@@ -363,7 +365,7 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
             this.tableRows = newTableRows;
             this.tableRowMetadata = newTableRowMetadata;
             this.tableRowMetadataChanged = true;
-        } else if (getForm().getViewMode() == Form.ViewMode.PREVIEW) {
+        } else if (viewMode != Form.ViewMode.NORMAL) {
             for (Column column : getColumns()) {
                 calculateRowspan(column);
             }
@@ -373,7 +375,7 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
             List<TableRow> newTableRows = new ArrayList<>();
             newTableRows.add(new TableRow(this, null));
 
-            if (this.columns.stream().noneMatch(c -> c.getValue() != null)) {
+            if (this.columns.stream().noneMatch(c -> c.getLabelModelBinding() != null)) {
                 OutputLabel emptyLabel = new OutputLabel(this.getForm());
                 emptyLabel.setBody("&nbsp;");
                 emptyLabel.setId("EmptyLabel1");
@@ -384,11 +386,27 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
 
             this.tableRows = newTableRows;
             this.tableRowMetadataChanged = true;
-        } else if (getForm().getViewMode() == Form.ViewMode.DESIGN) {
-            for (Column column : getColumns()) {
-                calculateRowspan(column);
-            }
         }
+//        else if (getForm().getViewMode() == Form.ViewMode.DESIGN) {
+//            for (Column column : getColumns()) {
+//                calculateRowspan(column);
+//            }
+//
+//            List<TableRow> newTableRows = new ArrayList<>();
+//            newTableRows.add(new TableRow(this, null));
+//
+//            if (this.columns.stream().noneMatch(c -> c.getLabelModelBinding() != null)) {
+//                OutputLabel emptyLabel = new OutputLabel(this.getForm());
+//                emptyLabel.setBody("&nbsp;");
+//                emptyLabel.setId("EmptyLabel1");
+//
+//                TableRow newTableRow = newTableRows.get(0);
+//                newTableRow.getTableCells().set(0, emptyLabel);
+//            }
+//
+//            this.tableRows = newTableRows;
+//            this.tableRowMetadataChanged = true;
+//        }
     }
 
     private void calculateRowspan(Column column) {
@@ -748,6 +766,19 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
                 IGroupingComponent<?> groupingColumn = column.getGroupingComponent(formElement);
                 if (groupingColumn != null) {
                     return groupingColumn;
+                }
+
+                // also check tableCell
+                if (column.getPrototype().getSubcomponents().size() > 0) {
+
+                    List subcomponents = column.getPrototype().getSubcomponents();
+
+                    for (Object cell : subcomponents) {
+                        if (cell.equals(formElement)) {
+                            return (IGroupingComponent) cell;
+                        }
+                    }
+
                 }
             }
             // not a column of this table

@@ -4,7 +4,7 @@
 
     <groupId>pl.fhframework.integration</groupId>
     <artifactId>integrationCoreLite</artifactId>
-    <version>4.3-SNAPSHOT</version>
+    <version>4.5-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>integrationCoreLite</name>
@@ -13,7 +13,7 @@
     <parent>
         <groupId>pl.fhframework</groupId>
         <artifactId>fhCoreLite</artifactId>
-        <version>4.3-SNAPSHOT</version>
+        <version>4.5-SNAPSHOT</version>
     </parent>
 
     <dependencies>

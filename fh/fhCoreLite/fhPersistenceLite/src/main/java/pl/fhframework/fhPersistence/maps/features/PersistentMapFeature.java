@@ -11,10 +11,7 @@ import pl.fhframework.core.maps.features.geometry.*;
 import pl.fhframework.fhPersistence.core.BasePersistentObject;
 
 import javax.persistence.Transient;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -42,10 +39,9 @@ public abstract class PersistentMapFeature extends BasePersistentObject implemen
     @Override
     public Map<String, Object> getProperties() {
         PropertyAccessor propertyAccessor = PropertyAccessorFactory.forBeanPropertyAccess(this);
-        return ReflectionUtils.getFields(this.getClass(), JsonProperty.class).stream().collect(Collectors.toMap(
-                field -> {
-                    JsonProperty jsonProperty = field.getAnnotation(JsonProperty.class);
-                    return jsonProperty.value();
-                }, field -> propertyAccessor.getPropertyValue(field.getName())));
+        Map<String, Object> properties = new HashMap<>();
+        ReflectionUtils.getFields(this.getClass(), JsonProperty.class).forEach(field ->
+                properties.put(field.getAnnotation(JsonProperty.class).value(), propertyAccessor.getPropertyValue(field.getName())));
+        return properties;
     }
 }

@@ -47,6 +47,10 @@ class Tree extends HTMLFormComponent {
         if (this.componentObj.lazy === false && this.componentObj.expanded === true) {
             this.expandAll();
         }
+
+        if (this.formId === 'designerToolbox') {
+            this.expandAll();
+        }
     };
 
     decomposeIcon(icon) {

@@ -1,6 +1,8 @@
 package pl.fhframework.model.forms;
 
 
+import pl.fhframework.model.forms.optimized.TableOptimized;
+
 import java.util.Map;
 
 public interface TableComponent<T extends FormElement> {
@@ -24,12 +26,47 @@ public interface TableComponent<T extends FormElement> {
     }
 
     /**
+     * Creates a copy this component with replaced iterators in bindings and actions.
+     * @param table table
+     * @param iteratorReplacements iterator replacements
+     * @return a copy this component
+     */
+    default T getCopy(TableOptimized table, Map<String, String> iteratorReplacements) {
+        T clone = createNewSameComponent();
+        doCopy(table, iteratorReplacements, clone);
+        return clone;
+    }
+
+    /**
      * Copies values of attributes with replaced iterators in bindings and actions to a new component of the same type.
      * @param table table
      * @param iteratorReplacements iterator replacements
      * @param clone a new component of the same type
      */
     default void doCopy(Table table, Map<String, String> iteratorReplacements, T clone) {
+        FormElement thisElement = (FormElement) this;
+
+        // Component
+        clone.setId(thisElement.getId());
+        clone.setAvailabilityModelBinding(table.getRowBinding(thisElement.getAvailabilityModelBinding(), clone, iteratorReplacements));
+
+        // FormElement
+        clone.setHeight(thisElement.getHeight());
+        clone.setWidth(thisElement.getWidth());
+        clone.setHorizontalAlign(thisElement.getHorizontalAlign());
+        clone.setVerticalAlign(thisElement.getVerticalAlign());
+        clone.setStyleClasses(thisElement.getStyleClasses());
+        clone.setHintBinding(table.getRowBinding(thisElement.getHintBinding(), clone, iteratorReplacements));
+    }
+
+
+    /**
+     * Copies values of attributes with replaced iterators in bindings and actions to a new component of the same type.
+     * @param table table
+     * @param iteratorReplacements iterator replacements
+     * @param clone a new component of the same type
+     */
+    default void doCopy(TableOptimized table, Map<String, String> iteratorReplacements, T clone) {
         FormElement thisElement = (FormElement) this;
 
         // Component

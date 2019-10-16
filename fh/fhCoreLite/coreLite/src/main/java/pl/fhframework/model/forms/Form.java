@@ -5,9 +5,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.web.util.ThrowableAnalyzer;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import pl.fhframework.Binding;
+import pl.fhframework.BindingResult;
+import pl.fhframework.SessionManager;
+import pl.fhframework.UserSession;
+import pl.fhframework.annotations.*;
+import pl.fhframework.binding.*;
 import pl.fhframework.core.FhAuthorizationException;
 import pl.fhframework.core.FhFormException;
 import pl.fhframework.core.forms.IHasBoundableLabel;
@@ -19,12 +24,6 @@ import pl.fhframework.core.security.AuthorizationManager;
 import pl.fhframework.core.uc.IFormUseCaseContext;
 import pl.fhframework.core.util.SpelUtils;
 import pl.fhframework.core.util.StringUtils;
-import pl.fhframework.Binding;
-import pl.fhframework.BindingResult;
-import pl.fhframework.SessionManager;
-import pl.fhframework.UserSession;
-import pl.fhframework.annotations.*;
-import pl.fhframework.binding.*;
 import pl.fhframework.events.IEventSource;
 import pl.fhframework.events.IEventSourceContainer;
 import pl.fhframework.forms.FiledsHighlightingList;
@@ -41,6 +40,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.time.Instant;
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.*;
@@ -77,8 +77,15 @@ public abstract class Form<T> extends GroupingComponent<Component> implements Bo
      * refreshed.
      */
     @JsonIgnore
+    @Getter
     @Setter
-    private Binding bindingMethods = new Binding();
+    private Binding bindingMethods;
+
+    @JsonIgnore
+    @Getter
+    @Setter
+    private List<Includeable> included = new LinkedList<>();
+
     private final HashSet<FormElement> elementsToBeRefreshed = new HashSet<>(20);
     @JsonIgnore
     private final Map<String, FormElement> elementIdToFormElement = new LinkedHashMap<>();
@@ -208,6 +215,10 @@ public abstract class Form<T> extends GroupingComponent<Component> implements Bo
     @JsonIgnore
     private T model;
 
+    @Setter
+    @JsonIgnore
+    private Supplier<T> modelProvider;
+
     @JsonIgnore
     @Getter
     @Setter
@@ -300,12 +311,22 @@ public abstract class Form<T> extends GroupingComponent<Component> implements Bo
     @JsonIgnore
     private final List<Throwable> processComponentsExceptions = new ArrayList<>();
 
+    @JsonIgnore
+    @Getter
+    @Setter
+    private IComponentBindingCreator componentBindingCreator = this::createModelBindingForComponent;
+
+    @JsonIgnore
+    @Getter
+    @Setter
+    private Supplier<Binding> bindingMethodsCreator = Binding::new;
+
     public Form() {
         super(null);
+        bindingMethods = bindingMethodsCreator.get();
         if (!formClassToVariantToElementIdToMethod.containsKey(this.getClass())) {
             buildProgrammingAvailabilityMethodMap();
         }
-
     }
 
     public IFormUseCaseContext getAbstractUseCase() {
@@ -325,7 +346,7 @@ public abstract class Form<T> extends GroupingComponent<Component> implements Bo
         componentMap.put(this.getId(), this);
     }
 
-    protected void refreshElementIdToFormElement() {
+    public void refreshElementIdToFormElement() {
         elementIdToFormElement.clear();
         doActionForEverySubcomponent((formElement) -> {
             if (formElement instanceof FormElement) {
@@ -340,6 +361,14 @@ public abstract class Form<T> extends GroupingComponent<Component> implements Bo
 
     @Override
     public Form<?> getForm() {
+        return this;
+    }
+
+    @JsonIgnore
+    public Form<?> getEventProcessingForm() {
+        if (getGroupingParentComponent() instanceof Generable && getGroupingParentComponent() instanceof Component) {
+            return ((Component) getGroupingParentComponent()).getForm();
+        }
         return this;
     }
 
@@ -385,10 +414,10 @@ public abstract class Form<T> extends GroupingComponent<Component> implements Bo
     public T getModelValue(String binding, Component bindingOwner) {
         try {
             if (!bindingMethods.isActive()) {
-                bindingMethods.activate(model, this);
+                activateBindings();
                 FhLogger.warn("Ad hoc access to model '{}'!", binding);
                 T result = bindingMethods.getModeValue(binding, bindingOwner != null ? bindingOwner.getBindingContext() : null);
-                bindingMethods.deactivate();
+                deactivateBindings();
                 return result;
             } else {
                 return bindingMethods.getModeValue(binding, bindingOwner != null ? bindingOwner.getBindingContext() : null);
@@ -417,10 +446,10 @@ public abstract class Form<T> extends GroupingComponent<Component> implements Bo
     public BindingResult getBindingResult(String binding, Component bindingOwner) {
         try {
             if (!bindingMethods.isActive()) {
-                bindingMethods.activate(model, this);
+                activateBindings();
                 FhLogger.warn("Ad hoc access to model '{}'!", binding);
                 BindingResult result = bindingMethods.getBindingResult(binding, bindingOwner != null ? bindingOwner.getBindingContext() : null);
-                bindingMethods.deactivate();
+                deactivateBindings();
                 return result;
             } else {
                 return bindingMethods.getBindingResult(binding, bindingOwner != null ? bindingOwner.getBindingContext() : null);
@@ -521,7 +550,13 @@ public abstract class Form<T> extends GroupingComponent<Component> implements Bo
     }
 
     public Set<ElementChanges> updateFormComponents() {
-        bindingMethods.activate(model, this);
+        activateBindings();
+
+        doActionForEverySubcomponent(formElement -> {
+            if(formElement instanceof Includeable) {
+                ((Includeable) formElement).activateBindings();
+            }
+        });
 
         doActionForEverySubcomponent((formElement) -> {
             if (formElement instanceof IGroupingComponent) {
@@ -544,14 +579,19 @@ public abstract class Form<T> extends GroupingComponent<Component> implements Bo
 
         resolveBindingAndUpdateView(changesInFormComponents);
 
-        bindingMethods.deactivate();
+        doActionForEverySubcomponent(formElement -> {
+            if(formElement instanceof Includeable) {
+                ((Includeable) formElement).deactivateBindings();
+            }
+        });
+        deactivateBindings();
         alreadyRefreshed = true;
 
         return changesInFormComponents;
     }
 
     public Set<ElementChanges> updateFormComponentsAvailabilityOnly() {
-        bindingMethods.activate(model, this);
+        activateBindings();
 
         Set<ElementChanges> changesInFormComponents = new LinkedHashSet<>();
 
@@ -577,7 +617,7 @@ public abstract class Form<T> extends GroupingComponent<Component> implements Bo
             }
         });
 
-        bindingMethods.deactivate();
+        deactivateBindings();
 
         return changesInFormComponents;
     }
@@ -617,7 +657,7 @@ public abstract class Form<T> extends GroupingComponent<Component> implements Bo
     }
 
     public void updateModel(List<ValueChange> changedFields) {
-        bindingMethods.activate(model, this);
+        activateBindings();
         changedFields.forEach(changedValue -> {
             if (getId().equals(changedValue.getFormId())) {
                 Component changedElement = elementIdToFormElement.get(changedValue.getFieldId());
@@ -630,16 +670,16 @@ public abstract class Form<T> extends GroupingComponent<Component> implements Bo
                 }
             }
         });
-        bindingMethods.deactivate();
+        deactivateBindings();
     }
 
-    @Deprecated
     public void activateBindings() {
-        bindingMethods.activate(model, this);
+        bindingMethods.activate(getModel(), this);
+        included.forEach(Includeable::activateBindings);
     }
 
-    @Deprecated
     public void deactivateBindings() {
+        included.forEach(Includeable::deactivateBindings);
         bindingMethods.deactivate();
     }
 
@@ -765,7 +805,7 @@ public abstract class Form<T> extends GroupingComponent<Component> implements Bo
     }
 
     public boolean expressionResult(String expression) {
-        Object result = SpelUtils.evaluateExpression(expression, model);
+        Object result = SpelUtils.evaluateExpression(expression, getModel());
         if (result instanceof Boolean) {
             return (Boolean) result;
         } else {
@@ -788,6 +828,9 @@ public abstract class Form<T> extends GroupingComponent<Component> implements Bo
     }
 
     public T getModel() {
+        if (modelProvider != null) {
+            return modelProvider.get();
+        }
         return model;
     }
 
@@ -800,7 +843,12 @@ public abstract class Form<T> extends GroupingComponent<Component> implements Bo
     }
 
     protected void removeElement(FormElement formElement) {
-        IGroupingComponent groupingComponent = getGroupingComponent(formElement);
+        IGroupingComponent groupingComponent = formElement.getGroupingParentComponent();
+
+        if (groupingComponent == null) {
+            groupingComponent = getGroupingComponent(formElement);
+        }
+
         if (groupingComponent instanceof IEditableGroupingComponent) {
             groupingComponent.removeSubcomponent(formElement);
         } else {
@@ -846,7 +894,7 @@ public abstract class Form<T> extends GroupingComponent<Component> implements Bo
         return bindingMethods.convertBindingValueToString(bindingResult, converterName);
     }
 
-    void addToElementIdToFormElement(FormElement component) {
+    public void addToElementIdToFormElement(FormElement component) {
         this.elementIdToFormElement.put(component.getId(), component);
     }
 

@@ -18,6 +18,7 @@ import pl.fhframework.UserSession;
 import pl.fhframework.io.FileService;
 import pl.fhframework.io.IFileMaxSized;
 import pl.fhframework.io.IResourced;
+import pl.fhframework.io.TemporaryResource;
 import pl.fhframework.model.forms.Form;
 import pl.fhframework.model.forms.FormElement;
 
@@ -169,7 +170,12 @@ public class FileUploadDownloadController {
         try (InputStream resourceIs = resource.getInputStream()) {
             response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + resource.getFilename());
             calcContentLength(resource, response);
-            response.setContentType(MediaType.APPLICATION_OCTET_STREAM.getType());
+            if (resource instanceof TemporaryResource && !StringUtils.isEmpty(((TemporaryResource) resource).getContentType())) {
+                response.setContentType(((TemporaryResource) resource).getContentType());
+            }
+            else {
+                response.setContentType(MediaType.APPLICATION_OCTET_STREAM.getType());
+            }
 
             int readBytes;
             byte[] bytes = new byte[256 * 1024]; // 256kB buffer

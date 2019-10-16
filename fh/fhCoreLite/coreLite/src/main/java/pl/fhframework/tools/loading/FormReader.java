@@ -508,7 +508,7 @@ public class FormReader extends XMLReader<Component, Form<?>> {
 
         // bindings
         if (fieldType == ModelBinding.class) {
-            return getComponentForm(component).createModelBindingForComponent(component, attrValue, field);
+            return getComponentForm(component).getComponentBindingCreator().create(component, attrValue, field);
         } else if (fieldType == IndexedModelBinding.class) {
             return getComponentForm(component).createIndexedModelBindingForComponent((IIndexedBindingOwner) component, attrValue, field);
         } else if (fieldType == ActionBinding.class) {

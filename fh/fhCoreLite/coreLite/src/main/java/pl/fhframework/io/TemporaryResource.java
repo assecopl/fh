@@ -1,5 +1,6 @@
 package pl.fhframework.io;
 
+import lombok.Setter;
 import org.apache.commons.io.IOUtils;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -14,6 +15,9 @@ import lombok.Getter;
 @Getter
 public class TemporaryResource extends FileSystemResource implements IResourced {
     public final static String TEMP_FILE_PREFIX = "__fh__";
+
+    @Setter
+    private String contentType;
 
     public TemporaryResource(File file) {
         super(file);

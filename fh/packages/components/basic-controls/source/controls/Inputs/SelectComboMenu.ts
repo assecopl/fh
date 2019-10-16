@@ -3,7 +3,6 @@ import {HTMLFormComponent} from 'fh-forms-handler';
 
 class SelectComboMenu extends InputText {
     protected values: any;
-    protected highlights: any;
     protected autocompleter: any;
     protected selectedIndex: any;
     private highlighted: any;
@@ -16,15 +15,13 @@ class SelectComboMenu extends InputText {
     private changeToFired: boolean;
     private rawValueOnLatSpecialKey: any;
     private autocompleteOpen: boolean;
-    private blurredAutocompleteScrollbard: boolean;
-    private emptyLabel: boolean;
-    private emptyLabelText: string;
+    private readonly emptyLabel: boolean;
+    private readonly emptyLabelText: string;
 
     constructor(componentObj: any, parent: HTMLFormComponent) {
         super(componentObj, parent);
 
         this.values = this.componentObj.filteredValues || [];
-        this.highlights = this.componentObj.highlightedValues;
         this.input = null;
         this.autocompleter = null;
         this.selectedIndex = null;
@@ -87,23 +84,20 @@ class SelectComboMenu extends InputText {
         }
 
         let autocompleter = document.createElement('ul');
+        autocompleter.setAttribute('unselectable', 'on');
         ['autocompleter', 'dropdown-menu', 'fc', 'selectcombo'].forEach(function (cssClass) {
             autocompleter.classList.add(cssClass);
         });
         autocompleter.id = this.id + '_autocompleter';
 
         this.autocompleter = autocompleter;
+        this.setValues(this.values);
         this.component = this.input;
         this.focusableComponent = input;
 
         this.wrap(false, true);
         this.hintElement = this.inputGroupElement;
         this.inputGroupElement.appendChild(autocompleter);
-
-        if (this.fh.isIE()) {
-            $(this.autocompleter).on('mousedown', this.autocompleteMousedownEvent.bind(this));
-            $(this.autocompleter).on('scroll', this.autocompelteScrollEvent.bind(this));
-        }
 
         this.createOpenButton();
         this.setRequiredField(false);
@@ -115,31 +109,12 @@ class SelectComboMenu extends InputText {
             this.htmlElement.classList.add('servicesListControlWrapper');
         }
 
-        this.setValues(this.values);
-        this.highlightValue(this.highlights);
-    };
 
-    clickedOnAutocompleterScrollbar(mouseX) {
-        return $(this.autocompleter).outerWidth() <= mouseX;
-
-    }
-
-    autocompelteScrollEvent(e) {
-        this.input.focus();
-    }
-
-    autocompleteMousedownEvent(e) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        if (this.clickedOnAutocompleterScrollbar(e.clientX)) {
-            this.blurredAutocompleteScrollbard = true;
-        } else {
-            this.blurredAutocompleteScrollbard = false;
-            this.closeAutocomplete();
+        if (this.componentObj.highlightedValue) {
+            this.highlighted = this.findByValue(this.componentObj.highlightedValue.targetValue);
         }
-        this.input.select();
-        this.input.focus();
-    }
+        this.hightlightValue();
+    };
 
     // noinspection JSUnusedGlobalSymbols
     protected innerWrap() {
@@ -164,9 +139,12 @@ class SelectComboMenu extends InputText {
 
         button.addEventListener('mousedown', function (e) {
             e.preventDefault();
+            // noinspection JSPotentiallyInvalidUsageOfClassThis
             if (this.autocompleteOpen) {
+                // noinspection JSPotentiallyInvalidUsageOfClassThis
                 this.closeAutocomplete();
             } else {
+                // noinspection JSPotentiallyInvalidUsageOfClassThis
                 this.openAutocomplete();
             }
             this.input.select();
@@ -203,10 +181,11 @@ class SelectComboMenu extends InputText {
 
         let keyCode = event.which;
         let options = this.autocompleter.querySelectorAll('li:not(.dropdown-header)');
+        // tab or enter
         if (keyCode === 9 || keyCode === 13) {
             let shouldBlur = true;
             if (this.highlighted != null) {
-                let element = options[this.highlighted].firstChild;
+                let element = this.highlighted.element.firstChild;
                 this.selectedIndex = parseInt(element.dataset.index);
                 if (this.emptyLabel) {
                     this.selectedIndex = this.selectedIndex - 1;
@@ -231,16 +210,14 @@ class SelectComboMenu extends InputText {
             });
             this.closeAutocomplete();
         } else if (keyCode == 32 && !this.autocompleteOpen) {
+            // spacja
             if (!this.freeTyping) {
                 event.preventDefault();
             }
             this.openAutocomplete();
         } else if (keyCode == 27) {
-            if (this.selectedIndex == null && this.emptyLabel) {
-                this.highlightValue([this.values[0]]);
-            } else {
-                this.highlightValue([this.values[this.selectedIndex]]);
-            }
+            // escape
+            this.hightlightValue();
             this.closeAutocomplete();
         } else {
             let move = 0;
@@ -256,39 +233,37 @@ class SelectComboMenu extends InputText {
                 'isEmpty')) {
                 // top arrow , down arrow
 
-                if ((move < 0 && this.highlighted === 0) || (this.highlighted + move) >= options.length) return;
+                let h = null;
+                if (this.highlighted) {
+                    h = parseInt(this.highlighted.element.firstChild.dataset.index);
+                }
+                if ((move < 0 && h === 0) || (h + move) >= options.length) return;
 
                 if (this.autocompleteOpen) {
-                    let current = options[this.highlighted];
-                    if (current) {
-                        current.classList.remove('selected');
-                    }
-
-                    if (this.highlighted === null) {
-                        if (move === 1) {
-                            this.highlighted = 0;
-                        }
+                    if (h === null && move === 1) {
+                        h = 1;
                     } else {
-                        this.highlighted = this.highlighted + move;
+                        h = h + move;
                     }
 
-                    if (this.highlighted != null) {
-                        options[this.highlighted].classList.add('selected');
-                        this.autocompleter.scrollTop = options[this.highlighted].offsetTop;
+                    let next = this.findValueByElement(options[h]);
+
+                    if (next) {
+                        this.highlighted = next;
+                        this.hightlightValue();
                     }
                 } else {
-                    if (this.highlighted === null) {
-                        if (move === 1) {
-                            this.highlighted = 1;
-                        }
+                    if (h === null && move === 1) {
+                        h = 1;
                     } else {
-                        this.highlighted = this.highlighted + move;
+                        h = h + move;
                     }
 
-                    let current = this.values[this.highlighted];
+                    let current = this.findValueByElement(options[h]);
                     if (current) {
                         this.input.value = current.targetValue;
-                        this.selectedIndex = this.highlighted - (this.emptyLabel ? 1 : 0);
+                        this.selectedIndex = h - (this.emptyLabel ? 1 : 0);
+                        this.highlighted = current;
                         this.updateModel();
                         if (this.onChange && (this.rawValue !== this.oldValue || this.changeToFired)) {
                             this.fireEventWithLock('onChange', this.onChange);
@@ -300,17 +275,17 @@ class SelectComboMenu extends InputText {
                 // left arrow , right arrow
                 return;
             } else if (keyCode == 36 || keyCode == 33) {
+                event.preventDefault();
                 // home, pg up
                 if (options.length === 0) return;
 
-                let current = options[this.highlighted];
-                if (current) {
-                    current.classList.remove('selected');
+                if (this.highlighted) {
+                    this.highlighted.element.firstChild.classList.remove('selected');
                 }
 
-                this.highlighted = 0;
-                options[this.highlighted].classList.add('selected');
-                this.autocompleter.scrollTop = options[this.highlighted].offsetTop;
+                this.highlighted = this.findValueByElement(options[0]);
+                this.highlighted.element.classList.add('selected');
+                this.autocompleter.scrollTop = this.highlighted.element.offsetTop;
                 return;
             } else if (keyCode == 35 || keyCode == 34) {
                 event.preventDefault();
@@ -318,14 +293,13 @@ class SelectComboMenu extends InputText {
                 // end, pg down
                 if (options.length === 0) return;
 
-                let current = options[this.highlighted];
-                if (current) {
-                    current.classList.remove('selected');
+                if (this.highlighted) {
+                    this.highlighted.element.firstChild.classList.remove('selected');
                 }
 
-                this.highlighted = options.length - 1;
-                options[this.highlighted].classList.add('selected');
-                this.autocompleter.scrollTop = options[this.highlighted].offsetTop;
+                this.highlighted = this.findValueByElement(options[options.length - 1]);
+                this.highlighted.element.classList.add('selected');
+                this.autocompleter.scrollTop = this.highlighted.element.offsetTop;
                 return;
             } else {
                 this.openAutocomplete();
@@ -361,13 +335,7 @@ class SelectComboMenu extends InputText {
         }
     }
 
-    inputBlurEvent(e) {
-        if (this.blurredAutocompleteScrollbard) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            this.blurredAutocompleteScrollbard = false;
-            return;
-        }
+    inputBlurEvent() {
         this.closeAutocomplete();
 
         if (this.emptyLabel && this.rawValue == null) {
@@ -402,9 +370,13 @@ class SelectComboMenu extends InputText {
                         this.highlighted = null;
                         this.setValues(newValue);
                         break;
-                    case 'highlightedValues':
-                        this.highlighted = null;
-                        this.highlightValue(newValue);
+                    case 'highlightedValue':
+                        if (newValue == null) {
+                            this.highlighted = null;
+                        } else {
+                            this.highlighted = this.findByValue(newValue.targetValue);
+                        }
+                        this.hightlightValue();
                         break;
                 }
             }.bind(this));
@@ -418,32 +390,81 @@ class SelectComboMenu extends InputText {
         }
     }
 
+    hightlightValue() {
+        if (this.highlighted == null) {
+            return;
+        }
+        for (let value of this.values) {
+            value.element.classList.remove('selected');
+        }
+
+        this.highlighted.element.classList.add('selected');
+        this.autocompleter.scrollTop = this.highlighted.element.offsetTop;
+    }
+
+    findByValue(value) {
+        value = value || '';
+        for (let option of this.values) {
+            if (option.targetValue.trim() === value.trim()) {
+                return option;
+            }
+        }
+
+        return null;
+    }
+
+    findValueByElement(value) {
+        for (let option of this.values) {
+            if (option.element === value) {
+                return option;
+            }
+        }
+
+        return null;
+    }
+
     openAutocomplete() {
         if (this.autocompleteOpen || this.accessibility !== 'EDIT') return;
         this.autocompleteOpen = true;
-
-        if (this.values.length > 0 && this.selectedIndex == null) {
-            this.highlightValue([this.values[0]]);
-        }
-
-        let formType = this.getFormType();
-
-        if ($(this.autocompleter).outerWidth() < $(this.component).outerWidth()) {
-            $(this.autocompleter).css('width', $(this.component).outerWidth());
-        }
         this.autocompleter.classList.add('show');
 
+        let formType = this.getFormType();
+        let targetWidth = this.component.clientWidth + this.openButton.clientWidth;
+        if ($(this.autocompleter).outerWidth() < targetWidth) {
+            $(this.autocompleter).css('width', targetWidth);
+        }
+
+        this.hightlightValue();
+
+        /**
+         * Check if component will overflow window
+         * and change direction of view if necessary.
+         */
         let bounding = this.autocompleter.getBoundingClientRect();
         let rightOverlap = bounding.right - (window.innerWidth || document.documentElement.clientWidth);
-        if (rightOverlap > 0) {
-            const scrollbarWidth = 17;
-            $(this.autocompleter).css('left', (-1 * rightOverlap) - scrollbarWidth);
+
+        if (rightOverlap > -17) {
+            this.autocompleter.style.setProperty('right', '0px', "important");
+            this.autocompleter.style.setProperty('left', 'auto', "important");
         }
+
+
         let parent = null;
 
         if (formType === 'STANDARD') {
-            parent = $(this.component).closest('.panel,.splitContainer');
-            if (!parent.hasClass('floating') && !parent.hasClass('splitContainer')) {
+            parent = $(this.component).closest('.panel,.splitContainer,.hasHeight');
+
+            //If outocompleter is about to open in container wity fixed height we change it's open direction. Direction will be UP.
+            if(parent.hasClass('hasHeight')){
+                const parentBound = parent[0].getBoundingClientRect();
+                let completerYmaks = bounding.height + bounding.top;
+                let parentYmaks = parentBound.top + parentBound.height;
+                if(completerYmaks > parentYmaks){
+                    this.autocompleter.style.setProperty('top', "-"+(bounding.height+2)+"px" , "important");
+                }
+
+            }
+            if (!parent.hasClass('floating') && !parent.hasClass('splitContainer') ) {
                 return;
             }
         } else if (formType === 'MODAL' || formType === 'MODAL_OVERFLOW') {
@@ -453,11 +474,12 @@ class SelectComboMenu extends InputText {
             return;
         }
 
+
         parent.append(this.autocompleter);
         let _component = $(this.component);
         let _autocompleter = $(this.autocompleter);
 
-        _autocompleter.css('top', _component.offset().top - parent.offset().top + _component.height());
+        _autocompleter.css('top', _component.offset().top - parent.offset().top + this.component.offsetHeight);
         _autocompleter.css('left', _component.offset().left - parent.offset().left);
         _autocompleter.css('width', _component.width());
     }
@@ -469,6 +491,12 @@ class SelectComboMenu extends InputText {
         let formType = this.getFormType();
 
         this.autocompleter.classList.remove('show');
+
+        /**
+         * Clear inline styles for right direction view.
+         */
+        this.autocompleter.style.setProperty('right', '', null);
+        this.autocompleter.style.setProperty('left', '', null);
 
         let parent = null;
         if (formType === 'STANDARD') {
@@ -487,6 +515,8 @@ class SelectComboMenu extends InputText {
         parent.find('.autocompleter').remove();
         this.component.appendChild(this.autocompleter);
         this.input.focus();
+
+
     }
 
     extractChangedAttributes() {
@@ -496,29 +526,18 @@ class SelectComboMenu extends InputText {
         if (this.accessibility !== 'EDIT') {
             return {};
         }
-        let attrs = {
-            blur: undefined,
-            text: undefined,
-            addedTag: undefined,
-            selectedIndexGroup: undefined,
-            selectedIndex: undefined,
-        };
+
         if (this.rawValue !== this.oldValue) {
-            if (this.selectedIndex != null) {
-                attrs.selectedIndex = this.selectedIndex;
-            } else {
-                attrs.text = this.rawValue;
-            }
-
             this.oldValue = this.rawValue;
-            this.selectedIndex = null;
-        }
-        if (this.blurEvent) {
-            attrs.blur = true;
-            this.blurEvent = false;
+
+            if (this.selectedIndex != null) {
+                return {selectedIndex: this.selectedIndex};
+            } else {
+                return {text: this.rawValue};
+            }
         }
 
-        return attrs;
+        return {};
     }
 
     setValues(values) {
@@ -568,18 +587,16 @@ class SelectComboMenu extends InputText {
                 if (this.accessibility !== 'EDIT' || disabled) {
                     return;
                 }
-
+                this.highlighted = this.findByValue(targetValue);
                 this.selectedIndex = index;
-                this.highlightValue([this.values[this.selectedIndex]]);
                 if (this.emptyLabel) {
                     this.selectedIndex = this.selectedIndex - 1;
                 }
-
                 this.input.value = targetValue;
 
                 this.updateModel();
                 if (this.onChange && (this.rawValue !== this.oldValue)) {
-                    this.fireEventWithLock('onChange', this.onChange, event);
+                    this.fireEventWithLock('onChange', this.onChange);
                     this.changeToFired = false;
                 }
 
@@ -596,39 +613,6 @@ class SelectComboMenu extends InputText {
     resolveValue(value) {
         value = this.fhml.resolveValueTextOrEmpty(value);
         return value;
-    }
-
-    highlightValue(highlights) {
-        if (!highlights) {
-            highlights = [];
-        }
-
-        this.selectedIndex = null;
-
-        let options = this.values;
-        if (highlights.length == 0) {
-            for (let optionIndex = 0; optionIndex < options.length; optionIndex++) {
-                let option = options[optionIndex];
-                option.element.classList.remove('selected');
-            }
-            return;
-        }
-
-        let highlight = highlights[0];
-
-        for (let optionIndex = 0; optionIndex < options.length; optionIndex++) {
-            let option = options[optionIndex];
-
-            option.element.classList.remove('selected');
-
-            if (option.targetValue === highlight.targetValue) {
-                this.selectedIndex = optionIndex;
-                this.highlighted = optionIndex;
-
-                option.element.classList.add('selected');
-                this.autocompleter.scrollTop = option.element.offsetTop;
-            }
-        }
     }
 
     setAccessibility(accessibility) {
@@ -672,11 +656,6 @@ class SelectComboMenu extends InputText {
     destroy(removeFromParent) {
         if (this.keySupportCallback) {
             this.keySupportCallback();
-        }
-
-        if (this.fh.isIE()) {
-            $(this.autocompleter).off('mousedown', this.autocompleteMousedownEvent.bind(this));
-            $(this.autocompleter).off('scroll', this.autocompelteScrollEvent.bind(this));
         }
 
         this.input.removeEventListener('input', this.inputInputEvent.bind(this));

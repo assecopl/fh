@@ -66,7 +66,7 @@ public class Combo extends BaseInputFieldWithKeySupport {
 
         private boolean displayAsTarget;
 
-        private String targetValue;
+        private Object targetValue;
 
         private String displayedValue;
 
@@ -78,6 +78,13 @@ public class Combo extends BaseInputFieldWithKeySupport {
             this.displayAsTarget = true;
             this.targetValue = targetValue;
             this.targetId = targetId;
+        }
+
+        public ComboItemDTO(Object targetValue, Long targetId, boolean displayAsTarget, String displayedValue) {
+            this.displayAsTarget = displayAsTarget;
+            this.targetValue = targetValue;
+            this.targetId = targetId;
+            this.displayedValue = displayedValue;
         }
 
         public ComboItemDTO(IComboItem comboItem) {
@@ -206,7 +213,7 @@ public class Combo extends BaseInputFieldWithKeySupport {
     @XMLProperty
     @DocumentedComponentAttribute(defaultValue = "false", value = "Determines if multiselect is enabled in combo. If multiselect is set to true, value has to be set to Collection.")
     @DesignerXMLProperty(functionalArea = SPECIFIC, priority = 10)
-    private boolean multiselect;
+    protected boolean multiselect;
 
     @Getter
     protected String multiselectRawValue;
@@ -218,7 +225,7 @@ public class Combo extends BaseInputFieldWithKeySupport {
     @DocumentedComponentAttribute(boundable = true, defaultValue = "false", value = "Defines if new values could be typed be user.  Binding changes may not be respected after initially showing this control.")
     private ModelBinding<Boolean> freeTypingBinding;
 
-    private Class<?> modelType = String.class;
+    protected Class<?> modelType = String.class;
 
     @JsonIgnore
     @Getter
@@ -458,7 +465,12 @@ public class Combo extends BaseInputFieldWithKeySupport {
                 }
                 this.selectedItem = new ArrayList<>((List) getModelBinding().getBindingResult().getValue());
             } else {
-                getModelBinding().setValue(selectedItem);
+                if (selectedItem instanceof IComboItem) {
+                    getModelBinding().setValue(((IComboItem) selectedItem).getTargetValue());
+                }
+                else {
+                    getModelBinding().setValue(selectedItem);
+                }
             }
         }
     }
@@ -539,7 +551,7 @@ public class Combo extends BaseInputFieldWithKeySupport {
         }
     }
 
-    private boolean processValuesBinding() {
+    protected boolean processValuesBinding() {
         boolean valuesChanged = false;
         if (valuesBinding != null) {
             BindingResult valuesBindingResult = valuesBinding.getBindingResult();
@@ -681,6 +693,9 @@ public class Combo extends BaseInputFieldWithKeySupport {
 
     //todo - temporary solution, remove Spel in future
     private String objectToStringAsDisplayExpresssion(Object item) {
+        if (item == null) {
+            return null;
+        }
         if (item instanceof String) {
             return (String) item;
         }

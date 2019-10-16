@@ -1,0 +1,47 @@
+<!--
+LAYOUT : fhframework.layout.templates=panels
+-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+</head>
+<body>
+<div th:fragment="layout">
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <div class="row">
+            <div class="navbar-logo">
+                <a class="navbar-brand" href="#" target="_self">
+                    <img th:src="${@environment.getProperty('fh.application.logo.url')}"
+                         th:alt="${@environment.getProperty('fh.application.title')}"/>
+                </a>
+            </div>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo05"
+                    aria-controls="navbarTogglerDemo05" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse navbar-controls" id="navbarTogglerDemo05">
+                <div id="navbarForm" class="navbar-nav"></div>
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid">
+        <div id="menuForm" class="col-sm-12 col-md-3 col-lg-3 col-xl-2 mt-3 d-none"
+             th:classappend="${@environment.getProperty('fh.application.menu.hide') == 'true'}?hidden"></div>
+        <div class="row">
+            <div id="sideFormLeft" class="col-sm-12 col-md-3 col-lg-3 col-xl-2 mt-3"></div>
+            <div id="mainForm" class="col-sm-12 col-md-6 col-lg-6 col-xl-8 mt-3"></div>
+            <div id="sideFormRight" class="col-sm-12 col-md-3 col-lg-3 col-xl-2 mt-3"></div>
+        </div>
+        <div id="formDesigner" class="d-none">
+            <div class="row">
+                <div id="formDesignerToolbox" class="col-md-2"></div>
+                <div id="formDesignerComponents" class="col"></div>
+                <div id="formDesignerModelProperties" class="col d-none"></div>
+                <div id="formDesignerProperties" class="col-md-2"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

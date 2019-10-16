@@ -4,7 +4,7 @@
 
 	<groupId>pl.fhframework</groupId>
 	<artifactId>fhFramework</artifactId>
-	<version>4.3-SNAPSHOT</version>
+	<version>4.5-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>fhFramewrok</name>
@@ -13,7 +13,7 @@
 	<parent>
 		<groupId>pl.fhframework</groupId>
 		<artifactId>fh-compile-bom</artifactId>
-		<version>4.3-SNAPSHOT</version>
+		<version>4.5-SNAPSHOT</version>
 		<relativePath>./BOM/fh-compile-bom</relativePath>
 	</parent>
 

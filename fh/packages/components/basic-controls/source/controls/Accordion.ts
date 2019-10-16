@@ -87,7 +87,7 @@ class Accordion extends HTMLFormComponent {
         let collapseWrapper = document.createElement('div');
         collapseWrapper.dataset.parent = '#' + this.id;
         collapseWrapper.classList.add('collapse');
-        if (active) {
+        if (active || this.designMode) {
              collapseWrapper.classList.add('show');
         }
 

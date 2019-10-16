@@ -13,6 +13,7 @@ import pl.fhframework.model.forms.designer.BindingExpressionDesignerPreviewProvi
 
 import lombok.Getter;
 import lombok.Setter;
+import pl.fhframework.model.forms.designer.IDesignerEventListener;
 
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.CONTENT;
 
@@ -23,7 +24,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
 @Control(parents = {TabContainer.class, Wizard.class})
 @DocumentedComponent(ignoreFields = {"width"},
         value = "Tab component which represents a single tab", icon = "fa fa-window-maximize")
-public class Tab extends GroupingComponent implements IHasBoundableLabel {
+public class Tab extends GroupingComponent implements IHasBoundableLabel, IDesignerEventListener {
 
     public static final String ATTR_LABEL = "label";
     public static final String TYPE_NAME = "Tab";
@@ -88,5 +89,17 @@ public class Tab extends GroupingComponent implements IHasBoundableLabel {
     @Override
     public String getType() {
         return TYPE_NAME;
+    }
+
+    @Override
+    public void onDesignerAddDefaultSubcomponent(SpacerService spacerService) {
+        addSubcomponent(createNewRow());
+    }
+
+    public Row createNewRow() {
+        Row row = new Row(getForm());
+        row.setGroupingParentComponent(this);
+        row.init();
+        return row;
     }
 }

@@ -38,7 +38,6 @@ public interface IFeature extends IGeographical {
     @JsonIgnore
     List<Class<? extends IGeometry>> allowedGeometries();
 
-    @JsonIgnore
     @ModelElement(type = ModelElementType.HIDDEN)
     Map<String, Object> getProperties();
 }

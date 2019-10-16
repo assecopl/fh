@@ -3,8 +3,8 @@ import {HTMLFormComponent} from "fh-forms-handler";
 import {AdditionalButton} from "fh-forms-handler";
 
 class Dropdown extends HTMLFormComponent {
-    private button: any;
-    private dropdown: any;
+    protected button: any;
+    protected dropdown: any;
     private menu: any;
     private style: any;
     private readonly onClick: any;
@@ -68,6 +68,10 @@ class Dropdown extends HTMLFormComponent {
 
         if (this.componentObj.subelements) {
             this.addComponents(this.componentObj.subelements);
+        }
+
+        if (button.id === 'designerShowPreviewFormButton') {
+            menu.classList.add('designerPreviewVariants');
         }
     };
 

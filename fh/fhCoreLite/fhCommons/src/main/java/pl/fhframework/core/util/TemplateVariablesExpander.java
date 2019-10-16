@@ -39,6 +39,16 @@ public class TemplateVariablesExpander {
         return template;
     }
 
+    public boolean varExists(String template, String var) {
+        String searchString = "{" + var + "}";
+        return StringUtils.contains(template, searchString);
+    }
+
+    public boolean sectionExists(String template, String sectionName) {
+        String searchString = "{" + sectionName + "?}";
+        return StringUtils.contains(template, searchString);
+    }
+
     private String optionalSection(String template, String sectionName, boolean shouldBeOn, List<Map<String, Object>> iterationsVars) {
         String result = template;
         result = doOptionalSection(result, sectionName, shouldBeOn, iterationsVars);

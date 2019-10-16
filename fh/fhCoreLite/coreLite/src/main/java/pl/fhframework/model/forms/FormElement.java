@@ -1,24 +1,22 @@
 package pl.fhframework.model.forms;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import pl.fhframework.core.generator.ModelElementType;
-import pl.fhframework.core.generator.ModelElement;
-import pl.fhframework.core.logging.FhLogger;
+import lombok.Getter;
+import lombok.Setter;
 import pl.fhframework.annotations.DesignerControl;
 import pl.fhframework.annotations.DesignerXMLProperty;
 import pl.fhframework.annotations.DocumentedComponentAttribute;
 import pl.fhframework.annotations.XMLProperty;
 import pl.fhframework.binding.ModelBinding;
+import pl.fhframework.core.generator.ModelElement;
+import pl.fhframework.core.generator.ModelElementType;
+import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.model.dto.ElementChanges;
 import pl.fhframework.model.forms.attribute.HintPlacement;
 import pl.fhframework.model.forms.attribute.HorizontalAlign;
 import pl.fhframework.model.forms.attribute.VerticalAlign;
 
 import java.util.Set;
-
-import lombok.Getter;
-import lombok.Setter;
 
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.LOOK_AND_STYLE;
 

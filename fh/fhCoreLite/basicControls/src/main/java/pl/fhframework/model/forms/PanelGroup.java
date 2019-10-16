@@ -15,6 +15,7 @@ import pl.fhframework.events.IEventSource;
 
 import lombok.Getter;
 import lombok.Setter;
+import pl.fhframework.model.forms.designer.IDesignerEventListener;
 
 import java.util.Optional;
 
@@ -24,7 +25,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
 
 @Control(parents = {Accordion.class, PanelGroup.class, Group.class, SplitContainer.class, Repeater.class, Column.class, Tab.class, Row.class, Form.class}, invalidParents = {Table.class}, canBeDesigned = true)
 @DocumentedComponent(value = "PanelGroup component is responsible for the grouping of sub-elements with optional header and collapsing", icon = "fa fa-object-group")
-public class PanelGroup extends GroupingComponent<Component> implements Boundable, IChangeableByClient, IEventSource, IHasBoundableLabel {
+public class PanelGroup extends GroupingComponent<Component> implements Boundable, IChangeableByClient, IEventSource, IHasBoundableLabel, IDesignerEventListener {
 
     private static final String COLLAPSED_ATTR = "collapsed";
     public static final String ON_TOGGLE = "onToggle";
@@ -129,5 +130,22 @@ public class PanelGroup extends GroupingComponent<Component> implements Boundabl
 
     public IActionCallbackContext setOnToggle(IActionCallback onToggle) {
         return CallbackActionBinding.createAndSet(onToggle, this::setOnToggle);
+    }
+
+    @Override
+    public void onDesignerAddDefaultSubcomponent(SpacerService spacerService) {
+        addSubcomponent(createNewRow());
+    }
+
+    @Override
+    public void onDesignerBeforeAdding(IGroupingComponent<?> parent, SpacerService spacerService) {
+        addSubcomponent(createNewRow());
+    }
+
+    private Row createNewRow() {
+        Row row = new Row(getForm());
+        row.setGroupingParentComponent(this);
+        row.init();
+        return row;
     }
 }

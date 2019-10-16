@@ -4,7 +4,7 @@
 
 	<artifactId>basicControls</artifactId>
 	<groupId>pl.fhframework</groupId>
-	<version>4.3-SNAPSHOT</version>
+	<version>4.5-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>basicControls</name>
@@ -13,7 +13,7 @@
 	<parent>
 		<groupId>pl.fhframework</groupId>
 		<artifactId>fhCoreLite</artifactId>
-		<version>4.3-SNAPSHOT</version>
+		<version>4.5-SNAPSHOT</version>
 	</parent>
 
 	<properties>
@@ -26,7 +26,7 @@
 			<groupId>pl.fhframework</groupId>
 			<artifactId>coreLite</artifactId>
 			<!--<version>${fh.version}</version>-->
-			<version>4.3-SNAPSHOT</version>
+			<version>4.5-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
@@ -63,7 +63,7 @@
         <!--<dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
-            <version>4.3-SNAPSHOT</version>
+            <version>4.5-SNAPSHOT</version>
         </dependency>-->
 
 	</dependencies>

@@ -28,7 +28,7 @@ class Form extends HTMLFormComponent {
     private windowListenerMouseUp: any;
     private modalDeferred;
 
-    constructor(formObj: any, parent:any = null, layout:string = null) {
+    constructor(formObj: any, parent: any = null) {
         super(formObj, parent);
 
         this.combinedId = this.id;
@@ -36,9 +36,6 @@ class Form extends HTMLFormComponent {
         this.formType = formObj.formType;
         this.viewMode = this.componentObj.viewMode;
         this.state = this.componentObj.state;
-
-
-
 
 
         /* TODO: remove after changing Java */
@@ -97,12 +94,11 @@ class Form extends HTMLFormComponent {
             //FIXME ever executed ?? Looks like never. There is no form witdh with this id.
             (<any>FhContainer.get('Designer')).beforeDesignerFormCreated();
         }
-        
 
         if (this.formType == 'MODAL') {
             this.layoutHandler.blockLayoutChangeForModal();
         }
-        if(this.designMode){
+        if (this.designMode) {
             this.layoutHandler.blockLayoutChangeForDesigner();
         }
 
@@ -146,22 +142,17 @@ class Form extends HTMLFormComponent {
             this.htmlElement.dataset.backdrop = 'static';
             this.htmlElement.dataset.keyboard = false;
             this.modalDeferred = $.Deferred();
-            $(this.htmlElement).modal({show: true});
-
-            this.keyupEvent = function (event) {
-                if (event.which == 9 && !isDescendant(this.htmlElement, event.target)) {
-                    $(this.htmlElement).find(':focusable').first().focus();
-                }
-            }.bind(this);
-            $(document).on('keyup', this.keyupEvent);
+            $(this.htmlElement).modal({show: true, focus: true});
 
             $(this.htmlElement).one('shown.bs.modal', function () {
                 while (this.contentWrapper != null && this.contentWrapper.firstChild) this.contentWrapper.removeChild(this.contentWrapper.firstChild);
                 this.renderSubcomponents();
                 this.modalDeferred.resolve();
+                this.focusFirstActiveInputElement();
             }.bind(this));
         } else {
             this.renderSubcomponents();
+            this.focusFirstActiveInputElement();
         }
 
         if (this.viewMode == 'DESIGN') {
@@ -288,10 +279,6 @@ class Form extends HTMLFormComponent {
         document.body.appendChild(container);
         this.container = container;
 
-        $(container).one('shown.bs.modal', function (event) {
-            $(event.target).find('.fc.button').first().focus();
-        });
-
         var form = document.createElement('div');
         form.id = this.id;
 
@@ -327,22 +314,23 @@ class Form extends HTMLFormComponent {
         var content = document.createElement('div');
         content.classList.add('modal-content');
 
-        var header = document.createElement('div');
-        header.classList.add('modal-header');
+        if (!this.componentObj.hideHeader) {
+            var header = document.createElement('div');
+            header.classList.add('modal-header');
 
-        var title = document.createElement('h5');
-        title.classList.add('modal-title');
-        this.addCloudIcon(title);
-        this.labelElement = document.createElement("span");
-        title.appendChild(this.labelElement);
-        this.labelElement.innerHTML = this.fhml.resolveValueTextOrEmpty(this.componentObj.label);
+            var title = document.createElement('h5');
+            title.classList.add('modal-title');
+            this.addCloudIcon(title);
+            this.labelElement = document.createElement("span");
+            title.appendChild(this.labelElement);
+            this.labelElement.innerHTML = this.fhml.resolveValueTextOrEmpty(this.componentObj.label);
 
-        header.appendChild(title);
-        if (this.onManualModalClose != null) {
-            header.appendChild(this.buildCloseButton());
+            header.appendChild(title);
+            if (this.onManualModalClose != null) {
+                header.appendChild(this.buildCloseButton());
+            }
+            content.appendChild(header);
         }
-        content.appendChild(header);
-
         var body = document.createElement('div');
         body.classList.add('modal-body');
 
@@ -364,6 +352,14 @@ class Form extends HTMLFormComponent {
 
         return form;
     };
+
+    focusFirstActiveInputElement() {
+        if (this.designMode) {
+            return;
+        }
+
+        $(this.component).find(':input:enabled:not([readonly]):not(button):first').trigger('focus');
+    }
 
     buildFloatingForm() {
         var form = document.createElement('div');

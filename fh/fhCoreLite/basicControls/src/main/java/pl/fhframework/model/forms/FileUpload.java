@@ -21,6 +21,7 @@ import pl.fhframework.model.PresentationStyleEnum;
 import pl.fhframework.model.dto.ElementChanges;
 import pl.fhframework.model.dto.ValueChange;
 import pl.fhframework.model.forms.designer.BindingExpressionDesignerPreviewProvider;
+import pl.fhframework.model.forms.designer.ButtonStyleFixedValuesProvider;
 import pl.fhframework.model.forms.utils.LanguageResolver;
 import pl.fhframework.model.forms.validation.ValidationFactory;
 import pl.fhframework.validation.ConstraintViolation;
@@ -39,13 +40,15 @@ import lombok.Setter;
 
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.BEHAVIOR;
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.CONTENT;
+import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.LOOK_AND_STYLE;
 
 @DesignerControl(defaultWidth = 2)
 @DocumentedComponent(value = "Component responsible for file upload", icon = "fa fa-upload")
 @Control(parents = {PanelGroup.class, Column.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
-public class FileUpload extends FormElement implements TableComponent<FileUpload>, IChangeableByClient, Boundable, IValidatedComponent, IFileMaxSized, IResourced, IHasBoundableLabel {
+public class FileUpload extends FormElement implements TableComponent<FileUpload>, IChangeableByClient, Boundable, IValidatedComponent, IFileMaxSized, IResourced, IHasBoundableLabel, Styleable {
     private static final String REQUIRED_ATTR = "required";
     private static final String LABEL_ATTR = "label";
+    public static final String STYLE_ATTR = "style";
     protected static final String VALIDATION_LABEL_ATTR = "validationLabel";
     private static final String MESSAGE_FOR_FIELD_ATTR = "messageForField";
 
@@ -107,6 +110,9 @@ public class FileUpload extends FormElement implements TableComponent<FileUpload
     @Getter
     private String label = "";
 
+    @Getter
+    private Style style = Style.PRIMARY;
+
     @JsonIgnore
     @Getter
     @Setter
@@ -128,6 +134,14 @@ public class FileUpload extends FormElement implements TableComponent<FileUpload
     @XMLProperty
     @DocumentedComponentAttribute(boundable = true, value = "Is multiple file upload allowed.")
     private boolean multiple;
+
+    @Getter
+    @Setter
+    @JsonIgnore
+    @XMLProperty(value = STYLE_ATTR)
+    @DocumentedComponentAttribute(boundable = true, defaultValue = "primary", value = "Determines style of FileUpload button. It is possible to select one of six Bootstrap classes: default, primary, success, info, warning, danger or bind it with variable.")
+    @DesignerXMLProperty(functionalArea = LOOK_AND_STYLE, priority = 77, fixedValuesProvider = ButtonStyleFixedValuesProvider.class)
+    private ModelBinding styleModelBinding;
 
     @JsonIgnore
     @Getter
@@ -232,7 +246,17 @@ public class FileUpload extends FormElement implements TableComponent<FileUpload
 
         this.language = LanguageResolver.languageChanges(getForm().getAbstractUseCase().getUserSession(), this.language, elementChanges);
 
-        boolean refreshView = processLabelBinding(elementChanges, false);
+        if (labelModelBinding != null) {
+            Object newLabelValueObj = labelModelBinding.getBindingResult().getValue();
+            String newLabelValue = newLabelValueObj != null ? newLabelValueObj.toString() : null;
+
+            if (!areValuesTheSame(newLabelValue, label)) {
+                this.label = newLabelValue;
+                elementChanges.addChange(LABEL_ATTR, this.label);
+            }
+        }
+
+        boolean refreshView = processStyleBinding(elementChanges, false);
         refreshView = processFileNameBinding(elementChanges, refreshView);
         this.prepareComponentAfterValidation(elementChanges);
         if (refreshView) {
@@ -240,6 +264,19 @@ public class FileUpload extends FormElement implements TableComponent<FileUpload
         }
 
         return elementChanges;
+    }
+
+    protected boolean processStyleBinding(ElementChanges elementChanges, boolean refreshView) {
+        BindingResult labelBidingResult = styleModelBinding != null ? styleModelBinding.getBindingResult() : null;
+        if (labelBidingResult != null) {
+            String newLabelValue = this.convertBindingValueToString(labelBidingResult);
+            if (!areValuesTheSame(newLabelValue, style.toValue())) {
+                this.style = Style.forValue(newLabelValue);
+                elementChanges.addChange(STYLE_ATTR, this.style);
+                refreshView = true;
+            }
+        }
+        return refreshView;
     }
 
     private boolean processFileNameBinding(ElementChanges elementChanges, boolean refreshView) {
@@ -271,21 +308,6 @@ public class FileUpload extends FormElement implements TableComponent<FileUpload
             }
         }
 
-        return refreshView;
-    }
-
-    protected boolean processLabelBinding(ElementChanges elementChanges, boolean refreshView) {
-        if (labelModelBinding != null) {
-            BindingResult labelBidingResult = labelModelBinding.getBindingResult();
-            if (labelBidingResult != null) {
-                String newLabelValue = this.convertBindingValueToString(labelBidingResult);
-                if (!areValuesTheSame(newLabelValue, label)) {
-                    this.label = newLabelValue;
-                    elementChanges.addChange(LABEL_ATTR, this.label);
-                    return true;
-                }
-            }
-        }
         return refreshView;
     }
 

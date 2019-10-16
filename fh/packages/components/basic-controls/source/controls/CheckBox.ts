@@ -83,9 +83,12 @@ class CheckBox extends HTMLFormComponent {
 
     addAlignStyles() {
         super.addAlignStyles();
+        let horizontalAlign = '';
+        let verticalAlign = '';
 
-        if (this.componentObj.horizontalAlign && this.htmlElement) {
-            let horizontalAlign = '';
+        if (!this.componentObj.horizontalAlign) {
+            horizontalAlign = 'start';
+        } else if (this.componentObj.horizontalAlign && this.htmlElement) {
             switch (this.componentObj.horizontalAlign) {
                 case "LEFT":
                     horizontalAlign = "start";
@@ -97,10 +100,12 @@ class CheckBox extends HTMLFormComponent {
                     horizontalAlign = "end";
                     break;
             }
-            this.htmlElement.classList.add('justify-content-' + horizontalAlign);
         }
-        if (this.componentObj.verticalAlign && this.htmlElement) {
-            let verticalAlign = '';
+        this.htmlElement.classList.add('justify-content-' + horizontalAlign);
+
+        if (!this.componentObj.verticalAlign) {
+            verticalAlign = "start"
+        } else if (this.componentObj.verticalAlign && this.htmlElement) {
             switch (this.componentObj.verticalAlign) {
                 case "TOP":
                     verticalAlign = "start";
@@ -112,8 +117,8 @@ class CheckBox extends HTMLFormComponent {
                     verticalAlign = "end";
                     break;
             }
-            this.htmlElement.classList.add('align-items-' + verticalAlign);
         }
+        this.htmlElement.classList.add('align-items-' + verticalAlign);
     };
 
     wrap(skipLabel) {

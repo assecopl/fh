@@ -1,5 +1,7 @@
 package pl.fhframework.core.security.model;
 
+import pl.fhframework.core.util.StringUtils;
+
 import java.util.List;
 
 /**
@@ -57,5 +59,23 @@ public interface IUserAccount {
     void addRole(IRoleInstance roleInstance);
     /** Remove role instance from user roles */
     void removeRole(IRoleInstance roleInstance);
+
+    /** Returns user first and last name or if it's null than returns login */
+    default String getName() {
+        String name = null;
+        if (!StringUtils.isNullOrEmpty(getFirstName())) {
+            name = getFirstName();
+        }
+        if (!StringUtils.isNullOrEmpty(getLastName())) {
+            if (!StringUtils.isNullOrEmpty(name)) {
+                name += " ";
+            }
+            name += getLastName();
+        }
+        if (StringUtils.isNullOrEmpty(name)) {
+            name = getLogin();
+        }
+        return name;
+    }
 
 }

@@ -1,5 +1,6 @@
 #applicationLock {
     display: flex;
+    z-index: 1051;
     background: rgba(0, 0, 0, 0.5);
 }
 

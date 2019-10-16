@@ -151,6 +151,20 @@ public class ModuleRegistry implements ApplicationListener<ContextRefreshedEvent
         return Optional.ofNullable(FH_MODULES_ON_CLASSPATH_BY_CLASSPATH_URL.get(fhResource));
     }
 
+    /**
+     * Finds a subsystem which ownes passed class by external path
+     *
+     * @param subsystemOwnedClass a class
+     * @return owning subsystem (optional)
+     */
+    public static Optional<Subsystem> findOwningSubsystemByExternalPath(Class<?> subsystemOwnedClass) {
+        FhResource fhResource = ReflectionUtils.baseClassPath(subsystemOwnedClass);
+        return FH_MODULES_ON_CLASSPATH_BY_CLASSPATH_URL.entrySet()
+                .stream()
+                .filter(c -> c.getKey().getExternalPath().equals(fhResource.getExternalPath()))
+                .map(Map.Entry::getValue).findAny();
+    }
+
     private static boolean isModuleLoaded(String moduleName) {
         for (Subsystem loadedSubsystem : LOADED_MODULES) {
             if (loadedSubsystem.getName().equals(moduleName)) {
@@ -280,6 +294,15 @@ public class ModuleRegistry implements ApplicationListener<ContextRefreshedEvent
     public static String getModuleId(Class clazz) {
         if (clazz != null) {
             DynamicClassName dynamicClassName = DynamicClassName.forClassName(ReflectionUtils.getClassName(clazz));
+
+            return getModuleId(dynamicClassName);
+        }
+
+        return null;
+    }
+
+    public static String getModuleId(DynamicClassName dynamicClassName) {
+        if (dynamicClassName != null) {
             Subsystem subsystem;
             do {
                 subsystem = FH_MODULES_BASE_PACKAGE.get(dynamicClassName.getPackageName());

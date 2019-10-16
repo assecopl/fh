@@ -50,6 +50,7 @@ class Column extends HTMLFormComponent {
             this.sorter = sorter;
 
             column.classList.add('sortable');
+            // column.classList.add(column.id);
             column.addEventListener('click', this.columnClickEvent.bind(this));
         }
 
@@ -120,7 +121,6 @@ class Column extends HTMLFormComponent {
         if (this.designMode && accessibility === 'HIDDEN') {
             accessibility = 'EDIT';
         }
-
 
         super.setAccessibility(accessibility);
 

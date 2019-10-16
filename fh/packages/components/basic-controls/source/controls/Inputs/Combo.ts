@@ -1,7 +1,13 @@
 import {InputText} from "./InputText";
-import {HTMLFormComponent} from 'fh-forms-handler';
+import {FhContainer, FormsManager, HTMLFormComponent} from 'fh-forms-handler';
+import getDecorators from "inversify-inject-decorators";
+
+let { lazyInject } = getDecorators(FhContainer);
 
 class Combo extends InputText {
+    @lazyInject("FormsManager")
+    protected formsManager: FormsManager;
+
     protected values: any;
     protected autocompleter: any;
     private selectedIndexGroup: any;
@@ -25,6 +31,7 @@ class Combo extends InputText {
     private multiselectRawValue: any;
     private multiselectOldValue: any;
     private changeToFired: boolean;
+    private firedEventData: any;
 
     private cursorPositionOnLastSpecialKey: any;
     private rawValueOnLastSpecialKey: any;
@@ -237,7 +244,6 @@ class Combo extends InputText {
         this.hintElement = this.component;
 
         this.wrap(false, true);
-        this.inputGroupElement.appendChild(autocompleter);
 
         if (this.multiselect) {
             this.inputGroupElement.classList.add('tagsinput');
@@ -247,6 +253,7 @@ class Combo extends InputText {
         this.createClearButton();
         this.setRequiredField(false);
 
+        this.inputGroupElement.appendChild(autocompleter);
         this.addStyles();
         this.display();
 
@@ -316,7 +323,6 @@ class Combo extends InputText {
     };
 
     openAutocomplete() {
-
         let formType = this.getFormType();
         let componentsContainer = this.component.closest('.card-body');
         let containerHeightAfterListDisplay;
@@ -332,23 +338,11 @@ class Combo extends InputText {
             containerHeightAfterListDisplay = componentsContainer.scrollHeight;
         }
 
-        // if scroll is needed, get height values of all elements displayed in the tab
-        // sum them up and set scroll accordingly to keep the autocompleter visible
-
         if (containerHeightAfterListDisplay > containerHeightBeforeListDisplay ) {
-            let allAttributesInTab = this.component.closest('.row.eq-row').childNodes;
-            let displayedAttributes = [];
-            let aggergatedElementsHeight = 0;
-
-            if (allAttributesInTab) {
-                allAttributesInTab.forEach(el => {
-                    if (!el.classList.contains('d-none') && !el.contains(this.component)){
-                        displayedAttributes.push(el);
-                        aggergatedElementsHeight += el.offsetHeight;
-                    }
-                })
-            }
-            componentsContainer.scrollTop = aggergatedElementsHeight;
+            this.autocompleter.scrollIntoView({
+                behavior: "smooth",
+                block: "nearest"
+            });
         }
 
         let parent = null;
@@ -547,7 +541,7 @@ class Combo extends InputText {
                 // escape and parse FHML
                 displayValue = this.resolveValue(displayValue);
                 a.innerHTML = displayValue;
-                a.addEventListener('mousedown', function (indexGroup, index, targetValue, targetCursorPosition, event) {
+                a.addEventListener('mousedown', function (itemValue, indexGroup, index, targetValue, targetCursorPosition, event) {
                     event.preventDefault();
 
                     if (this.accessibility !== 'EDIT' || disabled) {
@@ -560,7 +554,7 @@ class Combo extends InputText {
                     this.removedIndex = null;
                     this.forceSendSelectedIndex = true;
                     this.cleared = false;
-                    this.input.value = targetValue;
+                    this.input.value = itemValue.displayAsTarget ? itemValue.targetValue : itemValue.displayedValue;
                     if (targetCursorPosition !== undefined) {
                         this.setCursorPositionToInput(parseInt(targetCursorPosition));
                         shouldBlur = false;
@@ -575,7 +569,7 @@ class Combo extends InputText {
                         this.blurEventWithoutChange = true;
                         this.input.blur(); // must be after onChange
                     }
-                }.bind(this, key, i, itemValue.targetValue, itemValue.targetCursorPosition));
+                }.bind(this, itemValue, key, i, itemValue.targetValue, itemValue.targetCursorPosition));
 
                 li.appendChild(a);
                 this.autocompleter.appendChild(li);

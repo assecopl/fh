@@ -258,6 +258,10 @@ public class WebSocketFormsHandler extends FormsHandler {
             wssRepository.onConnectionClosed(session);
             WebSocketSessionManager.setWebSocketSession(session);
 
+            // should never happen, but then without this code can loop error for ever
+            if (status.getCode() == CloseStatus.TOO_BIG_TO_PROCESS.getCode()) {
+                SessionManager.getUserSession().getUseCaseContainer().clearUseCaseStack();
+            }
             try {
                 String sessionId = WebSocketSessionManager.getHttpSession().getId();
                 String userName = sessionId; // for guests take sessionId as name, it provides proper function of windows session overtake

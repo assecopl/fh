@@ -81,8 +81,8 @@ public class ComponentsUtils {
     public static void findByExpression(FormElement component, Predicate<FormElement> predicate, List<FormElement> found) {
         if (predicate.test(component)) {
             found.add(component);
-        } else if (component instanceof GroupingComponent) {
-            GroupingComponent<FormElement> groupingComponent = (GroupingComponent) component;
+        } else if (component instanceof IGroupingComponent) {
+            IGroupingComponent<FormElement> groupingComponent = (IGroupingComponent) component;
             for (FormElement _component : filterFormElements(groupingComponent.getSubcomponents())) {
                 findByExpression(_component, predicate, found);
             }

@@ -58,7 +58,7 @@ export class SessionTimeoutEvent extends BaseEvent {
         }
         if (distance <= 0) {
             clearTimeout(timerObject.timerId);
-            window.location.href = this.util.getPath('/autologout?reason=timeout');
+            window.location.href = this.util.getPath('autologout?reason=timeout');
         }
     }
 

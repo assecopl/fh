@@ -17,12 +17,20 @@ public class ActionSignature {
 
     private Type[] argumentTypes;
 
+    private String formId;
+
     public ActionSignature() {
     }
 
     public ActionSignature(String actionName, Type... argumentTypes) {
         this.actionName = actionName;
         this.argumentTypes = argumentTypes;
+    }
+
+    public ActionSignature(String actionName, String formId, Type... argumentTypes) {
+        this.actionName = actionName;
+        this.argumentTypes = argumentTypes;
+        this.formId = formId;
     }
 
     @Override

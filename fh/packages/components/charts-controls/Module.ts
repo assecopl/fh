@@ -1,4 +1,4 @@
-import './Module.css';
+import './source/Module.css';
 import {MeterGaugeChart} from './source/controls/MeterGaugeChart';
 import {BarChart} from './source/controls/BarChart';
 import {FhModule, FhContainer} from "fh-forms-handler";
@@ -20,4 +20,4 @@ class ChartsControls extends FhModule {
     }
 }
 
-export {ChartsControls}
+export {ChartsControls, BarChart, MeterGaugeChart}

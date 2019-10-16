@@ -1,4 +1,4 @@
-import './Module.css';
+import './source/Module.css';
 import {Tree} from "./source/controls/Tree/Tree";
 import {TreeElement} from "./source/controls/Tree/TreeElement";
 import {Group} from "./source/controls/Group";
@@ -50,6 +50,19 @@ import {FhContainer} from "fh-forms-handler";
 import {MdFileViewer} from "./source/controls/MdFileViewer";
 import {HtmlEditor} from "./source/controls/HtmlEditor";
 import {FhModule} from "fh-forms-handler";
+import {MarkdownGrid} from "./source/controls/MarkdownGrid";
+import {HtmlView} from "./source/controls/HtmlView";
+import {TableLazy} from "./source/controls/Table/TableLazy";
+import {ColumnLazy} from "./source/controls/Table/ColumnLazy";
+import {TableOptimized} from "./source/controls/Table/Optimized/TableOptimized";
+import {ColumnOptimized} from "./source/controls/Table/Optimized/ColumnOptimized";
+import {TableRowOptimized} from "./source/controls/Table/Optimized/TableRowOptimized";
+import {TableCellOptimized} from "./source/controls/Table/Optimized/TableCellOptimized";
+import {InputDateOptimized} from "./source/controls/Inputs/Optimized/InputDateOptimized";
+import {SelectComboMenuOptimized} from "./source/controls/Inputs/Optimized/SelectComboMenuOptimized";
+import {ThreeDotsMenuItem} from "./source/controls/Dropdown/ThreeDotsMenuItem";
+import {ThreeDotsMenu} from "./source/controls/Dropdown/ThreeDotsMenu";
+import { DictionaryCombo } from './source/controls/Inputs/DictionaryCombo';
 
 class BasicControls extends FhModule {
     protected registerComponents() {
@@ -185,10 +198,22 @@ class BasicControls extends FhModule {
                     return new TablePaged(componentObj, parent);
                 };
             });
+        FhContainer.bind<(componentObj: any, parent: any) => TableLazy>("TableLazy")
+            .toFactory<TableLazy>(() => {
+                return (componentObj: any, parent: any) => {
+                    return new TableLazy(componentObj, parent);
+                };
+            });
         FhContainer.bind<(componentObj: any, parent: any) => ColumnPaged>("ColumnPaged")
             .toFactory<ColumnPaged>(() => {
                 return (componentObj: any, parent: any) => {
                     return new ColumnPaged(componentObj, parent);
+                };
+            });
+        FhContainer.bind<(componentObj: any, parent: any) => ColumnLazy>("ColumnLazy")
+            .toFactory<ColumnLazy>(() => {
+                return (componentObj: any, parent: any) => {
+                    return new ColumnLazy(componentObj, parent);
                 };
             });
         FhContainer.bind<(componentObj: any, parent: any) => FileUpload>("FileUpload")
@@ -275,6 +300,12 @@ class BasicControls extends FhModule {
                     return new OptionsListElement(componentObj, parent);
                 };
             });
+        FhContainer.bind<(componentObj: any, parent: any) => DictionaryCombo>("DictionaryCombo")
+            .toFactory<DictionaryCombo>(() => {
+                return (componentObj: any, parent: any) => {
+                    return new DictionaryCombo(componentObj, parent);
+                };
+            });
         FhContainer.bind<(componentObj: any, parent: any) => Combo>("Combo")
             .toFactory<Combo>(() => {
                 return (componentObj: any, parent: any) => {
@@ -317,6 +348,12 @@ class BasicControls extends FhModule {
                     return new ImageGrid(componentObj, parent);
                 };
             });
+        FhContainer.bind<(componentObj: any, parent: any) => MarkdownGrid>("MarkdownGrid")
+            .toFactory<MarkdownGrid>(() => {
+                return (componentObj: any, parent: any) => {
+                    return new MarkdownGrid(componentObj, parent);
+                };
+            });
         FhContainer.bind<(componentObj: any, parent: any) => ButtonGroup>("ButtonGroup")
             .toFactory<ButtonGroup>(() => {
                 return (componentObj: any, parent: any) => {
@@ -341,13 +378,131 @@ class BasicControls extends FhModule {
                     return new MdFileViewer(componentObj, parent);
                 };
             });
-        FhContainer.bind<(componentObj: any, parent: any) => MdFileViewer>("HtmlEditor")
+        FhContainer.bind<(componentObj: any, parent: any) => HtmlEditor>("HtmlEditor")
             .toFactory<HtmlEditor>(() => {
                 return (componentObj: any, parent: any) => {
                     return new HtmlEditor(componentObj, parent);
                 };
             });
+        FhContainer.bind<(componentObj: any, parent: any) => HtmlView>("HtmlView")
+            .toFactory<HtmlView>(() => {
+                return (componentObj: any, parent: any) => {
+                    return new HtmlView(componentObj, parent);
+                };
+            });
+        FhContainer.bind<(componentObj: any, parent: any) => HtmlView>("ThreeDotsMenu")
+            .toFactory<ThreeDotsMenu>(() => {
+                return (componentObj: any, parent: any) => {
+                    return new ThreeDotsMenu(componentObj, parent);
+                };
+            });
+        FhContainer.bind<(componentObj: any, parent: any) => HtmlView>("ThreeDotsMenuItem")
+            .toFactory<ThreeDotsMenuItem>(() => {
+                return (componentObj: any, parent: any) => {
+                    return new ThreeDotsMenuItem(componentObj, parent);
+                };
+            });
+
+        /**
+         * --------------------------------------------------------------------------
+         * ------------------ Optimized components for table in IE ------------------
+         * --------------------------------------------------------------------------
+         */
+        FhContainer.bind<(componentObj: any, parent: any) => TableOptimized>("TableOptimized")
+            .toFactory<TableOptimized>(() => {
+                return (componentObj: any, parent: any) => {
+                    return new TableOptimized(componentObj, parent);
+                };
+            });
+        FhContainer.bind<(componentObj: any, parent: any) => TableCellOptimized>("TableCellOptimized")
+            .toFactory<TableCellOptimized>(() => {
+                return (componentObj: any, parent: any) => {
+                    return new TableCellOptimized(componentObj, parent);
+                };
+            });
+        FhContainer.bind<(componentObj: any, parent: any) => TableRowOptimized>("TableRowOptimized")
+            .toFactory<TableRowOptimized>(() => {
+                return (componentObj: any, parent: any) => {
+                    return new TableRowOptimized(componentObj, parent);
+                };
+            });
+        FhContainer.bind<(componentObj: any, parent: any) => InputDateOptimized>("InputDateOptimized")
+            .toFactory<InputDateOptimized>(() => {
+                return (componentObj: any, parent: any) => {
+                    return new InputDateOptimized(componentObj, parent);
+                };
+            });
+        FhContainer.bind<(componentObj: any, parent: any) => SelectComboMenuOptimized>("SelectComboMenuOptimized")
+            .toFactory<SelectComboMenuOptimized>(() => {
+                return (componentObj: any, parent: any) => {
+                    return new SelectComboMenuOptimized(componentObj, parent);
+                };
+            });
+        FhContainer.bind<(componentObj: any, parent: any) => ColumnOptimized>("ColumnOptimized")
+            .toFactory<ColumnOptimized>(() => {
+                return (componentObj: any, parent: any) => {
+                    return new ColumnOptimized(componentObj, parent);
+                };
+            });
     }
 }
 
-export {BasicControls}
+export {
+    BasicControls,
+    Tree,
+    TreeElement,
+    Group,
+    InputText,
+    SelectOneMenu,
+    Button,
+    Timer,
+    PanelGroup,
+    OutputLabel,
+    Spacer,
+    Dropdown,
+    DropdownItem,
+    TableRow,
+    TableRowOptimized,
+    Table,
+    TableOptimized,
+    Column,
+    ColumnOptimized,
+    TableCell,
+    TableCellOptimized,
+    TabContainer,
+    Tab,
+    Footer,
+    RadioOptionsGroup,
+    TablePaged,
+    ColumnPaged,
+    FileUpload,
+    ValidateMessages,
+    FloatingGroup,
+    Canvas,
+    Repeater,
+    CheckBox,
+    Accordion,
+    Link,
+    InputNumber,
+    Wizard,
+    Widget,
+    SplitContainer,
+    OptionsList,
+    OptionsListElement,
+    Combo,
+    InputDate,
+    InputTimestamp,
+    Image,
+    Calendar,
+    ImageGrid,
+    ButtonGroup,
+    Row,
+    RadioOption,
+    KeyboardEvent,
+    SelectComboMenu,
+    MdFileViewer,
+    HtmlEditor,
+    FhModule,
+    MarkdownGrid,
+    HtmlView,
+};

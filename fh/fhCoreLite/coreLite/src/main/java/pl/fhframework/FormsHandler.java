@@ -7,12 +7,13 @@ import org.hibernate.LazyInitializationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
+import pl.fhframework.core.CoreSystemFunction;
 import pl.fhframework.core.FhDescribedException;
 import pl.fhframework.core.FhException;
 import pl.fhframework.core.FhFormException;
 import pl.fhframework.core.logging.*;
 import pl.fhframework.core.logging.handler.IErrorInformationHandler;
-import pl.fhframework.core.uc.UseCase;
+import pl.fhframework.core.security.AuthorizationManager;
 import pl.fhframework.core.uc.handlers.IOnEventHandleError;
 import pl.fhframework.core.uc.handlers.UseCaseErrorsHandler;
 import pl.fhframework.core.uc.url.UseCaseUrl;
@@ -79,6 +80,9 @@ public abstract class FormsHandler {
 
     @Autowired
     protected UseCaseErrorsHandler useCaseErrorsHandler;
+
+    @Autowired(required = false)
+    protected AuthorizationManager authorizationManager;
 
     private Map<String, List<IClientDataHandler>> clientDataHandlerMap = new HashMap<>();
 
@@ -295,7 +299,7 @@ public abstract class FormsHandler {
 
         userSession.getUseCaseContainer().getFormsContainer().doForEachFullyManagedForm(form -> form.setShowingTimestamp(Instant.now()));
 
-        if (sessionTimeoutManagerActive) {
+        if (sessionTimeoutManagerActive && !sessionNeverExpireForUser(userSession)) {
             sessionTimeoutManager.registerConversation(userSession.getConversationUniqueId());
             Session.TimeoutData timeoutData = sessionTimeoutManager.keepSessionAlive(userSession.getConversationUniqueId());
             userSession.getUseCaseRequestContext().getEvents().add(new SessionTimeoutEvent(timeoutData));
@@ -335,6 +339,10 @@ public abstract class FormsHandler {
         finishEventHandling(requestId, context);
     }
 
+    private boolean sessionNeverExpireForUser(UserSession userSession) {
+        return authorizationManager != null && authorizationManager.hasFunction(userSession.getSystemUser().getBusinessRoles(), CoreSystemFunction.SESSION_NEVER_EXPIRES, CoreSystemFunction.CORE_MODULE_ID);
+    }
+
     private void runRemoteAction(String url, UserSession userSession, String requestId, WebSocketContext context) {
         UseCaseUrl useCaseUrl = parser.parseUrlQuestionParams(url);
         String remoteAction = useCaseUrl.getNamedParameter(UseCaseUrl.REMOTE_EVENT_NAME);
@@ -368,6 +376,8 @@ public abstract class FormsHandler {
         //Execute the proper logic associated with launching the use case.
         userSession.runUseCase(message.getUseCaseQualifiedClassName());
         finishEventHandling(requestId, context);
+
+        sessionLogger.logSessionEndState(userSession);
     }
 
     /**
@@ -396,7 +406,8 @@ public abstract class FormsHandler {
         sessionLogger.logEvent(eventData);
         userSession.handleEvent(eventData);
 
-        if (!userSession.isCloudPropagated() && sessionTimeoutManagerActive && !Objects.equals(Timer.ATTR_ON_TIMER, eventData.getEventType())) {
+        if (!userSession.isCloudPropagated() && sessionTimeoutManagerActive && !Objects.equals(Timer.ATTR_ON_TIMER, eventData.getEventType()) &&
+                !sessionNeverExpireForUser(userSession)) {
             Session.TimeoutData timeoutData = sessionTimeoutManager.keepSessionAlive(userSession.getConversationUniqueId());
             userSession.getUseCaseRequestContext().getEvents().add(new SessionTimeoutEvent(timeoutData));
         }
@@ -404,7 +415,7 @@ public abstract class FormsHandler {
         if (finishHandling) {
             finishEventHandling(requestId, context);
         }
-        sessionLogger.logSessionState(userSession);
+        sessionLogger.logSessionEndState(userSession);
     }
 
     protected void handleClientData(InClientData message, String requestId, WebSocketContext context) {
@@ -463,7 +474,7 @@ public abstract class FormsHandler {
         setStep(context, WebSocketSessionManager.EventProcessState.End);
     }
 
-        public void finalizeEventProcessing(UserSession userSession) { // before finishEventContext()
+    public void finalizeEventProcessing(UserSession userSession) { // before finishEventContext()
         UseCaseRequestContext requestContext = userSession.getUseCaseRequestContext();
 
         requestContext.setLayout(userSession.getUseCaseContainer().resolveUseCaseLayout());

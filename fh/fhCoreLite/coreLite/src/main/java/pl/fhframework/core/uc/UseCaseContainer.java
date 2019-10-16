@@ -25,6 +25,7 @@ import pl.fhframework.core.i18n.IUseCase18nListener;
 import pl.fhframework.core.i18n.MessageService;
 import pl.fhframework.core.logging.ErrorTranslator;
 import pl.fhframework.core.logging.FhLogger;
+import pl.fhframework.core.logging.ISessionLogger;
 import pl.fhframework.core.messages.IMessages;
 import pl.fhframework.core.security.AuthorizationManager;
 import pl.fhframework.core.security.model.IBusinessRole;
@@ -135,6 +136,9 @@ public class UseCaseContainer implements Serializable {
 
     @Autowired(required = false)
     private List<IUseCaseListener> useCaseListeners = new ArrayList<>();
+
+    @Autowired
+    protected ISessionLogger sessionLogger;
 
     @Getter
     private FormsContainer formsContainer = new FormsContainer();
@@ -273,6 +277,8 @@ public class UseCaseContainer implements Serializable {
         }
 
         <T, F extends Form<T>> F showForm(Class<F> formClazz, T model, String variantId) {
+            sessionLogger.logShowForm(formClazz, model, variantId);
+
             if (formsContainer.getManagedForms().size() > 0) {
                 Optional<Form<?>> formOpt = formsContainer.getManagedForms().stream().filter(
                         mForm -> formClazz.isAssignableFrom(mForm.getClass()) &&
@@ -309,8 +315,8 @@ public class UseCaseContainer implements Serializable {
             formsContainer.showForm(form);
         }
 
-        protected <M> AdHocForm<M> showForm(String formId, M model, String variantId) {
-            throw new UnsupportedOperationException();
+        protected <M> Form<M> showForm(String formId, M model, String variantId) {
+            return showForm(formsManager.getFormById(formId), model, variantId);
         }
 
         private List<IPairableComponent> getPairableComponents(List<Component> components) {
@@ -396,6 +402,11 @@ public class UseCaseContainer implements Serializable {
          * @param changesForThisServer list of changed to apply
          */
         protected abstract void handleEventBasedOn(InMessageEventData eventData, List<ValueChange> changesForThisServer);
+
+        /**
+         * Before releases resources.
+         */
+        protected abstract void preReleaseResources();
 
         /**
          * Releases resources.
@@ -498,7 +509,7 @@ public class UseCaseContainer implements Serializable {
             ClassLoader classLoader;
             if (callback instanceof UniversalCallbackHandler) {
                 classLoader = useCaseMetadata.getClazz().getClassLoader();
-                interfaces = new Class[]{(Class<IUseCaseOutputCallback>) ReflectionUtils.getClassForName(useCaseMetadata.getCallbackClazz(), classLoader)};
+                interfaces = new Class[]{(Class<IUseCaseOutputCallback>) ReflectionUtils.getClassForName(useCaseMetadata.getCallbackClassStr(), classLoader)};
             } else {
                 classLoader = callback.getClass().getClassLoader();
                 interfaces = callback.getClass().getInterfaces();
@@ -620,7 +631,7 @@ public class UseCaseContainer implements Serializable {
 
         protected void runAction(IEventSource sourceComponent, ActionBinding actionBinding, InMessageEventData eventData) {
             // always get form object from component as it may be CompositeForm.
-            Form<?> form = sourceComponent.getForm();
+            Form<?> form = sourceComponent.getEventProcessingForm();
 
             // only design action are run in design mode
             if (form.getViewMode() != Form.ViewMode.NORMAL) {
@@ -702,6 +713,12 @@ public class UseCaseContainer implements Serializable {
                     .map(ValueChange::getChangedAttributes)
                     .findFirst()
                     .orElse(new HashMap<>());
+        }
+
+        @Override
+        protected void preReleaseResources() {
+            FhLogger.debug(this.getClass(), logger -> logger.log("Before releasing use case resources {}", ReflectionUtils.getRealClass(this.useCase).getSimpleName()));
+            useCaseListeners.forEach(ucl -> ucl.beforeExit(getUseCase(), getExchangebleParams()));
         }
 
         @Override
@@ -828,7 +845,7 @@ public class UseCaseContainer implements Serializable {
                                 userSession.setActionContext(new ActionContext().
                                         validate(true));
                             } else if (actionName != null) {
-                                Method method = getUseCaseMethod(actionName, ReflectionUtils.getClassName(form.getClass()));
+                                Method method = getUseCaseMethod(actionName, ReflectionUtils.getClassName(sourceComponent.getEventProcessingForm().getClass()));
                                 if (method != null) {
                                     Action acionForMethod = method.getAnnotation(Action.class);
                                     userSession.setActionContext(ActionContext.of(acionForMethod));
@@ -982,6 +999,10 @@ public class UseCaseContainer implements Serializable {
         }
 
         @Override
+        protected void preReleaseResources() {
+        }
+
+        @Override
         protected void releaseResources() {
         }
 
@@ -1125,6 +1146,11 @@ public class UseCaseContainer implements Serializable {
         }
 
         @Override
+        protected void preReleaseResources() {
+            getWrapped().preReleaseResources();
+        }
+
+        @Override
         protected void releaseResources() {
             getWrapped().releaseResources();
         }
@@ -1258,7 +1284,7 @@ public class UseCaseContainer implements Serializable {
         getUseCaseContext(useCase).showForm(form, true);
     }
 
-    AdHocForm showForm(IUseCase useCase, String formId, Object model, String variantId) {
+    Form showForm(IUseCase useCase, String formId, Object model, String variantId) {
         return getUseCaseContext(useCase).showForm(formId, model, variantId);
     }
 
@@ -1491,7 +1517,7 @@ public class UseCaseContainer implements Serializable {
             } else {
                 newUseCaseContext = new LocalUrlUseCaseContext(
                         useCaseInfo.get().getClazz(),
-                        prepareNoOpCallback((Class<IUseCaseOutputCallback>) ReflectionUtils.getClassForName(useCaseInfo.get().getCallbackClazz(), useCaseInfo.get().getClazz().getClassLoader())));
+                        prepareNoOpCallback((Class<IUseCaseOutputCallback>) ReflectionUtils.getClassForName(useCaseInfo.get().getCallbackClassStr(), useCaseInfo.get().getClazz().getClassLoader())));
             }
 
             try {
@@ -1653,6 +1679,7 @@ public class UseCaseContainer implements Serializable {
 
         if (hasPermission(newUseCaseContext)) {
             systemContainerForUseCase.put(newUseCaseContext.getUseCase().getContainerId(), newUseCaseContext);
+            useCaseListeners.forEach(ucl -> ucl.beforeRun(newUseCaseContext.getUseCase(), new Object[0]));
             newUseCaseContext.getUseCase().start();
             useCaseListeners.forEach(ucl -> ucl.afterRun(newUseCaseContext.getUseCase(), new Object[0]));
         }
@@ -1671,8 +1698,8 @@ public class UseCaseContainer implements Serializable {
         Deque<Exception> exceptionsList = new LinkedList<>();
         // Closing all previous use cases and their resources (for example, form)
         while (!runningUseCasesStack.isEmpty()) {
+            runningUseCasesStack.getFirst().preReleaseResources();
             UseCaseContainer.UseCaseContext useCaseContext = runningUseCasesStack.removeFirst();
-            useCaseContext.releaseResources();
             formsContainer.useCaseTerminated(useCaseContext);
             if (SessionManager.getUserSession() != null
                     && SessionManager.getUserSession() == userSession // avoid cleaning conversation in case this action is called in other session context // TODO: make this work
@@ -1683,6 +1710,7 @@ public class UseCaseContainer implements Serializable {
                     exceptionsList.add(e);
                 }
             }
+            useCaseContext.releaseResources();
         }
 
         if (!exceptionsList.isEmpty()) {
@@ -1728,7 +1756,7 @@ public class UseCaseContainer implements Serializable {
         if (localUseCaseInfo.isPresent()) {
             if (callback == null) {
                 // prepare no-op callback
-                if (!IUseCaseNoCallback.class.getName().equals(localUseCaseInfo.get().getCallbackClazz())) {
+                if (!IUseCaseNoCallback.class.getName().equals(localUseCaseInfo.get().getCallbackClassStr())) {
                     throw new FhUseCaseException("Callback must not be null");
                 } else {
                     callback = (C) prepareNoOpCallback(IUseCaseNoCallback.class);
@@ -1837,9 +1865,10 @@ public class UseCaseContainer implements Serializable {
     private void terminateSystemUseCase(String container) {
         UseCaseContext useCaseContext = systemContainerForUseCase.get(container);
         if (useCaseContext != null) {
-            useCaseContext.releaseResources();
+            useCaseContext.preReleaseResources();
             formsContainer.useCaseTerminated(useCaseContext);
             systemContainerForUseCase.remove(container);
+            useCaseContext.releaseResources();
         }
     }
 
@@ -1850,6 +1879,7 @@ public class UseCaseContainer implements Serializable {
         UseCaseContext terminatedUseCase;
         do {
             terminatedUseCase = runningUseCasesStack.peekFirst();
+            terminatedUseCase.preReleaseResources();
             if (useCaseConversation != null) {
                 if (terminatedUseCase != useCaseContext || forceTerminate) {
                     useCaseConversation.usecaseTerminated(terminatedUseCase.getUseCase());
@@ -1858,8 +1888,8 @@ public class UseCaseContainer implements Serializable {
                 }
             }
             runningUseCasesStack.removeFirst();
-            terminatedUseCase.releaseResources();
             formsContainer.useCaseTerminated(terminatedUseCase);
+            terminatedUseCase.releaseResources();
         }
         while (useCaseContext != terminatedUseCase);// Removing elements from stack including usecase.
 
@@ -1969,6 +1999,8 @@ public class UseCaseContainer implements Serializable {
 
         runningUseCasesStack.addFirst(newUseCaseContext);
         formsContainer.useCaseStarted(newUseCaseContext);
+
+        useCaseListeners.forEach(ucl -> ucl.beforeRun(newUseCaseContext.getUseCase(), newUseCaseContext.getExchangebleParams()));
 
         try {
             newUseCaseContext.start();

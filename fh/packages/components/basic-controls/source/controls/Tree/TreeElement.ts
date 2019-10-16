@@ -15,6 +15,7 @@ class TreeElement extends HTMLFormComponent {
     private icons: any;
     private readonly selectable: any;
     private readonly icon: any;
+    private selected: boolean;
     private spanWithLabel: any;
     public parent: TreeElement;
     private ul: any;
@@ -26,12 +27,13 @@ class TreeElement extends HTMLFormComponent {
         this.label = this.componentObj.label;
         this.spanWithLabel = null;
         this.subTree = null;
-        this.collapsed = this.componentObj.collapsed || true;
+        this.collapsed = this.componentObj.collapsed;
         this.icons = this.parent.icons;
         this.icon = this.componentObj.icon;
 
         this.currentTechIconClasses = [];
         this.techIconElement = null;
+        this.selected = this.componentObj.selected || false;
 
         this.currentIconClasses = [];
         this.iconElement = null;
@@ -92,6 +94,10 @@ class TreeElement extends HTMLFormComponent {
 
         this.addStyles();
         this.display();
+
+        if (this.selected) {
+            this.expandAllToSelectedElement();
+        }
     };
 
     addNodes(nodesList) {
@@ -166,14 +172,17 @@ class TreeElement extends HTMLFormComponent {
                         this.label = newValue;
                         this.spanWithLabel.innerHTML = this.fhml.resolveValueTextOrEmpty(this.label);
                         break;
+                    case 'collapsed':
+                        this.collapsed = change.changedAttributes.collapsed;
+                        this.updateTreeCollapsed();
+                        break;
                     case 'selected':
                         if (change.changedAttributes.selected) {
                             this.component.classList.add("selected");
-                            let foundTree = this.findTree();
-                            foundTree.collapseAll();
-                            this.expandAllToSelectedElement();
+                            this.selected = true;
                         } else {
                             this.component.classList.remove("selected");
+                            this.selected = false;
                         }
                         break;
                     case 'icon':
@@ -308,6 +317,14 @@ class TreeElement extends HTMLFormComponent {
     iconClicked(event) {
         event.stopPropagation();
         this.toggleCollaped();
+
+        if (this.nextLevelExpandable) {
+            this.changesQueue.queueAttributeChange('collapsed', this.collapsed);
+        } else {
+            this.selected = !this.selected;
+            this.changesQueue.queueAttributeChange('selected', this.selected);
+        }
+
         if (this.onIconClick) {
             this.fireEventWithLock('onIconClick', "onIconClick");
         }
@@ -319,6 +336,14 @@ class TreeElement extends HTMLFormComponent {
         if (!this.selectable || this.collapsed) {
             this.toggleCollaped();
         }
+
+        // if (this.nextLevelExpandable) {
+            this.changesQueue.queueAttributeChange('collapsed', this.collapsed);
+        // } else {
+            this.selected = !this.selected;
+            this.changesQueue.queueAttributeChange('selected', this.selected);
+        // }
+
         if (this.onLabelClick) {
             this.fireEventWithLock('onLabelClick', "onLabelClick");
         }

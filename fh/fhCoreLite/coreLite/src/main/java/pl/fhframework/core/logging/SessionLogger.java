@@ -55,8 +55,17 @@ public class SessionLogger implements ISessionLogger{
             FhLogger.info(this.getClass(), "Forms to show: {}", DebugUtils.collectionInfo(session.getUseCaseRequestContext().getFormsToDisplay()));
     }
 
+    public void logSessionEndState(UserSession session) {
+        logSessionState(session);
+    }
+
     @Override
     public void logEvent(InMessageEventData eventData) {
 
+    }
+
+    @Override
+    public void logShowForm(Class<?> formClazz, Object model, String variantId) {
+        
     }
 }

@@ -53,10 +53,17 @@ class MdFileViewer extends HTMLFormComponent {
         if(resourceBasePath && !relativeUrl.includes(resourceBasePath)){
             relativeUrl = resourceBasePath + relativeUrl;
         }
-        $.get(this.util.getPath(relativeUrl), function(data:string){
-            this.component.innerHTML = marked(data, {renderer: this.markedStyleHandler()});
-            this.addHrefHandler();
-        }.bind(this)).catch()
+        $.get({
+            crossDomain: true,
+            xhrFields: {
+                withCredentials: true
+            },
+            url: this.util.getPath(relativeUrl),
+            success: function (data: string) {
+                this.component.innerHTML = marked(data, {renderer: this.markedStyleHandler()});
+                this.addHrefHandler();
+            }.bind(this)
+        }).catch()
     }
 
     /**
@@ -80,7 +87,7 @@ class MdFileViewer extends HTMLFormComponent {
             }.bind(this))
 
             } else {
-                elem.attr('target','_blank');
+                elem.setAttribute('target','_blank');
             }
         }.bind(this));
     }

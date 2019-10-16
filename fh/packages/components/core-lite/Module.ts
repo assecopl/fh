@@ -1,4 +1,4 @@
-import './Module.css';
+import './source/Module.css';
 
 import {ApplicationLock} from './source/Socket/ApplicationLock';
 import {Connector} from './source/Socket/Connector';
@@ -17,6 +17,7 @@ import {FocusEvent} from './source/Events/FocusEvent';
 import {StylesheetChangeEvent} from './source/Events/StylesheetChangeEvent';
 import {LanguageChangeEvent} from './source/Events/LanguageChangeEvent';
 import {RedirectEvent} from './source/Events/RedirectEvent';
+import {RedirectHomeEvent} from './source/Events/RedirectHomeEvent';
 import {SessionTimeoutEvent} from './source/Events/SessionTimeoutEvent';
 import {ShutdownEvent} from './source/Events/ShutdownEvent';
 import {MessageEvent} from './source/Events/MessageEvent';
@@ -35,9 +36,10 @@ import {WindowEventsListener} from './source/Forms/WindowEventsListener';
 import {FhModule} from "./source/FhModule";
 import {FhContainer} from "./source/FhContainer";
 import {ServiceManagerUtil} from "./source/Devices/ServiceManagerUtil";
-import {ClientDataHandler} from 'fh-forms-handler/source/Events/Handlers/ClientDataHandler';
-import {ServiceManager} from 'fh-forms-handler/source/Devices/ServiceManager';
+import {ClientDataHandler} from './source/Events/Handlers/ClientDataHandler';
+import {ServiceManager} from './source/Devices/ServiceManager';
 import {LayoutHandler} from "./source/LayoutHandler";
+import {ChatEvent} from "./source/Events/ChatEvent"
 
 class FormsHandler extends FhModule {
     protected registerComponents() {
@@ -63,12 +65,14 @@ class FormsHandler extends FhModule {
         FhContainer.bind<BaseEvent>('Events.StylesheetChangeEvent').to(StylesheetChangeEvent).inRequestScope();
         FhContainer.bind<BaseEvent>('Events.LanguageChangeEvent').to(LanguageChangeEvent).inRequestScope();
         FhContainer.bind<BaseEvent>('Events.RedirectEvent').to(RedirectEvent).inRequestScope();
+        FhContainer.bind<BaseEvent>('Events.RedirectHomeEvent').to(RedirectHomeEvent).inRequestScope();
         FhContainer.bind<BaseEvent>('Events.CloseTabEvent').to(CloseTabEvent).inRequestScope();
         FhContainer.bind<BaseEvent>('Events.ShutdownEvent').to(ShutdownEvent).inRequestScope();
         FhContainer.bind<BaseEvent>('Events.MessageEvent').to(MessageEvent).inRequestScope();
         FhContainer.bind<BaseEvent>('Events.ForcedLogoutEvent').to(ForcedLogoutEvent).inRequestScope();
         FhContainer.bind<BaseEvent>('Events.CustomActionEvent').to(CustomActionEvent).inRequestScope();
         FhContainer.bind<BaseEvent>('Events.SessionTimeoutEvent').to(SessionTimeoutEvent).inRequestScope();
+        FhContainer.bind<BaseEvent>('Events.ChatEvent').to(ChatEvent).inRequestScope();
         FhContainer.bind<CustomActions>('CustomActions').to(CustomActions).inSingletonScope();
         FhContainer.bind<FHML>('FHML').to(FHML).inSingletonScope();
         FhContainer.bind<FormComponentChangesQueue>('FormComponentChangesQueue').to(FormComponentChangesQueue).inRequestScope();
@@ -109,9 +113,23 @@ export {
     LanguageChangeObserver,
     WindowEventsListener,
     FormsHandler,
+    BaseEvent,
     FhModule,
+    ShutdownEvent,
+    CustomActionEvent,
+    DataToClientEvent,
+    FileDownloadEvent,
+    CloseTabEvent,
+    FocusEvent,
+    StylesheetChangeEvent,
+    LanguageChangeEvent,
+    RedirectEvent,
+    RedirectHomeEvent,
+    SessionTimeoutEvent,
+    MessageEvent,
     FhContainer,
     ServiceManagerUtil,
     ClientDataHandler,
-    ServiceManager
+    ServiceManager,
+    ChatEvent
 };

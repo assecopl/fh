@@ -36,6 +36,7 @@ class TableCell extends HTMLFormComponent {
         }
 
         cell.id = this.id;
+        cell.classList.add('tableCell');
         if (this.rowspan) {
             // @ts-ignore
             cell.rowSpan = this.rowspan;
@@ -47,7 +48,12 @@ class TableCell extends HTMLFormComponent {
             cell.classList.add('col-valign-' + this.verticalAlign.toLowerCase())
         }
 
-        var row = document.createElement('div');
+        var row = null;
+        if (this.fh.isIE() && this.ieFocusFixEnabled == true) {
+            row = document.createElement('div-a');
+        } else {
+            row = document.createElement('div');
+        }
         row.classList.add('pl-2');
         row.classList.add('pr-2');
         row.classList.add('row');

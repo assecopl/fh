@@ -9,6 +9,7 @@ import pl.fhframework.binding.IActionCallbackContext;
 import pl.fhframework.model.dto.InMessageEventData;
 
 import lombok.Getter;
+import pl.fhframework.model.forms.designer.IDesignerEventListener;
 
 import java.util.Optional;
 
@@ -22,7 +23,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
  */
 @Control(parents = {PanelGroup.class, Column.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class, SplitContainer.class}, invalidParents = {Table.class}, canBeDesigned = true)
 @DocumentedComponent(value = "Group component is responsible for placing components in one group, that does not intersects with other form components", icon = "fa fa-columns")
-public class Group extends GroupingComponent<Component> {
+public class Group extends GroupingComponent<Component> implements IDesignerEventListener {
 
     private static final String ATTR_ON_CLICK = "onClick";
 
@@ -63,5 +64,21 @@ public class Group extends GroupingComponent<Component> {
         return true;
     }
 
+    @Override
+    public void onDesignerAddDefaultSubcomponent(SpacerService spacerService) {
+        addSubcomponent(createNewRow());
+    }
+
+    @Override
+    public void onDesignerBeforeAdding(IGroupingComponent<?> parent, SpacerService spacerService) {
+        addSubcomponent(createNewRow());
+    }
+
+    private Row createNewRow() {
+        Row row = new Row(getForm());
+        row.setGroupingParentComponent(this);
+        row.init();
+        return row;
+    }
 
 }
