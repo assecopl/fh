@@ -3,7 +3,7 @@ import {HTMLFormComponent} from "fh-forms-handler";
 class CheckBox extends HTMLFormComponent {
     private readonly stickedLabel: boolean;
     private readonly onChange: any;
-    private input: any;
+    public input: any;
 
     constructor(componentObj: any, parent: HTMLFormComponent) {
         super(componentObj, parent);
@@ -156,6 +156,10 @@ class CheckBox extends HTMLFormComponent {
         }
 
         super.setPresentationStyle(presentationStyle);
+    }
+
+    getDefaultWidth(): string {
+        return "md-2";
     }
 
     destroy(removeFromParent: boolean) {

@@ -71,6 +71,7 @@ public abstract class GroupingComponent<T extends Component> extends FormElement
             nonVisualSubcomponents.add((NonVisualFormElement) component);
         } else {
             subcomponents.add(component);
+            component.setGroupingParentComponent(this);
         }
     }
 
@@ -80,6 +81,7 @@ public abstract class GroupingComponent<T extends Component> extends FormElement
             nonVisualSubcomponents.remove(removedFormElement);
         } else {
             subcomponents.remove(removedFormElement);
+            removedFormElement.setGroupingParentComponent(null);
         }
     }
 

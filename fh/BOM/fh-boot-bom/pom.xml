@@ -5,8 +5,9 @@
 
     <groupId>pl.fhframework</groupId>
     <artifactId>fh-boot-bom</artifactId>
-    <version>4.4.19</version>
+    <version>4.6-SNAPSHOT</version>
     <packaging>pom</packaging>
+    <url>https://github.com/assecopl/fh</url>
 
     <name>fh-boot</name>
     <description>Boot dependencies information set</description>
@@ -16,6 +17,40 @@
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.1.0.RELEASE</version>
     </parent>
+
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Gabriel Kurzac</name>
+            <email>gabriel.kurzac@asseco.pl</email>
+            <organization>Asseco Poland S.A.</organization>
+            <organizationUrl>https://pl.asseco.com</organizationUrl>
+        </developer>
+    </developers>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+
+    <scm>
+        <connection>scm:svn:http://127.0.0.1/dummy</connection>
+        <developerConnection>scm:svn:https://127.0.0.1/dummy</developerConnection>
+        <tag>HEAD</tag>
+        <url>http://127.0.0.1/dummy</url>
+    </scm>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -28,10 +63,11 @@
         <version.infinispan.starter>2.0.0.Final</version.infinispan.starter>
         <version.roaster>2.20.0.Final</version.roaster>
 
-        <fh.version>4.4.19</fh.version>
+        <fh.version>4.6-SNAPSHOT</fh.version>
         <fh.version.display>${fh.version}</fh.version.display>
         <springboot.version>2.1.0.RELEASE</springboot.version>
         <hibernate.version>5.4.1.Final</hibernate.version>
+        <aspectj.version>1.9.4</aspectj.version>
 
         <bom.dir>${user.dir}/BOM</bom.dir>
         <config.dir.name>config</config.dir.name>
@@ -40,9 +76,78 @@
 
     <profiles>
         <profile>
+            <id>release</id>
+            <properties>
+                <packaging.type>jar</packaging.type>
+                <application.properties.file>
+                    springboot-application.properties
+                </application.properties.file>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>2.2.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.9.1</version>
+                        <configuration>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.7</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.5</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
             <id>springboot</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>!skip-springboot</name>
+                </property>
             </activation>
             <properties>
                 <packaging.type>jar</packaging.type>
@@ -55,7 +160,7 @@
                     <dependency>
                         <groupId>pl.fhframework</groupId>
                         <artifactId>fh-springboot-bom</artifactId>
-                        <version>4.4.19</version>
+                        <version>4.6-SNAPSHOT</version>
                         <scope>import</scope>
                         <type>pom</type>
                     </dependency>
@@ -108,30 +213,9 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-security</artifactId>
                 </dependency>
-                <dependency>
-                    <groupId>pl.fhframework</groupId>
-                    <artifactId>fhJpa-standalone</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>pl.fhframework</groupId>
-                    <artifactId>fhTomcat-config</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>pl.fhframework</groupId>
-                    <artifactId>cache-standalone</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>com.h2database</groupId>
-                    <artifactId>h2</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>org.orbisgis</groupId>
-                    <artifactId>h2gis-functions</artifactId>
-                    <version>1.3.2</version>
-                </dependency>
                 <!--<dependency>-->
-                    <!--<groupId>org.postgresql</groupId>-->
-                    <!--<artifactId>postgresql</artifactId>-->
+                <!--<groupId>org.postgresql</groupId>-->
+                <!--<artifactId>postgresql</artifactId>-->
                 <!--</dependency>-->
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
@@ -141,6 +225,94 @@
             </dependencies>
         </profile>
 
+        <profile>
+            <id>fh-standalone</id>
+            <activation>
+                <property>
+                    <name>!skip-fh-standalone</name>
+                </property>
+            </activation>
+            <dependencyManagement>
+                <dependencies>
+                    <dependency>
+                        <groupId>pl.fhframework</groupId>
+                        <artifactId>fh-springboot-bom</artifactId>
+                        <version>4.6-SNAPSHOT</version>
+                        <scope>import</scope>
+                        <type>pom</type>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement>
+            <dependencies>
+                <dependency>
+                    <groupId>pl.fhframework</groupId>
+                    <artifactId>fhJpa-standalone</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>pl.fhframework</groupId>
+                    <artifactId>cache-standalone</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>pl.fhframework</groupId>
+                    <artifactId>pubsub-standalone</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>fh-tomcat</id>
+            <activation>
+                <property>
+                    <name>!skip-fh-tomcat</name>
+                </property>
+            </activation>
+            <dependencyManagement>
+                <dependencies>
+                    <dependency>
+                        <groupId>pl.fhframework</groupId>
+                        <artifactId>fh-springboot-bom</artifactId>
+                        <version>4.6-SNAPSHOT</version>
+                        <scope>import</scope>
+                        <type>pom</type>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement>
+            <dependencies>
+                <dependency>
+                    <groupId>pl.fhframework</groupId>
+                    <artifactId>fhTomcat-config</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>fh-h2</id>
+            <activation>
+                <property>
+                    <name>!skip-fh-h2</name>
+                </property>
+            </activation>
+            <dependencyManagement>
+                <dependencies>
+                    <dependency>
+                        <groupId>pl.fhframework</groupId>
+                        <artifactId>fh-springboot-bom</artifactId>
+                        <version>4.6-SNAPSHOT</version>
+                        <scope>import</scope>
+                        <type>pom</type>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement>
+            <dependencies>
+                <dependency>
+                    <groupId>com.h2database</groupId>
+                    <artifactId>h2</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.orbisgis</groupId>
+                    <artifactId>h2gis-functions</artifactId>
+                    <version>1.3.2</version>
+                </dependency>
+            </dependencies>
+        </profile>
         <profile>
             <id>jboss-eap6.4</id>
             <properties>
@@ -154,7 +326,7 @@
                     <dependency>
                         <groupId>pl.fhframework</groupId>
                         <artifactId>fh-jboss-eap6.4-bom</artifactId>
-                        <version>4.4.19</version>
+                        <version>4.6-SNAPSHOT</version>
                         <scope>import</scope>
                         <type>pom</type>
                     </dependency>
@@ -191,7 +363,7 @@
                                 </goals>
                                 <configuration>
                                     <tasks>
-                                        <echoproperties />
+                                        <echoproperties/>
                                     </tasks>
                                 </configuration>
                             </execution>
@@ -282,7 +454,7 @@
                                 </goals>
                                 <configuration>
                                     <tasks>
-                                        <echoproperties />
+                                        <echoproperties/>
                                     </tasks>
                                 </configuration>
                             </execution>
@@ -349,12 +521,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <scm>
-        <connection>scm:svn:http://127.0.0.1/dummy</connection>
-        <developerConnection>scm:svn:https://127.0.0.1/dummy</developerConnection>
-        <tag>HEAD</tag>
-        <url>http://127.0.0.1/dummy</url>
-    </scm>
-
 </project>

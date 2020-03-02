@@ -19,7 +19,7 @@ import java.util.Optional;
  */
 @DesignerControl(defaultWidth = 2)
 @Control(parents = {PanelGroup.class, Column.class, Tab.class, Row.class, Form.class, Group.class}, canBeDesigned = true)
-@DocumentedComponent(value = "Simple circular chart.", icon = "fa fa-circle-notch")
+@DocumentedComponent(category = DocumentedComponent.Category.CHARTS_MAPS, value = "Simple circular chart.", icon = "fa fa-circle-notch")
 public class MeterGaugeChart extends FormElement implements IChangeableByClient, Boundable, TableComponent<MeterGaugeChart> {
 
     private static final String MAX_VALUE_ATTR = "maxValue";

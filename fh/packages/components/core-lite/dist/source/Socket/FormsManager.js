@@ -161,16 +161,21 @@ var FormsManager = /** @class */ (function () {
             }
         }.bind(this));
     };
+    FormsManager.prototype.findFormByContainer = function (containerId) {
+        var form = null;
+        for (var i = 0; i < this.openedForms.length; i++) {
+            if (this.openedForms[i].parentId === containerId) {
+                form = this.openedForms[i];
+                break;
+            }
+        }
+        return form;
+    };
     FormsManager.prototype.focusComponent = function (componentId, containerId) {
         var path = false;
         var form = null;
         if (containerId) {
-            for (var i = 0; i < this.openedForms.length; i++) {
-                if (this.openedForms[i].parentId === containerId) {
-                    form = this.openedForms[i];
-                    break;
-                }
-            }
+            form = this.findFormByContainer(containerId);
             if (form) {
                 path = form.findComponent(componentId, false, true);
             }

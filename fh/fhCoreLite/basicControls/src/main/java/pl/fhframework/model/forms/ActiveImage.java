@@ -20,10 +20,10 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
  * Class representing xml component of ActiveImage. Every field represents xml attribute of
  * activeImage tag.
  * <p>
- * Example <ActiveImage src="value_1" onClick=""/>.
- * <p>
+ * Example {@code <ActiveImage src="value_1" onClick=""/>}
+ * </p>
  * Every field is parsed as json for javascript. If field should be ingored by JSON, use
- * <code>@JsonIgnore</code>. There can be used any annotations for json generator.
+ * {@code @JsonIgnore} There can be used any annotations for json generator.
  */
 @Getter
 @Setter

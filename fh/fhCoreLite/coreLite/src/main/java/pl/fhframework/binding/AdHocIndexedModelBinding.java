@@ -60,7 +60,7 @@ public class AdHocIndexedModelBinding<T> extends IndexedModelBinding<T> {
      * To replace given indices in many bindings: 1 x create replacement templates, 1 x fill templates with indices, n x replace in bindings.<br>
      * To prepare re-fillable single binding template: 1 x create replacement templates, 1 x replace in binding, n x fill binding with indices.
      * @param currentIterators iterators
-     * @return map iterator name -> replacement template
+     * @return map iterator name -&gt; replacement template
      */
     public static Map<String, String> buildIteratorReplacementTemplates(List<IRepeatableIteratorInfo> currentIterators) {
         Map<String, String> replacementMap = new LinkedHashMap<>();
@@ -122,7 +122,7 @@ public class AdHocIndexedModelBinding<T> extends IndexedModelBinding<T> {
     /**
      * Replaces iterators in binding with provided replacements.
      * @param binding binding
-     * @param iteratorReplacements iterator replacement map (iterator name -> replacement)
+     * @param iteratorReplacements iterator replacement map (iterator name -&gt; replacement)
      * @param useCurlyBrackets if binding is using curly brackets
      * @return replaces binding
      */

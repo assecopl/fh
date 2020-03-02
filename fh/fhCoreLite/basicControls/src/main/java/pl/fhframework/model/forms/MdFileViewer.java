@@ -10,6 +10,7 @@ import pl.fhframework.model.forms.designer.BindingExpressionDesignerPreviewProvi
 import pl.fhframework.model.forms.model.LabelPosition;
 import pl.fhframework.model.forms.optimized.ColumnOptimized;
 import pl.fhframework.model.forms.widgets.Widget;
+import pl.fhframework.subsystems.ModuleRegistry;
 
 import java.util.Map;
 
@@ -18,7 +19,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
 
 /**
  * Class representing xml component of MdFileViewer. Every field represents xml attribute of MdFileViewer tag. <p>
- * Example <MdFileViewer src="src_1" />. <p> Every field is parsed as json for javascript.
+ * Example {@code <MdFileViewer src="src_1" />}. <p> Every field is parsed as json for javascript.
  * If field should be ingored by JSON, use <code>@JsonIgnore</code>. There can be used any
  * annotations for json generator.
  */
@@ -26,7 +27,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
 @Setter
 @DesignerControl(defaultWidth = 12)
 @Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class,Group.class}, invalidParents = {Table.class, Widget.class}, canBeDesigned = true)
-@DocumentedComponent(value = "Md file viewer component for displaying *.md files. Allow inside navigation to other md file.", icon = "fa fa-eye")
+@DocumentedComponent(category = DocumentedComponent.Category.IMAGE_HTML_MD, value = "Md file viewer component for displaying *.md files. Allow inside navigation to other md file.", icon = "fa fa-eye")
 public class MdFileViewer extends FormElement implements TableComponent<MdFileViewer> {
 
     public static final String ATTR_SRC = "src";
@@ -44,14 +45,17 @@ public class MdFileViewer extends FormElement implements TableComponent<MdFileVi
     private ModelBinding<String> srcModelBinding;
 
 
-    /**
-     * Left margin of the component
-     */
+    @Getter
+    @Setter
+    @XMLProperty
+    @DocumentedComponentAttribute(boundable = true, value = "Module for md files. Represent base module for relatives urls to other md files.")
+    private String moduleId;
+
     @Getter
     @Setter
     @XMLProperty
     @DesignerXMLProperty(functionalArea = CONTENT)
-    @DocumentedComponentAttribute(boundable = true, value = "Resource base path for md files. Represent base path for relatives urls to other md files.")
+    @DocumentedComponentAttribute(boundable = true, value = "Base path for md files placed in resources. Represent base path for relatives urls to other md files.")
     private String resourceBasePath;
 
     @Getter
@@ -79,6 +83,7 @@ public class MdFileViewer extends FormElement implements TableComponent<MdFileVi
     @Override
     public void init() {
         super.init();
+        this.setModuleId(ModuleRegistry.getModuleId(this.getForm().getClass()));
     }
 
     @Override
@@ -105,6 +110,7 @@ public class MdFileViewer extends FormElement implements TableComponent<MdFileVi
         TableComponent.super.doCopy(table, iteratorReplacements, clone);
         clone.setSrc(this.getSrc());
         clone.setLabelModelBinding(table.getRowBinding(this.getLabelModelBinding(), clone, iteratorReplacements));
+        clone.setModuleId(this.getModuleId());
         clone.setResourceBasePath(this.getResourceBasePath());
 
     }

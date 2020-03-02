@@ -49,13 +49,13 @@
 }
 
 .fc.group.pinningModeButton:not(.floating) {
-    height: 28px !important;
+    height: 38px!important;
+    height: initial!important;
     overflow: hidden;
     width: 150px !important;;
 }
 
 .fc.group.pinningModeButton:not(.floating) .card-header {
-    background-color: #0EA0F4;
     padding-left: 0;
     padding-right: 0;
     text-align: center;

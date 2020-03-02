@@ -18,12 +18,14 @@ var MarkdownGrid = /** @class */ (function (_super) {
     __extends(MarkdownGrid, _super);
     function MarkdownGrid(componentObj, parent) {
         var _this = _super.call(this, componentObj, parent) || this;
+        _this.onFolderDoubleClick = null;
         _this.showDir = null;
         _this.values = _this.componentObj.values;
         _this.subsystem = _this.componentObj.subsystem;
         _this.grid = null;
         _this.selectedIndex = null;
         _this.subDirectories = _this.componentObj.subDirectories;
+        _this.onFolderDoubleClick = _this.componentObj.onFolderDoubleClick;
         return _this;
     }
     MarkdownGrid.prototype.create = function () {
@@ -74,10 +76,6 @@ var MarkdownGrid = /** @class */ (function (_super) {
         if (values == null) {
             return;
         }
-        // console.log("soryuje elementy !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" , values);
-        // values.sort((x,y) => {
-        //     return (x.directory === y.directory)? 0 : x.directory? -1 : 1;
-        // })
         for (var i = 0; i < values.length; i++) {
             this.addElement(values[i], i);
         }
@@ -96,9 +94,12 @@ var MarkdownGrid = /** @class */ (function (_super) {
         var wrapper = document.createElement("figure");
         wrapper.setAttribute("class", "figure col-lg-2 text-center pt-1");
         var link = document.createElement("a");
-        link.setAttribute("class", "resource ");
+        link.href = "#";
+        link.setAttribute("class", "resource border-white pointer");
         if (index === this.selectedIndex) {
             link.classList.add("selected");
+            link.classList.add("border-secondary");
+            link.classList.remove("border-white");
         }
         link.dataset.index = index.toString();
         wrapper.appendChild(link);
@@ -130,15 +131,30 @@ var MarkdownGrid = /** @class */ (function (_super) {
             this.updateModel();
             this.fireEvent('onChange', this.onChange, event);
         }.bind(this));
+        if (this.onFolderDoubleClick && val.directory) {
+            link.addEventListener('dblclick', function (event) {
+                event.stopPropagation();
+                event.preventDefault();
+                var selected = event.currentTarget;
+                var selectedIndex = parseInt(selected.dataset.index);
+                this.selectedIndex = selectedIndex;
+                this.updateModel();
+                this.fireEvent('onChange', this.onChange, event);
+                this.fireEvent('onFolderDoubleClick', this.onFolderDoubleClick, event);
+            }.bind(this));
+        }
         this.grid.appendChild(wrapper);
     };
     MarkdownGrid.prototype.addFolderUp = function (val, index) {
         var wrapper = document.createElement("figure");
         wrapper.setAttribute("class", "figure col-lg-2 text-center pt-1");
         var link = document.createElement("a");
-        link.setAttribute("class", "resource ");
+        link.href = "#";
+        link.setAttribute("class", "resource border-white pointer");
         if (index === this.selectedIndex) {
             link.classList.add("selected");
+            link.classList.add("border-secondary");
+            link.classList.remove("border-white");
         }
         link.dataset.index = index.toString();
         wrapper.appendChild(link);

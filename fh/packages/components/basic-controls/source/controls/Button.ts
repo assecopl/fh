@@ -5,11 +5,22 @@ class Button extends HTMLFormComponent {
     private readonly style: any;
     private readonly onClick: any;
 
+    private ButtonPL = {
+        "button_icon": "Ikona"
+    };
+    private ButtonEN = {
+        "button_icon": "Icon"
+    };
+
     constructor(componentObj: any, parent: HTMLFormComponent) {
         super(componentObj, parent);
 
         this.style = this.componentObj.style;
         this.onClick = this.componentObj.onClick;
+
+
+        this.i18n.registerStrings('pl', this.ButtonPL);
+        this.i18n.registerStrings('en', this.ButtonEN);
     }
 
     create() {
@@ -21,8 +32,22 @@ class Button extends HTMLFormComponent {
             button.classList.add(cssClass);
         });
 
+        //Check if there is icon inside
+        let needParse = this.fhml.needParse(label);
         label = this.resolveLabelAndIcon(label);
+        if (needParse && label) {
+            //Get raw text from label, remove all html tags. Basicly remove icon tag.
+            let text = this.fhml.removeHtmlTags(label);
+            if(text.length == 0) {
+                //Fill aria-label when there is no text inside label - only icon.
+                //Fill with icon default string.
+                button.setAttribute("aria-label", this.i18n.__("button_icon"));
+            }
+        }
+
         button.innerHTML = label;
+        // + "<div style='width:0px !imporant; height: 0px !imporant;color:transparent;'>h</div>";
+        // button.value = "adsa";
 
         if (this.onClick) {
             button.addEventListener('click', this.onClickEvent.bind(this));
@@ -120,7 +145,8 @@ class Button extends HTMLFormComponent {
     };
 
     resolveLabelAndIcon(label) {
-        return this.fhml.resolveValueTextOrEmpty(label);
+        let l = this.fhml.resolveValueTextOrEmpty(label);
+        return l;
     };
 
     extractChangedAttributes() {

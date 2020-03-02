@@ -5,11 +5,12 @@
 
     <groupId>pl.fhframework</groupId>
     <artifactId>commons-bom</artifactId>
-    <version>4.4.19</version>
+    <version>4.6-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>commons-bom</name>
     <description>commons-bom</description>
+    <url>https://github.com/assecopl/fh</url>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -18,11 +19,80 @@
     </parent>
 
     <properties>
-        <fh.version>4.4.19</fh.version>
+        <fh.version>4.6-SNAPSHOT</fh.version>
         <springboot.version>2.1.0.RELEASE</springboot.version>
         <hibernate.version>5.4.1.Final</hibernate.version>
         <postgresql.version>42.2.5</postgresql.version>
+        <aspectj.version>1.9.4</aspectj.version>
     </properties>
+
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Gabriel Kurzac</name>
+            <email>gabriel.kurzac@asseco.pl</email>
+            <organization>Asseco Poland S.A.</organization>
+            <organizationUrl>https://pl.asseco.com</organizationUrl>
+        </developer>
+    </developers>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+
+    <scm>
+        <connection>scm:git:git://github.com/assecopl/fh.git</connection>
+        <developerConnection>scm:git:ssh://github.com:assecopl/fh.git</developerConnection>
+        <url>http://github.com/assecopl/fh/tree/master</url>
+    </scm>
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.7</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.5</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <dependencyManagement>
         <dependencies>
@@ -61,6 +131,18 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-collections4</artifactId>
                 <version>4.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-configuration2</artifactId>
+                <version>2.1.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-beanutils</groupId>
+                <artifactId>commons-beanutils</artifactId>
+                <version>1.9.3</version>
             </dependency>
 
             <!-- commons apaches -->
@@ -130,7 +212,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-			<scope>provided</scope>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>

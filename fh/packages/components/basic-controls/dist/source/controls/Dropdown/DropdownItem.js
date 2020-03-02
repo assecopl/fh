@@ -28,7 +28,7 @@ var DropdownItem = /** @class */ (function (_super) {
     }
     DropdownItem.prototype.create = function () {
         var label = document.createElement('span');
-        label.id = this.id;
+        label.id = this.id + '_label';
         ['fc', 'outputLabel'].forEach(function (cssClass) {
             label.classList.add(cssClass);
         });
@@ -36,23 +36,23 @@ var DropdownItem = /** @class */ (function (_super) {
         this.buildInnerHTML();
         this.hintElement = this.component;
         this.labelComponent = this.component;
-        this.labelComponent.id = this.id + "___label"; // przeniesienie identyfikatora z utworzonej etykiety
-        var element = document.createElement('li');
+        this.labelComponent.id = label.id; // przeniesienie identyfikatora z utworzonej etykiety
+        var element = document.createElement('a');
         element.classList.add('dropdown-item');
         element.id = this.id;
-        var a = document.createElement('a');
+        this.labelComponent.setAttribute('for', this.id);
+        this.labelComponent.setAttribute('aria-label', this.fhml.resolveValueTextOrEmpty(this.componentObj.value));
+        element.setAttribute('aria-labeledby', this.labelComponent.id);
         if (this.url) {
-            a.href = this.url;
+            element.href = this.url;
         }
-        a['role'] = 'button';
-        a.appendChild(this.labelComponent);
-        element.appendChild(a);
+        element.appendChild(this.labelComponent);
         if (this.onClick) {
             element.addEventListener('click', this.onClickEvent.bind(this));
         }
         this.component = element;
         this.htmlElement = this.component;
-        this.wrap(true);
+        // this.wrap(true);
         this.display();
     };
     ;

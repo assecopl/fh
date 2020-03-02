@@ -4,8 +4,9 @@
 
 	<groupId>pl.fhframework</groupId>
 	<artifactId>fhCoreLite</artifactId>
-	<version>4.4.19</version>
+	<version>4.6-SNAPSHOT</version>
 	<packaging>pom</packaging>
+	<url>https://github.com/assecopl/fh</url>
 
 	<name>fhCoreLite</name>
 	<description>FH Framework Lite</description>
@@ -13,7 +14,7 @@
 	<parent>
 		<groupId>pl.fhframework</groupId>
 		<artifactId>fh-compile-bom</artifactId>
-		<version>4.4.19</version>
+		<version>4.6-SNAPSHOT</version>
 		<relativePath>../BOM/fh-compile-bom</relativePath>
 	</parent>
 
@@ -33,12 +34,14 @@
         <module>fhTomcat-config</module>
 		<module>securityDataProvider</module>
         <module>securityDataProvider-jdbc</module>
-        <module>securityDataProvider-ldap</module>
+		<module>securityDataProvider-ldap</module>
 		<module>securityDataProvider-remote</module>
 		<module>securityDataProvider-rest</module>
+		<module>securityDataProvider-cached</module>
 		<module>permissionProvider-jdbc</module>
 		<module>permissionProvider-rest</module>
 		<module>permissionProvider-standalone</module>
+		<module>pubsub-standalone</module>
         <module>reportsLite</module>
 		<module>chartsControls</module>
 		<module>coreApplication</module>

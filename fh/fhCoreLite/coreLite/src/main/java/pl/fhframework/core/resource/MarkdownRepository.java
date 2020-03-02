@@ -3,9 +3,8 @@ package pl.fhframework.core.resource;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.filefilter.*;
-import org.eclipse.core.internal.resources.Folder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.ApplicationListener;
@@ -19,7 +18,6 @@ import pl.fhframework.subsystems.Subsystem;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -194,7 +192,12 @@ public class MarkdownRepository implements ApplicationListener<ContextRefreshedE
     public synchronized void deleteElement(String subsystem, MarkdownEntry selected) throws IOException {
         //Todo add validation is folder empty.
         if (MARKDOWN_PER_MODULE.get(subsystem).contains(selected)) {
-            Files.delete(selected.getFile().toPath());
+            File fToDelete = selected.getFile();
+            if(fToDelete.isDirectory()){
+                FileUtils.deleteDirectory(fToDelete);
+            } else {
+                Files.delete(selected.getFile().toPath());
+            }
             MARKDOWN_PER_MODULE.get(subsystem).remove(selected);
         }
     }

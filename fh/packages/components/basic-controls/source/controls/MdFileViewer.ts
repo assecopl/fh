@@ -7,8 +7,9 @@ class MdFileViewer extends HTMLFormComponent {
     private mapElement: any;
     private mapId: string;
     private source: any;
-    private resourceBasePath:string = null;
-    private marked:any = null;
+    private resourceBasePath: string = null;
+    private moduleId: string = null;
+    private marked: any = null;
 
     constructor(componentObj: any, parent: HTMLFormComponent) {
         super(componentObj, parent);
@@ -16,9 +17,9 @@ class MdFileViewer extends HTMLFormComponent {
         this.mapId = '';
         this.source = this.componentObj.src;
         this.resourceBasePath = this.componentObj.resourceBasePath;
+        this.moduleId = this.componentObj.moduleId;
 
         this.mapElement = null;
-
     }
 
     create() {
@@ -28,17 +29,11 @@ class MdFileViewer extends HTMLFormComponent {
         viewer.classList.add("md-file-viewer");
 
 
-
-        this.loadMdFile(this.source);
+        this.loadMdFile(this.source, null, false);
 
         this.component = viewer;
         this.hintElement = this.component;
-        // if (this.width) {
-            this.wrap(false);
-        // } else {
-        //     this.htmlElement = this.component;
-        //     this.contentWrapper = this.htmlElement;
-        // }
+        this.wrap(false);
         this.addStyles();
 
         this.display();
@@ -49,14 +44,21 @@ class MdFileViewer extends HTMLFormComponent {
      * @param relativeUrl (relative url of md file)
      * @param resourceBasePath (path in resources url of md file)
      */
-    public loadMdFile(relativeUrl:string, resourceBasePath:string = null){
-        if(resourceBasePath && !relativeUrl.includes(resourceBasePath)){
-            relativeUrl = resourceBasePath + relativeUrl;
+    public loadMdFile(relativeUrl: string, resourceBasePath: string = null, processUrl: boolean = true) {
+        if (processUrl) {
+            if (resourceBasePath && !relativeUrl.includes(resourceBasePath)) {
+                relativeUrl = resourceBasePath + relativeUrl;
+            } else {
+                if (this.moduleId && !relativeUrl.includes("markdown?module=")) {
+                    relativeUrl = "markdown?module=" + this.moduleId + "&path=" + relativeUrl;
+                }
+            }
         }
+
         $.get({
-            crossDomain: true,
+            crossDomain: true,
             xhrFields: {
-                withCredentials: true
+                withCredentials: true
             },
             url: this.util.getPath(relativeUrl),
             success: function (data: string) {
@@ -70,24 +72,24 @@ class MdFileViewer extends HTMLFormComponent {
      * Handle logic of inside links.
      * If href attribute has .md extensions it will be open inside this container.
      */
-    public addHrefHandler(){
-        const collection:HTMLCollection | any = this.component.getElementsByTagName("a");
+    public addHrefHandler() {
+        const collection: HTMLCollection | any = this.component.getElementsByTagName("a");
 
         $.each(collection, function (key, elem) {
-            let href:string = elem.getAttribute("href");
-            if(href.includes(".md")) {
-                elem.addEventListener('click', function (event:Event){
+            let href: string = elem.getAttribute("href");
+            if (href.includes(".md")) {
+                elem.addEventListener('click', function (event: Event) {
                     event.stopPropagation();
                     event.preventDefault();
-                    if(this.util.isUrlRelative(href)){
+                    if (this.util.isUrlRelative(href)) {
                         this.loadMdFile(href, this.resourceBasePath);
                     } else {
                         this.loadMdFile(href);
                     }
-            }.bind(this))
+                }.bind(this))
 
             } else {
-                elem.setAttribute('target','_blank');
+                elem.setAttribute('target', '_blank');
             }
         }.bind(this));
     }
@@ -124,13 +126,13 @@ class MdFileViewer extends HTMLFormComponent {
      * Ads Bootstrap 4 and Highlight.js
      *
      */
-    private markedStyleHandler():Renderer{
+    private markedStyleHandler(): Renderer {
         const renderer = new marked.Renderer()
 
 
         renderer.heading = (text, level) => {
             return '<h' + level + ' class="md-inpage-anchor">'
-                +    text
+                + text
                 + '</h' + level + '>'
         }
 
@@ -146,17 +148,17 @@ class MdFileViewer extends HTMLFormComponent {
 
         renderer.table = (header, body) => {
             return '<table class="table table-bordered table-striped" >'
-                +     '<thead class="thead-default">'
-                +         header
-                +     '</thead>'
-                +     '<tbody>'
-                +         body
-                +     '</tbody>'
+                + '<thead class="thead-default">'
+                + header
+                + '</thead>'
+                + '<tbody>'
+                + body
+                + '</tbody>'
                 + '</table>'
         };
 
-        renderer.blockquote = (quote:string) => {
-            return '<blockquote class="blockquote">'+ quote + '</blockquote>';
+        renderer.blockquote = (quote: string) => {
+            return '<blockquote class="blockquote">' + quote + '</blockquote>';
         };
 
         return renderer

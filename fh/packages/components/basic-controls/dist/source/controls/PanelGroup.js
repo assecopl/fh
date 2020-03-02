@@ -19,6 +19,7 @@ var PanelGroup = /** @class */ (function (_super) {
     __extends(PanelGroup, _super);
     function PanelGroup(componentObj, parent) {
         var _this = _super.call(this, componentObj, parent) || this;
+        _this.headingTypeValue = null;
         _this.resolveValue = function (value) {
             value = this.fhml.resolveValueTextOrEmpty(value);
             return value;
@@ -26,6 +27,7 @@ var PanelGroup = /** @class */ (function (_super) {
         _this.componentObj.verticalAlign = _this.componentObj.verticalAlign || 'top';
         _this.isCollapsible = Boolean(_this.componentObj.collapsible);
         _this.onToggle = _this.componentObj.onToggle;
+        _this.headingTypeValue = _this.componentObj.headingTypeValue ? _this.componentObj.headingTypeValue : "span";
         _this.collapsed = Boolean(_this.componentObj.collapsed);
         _this.collapseToggler = null;
         _this.collapseChanged = false;
@@ -38,28 +40,28 @@ var PanelGroup = /** @class */ (function (_super) {
     }
     PanelGroup.prototype.create = function () {
         var group = document.createElement('div');
-        ['fc', 'group', 'mb-3'].forEach(function (cssClass) {
+        ['fc', 'group', 'panelGroup', 'mb-3', 'card', 'card-default'].forEach(function (cssClass) {
             group.classList.add(cssClass);
         });
         if (!this.borderVisible) {
             group.classList.add('borderHidden');
         }
         group.id = this.id;
-        ['card', 'card-default'].forEach(function (cssClass) {
-            group.classList.add(cssClass);
-        });
         var heading = document.createElement('div');
         heading.classList.add('card-header');
         heading.classList.add('d-flex');
-        var titleElm = document.createElement('span');
+        var titleElm = document.createElement(this.componentObj.label != null ? this.headingTypeValue : "span"); //Default span
         titleElm.classList.add('mr-auto');
         titleElm.classList.add('card-title');
         titleElm.classList.add('mb-0');
+        var titleElmIn = document.createElement('span');
+        titleElmIn.id = this.id + '_label';
+        titleElm.appendChild(titleElmIn);
         if (this.componentObj.label != null) {
-            titleElm.innerHTML = this.resolveValue(this.componentObj.label);
+            titleElmIn.innerHTML = this.resolveValue(this.componentObj.label);
         }
         else {
-            titleElm.innerHTML = '&nbsp;';
+            titleElmIn.innerHTML = '&nbsp;';
         }
         heading.appendChild(titleElm);
         var toolbox = document.createElement('span');
@@ -118,6 +120,7 @@ var PanelGroup = /** @class */ (function (_super) {
         if (footer.length) {
             if (this.componentObj.height) {
                 body.style.height = 'calc(' + this.componentObj.height + ' - 49px - ' + footer[0].clientHeight + 'px)';
+                body.classList.add('hasHeight');
             }
             else {
                 body.style.height = 'calc(100% - 49px - ' + footer[0].clientHeight + 'px)';
@@ -127,6 +130,7 @@ var PanelGroup = /** @class */ (function (_super) {
             if (this.componentObj.height) {
                 body.style['overflow-y'] = 'auto';
                 body.style.height = this.height;
+                body.classList.add('hasHeight');
             }
         }
     };
@@ -158,6 +162,7 @@ var PanelGroup = /** @class */ (function (_super) {
                     break;
             }
         }.bind(this));
+        $(this.component).scrollTop(this.component.clientHeight);
     };
     ;
     PanelGroup.prototype.updateHeaderVisibility = function (newTitle) {
@@ -224,11 +229,6 @@ var PanelGroup = /** @class */ (function (_super) {
             return [
                 new fh_forms_handler_2.AdditionalButton('moveUp', 'arrow-up', 'Move up'),
                 new fh_forms_handler_2.AdditionalButton('moveDown', 'arrow-down', 'Move down')
-            ];
-        }
-        else {
-            return [
-                new fh_forms_handler_2.AdditionalButton('addDefaultSubcomponent', 'plus', 'Add empty row')
             ];
         }
     };

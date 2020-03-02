@@ -30,7 +30,7 @@ class ButtonGroup extends HTMLFormComponent {
 
         this.component = group;
         this.htmlElement = this.component;
-        this.wrap();
+        this.wrap(true);
         this.handlemarginAndPAddingStyles();
         this.display();
 

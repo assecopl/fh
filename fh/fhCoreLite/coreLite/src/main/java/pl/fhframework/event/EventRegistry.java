@@ -144,4 +144,13 @@ public class EventRegistry {
         return prefix != null ? prefix + url : url;
     }
 
+
+    public void fireScrollEvent(String formElementId, Integer animateDuration) {
+        getEvents().add(new ScrollEvent(formElementId, true, animateDuration));
+    }
+
+    public void fireScrollEvent(String formElementId) {
+        getEvents().add(new ScrollEvent(formElementId, false, 0));
+    }
+
 }

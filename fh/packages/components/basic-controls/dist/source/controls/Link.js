@@ -67,7 +67,7 @@ var Link = /** @class */ (function (_super) {
         additionalWrapper.appendChild(link);
         this.component = additionalWrapper;
         this.hintElement = this.component;
-        this.wrap(true);
+        this.wrap();
         if (this.stickedLabel) {
             this.htmlElement.classList.add('stickedLabel');
         }
@@ -75,9 +75,35 @@ var Link = /** @class */ (function (_super) {
         this.display();
     };
     ;
-    Link.prototype.wrap = function (skipLabel) {
-        _super.prototype.wrap.call(this, skipLabel);
-        this.htmlElement.classList.add('form-group');
+    Link.prototype.wrap = function () {
+        var wrapper = document.createElement('div');
+        ['fc', 'wrapper', 'form-group'].forEach(function (cssClass) {
+            wrapper.classList.add(cssClass);
+        });
+        if (this.width) {
+            // @ts-ignore
+            this.setWrapperWidth(wrapper, undefined, this.width);
+        }
+        else {
+            wrapper.classList.add('inline');
+        }
+        if (this.componentObj.value) {
+            var label = document.createElement('label');
+            var labelValue = this.fhml.resolveValueTextOrEmpty(this.componentObj.value);
+            var labelId = this.id + '_label';
+            label.id = labelId;
+            label.classList.add('col-form-label');
+            label.classList.add('sr-only');
+            label.innerHTML = labelValue;
+            label.setAttribute('for', this.id);
+            label.setAttribute('aria-label', labelValue);
+            this.component.insertBefore(label, this.component.firstChild);
+            this.labelElement = label;
+            this.component.setAttribute('aria-describedby', label.id);
+        }
+        wrapper.appendChild(this.component);
+        this.htmlElement = wrapper;
+        this.contentWrapper = this.component;
     };
     ;
     Link.prototype.update = function (change) {
@@ -91,7 +117,7 @@ var Link = /** @class */ (function (_super) {
      * @Override
      */
     Link.prototype.getDefaultWidth = function () {
-        return null;
+        return "md-2";
     };
     return Link;
 }(fh_forms_handler_1.HTMLFormComponent));

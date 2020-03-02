@@ -15,7 +15,7 @@ import java.util.Set;
  * @author tomasz.kozlowski (created on 2018-05-14)
  */
 @RestController
-@ConditionalOnProperty(name = "fhframework.managementApi.enabled", havingValue = "true")
+@ConditionalOnProperty(name = "fhframework.securitymanagementApi.enabled", havingValue = "true")
 public class SecurityManagementAPIController {
 
     // SECURITY API

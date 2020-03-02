@@ -64,7 +64,10 @@ public class AutowireHelper implements ApplicationContextAware {
      * @param classToAutowire the instance of the class which holds @Autowire annotations
      */
     public static void forceAutowire(Object classToAutowire) {
-        getAutowireFactory().autowireBean(classToAutowire);
+        AutowireCapableBeanFactory factory = getAutowireFactory();
+        if (factory != null) {
+            factory.autowireBean(classToAutowire);
+        }
     }
 
     /**

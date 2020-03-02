@@ -22,7 +22,7 @@ import lombok.Setter;
  * Created by k.czajkowski on 23.01.2017.
  */
 @Control(parents = {PanelGroup.class, Tab.class, Row.class, Form.class, Group.class}, canBeDesigned = true)
-@DocumentedComponent(value = "Bar Chart displaying series of data", icon = "fa fa-chart-bar")
+@DocumentedComponent(category = DocumentedComponent.Category.CHARTS_MAPS, value = "Bar Chart displaying series of data", icon = "fa fa-chart-bar")
 @DesignerControl(defaultWidth = 6)
 public class BarChart extends Chart {
 

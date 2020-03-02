@@ -1,5 +1,6 @@
 import {HTMLFormComponent} from "fh-forms-handler";
 import {AdditionalButton} from "fh-forms-handler";
+import {fn} from "moment";
 
 declare const ENV_IS_DEVELOPMENT: boolean;
 
@@ -65,10 +66,11 @@ class ColumnPaged extends HTMLFormComponent {
 
         parentObject.sorter = sorter;
 
-        this.component.classList.add('sortable');
-        this.component.addEventListener('click', function (event) {
+        columnElement.addClass('sortable');
+        columnElement.on('click', function () {
             let icon = (<any>sorter.firstChild);
             let sortDirection;
+
             if (icon.classList.contains('fa-sort')) {
                 icon.classList.remove('fa-sort');
                 icon.classList.add('fa-sort-amount-down');

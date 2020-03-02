@@ -30,7 +30,9 @@ import java.util.stream.Collectors;
 
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.*;
 
-@DocumentedComponent(value = "Enables users to quickly find and select from a pre-populated list of values as they type, leveraging searching and filtering.",
+@TemplateControl(tagName = "fh-combo")
+@DesignerControl(defaultWidth = 3)
+@DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, value = "Enables users to quickly find and select from a pre-populated list of values as they type, leveraging searching and filtering.",
         icon = "fa fa-outdent")
 @Control(parents = {PanelGroup.class, Group.class, Column.class, Tab.class, Row.class, Form.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = true)
 public class Combo extends BaseInputFieldWithKeySupport {
@@ -158,7 +160,7 @@ public class Combo extends BaseInputFieldWithKeySupport {
     @Getter
     @Setter
     @XMLProperty(value = FILTER_TEXT)
-    @DesignerXMLProperty(commonUse = true, previewValueProvider = InputFieldDesignerPreviewProvider.class, priority = 120, functionalArea = SPECIFIC)
+    @DesignerXMLProperty(previewValueProvider = InputFieldDesignerPreviewProvider.class, priority = 120, functionalArea = SPECIFIC)
     @DocumentedComponentAttribute(boundable = true, value = "Binding represents value of filter text")
     private ModelBinding filterTextBinding;
 
@@ -721,6 +723,9 @@ public class Combo extends BaseInputFieldWithKeySupport {
 
     //todo - temporary solution, remove Spel in future
     private String objectToStringAsDisplayExpresssion(Object item) {
+        if (item == null) {
+            return null;
+        }
         if (item instanceof String) {
             return (String) item;
         }

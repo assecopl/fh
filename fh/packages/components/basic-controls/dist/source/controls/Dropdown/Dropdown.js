@@ -15,7 +15,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 require("bootstrap/js/dist/dropdown");
 var fh_forms_handler_1 = require("fh-forms-handler");
-var fh_forms_handler_2 = require("fh-forms-handler");
+var $ = require("jquery");
 var Dropdown = /** @class */ (function (_super) {
     __extends(Dropdown, _super);
     function Dropdown(componentObj, parent) {
@@ -53,14 +53,18 @@ var Dropdown = /** @class */ (function (_super) {
         this.dropdown.classList.add('fc');
         this.dropdown.classList.add('dropdown');
         this.dropdown.appendChild(button);
-        var menu = document.createElement('ul');
+        var menu = document.createElement('div');
         menu.classList.add('dropdown-menu');
         this.menu = menu;
         this.dropdown.appendChild(menu);
+        if (this.designMode) {
+            this.menu.classList.add('show');
+        }
         this.component = this.dropdown;
         this.htmlElement.appendChild(this.component);
         this.contentWrapper = menu;
         this.hintElement = this.component;
+        this.menu.addEventListener('click', this.onClickEvent.bind(this));
         if (this.componentObj.subelements) {
             this.addComponents(this.componentObj.subelements);
         }
@@ -69,6 +73,10 @@ var Dropdown = /** @class */ (function (_super) {
         }
     };
     ;
+    Dropdown.prototype.onClickEvent = function (event) {
+        event.stopPropagation();
+        $(this.dropdown).dropdown('toggle');
+    };
     Dropdown.prototype.onButtonClickEvent = function (event) {
         event.stopPropagation();
         this.fireEventWithLock('onClick', this.onClick);
@@ -104,7 +112,7 @@ var Dropdown = /** @class */ (function (_super) {
     ;
     Dropdown.prototype.getAdditionalButtons = function () {
         return [
-            new fh_forms_handler_2.AdditionalButton('addDefaultSubcomponent', 'plus', 'Add dropdown item')
+            new fh_forms_handler_1.AdditionalButton('addDefaultSubcomponent', 'plus', 'Add dropdown item')
         ];
     };
     Dropdown.prototype.wrap = function (skipLabel) {
@@ -136,7 +144,7 @@ var Dropdown = /** @class */ (function (_super) {
      * @Override
      */
     Dropdown.prototype.getDefaultWidth = function () {
-        return null;
+        return "md-2";
     };
     return Dropdown;
 }(fh_forms_handler_1.HTMLFormComponent));

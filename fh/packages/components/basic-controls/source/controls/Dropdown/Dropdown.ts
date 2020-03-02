@@ -1,6 +1,6 @@
 import 'bootstrap/js/dist/dropdown';
-import {HTMLFormComponent} from "fh-forms-handler";
-import {AdditionalButton} from "fh-forms-handler";
+import {AdditionalButton, HTMLFormComponent} from "fh-forms-handler";
+import * as $ from 'jquery';
 
 class Dropdown extends HTMLFormComponent {
     protected button: any;
@@ -56,15 +56,21 @@ class Dropdown extends HTMLFormComponent {
 
         this.dropdown.appendChild(button);
 
-        let menu = document.createElement('ul');
+        let menu = document.createElement('div');
         menu.classList.add('dropdown-menu');
         this.menu = menu;
         this.dropdown.appendChild(menu);
+
+        if (this.designMode) {
+            this.menu.classList.add('show');
+        }
 
         this.component = this.dropdown;
         this.htmlElement.appendChild(this.component);
         this.contentWrapper = menu;
         this.hintElement = this.component;
+
+        this.menu.addEventListener('click', this.onClickEvent.bind(this));
 
         if (this.componentObj.subelements) {
             this.addComponents(this.componentObj.subelements);
@@ -74,6 +80,11 @@ class Dropdown extends HTMLFormComponent {
             menu.classList.add('designerPreviewVariants');
         }
     };
+
+    onClickEvent(event) {
+        event.stopPropagation();
+        $(this.dropdown).dropdown('toggle');
+    }
 
     onButtonClickEvent(event) {
         event.stopPropagation();
@@ -148,8 +159,8 @@ class Dropdown extends HTMLFormComponent {
     /**
      * @Override
      */
-    public getDefaultWidth():string {
-        return null;
+    public getDefaultWidth(): string {
+        return "md-2";
     }
 }
 

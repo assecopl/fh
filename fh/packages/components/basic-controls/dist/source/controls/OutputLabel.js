@@ -151,6 +151,9 @@ var OutputLabel = /** @class */ (function (_super) {
             _super.prototype.wrap.call(this);
         }
     };
+    OutputLabel.prototype.getDefaultWidth = function () {
+        return 'md-2';
+    };
     __decorate([
         lazyInject("FH"),
         __metadata("design:type", fh_forms_handler_3.FH)

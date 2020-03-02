@@ -19,14 +19,16 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
  * Class representing xml component of SelectOneMenu. Every field represents xml attribute of
  * selectOneMenu tag.
  * <p>
- * Example <SelectOneMenu onInput="onInputAction" list="values" value="{value_1}"
- * label="label_1:" required="true|false"/>.
+ * Example {@code <SelectOneMenu onInput="onInputAction" list="values" value="{value_1}"
+ * label="label_1:" required="true|false"/>}.
  * <p>
  * Every field is parsed as json for javascript. If field should be ingored by JSON, use
  * <code>@JsonIgnore</code>. There can be used any annotations for json generator.
  */
-@DocumentedComponent(value = "Component responsible for displaying list of values, " +
+@TemplateControl(tagName = "fh-select-one-menu")
+@DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, value = "Component responsible for displaying list of values, " +
         "with possibility of selecting only one value.", icon = "fa fa-caret-square-down")
+@DesignerControl(defaultWidth = 3)
 @Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Group.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = true)
 public class SelectOneMenu extends BaseInputListField {
 
@@ -51,6 +53,10 @@ public class SelectOneMenu extends BaseInputListField {
     @Override
     public SelectOneMenu createNewSameComponent() {
         return new SelectOneMenu(getForm());
+    }
+
+    public String getModelBindingText() {
+        return getModelBinding() == null ? "" : getModelBinding().getBindingExpression();
     }
 
     @Override
@@ -78,6 +84,7 @@ public class SelectOneMenu extends BaseInputListField {
     @Override
     protected List<?> calculateBindingValues(List<?> value) {
         List<Object> values = new LinkedList<>(value);
+
         if (isEmptyLabel()) {
             values.add(0, this.emptyLabelText);
         }

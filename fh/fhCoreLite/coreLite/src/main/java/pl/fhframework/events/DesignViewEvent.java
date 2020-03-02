@@ -10,7 +10,7 @@ import java.util.Map;
 
 /**
  * Created by Adam Zareba on 01.03.2017. Event for form designer purpose. Allows sending additional
- * data over {@link #changedFields} collection.
+ * data over changedFields collection.
  */
 @Getter
 @Setter

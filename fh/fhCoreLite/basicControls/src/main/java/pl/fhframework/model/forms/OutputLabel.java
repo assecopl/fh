@@ -23,12 +23,13 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
 
 /**
  * Class representing xml component of OutputLabel. Every field represents xml attribute of
- * outputLabel tag. Example <OutputLabel value="{value_1}"/>. Every field is parsed as json for
+ * outputLabel tag. Example {@code <OutputLabel value="{value_1}"/>}. Every field is parsed as json for
  * javascript. If field should be ingored by JSON, use <code>@JsonIgnore</code>. There can be used
  * any annotations for json generator.
  */
+@TemplateControl(tagName = "fh-output-label")
 @Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
-@DocumentedComponent(value = "Label component is responsible for displaying value.", icon = "fa fa-font")
+@DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, value = "Label component is responsible for displaying value.", icon = "fa fa-font")
 @DesignerControl(defaultWidth = 2)
 public class OutputLabel extends FormElement implements TableComponent<OutputLabel>, Iconable, IBodyXml {
 
@@ -63,7 +64,7 @@ public class OutputLabel extends FormElement implements TableComponent<OutputLab
     @Getter
     @Setter
     @XMLProperty(required = true, value = ATTR_VALUE)
-    @DesignerXMLProperty(functionalArea = CONTENT, previewValueProvider = BindingExpressionDesignerPreviewProvider.class, priority = 15)
+    @DesignerXMLProperty(functionalArea = CONTENT, previewValueProvider = BindingExpressionDesignerPreviewProvider.class, priority = 95)
     @DocumentedComponentAttribute(boundable = true, value = "Represents text value for created component.")
     private ModelBinding valueBinding;
 

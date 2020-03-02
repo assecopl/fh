@@ -80,6 +80,12 @@ exports.FhContainer = FhContainer_1.FhContainer;
 var ServiceManagerUtil_1 = require("./source/Devices/ServiceManagerUtil");
 exports.ServiceManagerUtil = ServiceManagerUtil_1.ServiceManagerUtil;
 var LayoutHandler_1 = require("./source/LayoutHandler");
+var ChatEvent_1 = require("./source/Events/ChatEvent");
+exports.ChatEvent = ChatEvent_1.ChatEvent;
+var ScrollEvent_1 = require("./source/Events/ScrollEvent");
+exports.ScrollEvent = ScrollEvent_1.ScrollEvent;
+var ChatListEvent_1 = require("./source/Events/ChatListEvent");
+exports.ChatListEvent = ChatListEvent_1.ChatListEvent;
 var FormsHandler = /** @class */ (function (_super) {
     __extends(FormsHandler, _super);
     function FormsHandler() {
@@ -103,6 +109,7 @@ var FormsHandler = /** @class */ (function (_super) {
         FhContainer_1.FhContainer.bind('Events.FileDownloadEvent').to(FileDownloadEvent_1.FileDownloadEvent).inRequestScope();
         FhContainer_1.FhContainer.bind('Events.NotificationEvent').to(NotificationEvent_1.NotificationEvent).inRequestScope();
         FhContainer_1.FhContainer.bind('Events.FocusEvent').to(FocusEvent_1.FocusEvent).inRequestScope();
+        FhContainer_1.FhContainer.bind('Events.ScrollEvent').to(ScrollEvent_1.ScrollEvent).inRequestScope();
         FhContainer_1.FhContainer.bind('Events.StylesheetChangeEvent').to(StylesheetChangeEvent_1.StylesheetChangeEvent).inRequestScope();
         FhContainer_1.FhContainer.bind('Events.LanguageChangeEvent').to(LanguageChangeEvent_1.LanguageChangeEvent).inRequestScope();
         FhContainer_1.FhContainer.bind('Events.RedirectEvent').to(RedirectEvent_1.RedirectEvent).inRequestScope();
@@ -113,6 +120,8 @@ var FormsHandler = /** @class */ (function (_super) {
         FhContainer_1.FhContainer.bind('Events.ForcedLogoutEvent').to(ForcedLogoutEvent_1.ForcedLogoutEvent).inRequestScope();
         FhContainer_1.FhContainer.bind('Events.CustomActionEvent').to(CustomActionEvent_1.CustomActionEvent).inRequestScope();
         FhContainer_1.FhContainer.bind('Events.SessionTimeoutEvent').to(SessionTimeoutEvent_1.SessionTimeoutEvent).inRequestScope();
+        FhContainer_1.FhContainer.bind('Events.ChatEvent').to(ChatEvent_1.ChatEvent).inRequestScope();
+        FhContainer_1.FhContainer.bind('Events.ChatListEvent').to(ChatListEvent_1.ChatListEvent).inRequestScope();
         FhContainer_1.FhContainer.bind('CustomActions').to(CustomActions_1.CustomActions).inSingletonScope();
         FhContainer_1.FhContainer.bind('FHML').to(FHML_1.FHML).inSingletonScope();
         FhContainer_1.FhContainer.bind('FormComponentChangesQueue').to(FormComponentChangesQueue_1.FormComponentChangesQueue).inRequestScope();

@@ -147,40 +147,15 @@ public class FhLogger {
     }
 
     public static String resolveThrowableMessage(Throwable exception) {
+        return resolveThrowableMessage(exception, true);
+    }
+
+    public static String resolveThrowableMessage(Throwable exception, boolean withClassName) {
         if (exception instanceof FhDescribedException) {
             return exception.getMessage();
         }
 
-        Throwable current = exception;
-        Set<String> allMessages = new LinkedHashSet<>();
-        Set<String> fhMessages = new LinkedHashSet<>();
-        while (current != null) {
-            if (current instanceof FhException) {
-                fhMessages.add(current.getMessage());
-            }
-            else {
-                allMessages.add(current.getMessage());
-            }
-            if (current instanceof InvocationTargetException) {
-                current = ((InvocationTargetException) current).getTargetException();
-            }
-            else {
-                current = current.getCause();
-            }
-        }
-        Throwable rootCause = DebugUtils.getRootCause(exception);
-        String rootCasueStr = String.format("%s - %s", rootCause.getClass().getSimpleName(), rootCause.getMessage());
-        if (fhMessages.size() > 0) {
-            fhMessages.add(rootCasueStr);
-            clearDuplicates(fhMessages);
-            return fhMessages.stream().collect(Collectors.joining(", caused by: "));
-        }
-        else if (allMessages.size() > 0) {
-            allMessages.add(rootCasueStr);
-            clearDuplicates(allMessages);
-            return allMessages.stream().collect(Collectors.joining(", caused by: "));
-        }
-        return rootCasueStr;
+        return FhException.resolveThrowableMessage(exception);
     }
 
     private static void clearDuplicates(Set<String> messages) {

@@ -36,11 +36,6 @@ class Calendar extends HTMLFormComponent {
         container.classList.add('fc');
         container.classList.add('calendar');
 
-        let label = document.createElement('div');
-        label.classList.add('calendar-label');
-        label.appendChild(document.createTextNode(this.label));
-        container.appendChild(label);
-
         let calendar = document.createElement('div');
         calendar.id = this.id;
         calendar.classList.add('calendar-content');
@@ -48,7 +43,7 @@ class Calendar extends HTMLFormComponent {
 
         this.component = container;
         this.handlemarginAndPAddingStyles();
-        this.wrap(true);
+        this.wrap(false);
         this.display();
 
         let styleTypes = ['color', 'background-color', 'border-color'];

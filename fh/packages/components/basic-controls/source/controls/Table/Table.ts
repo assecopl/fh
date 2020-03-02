@@ -1,4 +1,4 @@
-import {AdditionalButton, HTMLFormComponent, FhContainer} from "fh-forms-handler";
+import {AdditionalButton, HTMLFormComponent, FhContainer, FormComponent} from "fh-forms-handler";
 import {TableWithKeyboardEvents} from "./Abstract/TableWithKeyboardEvents";
 
 class Table extends TableWithKeyboardEvents {
@@ -31,8 +31,8 @@ class Table extends TableWithKeyboardEvents {
         this.rowStylesMapping = this.componentObj.rowStylesMapping || [];
         this.minRows = this.componentObj.minRows || null;
         this.rowHeight = this.componentObj.rowHeight || 'normal';
-        this.tableGrid = this.componentObj.tableGrid || 'show';
-        this.tableStripes = this.componentObj.tableStripes || 'show';
+        this.tableGrid = this.componentObj.tableGrid || 'hide';
+        this.tableStripes = this.componentObj.tableStripes || 'hide';
         this.ieFocusFixEnabled = this.componentObj.ieFocusFixEnabled || false;
 
         this._dataWrapper = null;
@@ -429,7 +429,7 @@ class Table extends TableWithKeyboardEvents {
      * Used for standard tables
      * @param scrollAnimate
      */
-    highlightSelectedRows(scrollAnimate:boolean = false) {
+    highlightSelectedRows(scrollAnimate: boolean = false) {
         let oldSelected = this.table.querySelectorAll('.table-primary');
         if (oldSelected && oldSelected.length) {
             [].forEach.call(oldSelected, function (row) {
@@ -443,6 +443,9 @@ class Table extends TableWithKeyboardEvents {
         (this.rawValue || []).forEach(function (value) {
             if (value != -1) {
                 let row = this.table.querySelector(('[data-main-id="' + value + '"]'));
+                if (row == null) {
+                    return;
+                }
                 row.classList.add('table-primary');
                 let container = $(this.component);
                 let scrollTo = $(row);
@@ -539,6 +542,15 @@ class Table extends TableWithKeyboardEvents {
         }
     }
 
+    protected getAllComponents() {
+        let result: FormComponent[] = this.components;
+
+        this.rows.forEach((value) => {
+            result = result.concat(value.components);
+        });
+
+        return result;
+    }
 
 
 }

@@ -34,11 +34,14 @@ var Form = /** @class */ (function (_super) {
     function Form(formObj, parent) {
         if (parent === void 0) { parent = null; }
         var _this = _super.call(this, formObj, parent) || this;
+        _this.headingTypeValue = null;
+        _this.afterInitActions = [];
         _this.combinedId = _this.id;
         _this.formId = _this.id;
         _this.formType = formObj.formType;
         _this.viewMode = _this.componentObj.viewMode;
         _this.state = _this.componentObj.state;
+        _this.headingTypeValue = _this.componentObj.headingTypeValue ? _this.componentObj.headingTypeValue : null;
         /* TODO: remove after changing Java */
         if (_this.componentObj.modal) {
             _this.formType = 'MODAL';
@@ -159,6 +162,7 @@ var Form = /** @class */ (function (_super) {
         else if (this.container.clientHeight === 0) {
             this.container.style.height = 'auto';
         }
+        this.fireAfterInitActions();
     };
     ;
     Form.prototype.destroy = function (removeFromParent) {
@@ -304,7 +308,7 @@ var Form = /** @class */ (function (_super) {
             var title = document.createElement('h5');
             title.classList.add('modal-title');
             this.addCloudIcon(title);
-            this.labelElement = document.createElement("span");
+            this.labelElement = document.createElement(this.headingTypeValue ? this.headingTypeValue : "strong");
             title.appendChild(this.labelElement);
             this.labelElement.innerHTML = this.fhml.resolveValueTextOrEmpty(this.componentObj.label);
             header.appendChild(title);
@@ -351,7 +355,7 @@ var Form = /** @class */ (function (_super) {
         title.id = this.id + '_label';
         title.classList.add('card-title');
         this.addCloudIcon(title);
-        this.labelElement = document.createElement("span");
+        this.labelElement = document.createElement(this.headingTypeValue ? this.headingTypeValue : "span");
         title.appendChild(this.labelElement);
         this.labelElement.innerHTML = this.fhml.resolveValueTextOrEmpty(this.componentObj.label);
         heading.appendChild(title);
@@ -431,7 +435,7 @@ var Form = /** @class */ (function (_super) {
             var title = document.createElement('div');
             title.id = this.id + '_label';
             this.addCloudIcon(title);
-            this.labelElement = document.createElement("strong");
+            this.labelElement = document.createElement(this.headingTypeValue ? this.headingTypeValue : "span");
             this.labelElement.classList.add('card-title');
             title.appendChild(this.labelElement);
             this.labelElement.innerHTML = this.fhml.resolveValueTextOrEmpty(this.componentObj.label);
@@ -494,6 +498,17 @@ var Form = /** @class */ (function (_super) {
     ;
     Form.prototype.setPresentationStyle = function (presentationStyle) {
         return;
+    };
+    Form.prototype.addAfterInitActions = function (action) {
+        this.afterInitActions.push(action);
+    };
+    Form.prototype.fireAfterInitActions = function () {
+        this.afterInitActions.forEach(function (action) {
+            if (action && {}.toString.call(action) === '[object Function]') {
+                action();
+            }
+        });
+        this.afterInitActions = [];
     };
     __decorate([
         lazyInject('LayoutHandler'),

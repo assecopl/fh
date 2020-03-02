@@ -27,6 +27,9 @@ class Image extends HTMLFormComponent {
         });
         image.src = this.processURL(this.source);
 
+        let imageLabel = this.fhml.resolveValueTextOrEmpty(this.componentObj.label) || this.id;
+        image.setAttribute('alt', imageLabel);
+
         if (this.width) {
             image.classList.add('img-fluid');
         }
@@ -109,8 +112,8 @@ class Image extends HTMLFormComponent {
     /**
      * @Override
      */
-    public getDefaultWidth():string {
-        return null;
+    public getDefaultWidth(): string {
+        return "md-6";
     }
 }
 

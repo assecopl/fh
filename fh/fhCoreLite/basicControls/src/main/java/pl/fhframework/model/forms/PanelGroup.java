@@ -1,31 +1,27 @@
 package pl.fhframework.model.forms;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import pl.fhframework.core.forms.IHasBoundableLabel;
-import pl.fhframework.BindingResult;
-import pl.fhframework.annotations.*;
-import pl.fhframework.annotations.Control;
-import pl.fhframework.binding.*;
-import pl.fhframework.model.dto.ElementChanges;
-import pl.fhframework.model.dto.ValueChange;
-import pl.fhframework.model.forms.designer.BindingExpressionDesignerPreviewProvider;
-import pl.fhframework.model.dto.InMessageEventData;
-import pl.fhframework.events.IEventSource;
-
 import lombok.Getter;
 import lombok.Setter;
+import pl.fhframework.BindingResult;
+import pl.fhframework.annotations.*;
+import pl.fhframework.binding.*;
+import pl.fhframework.core.forms.IHasBoundableLabel;
+import pl.fhframework.events.IEventSource;
+import pl.fhframework.model.dto.ElementChanges;
+import pl.fhframework.model.dto.InMessageEventData;
+import pl.fhframework.model.dto.ValueChange;
+import pl.fhframework.model.forms.designer.BindingExpressionDesignerPreviewProvider;
 import pl.fhframework.model.forms.designer.IDesignerEventListener;
 
 import java.util.Optional;
 
-import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.BEHAVIOR;
-import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.CONTENT;
-import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.LOOK_AND_STYLE;
+import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.*;
 
+@TemplateControl(tagName = "fh-panel-group")
 @Control(parents = {Accordion.class, PanelGroup.class, Group.class, SplitContainer.class, Repeater.class, Column.class, Tab.class, Row.class, Form.class}, invalidParents = {Table.class}, canBeDesigned = true)
-@DocumentedComponent(value = "PanelGroup component is responsible for the grouping of sub-elements with optional header and collapsing", icon = "fa fa-object-group")
-public class PanelGroup extends GroupingComponent<Component> implements Boundable, IChangeableByClient, IEventSource, IHasBoundableLabel, IDesignerEventListener {
+@DocumentedComponent(category = DocumentedComponent.Category.ARRANGEMENT, value = "PanelGroup component is responsible for the grouping of sub-elements with optional header and collapsing", icon = "fa fa-object-group")
+public class PanelGroup extends GroupingComponentWithHeadingHierarchy<Component> implements Boundable, IChangeableByClient, IEventSource, IHasBoundableLabel, IDesignerEventListener {
 
     private static final String COLLAPSED_ATTR = "collapsed";
     public static final String ON_TOGGLE = "onToggle";
@@ -77,6 +73,8 @@ public class PanelGroup extends GroupingComponent<Component> implements Boundabl
     public PanelGroup(Form form) {
         super(form);
     }
+
+
 
     @Override
     public ElementChanges updateView() {
@@ -142,7 +140,7 @@ public class PanelGroup extends GroupingComponent<Component> implements Boundabl
         addSubcomponent(createNewRow());
     }
 
-    private Row createNewRow() {
+    public Row createNewRow() {
         Row row = new Row(getForm());
         row.setGroupingParentComponent(this);
         row.init();

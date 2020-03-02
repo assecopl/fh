@@ -32,6 +32,8 @@ var Image = /** @class */ (function (_super) {
             image.classList.add(cssClass);
         });
         image.src = this.processURL(this.source);
+        var imageLabel = this.fhml.resolveValueTextOrEmpty(this.componentObj.label) || this.id;
+        image.setAttribute('alt', imageLabel);
         if (this.width) {
             image.classList.add('img-fluid');
         }
@@ -106,7 +108,7 @@ var Image = /** @class */ (function (_super) {
      * @Override
      */
     Image.prototype.getDefaultWidth = function () {
-        return null;
+        return "md-6";
     };
     return Image;
 }(fh_forms_handler_1.HTMLFormComponent));

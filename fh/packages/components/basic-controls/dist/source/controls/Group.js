@@ -14,7 +14,6 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var fh_forms_handler_1 = require("fh-forms-handler");
-var fh_forms_handler_2 = require("fh-forms-handler");
 var Group = /** @class */ (function (_super) {
     __extends(Group, _super);
     function Group(componentObj, parent) {
@@ -39,10 +38,6 @@ var Group = /** @class */ (function (_super) {
         this.hintElement = this.component;
         this.wrap(true);
         this.addStyles();
-        /*
-         this.htmlElement = this.component;
-         this.contentWrapper = this.htmlElement;
-         */
         this.display();
         if (this.componentObj.subelements) {
             this.addComponents(this.componentObj.subelements);
@@ -58,8 +53,11 @@ var Group = /** @class */ (function (_super) {
     };
     Group.prototype.getAdditionalButtons = function () {
         return [
-            new fh_forms_handler_2.AdditionalButton('addDefaultSubcomponent', 'plus', 'Add empty row')
+        // new AdditionalButton('addDefaultSubcomponent', 'plus', 'Add empty row')
         ];
+    };
+    Group.prototype.getDefaultWidth = function () {
+        return "md-12";
     };
     return Group;
 }(fh_forms_handler_1.HTMLFormComponent));

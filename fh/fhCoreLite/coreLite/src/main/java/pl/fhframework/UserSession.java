@@ -16,9 +16,7 @@ import pl.fhframework.core.uc.UseCaseContainer;
 import pl.fhframework.core.uc.url.UseCaseUrl;
 import pl.fhframework.core.util.DebugUtils;
 import pl.fhframework.event.EventRegistry;
-import pl.fhframework.event.dto.ForcedLogoutEvent;
-import pl.fhframework.event.dto.MessageEvent;
-import pl.fhframework.event.dto.ShutdownEvent;
+import pl.fhframework.event.dto.*;
 import pl.fhframework.events.ActionContext;
 import pl.fhframework.events.IActionContext;
 import pl.fhframework.events.UseCaseRequestContext;
@@ -212,18 +210,27 @@ public class UserSession extends Session {
     }
 
     public void pushShutdownInfo(WebSocketContext context, boolean graceful) {
-        getUseCaseRequestContext().getEvents().add(new ShutdownEvent(graceful));
-        formsHandler.finishEventHandling("SHUTDOWN", context);
+        formsHandler.sendOutMessage("SHUTDOWN", new ShutdownEvent(graceful), context);
     }
 
     public void pushForcedLogoutInfo(WebSocketContext context, ForcedLogoutEvent.Reason reason){
-        getUseCaseRequestContext().getEvents().add(new ForcedLogoutEvent(reason));
-        formsHandler.finishEventHandling("FORCED_LOGOUT",context);
+        formsHandler.sendOutMessage("FORCED_LOGOUT", new ForcedLogoutEvent(reason), context);
     }
 
     public void pushMessage(WebSocketContext context, String title, String message) {
-        getUseCaseRequestContext().getEvents().add(new MessageEvent(title, message));
-        formsHandler.finishEventHandling("MESSAGE", context);
+        formsHandler.sendOutMessage("MESSAGE", new MessageEvent(title, message), context);
+    }
+
+    public void pushChatInfo(WebSocketContext context) {
+        formsHandler.sendOutMessage("CHAT", new ChatEvent(), context);
+    }
+
+    public void pushShowChatListInfo(WebSocketContext context) {
+        formsHandler.sendOutMessage("SHOW_CHAT_LIST", new ChatListEvent(true), context);
+    }
+
+    public void pushHideChatListInfo(WebSocketContext context) {
+        formsHandler.sendOutMessage("HIDE_CHAT_LIST", new ChatListEvent(false), context);
     }
 
     public UserSessionDescription getDescription(){

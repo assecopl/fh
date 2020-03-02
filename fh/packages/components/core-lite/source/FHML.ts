@@ -157,6 +157,10 @@ class FHML {
             return this.escapeHtml(valueText);
         }
     };
+
+    public removeHtmlTags(text:string){
+        return text.replace(/<\/?[^>]+(>|$)/g, "").trim();
+    };
 }
 
 export {FHML};

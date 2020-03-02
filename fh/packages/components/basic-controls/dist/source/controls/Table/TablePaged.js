@@ -51,11 +51,14 @@ var TablePaged = /** @class */ (function (_super) {
         toolsRow.classList.add('row');
         toolsRow.classList.add('toolsRow');
         var box = document.createElement('div');
+        box.id = this.id + '_rowsCountSelector';
         box.classList.add('rowsCountSelector');
         box.classList.add('form-inline');
         box.classList.add('col-md-6');
-        this.pageSizeSelect = document.createElement('select');
-        this.pageSizeSelect.classList.add('form-control');
+        var select = document.createElement('select');
+        select.id = this.id + '_rowsPerPageSelector';
+        select.classList.add('form-control');
+        this.pageSizeSelect = select;
         [5, 10, 15, 25].forEach(function (number) {
             var option = document.createElement('option');
             option.value = number;
@@ -69,15 +72,18 @@ var TablePaged = /** @class */ (function (_super) {
         box.appendChild(this.pageSizeSelect);
         var cecordsText = this.__('rows per page');
         cecordsText.classList.add('pl-3');
+        this.buildTablePagedToolsLabels(select, box);
         box.appendChild(cecordsText);
         toolsRow.appendChild(box);
         var pagination = document.createElement('div');
+        pagination.id = this.id + '_pagination';
         pagination.classList.add('table-pagination');
         pagination.classList.add('col-md-6');
         pagination.classList.add('text-right');
         var paginator = this.buildPaginator();
         pagination.appendChild(pageInfo);
         pagination.appendChild(paginator);
+        this.buildTablePagedToolsLabels(pagination, toolsRow);
         toolsRow.appendChild(pagination);
         this.htmlElement.appendChild(toolsRow);
         this.paginator = paginator;
@@ -88,6 +94,22 @@ var TablePaged = /** @class */ (function (_super) {
         this.pageSize = event.target.value;
         this.changesQueue.queueAttributeChange('pageSize', this.toInt(this.pageSize));
         this.fireEventWithLock('onPageSizeChange', null);
+    };
+    TablePaged.prototype.buildTablePagedToolsLabels = function (tablePagedTool, toolContainer) {
+        var label = document.createElement('label');
+        var labelId = tablePagedTool.id + '_label';
+        label.id = labelId;
+        label.classList.add('col-form-label');
+        label.classList.add('sr-only');
+        label.setAttribute('for', tablePagedTool.id);
+        if (tablePagedTool.type === 'select-one') {
+            label.innerHTML = 'rowsPerPageSelector';
+        }
+        else if (tablePagedTool.classList.contains('table-pagination')) {
+            label.innerHTML = 'pagination';
+        }
+        this.component.setAttribute('aria-describedby', labelId);
+        toolContainer.appendChild(label);
     };
     TablePaged.prototype.update = function (change) {
         _super.prototype.update.call(this, change);

@@ -38,7 +38,7 @@ var ButtonGroup = /** @class */ (function (_super) {
         }
         this.component = group;
         this.htmlElement = this.component;
-        this.wrap();
+        this.wrap(true);
         this.handlemarginAndPAddingStyles();
         this.display();
         if (this.componentObj.subelements) {

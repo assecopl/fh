@@ -38,17 +38,13 @@ var Calendar = /** @class */ (function (_super) {
         var container = document.createElement('div');
         container.classList.add('fc');
         container.classList.add('calendar');
-        var label = document.createElement('div');
-        label.classList.add('calendar-label');
-        label.appendChild(document.createTextNode(this.label));
-        container.appendChild(label);
         var calendar = document.createElement('div');
         calendar.id = this.id;
         calendar.classList.add('calendar-content');
         container.appendChild(calendar);
         this.component = container;
         this.handlemarginAndPAddingStyles();
-        this.wrap(true);
+        this.wrap(false);
         this.display();
         var styleTypes = ['color', 'background-color', 'border-color'];
         var dateGroups = this.values;

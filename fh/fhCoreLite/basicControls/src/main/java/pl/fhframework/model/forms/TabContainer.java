@@ -21,10 +21,11 @@ import java.util.Optional;
  * contains attributes in xml. Additionally it contains information about currently active tab
  * index. This field can be used inside Group, Column, Tab, Form.
  * <p>
- * Example: <TabContainer></TabContainer>
+ * Example: {@code <TabContainer></TabContainer>}
  */
+@TemplateControl(tagName = "fh-tab-container")
 @Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
-@DocumentedComponent(value = "TabContainer component which represents a containrt containing a single tabs", icon = "fas fa-window-maximize")
+@DocumentedComponent(category = DocumentedComponent.Category.ARRANGEMENT, value = "TabContainer component which represents a containrt containing a single tabs", icon = "fas fa-window-maximize")
 public class TabContainer extends GroupingComponent<Tab> implements IChangeableByClient, Boundable, CompactLayout, IDesignerEventListener {
 
     public static final String TYPE_NAME = "TabContainer";

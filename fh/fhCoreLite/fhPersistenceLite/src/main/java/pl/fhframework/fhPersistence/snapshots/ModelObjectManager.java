@@ -299,7 +299,7 @@ public class ModelObjectManager {
     }
 
     public void sychronizeCollections() {
-        modelProxyService.sychronizeCollections();
+        modelProxyService.synchronizeCollections();
     }
 
     public void manageNonOwningRelations() {

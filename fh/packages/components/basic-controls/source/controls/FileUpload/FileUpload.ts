@@ -11,7 +11,6 @@ class FileUpload extends HTMLFormComponent {
     private readonly fileNames: String[];
     private readonly label: string;
     private readonly inputHeight: number;
-    private input: any;
     private readonly multiple: boolean;
     private labelHidden: boolean;
     private progressBar: HTMLElement;
@@ -19,6 +18,7 @@ class FileUpload extends HTMLFormComponent {
     private readonly pendingUploadHandle: any;
     private inputFileButton: HTMLAnchorElement;
     private readonly style: any;
+    public input: any;
 
     constructor(componentObj: any, parent: HTMLFormComponent) {
         super(componentObj, parent);
@@ -49,8 +49,6 @@ class FileUpload extends HTMLFormComponent {
             fileUpload.classList.add(cssClass);
         }.bind(this));
 
-
-
         this.inputFileButton = document.createElement('a');
         ['fc', 'button', 'btn', 'btn-' + this.style, 'btn-block'].forEach(function (cssClass) {
             this.inputFileButton.classList.add(cssClass);
@@ -62,6 +60,29 @@ class FileUpload extends HTMLFormComponent {
 
         let inputFile = document.createElement('input');
         inputFile.setAttribute('id', this.componentObj.id + '_file');
+        inputFile.setAttribute('aria-label', this.i18n.__('add file'));
+
+        //If there is label we set aria-labeledby based on its value
+        if (this.label) {
+            let label = document.createElement('label');
+            let labelId = this.id + '_label';
+            label.id = labelId;
+            label.classList.add('control-label');
+            label.classList.add('fileNames');
+            label.classList.add('sr-only');
+            label.setAttribute('for', labelId);
+
+            let text = this.fhml.removeHtmlTags(this.label);
+            if (text.length > 0) {
+                inputFile.setAttribute('aria-describedby', labelId);
+            }
+
+            label.innerHTML = text;
+
+            this.inputFileButton.appendChild(label);
+            this.labelElement = label;
+        }
+
         inputFile.type = 'file';
         if (this.multiple) {
             inputFile.multiple = true;
@@ -93,10 +114,6 @@ class FileUpload extends HTMLFormComponent {
             inputFileProgress.classList.add(cssClass);
         }.bind(this));
 
-        let label = document.createElement('label');
-        label.setAttribute('for', this.componentObj.id + '_file');
-        this.inputFileButton.appendChild(label);
-
         let inputFileProgressBar = document.createElement('div');
         ['progress-bar'].forEach(function (cssClass) {
             inputFileProgressBar.classList.add(cssClass);
@@ -116,14 +133,6 @@ class FileUpload extends HTMLFormComponent {
         this.inputFileButton.appendChild(inputFileProgress);
 
         fileUpload.appendChild(this.inputFileButton);
-
-        let fileNameLabel = document.createElement('label');
-        if (this.inputHeight) {
-            fileNameLabel.style.height = this.inputHeight + 'px';
-        }
-        fileNameLabel.innerHTML = this.fileNames.join('<br />');
-        fileNameLabel.classList.add('fileNames');
-        fileUpload.appendChild(fileNameLabel);
 
         this.input = inputFile;
         this.component = fileUpload;
@@ -266,7 +275,9 @@ class FileUpload extends HTMLFormComponent {
                     if (!this.labelHidden) {
                         let fileNameLabel = this.component.querySelector('label.fileNames');
                         this.fileNames = newValue.join("<br />");
-                        fileNameLabel.innerHTML = this.fileNames;
+                        if (fileNameLabel) {
+                            fileNameLabel.innerHTML = this.fileNames;
+                        }
                     }
                     break;
                 case 'extensions':
@@ -382,7 +393,7 @@ class FileUpload extends HTMLFormComponent {
      * @Override
      */
     public getDefaultWidth() {
-        return 'lg-3,md-4,sm-5,xs-6';
+        return 'lg-2,md-4,sm-5,xs-6';
 
     }
 }

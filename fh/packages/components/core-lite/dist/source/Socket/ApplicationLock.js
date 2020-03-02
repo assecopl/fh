@@ -79,9 +79,10 @@ var ApplicationLock = /** @class */ (function () {
         return this.rids.length;
     };
     // TODO: refactor
-    ApplicationLock.prototype.createErrorDialog = function (data, callback) {
+    ApplicationLock.prototype.createErrorDialog = function (data, callback, withClose) {
         var _this = this;
         if (callback === void 0) { callback = undefined; }
+        if (withClose === void 0) { withClose = true; }
         var dialog = document.createElement('div');
         dialog.classList.add('fh-error-dialog');
         var close = document.createElement('span');
@@ -135,7 +136,9 @@ var ApplicationLock = /** @class */ (function () {
             wrapper.appendChild(modalBody);
             content.appendChild(wrapper);
         }
-        dialog.appendChild(close);
+        if (withClose) {
+            dialog.appendChild(close);
+        }
         dialog.appendChild(content);
         if (typeof callback === 'function') {
             callback(content, data);
@@ -158,18 +161,19 @@ var ApplicationLock = /** @class */ (function () {
             $(dialog).dialog("close");
         }
     };
-    ApplicationLock.prototype.createInfoDialog = function (info, button1Name, button1OnClick, button2Name, button2OnClick) {
+    ApplicationLock.prototype.createInfoDialog = function (info, button1Name, button1OnClick, button2Name, button2OnClick, withClose) {
         if (button1Name === void 0) { button1Name = undefined; }
         if (button1OnClick === void 0) { button1OnClick = undefined; }
         if (button2Name === void 0) { button2Name = undefined; }
         if (button2OnClick === void 0) { button2OnClick = undefined; }
+        if (withClose === void 0) { withClose = true; }
         if (this.reconnectInfo) {
             ApplicationLock_1.closeErrorDialog(this.reconnectInfo);
             this.reconnectInfo = null;
         }
         this.reconnectInfo = this.createErrorDialog([], function (content) {
             ApplicationLock_1.appendDialogElements(content, info, button1Name, button1OnClick, button2Name, button2OnClick);
-        });
+        }, withClose);
     };
     ApplicationLock.prototype.closeInfoDialog = function () {
         if (this.reconnectInfo) {

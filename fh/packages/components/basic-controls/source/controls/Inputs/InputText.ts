@@ -5,7 +5,6 @@ import {HTMLFormComponent, FormComponent, FormComponentKeySupport} from "fh-form
 import {FhContainer} from "fh-forms-handler";
 
 class InputText extends HTMLFormComponent {
-    protected input: any;
     protected keySupport: FormComponentKeySupport;
     private readonly isTextarea: boolean;
     private readonly inputType: any;
@@ -27,6 +26,7 @@ class InputText extends HTMLFormComponent {
     protected inputmaskEnabled: boolean;
     protected maskPlugin: any;
     protected maskInsertMode: boolean;
+    public input: any;
 
     constructor(componentObj: any, parent: HTMLFormComponent) {
         if (componentObj.rawValue == undefined) {
@@ -131,7 +131,20 @@ class InputText extends HTMLFormComponent {
             this.htmlElement.classList.add('servicesListControlWrapper');
         }
 
-       
+        if(this.fh.isIE()){
+            /**
+             * For IE only - prevent of content delete by ESC key press (27)
+             */
+            this.input.addEventListener('keydown', e => {
+                var keyCode = (window.event) ? e.which : e.keyCode;
+                if(keyCode == 27){ //Escape keycode
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                }
+            });
+
+        }
     }
 
     protected createIcon() {
@@ -153,13 +166,13 @@ class InputText extends HTMLFormComponent {
             groupSpan.appendChild(icon);
 
             if (this.componentObj.iconAlignment === 'BEFORE') {
-                this.inputGroupElement.insertBefore(group, this.inputGroupElement.firstChild);
+                this.inputGroupElement.insertBefore(group, this.component);
             } else if (this.componentObj.iconAlignment === 'AFTER') {
                 group.classList.remove('input-group-prepend');
                 group.classList.add('input-group-append');
                 this.inputGroupElement.appendChild(group);
             } else {
-                this.inputGroupElement.insertBefore(group, this.inputGroupElement.firstChild);
+                this.inputGroupElement.insertBefore(group, this.component);
             }
         }
     }
@@ -285,9 +298,14 @@ class InputText extends HTMLFormComponent {
                 }
             }
 
-            // @ts-ignore
+            try {
+                // @ts-ignore
                 this.maskPlugin = Inputmask(options).mask(this.input);
-            this.inputmaskEnabled = true;
+                this.inputmaskEnabled = true;
+            } catch (e) {
+                console.error('Invalidmask library error:');
+                console.error(e);
+            }
 
             this.input.addEventListener('keydown', event => {
                 this.removeInputPlaceholder(event);
@@ -445,6 +463,10 @@ class InputText extends HTMLFormComponent {
         this.disableMask();
 
         super.destroy(removeFromParent);
+    }
+
+    public getDefaultWidth():string {
+        return 'md-3';
     }
 }
 

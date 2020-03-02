@@ -5,7 +5,7 @@ class RadioOption extends HTMLFormComponent {
     private readonly onChange: any;
     private readonly groupName: string;
     private readonly checked: boolean;
-    private input: any;
+    public input: any;
     private valueChanged: boolean = false;
 
     constructor(componentObj: any, parent: HTMLFormComponent) {

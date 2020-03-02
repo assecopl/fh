@@ -141,7 +141,8 @@ public class ImageRepository implements ApplicationListener<ContextRefreshedEven
         Files.copy(source, destination);
 
         File resultFile = destination.toFile();
-        IMAGES_PER_MODULE.get(subsystem).add(new ImageEntry(name, resultFile, this.getImageType(resultFile)));
+        ImageEntry newImageEntry = new ImageEntry(name, resultFile, this.getImageType(resultFile));
+        IMAGES_PER_MODULE.get(subsystem).add(0, newImageEntry);
     }
 
     public synchronized void deleteImage(String subsystem, ImageEntry selected) throws IOException {

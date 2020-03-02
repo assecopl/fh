@@ -407,7 +407,7 @@ public class ModelProxyService {
         });
     }
 
-    public void sychronizeCollections() {
+    public void synchronizeCollections() {
         getModelStore().getAllExtendedCollections().forEach(this::syncStaticOrHybridCollection);
 
         // process orphan removal

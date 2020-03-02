@@ -21,10 +21,12 @@ var MdFileViewer = /** @class */ (function (_super) {
     function MdFileViewer(componentObj, parent) {
         var _this = _super.call(this, componentObj, parent) || this;
         _this.resourceBasePath = null;
+        _this.moduleId = null;
         _this.marked = null;
         _this.mapId = '';
         _this.source = _this.componentObj.src;
         _this.resourceBasePath = _this.componentObj.resourceBasePath;
+        _this.moduleId = _this.componentObj.moduleId;
         _this.mapElement = null;
         return _this;
     }
@@ -33,15 +35,10 @@ var MdFileViewer = /** @class */ (function (_super) {
         viewer.id = this.id;
         viewer.classList.add("fc");
         viewer.classList.add("md-file-viewer");
-        this.loadMdFile(this.source);
+        this.loadMdFile(this.source, null, false);
         this.component = viewer;
         this.hintElement = this.component;
-        // if (this.width) {
         this.wrap(false);
-        // } else {
-        //     this.htmlElement = this.component;
-        //     this.contentWrapper = this.htmlElement;
-        // }
         this.addStyles();
         this.display();
     };
@@ -51,10 +48,18 @@ var MdFileViewer = /** @class */ (function (_super) {
      * @param relativeUrl (relative url of md file)
      * @param resourceBasePath (path in resources url of md file)
      */
-    MdFileViewer.prototype.loadMdFile = function (relativeUrl, resourceBasePath) {
+    MdFileViewer.prototype.loadMdFile = function (relativeUrl, resourceBasePath, processUrl) {
         if (resourceBasePath === void 0) { resourceBasePath = null; }
-        if (resourceBasePath && !relativeUrl.includes(resourceBasePath)) {
-            relativeUrl = resourceBasePath + relativeUrl;
+        if (processUrl === void 0) { processUrl = true; }
+        if (processUrl) {
+            if (resourceBasePath && !relativeUrl.includes(resourceBasePath)) {
+                relativeUrl = resourceBasePath + relativeUrl;
+            }
+            else {
+                if (this.moduleId && !relativeUrl.includes("markdown?module=")) {
+                    relativeUrl = "markdown?module=" + this.moduleId + "&path=" + relativeUrl;
+                }
+            }
         }
         $.get({
             crossDomain: true,

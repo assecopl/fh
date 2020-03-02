@@ -169,7 +169,7 @@ var HTMLFormComponent = /** @class */ (function (_super) {
                     _this.handleDeleteBtnEvent(event);
                 });
             }.bind(this));
-            if (this.contentWrapper.classList.contains('button')) {
+            if (this.contentWrapper && this.contentWrapper.classList.contains('button')) {
                 this.component.addEventListener('click', function (e) {
                     var _this = this;
                     this.component.focus();
@@ -181,7 +181,7 @@ var HTMLFormComponent = /** @class */ (function (_super) {
                     });
                 }.bind(this));
             }
-            if (this.contentWrapper.classList.contains('selectOneMenu')) {
+            if (this.contentWrapper && this.contentWrapper.classList.contains('selectOneMenu')) {
                 this.component.addEventListener('click', function (e) {
                     var _this = this;
                     this.component.focus();
@@ -192,7 +192,7 @@ var HTMLFormComponent = /** @class */ (function (_super) {
                     });
                 }.bind(this));
             }
-            if (this.contentWrapper.classList.contains('fileUpload')) {
+            if (this.contentWrapper && this.contentWrapper.classList.contains('fileUpload')) {
                 this.component.addEventListener('click', function (e) {
                     var _this = this;
                     this.component.focus();
@@ -599,7 +599,9 @@ var HTMLFormComponent = /** @class */ (function (_super) {
     HTMLFormComponent.prototype.enableStyleClasses = function () {
         if (this.styleClasses.length && this.styleClasses[0] != '') {
             this.styleClasses.forEach(function (cssClass) {
-                this.component.classList.add(cssClass);
+                if (cssClass) {
+                    this.component.classList.add(cssClass);
+                }
             }.bind(this));
         }
     };
@@ -653,28 +655,128 @@ var HTMLFormComponent = /** @class */ (function (_super) {
         else {
             wrapper.classList.add('inline');
         }
-        if (!skipLabel) {
-            var label = document.createElement('label');
-            label.classList.add('col-form-label');
-            // label.classList.add('card-title');
-            label.htmlFor = this.id;
-            label.innerHTML = this.fhml.resolveValueTextOrEmpty(this.componentObj.label);
-            wrapper.appendChild(label);
-            this.labelElement = label;
-        }
         if (isInputElement) {
             var inputGroup = document.createElement('div');
-            // this.component.classList.add('input-group');
             inputGroup.classList.add('input-group');
             wrapper.appendChild(inputGroup);
             inputGroup.appendChild(wrappedComponent);
-            if (this.component.classList.contains('inputTimestamp')) {
-                inputGroup.id = this.componentObj.id;
-            }
             this.inputGroupElement = inputGroup;
         }
         else {
             wrapper.appendChild(wrappedComponent);
+        }
+        var label = document.createElement('label');
+        var labelValue;
+        label.id = this.id + '_label';
+        label.classList.add('col-form-label');
+        if (!skipLabel) {
+            if (this.componentObj.type === 'OutputLabel') {
+                label.classList.add('sr-only');
+                labelValue = this.fhml.resolveValueTextOrEmpty(this.componentObj.value);
+            }
+            else {
+                labelValue = this.fhml.resolveValueTextOrEmpty(this.componentObj.label);
+            }
+            if (!labelValue) {
+                label.classList.add('sr-only');
+                label.innerHTML = label.id;
+            }
+            else {
+                label.innerHTML = labelValue;
+            }
+            label.setAttribute('for', this.componentObj.id);
+            this.component.setAttribute('aria-describedby', label.id);
+            if (this.input && this.input.type === 'textarea' && isInputElement) {
+                this.inputGroupElement.classList.remove('input-group');
+                this.inputGroupElement.insertBefore(label, this.component);
+            }
+            else if (this.componentObj.type === 'OutputLabel') {
+                wrapper.insertBefore(label, this.component);
+            }
+            else if (isInputElement && this.formId !== 'designerProperties') {
+                label.classList.add('inputLabel');
+                if (this.componentObj.labelPosition != undefined) {
+                    var labelPosition = this.componentObj.labelPosition.toLowerCase();
+                    switch (labelPosition) {
+                        case 'up':
+                            this.inputGroupElement.insertBefore(label, this.inputGroupElement.firstChild);
+                            break;
+                        case 'down':
+                            this.inputGroupElement.appendChild(label);
+                            break;
+                        case 'left':
+                            label.classList.remove('inputLabel');
+                            this.inputGroupElement.insertBefore(label, this.inputGroupElement.firstChild);
+                            break;
+                        case 'right':
+                            label.classList.remove('inputLabel');
+                            this.inputGroupElement.appendChild(label);
+                            break;
+                    }
+                }
+                else {
+                    this.inputGroupElement.insertBefore(label, this.inputGroupElement.firstChild);
+                }
+            }
+            else if (isInputElement && this.formId === 'designerProperties') {
+                label.classList.add('inputLabel');
+                this.inputGroupElement.insertBefore(label, this.inputGroupElement.firstChild);
+            }
+            else if (this.componentObj.type === 'RadioOption' || this.componentObj.type === 'RadioOptionsGroup') {
+                wrapper.insertBefore(label, this.component);
+            }
+            else {
+                wrapper.appendChild(label);
+            }
+            this.labelElement = label;
+        }
+        else {
+            if (this.componentObj.label) {
+                if (this.componentObj.type === 'PanelGroup') {
+                    this.component.setAttribute('aria-describedby', this.componentObj.id + '_label');
+                }
+                else {
+                    label.classList.add('sr-only');
+                    label.setAttribute('for', this.id);
+                    label.innerHTML = this.fhml.resolveValueTextOrEmpty(this.componentObj.label);
+                    this.component.setAttribute('aria-describedby', this.componentObj.id + '_label');
+                    if (this.parent.componentObj.type === 'ButtonGroup') {
+                        this.hintElement.appendChild(label);
+                    }
+                    else {
+                        wrapper.appendChild(label);
+                    }
+                }
+            }
+            else if (this.componentObj.type === 'InputText' && !this.componentObj.value && this.componentObj.rawValue) {
+                label.classList.add('sr-only');
+                label.setAttribute('for', this.id);
+                label.innerHTML = this.fhml.resolveValueTextOrEmpty(this.componentObj.rawValue);
+                this.component.setAttribute('aria-describedby', this.componentObj.id + '_label');
+                wrapper.appendChild(label);
+            }
+            else if (this.componentObj.type === 'InputText' && !this.componentObj.rawValue) {
+                label.classList.add('sr-only');
+                label.setAttribute('for', this.id);
+                label.innerHTML = this.id + '_label';
+                this.component.setAttribute('aria-describedby', this.componentObj.id + '_label');
+                wrapper.appendChild(label);
+            }
+            else if (this.parent.componentObj.label && this.parent.componentObj.id !== this.formId) {
+                if (this.parent.componentObj.type === 'PanelGroup') {
+                    this.component.setAttribute('aria-describedby', this.parent.componentObj.id + '_label');
+                }
+                else {
+                    this.component.setAttribute('aria-describedby', this.parent.componentObj.id);
+                }
+            }
+            else {
+                label.classList.add('sr-only');
+                label.innerHTML = label.id;
+                label.setAttribute('for', this.id);
+                label.setAttribute('aria-label', label.id);
+                wrapper.appendChild(label);
+            }
         }
         if (this.inlineStyle) {
             this.component.setAttribute('style', this.inlineStyle);
@@ -688,9 +790,6 @@ var HTMLFormComponent = /** @class */ (function (_super) {
         }
         this.htmlElement = wrapper;
         this.contentWrapper = this.component;
-        if (!skipLabel) {
-            this.updateLabelClass(this.componentObj.label);
-        }
     };
     HTMLFormComponent.prototype.innerWrap = function () {
         return this.component;
@@ -721,7 +820,7 @@ var HTMLFormComponent = /** @class */ (function (_super) {
                 });
             }
             if (!this.htmlElement.classList.contains('colorBorder') && options.isLast) {
-                if (this.componentObj.type === 'DropdownItem') {
+                if (this.componentObj.type === 'DropdownItem' || this.componentObj.type === 'ThreeDotsMenuItem') {
                     var dropdown = this.component.closest('.fc.dropdown').parentElement;
                     dropdown.classList.add('colorBorder');
                     dropdown.classList.add('designerFocusedElement');
@@ -868,7 +967,7 @@ var HTMLFormComponent = /** @class */ (function (_super) {
                 scrollTop: $(row).offset().top - 160
             });
         }
-        else if (this.componentObj.type === 'DropdownItem') {
+        else if (this.componentObj.type === 'DropdownItem' || this.componentObj.type === 'ThreeDotsMenuItem') {
             var dropdown = this.component.closest('.fc.dropdown');
             $(options.scrollableElement).animate({
                 scrollTop: $(dropdown).offset().top - 160

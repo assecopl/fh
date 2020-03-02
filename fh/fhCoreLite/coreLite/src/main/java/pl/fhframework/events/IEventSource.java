@@ -27,4 +27,6 @@ public interface IEventSource {
     ViewEvent<?> prepareEventDataArgument(InMessageEventData eventData);
 
     <T> Form<T> getForm();
+
+    <T> Form<T> getEventProcessingForm();
 }

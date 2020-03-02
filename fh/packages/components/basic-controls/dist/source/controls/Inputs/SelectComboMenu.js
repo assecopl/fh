@@ -605,6 +605,9 @@ var SelectComboMenu = /** @class */ (function (_super) {
         }
         this.accessibility = accessibility;
     };
+    SelectComboMenu.prototype.getDefaultWidth = function () {
+        return "md-3";
+    };
     SelectComboMenu.prototype.destroy = function (removeFromParent) {
         if (this.keySupportCallback) {
             this.keySupportCallback();

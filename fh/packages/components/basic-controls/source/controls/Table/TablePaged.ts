@@ -53,12 +53,15 @@ class TablePaged extends Table {
         toolsRow.classList.add('toolsRow');
 
         let box = document.createElement('div');
+        box.id = this.id + '_rowsCountSelector';
         box.classList.add('rowsCountSelector');
         box.classList.add('form-inline');
         box.classList.add('col-md-6');
 
-        this.pageSizeSelect = document.createElement('select');
-        this.pageSizeSelect.classList.add('form-control');
+        let select = document.createElement('select');
+        select.id = this.id + '_rowsPerPageSelector';
+        select.classList.add('form-control');
+        this.pageSizeSelect = select;
         [5, 10, 15, 25].forEach(function (number) {
             let option = document.createElement('option');
             option.value = number;
@@ -74,10 +77,12 @@ class TablePaged extends Table {
         box.appendChild(this.pageSizeSelect);
         let cecordsText = this.__('rows per page');
         cecordsText.classList.add('pl-3');
+        this.buildTablePagedToolsLabels(select, box);
         box.appendChild(cecordsText);
         toolsRow.appendChild(box);
 
         let pagination = document.createElement('div');
+        pagination.id = this.id + '_pagination';
         pagination.classList.add('table-pagination');
         pagination.classList.add('col-md-6');
         pagination.classList.add('text-right');
@@ -85,6 +90,7 @@ class TablePaged extends Table {
         let paginator = this.buildPaginator();
         pagination.appendChild(pageInfo);
         pagination.appendChild(paginator);
+        this.buildTablePagedToolsLabels(pagination, toolsRow);
         toolsRow.appendChild(pagination);
 
         this.htmlElement.appendChild(toolsRow);
@@ -96,6 +102,22 @@ class TablePaged extends Table {
         this.pageSize = event.target.value;
         this.changesQueue.queueAttributeChange('pageSize', this.toInt(this.pageSize));
         this.fireEventWithLock('onPageSizeChange', null);
+    }
+
+    buildTablePagedToolsLabels(tablePagedTool, toolContainer) {
+        let label = document.createElement('label');
+        let labelId = tablePagedTool.id + '_label';
+        label.id = labelId;
+        label.classList.add('col-form-label');
+        label.classList.add('sr-only');
+        label.setAttribute('for', tablePagedTool.id);
+        if (tablePagedTool.type === 'select-one') {
+            label.innerHTML = 'rowsPerPageSelector';
+        } else if (tablePagedTool.classList.contains('table-pagination')) {
+            label.innerHTML = 'pagination';
+        }
+        this.component.setAttribute('aria-describedby',  labelId);
+        toolContainer.appendChild(label);
     }
 
     update(change) {

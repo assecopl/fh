@@ -122,14 +122,21 @@ exports.HtmlView = HtmlView_1.HtmlView;
 var TableLazy_1 = require("./source/controls/Table/TableLazy");
 var ColumnLazy_1 = require("./source/controls/Table/ColumnLazy");
 var TableOptimized_1 = require("./source/controls/Table/Optimized/TableOptimized");
+exports.TableOptimized = TableOptimized_1.TableOptimized;
 var ColumnOptimized_1 = require("./source/controls/Table/Optimized/ColumnOptimized");
+exports.ColumnOptimized = ColumnOptimized_1.ColumnOptimized;
 var TableRowOptimized_1 = require("./source/controls/Table/Optimized/TableRowOptimized");
+exports.TableRowOptimized = TableRowOptimized_1.TableRowOptimized;
 var TableCellOptimized_1 = require("./source/controls/Table/Optimized/TableCellOptimized");
+exports.TableCellOptimized = TableCellOptimized_1.TableCellOptimized;
 var InputDateOptimized_1 = require("./source/controls/Inputs/Optimized/InputDateOptimized");
 var SelectComboMenuOptimized_1 = require("./source/controls/Inputs/Optimized/SelectComboMenuOptimized");
-var RowDropdownItem_1 = require("./source/controls/Dropdown/RowDropdownItem");
-var RowDropdown_1 = require("./source/controls/Dropdown/RowDropdown");
+var ThreeDotsMenuItem_1 = require("./source/controls/Dropdown/ThreeDotsMenuItem");
+var ThreeDotsMenu_1 = require("./source/controls/Dropdown/ThreeDotsMenu");
 var DictionaryCombo_1 = require("./source/controls/Inputs/DictionaryCombo");
+var Anchor_1 = require("./source/controls/Anchor");
+var DropdownDivider_1 = require("./source/controls/Dropdown/DropdownDivider");
+exports.DropdownDivider = DropdownDivider_1.DropdownDivider;
 var BasicControls = /** @class */ (function (_super) {
     __extends(BasicControls, _super);
     function BasicControls() {
@@ -460,16 +467,28 @@ var BasicControls = /** @class */ (function (_super) {
                 return new HtmlView_1.HtmlView(componentObj, parent);
             };
         });
-        fh_forms_handler_1.FhContainer.bind("RowDropdown")
+        fh_forms_handler_1.FhContainer.bind("ThreeDotsMenu")
             .toFactory(function () {
             return function (componentObj, parent) {
-                return new RowDropdown_1.RowDropdown(componentObj, parent);
+                return new ThreeDotsMenu_1.ThreeDotsMenu(componentObj, parent);
             };
         });
-        fh_forms_handler_1.FhContainer.bind("RowDropdownItem")
+        fh_forms_handler_1.FhContainer.bind("ThreeDotsMenuItem")
             .toFactory(function () {
             return function (componentObj, parent) {
-                return new RowDropdownItem_1.RowDropdownItem(componentObj, parent);
+                return new ThreeDotsMenuItem_1.ThreeDotsMenuItem(componentObj, parent);
+            };
+        });
+        fh_forms_handler_1.FhContainer.bind("Anchor")
+            .toFactory(function () {
+            return function (componentObj, parent) {
+                return new Anchor_1.Anchor(componentObj, parent);
+            };
+        });
+        fh_forms_handler_1.FhContainer.bind("DropdownDivider")
+            .toFactory(function () {
+            return function (componentObj, parent) {
+                return new DropdownDivider_1.DropdownDivider(componentObj, parent);
             };
         });
         /**

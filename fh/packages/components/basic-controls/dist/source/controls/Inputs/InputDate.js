@@ -163,7 +163,7 @@ var InputDate = /** @class */ (function (_super) {
         addonDiv.appendChild(addon);
         this.inputGroupElement.classList.add('date');
         if (this.componentObj.iconAlignment === 'BEFORE') {
-            this.inputGroupElement.insertBefore(addonDiv, this.inputGroupElement.firstChild);
+            this.inputGroupElement.insertBefore(addonDiv, this.component);
         }
         else if (this.componentObj.iconAlignment === 'AFTER') {
             addonDiv.classList.remove('input-group-prepend');
@@ -171,7 +171,7 @@ var InputDate = /** @class */ (function (_super) {
             this.inputGroupElement.appendChild(addonDiv);
         }
         else {
-            this.inputGroupElement.insertBefore(addonDiv, this.inputGroupElement.firstChild);
+            this.inputGroupElement.insertBefore(addonDiv, this.component);
         }
         this.component.classList.add('datepickerInput');
     };
@@ -286,6 +286,9 @@ var InputDate = /** @class */ (function (_super) {
     };
     InputDate.prototype.wrap = function (skipLabel, isInputElement) {
         _super.prototype.wrap.call(this, skipLabel, isInputElement);
+    };
+    InputDate.prototype.getDefaultWidth = function () {
+        return "md-3";
     };
     InputDate.prototype.destroy = function (removeFromParent) {
         // noinspection JSIgnoredPromiseFromCall

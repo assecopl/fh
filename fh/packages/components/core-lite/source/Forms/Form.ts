@@ -27,6 +27,9 @@ class Form extends HTMLFormComponent {
     private windowListenerMouseMove: any;
     private windowListenerMouseUp: any;
     private modalDeferred;
+    protected headingTypeValue: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" = null;
+
+    protected afterInitActions:Array<any> = [];
 
     constructor(formObj: any, parent: any = null) {
         super(formObj, parent);
@@ -36,6 +39,7 @@ class Form extends HTMLFormComponent {
         this.formType = formObj.formType;
         this.viewMode = this.componentObj.viewMode;
         this.state = this.componentObj.state;
+        this.headingTypeValue = this.componentObj.headingTypeValue? this.componentObj.headingTypeValue : null;
 
 
         /* TODO: remove after changing Java */
@@ -169,6 +173,8 @@ class Form extends HTMLFormComponent {
         } else if (this.container.clientHeight === 0) {
             this.container.style.height = 'auto';
         }
+
+        this.fireAfterInitActions();
     };
 
     destroy(removeFromParent) {
@@ -321,7 +327,7 @@ class Form extends HTMLFormComponent {
             var title = document.createElement('h5');
             title.classList.add('modal-title');
             this.addCloudIcon(title);
-            this.labelElement = document.createElement("span");
+            this.labelElement = document.createElement(this.headingTypeValue?this.headingTypeValue:"strong");
             title.appendChild(this.labelElement);
             this.labelElement.innerHTML = this.fhml.resolveValueTextOrEmpty(this.componentObj.label);
 
@@ -380,7 +386,7 @@ class Form extends HTMLFormComponent {
         title.id = this.id + '_label';
         title.classList.add('card-title');
         this.addCloudIcon(title);
-        this.labelElement = document.createElement("span");
+        this.labelElement = document.createElement(this.headingTypeValue?this.headingTypeValue:"span");
         title.appendChild(this.labelElement);
         this.labelElement.innerHTML = this.fhml.resolveValueTextOrEmpty(this.componentObj.label);
 
@@ -476,7 +482,7 @@ class Form extends HTMLFormComponent {
             var title = document.createElement('div');
             title.id = this.id + '_label';
             this.addCloudIcon(title);
-            this.labelElement = document.createElement("strong");
+            this.labelElement = document.createElement(this.headingTypeValue?this.headingTypeValue:"span");
             this.labelElement.classList.add('card-title');
             title.appendChild(this.labelElement);
             this.labelElement.innerHTML = this.fhml.resolveValueTextOrEmpty(this.componentObj.label);
@@ -549,6 +555,20 @@ class Form extends HTMLFormComponent {
     setPresentationStyle(presentationStyle) {
         return;
     }
+
+    public addAfterInitActions(action: () => void){
+        this.afterInitActions.push(action);
+    }
+
+    private fireAfterInitActions(){
+        this.afterInitActions.forEach(function (action) {
+            if(action && {}.toString.call(action) === '[object Function]'){
+                action();
+            }
+        });
+        this.afterInitActions = [];
+    }
+
 }
 
 export {Form};

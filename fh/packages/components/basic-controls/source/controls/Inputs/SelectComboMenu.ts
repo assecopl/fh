@@ -670,6 +670,10 @@ class SelectComboMenu extends InputText {
         this.accessibility = accessibility;
     }
 
+    getDefaultWidth(): string {
+        return "md-3";
+    }
+
     destroy(removeFromParent) {
         if (this.keySupportCallback) {
             this.keySupportCallback();

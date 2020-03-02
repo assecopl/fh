@@ -21,7 +21,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Control(parents = {}, canBeDesigned = true)
-@DocumentedComponent(value = "Component to aggregate validation messages", icon = "fa fa-exclamation")
+@DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, value = "Component to aggregate validation messages", icon = "fa fa-exclamation")
 public class ValidateMessages extends FormElement implements IComponentsReferrer {
 
     public static final String ANY_COMPONENT = "*";
@@ -149,7 +149,17 @@ public class ValidateMessages extends FormElement implements IComponentsReferrer
                     if (StringUtils.isNullOrEmpty(label) && validationComponent instanceof BaseInputField && ((BaseInputField) validationComponent).getLabelModelBinding() != null) {
                         label = ((BaseInputField) validationComponent).convertBindingValueToString(((BaseInputField) validationComponent).getLabelModelBinding().getBindingResult());
                     }
-                    if (StringUtils.isNullOrEmpty(label) && showAttributeAsLabel) {
+                    if (validationComponent.getGroupingParentComponent() != null && validationComponent.getGroupingParentComponent() instanceof TableCell) {
+                        TableCell tableCell = ((TableCell) validationComponent.getGroupingParentComponent());
+                        Column tableColumn = (Column) tableCell.getGroupingParentComponent();
+                        Table table = tableColumn.getTable();
+                        String tableName = StringUtils.isNullOrEmpty(table.getLabel()) ? table.getId() : table.getLabel();
+
+                        int colNumber = table.getColumns().indexOf(tableColumn) + 1;
+                        int cellNunber = tableCell.getRowIndex() + 1;
+
+                        label = getForm().getAbstractUseCase().getUserSession().getValidationResults().getErrorMessage("fh.core.validation.field.table_field_error", tableName, cellNunber, colNumber);
+                    } else if (StringUtils.isNullOrEmpty(label) && showAttributeAsLabel) {
                         label = convertIdToLabel(validationComponent.getId());
                     }
                 }
@@ -165,7 +175,8 @@ public class ValidateMessages extends FormElement implements IComponentsReferrer
         return msg;
     }
 
-    private Optional<FormElement> findComponentBasedOnAttribute(Component basicFormElement, String attribute, Object parentObject) {
+    private Optional<FormElement> findComponentBasedOnAttribute(Component basicFormElement, String
+            attribute, Object parentObject) {
         // todo: optimize
         if (attribute == null || parentObject == null) {
             return Optional.empty();

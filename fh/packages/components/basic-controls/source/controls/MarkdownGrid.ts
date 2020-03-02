@@ -5,6 +5,7 @@ class MarkdownGrid extends HTMLFormComponent {
     private subsystem: any;
     private grid: any;
     private selectedIndex: any;
+    private onFolderDoubleClick:any = null
     private selectedFolder: string;
     private subDirectories:[];
 
@@ -18,6 +19,7 @@ class MarkdownGrid extends HTMLFormComponent {
         this.grid = null;
         this.selectedIndex = null;
         this.subDirectories = this.componentObj.subDirectories;
+        this.onFolderDoubleClick = this.componentObj.onFolderDoubleClick;
     }
 
     create() {
@@ -76,12 +78,6 @@ class MarkdownGrid extends HTMLFormComponent {
             return;
         }
 
-        // console.log("soryuje elementy !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" , values);
-        // values.sort((x,y) => {
-        //     return (x.directory === y.directory)? 0 : x.directory? -1 : 1;
-        // })
-
-
         for (let i = 0; i < values.length; i++) {
                 this.addElement(values[i], i);
         }
@@ -102,9 +98,12 @@ class MarkdownGrid extends HTMLFormComponent {
         wrapper.setAttribute("class", "figure col-lg-2 text-center pt-1");
 
         let link = document.createElement("a");
-        link.setAttribute("class", "resource ");
+        link.href = "#";
+        link.setAttribute("class", "resource border-white pointer");
         if (index === this.selectedIndex) {
             link.classList.add("selected");
+            link.classList.add("border-secondary");
+            link.classList.remove("border-white");
         }
         link.dataset.index = index.toString();
         wrapper.appendChild(link);
@@ -140,6 +139,19 @@ class MarkdownGrid extends HTMLFormComponent {
             this.fireEvent('onChange', this.onChange, event);
         }.bind(this));
 
+        if(this.onFolderDoubleClick && val.directory) {
+            link.addEventListener('dblclick', function (event) {
+                event.stopPropagation();
+                event.preventDefault();
+                let selected = event.currentTarget;
+                let selectedIndex = parseInt(selected.dataset.index);
+                this.selectedIndex = selectedIndex;
+                this.updateModel();
+                this.fireEvent('onChange', this.onChange, event);
+                this.fireEvent('onFolderDoubleClick', this.onFolderDoubleClick, event);
+            }.bind(this));
+        }
+
         this.grid.appendChild(wrapper);
     }
 
@@ -150,9 +162,12 @@ class MarkdownGrid extends HTMLFormComponent {
         wrapper.setAttribute("class", "figure col-lg-2 text-center pt-1");
 
         let link = document.createElement("a");
-        link.setAttribute("class", "resource ");
+        link.href = "#";
+        link.setAttribute("class", "resource border-white pointer");
         if (index === this.selectedIndex) {
             link.classList.add("selected");
+            link.classList.add("border-secondary");
+            link.classList.remove("border-white");
         }
         link.dataset.index = index.toString();
         wrapper.appendChild(link);

@@ -33,7 +33,7 @@ var BarChart = /** @class */ (function (_super) {
         this.canvas = canvas;
         container.appendChild(canvas);
         this.component = container;
-        this.wrap();
+        this.wrap(true);
         this.handlemarginAndPAddingStyles();
         this.display();
         this.displayChart();

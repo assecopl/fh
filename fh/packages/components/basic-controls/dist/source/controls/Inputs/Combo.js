@@ -766,6 +766,9 @@ var Combo = /** @class */ (function (_super) {
             }
         }
     };
+    Combo.prototype.getDefaultWidth = function () {
+        return _super.prototype.getDefaultWidth.call(this);
+    };
     __decorate([
         lazyInject("FormsManager"),
         __metadata("design:type", fh_forms_handler_1.FormsManager)

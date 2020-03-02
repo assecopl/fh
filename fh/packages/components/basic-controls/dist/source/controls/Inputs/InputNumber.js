@@ -33,6 +33,8 @@ var InputNumber = /** @class */ (function (_super) {
         _this.inputmaskEnabled = false;
         _this.onInput = _this.componentObj.onInput;
         _this.onChange = _this.componentObj.onChange;
+        _this.maxFractionDigits = _this.componentObj.maxFractionDigits != undefined ? _this.componentObj.maxFractionDigits : null;
+        _this.maxIntigerDigits = _this.componentObj.maxIntigerDigits != undefined ? _this.componentObj.maxIntigerDigits : null;
         _this.input = null;
         _this.valueChanged = false;
         // @ts-ignore
@@ -82,7 +84,7 @@ var InputNumber = /** @class */ (function (_super) {
             // @ts-ignore
             Inputmask({
                 radixPoint: ".",
-                regex: "^([.\\d]+)$"
+                regex: this.resolveRegex()
             }).mask(this.input);
             this.inputmaskEnabled = true;
         }
@@ -201,6 +203,29 @@ var InputNumber = /** @class */ (function (_super) {
         $(this.input).off('input', this.updateModel.bind(this));
         this.disableMask();
         _super.prototype.destroy.call(this, removeFromParent);
+    };
+    InputNumber.prototype.resolveRegex = function () {
+        var fractionMark = "[\\d]*)"; // Matches between one and unlimited times
+        var integerMark = "[\\d]*"; // Matches between one and unlimited times
+        var separatorMark = "([.]{0,1}"; //Matches between zero and one times
+        if (this.maxFractionDigits != null) {
+            if (this.maxFractionDigits == 0) {
+                fractionMark = "";
+                separatorMark = "";
+            }
+            else {
+                fractionMark = "[\\d]{0," + this.maxFractionDigits + "})";
+            }
+        }
+        if (this.maxIntigerDigits != null) {
+            if (this.maxIntigerDigits == 0) {
+                integerMark = "[0]{1}"; // Only 0 can be put before separator
+            }
+            else {
+                integerMark = "[\\d]{0," + this.maxIntigerDigits + "}";
+            }
+        }
+        return "^([-]?" + integerMark + "" + separatorMark + "" + fractionMark + ")$";
     };
     return InputNumber;
 }(fh_forms_handler_1.HTMLFormComponent));

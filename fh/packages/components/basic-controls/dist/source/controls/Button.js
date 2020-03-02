@@ -19,8 +19,16 @@ var Button = /** @class */ (function (_super) {
     __extends(Button, _super);
     function Button(componentObj, parent) {
         var _this = _super.call(this, componentObj, parent) || this;
+        _this.ButtonPL = {
+            "button_icon": "Ikona"
+        };
+        _this.ButtonEN = {
+            "button_icon": "Icon"
+        };
         _this.style = _this.componentObj.style;
         _this.onClick = _this.componentObj.onClick;
+        _this.i18n.registerStrings('pl', _this.ButtonPL);
+        _this.i18n.registerStrings('en', _this.ButtonEN);
         return _this;
     }
     Button.prototype.create = function () {
@@ -30,8 +38,21 @@ var Button = /** @class */ (function (_super) {
         ['fc', 'button', 'btn', 'btn-' + this.style, 'btn-block'].forEach(function (cssClass) {
             button.classList.add(cssClass);
         });
+        //Check if there is icon inside
+        var needParse = this.fhml.needParse(label);
         label = this.resolveLabelAndIcon(label);
+        if (needParse && label) {
+            //Get raw text from label, remove all html tags. Basicly remove icon tag.
+            var text = this.fhml.removeHtmlTags(label);
+            if (text.length == 0) {
+                //Fill aria-label when there is no text inside label - only icon.
+                //Fill with icon default string.
+                button.setAttribute("aria-label", this.i18n.__("button_icon"));
+            }
+        }
         button.innerHTML = label;
+        // + "<div style='width:0px !imporant; height: 0px !imporant;color:transparent;'>h</div>";
+        // button.value = "adsa";
         if (this.onClick) {
             button.addEventListener('click', this.onClickEvent.bind(this));
         }
@@ -115,7 +136,8 @@ var Button = /** @class */ (function (_super) {
     };
     ;
     Button.prototype.resolveLabelAndIcon = function (label) {
-        return this.fhml.resolveValueTextOrEmpty(label);
+        var l = this.fhml.resolveValueTextOrEmpty(label);
+        return l;
     };
     ;
     Button.prototype.extractChangedAttributes = function () {

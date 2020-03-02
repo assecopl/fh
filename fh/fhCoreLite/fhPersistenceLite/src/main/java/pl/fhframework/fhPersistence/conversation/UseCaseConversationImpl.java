@@ -59,6 +59,7 @@ public class UseCaseConversationImpl implements IUseCaseConversation {
     @Override
     public void usecaseEnded(Object owner) {
         ConversationParams cp = getOrCreate(owner);
+        conversationParams.remove(owner);
         if (cp.isCancel()) {
             conversationManager.withdraw(owner);
         } else {
@@ -68,6 +69,7 @@ public class UseCaseConversationImpl implements IUseCaseConversation {
 
     @Override
     public void usecaseTerminated(final Object owner) {
+        conversationParams.remove(owner);
         conversationManager.withdraw(owner);
     }
 
@@ -77,19 +79,22 @@ public class UseCaseConversationImpl implements IUseCaseConversation {
             ConversationParams cp = getOrCreate(owner);
             cp.setCancel(true);
         }
+        else if (transition.getDeclaredAnnotation(Approve.class) != null) {
+            ConversationParams cp = getOrCreate(owner);
+            cp.setApprove(true);
+        }
     }
 
     @Override
     public void processAnnotationsAfterAction(final Method transition, final Object owner) {
-        if (conversationManager.snapshotExists() && conversationManager.getCurrentSnapshot().isOwner(owner)) {
-            if (transition.getDeclaredAnnotation(Cancel.class) != null) {
-                cancelChanges(owner);
-            }
-            if (transition.getDeclaredAnnotation(Approve.class) != null) {
-                saveChnages(owner);
-            }
+        if (getOrCreate(owner).isCancel()) {
+            conversationParams.remove(owner);
+            cancelChanges(owner);
         }
-        conversationParams.remove(owner);
+        else if (getOrCreate(owner).isApprove()) {
+            conversationParams.remove(owner);
+            saveChnages(owner);
+        }
     }
 
     private ConversationParams getOrCreate(final Object owner) {
@@ -112,4 +117,5 @@ public class UseCaseConversationImpl implements IUseCaseConversation {
 @Setter
 class ConversationParams {
     private boolean cancel;
+    private boolean approve;
 }

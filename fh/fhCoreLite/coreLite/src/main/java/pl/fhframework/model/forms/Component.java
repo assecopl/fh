@@ -6,15 +6,16 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.util.ReflectionUtils;
+import pl.fhframework.BindingResult;
+import pl.fhframework.annotations.*;
 import pl.fhframework.aspects.snapshots.model.IUnmanagedUseCaseParameter;
+import pl.fhframework.aspects.snapshots.model.SkipSnapshot;
+import pl.fhframework.binding.*;
 import pl.fhframework.core.designer.IdAttributeDesignerSupport;
 import pl.fhframework.core.generator.ModelElement;
 import pl.fhframework.core.generator.ModelElementType;
 import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.core.util.StringUtils;
-import pl.fhframework.BindingResult;
-import pl.fhframework.annotations.*;
-import pl.fhframework.binding.*;
 import pl.fhframework.events.DesignViewEvent;
 import pl.fhframework.events.IDesignEventSource;
 import pl.fhframework.events.IEventSource;
@@ -23,6 +24,7 @@ import pl.fhframework.model.dto.ElementChanges;
 import pl.fhframework.model.dto.InMessageEventData;
 import pl.fhframework.model.dto.ValueChange;
 
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -71,12 +73,13 @@ public class Component implements Cloneable, IDesignEventSource, IEventSource, I
     @DocumentedComponentAttribute(boundable = true, type = AccessibilityEnum.class, value = "Accessibility of an Component")
     private ModelBinding<AccessibilityEnum> availabilityModelBinding;
 
+
     @Getter
     @Setter
     @XMLProperty(value = "hiddenElementsTakeUpSpace")
     @DesignerXMLProperty(functionalArea = LOOK_AND_STYLE, priority = 97) // Priority set to show element just after FormElement.verticalAlign
-    @DocumentedComponentAttribute("Parameter for HIDDEN components. Makes hidden elements still take up space in the page.")
-    private Boolean invisible;
+    @DocumentedComponentAttribute(defaultValue = "false", value = "Parameter for HIDDEN components. Makes hidden elements still take up space in the page.")
+    private boolean invisible;
 
     @JsonIgnore
     private AccessibilityEnum pastAvailability = null;
@@ -129,6 +132,12 @@ public class Component implements Cloneable, IDesignEventSource, IEventSource, I
     @DocumentedComponentAttribute(value = "If the component is dropped on form edited in designer.")
     private ActionBinding onDesignerToolboxDrop;
 
+    @JsonIgnore
+    @Getter
+    @Setter
+    @SkipSnapshot
+    private IGenerationUtils generationUtils;
+
     public Component(Form form) {
         this.form = form;
     }
@@ -161,6 +170,11 @@ public class Component implements Cloneable, IDesignEventSource, IEventSource, I
 
     public <T> Form<T> getForm() {
         return (Form<T>) form;
+    }
+
+    @JsonIgnore
+    public <T> Form<T> getEventProcessingForm() {
+        return (Form<T>) form.getEventProcessingForm();
     }
 
     protected boolean areModelValuesTheSame(Object firstValue, Object secondValue) {
@@ -241,7 +255,7 @@ public class Component implements Cloneable, IDesignEventSource, IEventSource, I
         }
 
         // form is the parent and form availability is not changed - use default availability for current variant
-        if (groupingParentComponent == getForm()
+        if ((groupingParentComponent == getForm() || getGroupingParentComponent() instanceof Includeable)
                 && !StringUtils.isNullOrEmpty(getForm().getVariant())
                 && parentAvailability == AccessibilityEnum.EDIT) {
             variantDefaultAvailability = getForm().getVariantsDefaultAvailability().get(getForm().getVariant());
@@ -478,4 +492,23 @@ public class Component implements Cloneable, IDesignEventSource, IEventSource, I
         initDone = false;
     }
 
+    public interface IGenerationUtils {
+        List<ComponentAttr> getAttributes();
+        Object getFieldValue(Field field);
+        String getTagName();
+    }
+
+    @Getter
+    @Setter
+    public static class ComponentAttr { // todo: move
+        private String name;
+        private Object value;
+        private Class<?> type;
+
+        public ComponentAttr(String name, Object value, Class<?> type) {
+            this.name = name;
+            this.value = value;
+            this.type = type;
+        }
+    }
 }

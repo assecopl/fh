@@ -21,7 +21,7 @@ import java.util.Optional;
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.BEHAVIOR;
 
 @Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
-@DocumentedComponent(value = "PanelGroup component responsible for the grouping of sub-elements and can be pinned out from document.", icon = "fa fa-object-group")
+@DocumentedComponent(category = DocumentedComponent.Category.ARRANGEMENT, value = "PanelGroup component responsible for the grouping of sub-elements and can be pinned out from document.", icon = "fa fa-object-group")
 public class FloatingGroup extends PanelGroup {
 
     public static final String ON_PIN_ATTR = "onTogglePin";

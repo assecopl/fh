@@ -125,6 +125,9 @@ var RadioOptionsGroup = /** @class */ (function (_super) {
         return this.changesQueue.extractChangedAttributes();
     };
     ;
+    RadioOptionsGroup.prototype.getDefaultWidth = function () {
+        return "md-3";
+    };
     RadioOptionsGroup.prototype.refreshOptions = function () {
         this.groupDiv.innerHTML = '';
         if (this.options !== undefined) {

@@ -58,6 +58,7 @@ public class RemoteUserAccountProvider implements UserAccountProvider {
         return userAccount;
     }
 
+    @Override
     @Transactional(readOnly = true)
     public List<IUserAccount> findAllUserAccounts() {
         List<UserInfo> users = repositoryManager.findAllUsers();

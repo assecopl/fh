@@ -5,10 +5,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.UrlResource;
 import pl.fhframework.app.config.DefaultApplicationConfigurer;
 import pl.fhframework.app.config.FhNavbarConfiguration;
+import pl.fhframework.app.preferences.UserPreferencesUC;
 import pl.fhframework.core.logging.FlushableRollingFileAppender;
 import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.core.rules.builtin.FhUserUtils;
 import pl.fhframework.core.security.model.IBusinessRole;
+import pl.fhframework.core.uc.IUseCaseNoCallback;
 import pl.fhframework.core.uc.IUseCaseRefreshListener;
 import pl.fhframework.core.uc.UseCase;
 import pl.fhframework.core.util.LogUtils;
@@ -90,15 +92,16 @@ public class NavbarUC implements INavbar, ISystemUseCase, IUseCaseRefreshListene
         cssUrls = configurer.getCssUrls();
         model.setCssIds(new ArrayList<>(cssUrls.keySet()));
         model.setFhCss(model.getCssIds().remove(FhNavbarConfiguration.FH_CSS));
+        model.setFhCss(model.getCssIds().remove(FhNavbarConfiguration.MATERIA_CSS));
         model.setDefaultCss(model.getCssIds().remove(FhNavbarConfiguration.BASE_CSS));
 
         if (Objects.equals(FhNavbarConfiguration.FH_CSS, defaultCss)) {
-            openFhStylesheet();
-        }
-        else if (Objects.equals(FhNavbarConfiguration.BASE_CSS, defaultCss)) {
+            openLocalStylesheet("fh");
+        } else if (Objects.equals(FhNavbarConfiguration.MATERIA_CSS, defaultCss)) {
+            openLocalStylesheet("materia");
+        } else if (Objects.equals(FhNavbarConfiguration.BASE_CSS, defaultCss)) {
             closeAlternativeStylesheet();
-        }
-        else {
+        } else {
             openStylesheet(defaultCss);
         }
     }
@@ -121,6 +124,11 @@ public class NavbarUC implements INavbar, ISystemUseCase, IUseCaseRefreshListene
     }
 
     @Action
+    public void openPreferences() {
+        runUseCase(UserPreferencesUC.class, IUseCaseNoCallback.getCallback());
+    }
+
+    @Action
     public void setLanguageEnglish() {
         this.setLanguage(NavbarForm.Language.ENGLISH.getValue());
     }
@@ -131,8 +139,8 @@ public class NavbarUC implements INavbar, ISystemUseCase, IUseCaseRefreshListene
     }
 
     @Action
-    public void openFhStylesheet() {
-        String style = contextRoot + (contextRoot.endsWith("/") ? "" : "/") + "css/fh.css";
+    public void openLocalStylesheet(String id) {
+        String style = contextRoot + (contextRoot.endsWith("/") ? "" : "/") + "css/" + id + ".css";
         model.setAlternativeStylesheet(style);
         eventRegistry.fireStylesheetChangeEvent(style);
     }

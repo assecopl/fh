@@ -5,6 +5,9 @@
 .fc.hasHeight {
     overflow-y: auto;
 }
+.hasHeight {
+    position: relative;
+}
 
 .fc.hidden {
     display: none;
@@ -152,4 +155,9 @@ span.required {
 
 #selectedElementDetailsGroup .fc.group .fc.table .table-heading th {
     border-top: unset;
+}
+
+.inputLabel {
+    margin-bottom: 0;
+    min-width: 100%;
 }

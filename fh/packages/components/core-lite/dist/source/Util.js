@@ -92,6 +92,70 @@ var Util = /** @class */ (function () {
         var r = new RegExp('^(?:[a-z]+:)?//', 'i');
         return !r.test(url);
     };
+    Util.prototype.scrollToComponent = function (formElementId, animateDuration) {
+        if (animateDuration === void 0) { animateDuration = null; }
+        var component = $("#" + formElementId);
+        /**
+         * Check if we are inside scrolled container.
+         */
+        var parent = component.closest('.hasHeight');
+        var offset = 0;
+        var tempId = false;
+        if (parent.length > 0) {
+            /**
+             * Set temporary id for calculation
+             */
+            if (parent[0].id == "") {
+                parent[0].id = btoa("scrollToComponentTempId");
+                tempId = true;
+            }
+            /**
+             * Scroll inside container
+             */
+            offset = this.getOffsetTop(component[0], parent[0].id);
+            if (tempId) {
+                parent[0].id = "";
+                tempId = false;
+            }
+        }
+        else {
+            /**
+             * Scroll whole page
+             */
+            offset = component.offset().top;
+            parent = $('html, body');
+        }
+        if (offset >= 0) {
+            if (offset > 25) {
+                offset -= 25;
+            }
+            else {
+                offset = 0;
+            }
+            if (animateDuration) {
+                parent.animate({
+                    scrollTop: offset
+                }, animateDuration);
+            }
+            else {
+                parent.scrollTop(offset);
+            }
+        }
+    };
+    /**
+     * Count offsetTop if there are more containers with relative position inside parent container.
+     * @param element
+     * @param parentId
+     */
+    Util.prototype.getOffsetTop = function (element, parentId) {
+        var offsetTop = 0;
+        while (element && element.id != parentId) {
+            offsetTop += element.offsetTop;
+            // console.log("getOfsetTop", element.id, element, offsetTop);
+            element = element.offsetParent;
+        }
+        return offsetTop;
+    };
     Util = __decorate([
         inversify_1.injectable()
     ], Util);

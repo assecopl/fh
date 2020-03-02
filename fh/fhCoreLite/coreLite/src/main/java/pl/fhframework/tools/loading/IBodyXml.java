@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * helps for components like OutputLabel, sets value of if by body and not as an attribute in XML.
  * Example in usage:
  *
- * <OutputLabel> Some text to be displayd as value. </OutputLabel>
+ * {@code <OutputLabel> Some text to be displayd as value. </OutputLabel>}
  */
 public interface IBodyXml {
 

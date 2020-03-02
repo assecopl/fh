@@ -23,6 +23,7 @@ var SelectOneMenu = /** @class */ (function (_super) {
         _this.emptyValue = _this.componentObj.emptyValue;
         _this.emptyLabel = _this.componentObj.emptyLabel;
         _this.emptyLabelText = _this.componentObj.emptyLabelText || '';
+        _this.modelBindingText = _this.componentObj.modelBindingText;
         return _this;
     }
     SelectOneMenu.prototype.create = function () {
@@ -145,6 +146,10 @@ var SelectOneMenu = /** @class */ (function (_super) {
     };
     SelectOneMenu.prototype.buildOptionsList = function () {
         var options = [];
+        if (this.designMode) {
+            this.emptyLabel = true;
+            this.emptyLabelText = this.modelBindingText;
+        }
         var defaultOption = document.createElement('option');
         defaultOption.selected = true;
         defaultOption.disabled = this.rawValue != -1 && !this.emptyLabel;
@@ -181,6 +186,9 @@ var SelectOneMenu = /** @class */ (function (_super) {
     SelectOneMenu.prototype.setAccessibility = function (accessibility) {
         _super.prototype.setAccessibility.call(this, accessibility);
         this.htmlElement.classList.add('fc-editable');
+    };
+    SelectOneMenu.prototype.getDefaultWidth = function () {
+        return "md-3";
     };
     SelectOneMenu.prototype.destroy = function (removeFromParent) {
         this.component.removeEventListener('click', this.selectOnClickEvent.bind(this));

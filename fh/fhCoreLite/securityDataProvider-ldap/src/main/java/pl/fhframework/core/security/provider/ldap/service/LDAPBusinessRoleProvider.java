@@ -1,5 +1,6 @@
 package pl.fhframework.core.security.provider.ldap.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ldap.core.AttributesMapper;
@@ -19,6 +20,7 @@ import java.util.List;
  * @author tomasz.kozlowski (created on 2018-06-13)
  */
 @Service
+@RequiredArgsConstructor
 public class LDAPBusinessRoleProvider implements BusinessRoleProvider {
 
     private static final String PROVIDER_TYPE = "LDAP";
@@ -28,8 +30,7 @@ public class LDAPBusinessRoleProvider implements BusinessRoleProvider {
     @Value("${fhframework.security.provider.ldap.group-object-class}")
     private String groupObjectClass;
 
-    @Autowired
-    private LdapTemplate ldapTemplate;
+    private final LdapTemplate ldapTemplate;
 
     @Override
     public IBusinessRole createSimpleBusinessRoleInstance(String roleName) {

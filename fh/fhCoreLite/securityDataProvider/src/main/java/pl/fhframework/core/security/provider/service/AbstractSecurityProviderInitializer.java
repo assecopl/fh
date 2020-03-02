@@ -24,7 +24,7 @@ public abstract class AbstractSecurityProviderInitializer implements SecurityPro
     protected String defaultAdminLogin;
     @Value("${fhframework.security.provider.default-admin-pass:admin}")
     protected String defaultAdminPass;
-    @Value("${fhframework.security.provider.default-admin-role:Administrator}")
+    @Value("${fhframework.security.provider.default-admin-role:#{null}}")
     protected String defaultAdminRole;
     @Value("${fhframework.security.provider.default-admin-all-permissions:false}")
     protected boolean defaultAdminAllPermissions;

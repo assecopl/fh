@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ShutdownEventEN = {
     "title": "Server shut down",
-    "message": "This server is being shut down.<br>Reloading the webpage...",
+    "message": "Server was shut down.",
     "button": "Reload",
     "graceful.title": "Server shut down",
     "graceful.message": "This server is being shut down.<br>Please save your data and reload the webpage (usually by pressing F5).",

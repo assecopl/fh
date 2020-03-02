@@ -29,10 +29,6 @@ class Group extends HTMLFormComponent {
         this.hintElement = this.component;
         this.wrap(true);
         this.addStyles();
-        /*
-         this.htmlElement = this.component;
-         this.contentWrapper = this.htmlElement;
-         */
         this.display();
 
         if (this.componentObj.subelements) {
@@ -50,8 +46,12 @@ class Group extends HTMLFormComponent {
 
     getAdditionalButtons(): any[] {
         return [
-            new AdditionalButton('addDefaultSubcomponent', 'plus', 'Add empty row')
+            // new AdditionalButton('addDefaultSubcomponent', 'plus', 'Add empty row')
         ];
+    }
+
+    getDefaultWidth(): string {
+        return "md-12";
     }
 }
 

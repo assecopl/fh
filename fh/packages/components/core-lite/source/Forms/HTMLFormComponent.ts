@@ -50,10 +50,10 @@ abstract class HTMLFormComponent extends FormComponent {
     private static bootstrapColSeparateCahrsRegexp: RegExp = /(,|;|\|\/|\|)/g;
     protected focusableComponent: HTMLElement;
     public type: string;
+    public input: any;
 
     protected constructor(componentObj: any, parent: FormComponent) {
         super(componentObj, parent);
-
 
 
         if (this.parent != null) {
@@ -199,7 +199,7 @@ abstract class HTMLFormComponent extends FormComponent {
                     this.handleDeleteBtnEvent(event);
                 });
             }.bind(this));
-            if (this.contentWrapper.classList.contains('button')) {
+            if (this.contentWrapper && this.contentWrapper.classList.contains('button')) {
                 this.component.addEventListener('click', function (e) {
                     this.component.focus();
                     e.stopImmediatePropagation();
@@ -210,7 +210,7 @@ abstract class HTMLFormComponent extends FormComponent {
                     });
                 }.bind(this));
             }
-            if (this.contentWrapper.classList.contains('selectOneMenu')) {
+            if (this.contentWrapper && this.contentWrapper.classList.contains('selectOneMenu')) {
                 this.component.addEventListener('click', function (e) {
                     this.component.focus();
                     e.stopImmediatePropagation();
@@ -220,7 +220,7 @@ abstract class HTMLFormComponent extends FormComponent {
                     });
                 }.bind(this));
             }
-            if (this.contentWrapper.classList.contains('fileUpload')) {
+            if (this.contentWrapper && this.contentWrapper.classList.contains('fileUpload')) {
                 this.component.addEventListener('click', function (e) {
                     this.component.focus();
                     e.stopImmediatePropagation();
@@ -260,7 +260,7 @@ abstract class HTMLFormComponent extends FormComponent {
             let tooltipOptions: any = {
                 placement: this.hintPlacement,
                 title: this.hint,
-                trigger : this.hintTrigger,
+                trigger: this.hintTrigger,
                 html: true,
                 boundary: 'window'
             };
@@ -549,7 +549,7 @@ abstract class HTMLFormComponent extends FormComponent {
         return this.componentObj.height != undefined && this.componentObj.height != "" && this.componentObj.height != null;
     }
 
-    handleHeight(){
+    handleHeight() {
         if (this.componentObj.height != undefined) {
             let height = this.componentObj.height;
             if (height.indexOf('%') !== -1) {
@@ -668,7 +668,9 @@ abstract class HTMLFormComponent extends FormComponent {
     enableStyleClasses() {
         if (this.styleClasses.length && this.styleClasses[0] != '') {
             this.styleClasses.forEach(function (cssClass) {
-                this.component.classList.add(cssClass);
+                if (cssClass) {
+                    this.component.classList.add(cssClass);
+                }
             }.bind(this));
         }
     }
@@ -678,7 +680,7 @@ abstract class HTMLFormComponent extends FormComponent {
             oldWidth.forEach(function (width) {
                 if (HTMLFormComponent.bootstrapColRegexp.test(width)) {
                     //In bootstrap 4 "co-xs-12" was replaced with "col-12" so we need to delete it from string.
-                    wrapper.classList.remove('col-' + width.replace('xs-','-'));
+                    wrapper.classList.remove('col-' + width.replace('xs-', '-'));
                 } else if (HTMLFormComponent.bootstrapColWidthRegexp.test(width)) {
                     wrapper.classList.remove('exactWidth');
                     wrapper.style.width = undefined;
@@ -691,7 +693,7 @@ abstract class HTMLFormComponent extends FormComponent {
         newWidth.forEach(function (width) {
             if (HTMLFormComponent.bootstrapColRegexp.test(width)) {
                 //In bootstrap 4 "co-xs-12" was replaced with "col-12" so we need to delete it from string.
-                wrapper.classList.add('col-' + width.replace('xs-','-'));
+                wrapper.classList.add('col-' + width.replace('xs-', '-'));
             } else if (HTMLFormComponent.bootstrapColWidthRegexp.test(width)) {
                 wrapper.classList.add('exactWidth');
                 wrapper.style.width = width;
@@ -719,30 +721,116 @@ abstract class HTMLFormComponent extends FormComponent {
             wrapper.classList.add('inline');
         }
 
-        if (!skipLabel) {
-            let label = document.createElement('label');
-            label.classList.add('col-form-label');
-            // label.classList.add('card-title');
-            label.htmlFor = this.id;
-            label.innerHTML = this.fhml.resolveValueTextOrEmpty(this.componentObj.label);
-            wrapper.appendChild(label);
-            this.labelElement = label;
-        }
-
         if (isInputElement) {
             let inputGroup = document.createElement('div');
-            // this.component.classList.add('input-group');
             inputGroup.classList.add('input-group');
             wrapper.appendChild(inputGroup);
             inputGroup.appendChild(wrappedComponent);
 
-            if (this.component.classList.contains('inputTimestamp')) {
-                inputGroup.id = this.componentObj.id;
-            }
-
             this.inputGroupElement = inputGroup;
         } else {
             wrapper.appendChild(wrappedComponent);
+        }
+
+        let label = document.createElement('label');
+        let labelValue;
+        label.id = this.id + '_label';
+        label.classList.add('col-form-label');
+
+        if (!skipLabel) {
+            if (this.componentObj.type === 'OutputLabel') {
+                label.classList.add('sr-only');
+                labelValue = this.fhml.resolveValueTextOrEmpty(this.componentObj.value);
+            } else {
+                labelValue = this.fhml.resolveValueTextOrEmpty(this.componentObj.label);
+            }
+            if (!labelValue) {
+                label.classList.add('sr-only');
+                label.innerHTML = label.id;
+            } else {
+                label.innerHTML = labelValue;
+            }
+
+            label.setAttribute('for', this.componentObj.id);
+            this.component.setAttribute('aria-describedby', label.id);
+
+            if (this.input && this.input.type === 'textarea' && isInputElement) {
+                this.inputGroupElement.classList.remove('input-group');
+                this.inputGroupElement.insertBefore(label, this.component);
+            } else if (this.componentObj.type === 'OutputLabel') {
+                wrapper.insertBefore(label, this.component);
+            } else if (isInputElement && this.formId !== 'designerProperties') {
+                label.classList.add('inputLabel');
+                if (this.componentObj.labelPosition != undefined) {
+                    let labelPosition = this.componentObj.labelPosition.toLowerCase();
+                    switch (labelPosition) {
+                        case 'up':
+                            this.inputGroupElement.insertBefore(label, this.inputGroupElement.firstChild);
+                            break;
+                        case 'down':
+                            this.inputGroupElement.appendChild(label);
+                            break;
+                        case 'left':
+                            label.classList.remove('inputLabel');
+                            this.inputGroupElement.insertBefore(label, this.inputGroupElement.firstChild);
+                            break;
+                        case 'right':
+                            label.classList.remove('inputLabel');
+                            this.inputGroupElement.appendChild(label);
+                            break;
+                    }
+                } else {
+                    this.inputGroupElement.insertBefore(label, this.inputGroupElement.firstChild);
+                }
+            } else if (isInputElement && this.formId === 'designerProperties') {
+                label.classList.add('inputLabel');
+                this.inputGroupElement.insertBefore(label, this.inputGroupElement.firstChild);
+            } else if (this.componentObj.type === 'RadioOption' || this.componentObj.type === 'RadioOptionsGroup') {
+                wrapper.insertBefore(label, this.component);
+            } else {
+                wrapper.appendChild(label);
+            }
+            this.labelElement = label;
+        } else {
+            if (this.componentObj.label) {
+                if (this.componentObj.type === 'PanelGroup') {
+                    this.component.setAttribute('aria-describedby', this.componentObj.id + '_label');
+                } else {
+                    label.classList.add('sr-only');
+                    label.setAttribute('for', this.id);
+                    label.innerHTML = this.fhml.resolveValueTextOrEmpty(this.componentObj.label);
+                    this.component.setAttribute('aria-describedby', this.componentObj.id + '_label');
+                    if (this.parent.componentObj.type === 'ButtonGroup') {
+                        this.hintElement.appendChild(label);
+                    } else {
+                        wrapper.appendChild(label);
+                    }
+                }
+            } else if (this.componentObj.type === 'InputText' && !this.componentObj.value && this.componentObj.rawValue) {
+                label.classList.add('sr-only');
+                label.setAttribute('for', this.id);
+                label.innerHTML = this.fhml.resolveValueTextOrEmpty(this.componentObj.rawValue);
+                this.component.setAttribute('aria-describedby', this.componentObj.id + '_label');
+                wrapper.appendChild(label);
+            } else if (this.componentObj.type === 'InputText' && !this.componentObj.rawValue) {
+                label.classList.add('sr-only');
+                label.setAttribute('for', this.id);
+                label.innerHTML = this.id + '_label';
+                this.component.setAttribute('aria-describedby', this.componentObj.id + '_label');
+                wrapper.appendChild(label);
+            } else if (this.parent.componentObj.label  && this.parent.componentObj.id !== this.formId) {
+                if (this.parent.componentObj.type === 'PanelGroup') {
+                    this.component.setAttribute('aria-describedby', this.parent.componentObj.id + '_label');
+                } else {
+                    this.component.setAttribute('aria-describedby', this.parent.componentObj.id);
+                }
+            } else {
+                label.classList.add('sr-only');
+                label.innerHTML = label.id;
+                label.setAttribute('for', this.id);
+                label.setAttribute('aria-label', label.id);
+                wrapper.appendChild(label);
+            }
         }
 
         if (this.inlineStyle) {
@@ -758,13 +846,9 @@ abstract class HTMLFormComponent extends FormComponent {
             wrapper.classList.add('mr-auto');
         }
 
-
         this.htmlElement = wrapper;
         this.contentWrapper = this.component;
 
-        if (!skipLabel) {
-            this.updateLabelClass(this.componentObj.label);
-        }
     }
 
     protected innerWrap() {
@@ -802,7 +886,7 @@ abstract class HTMLFormComponent extends FormComponent {
             }
 
             if (!this.htmlElement.classList.contains('colorBorder') && options.isLast) {
-                if (this.componentObj.type === 'DropdownItem') {
+                if (this.componentObj.type === 'DropdownItem' || this.componentObj.type === 'ThreeDotsMenuItem') {
                     let dropdown = this.component.closest('.fc.dropdown').parentElement;
                     dropdown.classList.add('colorBorder');
                     dropdown.classList.add('designerFocusedElement');
@@ -944,7 +1028,7 @@ abstract class HTMLFormComponent extends FormComponent {
         }
     }
 
-    public getDefaultWidth():string {
+    public getDefaultWidth(): string {
         return 'md-12';
     }
 
@@ -965,7 +1049,7 @@ abstract class HTMLFormComponent extends FormComponent {
             $(options.scrollableElement).animate({
                 scrollTop: $(row).offset().top - 160
             });
-        } else if (this.componentObj.type === 'DropdownItem') {
+        } else if (this.componentObj.type === 'DropdownItem' || this.componentObj.type === 'ThreeDotsMenuItem') {
             let dropdown = this.component.closest('.fc.dropdown');
             $(options.scrollableElement).animate({
                 scrollTop: $(dropdown).offset().top - 160
@@ -1041,9 +1125,9 @@ abstract class HTMLFormComponent extends FormComponent {
         let nodeCarets;
 
         treeElementsList.forEach(node => {
-           if (node.contains(elementTreeEquivalent)) {
-               topLevelNode = node;
-           }
+            if (node.contains(elementTreeEquivalent)) {
+                topLevelNode = node;
+            }
         });
 
         if (topLevelNode) {
@@ -1109,12 +1193,12 @@ abstract class HTMLFormComponent extends FormComponent {
      * Function process width string from backend serwer and creates proper bootstrap classes string array so they can be added to component.
      * @param width
      */
-    private handleWidth(width:string = this.componentObj.width){
-        if(!width){
-          width = this.getDefaultWidth()
+    private handleWidth(width: string = this.componentObj.width) {
+        if (!width) {
+            width = this.getDefaultWidth()
         }
 
-        if(width) {
+        if (width) {
             // Delete unwanted spaces
             width = width.trim();
             //Replace un wanted chars
@@ -1129,7 +1213,7 @@ abstract class HTMLFormComponent extends FormComponent {
     /**
      * Logic moved to function so it can be overrided by children classes.
      */
-    protected buildDesingerToolbox(){
+    protected buildDesingerToolbox() {
         (<any>FhContainer.get('Designer')).buildToolbox(this.getAdditionalButtons(), this);
 
     }
@@ -1151,10 +1235,10 @@ abstract class HTMLFormComponent extends FormComponent {
                  */
                 const activeElement = document.activeElement;
                 const activeElementTagName = activeElement.tagName.toLowerCase();
-                if(focusedElement.contains(activeElement) || (!focusedElement.contains(activeElement) &&
-                        (activeElementTagName !== 'input' &&
-                            activeElementTagName !== 'select' &&
-                            activeElementTagName !== 'textarea' &&
+                if (focusedElement.contains(activeElement) || (!focusedElement.contains(activeElement) &&
+                    (activeElementTagName !== 'input' &&
+                        activeElementTagName !== 'select' &&
+                        activeElementTagName !== 'textarea' &&
                         !activeElement.classList.contains("form-control")))) {
                     deleteBtn.click();
                 }

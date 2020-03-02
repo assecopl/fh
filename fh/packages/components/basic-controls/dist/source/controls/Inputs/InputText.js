@@ -108,6 +108,19 @@ var InputText = /** @class */ (function (_super) {
         if (this.component.classList.contains('servicesListControl')) {
             this.htmlElement.classList.add('servicesListControlWrapper');
         }
+        if (this.fh.isIE()) {
+            /**
+             * For IE only - prevent of content delete by ESC key press (27)
+             */
+            this.input.addEventListener('keydown', function (e) {
+                var keyCode = (window.event) ? e.which : e.keyCode;
+                if (keyCode == 27) { //Escape keycode
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                }
+            });
+        }
     };
     InputText.prototype.createIcon = function () {
         if (this.componentObj.icon) {
@@ -125,7 +138,7 @@ var InputText = /** @class */ (function (_super) {
             }
             groupSpan.appendChild(icon);
             if (this.componentObj.iconAlignment === 'BEFORE') {
-                this.inputGroupElement.insertBefore(group, this.inputGroupElement.firstChild);
+                this.inputGroupElement.insertBefore(group, this.component);
             }
             else if (this.componentObj.iconAlignment === 'AFTER') {
                 group.classList.remove('input-group-prepend');
@@ -133,7 +146,7 @@ var InputText = /** @class */ (function (_super) {
                 this.inputGroupElement.appendChild(group);
             }
             else {
-                this.inputGroupElement.insertBefore(group, this.inputGroupElement.firstChild);
+                this.inputGroupElement.insertBefore(group, this.component);
             }
         }
     };
@@ -251,9 +264,15 @@ var InputText = /** @class */ (function (_super) {
                     options.mask = this.mask;
                 }
             }
-            // @ts-ignore
-            this.maskPlugin = Inputmask(options).mask(this.input);
-            this.inputmaskEnabled = true;
+            try {
+                // @ts-ignore
+                this.maskPlugin = Inputmask(options).mask(this.input);
+                this.inputmaskEnabled = true;
+            }
+            catch (e) {
+                console.error('Invalidmask library error:');
+                console.error(e);
+            }
             this.input.addEventListener('keydown', function (event) {
                 _this.removeInputPlaceholder(event);
             });
@@ -399,6 +418,9 @@ var InputText = /** @class */ (function (_super) {
         $(this.input).off('input', this.updateModel.bind(this));
         this.disableMask();
         _super.prototype.destroy.call(this, removeFromParent);
+    };
+    InputText.prototype.getDefaultWidth = function () {
+        return 'md-3';
     };
     return InputText;
 }(fh_forms_handler_1.HTMLFormComponent));

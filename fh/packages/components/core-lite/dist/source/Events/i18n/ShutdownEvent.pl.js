@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ShutdownEventPL = {
     "title": "Wyłączenie serwera",
-    "message": "Ten serwer jest wyłączany.<br>Ponowne ładowanie strony...",
-    "button": "Ponowne ładowanie",
+    "message": "Serwer został wyłączany.",
+    "button": "Przeładuj stronę",
     "graceful.title": "Wyłączenie serwera",
     "graceful.message": "Ten serwer jest wyłączany.<br>Proszę zapisać swoje dane i odświeżyć stronę (zazwyczaj poprzez naciśnięcie F5).",
     "graceful.button": "OK",

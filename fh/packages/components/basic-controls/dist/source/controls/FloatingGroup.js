@@ -186,6 +186,12 @@ var FloatingGroup = /** @class */ (function (_super) {
     FloatingGroup.prototype.pinGroup = function (skipValueChange) {
         this.component.classList.remove('floating');
         this.removeInlineStyles();
+        if (this.pinningMode == 'button') {
+            this.component.classList.add('btn');
+            this.component.classList.add('btn-primary');
+            this.component.classList.remove('card');
+            this.component.classList.remove('card-default');
+        }
         this.component.classList.remove('fullscreen');
         var fullscreenToggleIcon = this.groupToolbox.querySelector('.fullscreenToggle > span');
         if (fullscreenToggleIcon != null) {
@@ -214,6 +220,12 @@ var FloatingGroup = /** @class */ (function (_super) {
             this.component.classList.add('floating');
         }
         this.addInlineStyles();
+        if (this.pinningMode == 'button') {
+            this.component.classList.remove('btn');
+            this.component.classList.remove('btn-primary');
+            this.component.classList.add('card');
+            this.component.classList.add('card-default');
+        }
         if (!this.hideHeader) {
             this.component.querySelector('.card-header').addEventListener('mousedown', this.bound.toggleMouseDown);
         }

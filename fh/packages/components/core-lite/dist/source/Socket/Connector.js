@@ -28,7 +28,7 @@ var Connector = /** @class */ (function () {
         this.doNotReconnect = false;
         this.retryCount = 0;
         this.reconnectTimeoutMs = 3000;
-        this.reconnectDecisionDialogMs = 60000;
+        this.reconnectDecisionDialogMs = 30000;
         this.reconnectStartTime = 0;
         this.serverAlive = true;
         this.headResponseRetry = 0;
@@ -150,7 +150,8 @@ var Connector = /** @class */ (function () {
         }
         if (connector.reconnectStartTime + connector.reconnectDecisionDialogMs < Date.now()) {
             connector.reconnecting = false;
-            connector.applicationLock.createInfoDialog(this.i18n.__('connection_lost_message'), this.i18n.__('connection_lost_button1'), "window.FhContainer.get('Connector').reconnectTry()", this.i18n.__('connection_lost_button2'), "window.FhContainer.get('Connector').closeDialog()");
+            window["FhContainer"] = FhContainer_1.FhContainer;
+            connector.applicationLock.createInfoDialog(this.i18n.__('connection_lost_message'), this.i18n.__('connection_lost_button1'), "window.FhContainer.get('Connector').closeDialog();window.FhContainer.get('Connector').onClose()", this.i18n.__('connection_lost_button2'), "window.FhContainer.get('Connector').closeDialog()");
             return;
         }
         connector.reconnecting = true;
@@ -159,10 +160,14 @@ var Connector = /** @class */ (function () {
         testRequest.open('HEAD', connector.util.getPath('/'), true);
         testRequest.onload = function () {
             if (testRequest.readyState === 4) {
+                if (testRequest.status === 401) { // not authorized, probably http session is lost
+                    this.applicationLock.createInfoDialog(this.i18n.__('session_expired_message'), this.i18n.__('session_expired_button'), 'window.location.reload(true)');
+                    return;
+                }
                 connector.serverAlive = testRequest.status === 200;
                 connector.connect(undefined);
             }
-        };
+        }.bind(this);
         testRequest.onerror = function () {
             connector.serverAlive = false;
             if (ENV_IS_DEVELOPMENT) {
@@ -170,6 +175,7 @@ var Connector = /** @class */ (function () {
             }
             connector.connect(undefined);
         };
+        testRequest.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
         testRequest.send(null);
     };
     Connector.prototype.onOpen = function (event) {
@@ -217,7 +223,7 @@ var Connector = /** @class */ (function () {
             if (!this.reconnecting && typeof this.reconnectCallback === 'function') {
                 this.reconnectCallback();
             }
-            setTimeout(function () { return _this.reconnectTry; }, this.reconnectTimeoutMs);
+            setTimeout(function () { return _this.reconnectTry(); }, this.reconnectTimeoutMs);
         }
     };
     Connector.prototype.closeDialog = function () {

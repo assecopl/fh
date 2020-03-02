@@ -386,6 +386,9 @@ var FormComponent = /** @class */ (function () {
     FormComponent.prototype.isFormActive = function () {
         return this.getForm().state == 'ACTIVE';
     };
+    FormComponent.prototype.addAfterInitActions = function (action) {
+        this.getForm().addAfterInitActions(action);
+    };
     FormComponent.VALUE_ATTRIBUTE_NAME = 'value';
     __decorate([
         lazyInject("FormsManager"),

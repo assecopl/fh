@@ -13,6 +13,7 @@ class PanelGroup extends HTMLFormComponent {
     private collapsedOld: any;
     private headingElement: any;
     protected forceHeader: any;
+    protected headingTypeValue: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" = null;
 
     constructor(componentObj: any, parent: HTMLFormComponent) {
         super(componentObj, parent);
@@ -21,6 +22,7 @@ class PanelGroup extends HTMLFormComponent {
 
         this.isCollapsible = Boolean(this.componentObj.collapsible);
         this.onToggle = this.componentObj.onToggle;
+        this.headingTypeValue = this.componentObj.headingTypeValue? this.componentObj.headingTypeValue : "span";
         this.collapsed = Boolean(this.componentObj.collapsed);
         this.collapseToggler = null;
         this.collapseChanged = false;
@@ -33,29 +35,31 @@ class PanelGroup extends HTMLFormComponent {
 
     create() {
         let group = document.createElement('div');
-        ['fc', 'group', 'mb-3'].forEach(function (cssClass) {
+        ['fc', 'group', 'panelGroup', 'mb-3', 'card', 'card-default'].forEach(function (cssClass) {
             group.classList.add(cssClass);
         });
         if (!this.borderVisible) {
             group.classList.add('borderHidden');
         }
         group.id = this.id;
-        ['card', 'card-default'].forEach(function (cssClass) {
-            group.classList.add(cssClass);
-        });
 
         let heading = document.createElement('div');
         heading.classList.add('card-header');
         heading.classList.add('d-flex');
 
-        let titleElm = document.createElement('span');
+        let titleElm = document.createElement(this.componentObj.label != null ? this.headingTypeValue: "span"); //Default span
         titleElm.classList.add('mr-auto');
         titleElm.classList.add('card-title');
         titleElm.classList.add('mb-0');
+
+        let titleElmIn = document.createElement('span');
+        titleElmIn.id = this.id + '_label';
+        titleElm.appendChild(titleElmIn);
+
         if (this.componentObj.label != null) {
-            titleElm.innerHTML = this.resolveValue(this.componentObj.label);
+            titleElmIn.innerHTML = this.resolveValue(this.componentObj.label);
         } else {
-            titleElm.innerHTML = '&nbsp;';
+            titleElmIn.innerHTML = '&nbsp;';
         }
         heading.appendChild(titleElm);
 
@@ -129,6 +133,7 @@ class PanelGroup extends HTMLFormComponent {
         if (footer.length) {
             if (this.componentObj.height) {
                 body.style.height = 'calc(' + this.componentObj.height + ' - 49px - ' +  footer[0].clientHeight + 'px)';
+                body.classList.add('hasHeight');
             } else {
                 body.style.height = 'calc(100% - 49px - ' +  footer[0].clientHeight + 'px)';
             }
@@ -136,6 +141,7 @@ class PanelGroup extends HTMLFormComponent {
             if (this.componentObj.height) {
                 body.style['overflow-y'] = 'auto';
                 body.style.height = this.height;
+                body.classList.add('hasHeight');
             }
         }
 
@@ -143,7 +149,6 @@ class PanelGroup extends HTMLFormComponent {
 
     update(change) {
         super.update(change);
-
         $.each(change.changedAttributes, function (name, newValue) {
             switch (name) {
                 case 'collapsed':
@@ -168,6 +173,8 @@ class PanelGroup extends HTMLFormComponent {
                     break;
             }
         }.bind(this));
+        $(this.component).scrollTop(this.component.clientHeight);
+
     };
 
     updateHeaderVisibility(newTitle) {
@@ -238,10 +245,6 @@ class PanelGroup extends HTMLFormComponent {
             return [
                 new AdditionalButton('moveUp', 'arrow-up', 'Move up'),
                 new AdditionalButton('moveDown', 'arrow-down', 'Move down')
-            ];
-        } else {
-            return [
-                new AdditionalButton('addDefaultSubcomponent', 'plus', 'Add empty row')
             ];
         }
     }

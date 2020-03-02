@@ -148,6 +148,10 @@ var FHML = /** @class */ (function () {
         }
     };
     ;
+    FHML.prototype.removeHtmlTags = function (text) {
+        return text.replace(/<\/?[^>]+(>|$)/g, "").trim();
+    };
+    ;
     FHML = __decorate([
         inversify_1.injectable(),
         __metadata("design:paramtypes", [])

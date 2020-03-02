@@ -55,6 +55,24 @@ var FileUpload = /** @class */ (function (_super) {
         //btn-danger
         var inputFile = document.createElement('input');
         inputFile.setAttribute('id', this.componentObj.id + '_file');
+        inputFile.setAttribute('aria-label', this.i18n.__('add file'));
+        //If there is label we set aria-labeledby based on its value
+        if (this.label) {
+            var label = document.createElement('label');
+            var labelId = this.id + '_label';
+            label.id = labelId;
+            label.classList.add('control-label');
+            label.classList.add('fileNames');
+            label.classList.add('sr-only');
+            label.setAttribute('for', labelId);
+            var text = this.fhml.removeHtmlTags(this.label);
+            if (text.length > 0) {
+                inputFile.setAttribute('aria-describedby', labelId);
+            }
+            label.innerHTML = text;
+            this.inputFileButton.appendChild(label);
+            this.labelElement = label;
+        }
         inputFile.type = 'file';
         if (this.multiple) {
             inputFile.multiple = true;
@@ -82,9 +100,6 @@ var FileUpload = /** @class */ (function (_super) {
         ['progress', 'progress-striped', 'active', 'd-none'].forEach(function (cssClass) {
             inputFileProgress.classList.add(cssClass);
         }.bind(this));
-        var label = document.createElement('label');
-        label.setAttribute('for', this.componentObj.id + '_file');
-        this.inputFileButton.appendChild(label);
         var inputFileProgressBar = document.createElement('div');
         ['progress-bar'].forEach(function (cssClass) {
             inputFileProgressBar.classList.add(cssClass);
@@ -101,13 +116,6 @@ var FileUpload = /** @class */ (function (_super) {
         }.bind(this));
         this.inputFileButton.appendChild(inputFileProgress);
         fileUpload.appendChild(this.inputFileButton);
-        var fileNameLabel = document.createElement('label');
-        if (this.inputHeight) {
-            fileNameLabel.style.height = this.inputHeight + 'px';
-        }
-        fileNameLabel.innerHTML = this.fileNames.join('<br />');
-        fileNameLabel.classList.add('fileNames');
-        fileUpload.appendChild(fileNameLabel);
         this.input = inputFile;
         this.component = fileUpload;
         this.focusableComponent = this.inputFileButton;
@@ -232,7 +240,9 @@ var FileUpload = /** @class */ (function (_super) {
                     if (!this.labelHidden) {
                         var fileNameLabel = this.component.querySelector('label.fileNames');
                         this.fileNames = newValue.join("<br />");
-                        fileNameLabel.innerHTML = this.fileNames;
+                        if (fileNameLabel) {
+                            fileNameLabel.innerHTML = this.fileNames;
+                        }
                     }
                     break;
                 case 'extensions':
@@ -346,7 +356,7 @@ var FileUpload = /** @class */ (function (_super) {
      * @Override
      */
     FileUpload.prototype.getDefaultWidth = function () {
-        return 'lg-3,md-4,sm-5,xs-6';
+        return 'lg-2,md-4,sm-5,xs-6';
     };
     return FileUpload;
 }(fh_forms_handler_1.HTMLFormComponent));

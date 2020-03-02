@@ -31,14 +31,12 @@ class Combo extends InputText {
     private multiselectRawValue: any;
     private multiselectOldValue: any;
     private changeToFired: boolean;
-    private firedEventData: any;
 
     private onInputTimer: any;
     private openOnFocus: boolean = true;
     private readonly onInputTimeout: number;
 
     private cursorPositionOnLastSpecialKey: any;
-    private rawValueOnLastSpecialKey: any;
 
     constructor(componentObj: any, parent: HTMLFormComponent) {
         super(componentObj, parent);
@@ -54,7 +52,6 @@ class Combo extends InputText {
         this.cleared = false;
         this.lastCursorPosition = this.componentObj.cursor;
         this.blurEvent = false;
-
         this.openOnFocus = typeof this.componentObj.openOnFocus === 'undefined' ? true : this.componentObj.openOnFocus;
         this.emptyValue = this.componentObj.emptyValue;
         this.onSpecialKey = this.componentObj.onSpecialKey;
@@ -831,6 +828,10 @@ class Combo extends InputText {
                 this.fireEvent('onInput', this.onInput);
             }
         }
+    }
+
+    getDefaultWidth(): string {
+        return super.getDefaultWidth();
     }
 }
 

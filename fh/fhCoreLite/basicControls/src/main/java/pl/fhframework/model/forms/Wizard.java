@@ -19,12 +19,12 @@ import java.util.function.Consumer;
 /**
  * Class represents container for tabs and extends <code>GroupingComponent</code> class.
  * <p>
- * Example: <TabContainer></TabContainer>
+ * Example: {@code <TabContainer></TabContainer>}
  * <p>
  * mateusz.zaremba
  */
 @Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
-@DocumentedComponent(value = "Wizard component which represents container with tabs", icon = "fa fa-window-maximize")
+@DocumentedComponent(category = DocumentedComponent.Category.ARRANGEMENT, value = "Wizard component which represents container with tabs", icon = "fa fa-window-maximize")
 public class Wizard extends GroupingComponent<Tab> implements IChangeableByClient, Boundable, CompactLayout, IDesignerEventListener {
 
     public static final String TYPE_NAME = "Wizard";

@@ -155,6 +155,9 @@ var CheckBox = /** @class */ (function (_super) {
         }
         _super.prototype.setPresentationStyle.call(this, presentationStyle);
     };
+    CheckBox.prototype.getDefaultWidth = function () {
+        return "md-2";
+    };
     CheckBox.prototype.destroy = function (removeFromParent) {
         this.input.removeEventListener('change', this.inputCheckEvent.bind(this));
         if (this.onChange) {

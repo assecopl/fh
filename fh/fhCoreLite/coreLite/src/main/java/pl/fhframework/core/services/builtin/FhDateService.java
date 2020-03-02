@@ -1,15 +1,14 @@
 package pl.fhframework.core.services.builtin;
 
 import pl.fhframework.core.FhException;
+import pl.fhframework.core.rules.Comment;
 import pl.fhframework.core.services.FhService;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalField;
-import java.time.temporal.WeekFields;
+import java.time.temporal.*;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -204,6 +203,25 @@ public class FhDateService {
 
     public int dateDaysBetween(Date date1, Date date2) {
         return dateDaysBetween(ldFromDate(date1), ldFromDate(date2));
+    }
+
+    @Comment("Returns date of first day in week for given date")
+    public LocalDate dateFirstDayOfWeek(LocalDate anyDayInWeek){
+        return dateAddDays(anyDayInWeek, -dateDayOfWeek(anyDayInWeek)+1);
+    }
+    @Comment("Returns date of last day of week or month for given date")
+    public LocalDate lastDayOfWeekOrMonth(LocalDate anyDayInWeek){
+        int daysToEndOfWeek = 7-dateDayOfWeek(anyDayInWeek);
+        LocalDate lastDayOfMonth = anyDayInWeek.with(TemporalAdjusters.lastDayOfMonth());
+        int daysToEndOfMonth = dateDayOfMonth(lastDayOfMonth) - dateDayOfMonth(anyDayInWeek);
+        int minLengthInDaysToEndOfPeriod = Math.min(daysToEndOfMonth, daysToEndOfWeek);
+        return dateAddDays(anyDayInWeek, minLengthInDaysToEndOfPeriod);
+    }
+
+
+    @Comment("Converts timestamp to date")
+    public LocalDate timeToDate(Date time){
+        return new java.sql.Date(time.getTime()).toLocalDate();
     }
 
     LocalDate dateFrom(Object from) {

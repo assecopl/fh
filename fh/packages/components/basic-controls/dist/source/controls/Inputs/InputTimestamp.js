@@ -27,7 +27,7 @@ var InputTimestamp = /** @class */ (function (_super) {
             "en": InputTimestamp_en_1.InputTimestampEN
         };
         _this.backendFormat = "YYYY-MM-DDTHH:mm:ss.SSS";
-        _this.format = _this.componentObj.format || 'YYYY-MM-DD HH:mm';
+        _this.format = _this.componentObj.format || 'YYYY-MM-DD HH:mm:ss';
         // @ts-ignore
         _this.keySupport = fh_forms_handler_1.FhContainer.get("FormComponentKeySupport")(_this.componentObj, _this);
         $.fn.datetimepicker.defaults.tooltips = _this.tooltipsI18n[_this.i18n.selectedLanguage];
@@ -51,7 +51,8 @@ var InputTimestamp = /** @class */ (function (_super) {
         ['fc', 'inputTimestamp', 'form-control'].forEach(function (cssClass) {
             input.classList.add(cssClass);
         });
-        // input.type = 'datetime-local';
+        input.id = this.id;
+        input.type = 'text';
         input.placeholder = this.format;
         this.i18n.subscribe(this);
         // must be before onInput/onChange events
@@ -106,6 +107,9 @@ var InputTimestamp = /** @class */ (function (_super) {
     };
     InputTimestamp.prototype.wrap = function (skipLabel, isInputElement) {
         _super.prototype.wrap.call(this, skipLabel, isInputElement);
+    };
+    InputTimestamp.prototype.getDefaultWidth = function () {
+        return "md-3";
     };
     InputTimestamp.prototype.destroy = function (removeFromParent) {
         $(this.input).off('blur', this.inputBlurEvent.bind(this));

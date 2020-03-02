@@ -78,3 +78,6 @@
 .calendar-content {
     margin-bottom: .75rem;
 }
+.fc.calendar {
+    overflow: hidden;
+}

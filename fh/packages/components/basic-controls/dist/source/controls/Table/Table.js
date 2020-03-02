@@ -28,8 +28,8 @@ var Table = /** @class */ (function (_super) {
         _this.rowStylesMapping = _this.componentObj.rowStylesMapping || [];
         _this.minRows = _this.componentObj.minRows || null;
         _this.rowHeight = _this.componentObj.rowHeight || 'normal';
-        _this.tableGrid = _this.componentObj.tableGrid || 'show';
-        _this.tableStripes = _this.componentObj.tableStripes || 'show';
+        _this.tableGrid = _this.componentObj.tableGrid || 'hide';
+        _this.tableStripes = _this.componentObj.tableStripes || 'hide';
         _this.ieFocusFixEnabled = _this.componentObj.ieFocusFixEnabled || false;
         _this._dataWrapper = null;
         _this.onRowDoubleClick = _this.componentObj.onRowDoubleClick;
@@ -404,6 +404,9 @@ var Table = /** @class */ (function (_super) {
         (this.rawValue || []).forEach(function (value) {
             if (value != -1) {
                 var row = this.table.querySelector(('[data-main-id="' + value + '"]'));
+                if (row == null) {
+                    return;
+                }
                 row.classList.add('table-primary');
                 var container = $(this.component);
                 var scrollTo_1 = $(row);
@@ -497,6 +500,13 @@ var Table = /** @class */ (function (_super) {
             //Show highlighted record after showing table again , Works only with animate set to true.
             this.highlightSelectedRows(true);
         }
+    };
+    Table.prototype.getAllComponents = function () {
+        var result = this.components;
+        this.rows.forEach(function (value) {
+            result = result.concat(value.components);
+        });
+        return result;
     };
     return Table;
 }(TableWithKeyboardEvents_1.TableWithKeyboardEvents));

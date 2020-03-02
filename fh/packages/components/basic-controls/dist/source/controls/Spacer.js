@@ -22,13 +22,32 @@ var Spacer = /** @class */ (function (_super) {
     Spacer.prototype.create = function () {
         this.component = document.createElement('div');
         this.component.id = this.id;
-        this.wrap(true);
+        this.wrap();
         // spacer.classList.add('spacer');
         this.component.parentNode.classList.add('spacer');
         this.addStyles();
         this.display();
     };
     ;
+    Spacer.prototype.getDefaultWidth = function () {
+        return 'md-2';
+    };
+    Spacer.prototype.wrap = function () {
+        var wrapper = document.createElement('div');
+        ['fc', 'wrapper'].forEach(function (cssClass) {
+            wrapper.classList.add(cssClass);
+        });
+        if (this.width) {
+            // @ts-ignore
+            this.setWrapperWidth(wrapper, undefined, this.width);
+        }
+        else {
+            wrapper.classList.add('inline');
+        }
+        wrapper.appendChild(this.component);
+        this.htmlElement = wrapper;
+        this.contentWrapper = this.component;
+    };
     return Spacer;
 }(fh_forms_handler_1.HTMLFormComponent));
 exports.Spacer = Spacer;

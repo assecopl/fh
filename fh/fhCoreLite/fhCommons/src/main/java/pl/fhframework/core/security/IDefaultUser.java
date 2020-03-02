@@ -8,6 +8,8 @@ import java.util.Set;
 public interface IDefaultUser {
 
     String getLogin();
+    String getFirstName();
+    String getLastName();
     String getPassword();
     Set<IDefaultRole> getRoles();
 

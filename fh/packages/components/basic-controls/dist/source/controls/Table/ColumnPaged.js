@@ -66,8 +66,8 @@ var ColumnPaged = /** @class */ (function (_super) {
         sorter.appendChild(icon);
         columnElement.append($(sorter));
         parentObject.sorter = sorter;
-        this.component.classList.add('sortable');
-        this.component.addEventListener('click', function (event) {
+        columnElement.addClass('sortable');
+        columnElement.on('click', function () {
             var icon = sorter.firstChild;
             var sortDirection;
             if (icon.classList.contains('fa-sort')) {

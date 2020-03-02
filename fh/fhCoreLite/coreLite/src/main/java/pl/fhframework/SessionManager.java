@@ -35,6 +35,11 @@ public abstract class SessionManager {
         return user != null ? user.getLogin() : null;
     }
 
+    public static String getUserFullName() {
+        SystemUser user = getSystemUser();
+        return user != null ? user.getFullName() : null;
+    }
+
     public static void registerThreadSessionManager(ISessionManagerImpl sessionManager) {
         THREAD_SESSION_MANAGER.set(sessionManager);
     }

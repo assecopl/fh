@@ -46,8 +46,6 @@ public class FormReader extends XMLReader<Component, Form<?>> {
 
     private static Map<String, Optional<IComponentAttributeTypeConverter<?>>> perAttributeConverters = new ConcurrentHashMap<>();
 
-    private static List<String> jsFiles;
-
     private static Map<Class, Optional<Constructor>> stringBasedConstructorsCache = new ConcurrentHashMap<>();
 
     private static Map<String, Optional<Method>> fieldSettersCache = new ConcurrentHashMap<>();
@@ -144,7 +142,6 @@ public class FormReader extends XMLReader<Component, Form<?>> {
                 formComponentsPackages = Arrays.asList("pl");
             }
             tagNameToFormComponentClass = new HashMap<>();
-            HashSet<String> allJSSet = new HashSet<>();
 
             compositesClasses = new HashMap<>();
             templatesToCompositeClasses = new HashMap<>();
@@ -175,7 +172,6 @@ public class FormReader extends XMLReader<Component, Form<?>> {
                 tagNameToFormComponentClass.forEach((tagName, formComponentClass) -> {
                     FhLogger.debug(this.getClass(), logger -> logger.log("Registering control '{}' as '{}'", formComponentClass.getName(), tagName));
                     Control formComponentJS = formComponentClass.getAnnotation(Control.class);
-                    allJSSet.addAll(Arrays.asList(formComponentJS.jsFiles()));
                 });
 
                 List<Class<? extends Component>> discoveredFormConponentsClasses = ReflectionUtils.giveClassesTypeList(formComponentPackage, Component.class);
@@ -213,7 +209,6 @@ public class FormReader extends XMLReader<Component, Form<?>> {
                     perAttributeTypeConverters.put(supportedType, (IComponentAttributeTypeConverter) attrConverterClass.newInstance());
                 }
             }
-            jsFiles = new ArrayList<>(allJSSet);
         } catch (Exception exc) {
             FhLogger.error("Problem during initialization", exc);
             throw new FhException(exc);

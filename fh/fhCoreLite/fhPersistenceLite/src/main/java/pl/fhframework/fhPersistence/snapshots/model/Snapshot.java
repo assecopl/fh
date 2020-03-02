@@ -123,7 +123,7 @@ public class Snapshot implements Serializable {
     }
 
     /**
-     * Return modified attributes of input object. Verification is shallow. That mean for relation A -> B 'field',
+     * Return modified attributes of input object. Verification is shallow. That mean for relation A -&gt; B 'field',
      * when attribute in object B was modified, getModififiedFields for object A won't return the modified attribute 'field'
      *
      * @param object input object
