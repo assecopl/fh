@@ -54,6 +54,7 @@ class Accordion extends HTMLFormComponent {
         button.classList.add('btn');
         button.attributes['type'] = 'button';
         button.classList.add('btn-block');
+        button.classList.add('collapseBtn');
 
         let active = this.activeGroup === parseInt(button.dataset.index);
         if (!active) {

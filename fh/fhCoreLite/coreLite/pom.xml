@@ -5,8 +5,9 @@
 
     <groupId>pl.fhframework</groupId>
     <artifactId>coreLite</artifactId>
-    <version>4.5-SNAPSHOT</version>
+    <version>4.5.6</version>
     <packaging>jar</packaging>
+    <url>https://github.com/assecopl/fh</url>
 
     <name>CoreLite</name>
     <description>Projekt CoreLite</description>
@@ -14,7 +15,7 @@
     <parent>
         <groupId>pl.fhframework</groupId>
         <artifactId>fhCoreLite</artifactId>
-        <version>4.5-SNAPSHOT</version>
+        <version>4.5.6</version>
     </parent>
 
     <properties>
@@ -34,13 +35,13 @@
             <groupId>pl.fhframework.aspects</groupId>
             <artifactId>fhAspects</artifactId>
             <!--<version>${fh.version}</version>-->
-            <version>4.5-SNAPSHOT</version>
+            <version>4.5.6</version>
         </dependency>
         <dependency>
             <groupId>pl.fhframework.commons</groupId>
             <artifactId>fhCommons</artifactId>
             <!--<version>${fh.version}</version>-->
-            <version>4.5-SNAPSHOT</version>
+            <version>4.5.6</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
@@ -284,7 +285,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>aspectj-maven-plugin</artifactId>
-                <version>1.9</version>
+                <version>1.11</version>
                 <configuration>
                     <showWeaveInfo>true</showWeaveInfo>
                     <source>${maven.compiler.source}</source>
@@ -338,5 +339,67 @@
 
     </build>
 
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>2.2.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.9.1</version>
+                        <configuration>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.7</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.5</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>

@@ -52,7 +52,7 @@ public class ModelProxyService {
     @Autowired
     protected ModelConfig modelConfig;
 
-    @Autowired
+    @Autowired(required = false)
     protected EntityManagerRepository emRepository;
 
     @Autowired
@@ -352,7 +352,7 @@ public class ModelProxyService {
     }
 
     public void refreshStaticCollection(BaseEntity baseEntity, EntityManager entityManager) {
-        if (entityManager.contains(baseEntity)) {
+        if (entityManager != null && entityManager.contains(baseEntity)) {
             getModelStore().clearStaticCollection(baseEntity, entityManager);
         }
     }
@@ -407,7 +407,7 @@ public class ModelProxyService {
         });
     }
 
-    public void sychronizeCollections() {
+    public void synchronizeCollections() {
         getModelStore().getAllExtendedCollections().forEach(this::syncStaticOrHybridCollection);
 
         // process orphan removal

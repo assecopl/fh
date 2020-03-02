@@ -7,9 +7,7 @@ import pl.fhframework.core.security.AuthorizationManager;
 import pl.fhframework.core.security.ISecurityDataProvider;
 import pl.fhframework.core.security.model.IBusinessRole;
 import pl.fhframework.core.security.model.IPermission;
-import pl.fhframework.core.security.provider.model.Permission;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -66,12 +64,12 @@ public class SecurityManagementAPIController {
     }
 
     @PostMapping(SECURITY_MANAGEMENT_API_PERMISSIONS_SAVE_URI)
-    public void savePermissions(@RequestBody List<Permission> permissions) {
-        securityDataProvider.savePermissions(new ArrayList<>(permissions));
+    public void savePermissions(@RequestBody List<IPermission> permissions) {
+        securityDataProvider.savePermissions(permissions);
     }
 
     @PostMapping(value = SECURITY_MANAGEMENT_API_PERMISSIONS_DELETE_URI)
-    public void deletePermission(@RequestBody Permission permission) {
+    public void deletePermission(@RequestBody IPermission permission) {
         securityDataProvider.deletePermission(permission);
     }
 

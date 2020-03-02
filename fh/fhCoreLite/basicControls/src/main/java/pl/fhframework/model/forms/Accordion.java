@@ -1,25 +1,24 @@
 package pl.fhframework.model.forms;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import lombok.Getter;
+import lombok.Setter;
 import pl.fhframework.BindingResult;
 import pl.fhframework.annotations.*;
 import pl.fhframework.binding.*;
 import pl.fhframework.model.dto.ElementChanges;
+import pl.fhframework.model.dto.InMessageEventData;
 import pl.fhframework.model.dto.ValueChange;
 import pl.fhframework.model.forms.designer.IDesignerEventListener;
-import pl.fhframework.model.dto.InMessageEventData;
-
-import lombok.Getter;
-import lombok.Setter;
+import pl.fhframework.model.forms.optimized.ColumnOptimized;
 
 import java.util.Objects;
 import java.util.Optional;
 
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.BEHAVIOR;
 
-@Control(parents = {PanelGroup.class, Column.class, Tab.class, Row.class, Form.class, Group.class}, canBeDesigned = true)
-@DocumentedComponent(value = "PanelGroup component responsible for the grouping of sub-elements, only one uncollapsed group will be allowed.", icon = "fa fa-caret-down")
+@Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Group.class}, canBeDesigned = true)
+@DocumentedComponent(category = DocumentedComponent.Category.ARRANGEMENT, value = "PanelGroup component responsible for the grouping of sub-elements, only one uncollapsed group will be allowed.", icon = "fa fa-caret-down")
 public class Accordion extends GroupingComponent<FormElement> implements Boundable, IChangeableByClient, CompactLayout, IDesignerEventListener {
 
     private static final String ATTR_ACTIVE_GROUP = "activeGroup";
@@ -104,6 +103,7 @@ public class Accordion extends GroupingComponent<FormElement> implements Boundab
         PanelGroup panel = new PanelGroup(getForm());
         panel.setLabelModelBinding(new StaticBinding<>("Accordion Panel " + nameSuffix));
         panel.setGroupingParentComponent(this);
+        panel.addSubcomponent(panel.createNewRow());
         panel.init();
         return panel;
     }

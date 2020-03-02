@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class RestUtils implements IRestUtils {
     public static final String NAME = "__restUtils";
 
-    @Autowired
+    @Autowired(required = false)
     private EndpointRepository endpointRepository;
 
     public RestResource buildRestResource(String endpointName, String endpointUrl, String resourceUri) {

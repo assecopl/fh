@@ -1,9 +1,11 @@
 package pl.fhframework.core.logging;
 
 import org.springframework.stereotype.Service;
+import pl.fhframework.core.uc.IUseCase;
 import pl.fhframework.core.util.DebugUtils;
 import pl.fhframework.Session;
 import pl.fhframework.UserSession;
+import pl.fhframework.model.dto.AbstractMessage;
 import pl.fhframework.model.dto.InMessageEventData;
 
 import java.util.stream.Collectors;
@@ -67,5 +69,12 @@ public class SessionLogger implements ISessionLogger{
     @Override
     public void logShowForm(Class<?> formClazz, Object model, String variantId) {
         
+    }
+
+    @Override
+    public void logReqestResponse(String requestId, AbstractMessage inMessage, IUseCase topUseCase, Throwable exception, Long time) {
+        if (FhLogger.isDebugEnabled(this.getClass())) {
+            FhLogger.debug(this.getClass(), logger -> logger.log("Service time: {}", DebugUtils.timeAsString(time)));
+        }
     }
 }

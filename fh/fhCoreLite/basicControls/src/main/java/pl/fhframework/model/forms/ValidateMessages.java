@@ -21,7 +21,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Control(parents = {}, canBeDesigned = true)
-@DocumentedComponent(value = "Component to aggregate validation messages", icon = "fa fa-exclamation")
+@DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, value = "Component to aggregate validation messages", icon = "fa fa-exclamation")
 public class ValidateMessages extends FormElement implements IComponentsReferrer {
 
     public static final String ANY_COMPONENT = "*";

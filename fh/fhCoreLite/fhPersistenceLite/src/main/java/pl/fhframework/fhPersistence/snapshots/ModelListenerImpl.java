@@ -31,7 +31,7 @@ public class ModelListenerImpl implements ModelListener {
     @Autowired
     protected ConversationManagerUtils conversationManagerUtils;
 
-    @Autowired
+    @Autowired(required = false)
     protected EntityManagerRepository emRepository;
 
     @Autowired

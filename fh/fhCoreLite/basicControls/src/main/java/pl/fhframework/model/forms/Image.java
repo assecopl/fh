@@ -1,39 +1,36 @@
 package pl.fhframework.model.forms;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import pl.fhframework.core.logging.FhLogger;
+import lombok.Getter;
+import lombok.Setter;
 import pl.fhframework.annotations.*;
 import pl.fhframework.binding.*;
+import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.model.dto.ElementChanges;
+import pl.fhframework.model.dto.InMessageEventData;
 import pl.fhframework.model.forms.designer.BindingExpressionDesignerPreviewProvider;
 import pl.fhframework.model.forms.model.LabelPosition;
+import pl.fhframework.model.forms.optimized.ColumnOptimized;
 import pl.fhframework.model.forms.widgets.Widget;
-import pl.fhframework.model.dto.InMessageEventData;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import lombok.Getter;
-import lombok.Setter;
-
-import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.BEHAVIOR;
-import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.CONTENT;
-import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.LOOK_AND_STYLE;
+import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.*;
 
 /**
  * Class representing xml component of Image. Every field represents xml attribute of image tag. <p>
- * Example <Image src="src_1" zr="bindSource_1"/>. <p> Every field is parsed as json for javascript.
+ * Example {@code <Image src="src_1" zr="bindSource_1"/>}. <p> Every field is parsed as json for javascript.
  * If field should be ingored by JSON, use <code>@JsonIgnore</code>. There can be used any
  * annotations for json generator.
  */
 @Getter
 @Setter
 @DesignerControl(defaultWidth = 6)
-@Control(parents = {PanelGroup.class, Column.class, Tab.class, Row.class, Form.class, Group.class, Widget.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = true)
-@DocumentedComponent(value = "Image component for displaying image and marking points on it (optionally)", icon = "fa fa-image")
+@Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Group.class, Widget.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = true)
+@DocumentedComponent(category = DocumentedComponent.Category.IMAGE_HTML_MD, value = "Image component for displaying image and marking points on it (optionally)", icon = "fa fa-image")
 public class Image extends FormElement implements TableComponent<Image> {
 
     public static final String ATTR_SRC = "src";

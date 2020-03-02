@@ -3,15 +3,13 @@ package pl.fhframework.model.forms;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.cglib.core.Local;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import pl.fhframework.BindingResult;
 import pl.fhframework.annotations.*;
-import pl.fhframework.annotations.Control;
 import pl.fhframework.binding.ModelBinding;
 import pl.fhframework.model.dto.ElementChanges;
-import pl.fhframework.events.IEventSource;
+import pl.fhframework.model.forms.optimized.ColumnOptimized;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -21,8 +19,8 @@ import static java.util.AbstractMap.SimpleImmutableEntry;
 import static java.util.Map.Entry;
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.SPECIFIC;
 
-@DocumentedComponent(value = "Component responsible for displaying calendar,only date could be set in this field", icon = "fa fa-calendar")
-@Control(parents = {PanelGroup.class, Column.class, Tab.class, Row.class, Form.class, Group.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = true)
+@DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, value = "Component responsible for displaying calendar,only date could be set in this field", icon = "fa fa-calendar")
+@Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Group.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = true)
 public class Calendar extends BaseInputField {
 
     private static final String VALUES_ATTR = "values";

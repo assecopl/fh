@@ -16,7 +16,7 @@ import javax.persistence.TypedQuery;
  */
 @Service
 public class FhSequenceHelper {
-    @Autowired
+    @Autowired(required = false)
     private EntityManagerRepository repository;
 
     @Transactional

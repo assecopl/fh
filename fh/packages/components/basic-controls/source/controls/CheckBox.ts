@@ -23,7 +23,8 @@ class CheckBox extends HTMLFormComponent {
     create() {
         let input = document.createElement('input');
         input.id = this.id;
-        input.classList.add('fc', 'form-check-input');
+        input.classList.add('fc');
+        input.classList.add('form-check-input');
         input.type = 'checkbox';
         input.checked = this.rawValue;
 
@@ -155,6 +156,10 @@ class CheckBox extends HTMLFormComponent {
         }
 
         super.setPresentationStyle(presentationStyle);
+    }
+
+    getDefaultWidth(): string {
+        return "md-2";
     }
 
     destroy(removeFromParent: boolean) {

@@ -14,10 +14,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.jta.atomikos.AtomikosProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.boot.orm.jpa.hibernate.SpringJtaPlatform;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
-import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.*;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -37,6 +34,7 @@ import java.util.*;
 @EnableAutoConfiguration
 @EnableConfigurationProperties(AtomikosProperties.class)
 @EnableScheduling
+@Profile("!withoutDataSource")
 public class DefaultJpaDatabaseConfiguration {
     @Value("${spring.jpa.database-platform:org.hibernate.dialect.H2Dialect}")
     private String dialect;

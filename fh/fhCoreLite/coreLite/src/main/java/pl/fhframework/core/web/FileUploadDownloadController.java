@@ -168,7 +168,7 @@ public class FileUploadDownloadController {
         }
 
         try (InputStream resourceIs = resource.getInputStream()) {
-            response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + resource.getFilename());
+            response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"");
             calcContentLength(resource, response);
             if (resource instanceof TemporaryResource && !StringUtils.isEmpty(((TemporaryResource) resource).getContentType())) {
                 response.setContentType(((TemporaryResource) resource).getContentType());

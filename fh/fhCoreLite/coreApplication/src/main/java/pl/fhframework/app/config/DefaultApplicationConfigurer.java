@@ -64,6 +64,7 @@ public class DefaultApplicationConfigurer {
 
         cssUrls.put("cosmo", String.format(FhNavbarConfiguration.BOOTSWATCH_THEME_URL, "cosmo"));
         cssUrls.put("superhero", String.format(FhNavbarConfiguration.BOOTSWATCH_THEME_URL, "superhero"));
+        cssUrls.put("lux", String.format(FhNavbarConfiguration.BOOTSWATCH_THEME_URL, "lux"));
 
         return cssUrls;
     }

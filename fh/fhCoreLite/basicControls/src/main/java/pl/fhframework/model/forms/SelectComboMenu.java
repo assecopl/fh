@@ -28,8 +28,9 @@ import java.util.stream.Collectors;
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.CONTENT;
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.SPECIFIC;
 
-@DocumentedComponent(value = "Enables users to quickly find and select from a pre-populated list of values as they type, leveraging searching and filtering.",
+@DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, value = "Enables users to quickly find and select from a pre-populated list of values as they type, leveraging searching and filtering.",
         icon = "fa fa-outdent")
+@DesignerControl(defaultWidth = 3)
 @Control(parents = {PanelGroup.class, Group.class, Column.class, Tab.class, Row.class, Form.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = true)
 public class SelectComboMenu extends BaseInputFieldWithKeySupport {
     private static final String ON_SPECIAL_KEY_ATTR = "onSpecialKey";
@@ -399,9 +400,12 @@ public class SelectComboMenu extends BaseInputFieldWithKeySupport {
                     String valuesAsString = (String) value;
                     String[] allValues = valuesAsString.split("\\|");
                     if (allValues.length > 0) {
-                        this.values.clear();
-                        this.values.addAll(Arrays.stream(allValues).collect(Collectors.toList()));
-                        return true;
+                        List<Object> newValues = Arrays.stream(allValues).collect(Collectors.toList());
+                        if (!Objects.equals(newValues, values)) {
+                            this.values.clear();
+                            this.values.addAll(newValues);
+                            return true;
+                        }
                     }
                 } else if (value instanceof List && !Objects.equals(value, values)) {
                     List collection = (List) value;

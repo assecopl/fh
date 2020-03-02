@@ -25,7 +25,7 @@ import lombok.Setter;
  * This component can be used in XML Form. Most logic is based on component - Repeater, for dynamic
  * binding resolving and cloning components.
  */
-@DocumentedComponent(ignoreFields = {"width"},
+@DocumentedComponent(category = DocumentedComponent.Category.TABLE_AND_TREE, ignoreFields = {"width"},
         value = "Tree component is responsible for display certain relation between parent and childs. "
                 + "This component is similar too Repeater, but relation is visible.", icon = "fa fa-tree")
 @Control(parents = {PanelGroup.class, Group.class, Column.class, Tab.class, Row.class, Form.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = true)

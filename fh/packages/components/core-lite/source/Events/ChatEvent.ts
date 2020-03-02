@@ -13,15 +13,19 @@ class ChatEvent extends BaseEvent {
     private formsManager: FormsManager;
 
     public fire(data) {
-        let form = this.formsManager.findForm('ChatForm');
-        if(form != null) {
-            let component = form.findComponent('messagesTable', false, false, true);
+        this.fireUpdate("ChatForm");
+        this.fireUpdate("ChatSystemForm");
+    }
+
+    private fireUpdate(formId: string) {
+        let form = this.formsManager.findForm(formId);
+        if(form != null && form.state == 'ACTIVE') {
+            let component = form.findComponent('refreshBtn', false, false, true);
             if (component != null) {
-                component.fireEvent('onRowDoubleClick', 'onChatRefresh');
+                component.fireEvent('onClick', 'onChatRefresh');
             }
         }
     }
-
 }
 
 export { ChatEvent };

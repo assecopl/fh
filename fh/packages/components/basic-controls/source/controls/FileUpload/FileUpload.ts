@@ -382,7 +382,7 @@ class FileUpload extends HTMLFormComponent {
      * @Override
      */
     public getDefaultWidth() {
-        return 'lg-3,md-4,sm-5,xs-6';
+        return 'lg-2,md-4,sm-5,xs-6';
 
     }
 }

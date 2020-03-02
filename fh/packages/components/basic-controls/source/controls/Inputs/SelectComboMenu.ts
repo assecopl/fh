@@ -362,9 +362,25 @@ class SelectComboMenu extends InputText {
             $.each(change.changedAttributes, function (name, newValue) {
                 switch (name) {
                     case 'rawValue':
-                        this.input.value = newValue;
-                        this.rawValue = newValue;
-                        this.oldValue = newValue;
+                        if (newValue) {
+                            this.input.value = newValue;
+                            this.rawValue = newValue;
+                            this.oldValue = newValue;
+                            this.highlighted = this.findByValue(newValue);
+                        } else {
+                            if (this.emptyLabel && this.emptyLabelText) {
+                                this.input.value = this.emptyLabelText;
+                                this.rawValue = this.emptyLabelText;
+                                this.oldValue = this.emptyLabelText;
+                                this.highlighted = this.findByValue(this.emptyLabelText);
+                            } else {
+                                this.input.value = null;
+                                this.rawValue = null;
+                                this.oldValue = null;
+                                this.highlighted = this.findByValue(this.emptyLabelText);
+                            }
+                        }
+                        this.hightlightValue();
                         break;
                     case 'filteredValues':
                         this.highlighted = null;
@@ -391,11 +407,12 @@ class SelectComboMenu extends InputText {
     }
 
     hightlightValue() {
-        if (this.highlighted == null) {
-            return;
-        }
         for (let value of this.values) {
             value.element.classList.remove('selected');
+        }
+
+        if (this.highlighted == null) {
+            return;
         }
 
         this.highlighted.element.classList.add('selected');
@@ -651,6 +668,10 @@ class SelectComboMenu extends InputText {
         }
 
         this.accessibility = accessibility;
+    }
+
+    getDefaultWidth(): string {
+        return "md-3";
     }
 
     destroy(removeFromParent) {

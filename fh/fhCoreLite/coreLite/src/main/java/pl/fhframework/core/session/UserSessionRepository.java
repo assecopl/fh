@@ -86,6 +86,7 @@ public class UserSessionRepository implements HttpSessionListener {
             }
         }
     }
+
     private void onSessionExpired(String sessionId) {
         UserSession session = userSessions.get(sessionId);
         if (session != null) {
@@ -94,7 +95,10 @@ public class UserSessionRepository implements HttpSessionListener {
                     listener.accept(session);
                 }
             } finally {
-                userSessions.remove(sessionId);
+                UserSession userSession = userSessions.remove(sessionId);
+                int httpSessionHash = System.identityHashCode(userSession.getHttpSession());
+                userSessionsHash.remove(httpSessionHash);
+                userSessionsByConversationId.remove(userSession.getConversationUniqueId());
             }
         }
     }

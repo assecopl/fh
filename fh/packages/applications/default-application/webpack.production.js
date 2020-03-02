@@ -5,7 +5,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 module.exports = function (baseConfig) {
     return Merge(baseConfig, {
         mode: 'production',
-        devtool: 'nosources-source-map',
+        devtool: 'source-map',
         optimization: {
             minimizer: [
                 new UglifyJsPlugin({

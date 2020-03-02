@@ -33,16 +33,13 @@ class PanelGroup extends HTMLFormComponent {
 
     create() {
         let group = document.createElement('div');
-        ['fc', 'group', 'mb-3'].forEach(function (cssClass) {
+        ['fc', 'group', 'panelGroup', 'mb-3', 'card', 'card-default'].forEach(function (cssClass) {
             group.classList.add(cssClass);
         });
         if (!this.borderVisible) {
             group.classList.add('borderHidden');
         }
         group.id = this.id;
-        ['card', 'card-default'].forEach(function (cssClass) {
-            group.classList.add(cssClass);
-        });
 
         let heading = document.createElement('div');
         heading.classList.add('card-header');
@@ -52,10 +49,14 @@ class PanelGroup extends HTMLFormComponent {
         titleElm.classList.add('mr-auto');
         titleElm.classList.add('card-title');
         titleElm.classList.add('mb-0');
+
+        let titleElmIn = document.createElement('span');
+        titleElm.appendChild(titleElmIn);
+
         if (this.componentObj.label != null) {
-            titleElm.innerHTML = this.resolveValue(this.componentObj.label);
+            titleElmIn.innerHTML = this.resolveValue(this.componentObj.label);
         } else {
-            titleElm.innerHTML = '&nbsp;';
+            titleElmIn.innerHTML = '&nbsp;';
         }
         heading.appendChild(titleElm);
 
@@ -129,6 +130,7 @@ class PanelGroup extends HTMLFormComponent {
         if (footer.length) {
             if (this.componentObj.height) {
                 body.style.height = 'calc(' + this.componentObj.height + ' - 49px - ' +  footer[0].clientHeight + 'px)';
+                body.classList.add('hasHeight');
             } else {
                 body.style.height = 'calc(100% - 49px - ' +  footer[0].clientHeight + 'px)';
             }
@@ -136,6 +138,7 @@ class PanelGroup extends HTMLFormComponent {
             if (this.componentObj.height) {
                 body.style['overflow-y'] = 'auto';
                 body.style.height = this.height;
+                body.classList.add('hasHeight');
             }
         }
 
@@ -143,7 +146,6 @@ class PanelGroup extends HTMLFormComponent {
 
     update(change) {
         super.update(change);
-
         $.each(change.changedAttributes, function (name, newValue) {
             switch (name) {
                 case 'collapsed':
@@ -168,6 +170,8 @@ class PanelGroup extends HTMLFormComponent {
                     break;
             }
         }.bind(this));
+        $(this.component).scrollTop(this.component.clientHeight);
+
     };
 
     updateHeaderVisibility(newTitle) {
@@ -238,10 +242,6 @@ class PanelGroup extends HTMLFormComponent {
             return [
                 new AdditionalButton('moveUp', 'arrow-up', 'Move up'),
                 new AdditionalButton('moveDown', 'arrow-down', 'Move down')
-            ];
-        } else {
-            return [
-                new AdditionalButton('addDefaultSubcomponent', 'plus', 'Add empty row')
             ];
         }
     }

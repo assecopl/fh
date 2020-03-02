@@ -4,28 +4,23 @@ package pl.fhframework.model.forms;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.core.convert.ConversionFailedException;
+import pl.fhframework.BindingResult;
 import pl.fhframework.annotations.*;
 import pl.fhframework.binding.ModelBinding;
 import pl.fhframework.core.FhBindingException;
 import pl.fhframework.core.generator.ModelElement;
 import pl.fhframework.core.generator.ModelElementType;
-import pl.fhframework.core.util.StringUtils;
-import pl.fhframework.model.dto.ValueChange;
-import pl.fhframework.model.forms.designer.BindingExpressionDesignerPreviewProvider;
+import pl.fhframework.model.dto.ElementChanges;
 import pl.fhframework.model.forms.designer.InputFieldDesignerPreviewProvider;
 
-
-import java.text.ParseException;
-
-import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.*;
+import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.CONTENT;
 
 
 @DesignerControl(defaultWidth = -1)
 @Control(parents = {DictionaryCombo.class}, canBeDesigned = false)
 @DocumentedComponent(value = "It is used to construct columns of Table components.", icon = "fa fa-columns")
 @ModelElement(type = ModelElementType.HIDDEN)
-public class DictionaryComboParameter extends Component implements Boundable{
+public class DictionaryComboParameter extends FormElement implements Boundable{
 
 
     public static final String ATTR_VALUE = "value";
@@ -36,8 +31,7 @@ public class DictionaryComboParameter extends Component implements Boundable{
     private String name;
 
     @Getter
-    @Setter
-    private String rawValue = "";
+    private String value;
 
     @JsonIgnore
     @Getter
@@ -59,6 +53,26 @@ public class DictionaryComboParameter extends Component implements Boundable{
 
     protected void processCoversionException(FhBindingException cfe) {
         throw cfe;
+    }
+
+
+    @Override
+    protected ElementChanges updateView() {
+
+        ElementChanges elementChanges = super.updateView();
+        if(modelBinding != null) {
+            BindingResult bindingResult = modelBinding.getBindingResult();
+            if (bindingResult != null) {
+                String newLabelValue = this.convertValueToString(bindingResult.getValue());
+                if (!areValuesTheSame(newLabelValue, value)) {
+                    DictionaryCombo combo =((DictionaryCombo) this.getGroupingParentComponent());
+                    this.value = newLabelValue;
+                    elementChanges = combo.comboParameterModelRefreash();
+                }
+            }
+
+        }
+        return elementChanges;
     }
 
 }

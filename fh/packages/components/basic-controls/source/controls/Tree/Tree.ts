@@ -29,6 +29,7 @@ class Tree extends HTMLFormComponent {
         let ulElement = document.createElement('ul');
         ulElement.classList.add('list-group');
         ulElement.classList.add('col-12');
+        ulElement.classList.add('treeElementList');
 
         row.appendChild(ulElement);
         tree.appendChild(row);
@@ -45,10 +46,6 @@ class Tree extends HTMLFormComponent {
         }
 
         if (this.componentObj.lazy === false && this.componentObj.expanded === true) {
-            this.expandAll();
-        }
-
-        if (this.formId === 'designerToolbox') {
             this.expandAll();
         }
     };

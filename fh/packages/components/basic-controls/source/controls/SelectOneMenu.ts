@@ -203,6 +203,10 @@ class SelectOneMenu extends HTMLFormComponent {
         this.htmlElement.classList.add('fc-editable');
     }
 
+    getDefaultWidth(): string {
+        return "md-3";
+    }
+
     destroy(removeFromParent: boolean) {
         this.component.removeEventListener('click', this.selectOnClickEvent.bind(this));
         this.component.removeEventListener('change', this.selectChangeEvent.bind(this));

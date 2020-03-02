@@ -1,21 +1,20 @@
 package pl.fhframework.model.forms;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import lombok.Getter;
+import lombok.Setter;
 import pl.fhframework.BindingResult;
+import pl.fhframework.annotations.*;
 import pl.fhframework.binding.CompiledBinding;
 import pl.fhframework.binding.ModelBinding;
 import pl.fhframework.core.FhBindingException;
-import pl.fhframework.annotations.*;
+import pl.fhframework.model.forms.designer.InputFieldDesignerPreviewProvider;
+import pl.fhframework.model.forms.optimized.ColumnOptimized;
 
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
-
-import lombok.Getter;
-import lombok.Setter;
-import pl.fhframework.model.forms.designer.InputFieldDesignerPreviewProvider;
 
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.CONTENT;
 
@@ -23,8 +22,9 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
  * Class represents input field for date and time. Receives every attribute of input field.  This
  * field can be used inside PanelGroup, Column, Tab, Form.
  */
-@DocumentedComponent(value = "Component responsible for displaying field, where use can set date and time.", icon = "fa fa-clock")
-@Control(parents = {PanelGroup.class, Column.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
+@DesignerControl(defaultWidth = 3)
+@DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, value = "Component responsible for displaying field, where use can set date and time.", icon = "fa fa-clock")
+@Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
 @OverridenPropertyAnnotations(
         property = "modelBinding",
         designerXmlProperty = @DesignerXMLProperty(allowedTypes = {Date.class,LocalDateTime.class}, commonUse = true, previewValueProvider = InputFieldDesignerPreviewProvider.class, priority = 80, functionalArea = CONTENT))

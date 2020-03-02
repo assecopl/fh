@@ -9,6 +9,7 @@ import pl.fhframework.core.logging.FlushableRollingFileAppender;
 import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.core.rules.builtin.FhUserUtils;
 import pl.fhframework.core.security.model.IBusinessRole;
+import pl.fhframework.core.uc.IUseCaseRefreshListener;
 import pl.fhframework.core.uc.UseCase;
 import pl.fhframework.core.util.LogUtils;
 import pl.fhframework.core.util.StringUtils;
@@ -24,7 +25,7 @@ import java.util.Objects;
 
 @UseCase
 //@SystemFunction(DemoSystemFunction.DEMO_PANEL_TOP)
-public class NavbarUC implements INavbar, ISystemUseCase {
+public class NavbarUC implements INavbar, ISystemUseCase, IUseCaseRefreshListener {
     public static final String NAVBAR_CONTAINER_ID = "navbarForm";
 
     private NavbarForm.Model model = new NavbarForm.Model();
@@ -163,6 +164,15 @@ public class NavbarUC implements INavbar, ISystemUseCase {
             return Locale.forLanguageTag(languageTag);
         } else {
             return Locale.getDefault();
+        }
+    }
+
+    @Override
+    public void doAfterRefresh() {
+        if (menuService.isHidden()) {
+            menuService.hide();
+        } else {
+            menuService.show();
         }
     }
 

@@ -18,7 +18,7 @@ class InputTimestamp extends InputDate implements LanguageChangeObserver {
         super(componentObj, parent);
 
         this.backendFormat = "YYYY-MM-DDTHH:mm:ss.SSS";
-        this.format = this.componentObj.format || 'YYYY-MM-DD HH:mm';
+        this.format = this.componentObj.format || 'YYYY-MM-DD HH:mm:ss';
         // @ts-ignore
         this.keySupport = FhContainer.get("FormComponentKeySupport")(this.componentObj, this);
 
@@ -114,6 +114,10 @@ class InputTimestamp extends InputDate implements LanguageChangeObserver {
 
     wrap(skipLabel, isInputElement) {
         super.wrap(skipLabel, isInputElement);
+    }
+
+    getDefaultWidth(): string {
+        return "md-3";
     }
 
     destroy(removeFromParent: boolean) {

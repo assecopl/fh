@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.core.env.Environment;
+import org.springframework.core.env.Profiles;
 import org.springframework.stereotype.Component;
 
 import pl.fhframework.aspects.snapshots.model.ISnapshotEnabled;
@@ -13,6 +15,7 @@ import pl.fhframework.core.FhConversationException;
 import pl.fhframework.core.session.scope.SessionScope;
 import pl.fhframework.fhPersistence.snapshots.ModelObjectManager;
 import pl.fhframework.fhPersistence.snapshots.model.Snapshot;
+import pl.fhframework.fhPersistence.transaction.ConversationStatelessContext;
 
 import java.util.Deque;
 import java.util.LinkedList;
@@ -26,6 +29,8 @@ import java.util.Set;
 @Component
 @Scope(scopeName = SessionScope.SESSION_SCOPE, proxyMode = ScopedProxyMode.INTERFACES)
 public class ConversationManagerImpl implements BusinessContext, ConversationManager {
+    @Autowired
+    private Environment env;
 
     @Autowired
     protected ApplicationContext applicationContext;
@@ -69,7 +74,6 @@ public class ConversationManagerImpl implements BusinessContext, ConversationMan
     }
 
     private void managePersistenceSession(Object owner) {
-        modelObjectManager.managePersistenceSession();
         exchangeFinishParams(owner, conversationContexts.getLast().getOutputParams());
         clearExchangedObjects(owner);
     }
@@ -242,6 +246,7 @@ public class ConversationManagerImpl implements BusinessContext, ConversationMan
     private void approveCurrentContext(Object owner) {
         checkContextExistance("Attempt to approve not existing context");
         if (isOwner(owner)) {
+            modelObjectManager.synchronizeObjectState();
             getCurrentContext().approve();
             managePersistenceSession(owner);
             getCurrentContext().approve();
@@ -254,6 +259,7 @@ public class ConversationManagerImpl implements BusinessContext, ConversationMan
     private void approveAndTerminateCurrentContext(Object owner) {
         checkContextExistance("Attempt to approve and terminate not existing context");
         if (isOwner(owner)) {
+            modelObjectManager.synchronizeObjectState();
             getCurrentContext().approve();
             managePersistenceSession(owner);
             getCurrentContext().approveAndTerminate();
@@ -266,7 +272,9 @@ public class ConversationManagerImpl implements BusinessContext, ConversationMan
     }
 
     protected void createContext(Object owner) {
-        ConversationContext context = applicationContext.getBean(ConversationStatefullContext.class);
+        ConversationContext context = (env.acceptsProfiles(Profiles.of("withoutDataSource"))) ?
+                applicationContext.getBean(ConversationStatelessContext.class) :
+                applicationContext.getBean(ConversationStatefullContext.class);
         context.setContextOwner(owner);
         conversationContexts.addLast(context);
     }

@@ -28,9 +28,10 @@ import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.SPECIFIC;
+import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.*;
 
-@DocumentedComponent(value = "Enables users to quickly find and select from a pre-populated list of values as they type, leveraging searching and filtering.",
+@DesignerControl(defaultWidth = 3)
+@DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, value = "Enables users to quickly find and select from a pre-populated list of values as they type, leveraging searching and filtering.",
         icon = "fa fa-outdent")
 @Control(parents = {PanelGroup.class, Group.class, Column.class, Tab.class, Row.class, Form.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = true)
 public class Combo extends BaseInputFieldWithKeySupport {
@@ -60,6 +61,7 @@ public class Combo extends BaseInputFieldWithKeySupport {
     private static final String EMPTY_VALUE_ATTR = "emptyValue";
     private static final String DISPLAY_FUNCTION_ATTR = "displayFunction";
     private static final String DISPLAY_RULE_ATTR = "displayExpression";
+    private static final String ATTR_OPEN_ON_FOCUS = "openOnFocus";
 
     @Getter
     protected static class ComboItemDTO {
@@ -95,6 +97,20 @@ public class Combo extends BaseInputFieldWithKeySupport {
             this.targetCursorPosition = comboItem.getTargetCursorPosition();
         }
     }
+
+    @Getter
+    @Setter
+    @XMLProperty(value = ATTR_OPEN_ON_FOCUS, defaultValue = "true")
+    @DesignerXMLProperty(functionalArea = BEHAVIOR, priority = 86)
+    @DocumentedComponentAttribute(defaultValue = "true", value = "Should prompt window be opened when field gains focus.")
+    private Boolean openOnFocus;
+
+    @Setter
+    @Getter
+    @XMLProperty(defaultValue = "0")
+    @DesignerXMLProperty(functionalArea = DesignerXMLProperty.PropertyFunctionalArea.BEHAVIOR)
+    @DocumentedComponentAttribute(value = "Delay onInput action for specific miliseconds. Value must be between 0 and 10000.", defaultValue = "0")
+    private Integer onInputTimeout;
 
     @Getter
     @XMLProperty(defaultValue = "-")
@@ -140,7 +156,7 @@ public class Combo extends BaseInputFieldWithKeySupport {
     @Getter
     @Setter
     @XMLProperty(value = FILTER_TEXT)
-    @DesignerXMLProperty(commonUse = true, previewValueProvider = InputFieldDesignerPreviewProvider.class, priority = 120, functionalArea = SPECIFIC)
+    @DesignerXMLProperty(previewValueProvider = InputFieldDesignerPreviewProvider.class, priority = 120, functionalArea = SPECIFIC)
     @DocumentedComponentAttribute(boundable = true, value = "Binding represents value of filter text")
     private ModelBinding filterTextBinding;
 
@@ -561,16 +577,26 @@ public class Combo extends BaseInputFieldWithKeySupport {
                     String valuesAsString = (String) value;
                     String[] allValues = valuesAsString.split("\\|");
                     if (allValues.length > 0) {
-                        this.values.put("", Arrays.stream(allValues).collect(Collectors.toList()));
-                        return true;
+                        MultiValueMap<String, Object> newValues = new LinkedMultiValueMap();
+                        newValues.put("", Arrays.stream(allValues).collect(Collectors.toList()));
+                        if (!Objects.equals(newValues, values)) {
+                            values.clear();
+                            values.putAll(newValues);
+                            return true;
+                        }
                     }
                 } else if (value instanceof List) {
                     List collection = (List) value;
                     if (!CollectionUtils.isEmpty(collection)) {
                         this.modelType = collection.stream().findFirst().get().getClass();
                     }
-                    this.values.put("", new LinkedList<>(collection));
-                    return true;
+                    MultiValueMap<String, Object> newValues = new LinkedMultiValueMap();
+                    newValues.put("", new LinkedList<>(collection));
+                    if (!Objects.equals(newValues, values)) {
+                        values.clear();
+                        values.putAll(newValues);
+                        return true;
+                    }
                 } else if (value instanceof MultiValueMap && !Objects.equals(value, values)) {
                     MultiValueMap<String, Object> mapFromBinding = (MultiValueMap<String, Object>) value;
                     resolveModelType(mapFromBinding);

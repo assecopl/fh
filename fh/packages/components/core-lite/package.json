@@ -1,7 +1,7 @@
 {
   "name": "fh-forms-handler",
-  "version": "4.4.0-SNAPSHOT",
-  "main": "Module.ts",
+  "version": "4.5.6",
+  "main": "dist/Module.js",
   "types": "dist/Module.d.ts",
   "scripts": {
     "prepublish": "node prepublish",

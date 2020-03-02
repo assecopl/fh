@@ -1,8 +1,10 @@
 package pl.fhframework.core.util;
 
+import pl.fhframework.core.FhException;
 import pl.fhframework.core.logging.UserSessionBasedDiscriminator;
 import pl.fhframework.UserSession;
 
+import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -18,7 +20,13 @@ public class LogUtils {
                 .replace(UserSessionBasedDiscriminator.CREATION_DATE_TAG, userSession.getCreationDateString());
 
         Path result = Paths.get(LOG_BASE_PATH, fileName);
-
+        if (!result.toFile().exists()) {
+            try {
+                result.toFile().createNewFile(); // TEAM-872
+            } catch (IOException e) {
+                throw new FhException("Can't create log file");
+            }
+        }
         return FileUtils.getURL(result);
     }
 

@@ -10,6 +10,7 @@ import pl.fhframework.binding.CallbackActionBinding;
 import pl.fhframework.binding.IActionCallback;
 import pl.fhframework.binding.IActionCallbackContext;
 import pl.fhframework.model.dto.InMessageEventData;
+import pl.fhframework.model.forms.optimized.ColumnOptimized;
 
 import java.util.Optional;
 
@@ -19,14 +20,14 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
  * Class representing xml component of ActiveImage. Every field represents xml attribute of
  * activeImage tag.
  * <p>
- * Example <ActiveImage src="value_1" onClick=""/>.
- * <p>
+ * Example {@code <ActiveImage src="value_1" onClick=""/>}
+ * </p>
  * Every field is parsed as json for javascript. If field should be ingored by JSON, use
- * <code>@JsonIgnore</code>. There can be used any annotations for json generator.
+ * {@code @JsonIgnore} There can be used any annotations for json generator.
  */
 @Getter
 @Setter
-@Control(parents = {PanelGroup.class, Column.class, Tab.class, Row.class, Form.class, Group.class})
+@Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Group.class})
 public class ActiveImage extends PanelGroup {
     public static final String ATTR_SRC = "src";
     public static final String ATTR_ON_CLICK = "onClick";

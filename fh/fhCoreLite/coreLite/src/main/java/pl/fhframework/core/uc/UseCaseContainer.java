@@ -1226,6 +1226,16 @@ public class UseCaseContainer implements Serializable {
         systemContainerForUseCase.forEach((cont, uc) -> this.onSessionLanguageChange(uc));
     }
 
+    public void onSessionRefresh() {
+        systemContainerForUseCase.forEach((cont, uc) -> this.onSessionRefresh(uc));
+    }
+
+    private void onSessionRefresh(UseCaseContext<?, ?> useCaseContext) {
+        if (useCaseContext.getUseCase() instanceof IUseCaseRefreshListener) {
+            ((IUseCaseRefreshListener) useCaseContext.getUseCase()).doAfterRefresh();
+        }
+    }
+
     private void onSessionLanguageChange(UseCaseContext<?, ?> useCaseContext) {
         if (useCaseContext.getUseCase() instanceof IUseCase18nListener) {
             ((IUseCase18nListener) useCaseContext.getUseCase()).onSessionLanguageChange();

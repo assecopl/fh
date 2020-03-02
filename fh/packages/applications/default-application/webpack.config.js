@@ -24,7 +24,6 @@ module.exports = function (cmdEnv) {
     let baseConfig = {
         entry: ['@babel/polyfill', './Module.ts'],
         mode: 'development',
-        devtool: 'source-map',
         output: {
             path: Path.resolve('./../../../fhCoreLite/defaultApplication/target/classes/static'),
             filename: 'fhApplication.bundle.js'

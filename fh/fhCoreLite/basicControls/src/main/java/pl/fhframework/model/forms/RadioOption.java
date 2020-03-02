@@ -11,10 +11,14 @@ import pl.fhframework.binding.StaticBinding;
 import pl.fhframework.model.dto.ElementChanges;
 import pl.fhframework.model.dto.ValueChange;
 import pl.fhframework.model.forms.designer.InputFieldDesignerPreviewProvider;
+import pl.fhframework.model.forms.optimized.ColumnOptimized;
 import pl.fhframework.model.forms.validation.ValidationFactory;
 import pl.fhframework.validation.ValidationManager;
 
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.CONTENT;
 
@@ -22,8 +26,8 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
  * RadioOption
  * It is used to add common logic to options group eg. reaction to 'on change' events.
  */
-@Control(parents = {PanelGroup.class, Column.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
-@DocumentedComponent(value = "RadioOption represents single radio component", icon = "fa fa-circle", ignoreFields = {"emptyValue", "emptyLabel"})
+@Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
+@DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, value = "RadioOption represents single radio component", icon = "fa fa-circle", ignoreFields = {"emptyValue", "emptyLabel"})
 public class RadioOption extends BaseInputField implements IPairableComponent<String> {
     private static final String GROUP_VALUE_ATTR = "targetValue";
     private static final String CHECKED_ATTR = "checkedRadio";
@@ -35,7 +39,7 @@ public class RadioOption extends BaseInputField implements IPairableComponent<St
     @JsonIgnore
     @Getter
     @Setter
-    @XMLProperty(value = GROUP_VALUE_ATTR)
+    @XMLProperty(required = true, value = GROUP_VALUE_ATTR)
     @DesignerXMLProperty(commonUse = true, previewValueProvider = InputFieldDesignerPreviewProvider.class, priority = 80, functionalArea = CONTENT)
     @DocumentedComponentAttribute(boundable = true, value = "Target value for group of RadioOption controls")
     private ModelBinding groupModelBinding;
@@ -58,7 +62,7 @@ public class RadioOption extends BaseInputField implements IPairableComponent<St
 
     @Override
     public void updateModel(ValueChange valueChange) {
-        if (groupModelBinding != null) {
+        if (groupModelBinding != null && !valueChange.getChangedAttributes().isEmpty()) {
             this.updateBinding(valueChange, groupModelBinding, groupModelBinding.getBindingExpression(), this.getOptionalFormatter());
         }
     }

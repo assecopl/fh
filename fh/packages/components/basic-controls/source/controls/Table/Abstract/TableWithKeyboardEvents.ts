@@ -15,8 +15,10 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
     protected rows: Array<TableRowOptimized> = [];
     protected multiselect:boolean = false;
 
-    private keyEventTimer: any;                //timer identifier
-    private doneEventInterval: number = 500;   //event delay in miliseconds
+    protected keyEventTimer: any;                //timer identifier
+    protected doneEventInterval: number = 500;   //event delay in miliseconds
+
+    private loopDown:boolean = true; //key event loop turn on/off
 
     constructor(componentObj: any, parent: HTMLFormComponent) {
         super(componentObj, parent);
@@ -47,7 +49,7 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
 
 
     //Realese ctrl click for keyboard events
-    private  tableKeyupEvent(e) {
+    public  tableKeyupEvent(e) {
         this.ctrlIsPressed = false;
         if (e.which == 9 && $(document.activeElement).is(":input")) {
             let parent = $(document.activeElement).parents('tbody tr:not(.emptyRow)');
@@ -78,18 +80,14 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
                         next = current.next('tr:not(.emptyRow)');
                     }
                     //If there isn't next element we go back to first one.
-                    if (next && next.length == 0) {
+                    if (next && next.length == 0 && this.loopDown) {
                         next = $(this.htmlElement).find('tbody tr:not(.emptyRow)').first();
                     }
 
                     if (next && next.length > 0) {
                         current.removeClass('table-primary');
                         next.addClass('table-primary');
-                        let offset = $(next).position().top;
-                        if (this.fixedHeader) {
-                            offset -= this.header.clientHeight;
-                        }
-                        $(this.component).scrollTop(offset - (this.component.clientHeight / 2));
+                        this.scrolToRow(next);
                         this.keyEventTimer = setTimeout(function (elem) {
                             elem.trigger('click');
                         }, this.doneEventInterval, next);
@@ -111,11 +109,7 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
                     } else if (prev && prev.length > 0) {
                         current.removeClass('table-primary');
                         prev.addClass('table-primary');
-                        let offset = $(prev).position().top;
-                        if (this.fixedHeader) {
-                            offset -= this.header.clientHeight;
-                        }
-                        $(this.component).scrollTop(offset - (this.component.clientHeight / 2));
+                        this.scrolToRow(prev);
                         this.keyEventTimer = setTimeout(function (elem) {
                             elem.trigger('click');
                         }, this.doneEventInterval, prev);
@@ -144,8 +138,11 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
         }.bind(this));
     }
 
-
-    protected highlightSelectedRows() {
+    /**
+     * Used For Optimized Tables
+     * @param scrollAnimate
+     */
+    protected highlightSelectedRows(scrollAnimate:boolean = false) {
         let oldSelected = this.table.querySelectorAll('.table-primary');
         if (oldSelected && oldSelected.length) {
             [].forEach.call(oldSelected, function (row) {
@@ -155,7 +152,7 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
         (this.rawValue || []).forEach(function (value) {
             if (value != -1) {
                 const row: TableRowOptimized = this.rows[parseInt(value)];
-                row.highlightRow();
+                row.highlightRow(scrollAnimate);
 
             }
         }.bind(this));
@@ -175,6 +172,20 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
             }.bind(this));
         }
     };
+
+
+    destroy(removeFromParent) {
+        this.table.removeEventListener('mousedown', this.tableMousedownEvent);
+        if (this.selectable && this.onRowClick) {
+            this.table.removeEventListener('keydown', this.tableKeydownEvent.bind(this));
+            this.table.removeEventListener('keyup', this.tableKeyupEvent.bind(this));
+        }
+        super.destroy(removeFromParent);
+    }
+
+    public keyEventLoopDownTurnOff(){
+        this.loopDown = false;
+    }
 
 }
 

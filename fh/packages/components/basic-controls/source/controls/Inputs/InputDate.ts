@@ -97,7 +97,7 @@ class InputDate extends InputText implements LanguageChangeObserver {
 
         this.createAddon();
 
-        $(this.input).on('input', this.updateModel.bind(this));
+        $(this.input).on('input', this.onValueInput.bind(this));
         $(this.input).on('blur', this.inputBlurEvent.bind(this));
         $(this.input).on('change', this.inputChangeEvent.bind(this));
 
@@ -239,6 +239,16 @@ class InputDate extends InputText implements LanguageChangeObserver {
         }.bind(this));
     };
 
+    onValueInput() {
+        if (this.maskEnabled) {
+            if (this.maskPlugin.isComplete(this.input)) {
+                this.updateModel();
+            }
+        } else {
+            this.updateModel();
+        }
+    }
+
     updateModel() {
         this.rawValue = InputDate.toDateOrLeave(this.input.value, this.format, this.backendFormat);
         if (this.onChange != null && this.oldValue !== this.rawValue) {
@@ -282,7 +292,7 @@ class InputDate extends InputText implements LanguageChangeObserver {
     protected applyMask() {
         if (this.maskEnabled && !this.inputmaskEnabled) {
             // @ts-ignore
-            Inputmask({
+            this.maskPlugin = Inputmask({
                 clearMaskOnLostFocus: false,
                 greedy: false,
                 jitMasking: this.maskDynamic,
@@ -306,11 +316,17 @@ class InputDate extends InputText implements LanguageChangeObserver {
         super.wrap(skipLabel, isInputElement);
     }
 
+    getDefaultWidth(): string {
+        return "md-3";
+    }
+
     destroy(removeFromParent: boolean) {
         // noinspection JSIgnoredPromiseFromCall
         this.i18n.unsubscribe(this);
 
-        $(this.input).off('input', this.updateModel.bind(this));
+        this.maskPlugin = null;
+
+        $(this.input).off('input', this.onValueInput.bind(this));
         $(this.input).off('blur', this.inputBlurEvent.bind(this));
         $(this.input).off('change', this.inputChangeEvent.bind(this));
 

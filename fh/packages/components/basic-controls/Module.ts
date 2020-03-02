@@ -63,6 +63,8 @@ import {SelectComboMenuOptimized} from "./source/controls/Inputs/Optimized/Selec
 import {ThreeDotsMenuItem} from "./source/controls/Dropdown/ThreeDotsMenuItem";
 import {ThreeDotsMenu} from "./source/controls/Dropdown/ThreeDotsMenu";
 import { DictionaryCombo } from './source/controls/Inputs/DictionaryCombo';
+import {Anchor} from "./source/controls/Anchor";
+import {DropdownDivider} from "./source/controls/Dropdown/DropdownDivider";
 
 class BasicControls extends FhModule {
     protected registerComponents() {
@@ -402,6 +404,18 @@ class BasicControls extends FhModule {
                     return new ThreeDotsMenuItem(componentObj, parent);
                 };
             });
+        FhContainer.bind<(componentObj: any, parent: any) => Anchor>("Anchor")
+            .toFactory<Anchor>(() => {
+                return (componentObj: any, parent: any) => {
+                    return new Anchor(componentObj, parent);
+                };
+            });
+        FhContainer.bind<(componentObj: any, parent: any) => DropdownDivider>("DropdownDivider")
+            .toFactory<DropdownDivider>(() => {
+                return (componentObj: any, parent: any) => {
+                    return new DropdownDivider(componentObj, parent);
+                };
+            });
 
         /**
          * --------------------------------------------------------------------------
@@ -505,4 +519,5 @@ export {
     FhModule,
     MarkdownGrid,
     HtmlView,
+    DropdownDivider
 };

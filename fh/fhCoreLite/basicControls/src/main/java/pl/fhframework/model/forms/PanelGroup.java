@@ -24,7 +24,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.LOOK_AND_STYLE;
 
 @Control(parents = {Accordion.class, PanelGroup.class, Group.class, SplitContainer.class, Repeater.class, Column.class, Tab.class, Row.class, Form.class}, invalidParents = {Table.class}, canBeDesigned = true)
-@DocumentedComponent(value = "PanelGroup component is responsible for the grouping of sub-elements with optional header and collapsing", icon = "fa fa-object-group")
+@DocumentedComponent(category = DocumentedComponent.Category.ARRANGEMENT, value = "PanelGroup component is responsible for the grouping of sub-elements with optional header and collapsing", icon = "fa fa-object-group")
 public class PanelGroup extends GroupingComponent<Component> implements Boundable, IChangeableByClient, IEventSource, IHasBoundableLabel, IDesignerEventListener {
 
     private static final String COLLAPSED_ATTR = "collapsed";
@@ -142,7 +142,7 @@ public class PanelGroup extends GroupingComponent<Component> implements Boundabl
         addSubcomponent(createNewRow());
     }
 
-    private Row createNewRow() {
+    public Row createNewRow() {
         Row row = new Row(getForm());
         row.setGroupingParentComponent(this);
         row.init();

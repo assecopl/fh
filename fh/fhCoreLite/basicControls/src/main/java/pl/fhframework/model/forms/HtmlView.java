@@ -8,14 +8,16 @@ import pl.fhframework.annotations.*;
 import pl.fhframework.binding.ModelBinding;
 import pl.fhframework.model.dto.ElementChanges;
 import pl.fhframework.model.forms.designer.BindingExpressionDesignerPreviewProvider;
+import pl.fhframework.model.forms.optimized.ColumnOptimized;
 
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.CONTENT;
+import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.SPECIFIC;
 
 @Getter
 @Setter
 @DesignerControl(defaultWidth = 12)
-@Control(parents = {PanelGroup.class, Column.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
-@DocumentedComponent(value = "HTML code evaluation.", icon = "fa fa-eye")
+@Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
+@DocumentedComponent(category = DocumentedComponent.Category.IMAGE_HTML_MD, value = "HTML code evaluation.", icon = "fa fa-eye")
 public class HtmlView extends FormElement {
     public static final String ATTR_TEXT = "text";
 
@@ -29,6 +31,14 @@ public class HtmlView extends FormElement {
 
     @Getter
     private String text;
+
+    @JsonIgnore
+    @Getter
+    @Setter
+    @XMLProperty
+    @DocumentedComponentAttribute(value = "Id of formatter which will format object to String. It must be consistent with value of pl.fhframework.formatter.FhFormatter annotation.")
+    @DesignerXMLProperty(functionalArea = SPECIFIC, priority = 93)
+    private String formatter;
 
     public HtmlView(Form form) {
         super(form);
@@ -54,6 +64,9 @@ public class HtmlView extends FormElement {
             BindingResult<String> bindingResult = textModelBinding.getBindingResult();
             if (bindingResult != null) {
                 String newLabelValue = bindingResult.getValue();
+                if (this.formatter != null) {
+                    newLabelValue = getForm().convertValueToString(newLabelValue, formatter);
+                }
                 if (!areValuesTheSame(newLabelValue, text)) {
                     this.text = newLabelValue;
                     elementChanges.addChange(ATTR_TEXT, text);

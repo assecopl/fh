@@ -5,6 +5,9 @@
 .fc.hasHeight {
     overflow-y: auto;
 }
+.hasHeight {
+    position: relative;
+}
 
 .fc.hidden {
     display: none;

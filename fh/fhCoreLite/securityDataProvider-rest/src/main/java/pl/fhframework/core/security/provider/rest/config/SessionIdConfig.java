@@ -14,7 +14,7 @@ import pl.fhframework.core.util.StringUtils;
 @Component
 public class SessionIdConfig implements WebServerFactoryCustomizer<ConfigurableWebServerFactory> {
 
-    @Value("${luna.security.provider.rest.jSessionIdName:}")
+    @Value("${fhframework.security.provider.rest.jSessionIdName:}")
     private String jSessionIdName;
 
     @Override

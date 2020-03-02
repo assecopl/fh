@@ -25,6 +25,7 @@ class InputText extends HTMLFormComponent {
     private timeoutFunction: any;
     private readonly inputTimeout: number;
     protected inputmaskEnabled: boolean;
+    protected maskPlugin: any;
     protected maskInsertMode: boolean;
 
     constructor(componentObj: any, parent: HTMLFormComponent) {
@@ -284,7 +285,7 @@ class InputText extends HTMLFormComponent {
 
             try {
                 // @ts-ignore
-                Inputmask(options).mask(this.input);
+                this.maskPlugin = Inputmask(options).mask(this.input);
                 this.inputmaskEnabled = true;
             } catch (e) {
                 console.error('Invalidmask library error:');
@@ -447,6 +448,10 @@ class InputText extends HTMLFormComponent {
         this.disableMask();
 
         super.destroy(removeFromParent);
+    }
+
+    public getDefaultWidth():string {
+        return 'md-3';
     }
 }
 

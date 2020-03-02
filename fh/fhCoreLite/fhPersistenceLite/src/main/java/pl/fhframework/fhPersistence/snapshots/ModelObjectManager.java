@@ -66,18 +66,19 @@ public class ModelObjectManager {
         Map<Integer, SnapshotObject> persisted = new LinkedHashMap<>();
         Map<Integer, SnapshotObject> persistedOrphans = new LinkedHashMap<>();
         EntityManager em = cc.getEntityManager();
-        for (SnapshotObject entry : snapshot.getSnapshotEntries().values()) {
-            if (entry.getState() == SnapshotEmObjectState.Persisted && em.contains(entry.getTarget())) {
-                if (entry.isOrphan()) {
-                    persistedOrphans.put(ModelStore.getIdentityHashCode(entry.getTarget()), entry);
-                } else {
-                    persisted.put(ModelStore.getIdentityHashCode(entry.getTarget()), entry);
+        if (em != null) {
+            for (SnapshotObject entry : snapshot.getSnapshotEntries().values()) {
+                if (entry.getState() == SnapshotEmObjectState.Persisted && em.contains(entry.getTarget())) {
+                    if (entry.isOrphan()) {
+                        persistedOrphans.put(ModelStore.getIdentityHashCode(entry.getTarget()), entry);
+                    } else {
+                        persisted.put(ModelStore.getIdentityHashCode(entry.getTarget()), entry);
+                    }
+                } else if (entry.getState() == SnapshotEmObjectState.Removed) {
+                    em.persist(entry.getTarget());
                 }
-            } else if (entry.getState() == SnapshotEmObjectState.Removed) {
-                em.persist(entry.getTarget());
             }
         }
-
         // 2. If object is manually persisted, then leave changed (not restored) all its fields that are objects with
         // orphanRemoval flag set true
         for (SnapshotObject entry : snapshot.getSnapshotEntries().values()) {
@@ -261,8 +262,6 @@ public class ModelObjectManager {
     private void exchangeWrappedManagedObjects(final Object input, final ConversationContext prevContext, ConversationContext currentContext, boolean inputExchange) {
         Class klasa = input.getClass();
 
-        EntityManager em = currentContext.getEntityManager();
-
         try {
             while (!klasa.equals(Object.class)) {
                 for (Field field : klasa.getDeclaredFields()) {
@@ -300,13 +299,13 @@ public class ModelObjectManager {
     }
 
     public void sychronizeCollections() {
-        modelProxyService.sychronizeCollections();
+        modelProxyService.synchronizeCollections();
     }
 
     public void manageNonOwningRelations() {
     }
 
-    public void managePersistenceSession() {
+    public void synchronizeObjectState() {
         sychronizeCollections();
         manageNonOwningRelations();
     }

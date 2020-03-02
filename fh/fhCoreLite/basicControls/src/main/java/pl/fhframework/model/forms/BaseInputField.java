@@ -79,7 +79,7 @@ public abstract class BaseInputField extends FormElementWithConfirmationSupport 
     @Getter
     @Setter
     @XMLProperty(value = LABEL_ATTR)
-    @DesignerXMLProperty(commonUse = true, previewValueProvider = BindingExpressionDesignerPreviewProvider.class, priority = 100, functionalArea = CONTENT)
+    @DesignerXMLProperty(commonUse = true, previewValueProvider = BindingExpressionDesignerPreviewProvider.class, priority = 110, functionalArea = CONTENT)
     @DocumentedComponentAttribute(boundable = true, value = "Represents label for created component. Supports FHML - FH Markup Language.")
     private ModelBinding labelModelBinding;
 

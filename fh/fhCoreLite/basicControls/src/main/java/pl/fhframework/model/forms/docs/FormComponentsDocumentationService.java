@@ -4,11 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 
 import pl.fhframework.core.designer.IDocumentationUseCase;
+import pl.fhframework.core.i18n.MessageService;
 import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.ReflectionUtils;
 import pl.fhframework.annotations.*;
@@ -20,14 +19,11 @@ import pl.fhframework.model.forms.attributes.AttributeHolder;
 import pl.fhframework.core.designer.ComponentElement;
 import pl.fhframework.core.designer.DocumentedAttribute;
 import pl.fhframework.model.forms.docs.model.FormComponentDocumentationHolder;
+import pl.fhframework.model.forms.docs.model.FormElementCategory;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 @Service
 public class FormComponentsDocumentationService {
@@ -38,14 +34,22 @@ public class FormComponentsDocumentationService {
     private static final String DOCUMENTED_COMPONENTS_PACKAGE = "pl";
     private static final String GIS2D_PACKAGE = "pl.fhframework.gis2d";
     private static final String FH_BASIC_COMPONENTS_PACKAGE = "pl.fhframework.model";
+
     @Autowired
     private ApplicationContext appContext;
+
+    @Autowired
+    private MessageService messageService;
 
     public FormComponentDocumentationHolder findDocumentedBasicComponentsForPredicate(Boolean canBeDesigned) throws ClassNotFoundException {
         FormComponentDocumentationHolder form = new FormComponentDocumentationHolder();
         DocumentationPathParams pathParams = new DocumentationPathParams(FORM_CLASS_PATH, ELEMENT_CLASS_PATH, FH_BASIC_COMPONENTS_PACKAGE, UC_CLASS_PATH);
-        MultiValueMap<String, ComponentElement> documentationElementsMap = collectDocumentedFormComponents(isInPackage(pathParams.getComponentsPackage()), canBeDesigned, pathParams);
-        form.setFormElements(documentationElementsMap.get(""));
+        Map<String, FormElementCategory> documentationElementsMap = collectDocumentedFormComponents(isInPackage(pathParams.getComponentsPackage()), canBeDesigned, pathParams);
+
+        ArrayList<FormElementCategory> componentCategories = new ArrayList<>(documentationElementsMap.values());
+        componentCategories.forEach(c -> c.setName(messageService.getBundle("fhCoreMessageSource").getEnumMessage(c.getCategory())));
+        componentCategories.sort(Comparator.comparing(o -> o.getCategory().ordinal()));
+        form.setFormElements(componentCategories);
         return form;
     }
 
@@ -55,13 +59,13 @@ public class FormComponentsDocumentationService {
 
     public FormComponentDocumentationHolder findDocumentedMap2dComponentsForPredicate(Predicate<? super Class<?>> predicate, DocumentationPathParams pathParams, String category) throws ClassNotFoundException {
         FormComponentDocumentationHolder form = new FormComponentDocumentationHolder();
-        MultiValueMap<String, ComponentElement> documentationElementsMap = collectDocumentedFormComponents(predicate, null, pathParams);
-        form.setMap2dElements(documentationElementsMap.get(category));
+        Map<String, FormElementCategory> documentationElementsMap = collectDocumentedFormComponents(predicate, null, pathParams);
+        form.setMap2dElements(documentationElementsMap.get("").getComponents());
         return form;
     }
 
-    public MultiValueMap<String, ComponentElement> collectDocumentedFormComponents(Predicate<? super Class<?>> predicate, Boolean canBeDesigned, DocumentationPathParams pathParams) throws ClassNotFoundException {
-        MultiValueMap<String, ComponentElement> componentDocumentation = new LinkedMultiValueMap<>();
+    public Map<String, FormElementCategory> collectDocumentedFormComponents(Predicate<? super Class<?>> predicate, Boolean canBeDesigned, DocumentationPathParams pathParams) throws ClassNotFoundException {
+        Map<String, FormElementCategory> componentDocumentation = new TreeMap<>();
         //TODO:think about get by superclass not only by annotation
         List<Class<?>> documentedClasses = findDocumentedClasses(predicate);
 
@@ -74,21 +78,13 @@ public class FormComponentsDocumentationService {
                 String formComponentSimpleName = clazz.getSimpleName();
                 Class<? extends ComponentElement> formDocumentationComponentClassName;
                 ComponentElement element;
-                String category = classAnnotation.category();
+                DocumentedComponent.Category category = classAnnotation.category();
                 //if category attribute is set look for form and model inside *.<category>.* package i.e. for maps search in pl.fhframework.docs.forms.component.map3d package
                 try {
-                    if (!StringUtils.isEmpty(category)) {
-                        String categoryPath = category + ".";
-                        formDocumentationComponentClassName = (Class<? extends ComponentElement>) Class.forName(String.format(pathParams.getModelClassPath(), categoryPath, formComponentSimpleName));
-                        element = appContext.getBean(formDocumentationComponentClassName);
-                        element.setForm((Class<? extends Form>) Class.forName(String.format(pathParams.getFormClassPath(), categoryPath, formComponentSimpleName)));
-                        element.setUseCase((Class<IDocumentationUseCase>) ReflectionUtils.tryGetClassForName(String.format(pathParams.getUcClassPath(), categoryPath, formComponentSimpleName)));
-                    } else {
-                        formDocumentationComponentClassName = (Class<? extends ComponentElement>) Class.forName(String.format(pathParams.getModelClassPath(), "", formComponentSimpleName));
-                        element = appContext.getBean(formDocumentationComponentClassName);
-                        element.setForm((Class<? extends Form>) Class.forName(String.format(pathParams.getFormClassPath(), "", formComponentSimpleName)));
-                        element.setUseCase((Class<IDocumentationUseCase>) ReflectionUtils.tryGetClassForName(String.format(pathParams.getUcClassPath(), "", formComponentSimpleName)));
-                    }
+                    formDocumentationComponentClassName = (Class<? extends ComponentElement>) Class.forName(String.format(pathParams.getModelClassPath(), "", formComponentSimpleName));
+                    element = appContext.getBean(formDocumentationComponentClassName);
+                    element.setForm((Class<? extends Form>) Class.forName(String.format(pathParams.getFormClassPath(), "", formComponentSimpleName)));
+                    element.setUseCase((Class<IDocumentationUseCase>) ReflectionUtils.tryGetClassForName(String.format(pathParams.getUcClassPath(), "", formComponentSimpleName)));
 
                     element.setDescription(classAnnotation.value());
                     element.setComponentName(formComponentSimpleName);
@@ -97,20 +93,20 @@ public class FormComponentsDocumentationService {
                     element.setIcon(classAnnotation.icon());
 
                     collectDocumentedAttributes(clazz, element, Arrays.asList(attributeExcludes));
-                    componentDocumentation.add(category, element);
+
+                    String categoryName = category.toString();
+                    if (componentDocumentation.containsKey(categoryName)) {
+                        componentDocumentation.get(categoryName).getComponents().add(element);
+                    } else {
+                        FormElementCategory formElementCategory = new FormElementCategory(categoryName, category, new ArrayList<>());
+                        formElementCategory.getComponents().add(element);
+                        componentDocumentation.put(categoryName, formElementCategory);
+                    }
                 } catch (ClassNotFoundException ex) {
                     FhLogger.warn("There is no documentation for component", ex);
                 }
             }
         }
-
-        componentDocumentation.forEach((s, componentElements) -> Collections.sort(componentElements, (component1, component2) -> {
-            // sort by category then by component name
-            int c1 = component1.getCategory().compareTo(component2.getCategory());
-            if (c1 != 0)
-                return c1;
-            return component1.getComponentName().compareTo(component2.getComponentName());
-        }));
 
         return componentDocumentation;
     }

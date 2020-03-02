@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import pl.fhframework.core.security.IDefaultUser;
 import pl.fhframework.core.security.ISecurityDataProvider;
 import pl.fhframework.core.security.provider.service.AbstractSecurityProviderInitializer;
-import pl.fhframework.core.security.provider.service.LunaUserDetailsService;
+import pl.fhframework.core.security.provider.service.FhUserDetailsService;
 
 import java.util.List;
 import java.util.Objects;
@@ -20,14 +20,14 @@ import java.util.Objects;
 @Service
 public class RemoteSecurityProviderInitializer extends AbstractSecurityProviderInitializer {
 
-    @Value("${luna.security.provider.remote.pass.encode:true}")
+    @Value("${fhframework.security.provider.remote.pass.encode:true}")
     boolean passEncode;
 
-    private final LunaUserDetailsService userDetailsService;
+    private final FhUserDetailsService userDetailsService;
     private final ApplicationContext applicationContext;
 
     @Autowired
-    public RemoteSecurityProviderInitializer(ISecurityDataProvider securityDataProvider, LunaUserDetailsService userDetailsService, ApplicationContext applicationContext) {
+    public RemoteSecurityProviderInitializer(ISecurityDataProvider securityDataProvider, FhUserDetailsService userDetailsService, ApplicationContext applicationContext) {
         super(securityDataProvider);
         this.userDetailsService = userDetailsService;
         this.applicationContext = applicationContext;

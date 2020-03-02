@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import pl.fhframework.core.security.AuthorizationManager;
 import pl.fhframework.core.security.ISecurityDataProvider;
 import pl.fhframework.core.security.ISystemFunctionId;
@@ -15,7 +16,6 @@ import pl.fhframework.core.security.model.IPermission;
 import pl.fhframework.core.security.model.IRoleInstance;
 import pl.fhframework.core.security.model.IUserAccount;
 import pl.fhframework.core.security.provider.exception.SecurityDataProviderException;
-import pl.fhframework.core.security.provider.model.Permission;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -167,7 +167,7 @@ public class SecurityDataProvider implements ISecurityDataProvider {
     @Override
     public List<IBusinessRole> findBusinessRolesForFunction(String moduleUUID, String functionName) {
         Collection<String> functions = getFunctionHierarchy(functionName);
-        List<Permission> permissions = permissionProvider.findByModuleUUIDAndFunctionNameIn(moduleUUID, functions);
+        List<IPermission> permissions = permissionProvider.findByModuleUUIDAndFunctionNameIn(moduleUUID, functions);
         return permissions.stream()
                 .map(permission -> businessRoleProvider.findBusinessRoleByName(permission.getBusinessRoleName()))
                 .collect(Collectors.toList());
@@ -221,7 +221,7 @@ public class SecurityDataProvider implements ISecurityDataProvider {
 
     @Override
     public void savePermissions(List<IPermission> permissions) {
-        if (permissions != null) {
+        if (!CollectionUtils.isEmpty(permissions)) {
             permissions.forEach(permissionProvider::savePermission);
         }
         changesInformer.informServerDefinitionChanged();

@@ -182,7 +182,7 @@ class TableOptimized extends TableWithKeyboardEvents {
     public render() {
         super.render();
         if (!this.onRowClick || this.onRowClick === '-') {
-            this.highlightSelectedRows();
+            this.highlightSelectedRows(true);
         }
     }
 
@@ -196,6 +196,38 @@ class TableOptimized extends TableWithKeyboardEvents {
      * @param componentsList
      */
 
+    deleteRow(row) {
+        row.components.forEach(column => {
+            column._parent = null;
+            column._parent = null;
+            column.contentWrapper = null;
+            column.container = null;
+            if (row._dataWrapper) {
+                row._dataWrapper.removeChild(column.htmlElement);
+            }
+            column.destroy();
+        });
+        row.components = [];
+        row.component = null;
+        row._parent = null;
+        row.contentWrapper = null;
+        row.container = null;
+        row.htmlElement.removeEventListener('click', this.onRowClickEvent.bind(this));
+
+        $(row.htmlElement).unbind().remove();
+        row.htmlElement = null;
+        row.destroy();
+    };
+
+    removeMinRowRows() {
+        if (this.rows.length > this.visibleRows) {
+            let i;
+            for (i = this.visibleRows; i < this.rows.length; i++) {
+                this.deleteRow(this.rows[i]);
+            }
+            this.rows = this.rows.splice(0, this.visibleRows);
+        }
+    };
 
     addMinRowRows() {
         if (this.visibleRows < this.minRows) {
@@ -334,6 +366,16 @@ class TableOptimized extends TableWithKeyboardEvents {
             if (this.rawValue.length == 0) {
                 this.rawValue.push(-1);
             }
+        }
+    };
+
+    redrawColumns() {
+        this.calculateColumnWidths();
+
+        // if minRows is present
+        if (this.minRows !== null && this.rows.length > 0) {
+            this.removeMinRowRows();
+            this.addMinRowRows();
         }
     };
 

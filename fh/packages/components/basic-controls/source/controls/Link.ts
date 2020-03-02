@@ -86,7 +86,7 @@ class Link extends HTMLFormComponent {
      * @Override
      */
     public getDefaultWidth():string {
-        return null;
+        return "md-2";
     }
 }
 

@@ -9,16 +9,21 @@ import pl.fhframework.binding.ModelBinding;
 import pl.fhframework.model.dto.ElementChanges;
 import pl.fhframework.model.dto.ValueChange;
 import pl.fhframework.model.forms.designer.BindingExpressionDesignerPreviewProvider;
+import pl.fhframework.model.forms.optimized.ColumnOptimized;
 
 import java.util.Objects;
+import java.util.Optional;
 
-import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.CONTENT;
+import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.*;
 
 @Getter
 @Setter
+@OverridenPropertyAnnotations(designerXmlProperty = @DesignerXMLProperty(skip = true), property = "value")
+@OverridenPropertyAnnotations(designerXmlProperty = @DesignerXMLProperty(skip = true), property = "modelBinding")
+@OverridenPropertyAnnotations(designerXmlProperty = @DesignerXMLProperty(skip = true), property = "rawValue")
 @DesignerControl(defaultWidth = 12)
-@Control(parents = {PanelGroup.class, Column.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
-@DocumentedComponent(value = "Visual HTML text editor. Allows visual editing of text in HTML markup.", icon = "fa fa-eye")
+@Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
+@DocumentedComponent(category = DocumentedComponent.Category.IMAGE_HTML_MD, value = "Visual HTML text editor. Allows visual editing of text in HTML markup.", icon = "fa fa-eye")
 public class HtmlEditor extends BaseInputField {
     public static final String ATTR_TEXT = "text";
 
@@ -32,6 +37,14 @@ public class HtmlEditor extends BaseInputField {
 
     @Getter
     private String text;
+
+    @JsonIgnore
+    @Getter
+    @Setter
+    @XMLProperty
+    @DocumentedComponentAttribute(value = "Id of formatter which will format object to String. It must be consistent with value of pl.fhframework.formatter.FhFormatter annotation.")
+    @DesignerXMLProperty(functionalArea = SPECIFIC, priority = 93)
+    private String formatter;
 
     public HtmlEditor(Form form) {
         super(form);
@@ -57,6 +70,10 @@ public class HtmlEditor extends BaseInputField {
             BindingResult<String> bindingResult = textModelBinding.getBindingResult();
             if (bindingResult != null) {
                 String newLabelValue = bindingResult.getValue();
+
+                if (this.formatter != null) {
+                    newLabelValue = getForm().convertValueToString(newLabelValue, formatter);
+                }
                 if (!areValuesTheSame(newLabelValue, text)) {
                     this.text = newLabelValue;
                     elementChanges.addChange(ATTR_TEXT, text);
@@ -73,7 +90,7 @@ public class HtmlEditor extends BaseInputField {
 
         if (!Objects.equals(text, newText)) {
             this.text = newText;
-            this.updateBindingForValue(newText, textModelBinding, newText);
+            this.updateBindingForValue(newText, textModelBinding, newText, Optional.ofNullable(formatter));
         }
     }
 

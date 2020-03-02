@@ -23,8 +23,8 @@ class ColumnPaged extends HTMLFormComponent {
     create() {
 
         let column = document.createElement('th');
-        if (this.width) {
-            column.style.width = this.width + '%';
+        if (this.width && this.width.length > 0) {
+            column.style.width = this.width[0].includes("px")? this.width[0]: this.width[0]  + '%';
         }
         // HTMLComponent recognized and updated label
         this.labelElement = document.createElement('span');

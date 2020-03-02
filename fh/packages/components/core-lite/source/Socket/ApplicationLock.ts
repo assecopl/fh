@@ -88,7 +88,7 @@ class ApplicationLock {
     }
 
     // TODO: refactor
-    public createErrorDialog(data: Array<any>, callback: any = undefined): any {
+    public createErrorDialog(data: Array<any>, callback: any = undefined, withClose = true): any {
         let dialog = document.createElement('div');
         dialog.classList.add('fh-error-dialog');
 
@@ -156,7 +156,9 @@ class ApplicationLock {
             content.appendChild(wrapper);
         }
 
-        dialog.appendChild(close);
+        if (withClose) {
+            dialog.appendChild(close);
+        }
         dialog.appendChild(content);
 
         if (typeof callback === 'function') {
@@ -184,14 +186,14 @@ class ApplicationLock {
         }
     }
 
-    public createInfoDialog(info, button1Name = undefined, button1OnClick = undefined, button2Name = undefined, button2OnClick = undefined): void {
+    public createInfoDialog(info, button1Name = undefined, button1OnClick = undefined, button2Name = undefined, button2OnClick = undefined, withClose = true): void {
         if (this.reconnectInfo) {
             ApplicationLock.closeErrorDialog(this.reconnectInfo);
             this.reconnectInfo = null;
         }
         this.reconnectInfo = this.createErrorDialog([], function (content) {
             ApplicationLock.appendDialogElements(content, info, button1Name, button1OnClick, button2Name, button2OnClick);
-        });
+        }, withClose);
     }
 
     public closeInfoDialog(): void {

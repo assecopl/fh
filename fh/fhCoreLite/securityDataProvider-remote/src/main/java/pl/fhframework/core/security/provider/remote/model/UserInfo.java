@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +17,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @JsonRootName("user")
-public class UserInfo {
+public class UserInfo implements Serializable {
 
     @JsonProperty
     private String username;

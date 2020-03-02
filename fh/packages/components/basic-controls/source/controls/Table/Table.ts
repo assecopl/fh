@@ -1,7 +1,7 @@
-import {AdditionalButton, HTMLFormComponent, FhContainer} from "fh-forms-handler";
-import {TableFixedHeaderAndHorizontalScroll} from "./Abstract/TableFixedHeaderAndHorizontalScroll";
+import {AdditionalButton, HTMLFormComponent, FhContainer, FormComponent} from "fh-forms-handler";
+import {TableWithKeyboardEvents} from "./Abstract/TableWithKeyboardEvents";
 
-class Table extends TableFixedHeaderAndHorizontalScroll {
+class Table extends TableWithKeyboardEvents {
     protected readonly visibleRows: any;
     protected readonly tableData: any;
     protected rows: Array<any> = [];
@@ -13,11 +13,8 @@ class Table extends TableFixedHeaderAndHorizontalScroll {
     private readonly tableStripes: any;
     protected readonly onRowClick: any;
     private readonly onRowDoubleClick: any;
-    private readonly multiselect: any;
     private readonly selectionCheckboxes: any;
     private selectionChanged: any;
-    private readonly selectable: boolean;
-    private ctrlIsPressed: any;
     public totalColumns: number;
     protected ieFocusFixEnabled: boolean;
     protected table: HTMLTableElement;
@@ -25,12 +22,8 @@ class Table extends TableFixedHeaderAndHorizontalScroll {
     protected footer: HTMLTableSectionElement = null;
     private _dataWrapper: HTMLTableSectionElement;
 
-    private keyEventTimer: any;                //timer identifier
-    private doneEventInterval: number = 500;   //event delay in miliseconds
-
     constructor(componentObj: any, parent: HTMLFormComponent) {
         super(componentObj, parent);
-        this.selectable = this.componentObj.selectable || true;
         this.visibleRows = this.componentObj.displayedRowsCount || 0;
         this.tableData = this.componentObj.tableRows;
         this.rows = [];
@@ -41,15 +34,11 @@ class Table extends TableFixedHeaderAndHorizontalScroll {
         this.tableGrid = this.componentObj.tableGrid || 'hide';
         this.tableStripes = this.componentObj.tableStripes || 'hide';
         this.ieFocusFixEnabled = this.componentObj.ieFocusFixEnabled || false;
-        this.rawValue = this.componentObj.rawValue || this.componentObj.selectedRowsNumbers || [];
 
         this._dataWrapper = null;
-        this.onRowClick = this.componentObj.onRowClick;
         this.onRowDoubleClick = this.componentObj.onRowDoubleClick;
-        this.multiselect = this.componentObj.multiselect || false;
         this.selectionCheckboxes = this.componentObj.selectionCheckboxes || false;
         this.selectionChanged = false;
-        this.ctrlIsPressed = false;
 
         this.componentObj.verticalAlign = this.componentObj.verticalAlign || 'top';
         this.totalColumns = 0;
@@ -62,10 +51,6 @@ class Table extends TableFixedHeaderAndHorizontalScroll {
         table.id = this.id;
         table.tabIndex = 0;
 
-        if (this.selectable && this.onRowClick) {
-            $(table).on('keydown', this.tableKeydownEvent.bind(this));
-            $(table).on('keyup', this.tableKeyupEvent.bind(this));
-        }
 
         ['fc', 'table', 'table-hover', 'table-bordered'].forEach(function (cssClass) {
             table.classList.add(cssClass);
@@ -107,7 +92,6 @@ class Table extends TableFixedHeaderAndHorizontalScroll {
 
 
         this.table = table;
-        this.bindKeyboardEvents();
 
         let div = document.createElement('div');
         if (this.componentObj.horizontalScrolling) {
@@ -152,9 +136,8 @@ class Table extends TableFixedHeaderAndHorizontalScroll {
         }
 
         this.refreshData();
-        $(this.table).on('mousedown', this.tableMousedownEvent);
-        this.calculateColumnWidths();
-        this.initFixedHeaderAndScrolling();
+        this.initExtends();
+
 
     }
 
@@ -166,11 +149,13 @@ class Table extends TableFixedHeaderAndHorizontalScroll {
                     case 'rowIndexMappings':
                         this.rowIndexMappings = newValue;
                         this.refreshData(true);
+                        this.updateFixedHeaderWidth();
                         break;
                     case 'displayedRowsCount':
                         this.visibleRows = change.changedAttributes['displayedRowsCount'];
                         this.tableData = change.changedAttributes['tableRows'];
                         this.refreshData(true);
+                        this.updateFixedHeaderWidth();
                         break;
                     case 'selectedRowNumber':
                         this.rawValue = change.changedAttributes['selectedRowNumber'];
@@ -192,25 +177,6 @@ class Table extends TableFixedHeaderAndHorizontalScroll {
             }.bind(this));
         }
     };
-
-    tableMousedownEvent(event) {
-        if (event.ctrlKey) {
-            event.preventDefault();
-        }
-    }
-
-    tableKeydownEvent(event) {
-        if (event.which == "17") {
-            this.ctrlIsPressed = true;
-        }
-    }
-
-    // fixedHeaderEvent(e) {
-    //     const el = e.target;
-    //     $(this.header)
-    //         .find('th')
-    //         .css('transform', 'translateY(' + el.scrollTop + 'px)');
-    // }
 
     onRowClickEvent(event) {
         if (this.accessibility != 'EDIT') return;
@@ -458,7 +424,12 @@ class Table extends TableFixedHeaderAndHorizontalScroll {
     };
 
 
-    highlightSelectedRows() {
+    /**
+     * @override
+     * Used for standard tables
+     * @param scrollAnimate
+     */
+    highlightSelectedRows(scrollAnimate: boolean = false) {
         let oldSelected = this.table.querySelectorAll('.table-primary');
         if (oldSelected && oldSelected.length) {
             [].forEach.call(oldSelected, function (row) {
@@ -478,13 +449,11 @@ class Table extends TableFixedHeaderAndHorizontalScroll {
                 if (this.rawValue.length < 2) {
                     let containerHeight = container.height();
                     let containerScrollTop = container.scrollTop();
-                    let realPositionElement = containerScrollTop + scrollTo.position().top;
+                    let realPositionElement = scrollTo.position().top;
                     if (realPositionElement < containerScrollTop || realPositionElement
                         > containerScrollTop
                         + containerHeight) {
-                        $(this.component).animate({
-                            scrollTop: realPositionElement - scrollTo.outerHeight()
-                        });
+                        this.scrolToRow(scrollTo, scrollAnimate);
                     }
                 }
                 if (this.selectionCheckboxes) {
@@ -531,98 +500,6 @@ class Table extends TableFixedHeaderAndHorizontalScroll {
         }
     };
 
-    tableKeyupEvent(e) {
-        this.ctrlIsPressed = false;
-        if (e.which == 9 && $(document.activeElement).is(":input")) {
-            let parent = $(document.activeElement).parents('tbody tr:not(.emptyRow)');
-
-            if (parent && parent.length > 0) {
-                parent.trigger('click');
-            }
-        }
-    }
-
-    bindKeyboardEvents() {
-        this.table.addEventListener('keydown', function (e) {
-            if (document.activeElement == this.table) {
-                if (e.which == 40) { // strzalka w dol
-                    clearTimeout(this.keyEventTimer);
-                    e.preventDefault();
-                    let current = $(this.htmlElement).find('tbody tr.table-primary');
-                    let next = null;
-
-                    if (current.length == 0) {
-                        next = $(this.htmlElement).find('tbody tr:not(.emptyRow)').first();
-                    } else {
-                        next = current.next('tr:not(.emptyRow)');
-                    }
-                    //If there isn't next element we go back to first one.
-                    if (next && next.length == 0) {
-                        next = $(this.htmlElement).find('tbody tr:not(.emptyRow)').first();
-                    }
-
-                    if (next && next.length > 0) {
-                        current.removeClass('table-primary');
-                        next.addClass('table-primary');
-                        let offset = $(next).position().top;
-                        if (this.fixedHeader) {
-                            offset -= this.header.clientHeight;
-                        }
-                        $(this.component).scrollTop(offset - (this.component.clientHeight / 2));
-                        this.keyEventTimer = setTimeout(function (elem) {
-                            elem.trigger('click');
-                        }, this.doneEventInterval, next);
-                    }
-                } else if (e.which == 38) { // strzalka w gore
-                    e.preventDefault();
-                    clearTimeout(this.keyEventTimer);
-                    let current = $(this.htmlElement).find('tbody tr.table-primary');
-                    let prev = null;
-
-                    if (current.length == 0) {
-                        prev = $(this.htmlElement).find('tbody tr:not(.emptyRow)').first();
-                    } else {
-                        prev = current.prev('tr:not(.emptyRow)');
-                    }
-
-                    if (prev && prev.length == 0) {
-                        $(this.component).scrollTop(0);
-                    } else if (prev && prev.length > 0) {
-                        current.removeClass('table-primary');
-                        prev.addClass('table-primary');
-                        let offset = $(prev).position().top;
-                        if (this.fixedHeader) {
-                            offset -= this.header.clientHeight;
-                        }
-                        $(this.component).scrollTop(offset - (this.component.clientHeight / 2));
-                        this.keyEventTimer = setTimeout(function (elem) {
-                            elem.trigger('click');
-                        }, this.doneEventInterval, prev);
-
-                    }
-                }else if (e.which == 33 || e.which == 36) { // pgup i home
-                    e.preventDefault();
-
-                    let first = $(this.htmlElement).find('tbody tr:not(.emptyRow)').first();
-
-                    if (first && first.length > 0) {
-                        $(this.component).scrollTop(0);
-                        first.trigger('click');
-                    }
-                } else if (e.which == 34 || e.which == 35) { // pgdown i end
-                    e.preventDefault();
-
-                    let last = $(this.htmlElement).find('tbody tr:not(.emptyRow)').last();
-
-                    if (last && last.length > 0) {
-                        $(this.component).scrollTop($(last).position().top);
-                        last.trigger('click');
-                    }
-                }
-            }
-        }.bind(this));
-    }
-
     extractChangedAttributes() {
         return this.changesQueue.extractChangedAttributes();
     };
@@ -646,13 +523,6 @@ class Table extends TableFixedHeaderAndHorizontalScroll {
     }
 
     destroy(removeFromParent) {
-        $(this.table).off('mousedown', this.tableMousedownEvent);
-
-        if (this.selectable && this.onRowClick) {
-            $(this.table).off('keydown', this.tableKeydownEvent.bind(this));
-            $(this.table).off('keyup', this.tableKeyupEvent.bind(this));
-        }
-
         this.clearRows();
         super.destroy(removeFromParent);
     }
@@ -664,10 +534,20 @@ class Table extends TableFixedHeaderAndHorizontalScroll {
     render() {
         super.render();
         if (!this.onRowClick || this.onRowClick === '-') {
-            this.highlightSelectedRows();
+            //Show highlighted record after showing table again , Works only with animate set to true.
+            this.highlightSelectedRows(true);
         }
     }
 
+    protected getAllComponents() {
+        let result: FormComponent[] = this.components;
+
+        this.rows.forEach((value) => {
+            result = result.concat(value.components);
+        });
+
+        return result;
+    }
 }
 
 export {Table};

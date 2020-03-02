@@ -3,16 +3,17 @@ package pl.fhframework.model.forms;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
-import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.BindingResult;
 import pl.fhframework.annotations.*;
 import pl.fhframework.binding.*;
+import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.model.TextAlignEnum;
 import pl.fhframework.model.dto.ElementChanges;
 import pl.fhframework.model.dto.InMessageEventData;
 import pl.fhframework.model.forms.config.BasicControlsConfiguration;
 import pl.fhframework.model.forms.designer.InputFieldDesignerPreviewProvider;
 import pl.fhframework.model.forms.designer.RegExAttributeDesignerSupport;
+import pl.fhframework.model.forms.optimized.ColumnOptimized;
 import pl.fhframework.model.forms.utils.LanguageResolver;
 import pl.fhframework.model.forms.validation.ValidationFactory;
 import pl.fhframework.tools.loading.IBodyXml;
@@ -25,9 +26,10 @@ import java.util.regex.PatternSyntaxException;
 
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.*;
 
-@DocumentedComponent(value = "InputText component is responsible for displaying simple field, where user can write some data" +
+@DesignerControl(defaultWidth = 3)
+@DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, value = "InputText component is responsible for displaying simple field, where user can write some data" +
         " plus label representing this field.", icon = "fa fa-edit")
-@Control(parents = {PanelGroup.class, Column.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
+@Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
 @OverridenPropertyAnnotations(
         property = "modelBinding",
         designerXmlProperty = @DesignerXMLProperty(allowedTypes = String.class, commonUse = true, previewValueProvider = InputFieldDesignerPreviewProvider.class, priority = 80, functionalArea = CONTENT))

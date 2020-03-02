@@ -20,8 +20,9 @@ public class ModelListenerFactoryImpl implements ModelListenerFactory {
     }
 
     public static ModelListener getModelListenerImpl() {
-        if (ApplicationContextHolder.getApplicationContext() != null && SessionManager.getSession() != null
-                && ApplicationContextHolder.getApplicationContext().getAutowireCapableBeanFactory().getBean(EntityManagerRepository.class).isConversation()) {
+        if (ApplicationContextHolder.getApplicationContext() != null && SessionManager.getSession() != null &&
+                (!ApplicationContextHolder.getApplicationContext().getAutowireCapableBeanFactory().containsBean(EntityManagerRepository.beanName) ||
+                ApplicationContextHolder.getApplicationContext().getAutowireCapableBeanFactory().getBean(EntityManagerRepository.class).isConversation())) {
             return ApplicationContextHolder.getApplicationContext().getBean(ModelListener.class);
         }
 

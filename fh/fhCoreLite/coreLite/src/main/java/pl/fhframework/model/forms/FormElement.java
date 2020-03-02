@@ -13,6 +13,7 @@ import pl.fhframework.core.generator.ModelElementType;
 import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.model.dto.ElementChanges;
 import pl.fhframework.model.forms.attribute.HintPlacement;
+import pl.fhframework.model.forms.attribute.HintTrigger;
 import pl.fhframework.model.forms.attribute.HorizontalAlign;
 import pl.fhframework.model.forms.attribute.VerticalAlign;
 
@@ -21,7 +22,7 @@ import java.util.Set;
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.LOOK_AND_STYLE;
 
 /**
- * Base component/root of all visual and non visual components.<br/> Contains common logic inherited
+ * Base component/root of all visual and non visual components. Contains common logic inherited
  * by descendant components. Created by Gabriel on 2015-11-20.
  */
 @DesignerControl
@@ -36,6 +37,7 @@ public abstract class FormElement extends Component {
     private static final String PIXED_POSITIVE_REGEX = "([0-9]+)((px)?)";
     private static final String HINT_ATTR = "hint";
     private static final String HINT_PLACEMENT_ATTR = "hintPlacement";
+    private static final String HINT_TRIGGER_ATTR = "hintTrigger";
 
     /**
      * Height of the component
@@ -140,6 +142,15 @@ public abstract class FormElement extends Component {
     @DocumentedComponentAttribute(defaultValue = "TOP", value = "Placement of the hint for component. Available values: top, left, right, bottom. If value is not set then position will be chosen dynamically.")
     private HintPlacement hintPlacement;
 
+    /**
+     * Placement of the hint for component
+     */
+    @Getter
+    @Setter
+    @XMLProperty(value = HINT_TRIGGER_ATTR)
+    @DesignerXMLProperty(functionalArea = LOOK_AND_STYLE, priority = 85)
+    @DocumentedComponentAttribute(defaultValue = "HOVER_FOCUS", value = "Trigger of the hint for component. Available values: HOVER_FOCUS, HOVER. If value is not set then position will be HOVER_FOCUS.")
+    private HintTrigger hintTrigger;
 
     /**
      * Left margin of the component

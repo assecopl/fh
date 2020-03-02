@@ -9,6 +9,7 @@ import org.springframework.security.oauth2.client.resource.BaseOAuth2ProtectedRe
 import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails;
 import org.springframework.security.oauth2.client.token.grant.password.ResourceOwnerPasswordResourceDetails;
 import org.springframework.web.client.RestTemplate;
+import pl.fhframework.core.security.provider.enums.RestTemplateType;
 import pl.fhframework.core.util.StringUtils;
 
 import javax.annotation.PostConstruct;
@@ -18,21 +19,21 @@ import java.util.Arrays;
 @Configuration
 public class RestTemplateConfig {
 
-    @Value("${luna.security.provider.rest.templateType:Simple}")
+    @Value("${fhframework.security.provider.rest.templateType:Simple}")
     private RestTemplateType templateType;
-    @Value("${luna.security.provider.rest.username:}")
+    @Value("${fhframework.security.provider.rest.username:}")
     private String username;
-    @Value("${luna.security.provider.rest.password:}")
+    @Value("${fhframework.security.provider.rest.password:}")
     private String password;
-    @Value("${luna.security.provider.rest.tokenUri:}")
+    @Value("${fhframework.security.provider.rest.tokenUri:}")
     private String tokenUri;
-    @Value("${luna.security.provider.rest.clientId:}")
+    @Value("${fhframework.security.provider.rest.clientId:}")
     private String clientId;
-    @Value("${luna.security.provider.rest.clientSecret:}")
+    @Value("${fhframework.security.provider.rest.clientSecret:}")
     private String clientSecret;
-    @Value("${luna.security.provider.rest.grantType:client_credentials}")
+    @Value("${fhframework.security.provider.rest.grantType:client_credentials}")
     private String grantType;
-    @Value("${luna.security.provider.rest.grantType:}")
+    @Value("${fhframework.security.provider.rest.scope:}")
     private String scope;
 
     public static RestTemplate restTemplate;

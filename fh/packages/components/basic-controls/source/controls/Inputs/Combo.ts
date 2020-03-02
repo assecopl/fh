@@ -2,7 +2,7 @@ import {InputText} from "./InputText";
 import {FhContainer, FormsManager, HTMLFormComponent} from 'fh-forms-handler';
 import getDecorators from "inversify-inject-decorators";
 
-let { lazyInject } = getDecorators(FhContainer);
+let {lazyInject} = getDecorators(FhContainer);
 
 class Combo extends InputText {
     @lazyInject("FormsManager")
@@ -33,6 +33,10 @@ class Combo extends InputText {
     private changeToFired: boolean;
     private firedEventData: any;
 
+    private onInputTimer: any;
+    private openOnFocus: boolean = true;
+    private readonly onInputTimeout: number;
+
     private cursorPositionOnLastSpecialKey: any;
     private rawValueOnLastSpecialKey: any;
 
@@ -40,6 +44,7 @@ class Combo extends InputText {
         super(componentObj, parent);
 
         this.values = this.componentObj.filteredValues;
+        this.onInputTimeout = this.componentObj.onInputTimeout ? this.componentObj.onInputTimeout : null;
         this.input = null;
         this.autocompleter = null;
         this.selectedIndexGroup = null;
@@ -50,6 +55,7 @@ class Combo extends InputText {
         this.lastCursorPosition = this.componentObj.cursor;
         this.blurEvent = false;
 
+        this.openOnFocus = typeof this.componentObj.openOnFocus === 'undefined' ? true : this.componentObj.openOnFocus;
         this.emptyValue = this.componentObj.emptyValue;
         this.onSpecialKey = this.componentObj.onSpecialKey;
         this.onDblSpecialKey = this.componentObj.onDblSpecialKey;
@@ -108,8 +114,10 @@ class Combo extends InputText {
                     this.selectedIndexGroup = element.dataset.group;
                     this.selectedIndex = parseInt(element.dataset.index);
                     this.forceSendSelectedIndex = true;
-
-                    this.input.value = element.dataset.targetValue;
+                    const val = this.values[this.selectedIndexGroup][this.selectedIndex];
+                    if (val) {
+                        this.input.value = val.displayAsTarget ? val.targetValue : val.displayedValue;
+                    }
                     if (element.dataset.targetCursorPosition !== undefined) {
                         this.setCursorPositionToInput(parseInt(element.dataset.targetCursorPosition));
                         shouldBlur = false;
@@ -173,7 +181,10 @@ class Combo extends InputText {
         if (this.onInput) {
             input.addEventListener('input', function () {
                 if (this.accessibility === 'EDIT') {
-                    this.fireEvent('onInput', this.onInput);
+                    if (!this.openOnFocus) {
+                        this.openAutocomplete();
+                    }
+                    this.onInputEvent();
                 }
             }.bind(this));
         }
@@ -181,9 +192,11 @@ class Combo extends InputText {
             if (event.ctrlKey && event.which === 32 && this.accessibility === 'EDIT') {
                 event.stopPropagation();
                 event.preventDefault();
+
                 let doubleSepcialKey = this.onDblSpecialKey && this.input && this.input.value == this.rawValueOnLatSpecialKey && this.input.selectionStart == this.cursorPositionOnLastSpecialKey;
                 if (fireEvent) {
                     if (!doubleSepcialKey) {
+                        this.openAutocomplete();
                         this.rawValueOnLatSpecialKey = this.input.value;
                         this.cursorPositionOnLastSpecialKey = this.input.selectionStart;
                         if (this.onSpecialKey) {
@@ -208,10 +221,10 @@ class Combo extends InputText {
 
         input.addEventListener('focus', function () {
             if (this.accessibility === 'EDIT') {
-                if (this.onInput) {
-                    this.fireEvent('onInput', this.onInput);
+                this.onInputEvent();
+                if (this.openOnFocus) {
+                    this.openAutocomplete();
                 }
-                this.openAutocomplete();
             }
         }.bind(this));
         input.addEventListener('blur', function () {
@@ -244,6 +257,7 @@ class Combo extends InputText {
         this.hintElement = this.component;
 
         this.wrap(false, true);
+        this.createIcon();
 
         if (this.multiselect) {
             this.inputGroupElement.classList.add('tagsinput');
@@ -338,7 +352,7 @@ class Combo extends InputText {
             containerHeightAfterListDisplay = componentsContainer.scrollHeight;
         }
 
-        if (containerHeightAfterListDisplay > containerHeightBeforeListDisplay ) {
+        if (containerHeightAfterListDisplay > containerHeightBeforeListDisplay) {
             this.autocompleter.scrollIntoView({
                 behavior: "smooth",
                 block: "nearest"
@@ -677,21 +691,19 @@ class Combo extends InputText {
 
                 tagslist.push(value);
 
-                $('#' + id + '_tag').val('');
-                if (options.focus) {
-                    $('#' + id + '_tag').focus();
-                } else {
-                    $('#' + id + '_tag').blur();
-                }
-            }
-            if (options.focus) {
-                $(this.input).trigger('focus');
+                $('#' + id + '_tagsinput').val('');
+                $('#' + id + '_tagsinput').blur();
             }
         }
 
-        if (options.callback && this.tagsInputData.onAddTag) {
-            // todo: change
-            this.tagsInputData.onAddTag.call(this, this, value);
+        if (options.callback) {
+            this.selectedIndex = null;
+            this.input.value = '';
+            this.setValues(this.values);
+            this.closeAutocomplete();
+            this.addedTag = true;
+            this.updateModel();
+            this.changeToFired = false
         }
     }
 
@@ -712,8 +724,14 @@ class Combo extends InputText {
         this.tagslist = [];
         this.importTags(reAddTags);
 
-        if (options.callback && this.tagsInputData.onRemoveTag) {
-            this.tagsInputData.onRemoveTag.call(this, this, value);
+        if (options.callback) {
+            this.selectedIndex = null;
+            this.input.value = '';
+            this.closeAutocomplete();
+            this.setValues(this.values);
+            this.updateModel();
+            this.fireEventWithLock('onChange', this.onChange);
+            this.changeToFired = false
         }
     }
 
@@ -770,7 +788,7 @@ class Combo extends InputText {
                 }
                 break;
             case 'HIDDEN':
-                if(this.invisible){
+                if (this.invisible) {
                     this.htmlElement.classList.add('invisible');
                 } else {
                     this.htmlElement.classList.add('d-none');
@@ -796,6 +814,23 @@ class Combo extends InputText {
             }
         }
         return false;
+    }
+
+    onInputEvent() {
+        if (this.onInput) {
+            if (this.onInputTimeout) {
+                clearTimeout(this.onInputTimer);
+                this.onInputTimer = setTimeout(function () {
+                    this.fireEvent('onInput', this.onInput);
+                }.bind(this), this.onInputTimeout);
+            } else {
+                this.fireEvent('onInput', this.onInput);
+            }
+        }
+    }
+
+    getDefaultWidth(): string {
+        return super.getDefaultWidth();
     }
 }
 

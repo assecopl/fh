@@ -31,7 +31,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
 @OverridenPropertyAnnotations(
         property = "collection",
         designerXmlProperty = @DesignerXMLProperty(allowedTypes = {Page.class, PageModel.class}, commonUse = true, bindingOnly = true, functionalArea = CONTENT, priority = 15))
-@DocumentedComponent(value = "Table that allows to arrange data like text, images, links, other tables, etc. into rows and columns of cells inside of page.", icon = "fa fa-table")
+@DocumentedComponent(category = DocumentedComponent.Category.TABLE_AND_TREE, value = "Table that allows to arrange data like text, images, links, other tables, etc. into rows and columns of cells inside of page.", icon = "fa fa-table")
 public class TablePaged extends Table {
 
     private static final String SORT_BY_ATTRIBUTE = "sortBy";

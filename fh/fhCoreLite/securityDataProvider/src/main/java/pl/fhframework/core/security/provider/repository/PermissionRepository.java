@@ -1,22 +1,34 @@
 package pl.fhframework.core.security.provider.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import pl.fhframework.core.security.provider.model.Permission;
+import pl.fhframework.core.security.model.IPermission;
 
 import java.util.Collection;
 import java.util.List;
 
 /**
+ * An interface for permission repository.
  * @author tomasz.kozlowski (created on 2017-11-22)
  */
-public interface PermissionRepository extends JpaRepository<Permission, Long> {
+public interface PermissionRepository {
 
-    List<Permission> findByBusinessRoleNameIgnoreCase(String businessRoleName);
+    /** Creates new instance of permission object */
+    IPermission createInstance();
 
-    List<Permission> findByModuleUUIDAndFunctionNameIn(String moduleUUID, Collection<String> functions);
+    /** Finds all permissions for given business role */
+    List<IPermission> findForBusinessRole(String businessRoleName);
 
-    default Permission getInstance() {
-        return new Permission();
+    /** Finds all permissions for given module UUID and functions */
+    List<IPermission> findForModuleAndFunction(String moduleUUID, Collection<String> functions);
+
+    /** Store permission instance */
+    IPermission save(IPermission permission);
+
+    /** Store collection of permissions */
+    default void saveAll(List<IPermission> permissions) {
+        permissions.forEach(this::save);
     }
+
+    /** Deletes permission instance */
+    void delete(IPermission permission);
 
 }

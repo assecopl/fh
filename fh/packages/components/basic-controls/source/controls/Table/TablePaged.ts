@@ -18,8 +18,11 @@ class TablePaged extends Table {
     private readonly paginatorOffset: any;
     private pageChangeListeners: HTMLElement[];
 
+
     constructor(componentObj: any, parent: HTMLFormComponent) {
         super(componentObj, parent);
+
+        this.keyEventLoopDownTurnOff();
 
         this.i18n.registerStrings('en', TablePagedEN);
         this.i18n.registerStrings('pl', TablePagedPL);

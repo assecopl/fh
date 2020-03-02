@@ -1,29 +1,30 @@
 package pl.fhframework.model.forms;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import lombok.Getter;
+import lombok.Setter;
 import pl.fhframework.BindingResult;
 import pl.fhframework.annotations.*;
 import pl.fhframework.binding.*;
 import pl.fhframework.model.dto.ElementChanges;
+import pl.fhframework.model.dto.InMessageEventData;
 import pl.fhframework.model.dto.ValueChange;
 import pl.fhframework.model.forms.designer.IDesignerEventListener;
-import pl.fhframework.model.dto.InMessageEventData;
+import pl.fhframework.model.forms.optimized.ColumnOptimized;
 
-import lombok.Getter;
-import lombok.Setter;
-
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Class represents container for tabs and extends <code>GroupingComponent</code> class. It does not
  * contains attributes in xml. Additionally it contains information about currently active tab
  * index. This field can be used inside Group, Column, Tab, Form.
  * <p>
- * Example: <TabContainer></TabContainer>
+ * Example: {@code <TabContainer></TabContainer>}
  */
-@Control(parents = {PanelGroup.class, Column.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
-@DocumentedComponent(value = "TabContainer component which represents a containrt containing a single tabs", icon = "fas fa-window-maximize")
+@Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
+@DocumentedComponent(category = DocumentedComponent.Category.ARRANGEMENT, value = "TabContainer component which represents a containrt containing a single tabs", icon = "fas fa-window-maximize")
 public class TabContainer extends GroupingComponent<Tab> implements IChangeableByClient, Boundable, CompactLayout, IDesignerEventListener {
 
     public static final String TYPE_NAME = "TabContainer";

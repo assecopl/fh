@@ -38,6 +38,7 @@ abstract class HTMLFormComponent extends FormComponent {
     private readonly language: any;
     protected hint: any;
     protected hintPlacement: string;
+    protected hintTrigger: string;
     protected hintInitialized: boolean = false;
     public rawValue: any;
     private areSubcomponentsRendered: boolean;
@@ -52,7 +53,6 @@ abstract class HTMLFormComponent extends FormComponent {
 
     protected constructor(componentObj: any, parent: FormComponent) {
         super(componentObj, parent);
-
 
 
         if (this.parent != null) {
@@ -94,6 +94,18 @@ abstract class HTMLFormComponent extends FormComponent {
 
         this.hint = this.componentObj.hint || null;
         this.hintPlacement = this.componentObj.hintPlacement || 'auto';
+        if (this.componentObj.hintTrigger) {
+            switch (this.componentObj.hintTrigger) {
+                case "HOVER_FOCUS":
+                    this.hintTrigger = 'hover focus';
+                    break;
+                case "HOVER":
+                    this.hintTrigger = 'hover';
+                    break;
+            }
+        } else {
+            this.hintTrigger = 'hover focus';
+        }
         this.hintElement = null;
 
         if (this.formId === 'designerComponents' || this.formId === 'designerToolbox') {
@@ -186,7 +198,7 @@ abstract class HTMLFormComponent extends FormComponent {
                     this.handleDeleteBtnEvent(event);
                 });
             }.bind(this));
-            if (this.contentWrapper.classList.contains('button')) {
+            if (this.contentWrapper && this.contentWrapper.classList.contains('button')) {
                 this.component.addEventListener('click', function (e) {
                     this.component.focus();
                     e.stopImmediatePropagation();
@@ -197,7 +209,7 @@ abstract class HTMLFormComponent extends FormComponent {
                     });
                 }.bind(this));
             }
-            if (this.contentWrapper.classList.contains('selectOneMenu')) {
+            if (this.contentWrapper && this.contentWrapper.classList.contains('selectOneMenu')) {
                 this.component.addEventListener('click', function (e) {
                     this.component.focus();
                     e.stopImmediatePropagation();
@@ -207,7 +219,7 @@ abstract class HTMLFormComponent extends FormComponent {
                     });
                 }.bind(this));
             }
-            if (this.contentWrapper.classList.contains('fileUpload')) {
+            if (this.contentWrapper && this.contentWrapper.classList.contains('fileUpload')) {
                 this.component.addEventListener('click', function (e) {
                     this.component.focus();
                     e.stopImmediatePropagation();
@@ -247,6 +259,7 @@ abstract class HTMLFormComponent extends FormComponent {
             let tooltipOptions: any = {
                 placement: this.hintPlacement,
                 title: this.hint,
+                trigger: this.hintTrigger,
                 html: true,
                 boundary: 'window'
             };
@@ -531,7 +544,7 @@ abstract class HTMLFormComponent extends FormComponent {
         this.handlemarginAndPAddingStyles();
     }
 
-    handleHeight(){
+    handleHeight() {
         if (this.componentObj.height != undefined) {
             let height = this.componentObj.height;
             if (height.indexOf('%') !== -1) {
@@ -650,7 +663,9 @@ abstract class HTMLFormComponent extends FormComponent {
     enableStyleClasses() {
         if (this.styleClasses.length && this.styleClasses[0] != '') {
             this.styleClasses.forEach(function (cssClass) {
-                this.component.classList.add(cssClass);
+                if (cssClass) {
+                    this.component.classList.add(cssClass);
+                }
             }.bind(this));
         }
     }
@@ -660,7 +675,7 @@ abstract class HTMLFormComponent extends FormComponent {
             oldWidth.forEach(function (width) {
                 if (HTMLFormComponent.bootstrapColRegexp.test(width)) {
                     //In bootstrap 4 "co-xs-12" was replaced with "col-12" so we need to delete it from string.
-                    wrapper.classList.remove('col-' + width.replace('xs-','-'));
+                    wrapper.classList.remove('col-' + width.replace('xs-', '-'));
                 } else if (HTMLFormComponent.bootstrapColWidthRegexp.test(width)) {
                     wrapper.classList.remove('exactWidth');
                     wrapper.style.width = undefined;
@@ -673,7 +688,7 @@ abstract class HTMLFormComponent extends FormComponent {
         newWidth.forEach(function (width) {
             if (HTMLFormComponent.bootstrapColRegexp.test(width)) {
                 //In bootstrap 4 "co-xs-12" was replaced with "col-12" so we need to delete it from string.
-                wrapper.classList.add('col-' + width.replace('xs-','-'));
+                wrapper.classList.add('col-' + width.replace('xs-', '-'));
             } else if (HTMLFormComponent.bootstrapColWidthRegexp.test(width)) {
                 wrapper.classList.add('exactWidth');
                 wrapper.style.width = width;
@@ -784,7 +799,7 @@ abstract class HTMLFormComponent extends FormComponent {
             }
 
             if (!this.htmlElement.classList.contains('colorBorder') && options.isLast) {
-                if (this.componentObj.type === 'DropdownItem') {
+                if (this.componentObj.type === 'DropdownItem' || this.componentObj.type === 'ThreeDotsMenuItem') {
                     let dropdown = this.component.closest('.fc.dropdown').parentElement;
                     dropdown.classList.add('colorBorder');
                     dropdown.classList.add('designerFocusedElement');
@@ -926,7 +941,7 @@ abstract class HTMLFormComponent extends FormComponent {
         }
     }
 
-    public getDefaultWidth():string {
+    public getDefaultWidth(): string {
         return 'md-12';
     }
 
@@ -947,7 +962,7 @@ abstract class HTMLFormComponent extends FormComponent {
             $(options.scrollableElement).animate({
                 scrollTop: $(row).offset().top - 160
             });
-        } else if (this.componentObj.type === 'DropdownItem') {
+        } else if (this.componentObj.type === 'DropdownItem' || this.componentObj.type === 'ThreeDotsMenuItem') {
             let dropdown = this.component.closest('.fc.dropdown');
             $(options.scrollableElement).animate({
                 scrollTop: $(dropdown).offset().top - 160
@@ -975,8 +990,28 @@ abstract class HTMLFormComponent extends FormComponent {
             })
         }
 
-        // verify event source and set elementTreeEquivalent accordingly
+        // check if formToolboxTools accordion is expanded and if so, collapse its elements first
+        let toolboxElements = document.getElementById('toolboxFormTools');
+        let toolboxBtns = toolboxElements.querySelectorAll('.collapseBtn');
 
+        if (toolboxBtns) {
+            toolboxBtns.forEach(button => {
+                if (!button.classList.contains('collapsed')) {
+                    button.setAttribute('aria-expanded', 'false');
+                    button.classList.add('collapsed');
+                }
+            })
+        }
+
+        // check if designerElementTree is collapsed and if so, expand it first
+        let collapseBtn = designerElementTree.querySelector('.btn');
+        if (collapseBtn && collapseBtn.classList.contains('collapsed')) {
+            collapseBtn.setAttribute('aria-expanded', 'true');
+            collapseBtn.classList.remove("collapsed");
+            designerElementTree.querySelector('.collapse').classList.add('show');
+        }
+
+        // verify event source and set elementTreeEquivalent accordingly
         let focusEventData = this.formsManager.firedEventData;
         let sourceElement = focusEventData.eventSourceId;
         let elementTreeEquivalent;
@@ -997,29 +1032,41 @@ abstract class HTMLFormComponent extends FormComponent {
     }
 
     updateDesignerElementTree(focusEventData, elementTreeEquivalent) {
-        let subNodes = elementTreeEquivalent.querySelector('ul');
-        let elementTreeCaret = elementTreeEquivalent.querySelector('.treeNodeBody').firstChild;
+        let treeElementsList = Array.from(document.getElementById('designerElementTree').querySelector('.treeElementList').children);
+        let topLevelNode;
+        let hiddenNodes;
+        let nodeCarets;
 
-        if (subNodes.children.length) {
-            if (focusEventData.containerId === 'designedFormContainer') {
-                if (elementTreeCaret.classList.contains('fa-caret-down')) {
-                    return;
+        treeElementsList.forEach(node => {
+            if (node.contains(elementTreeEquivalent)) {
+                topLevelNode = node;
+            }
+        });
+
+        if (topLevelNode) {
+            hiddenNodes = topLevelNode.querySelectorAll('ul.d-none');
+            nodeCarets = topLevelNode.querySelectorAll('.treeNodeBody');
+
+            // expand only nodes that contain elementTreeEquivalent
+            hiddenNodes.forEach(node => {
+                if (node.children.length && node.contains(elementTreeEquivalent)) {
+                    node.classList.remove('d-none');
                 }
-                elementTreeCaret.click();
-            }
-        } else {
-            let ul = elementTreeEquivalent.parentElement;
-            if (ul.classList.contains('d-none')) {
+            });
 
-                // update caret icon:
-                let icon = ul.previousElementSibling.querySelector('.fa-caret-right');
-                icon.classList.remove('fa-caret-right');
-                icon.classList.add('fa-caret-down');
+            // update nodes carets that contain elementTreeEquivalent
+            nodeCarets.forEach(caret => {
+                if (caret.firstChild.classList.contains('fa-caret-right')) {
 
-                // show hidden list
-                ul.classList.remove('d-none');
-            }
+                    let nodeList = caret.parentElement;
+                    if (nodeList && !nodeList.nextElementSibling.classList.contains('d-none')) {
+                        caret.firstChild.classList.remove('fa-caret-right');
+                        caret.firstChild.classList.add('fa-caret-down');
+                    }
+                }
+            })
         }
+
     }
 
     /**
@@ -1059,12 +1106,12 @@ abstract class HTMLFormComponent extends FormComponent {
      * Function process width string from backend serwer and creates proper bootstrap classes string array so they can be added to component.
      * @param width
      */
-    private handleWidth(width:string = this.componentObj.width){
-        if(!width){
-          width = this.getDefaultWidth()
+    private handleWidth(width: string = this.componentObj.width) {
+        if (!width) {
+            width = this.getDefaultWidth()
         }
 
-        if(width) {
+        if (width) {
             // Delete unwanted spaces
             width = width.trim();
             //Replace un wanted chars
@@ -1079,7 +1126,7 @@ abstract class HTMLFormComponent extends FormComponent {
     /**
      * Logic moved to function so it can be overrided by children classes.
      */
-    protected buildDesingerToolbox(){
+    protected buildDesingerToolbox() {
         (<any>FhContainer.get('Designer')).buildToolbox(this.getAdditionalButtons(), this);
 
     }
@@ -1101,10 +1148,10 @@ abstract class HTMLFormComponent extends FormComponent {
                  */
                 const activeElement = document.activeElement;
                 const activeElementTagName = activeElement.tagName.toLowerCase();
-                if(focusedElement.contains(activeElement) || (!focusedElement.contains(activeElement) &&
-                        (activeElementTagName !== 'input' &&
-                            activeElementTagName !== 'select' &&
-                            activeElementTagName !== 'textarea' &&
+                if (focusedElement.contains(activeElement) || (!focusedElement.contains(activeElement) &&
+                    (activeElementTagName !== 'input' &&
+                        activeElementTagName !== 'select' &&
+                        activeElementTagName !== 'textarea' &&
                         !activeElement.classList.contains("form-control")))) {
                     deleteBtn.click();
                 }

@@ -4,27 +4,29 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import pl.fhframework.annotations.*;
-import pl.fhframework.binding.*;
+import pl.fhframework.binding.ModelBinding;
 import pl.fhframework.model.dto.ElementChanges;
 import pl.fhframework.model.forms.designer.BindingExpressionDesignerPreviewProvider;
 import pl.fhframework.model.forms.model.LabelPosition;
+import pl.fhframework.model.forms.optimized.ColumnOptimized;
 import pl.fhframework.model.forms.widgets.Widget;
 
 import java.util.Map;
 
-import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.*;
+import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.CONTENT;
+import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.LOOK_AND_STYLE;
 
 /**
  * Class representing xml component of MdFileViewer. Every field represents xml attribute of MdFileViewer tag. <p>
- * Example <MdFileViewer src="src_1" />. <p> Every field is parsed as json for javascript.
+ * Example {@code <MdFileViewer src="src_1" />}. <p> Every field is parsed as json for javascript.
  * If field should be ingored by JSON, use <code>@JsonIgnore</code>. There can be used any
  * annotations for json generator.
  */
 @Getter
 @Setter
 @DesignerControl(defaultWidth = 12)
-@Control(parents = {PanelGroup.class, Column.class, Tab.class, Row.class, Form.class, Repeater.class,Group.class}, invalidParents = {Table.class, Widget.class}, canBeDesigned = true)
-@DocumentedComponent(value = "Md file viewer component for displaying *.md files. Allow inside navigation to other md file.", icon = "fa fa-eye")
+@Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class,Group.class}, invalidParents = {Table.class, Widget.class}, canBeDesigned = true)
+@DocumentedComponent(category = DocumentedComponent.Category.IMAGE_HTML_MD, value = "Md file viewer component for displaying *.md files. Allow inside navigation to other md file.", icon = "fa fa-eye")
 public class MdFileViewer extends FormElement implements TableComponent<MdFileViewer> {
 
     public static final String ATTR_SRC = "src";

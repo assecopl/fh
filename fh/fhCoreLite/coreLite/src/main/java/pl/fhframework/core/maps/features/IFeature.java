@@ -31,6 +31,7 @@ public interface IFeature extends IGeographical {
         getGeometry().setCoordinates(coordinates);
     }
 
+    @ModelElement(type = ModelElementType.HIDDEN)
     default String getType() {
         return TYPE;
     }

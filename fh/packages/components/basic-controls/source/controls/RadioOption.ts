@@ -29,11 +29,10 @@ class RadioOption extends HTMLFormComponent {
             this.updateModel();
         }.bind(this));
 
-        if (this.onChange) {
-            input.addEventListener('click', function (event) {
-                this.fireEventWithLock('onChange', this.onChange, event);
-            }.bind(this));
-        }
+        input.addEventListener('click', function (event) {
+            this.fireEventWithLock('onChange', this.onChange, event);
+        }.bind(this));
+
 
         this.input = input;
         this.component = input;
