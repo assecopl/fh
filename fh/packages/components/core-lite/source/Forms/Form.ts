@@ -28,8 +28,6 @@ class Form extends HTMLFormComponent {
     private windowListenerMouseUp: any;
     private modalDeferred;
 
-    protected afterInitActions:Array<any> = [];
-
     constructor(formObj: any, parent: any = null) {
         super(formObj, parent);
 
@@ -171,8 +169,6 @@ class Form extends HTMLFormComponent {
         } else if (this.container.clientHeight === 0) {
             this.container.style.height = 'auto';
         }
-
-        this.fireAfterInitActions();
     };
 
     destroy(removeFromParent) {
@@ -553,20 +549,6 @@ class Form extends HTMLFormComponent {
     setPresentationStyle(presentationStyle) {
         return;
     }
-
-    public addAfterInitActions(action: () => void){
-        this.afterInitActions.push(action);
-    }
-
-    private fireAfterInitActions(){
-        this.afterInitActions.forEach(function (action) {
-            if(action && {}.toString.call(action) === '[object Function]'){
-                action();
-            }
-        });
-        this.afterInitActions = [];
-    }
-
 }
 
 export {Form};

@@ -2,7 +2,6 @@ package pl.fhframework.model.security;
 
 import lombok.Getter;
 import pl.fhframework.core.security.model.IBusinessRole;
-import pl.fhframework.core.util.StringUtils;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -53,14 +52,4 @@ public class SystemUser {
         }
         return false;
     }
-
-    /** Returns user full name */
-    public String getFullName() {
-        String fullName = name;
-        if (!StringUtils.isNullOrEmpty(surname)) {
-            fullName += " " + surname;
-        }
-        return fullName;
-    }
-
 }

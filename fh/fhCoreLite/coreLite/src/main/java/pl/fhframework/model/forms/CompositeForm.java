@@ -1,6 +1,5 @@
 package pl.fhframework.model.forms;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -64,11 +63,6 @@ public class CompositeForm<T> extends Form<T> {
 
     public void addRegisteredEvents(List<OnEvent> eventList) {
         registeredEvents.addAll(eventList);
-    }
-
-    @JsonIgnore
-    public Form<?> getEventProcessingForm() {
-        return this;
     }
 
     @AllArgsConstructor

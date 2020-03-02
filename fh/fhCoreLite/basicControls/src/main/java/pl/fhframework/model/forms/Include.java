@@ -10,16 +10,15 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ReflectionUtils;
+import pl.fhframework.annotations.*;
 import pl.fhframework.binding.AdHocModelBinding;
+import pl.fhframework.binding.ModelBinding;
 import pl.fhframework.binding.StaticBinding;
 import pl.fhframework.core.FhException;
 import pl.fhframework.core.FhFormException;
 import pl.fhframework.core.dynamic.DynamicClassName;
 import pl.fhframework.core.events.OnEvent;
 import pl.fhframework.core.logging.FhLogger;
-import pl.fhframework.annotations.*;
-import pl.fhframework.annotations.composite.Composite;
-import pl.fhframework.binding.ModelBinding;
 import pl.fhframework.core.util.StringUtils;
 import pl.fhframework.forms.IFormsUtils;
 import pl.fhframework.helper.AutowireHelper;
@@ -43,7 +42,7 @@ import java.util.function.Supplier;
 
 @Control(canBeDesigned = true)
 @DesignerControl
-@DocumentedComponent(category = DocumentedComponent.Category.ARRANGEMENT, value = "Component used to include xml templates into main form view", icon = "fa fa-cubes")
+@DocumentedComponent(value = "Component used to include xml templates into main form view", icon = "fa fa-cubes")
 @JsonIgnoreType
 @JsonSerialize(using = Include.Serializer.class)
 public class Include extends GroupingComponent<Component> implements Includeable {
@@ -331,7 +330,6 @@ public class Include extends GroupingComponent<Component> implements Includeable
         public void serialize(Include tag, JsonGenerator gen, SerializerProvider serializers) throws IOException {
             if (tag != null && tag.getSubcomponents() != null) {
                 Group group = new Group(tag.getForm());
-                group.setStyleClasses(tag.getClass().getSimpleName());
                 group.setId(tag.getId());
                 group.getSubcomponents().addAll(tag.getSubcomponents());
                 gen.writeObject(group);

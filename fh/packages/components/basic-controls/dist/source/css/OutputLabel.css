@@ -1,0 +1,28 @@
+.fc.outputLabel {
+    padding: .5rem 0;
+}
+.fc.outputLabel i {
+    margin-right: 5px;
+}
+.fc.outputLabel.hasHeight {
+    display: inline-block;
+}
+.align-left .fc.outputLabel {
+    text-align: left;
+}
+.align-center .fc.outputLabel {
+    text-align: center;
+}
+.align-right .fc.outputLabel {
+    text-align: right;
+}
+.col-form-label,
+.form-check-label {
+    display: flex;
+}
+
+.col-form-label .requiredFieldWrapper,
+.form-check-label .requiredFieldWrapper {
+    position: relative;
+    padding-left: 0.5em;
+}

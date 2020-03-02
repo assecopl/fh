@@ -116,7 +116,7 @@ class Combo extends InputText {
                     this.forceSendSelectedIndex = true;
                     const val = this.values[this.selectedIndexGroup][this.selectedIndex];
                     if (val) {
-                        this.input.value = val.displayAsTarget ? val.targetValue : val.displayedValue;
+                        this.input.value = val.targetValue;
                     }
                     if (element.dataset.targetCursorPosition !== undefined) {
                         this.setCursorPositionToInput(parseInt(element.dataset.targetCursorPosition));
@@ -532,8 +532,12 @@ class Combo extends InputText {
 
                 let a = document.createElement('a');
                 a.classList.add('dropdown-item');
-                let displayValue = itemValue.displayAsTarget ? itemValue.targetValue : itemValue.displayedValue;
-
+                let displayValue;
+                if (this.formId === 'designerProperties') {
+                    displayValue = itemValue.displayAsTarget ? itemValue.targetValue : itemValue.displayedValueWithoutExtras;
+                } else {
+                    displayValue = itemValue.displayAsTarget ? itemValue.targetValue : itemValue.displayedValue;
+                }
                 let disabled = false;
                 if (this.multiselect && this.tagslist.indexOf(displayValue) >= 0) {
                     a.classList.add('disabled');
@@ -568,7 +572,7 @@ class Combo extends InputText {
                     this.removedIndex = null;
                     this.forceSendSelectedIndex = true;
                     this.cleared = false;
-                    this.input.value = itemValue.displayAsTarget ? itemValue.targetValue : itemValue.displayedValue;
+                    this.input.value = itemValue.targetValue;
                     if (targetCursorPosition !== undefined) {
                         this.setCursorPositionToInput(parseInt(targetCursorPosition));
                         shouldBlur = false;
@@ -827,10 +831,6 @@ class Combo extends InputText {
                 this.fireEvent('onInput', this.onInput);
             }
         }
-    }
-
-    getDefaultWidth(): string {
-        return super.getDefaultWidth();
     }
 }
 

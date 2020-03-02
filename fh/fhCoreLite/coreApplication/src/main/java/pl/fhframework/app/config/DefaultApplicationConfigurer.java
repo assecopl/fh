@@ -59,12 +59,11 @@ public class DefaultApplicationConfigurer {
     private Map<String, String> getDefaultCssUrls() {
         Map<String, String> cssUrls = new LinkedHashMap<>();
         cssUrls.put(FhNavbarConfiguration.FH_CSS, null);
-        cssUrls.put(FhNavbarConfiguration.MATERIA_CSS, null);
         cssUrls.put(FhNavbarConfiguration.BASE_CSS, null);
 
-        cssUrls.put("cosmo", String.format(FhNavbarConfiguration.BOOTSWATCH_THEME_URL, "cosmo"));
+        cssUrls.put("sketchy", String.format(FhNavbarConfiguration.BOOTSWATCH_THEME_URL, "sketchy"));
+        cssUrls.put("cyborg", String.format(FhNavbarConfiguration.BOOTSWATCH_THEME_URL, "cyborg"));
         cssUrls.put("superhero", String.format(FhNavbarConfiguration.BOOTSWATCH_THEME_URL, "superhero"));
-        cssUrls.put("lux", String.format(FhNavbarConfiguration.BOOTSWATCH_THEME_URL, "lux"));
 
         return cssUrls;
     }

@@ -18,7 +18,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
 
 /**
  * Class representing xml component of MdFileViewer. Every field represents xml attribute of MdFileViewer tag. <p>
- * Example {@code <MdFileViewer src="src_1" />}. <p> Every field is parsed as json for javascript.
+ * Example <MdFileViewer src="src_1" />. <p> Every field is parsed as json for javascript.
  * If field should be ingored by JSON, use <code>@JsonIgnore</code>. There can be used any
  * annotations for json generator.
  */
@@ -26,7 +26,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
 @Setter
 @DesignerControl(defaultWidth = 12)
 @Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class,Group.class}, invalidParents = {Table.class, Widget.class}, canBeDesigned = true)
-@DocumentedComponent(category = DocumentedComponent.Category.IMAGE_HTML_MD, value = "Md file viewer component for displaying *.md files. Allow inside navigation to other md file.", icon = "fa fa-eye")
+@DocumentedComponent(value = "Md file viewer component for displaying *.md files. Allow inside navigation to other md file.", icon = "fa fa-eye")
 public class MdFileViewer extends FormElement implements TableComponent<MdFileViewer> {
 
     public static final String ATTR_SRC = "src";

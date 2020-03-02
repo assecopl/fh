@@ -89,7 +89,7 @@ class InputNumber extends HTMLFormComponent {
             // @ts-ignore
             Inputmask({
                 radixPoint: ".",
-                regex: "^([-]?[.\\d]+)$"
+                regex: "^([.\\d]+)$"
             }).mask(this.input);
             this.inputmaskEnabled = true;
         }

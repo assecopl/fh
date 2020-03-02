@@ -1,0 +1,5 @@
+@import "~bootstrap/dist/css/bootstrap.css";
+@import '~@fortawesome/fontawesome-free/css/all.css';
+@import "Styles/FormComponents.css";
+@import '~jquery-ui/themes/base/dialog.css';
+@import '~jquery-ui/themes/base/theme.css';

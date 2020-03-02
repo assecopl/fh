@@ -18,8 +18,8 @@ import pl.fhframework.model.forms.designer.IDesignerEventListener;
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.CONTENT;
 
 /**
- * Class represents Tab as grouping element. Tab consists of label and layout position. Example:
- * {@code <Group></Group>} Should be used within TabContainer.
+ * Class represents Tab as grouping element. Tab consists of label and layout position. <p> Example:
+ * <Group></Group> <p> Should be used within TabContainer.
  */
 @Control(parents = {TabContainer.class, Wizard.class})
 @DocumentedComponent(ignoreFields = {"width"},

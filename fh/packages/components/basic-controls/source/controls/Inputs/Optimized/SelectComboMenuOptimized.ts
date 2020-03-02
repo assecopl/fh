@@ -359,9 +359,25 @@ class SelectComboMenuOptimized extends InputText {
             $.each(change.changedAttributes, function (name, newValue) {
                 switch (name) {
                     case 'rawValue':
-                        this.input.value = newValue;
-                        this.rawValue = newValue;
-                        this.oldValue = newValue;
+                        if (newValue) {
+                            this.input.value = newValue;
+                            this.rawValue = newValue;
+                            this.oldValue = newValue;
+                            this.highlighted = this.findByValue(newValue);
+                        } else {
+                            if (this.emptyLabel && this.emptyLabelText) {
+                                this.input.value = this.emptyLabelText;
+                                this.rawValue = this.emptyLabelText;
+                                this.oldValue = this.emptyLabelText;
+                                this.highlighted = this.findByValue(this.emptyLabelText);
+                            } else {
+                                this.input.value = null;
+                                this.rawValue = null;
+                                this.oldValue = null;
+                                this.highlighted = this.findByValue(this.emptyLabelText);
+                            }
+                        }
+                        this.hightlightValue();
                         break;
                     case 'filteredValues':
                         this.highlighted = null;
@@ -392,11 +408,16 @@ class SelectComboMenuOptimized extends InputText {
             return;
         }
         for (let value of this.values) {
-            value.element.classList.remove('selected');
+            if (value.element){
+                value.element.classList.remove('selected');
+            }
         }
 
-        this.highlighted.element.classList.add('selected');
-        this.autocompleter.scrollTop = this.highlighted.element.offsetTop;
+        if(this.highlighted.element) {
+            this.highlighted.element.classList.add('selected');
+            this.autocompleter.scrollTop = this.highlighted.element.offsetTop;
+        }
+
     }
 
     findByValue(value) {

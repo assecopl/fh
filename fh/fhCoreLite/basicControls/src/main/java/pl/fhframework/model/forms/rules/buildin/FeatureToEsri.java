@@ -19,8 +19,8 @@ import java.util.Map;
  * Changes collection of IFeatures - fhFramework model representation of GeoJSON feature into collection of ArcGis JSON objects. Remember that ArcGis JSON
  * is able to handle only one geometry type per layer.
  * Example:
- * List&lt;IFeature&gt; features;
- * List&lt;JsonNode&gt; = RULE.convertGeoJsonToEsriJson(features);
+ * List <IFeature> features;
+ * List<JsonNode> = RULE.convertGeoJsonToEsriJson(features);
  */
 @BusinessRule(categories = "esri")
 public class FeatureToEsri {

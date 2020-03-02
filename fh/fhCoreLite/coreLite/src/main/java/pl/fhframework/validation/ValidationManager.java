@@ -76,7 +76,7 @@ public class ValidationManager<T> {
      * or interrupted for the first violation when stopOnFirstHandlerException=true
      *
      * @param value - value to validation
-     * @return list of violations. If size &gt; 0, the validation does not successfully
+     * @return list of violations. If size > 0, the validation does not successfully
      */
     public List<ConstraintViolation<T>> validate(T value) {
         final Iterator<Validator<T>> iterator = validators.iterator();

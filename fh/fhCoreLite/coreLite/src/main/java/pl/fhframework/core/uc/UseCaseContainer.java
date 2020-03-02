@@ -631,7 +631,7 @@ public class UseCaseContainer implements Serializable {
 
         protected void runAction(IEventSource sourceComponent, ActionBinding actionBinding, InMessageEventData eventData) {
             // always get form object from component as it may be CompositeForm.
-            Form<?> form = sourceComponent.getEventProcessingForm();
+            Form<?> form = sourceComponent.getForm();
 
             // only design action are run in design mode
             if (form.getViewMode() != Form.ViewMode.NORMAL) {
@@ -845,7 +845,7 @@ public class UseCaseContainer implements Serializable {
                                 userSession.setActionContext(new ActionContext().
                                         validate(true));
                             } else if (actionName != null) {
-                                Method method = getUseCaseMethod(actionName, ReflectionUtils.getClassName(sourceComponent.getEventProcessingForm().getClass()));
+                                Method method = getUseCaseMethod(actionName, ReflectionUtils.getClassName(sourceComponent.getForm().getClass()));
                                 if (method != null) {
                                     Action acionForMethod = method.getAnnotation(Action.class);
                                     userSession.setActionContext(ActionContext.of(acionForMethod));

@@ -7,7 +7,10 @@ import org.hibernate.LazyInitializationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
-import pl.fhframework.core.*;
+import pl.fhframework.core.CoreSystemFunction;
+import pl.fhframework.core.FhDescribedException;
+import pl.fhframework.core.FhException;
+import pl.fhframework.core.FhFormException;
 import pl.fhframework.core.logging.*;
 import pl.fhframework.core.logging.handler.IErrorInformationHandler;
 import pl.fhframework.core.security.AuthorizationManager;
@@ -20,7 +23,6 @@ import pl.fhframework.core.util.DebugUtils;
 import pl.fhframework.configuration.FHConfiguration;
 import pl.fhframework.core.util.JsonUtil;
 import pl.fhframework.core.util.StringUtils;
-import pl.fhframework.event.dto.EventDTO;
 import pl.fhframework.event.dto.SessionTimeoutEvent;
 import pl.fhframework.events.IClientDataHandler;
 import pl.fhframework.events.UseCaseRequestContext;
@@ -122,24 +124,6 @@ public abstract class FormsHandler {
 
     public void sendResponse(String requestId, AbstractMessage data) {
         sendResponse(requestId, data, WebSocketContext.fromThreadLocals());
-    }
-
-    public void sendOutMessage(String requestId, EventDTO eventDTO) {
-        sendOutMessage(requestId, eventDTO, WebSocketContext.fromThreadLocals());
-    }
-
-    public void sendOutMessage(String requestId, EventDTO eventDTO, WebSocketContext context) {
-        sendOutMessage(requestId, Collections.singletonList(eventDTO), context);
-    }
-
-    public void sendOutMessage(String requestId, List<EventDTO> eventsDTO) {
-        sendOutMessage(requestId, eventsDTO, WebSocketContext.fromThreadLocals());
-    }
-
-    public void sendOutMessage(String requestId, List<EventDTO> eventsDTO, WebSocketContext context) {
-        OutMessageEventHandlingResult response = new OutMessageEventHandlingResult();
-        response.getEvents().addAll(eventsDTO);
-        sendResponse(requestId, response, context, Collections.emptyList(), false);
     }
 
     public void sendResponse(String requestId, AbstractMessage data, WebSocketContext context) {
@@ -269,12 +253,7 @@ public abstract class FormsHandler {
                 exc = new FhDescribedException(translatedError.get(), exc);
             }
 
-            if (exc instanceof FhDescribedNstException) {
-                FhLogger.error(exc.getMessage());
-            }
-            else {
-                FhLogger.error(exc);
-            }
+            FhLogger.error(exc);
             UserSession session = context.getUserSession();
             if (session != null) {
                 List<ErrorInformation> errors = session.getAwaitingErrorInformations();

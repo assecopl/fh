@@ -22,7 +22,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
 
 /**
  * Class representing xml component of Image. Every field represents xml attribute of image tag. <p>
- * Example {@code <Image src="src_1" zr="bindSource_1"/>}. <p> Every field is parsed as json for javascript.
+ * Example <Image src="src_1" zr="bindSource_1"/>. <p> Every field is parsed as json for javascript.
  * If field should be ingored by JSON, use <code>@JsonIgnore</code>. There can be used any
  * annotations for json generator.
  */
@@ -30,7 +30,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
 @Setter
 @DesignerControl(defaultWidth = 6)
 @Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Group.class, Widget.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = true)
-@DocumentedComponent(category = DocumentedComponent.Category.IMAGE_HTML_MD, value = "Image component for displaying image and marking points on it (optionally)", icon = "fa fa-image")
+@DocumentedComponent(value = "Image component for displaying image and marking points on it (optionally)", icon = "fa fa-image")
 public class Image extends FormElement implements TableComponent<Image> {
 
     public static final String ATTR_SRC = "src";

@@ -130,6 +130,8 @@ class InputText extends HTMLFormComponent {
         if (this.component.classList.contains('servicesListControl')) {
             this.htmlElement.classList.add('servicesListControlWrapper');
         }
+
+       
     }
 
     protected createIcon() {
@@ -283,14 +285,9 @@ class InputText extends HTMLFormComponent {
                 }
             }
 
-            try {
-                // @ts-ignore
+            // @ts-ignore
                 this.maskPlugin = Inputmask(options).mask(this.input);
-                this.inputmaskEnabled = true;
-            } catch (e) {
-                console.error('Invalidmask library error:');
-                console.error(e);
-            }
+            this.inputmaskEnabled = true;
 
             this.input.addEventListener('keydown', event => {
                 this.removeInputPlaceholder(event);
@@ -448,10 +445,6 @@ class InputText extends HTMLFormComponent {
         this.disableMask();
 
         super.destroy(removeFromParent);
-    }
-
-    public getDefaultWidth():string {
-        return 'md-3';
     }
 }
 

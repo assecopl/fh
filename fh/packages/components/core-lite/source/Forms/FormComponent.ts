@@ -409,11 +409,6 @@ abstract class FormComponent {
     protected isFormActive(): boolean {
         return this.getForm().state == 'ACTIVE';
     }
-
-    public addAfterInitActions(action: any): void {
-        this.getForm().addAfterInitActions(action);
-    }
-
 }
 
 export {FormComponent};

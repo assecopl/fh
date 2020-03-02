@@ -16,10 +16,6 @@ class Spacer extends HTMLFormComponent {
         this.addStyles();
         this.display();
     };
-
-    getDefaultWidth(): string {
-        return 'md-2';
-    }
 }
 
 export {Spacer};

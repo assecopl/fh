@@ -18,13 +18,13 @@ import org.springframework.core.ResolvableType;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.core.type.filter.AssignableTypeFilter;
-import pl.fhframework.annotations.Action;
 import pl.fhframework.core.*;
 import pl.fhframework.core.dynamic.DynamicClassName;
 import pl.fhframework.core.generator.GeneratedDynamicClass;
 import pl.fhframework.core.io.FhResource;
 import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.core.util.StringUtils;
+import pl.fhframework.annotations.Action;
 import pl.fhframework.model.forms.Form;
 import pl.fhframework.subsystems.ModuleRegistry;
 
@@ -39,8 +39,6 @@ import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 public class ReflectionUtils {
-
-    public static abstract class AnyGenericType {} // TODO: FH_GENERICS
 
     @AllArgsConstructor
     @Getter
@@ -118,18 +116,13 @@ public class ReflectionUtils {
     public static Type extractTypeVariable(Type childType, Type parentType) {
         if (childType instanceof TypeVariable) {
             String typeVarName = TypeVariable.class.cast(childType).getName();
-            TypeVariable[] genricParentTypeVars = ReflectionUtils.getRawClass(parentType).getTypeParameters();
-            Type[] parentTypeVars = ReflectionUtils.getGenericArguments(parentType);
-            for (int varIndex = 0; varIndex < parentTypeVars.length; varIndex++) { // TODO: FH Generics
-                if (parentTypeVars[varIndex] instanceof TypeVariable &&
-                        ((TypeVariable) parentTypeVars[varIndex]).getName().equals(typeVarName) ||
-                                genricParentTypeVars[varIndex].getName().equals(typeVarName)) {
+            TypeVariable[] parentTypeVars = ReflectionUtils.getRawClass(parentType).getTypeParameters();
+            for (int varIndex = 0; varIndex < parentTypeVars.length; varIndex++) {
+                if (parentTypeVars[varIndex].getName().equals(typeVarName)) {
                     return ReflectionUtils.getGenericArguments(parentType)[varIndex];
                 }
             }
-            // TODO: FH Generics
-            //throw new FhBindingException("Cannot resolve " + childType.toString() + " in " + parentType.toString());
-            return AnyGenericType.class;
+            throw new FhBindingException("Cannot resolve " + childType.toString() + " in " + parentType.toString());
         } else if (childType instanceof Class) {
             return ReflectionUtils.resolveToRealClass((Class<?>) childType);
         } else {
@@ -275,10 +268,9 @@ public class ReflectionUtils {
                 if (ex.getTargetException() instanceof FhAuthorizationException) {
                     throw (FhException) ex.getTargetException();
                 }
-                if (!(ex.getTargetException() instanceof FhDescribedException)) {
-                    FhLogger.errorSuppressed("Method '{}.{}' throwed {}!", container.getClass().getName(), method.getName(), ex.getTargetException().getClass(), ex.getTargetException());
-                }
-                if (ex.getTargetException() instanceof FhMessageException || ex.getTargetException() instanceof FhDescribedNstException) {
+
+                FhLogger.errorSuppressed("Method '{}.{}' throwed {}!", container.getClass().getName(), method.getName(), ex.getTargetException().getClass(), ex.getTargetException());
+                if (ex.getTargetException() instanceof FhMessageException) {
                     throw (FhException) ex.getTargetException();
                 }
                 throw new ActionInvocationException(method.getName(), ex.getTargetException());
@@ -752,8 +744,6 @@ public class ReflectionUtils {
             return new Class<?>[0];
         } else if (type instanceof ParameterizedType) {
             return ParameterizedType.class.cast(type).getActualTypeArguments();
-        } else if (type instanceof TypeVariable){
-            return new Class<?> [] {AnyGenericType.class}; // TODO: FH_GENERICS
         } else {
             throw new RuntimeException("Not supported type: " + type.getClass().getName());
         }
@@ -799,7 +789,7 @@ public class ReflectionUtils {
         } else if (type instanceof GenericArrayType) {
             return Array.class;
         } else if (throwExp) {
-            return AnyGenericType.class; // TODO: FH_GENERICS
+            throw new RuntimeException("Not supported type: " + type.getClass().getName());
         }
         return null;
     }
@@ -1014,9 +1004,6 @@ public class ReflectionUtils {
     }
 
     public static boolean isAssignablFrom(Class<?> class1, Class<?> class2) {
-        if (class1 == AnyGenericType.class || class2 == AnyGenericType.class) {
-            return true; // TODO: FH_GENERICS, for now delegate generics check till compile time
-        }
         if (isGeneratedDynamicClass(class1) && isGeneratedDynamicClass(class2)) {
             return getClassName(class1).equals(getClassName(class2));
         }
@@ -1069,13 +1056,9 @@ public class ReflectionUtils {
     public static String getSimpleClassName(Class clazz) {
         GeneratedDynamicClass dynamicClass = (GeneratedDynamicClass) clazz.getAnnotation(GeneratedDynamicClass.class);
         if (dynamicClass != null) {
-            return getSimpleClassName(dynamicClass.value());
+            return DynamicClassName.forClassName(dynamicClass.value()).getBaseClassName();
         }
         return clazz.getSimpleName();
-    }
-
-    public static String getSimpleClassName(String clazz) {
-        return DynamicClassName.forClassName(clazz).getBaseClassName();
     }
 
     public static boolean isGeneratedDynamicClass(Class clazz) {

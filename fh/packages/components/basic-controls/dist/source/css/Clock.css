@@ -1,0 +1,8 @@
+.clockContainer {
+    background-color: #305275;
+    min-height: 374px;
+}
+.clockContainer .Clock {
+    margin: 20px auto;
+    display: block;
+}

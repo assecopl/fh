@@ -50,12 +50,8 @@ class Group extends HTMLFormComponent {
 
     getAdditionalButtons(): any[] {
         return [
-            // new AdditionalButton('addDefaultSubcomponent', 'plus', 'Add empty row')
+            new AdditionalButton('addDefaultSubcomponent', 'plus', 'Add empty row')
         ];
-    }
-
-    getDefaultWidth(): string {
-        return "md-12";
     }
 }
 

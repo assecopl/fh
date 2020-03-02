@@ -5,9 +5,8 @@
 
     <groupId>pl.fhframework</groupId>
     <artifactId>fh-springboot-bom</artifactId>
-    <version>4.5.6</version>
+    <version>4.4.19</version>
     <packaging>pom</packaging>
-    <url>https://github.com/assecopl/fh</url>
 
     <name>fh-springboot-bom</name>
     <description>Springboot dependencies information set</description>
@@ -29,114 +28,18 @@
         <version.infinispan.starter>2.0.0.Final</version.infinispan.starter>
         <version.roaster>2.20.0.Final</version.roaster>
 
-        <fh.version>4.5.6</fh.version>
+        <fh.version>4.4.19</fh.version>
         <springboot.version>2.1.0.RELEASE</springboot.version>
         <hibernate.version>5.4.1.Final</hibernate.version>
-        <aspectj.version>1.9.4</aspectj.version>
     </properties>
 
-    <licenses>
-        <license>
-            <name>The Apache License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-        </license>
-    </licenses>
-
-    <developers>
-        <developer>
-            <name>Gabriel Kurzac</name>
-            <email>gabriel.kurzac@asseco.pl</email>
-            <organization>Asseco Poland S.A.</organization>
-            <organizationUrl>https://pl.asseco.com</organizationUrl>
-        </developer>
-    </developers>
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
-
-    <scm>
-        <connection>scm:git:git://github.com/assecopl/fh.git</connection>
-        <developerConnection>scm:git:ssh://github.com:assecopl/fh.git</developerConnection>
-        <url>http://github.com/assecopl/fh/tree/master</url>
-    </scm>
-
-    <profiles>
-        <profile>
-            <id>release</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <version>2.2.1</version>
-                        <executions>
-                            <execution>
-                                <id>attach-sources</id>
-                                <goals>
-                                    <goal>jar-no-fork</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.9.1</version>
-                        <configuration>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>attach-javadocs</id>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.7</version>
-                        <extensions>true</extensions>
-                        <configuration>
-                            <serverId>ossrh</serverId>
-                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.5</version>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>pl.fhframework</groupId>
                 <artifactId>commons-bom</artifactId>
-                <version>4.5.6</version>
+                <version>4.4.19</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -155,11 +58,8 @@
                 <artifactId>cache-standalone</artifactId>
                 <version>${fh.version}</version>
             </dependency>
-            <dependency>
-                <groupId>pl.fhframework</groupId>
-                <artifactId>pubsub-standalone</artifactId>
-                <version>${fh.version}</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
+
+
 </project>

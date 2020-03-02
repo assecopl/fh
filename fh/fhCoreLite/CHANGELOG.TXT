@@ -1,13 +1,8 @@
-﻿4.5.6
-- Dodanie profili: fh-standalone (domyślnie włączony, dodaje zależności xxx-standalone), fh-tomcat (domyślnie włączony, dodaje zależność fh-tomcat), fh-h2 (domyślnie włączony dodaje zależności do H2). Profile można wyłączyć parametrem: skip-fh-standalone, skip-fh-tomcat, skip-fh-h2
 - Dodanie obsługi TLS w MailClient, nowe properties'y fh.mail.server.startTlsEnabled, fh.mail.server.startTlsRequired. Włączając TLS należy zaimportować certyfikat serwera pocztowego do truststore (np. openssl s_client -connect localhost:587 -servername localhost -showcerts -starttls smtp -prexit 2>&1 </dev/null | sed -n '/-----BEGIN/,/-----END/p' > ~/smptcert.pem | sudo keytool -importcert -file ~/smptcert.pem -alias smptcert -keystore ~/cacerts) i ustawić properties'y javax.net.ssl.trustStore=./cacerts i javax.net.ssl.trustStorePassword=
 
-4.5.0
-- Dodanie implementacji wzorca publikacji-subskrypcji dla rozgłaszania komunikatów w klastrze serwerów
-- Dodanie REST Permission Provider pozwalającego na zarządzanie uprawnieniami za pośrednictwem usług REST
-- Dodanie Permission Provider-ów dla pobierania uprawnień z tabelli (JDBC) oraz pobierania z pliku XML (STANDALONE)
+4.4.9
+- Dodanie Permission Provider-ów dla pobierania uprawnień z tabeli (JDBC), pobierania z pliku XML (STANDALONE) oraz pobierania z zewnętrznej usługi (REST)
 - Dodanie abstrakcji Permission Provider, pozwalającej na dostarczanie źródła danych o uprawnieniach
-- Dodanie wyszukiwania wszystkich użytkowników w ramach LDAP Security Data Provider
 
 4.4.0
 - Możliwość nadania uprawnienia "sessionNeverExpires", które wyłącza automatyczne kończenie sesji (użytkownik nie zostanie automatycznie wylogowany w przypadku braku aktywności)

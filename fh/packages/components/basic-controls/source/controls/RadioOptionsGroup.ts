@@ -118,10 +118,6 @@ class RadioOptionsGroup extends HTMLFormComponent {
         return this.changesQueue.extractChangedAttributes();
     };
 
-    getDefaultWidth(): string {
-        return "md-3";
-    }
-
     refreshOptions() {
         this.groupDiv.innerHTML = '';
         if (this.options !== undefined) {

@@ -19,7 +19,7 @@ import static java.util.AbstractMap.SimpleImmutableEntry;
 import static java.util.Map.Entry;
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.SPECIFIC;
 
-@DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, value = "Component responsible for displaying calendar,only date could be set in this field", icon = "fa fa-calendar")
+@DocumentedComponent(value = "Component responsible for displaying calendar,only date could be set in this field", icon = "fa fa-calendar")
 @Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Group.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = true)
 public class Calendar extends BaseInputField {
 

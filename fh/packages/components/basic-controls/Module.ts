@@ -60,11 +60,9 @@ import {TableRowOptimized} from "./source/controls/Table/Optimized/TableRowOptim
 import {TableCellOptimized} from "./source/controls/Table/Optimized/TableCellOptimized";
 import {InputDateOptimized} from "./source/controls/Inputs/Optimized/InputDateOptimized";
 import {SelectComboMenuOptimized} from "./source/controls/Inputs/Optimized/SelectComboMenuOptimized";
-import {ThreeDotsMenuItem} from "./source/controls/Dropdown/ThreeDotsMenuItem";
-import {ThreeDotsMenu} from "./source/controls/Dropdown/ThreeDotsMenu";
+import {RowDropdownItem} from "./source/controls/Dropdown/RowDropdownItem";
+import {RowDropdown} from "./source/controls/Dropdown/RowDropdown";
 import { DictionaryCombo } from './source/controls/Inputs/DictionaryCombo';
-import {Anchor} from "./source/controls/Anchor";
-import {DropdownDivider} from "./source/controls/Dropdown/DropdownDivider";
 
 class BasicControls extends FhModule {
     protected registerComponents() {
@@ -392,28 +390,16 @@ class BasicControls extends FhModule {
                     return new HtmlView(componentObj, parent);
                 };
             });
-        FhContainer.bind<(componentObj: any, parent: any) => HtmlView>("ThreeDotsMenu")
-            .toFactory<ThreeDotsMenu>(() => {
+        FhContainer.bind<(componentObj: any, parent: any) => HtmlView>("RowDropdown")
+            .toFactory<RowDropdown>(() => {
                 return (componentObj: any, parent: any) => {
-                    return new ThreeDotsMenu(componentObj, parent);
+                    return new RowDropdown(componentObj, parent);
                 };
             });
-        FhContainer.bind<(componentObj: any, parent: any) => HtmlView>("ThreeDotsMenuItem")
-            .toFactory<ThreeDotsMenuItem>(() => {
+        FhContainer.bind<(componentObj: any, parent: any) => HtmlView>("RowDropdownItem")
+            .toFactory<RowDropdownItem>(() => {
                 return (componentObj: any, parent: any) => {
-                    return new ThreeDotsMenuItem(componentObj, parent);
-                };
-            });
-        FhContainer.bind<(componentObj: any, parent: any) => Anchor>("Anchor")
-            .toFactory<Anchor>(() => {
-                return (componentObj: any, parent: any) => {
-                    return new Anchor(componentObj, parent);
-                };
-            });
-        FhContainer.bind<(componentObj: any, parent: any) => DropdownDivider>("DropdownDivider")
-            .toFactory<DropdownDivider>(() => {
-                return (componentObj: any, parent: any) => {
-                    return new DropdownDivider(componentObj, parent);
+                    return new RowDropdownItem(componentObj, parent);
                 };
             });
 
@@ -476,13 +462,9 @@ export {
     Dropdown,
     DropdownItem,
     TableRow,
-    TableRowOptimized,
     Table,
-    TableOptimized,
     Column,
-    ColumnOptimized,
     TableCell,
-    TableCellOptimized,
     TabContainer,
     Tab,
     Footer,
@@ -519,5 +501,4 @@ export {
     FhModule,
     MarkdownGrid,
     HtmlView,
-    DropdownDivider
 };

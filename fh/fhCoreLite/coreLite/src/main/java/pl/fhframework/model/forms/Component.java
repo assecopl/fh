@@ -26,7 +26,8 @@ import pl.fhframework.model.dto.ValueChange;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.*;
+import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.CONTENT;
+import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.LOOK_AND_STYLE;
 
 /**
  * Created by krzysztof.kobylarek on 2016-12-20.
@@ -70,13 +71,12 @@ public class Component implements Cloneable, IDesignEventSource, IEventSource, I
     @DocumentedComponentAttribute(boundable = true, type = AccessibilityEnum.class, value = "Accessibility of an Component")
     private ModelBinding<AccessibilityEnum> availabilityModelBinding;
 
-
     @Getter
     @Setter
     @XMLProperty(value = "hiddenElementsTakeUpSpace")
     @DesignerXMLProperty(functionalArea = LOOK_AND_STYLE, priority = 97) // Priority set to show element just after FormElement.verticalAlign
-    @DocumentedComponentAttribute(defaultValue = "false", value = "Parameter for HIDDEN components. Makes hidden elements still take up space in the page.")
-    private boolean invisible;
+    @DocumentedComponentAttribute("Parameter for HIDDEN components. Makes hidden elements still take up space in the page.")
+    private Boolean invisible;
 
     @JsonIgnore
     private AccessibilityEnum pastAvailability = null;
@@ -163,11 +163,6 @@ public class Component implements Cloneable, IDesignEventSource, IEventSource, I
         return (Form<T>) form;
     }
 
-    @JsonIgnore
-    public <T> Form<T> getEventProcessingForm() {
-        return (Form<T>) form.getEventProcessingForm();
-    }
-
     protected boolean areModelValuesTheSame(Object firstValue, Object secondValue) {
         return areValuesTheSame(firstValue, secondValue);
     }
@@ -246,7 +241,7 @@ public class Component implements Cloneable, IDesignEventSource, IEventSource, I
         }
 
         // form is the parent and form availability is not changed - use default availability for current variant
-        if ((groupingParentComponent == getForm() || getGroupingParentComponent() instanceof Includeable)
+        if (groupingParentComponent == getForm()
                 && !StringUtils.isNullOrEmpty(getForm().getVariant())
                 && parentAvailability == AccessibilityEnum.EDIT) {
             variantDefaultAvailability = getForm().getVariantsDefaultAvailability().get(getForm().getVariant());

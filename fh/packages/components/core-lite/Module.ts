@@ -39,9 +39,6 @@ import {ServiceManagerUtil} from "./source/Devices/ServiceManagerUtil";
 import {ClientDataHandler} from './source/Events/Handlers/ClientDataHandler';
 import {ServiceManager} from './source/Devices/ServiceManager';
 import {LayoutHandler} from "./source/LayoutHandler";
-import {ChatEvent} from "./source/Events/ChatEvent"
-import {ScrollEvent} from "./source/Events/ScrollEvent";
-import {ChatListEvent} from "./source/Events/ChatListEvent";
 
 class FormsHandler extends FhModule {
     protected registerComponents() {
@@ -64,7 +61,6 @@ class FormsHandler extends FhModule {
         FhContainer.bind<BaseEvent>('Events.FileDownloadEvent').to(FileDownloadEvent).inRequestScope();
         FhContainer.bind<BaseEvent>('Events.NotificationEvent').to(NotificationEvent).inRequestScope();
         FhContainer.bind<BaseEvent>('Events.FocusEvent').to(FocusEvent).inRequestScope();
-        FhContainer.bind<BaseEvent>('Events.ScrollEvent').to(ScrollEvent).inRequestScope();
         FhContainer.bind<BaseEvent>('Events.StylesheetChangeEvent').to(StylesheetChangeEvent).inRequestScope();
         FhContainer.bind<BaseEvent>('Events.LanguageChangeEvent').to(LanguageChangeEvent).inRequestScope();
         FhContainer.bind<BaseEvent>('Events.RedirectEvent').to(RedirectEvent).inRequestScope();
@@ -75,8 +71,6 @@ class FormsHandler extends FhModule {
         FhContainer.bind<BaseEvent>('Events.ForcedLogoutEvent').to(ForcedLogoutEvent).inRequestScope();
         FhContainer.bind<BaseEvent>('Events.CustomActionEvent').to(CustomActionEvent).inRequestScope();
         FhContainer.bind<BaseEvent>('Events.SessionTimeoutEvent').to(SessionTimeoutEvent).inRequestScope();
-        FhContainer.bind<BaseEvent>('Events.ChatEvent').to(ChatEvent).inRequestScope();
-        FhContainer.bind<BaseEvent>('Events.ChatListEvent').to(ChatListEvent).inRequestScope();
         FhContainer.bind<CustomActions>('CustomActions').to(CustomActions).inSingletonScope();
         FhContainer.bind<FHML>('FHML').to(FHML).inSingletonScope();
         FhContainer.bind<FormComponentChangesQueue>('FormComponentChangesQueue').to(FormComponentChangesQueue).inRequestScope();
@@ -125,7 +119,6 @@ export {
     FileDownloadEvent,
     CloseTabEvent,
     FocusEvent,
-    ScrollEvent,
     StylesheetChangeEvent,
     LanguageChangeEvent,
     RedirectEvent,
@@ -135,7 +128,5 @@ export {
     FhContainer,
     ServiceManagerUtil,
     ClientDataHandler,
-    ServiceManager,
-    ChatEvent,
-    ChatListEvent
+    ServiceManager
 };

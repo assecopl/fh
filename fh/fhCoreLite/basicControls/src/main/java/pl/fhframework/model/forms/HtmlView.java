@@ -17,7 +17,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
 @Setter
 @DesignerControl(defaultWidth = 12)
 @Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
-@DocumentedComponent(category = DocumentedComponent.Category.IMAGE_HTML_MD, value = "HTML code evaluation.", icon = "fa fa-eye")
+@DocumentedComponent(value = "HTML code evaluation.", icon = "fa fa-eye")
 public class HtmlView extends FormElement {
     public static final String ATTR_TEXT = "text";
 

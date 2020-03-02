@@ -158,10 +158,6 @@ class CheckBox extends HTMLFormComponent {
         super.setPresentationStyle(presentationStyle);
     }
 
-    getDefaultWidth(): string {
-        return "md-2";
-    }
-
     destroy(removeFromParent: boolean) {
         this.input.removeEventListener('change', this.inputCheckEvent.bind(this));
         if (this.onChange) {

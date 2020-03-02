@@ -5,7 +5,6 @@ class SelectOneMenu extends HTMLFormComponent {
     private emptyValue: boolean;
     private emptyLabel: boolean;
     private emptyLabelText: string;
-    private modelBindingText: string;
     private onChange: any;
     private defaultOption: any;
     private clearButton: HTMLSpanElement;
@@ -19,7 +18,6 @@ class SelectOneMenu extends HTMLFormComponent {
         this.emptyValue = this.componentObj.emptyValue;
         this.emptyLabel = this.componentObj.emptyLabel;
         this.emptyLabelText = this.componentObj.emptyLabelText || '';
-        this.modelBindingText = this.componentObj.modelBindingText;
 
     }
 
@@ -158,12 +156,6 @@ class SelectOneMenu extends HTMLFormComponent {
 
     buildOptionsList(): Array<any> {
         let options = [];
-
-        if (this.designMode) {
-            this.emptyLabel = true;
-            this.emptyLabelText = this.modelBindingText;
-        }
-
         let defaultOption = document.createElement('option');
         defaultOption.selected = true;
         defaultOption.disabled = this.rawValue != -1 && !this.emptyLabel;
@@ -201,10 +193,6 @@ class SelectOneMenu extends HTMLFormComponent {
     setAccessibility(accessibility) {
         super.setAccessibility(accessibility);
         this.htmlElement.classList.add('fc-editable');
-    }
-
-    getDefaultWidth(): string {
-        return "md-3";
     }
 
     destroy(removeFromParent: boolean) {

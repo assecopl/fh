@@ -1,13 +1,12 @@
 package pl.fhframework.core.security.model;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
  * Interface representing a permission (association between business role and system function).
  * @author tomasz.kozlowski (created on 2017-11-22)
  */
-public interface IPermission extends Serializable {
+public interface IPermission {
 
     /** Gets a permission identifier */
     Long getId();

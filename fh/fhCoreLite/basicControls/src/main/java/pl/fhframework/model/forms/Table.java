@@ -50,8 +50,8 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
 
 /**
  * Table is component which describes and operates on tabular data. Table consists of TableRow and
- * Column components, handles user actions as well as binds model data to its elements.
- * Attributes:
+ * Column components, handles user actions as well as binds model data to its elements.<br/>
+ * Attributes:<br/>
  * <pre>
  * <code>collection</code> - table model
  * <code>selected</code> - selected row
@@ -67,7 +67,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
  * </Table>}</pre>
  */
 @Control(parents = {Tab.class, GroupingComponent.class, Row.class, Form.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = true)
-@DocumentedComponent(category = DocumentedComponent.Category.TABLE_AND_TREE ,value = "Table that allows to arrange data like text, images, links, other tables, etc. into rows and columns of cells.", icon = "fa fa-table")
+@DocumentedComponent(value = "Table that allows to arrange data like text, images, links, other tables, etc. into rows and columns of cells.", icon = "fa fa-table")
 public class Table extends Repeater implements ITabular, IChangeableByClient, IEventSourceContainer, IRowNumberOffsetSupplier, Boundable, CompactLayout, IDesignerEventListener, IHasBoundableLabel {
 
     protected static final String LABEL_ATTR = "label";
@@ -192,14 +192,14 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
     @Getter
     @Setter
     @XMLProperty
-    @DocumentedComponentAttribute(defaultValue = "hide", value = "Displays or hides grid on tables")
+    @DocumentedComponentAttribute(defaultValue = "show", value = "Displays or hides grid on tables")
     @DesignerXMLProperty(functionalArea = LOOK_AND_STYLE, priority = 71)
     private TableGrid tableGrid;
 
     @Getter
     @Setter
     @XMLProperty
-    @DocumentedComponentAttribute(defaultValue = "hide", value = "Displays or hides gray stripes on table rows")
+    @DocumentedComponentAttribute(defaultValue = "show", value = "Displays or hides gray stripes on table rows")
     @DesignerXMLProperty(functionalArea = LOOK_AND_STYLE, priority = 70)
     private TableStripes tableStripes;
 

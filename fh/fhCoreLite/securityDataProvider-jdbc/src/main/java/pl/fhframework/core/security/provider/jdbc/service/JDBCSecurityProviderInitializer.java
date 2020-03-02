@@ -117,8 +117,6 @@ public class JDBCSecurityProviderInitializer extends AbstractSecurityProviderIni
                 IUserAccount user =
                         createUser(
                             defaultUser.getLogin(),
-                            defaultUser.getFirstName(),
-                            defaultUser.getLastName(),
                             passwordEncoder.encode(defaultUser.getPassword()),
                             createRoleInstances(defaultUser.getRoles())
                         );
@@ -128,11 +126,9 @@ public class JDBCSecurityProviderInitializer extends AbstractSecurityProviderIni
         }
     }
 
-    private IUserAccount createUser(String login, String firstName, String lastName, String password, List<IRoleInstance> roles) {
+    private IUserAccount createUser(String login, String password, List<IRoleInstance> roles) {
         IUserAccount userAccount = securityDataProvider.createSimpleUserAccountInstance();
         userAccount.setLogin(login);
-        userAccount.setFirstName(firstName);
-        userAccount.setLastName(lastName);
         userAccount.setPassword(password);
         userAccount.setEmail(login.toLowerCase() + "@mail.com");
         userAccount.setBlocked(false);

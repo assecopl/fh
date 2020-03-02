@@ -18,7 +18,7 @@ public abstract class I18nAwareDesignerPreviewProvider implements IDesignerPrevi
     /**
      * Resolves binding if contains i18n expression
      * @param messageService message service
-     * @param modelBinding binding expression
+     * @param biningExpression binding expression
      * @return optional translation
      */
     public Optional<String> getI18nBindingValue(MessageService messageService, Form<?> form, DesignerModelBinding<?> modelBinding) {

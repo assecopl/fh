@@ -22,8 +22,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
  * Class represents input field for date and time. Receives every attribute of input field.  This
  * field can be used inside PanelGroup, Column, Tab, Form.
  */
-@DesignerControl(defaultWidth = 3)
-@DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, value = "Component responsible for displaying field, where use can set date and time.", icon = "fa fa-clock")
+@DocumentedComponent(value = "Component responsible for displaying field, where use can set date and time.", icon = "fa fa-clock")
 @Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
 @OverridenPropertyAnnotations(
         property = "modelBinding",

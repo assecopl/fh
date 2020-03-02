@@ -37,8 +37,8 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
 
 /**
  * Table is component which describes and operates on tabular data. Table consists of TableRowOprimized and
- * ColumnOptimized components, handles user actions as well as binds model data to its elements.
- * Attributes:
+ * ColumnOptimized components, handles user actions as well as binds model data to its elements.<br/>
+ * Attributes:<br/>
  * <pre>
  * <code>collection</code> - table model
  * <code>selected</code> - selected row
@@ -54,7 +54,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
  * </Table>}</pre>
  */
 @Control(parents = {Tab.class, GroupingComponent.class, Row.class, Form.class, Repeater.class}, invalidParents = {TableOptimized.class}, canBeDesigned = true)
-@DocumentedComponent(category = DocumentedComponent.Category.TABLE_AND_TREE, value = "TableOptimized", icon = "fa fa-table")
+@DocumentedComponent(value = "TableOptimized", icon = "fa fa-table")
 public class TableOptimized extends  Repeater implements ITabular, IChangeableByClient, IEventSourceContainer, IRowNumberOffsetSupplier, Boundable, CompactLayout, IDesignerEventListener, IHasBoundableLabel {
 
     protected static final String LABEL_ATTR = "label";

@@ -26,7 +26,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
  */
 @DesignerControl(defaultWidth = 2)
 @Control(parents = {PanelGroup.class, Group.class, Column.class, Tab.class, Row.class, Form.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = true)
-@DocumentedComponent(category = DocumentedComponent.Category.BUTTONS_AND_OTHER, value = "Label component is responsible for displaying HTML link.", icon = "fa fa-link")
+@DocumentedComponent(value = "Label component is responsible for displaying HTML link.", icon = "fa fa-link")
 public class Link extends OutputLabel implements IHasBoundableLabel {
 
     private static final String ATTR_URL = "url";

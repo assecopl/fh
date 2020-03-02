@@ -1,6 +1,5 @@
 package pl.fhframework;
 
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
@@ -25,14 +24,6 @@ public class WebSocketConfiguration implements WebSocketConfigurer {
     @Value("${fh.web.socket.origins:}")
     private List<String> websocketOrigins;
 
-    @Getter
-    @Value("${fh.web.socket.textBufferSize:262144}")
-    private int textBufferSize;
-
-    @Getter
-    @Value("${fh.web.socket.sendTimeLimit:60000}")
-    private int sendTimeLimit;
-
     @Autowired
     private ApplicationContext applicationContext;
 
@@ -51,7 +42,7 @@ public class WebSocketConfiguration implements WebSocketConfigurer {
         return new ServletContextInitializer() {
             @Override
             public void onStartup(ServletContext servletContext) throws ServletException {
-                servletContext.setInitParameter("org.apache.tomcat.websocket.textBufferSize", Integer.toString(textBufferSize));
+                servletContext.setInitParameter("org.apache.tomcat.websocket.textBufferSize", "262144");
             }
         };
     }

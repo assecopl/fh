@@ -10,7 +10,6 @@ import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.WebSocketSession;
-import org.springframework.web.socket.handler.ConcurrentWebSocketSessionDecorator;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 import pl.fhframework.core.FhFrameworkException;
 import pl.fhframework.core.logging.FhLogger;
@@ -24,8 +23,10 @@ import pl.fhframework.model.dto.OutMessageEventHandlingResult;
 import pl.fhframework.model.security.SystemUser;
 
 import java.io.IOException;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class WebSocketFormsHandler extends FormsHandler {
@@ -44,9 +45,6 @@ public class WebSocketFormsHandler extends FormsHandler {
 
     @Autowired
     private UserAttributesTempCache userAttributesTempCache;
-
-    @Autowired
-    private WebSocketConfiguration webSocketConfiguration;
 
     private final static boolean FORBID_MULTI_SEND = false;//TODO: We can change it, but in case of activation of non-WebSocket-based connection we need to change the protocol on JSON tag so you could put several commands in one response.
 
@@ -193,12 +191,8 @@ public class WebSocketFormsHandler extends FormsHandler {
     }
 
     private class InternalHandler extends TextWebSocketHandler {
-        private Map<String, WebSocketSession> concurrentWebSocketSessions = new ConcurrentHashMap<String, WebSocketSession>();
-
         @Override
         public void handleTextMessage(WebSocketSession session, TextMessage input) throws Exception {
-            session = concurrentWebSocketSessions.getOrDefault(session.getId(), session);
-
             WebSocketSessionManager.setWebSocketSession(session);
             try {
                 handle(session, input);
@@ -211,8 +205,6 @@ public class WebSocketFormsHandler extends FormsHandler {
 
         @Override
         public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
-            session = concurrentWebSocketSessions.getOrDefault(session.getId(), session);
-
             WebSocketSessionManager.setWebSocketSession(session);
             try {
                 transportError(session, exception);
@@ -225,9 +217,6 @@ public class WebSocketFormsHandler extends FormsHandler {
 
         @Override
         public void afterConnectionEstablished(WebSocketSession session) {
-            session = new ConcurrentWebSocketSessionDecorator(session, webSocketConfiguration.getSendTimeLimit(), webSocketConfiguration.getTextBufferSize());
-            concurrentWebSocketSessions.put(session.getId(), session);
-
             WebSocketSessionManager.setWebSocketSession(session);
             try {
                 String sessionId = WebSocketSessionManager.getHttpSession().getId();
@@ -266,8 +255,6 @@ public class WebSocketFormsHandler extends FormsHandler {
 
         @Override
         public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-            session = concurrentWebSocketSessions.getOrDefault(session.getId(), session);
-
             wssRepository.onConnectionClosed(session);
             WebSocketSessionManager.setWebSocketSession(session);
 
@@ -292,7 +279,6 @@ public class WebSocketFormsHandler extends FormsHandler {
                 FhLogger.errorSuppressed("Error during connection closing", e);
             } finally {
                 WebSocketSessionManager.setWebSocketSession(null);
-                concurrentWebSocketSessions.remove(session.getId());
             }
         }
     }

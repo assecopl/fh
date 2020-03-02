@@ -109,8 +109,8 @@ class Image extends HTMLFormComponent {
     /**
      * @Override
      */
-    public getDefaultWidth(): string {
-        return "md-6";
+    public getDefaultWidth():string {
+        return null;
     }
 }
 

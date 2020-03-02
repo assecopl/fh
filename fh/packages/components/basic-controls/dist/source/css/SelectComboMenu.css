@@ -1,0 +1,9 @@
+ul.autocompleter {
+    width: fit-content;
+    width: -moz-fit-content;
+}
+
+.autocompleter li a.dropdown-item:hover {
+    background: inherit !important;
+    cursor: pointer;
+}

@@ -22,7 +22,7 @@ import java.util.Set;
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.LOOK_AND_STYLE;
 
 /**
- * Base component/root of all visual and non visual components. Contains common logic inherited
+ * Base component/root of all visual and non visual components.<br/> Contains common logic inherited
  * by descendant components. Created by Gabriel on 2015-11-20.
  */
 @DesignerControl

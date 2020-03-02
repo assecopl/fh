@@ -145,10 +145,6 @@ class OutputLabel extends HTMLFormComponent {
             super.wrap();
         }
     }
-
-    getDefaultWidth(): string {
-        return 'md-2';
-    }
 }
 
 export {OutputLabel};

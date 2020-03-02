@@ -19,6 +19,7 @@ public interface IDesignerEventListener {
 
     /**
      * Adds subcomponent of default type.
+     * @param parent parent component
      * @param spacerService SpacerService implementation for optional usage
      */
     public default void onDesignerAddDefaultSubcomponent(SpacerService spacerService) {

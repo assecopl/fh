@@ -26,8 +26,7 @@ import java.util.regex.PatternSyntaxException;
 
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.*;
 
-@DesignerControl(defaultWidth = 3)
-@DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, value = "InputText component is responsible for displaying simple field, where user can write some data" +
+@DocumentedComponent(value = "InputText component is responsible for displaying simple field, where user can write some data" +
         " plus label representing this field.", icon = "fa fa-edit")
 @Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
 @OverridenPropertyAnnotations(

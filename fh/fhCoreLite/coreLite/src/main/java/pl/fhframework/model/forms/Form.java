@@ -361,12 +361,7 @@ public abstract class Form<T> extends GroupingComponent<Component> implements Bo
 
     @Override
     public Form<?> getForm() {
-        return this;
-    }
-
-    @JsonIgnore
-    public Form<?> getEventProcessingForm() {
-        if (getGroupingParentComponent() instanceof Generable && getGroupingParentComponent() instanceof Component) {
+        if (getGroupingParentComponent() instanceof Component) {
             return ((Component) getGroupingParentComponent()).getForm();
         }
         return this;
@@ -493,9 +488,10 @@ public abstract class Form<T> extends GroupingComponent<Component> implements Bo
     }
 
     /**
-     * Returns Event Source object indicated by passed id
+     * Returns >Event Source< object indicated by passed id
      *
-     * @param eventSourceId event source id, in case of form component it is an id of form's element
+     * @param eventSourceId event source id, in case of form component it is an id of form's
+     *                      element
      * @return EventSource instance
      */
     public IEventSource getEventSource(String eventSourceId) {
@@ -528,9 +524,10 @@ public abstract class Form<T> extends GroupingComponent<Component> implements Bo
     }
 
     /**
-     * Returns Event Source object indicated by passed id
+     * Returns >Event Source< object indicated by passed id
      *
-     * @param idOfFormElement event source id, in case of form component it is an id of form's element
+     * @param idOfFormElement event source id, in case of form component it is an id of form's
+     *                        element
      * @return EventSource instance
      */
     public FormElement getFormElement(String idOfFormElement) {

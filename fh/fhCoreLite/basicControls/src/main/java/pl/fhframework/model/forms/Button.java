@@ -24,12 +24,12 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
 
 /**
  * Class representing xml component of Button. Every field represents xml attribute of button tag.
- * Example {@code <Button label="button_1"/>}. Every field is parsed as json for javascript. If field should
+ * Example <Button label="button_1"/>. Every field is parsed as json for javascript. If field should
  * be ingored by JSON, use <code>@JsonIgnore</code>. There can be used any annotations for json
  * generator.
  */
 @Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Form.class, ButtonGroup.class, Group.class, Row.class, Footer.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = true)
-@DocumentedComponent(category = DocumentedComponent.Category.BUTTONS_AND_OTHER, value = "Button which represents HTML input", icon = "fa fa-square")
+@DocumentedComponent(value = "Button which represents HTML input", icon = "fa fa-square")
 @DesignerControl(defaultWidth = 2)
 public class Button extends FormElementWithConfirmationSupport implements TableComponent<Button>, Styleable, IHasBoundableLabel {
 

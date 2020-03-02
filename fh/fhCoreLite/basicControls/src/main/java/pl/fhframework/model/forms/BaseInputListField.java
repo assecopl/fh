@@ -82,7 +82,7 @@ public abstract class BaseInputListField extends BaseInputField {
     @Getter
     @Setter
     @XMLProperty(aliases = {"displayAttribute"})
-    @DesignerXMLProperty(priority = 79, functionalArea = CONTENT, commonUse = true)
+    @DesignerXMLProperty(priority = 91, functionalArea = CONTENT, commonUse = true)
     @DocumentedComponentAttribute(value = "Defines an attribute of a single value object to be used for display. If not set, converter will be used.")
     private String displayExpression;
 

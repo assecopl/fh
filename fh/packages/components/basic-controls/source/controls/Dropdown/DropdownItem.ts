@@ -30,14 +30,18 @@ class DropdownItem extends OutputLabel {
         this.labelComponent = this.component;
         this.labelComponent.id = this.id + "___label"; // przeniesienie identyfikatora z utworzonej etykiety
 
-        let element = document.createElement('a');
+        let element = document.createElement('li');
         element.classList.add('dropdown-item');
         element.id = this.id;
 
+        let a = document.createElement('a');
         if (this.url) {
-            element.href = this.url;
+            a.href = this.url;
         }
-        element.appendChild(this.labelComponent);
+        a['role'] = 'button';
+        a.appendChild(this.labelComponent);
+
+        element.appendChild(a);
 
         if (this.onClick) {
             element.addEventListener('click', this.onClickEvent.bind(this));
@@ -45,7 +49,7 @@ class DropdownItem extends OutputLabel {
 
         this.component = element;
         this.htmlElement = this.component;
-        // this.wrap(true);
+        this.wrap(true);
         this.display();
     };
 

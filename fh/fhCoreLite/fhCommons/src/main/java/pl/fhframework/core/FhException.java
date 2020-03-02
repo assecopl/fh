@@ -83,10 +83,6 @@ public class FhException extends RuntimeException {
     }
 
     public static String resolveThrowableMessage(Throwable exception) {
-        return resolveThrowableMessage(exception, true);
-    }
-
-    public static String resolveThrowableMessage(Throwable exception, boolean withClassName) {
         Throwable current = exception;
         Set<String> allMessages = new LinkedHashSet<>();
         Set<String> fhMessages = new LinkedHashSet<>();
@@ -105,32 +101,16 @@ public class FhException extends RuntimeException {
             }
         }
         Throwable rootCause = getRootCause(exception);
-        String rootCasueStr;
-        if (withClassName) {
-            rootCasueStr = String.format("%s - %s", rootCause.getClass().getSimpleName(), rootCause.getMessage());
-        }
-        else {
-            rootCasueStr = String.format("%s", rootCause.getMessage());
-        }
+        String rootCasueStr = String.format("%s - %s", rootCause.getClass().getSimpleName(), rootCause.getMessage());
         if (fhMessages.size() > 0) {
             fhMessages.add(rootCasueStr);
             clearDuplicates(fhMessages);
-            if (withClassName) {
-                return fhMessages.stream().collect(Collectors.joining(", caused by: "));
-            }
-            else {
-                return fhMessages.stream().collect(Collectors.joining(". "));
-            }
+            return fhMessages.stream().collect(Collectors.joining(", caused by: "));
         }
         else if (allMessages.size() > 0) {
             allMessages.add(rootCasueStr);
             clearDuplicates(allMessages);
-            if (withClassName) {
-                return allMessages.stream().collect(Collectors.joining(", caused by: "));
-            }
-            else {
-                return allMessages.stream().collect(Collectors.joining(". "));
-            }
+            return allMessages.stream().collect(Collectors.joining(", caused by: "));
         }
         return rootCasueStr;
     }

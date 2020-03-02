@@ -14,16 +14,14 @@ import pl.fhframework.model.forms.optimized.ColumnOptimized;
 import java.util.Objects;
 import java.util.Optional;
 
-import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.*;
+import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.CONTENT;
+import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.SPECIFIC;
 
 @Getter
 @Setter
-@OverridenPropertyAnnotations(designerXmlProperty = @DesignerXMLProperty(skip = true), property = "value")
-@OverridenPropertyAnnotations(designerXmlProperty = @DesignerXMLProperty(skip = true), property = "modelBinding")
-@OverridenPropertyAnnotations(designerXmlProperty = @DesignerXMLProperty(skip = true), property = "rawValue")
 @DesignerControl(defaultWidth = 12)
 @Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
-@DocumentedComponent(category = DocumentedComponent.Category.IMAGE_HTML_MD, value = "Visual HTML text editor. Allows visual editing of text in HTML markup.", icon = "fa fa-eye")
+@DocumentedComponent(value = "Visual HTML text editor. Allows visual editing of text in HTML markup.", icon = "fa fa-eye")
 public class HtmlEditor extends BaseInputField {
     public static final String ATTR_TEXT = "text";
 

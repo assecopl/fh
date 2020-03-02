@@ -25,7 +25,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
  * Created by krzysztof.kobylarek on 2016-11-09.
  */
 @Control(canBeDesigned = true)
-@DocumentedComponent(ignoreFields = {"width"}, category = DocumentedComponent.Category.ARRANGEMENT,
+@DocumentedComponent(ignoreFields = {"width"},
         value = "Component that allows to arrange data like text, images, links, etc. into rows and columns of cells.",
         icon = "fa fa-sitemap")
 public class Repeater extends FormElement implements IEditableGroupingComponent<Component>, IRepeatable, IStateHolder, ISingleIteratorRepeatable<Repeater> {

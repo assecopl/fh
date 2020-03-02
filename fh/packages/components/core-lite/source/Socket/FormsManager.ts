@@ -194,23 +194,16 @@ class FormsManager {
         }.bind(this));
     }
 
-    findFormByContainer(containerId){
-        let form = null;
-        for (let i = 0; i < this.openedForms.length; i++) {
-            if (this.openedForms[i].parentId === containerId) {
-                form = this.openedForms[i];
-                break;
-            }
-        }
-        return form;
-    }
-
-
     focusComponent(componentId, containerId) {
         let path = false;
         let form = null;
         if (containerId) {
-            form = this.findFormByContainer(containerId);
+            for (let i = 0; i < this.openedForms.length; i++) {
+                if (this.openedForms[i].parentId === containerId) {
+                    form = this.openedForms[i];
+                    break;
+                }
+            }
             if (form) {
                 path = form.findComponent(componentId, false, true);
             }

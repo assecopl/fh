@@ -254,7 +254,7 @@ public class FormWriter {
         return xml.toString();
     }
 
-    public static void elementsToXml(StringBuilder xml,
+    private static void elementsToXml(StringBuilder xml,
                                       Collection<? extends Component> elements,
                                       Set<Component> alreadyAddedChildren,
                                       boolean preserveIds) {

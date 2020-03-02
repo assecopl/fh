@@ -190,7 +190,7 @@ public abstract class SubsystemElementsTree {
     }
 
     /**
-     * see pl.fhframework.subsystems.DynamicSubsystem
+     * @see pl.fhframework.subsystems.DynamicSubsystem#requiresUpdate()
      */
     public static boolean requiresUpdate(TreeRoot treeRoot) {
         long currentTime = System.currentTimeMillis();

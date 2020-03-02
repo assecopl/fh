@@ -1,4 +1,4 @@
-import {AdditionalButton, HTMLFormComponent, FhContainer, FormComponent} from "fh-forms-handler";
+import {AdditionalButton, HTMLFormComponent, FhContainer} from "fh-forms-handler";
 import {TableWithKeyboardEvents} from "./Abstract/TableWithKeyboardEvents";
 
 class Table extends TableWithKeyboardEvents {
@@ -31,8 +31,8 @@ class Table extends TableWithKeyboardEvents {
         this.rowStylesMapping = this.componentObj.rowStylesMapping || [];
         this.minRows = this.componentObj.minRows || null;
         this.rowHeight = this.componentObj.rowHeight || 'normal';
-        this.tableGrid = this.componentObj.tableGrid || 'hide';
-        this.tableStripes = this.componentObj.tableStripes || 'hide';
+        this.tableGrid = this.componentObj.tableGrid || 'show';
+        this.tableStripes = this.componentObj.tableStripes || 'show';
         this.ieFocusFixEnabled = this.componentObj.ieFocusFixEnabled || false;
 
         this._dataWrapper = null;
@@ -156,10 +156,11 @@ class Table extends TableWithKeyboardEvents {
                         this.tableData = change.changedAttributes['tableRows'];
                         this.refreshData(true);
                         this.updateFixedHeaderWidth();
+                        this.scrollTopInside();
                         break;
                     case 'selectedRowNumber':
                         this.rawValue = change.changedAttributes['selectedRowNumber'];
-                        this.highlightSelectedRows();
+                            this.highlightSelectedRows();
                         break;
                     case 'rowStylesMapping':
                         this.rowStylesMapping = newValue;
@@ -371,9 +372,8 @@ class Table extends TableWithKeyboardEvents {
         this.addMinRowRows();
 
         if (this.onRowClick === '-' || !clearSelection) {
-            this.highlightSelectedRows();
+            this.highlightSelectedRows(false);
         }
-
     };
 
     addMinRowRows() {
@@ -429,7 +429,7 @@ class Table extends TableWithKeyboardEvents {
      * Used for standard tables
      * @param scrollAnimate
      */
-    highlightSelectedRows(scrollAnimate: boolean = false) {
+    highlightSelectedRows(scrollAnimate:boolean = false) {
         let oldSelected = this.table.querySelectorAll('.table-primary');
         if (oldSelected && oldSelected.length) {
             [].forEach.call(oldSelected, function (row) {
@@ -539,15 +539,8 @@ class Table extends TableWithKeyboardEvents {
         }
     }
 
-    protected getAllComponents() {
-        let result: FormComponent[] = this.components;
 
-        this.rows.forEach((value) => {
-            result = result.concat(value.components);
-        });
 
-        return result;
-    }
 }
 
 export {Table};

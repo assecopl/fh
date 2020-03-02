@@ -92,7 +92,6 @@ public class DynamicClassName {
 
     @Override
     public boolean equals(Object o) {
-        if (o == null) return false;
         DynamicClassName that = (DynamicClassName) o;
         return packageName.equals(that.packageName) && baseClassName.equals(that.baseClassName);
     }

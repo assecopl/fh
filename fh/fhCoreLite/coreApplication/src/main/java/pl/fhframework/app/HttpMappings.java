@@ -1,6 +1,5 @@
 package pl.fhframework.app;
 
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -34,7 +33,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -137,7 +135,7 @@ public class HttpMappings extends WebMvcConfigurerAdapter {
 
     @RequestMapping(value = "/autologout", method = RequestMethod.GET)
     public ModelAndView timeout(@RequestParam(value = "reason", required = false) String reason,
-                                HttpServletRequest request) {
+                               HttpServletRequest request) {
         ModelAndView model = new ModelAndView();
 
         // todo: better condition for custom logout url
@@ -201,21 +199,10 @@ public class HttpMappings extends WebMvcConfigurerAdapter {
             return ResponseEntity.ok()
                     .lastModified(file.lastModified())
                     .contentLength(file.length())
-                    .contentType(getFileContentType(file))
                     .body(bytes);
         } catch (IOException e) {
             FhLogger.error("Error while reading stream: " + e.getMessage(), e);
             throw new ResourceNotFoundException();
-        }
-    }
-
-    private MediaType getFileContentType(File file) {
-        if (FilenameUtils.isExtension(file.getName(), Arrays.asList("PNG", "png"))) {
-            return MediaType.IMAGE_PNG;
-        } else if (FilenameUtils.isExtension(file.getName(), Arrays.asList("GIF", "gif"))) {
-            return MediaType.IMAGE_GIF;
-        } else {
-            return MediaType.IMAGE_JPEG;
         }
     }
 }

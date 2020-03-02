@@ -316,10 +316,6 @@ class InputDate extends InputText implements LanguageChangeObserver {
         super.wrap(skipLabel, isInputElement);
     }
 
-    getDefaultWidth(): string {
-        return "md-3";
-    }
-
     destroy(removeFromParent: boolean) {
         // noinspection JSIgnoredPromiseFromCall
         this.i18n.unsubscribe(this);

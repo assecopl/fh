@@ -351,14 +351,6 @@ public class ModelConfig {
         return nonOwningRelations.get(entityClass);
     }
 
-    public Class getRelatedClass(String clazz, String role) {
-        FieldAnnotation fieldAnnotation = getClassFieldsAnnotationsForClass((Class<? extends BaseEntity>) ReflectionUtils.getClassForName(clazz)).get(role);
-        if (ReflectionUtils.isAssignablFrom(Collection.class, fieldAnnotation.getField().getType())) {
-            return ReflectionUtils.getGenericTypeInFieldType(fieldAnnotation.getField(), 0);
-        }
-        return fieldAnnotation.getField().getType();
-    }
-
     @Data
     @AllArgsConstructor
     public class FieldAnnotation {

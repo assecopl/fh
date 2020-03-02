@@ -32,3 +32,4 @@ public interface PermissionRepository {
     void delete(IPermission permission);
 
 }
+

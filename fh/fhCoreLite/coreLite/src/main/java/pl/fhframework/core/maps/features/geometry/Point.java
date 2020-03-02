@@ -48,19 +48,8 @@ public class Point extends MapGeometry implements IPoint {
     }
 
     @Override
-    public void setLongitude(double longitude) {
-        geometry = geometryFactory.createPoint(new Coordinate(longitude, getLatitude()));
-    }
-
-
-    @Override
     public double getLatitude() {
         return toPoint().getY();
-    }
-
-    @Override
-    public void setLatitude(double latitude) {
-        geometry = geometryFactory.createPoint(new Coordinate(getLongitude(), latitude));
     }
 
     protected org.locationtech.jts.geom.Point toPoint() {

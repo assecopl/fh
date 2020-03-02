@@ -13,7 +13,6 @@ import javax.servlet.http.HttpSession;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.web.socket.handler.ConcurrentWebSocketSessionDecorator;
 import pl.fhframework.aspects.ApplicationContextHolder;
 import pl.fhframework.core.logging.LogLevel;
 import pl.fhframework.core.logging.FhLogger;
@@ -102,7 +101,8 @@ public class WebSocketSessionManager implements ISessionManagerImpl {
             // include current inactive time - FH-7448
             int currentInactiveTime = (int) ((System.currentTimeMillis() - sessionHttp.getLastAccessedTime()) / 1000);
             sessionHttp.setMaxInactiveInterval(currentInactiveTime + SUSTAIN_TIMEOUT);
-        } catch (IllegalStateException ise) {
+        }
+        catch (IllegalStateException ise) {
             // session allready invalidated
             FhLogger.log(LogLevel.DEBUG, "HttpSession for web socket '{}' is already invalid", webSocketSession.getId());
         }
@@ -128,7 +128,7 @@ public class WebSocketSessionManager implements ISessionManagerImpl {
         return getUserSessionRepository().getUserSession(getHttpSession().getId()) != null;
     }
 
-    public static void prepareSessionScope() {
+    public static void prepareSessionScope(){
         final HttpSession httpSession = getHttpSession();
         WebSocketSessionRequestAttribute attributes = new WebSocketSessionRequestAttribute(httpSession);
 
@@ -178,7 +178,7 @@ public class WebSocketSessionManager implements ISessionManagerImpl {
     }
 
     public static HttpSession getHttpSession(WebSocketSession session) {
-        return ((HttpSession) session.getAttributes().get(HTTP_SESSION_KEY));
+        return ((HttpSession)session.getAttributes().get(HTTP_SESSION_KEY));
     }
 
     public static HttpSession getHttpSession() {

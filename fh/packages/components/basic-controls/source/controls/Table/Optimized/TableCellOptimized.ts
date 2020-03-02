@@ -56,6 +56,9 @@ class TableCellOptimized extends HTMLFormComponent {
                 } else {
                     row = document.createElement('div');
                 }
+        row.classList.add('pl-2');
+        row.classList.add('pr-2');
+        row.classList.add('row');
         cell.appendChild(row);
 
         this.component = cell;

@@ -55,6 +55,7 @@ abstract class HTMLFormComponent extends FormComponent {
         super(componentObj, parent);
 
 
+
         if (this.parent != null) {
             this.container = this.parent.contentWrapper;
         } else { // FORM
@@ -198,7 +199,7 @@ abstract class HTMLFormComponent extends FormComponent {
                     this.handleDeleteBtnEvent(event);
                 });
             }.bind(this));
-            if (this.contentWrapper && this.contentWrapper.classList.contains('button')) {
+            if (this.contentWrapper.classList.contains('button')) {
                 this.component.addEventListener('click', function (e) {
                     this.component.focus();
                     e.stopImmediatePropagation();
@@ -209,7 +210,7 @@ abstract class HTMLFormComponent extends FormComponent {
                     });
                 }.bind(this));
             }
-            if (this.contentWrapper && this.contentWrapper.classList.contains('selectOneMenu')) {
+            if (this.contentWrapper.classList.contains('selectOneMenu')) {
                 this.component.addEventListener('click', function (e) {
                     this.component.focus();
                     e.stopImmediatePropagation();
@@ -219,7 +220,7 @@ abstract class HTMLFormComponent extends FormComponent {
                     });
                 }.bind(this));
             }
-            if (this.contentWrapper && this.contentWrapper.classList.contains('fileUpload')) {
+            if (this.contentWrapper.classList.contains('fileUpload')) {
                 this.component.addEventListener('click', function (e) {
                     this.component.focus();
                     e.stopImmediatePropagation();
@@ -259,7 +260,7 @@ abstract class HTMLFormComponent extends FormComponent {
             let tooltipOptions: any = {
                 placement: this.hintPlacement,
                 title: this.hint,
-                trigger: this.hintTrigger,
+                trigger : this.hintTrigger,
                 html: true,
                 boundary: 'window'
             };
@@ -544,7 +545,11 @@ abstract class HTMLFormComponent extends FormComponent {
         this.handlemarginAndPAddingStyles();
     }
 
-    handleHeight() {
+    public hasHeight():boolean {
+        return this.componentObj.height != undefined && this.componentObj.height != "" && this.componentObj.height != null;
+    }
+
+    handleHeight(){
         if (this.componentObj.height != undefined) {
             let height = this.componentObj.height;
             if (height.indexOf('%') !== -1) {
@@ -663,9 +668,7 @@ abstract class HTMLFormComponent extends FormComponent {
     enableStyleClasses() {
         if (this.styleClasses.length && this.styleClasses[0] != '') {
             this.styleClasses.forEach(function (cssClass) {
-                if (cssClass) {
-                    this.component.classList.add(cssClass);
-                }
+                this.component.classList.add(cssClass);
             }.bind(this));
         }
     }
@@ -675,7 +678,7 @@ abstract class HTMLFormComponent extends FormComponent {
             oldWidth.forEach(function (width) {
                 if (HTMLFormComponent.bootstrapColRegexp.test(width)) {
                     //In bootstrap 4 "co-xs-12" was replaced with "col-12" so we need to delete it from string.
-                    wrapper.classList.remove('col-' + width.replace('xs-', '-'));
+                    wrapper.classList.remove('col-' + width.replace('xs-','-'));
                 } else if (HTMLFormComponent.bootstrapColWidthRegexp.test(width)) {
                     wrapper.classList.remove('exactWidth');
                     wrapper.style.width = undefined;
@@ -688,7 +691,7 @@ abstract class HTMLFormComponent extends FormComponent {
         newWidth.forEach(function (width) {
             if (HTMLFormComponent.bootstrapColRegexp.test(width)) {
                 //In bootstrap 4 "co-xs-12" was replaced with "col-12" so we need to delete it from string.
-                wrapper.classList.add('col-' + width.replace('xs-', '-'));
+                wrapper.classList.add('col-' + width.replace('xs-','-'));
             } else if (HTMLFormComponent.bootstrapColWidthRegexp.test(width)) {
                 wrapper.classList.add('exactWidth');
                 wrapper.style.width = width;
@@ -799,7 +802,7 @@ abstract class HTMLFormComponent extends FormComponent {
             }
 
             if (!this.htmlElement.classList.contains('colorBorder') && options.isLast) {
-                if (this.componentObj.type === 'DropdownItem' || this.componentObj.type === 'ThreeDotsMenuItem') {
+                if (this.componentObj.type === 'DropdownItem') {
                     let dropdown = this.component.closest('.fc.dropdown').parentElement;
                     dropdown.classList.add('colorBorder');
                     dropdown.classList.add('designerFocusedElement');
@@ -941,7 +944,7 @@ abstract class HTMLFormComponent extends FormComponent {
         }
     }
 
-    public getDefaultWidth(): string {
+    public getDefaultWidth():string {
         return 'md-12';
     }
 
@@ -962,7 +965,7 @@ abstract class HTMLFormComponent extends FormComponent {
             $(options.scrollableElement).animate({
                 scrollTop: $(row).offset().top - 160
             });
-        } else if (this.componentObj.type === 'DropdownItem' || this.componentObj.type === 'ThreeDotsMenuItem') {
+        } else if (this.componentObj.type === 'DropdownItem') {
             let dropdown = this.component.closest('.fc.dropdown');
             $(options.scrollableElement).animate({
                 scrollTop: $(dropdown).offset().top - 160
@@ -1038,9 +1041,9 @@ abstract class HTMLFormComponent extends FormComponent {
         let nodeCarets;
 
         treeElementsList.forEach(node => {
-            if (node.contains(elementTreeEquivalent)) {
-                topLevelNode = node;
-            }
+           if (node.contains(elementTreeEquivalent)) {
+               topLevelNode = node;
+           }
         });
 
         if (topLevelNode) {
@@ -1106,12 +1109,12 @@ abstract class HTMLFormComponent extends FormComponent {
      * Function process width string from backend serwer and creates proper bootstrap classes string array so they can be added to component.
      * @param width
      */
-    private handleWidth(width: string = this.componentObj.width) {
-        if (!width) {
-            width = this.getDefaultWidth()
+    private handleWidth(width:string = this.componentObj.width){
+        if(!width){
+          width = this.getDefaultWidth()
         }
 
-        if (width) {
+        if(width) {
             // Delete unwanted spaces
             width = width.trim();
             //Replace un wanted chars
@@ -1126,7 +1129,7 @@ abstract class HTMLFormComponent extends FormComponent {
     /**
      * Logic moved to function so it can be overrided by children classes.
      */
-    protected buildDesingerToolbox() {
+    protected buildDesingerToolbox(){
         (<any>FhContainer.get('Designer')).buildToolbox(this.getAdditionalButtons(), this);
 
     }
@@ -1148,10 +1151,10 @@ abstract class HTMLFormComponent extends FormComponent {
                  */
                 const activeElement = document.activeElement;
                 const activeElementTagName = activeElement.tagName.toLowerCase();
-                if (focusedElement.contains(activeElement) || (!focusedElement.contains(activeElement) &&
-                    (activeElementTagName !== 'input' &&
-                        activeElementTagName !== 'select' &&
-                        activeElementTagName !== 'textarea' &&
+                if(focusedElement.contains(activeElement) || (!focusedElement.contains(activeElement) &&
+                        (activeElementTagName !== 'input' &&
+                            activeElementTagName !== 'select' &&
+                            activeElementTagName !== 'textarea' &&
                         !activeElement.classList.contains("form-control")))) {
                     deleteBtn.click();
                 }

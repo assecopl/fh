@@ -2,8 +2,6 @@ import {HTMLFormComponent} from "fh-forms-handler";
 
 class Repeater extends HTMLFormComponent {
     private referenceNode: any;
-    private rWrapper: any;
-
 
     constructor(componentObj: any, parent: HTMLFormComponent) {
         super(componentObj, parent);

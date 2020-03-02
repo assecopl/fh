@@ -93,25 +93,23 @@ abstract class TableFixedHeaderAndHorizontalScroll extends HTMLFormComponent {
         }
     };
 
-    private calculateColumnWidth(column:any, isLat:boolean){
-        if (isLat) {
-            /**
-             * Need to remamber last column to recalculate whne vertical scroll appears.
-             */
-            this.lastThColumn = column;
-            this.lastThWidth = this.lastThColumn.htmlElement.offsetWidth;
-        }
+    private calculateColumnWidth(column:any, precentage:boolean){
+
+        this.lastThColumn = column;
         column.htmlElement.dataset.originalWidth =  column.htmlElement.style.width;
-        column.htmlElement.style.width = column.htmlElement.offsetWidth + "px";
         column.htmlElement.classList.add(column.id);
+        let offsetWidth = column.htmlElement.offsetWidth + "px"
+        if(precentage){
+            offsetWidth = this.convertToPrecentageWidth(column.htmlElement.offsetWidth) + "%"
+        }
         if(this.initFixedHeader){
             /**
              * if fixedheader is already initilized we need to set widths also on cloned objects.
              */
-            $('.'+column.id).css("width", column.htmlElement.offsetWidth + "px");
+            $('.'+column.id).css("width",offsetWidth);
             $('.'+column.id).attr("class", column.htmlElement.classList.toString());
         } else {
-            column.htmlElement.style.width = column.htmlElement.offsetWidth + "px";
+            column.htmlElement.style.width = offsetWidth;
         }
     }
 
@@ -124,8 +122,12 @@ abstract class TableFixedHeaderAndHorizontalScroll extends HTMLFormComponent {
 
     private calculateColumnsWidth() {
         const colCount = this.components.length;
+        //To keep proper size - first we need to set px then rewrite it to %.
         (this.components || []).forEach(function (column, index) {
-            this.calculateColumnWidth(column, (index == colCount - 1))
+            this.calculateColumnWidth(column)
+        }.bind(this));
+        (this.components || []).forEach(function (column, index) {
+            this.calculateColumnWidth(column, true);
         }.bind(this));
     }
 
@@ -134,16 +136,16 @@ abstract class TableFixedHeaderAndHorizontalScroll extends HTMLFormComponent {
         (this.components || []).forEach(function (column, index) {
             this.setColumnOriginalWidth(column)
         }.bind(this));
-
-        // this.calculateColumnsWidth();
+        this.calculateColumnsWidth();
 
     }
 
 
     handleFixedHeader() {
         if (this.fixedHeader && this.inputGroupElement && !this.initFixedHeader && (!this.designMode || this._formId === 'FormPreview')) {
-            const colCount = this.components.length;
-           this.calculateColumnsWidth();
+
+            this.calculateColumnsWidth();
+
             this.scrollbarWidth = this.component.offsetWidth - this.component.clientWidth;
             let outter: HTMLDivElement = document.createElement('div');
             let table: any = this.table.cloneNode(false);
@@ -151,6 +153,7 @@ abstract class TableFixedHeaderAndHorizontalScroll extends HTMLFormComponent {
             let outterWidth = this.component.style.width ? this.component.style.width : "100%";
 
             table.classList.add('clonedTableHeader');
+            table.id = table.id+"_clone";
             table.style.cssText += "background:white;margin-bottom:0px;";
             outter.style.cssText = "position:absolute;top:0px;left:0px;width:calc(" + outterWidth + " - " + this.scrollbarWidth + "px);overflow:hidden";
             //append main table header into cloned table.
@@ -158,6 +161,9 @@ abstract class TableFixedHeaderAndHorizontalScroll extends HTMLFormComponent {
 
             //fill main table with cloned header
             $(this.header).clone(true).appendTo(this.table);
+            $(table).find("th").each(function () {
+                    $(this).attr("id", this.id+"_clone");
+            });
             // this.table.appendChild(this.header.cloneNode(true));
             //
 
@@ -176,8 +182,6 @@ abstract class TableFixedHeaderAndHorizontalScroll extends HTMLFormComponent {
         }
     }
 
-
-
     handleColumnResize(): void {
         if (!this.initColumnResize && !this.horizontalScrolling) {
             const colCount = this.components.length;
@@ -189,7 +193,8 @@ abstract class TableFixedHeaderAndHorizontalScroll extends HTMLFormComponent {
                 if (!column.htmlElement.classList.contains(column.id)) {
                     column.htmlElement.classList.add(column.id)
                 }
-                if (column.htmlElement.nextSibling) {
+                const sibling = this.getVisiableSibling(column.htmlElement);
+                if (sibling) {
                     let col = null;
                     col = $("." + column.id);
 
@@ -208,7 +213,7 @@ abstract class TableFixedHeaderAndHorizontalScroll extends HTMLFormComponent {
                         const htmlElement = column.htmlElement;
                         this.startPageX = e.pageX;
                         this.startOffset = htmlElement.offsetWidth;
-                        this.secondOffset = htmlElement.nextSibling ? (htmlElement.nextSibling.offsetWidth) : (htmlElement.previousSibling.offsetWidth);
+                        this.secondOffset = sibling.offsetWidth;
                     }.bind(this);
 
                     col.each(function (index) {
@@ -225,22 +230,15 @@ abstract class TableFixedHeaderAndHorizontalScroll extends HTMLFormComponent {
                     let scrollbarWidth = this.component.offsetWidth - this.component.clientWidth;
                     [].forEach.call(this.thElm, function (column) {
                         let lastScroll = 0;
-                        if (column.nextSibling) {
+                        const sibling = this.getVisiableSibling(column);
+                        if (sibling) {
                             const colWidth = this.startOffset + (e.pageX - this.startPageX);
                             let nextSiblingWidth = this.secondOffset - (e.pageX - this.startPageX);
                             //Minimal column width is 20px. We can't go less.
 
                            if(colWidth > 25 && nextSiblingWidth > 25) {
-                               //check is this is last column. If scrollbar appeared we need to calculate width of lats column.
-                               if (!column.nextSibling.nextSibling) {
-                                   nextSiblingWidth = nextSiblingWidth - scrollbarWidth;
-                               } else {
-                                   if(this.scrollbarWidth != scrollbarWidth) {
-                                       $("." + this.lastThColumn.id).css('width', this.lastThWidth - scrollbarWidth + 'px');
-                                   }
-                               }
-                               column.nextSibling.style.width = nextSiblingWidth + 'px'
-                               column.style.width = colWidth + 'px';
+                               sibling.style.width = this.convertToPrecentageWidth(nextSiblingWidth) + '%'
+                               column.style.width = this.convertToPrecentageWidth(colWidth) + '%';
                            }
 
 
@@ -257,7 +255,6 @@ abstract class TableFixedHeaderAndHorizontalScroll extends HTMLFormComponent {
             this.initColumnResize = true;
         }
     }
-
 
     recalculateGripHeight() {
         $("." + this.table.id + "_grip").css('height', this.table.offsetHeight + "px");
@@ -293,7 +290,6 @@ abstract class TableFixedHeaderAndHorizontalScroll extends HTMLFormComponent {
                 let outterWidth = this.component.style.width ? this.component.style.width : "100%";
                 this.fixedHeaderWrapper.style.width = "calc("+outterWidth+" - " + scrollbarWidth + "px)";
                 this.scrollbarWidth = scrollbarWidth;
-                $("." + this.lastThColumn.id).css('width', (this.lastThWidth - scrollbarWidth) + 'px');
             }
         }
     }
@@ -321,12 +317,51 @@ abstract class TableFixedHeaderAndHorizontalScroll extends HTMLFormComponent {
         }
     }
 
+    public scrollTopInside(){
+        if(this.hasHeight()) {
+            /**
+             * If table is inside scrollable container we scoll it to the top when selection need to be cleared.
+             */
+            $(this.component).scrollTop(0);
+        }
+    }
+
     // fixedHeaderEvent(e) {
     //     const el = e.target;
     //     $(this.header)
     //         .find('th')
     //         .css('transform', 'translateY(' + el.scrollTop + 'px)');
     // }
+
+    /**
+     * Function helps get next or prevoius Visible Sibling.
+     * @param column
+     */
+    public getVisiableSibling(htmlElement:any):any{
+        let sibling = htmlElement.nextSibling;
+
+        while(sibling && !this.isVisiable(sibling)){
+                sibling = sibling.nextSibling
+        }
+
+        if(!sibling){
+            let sibling = htmlElement.previousSibling;
+            while(sibling && !this.isVisiable(sibling)){
+                sibling = sibling.previousSibling
+            }
+        }
+
+        return sibling
+    }
+
+    private isVisiable(htmlElement:any){
+        var style = window.getComputedStyle(htmlElement);
+        return !(style.display === 'none')
+    }
+
+    public convertToPrecentageWidth(widthInPx:any){
+        return ( ((widthInPx/this.component.clientWidth)) * 100 ).toExponential(2);
+    }
 
 }
 

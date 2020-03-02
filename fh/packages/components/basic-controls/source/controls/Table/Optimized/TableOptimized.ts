@@ -131,6 +131,7 @@ class TableOptimized extends TableWithKeyboardEvents {
                         break;
                 }
             }.bind(this));
+            this.updateFixedHeaderWidth();
         }
     }
 
@@ -161,7 +162,7 @@ class TableOptimized extends TableWithKeyboardEvents {
                 onRowClickEvent: null
             };
             if (this.selectable && this.onRowClick) {
-                rowData.onRowClickEvent = this.onRowClickEvent.bind(this, event, index)
+                rowData.onRowClickEvent = this.onRowClickEvent.bind(this, index)
             }
 
             this.addRow(rowData, index);
@@ -323,7 +324,7 @@ class TableOptimized extends TableWithKeyboardEvents {
     };
 
 
-    onRowClickEvent(event, index) {
+    onRowClickEvent(index) {
         if (this.accessibility != 'EDIT') return;
 
         let mainId = index;

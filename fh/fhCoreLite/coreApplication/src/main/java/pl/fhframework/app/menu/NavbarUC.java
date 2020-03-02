@@ -90,16 +90,15 @@ public class NavbarUC implements INavbar, ISystemUseCase, IUseCaseRefreshListene
         cssUrls = configurer.getCssUrls();
         model.setCssIds(new ArrayList<>(cssUrls.keySet()));
         model.setFhCss(model.getCssIds().remove(FhNavbarConfiguration.FH_CSS));
-        model.setFhCss(model.getCssIds().remove(FhNavbarConfiguration.MATERIA_CSS));
         model.setDefaultCss(model.getCssIds().remove(FhNavbarConfiguration.BASE_CSS));
 
         if (Objects.equals(FhNavbarConfiguration.FH_CSS, defaultCss)) {
-            openLocalStylesheet("fh");
-        } else if (Objects.equals(FhNavbarConfiguration.MATERIA_CSS, defaultCss)) {
-            openLocalStylesheet("materia");
-        } else if (Objects.equals(FhNavbarConfiguration.BASE_CSS, defaultCss)) {
+            openFhStylesheet();
+        }
+        else if (Objects.equals(FhNavbarConfiguration.BASE_CSS, defaultCss)) {
             closeAlternativeStylesheet();
-        } else {
+        }
+        else {
             openStylesheet(defaultCss);
         }
     }
@@ -132,8 +131,8 @@ public class NavbarUC implements INavbar, ISystemUseCase, IUseCaseRefreshListene
     }
 
     @Action
-    public void openLocalStylesheet(String id) {
-        String style = contextRoot + (contextRoot.endsWith("/") ? "" : "/") + "css/" + id + ".css";
+    public void openFhStylesheet() {
+        String style = contextRoot + (contextRoot.endsWith("/") ? "" : "/") + "css/fh.css";
         model.setAlternativeStylesheet(style);
         eventRegistry.fireStylesheetChangeEvent(style);
     }

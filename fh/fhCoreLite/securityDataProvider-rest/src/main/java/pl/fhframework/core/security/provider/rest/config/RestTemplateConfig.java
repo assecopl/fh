@@ -33,7 +33,7 @@ public class RestTemplateConfig {
     private String clientSecret;
     @Value("${fhframework.security.provider.rest.grantType:client_credentials}")
     private String grantType;
-    @Value("${fhframework.security.provider.rest.scope:}")
+    @Value("${fhframework.security.provider.rest.grantType:}")
     private String scope;
 
     public static RestTemplate restTemplate;

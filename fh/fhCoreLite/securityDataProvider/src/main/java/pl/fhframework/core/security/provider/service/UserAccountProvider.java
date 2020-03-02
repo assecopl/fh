@@ -29,8 +29,6 @@ public interface UserAccountProvider {
 
     Page<IUserAccount> findAllUserAccounts(IUserAccount probe, Pageable pageable);
 
-    List<IUserAccount> findAllUserAccounts();
-
     long getUserAccountsCount();
 
     boolean supportsUserManagement();
