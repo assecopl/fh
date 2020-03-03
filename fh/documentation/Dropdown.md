@@ -1,4 +1,4 @@
-## Kontrolka Dropdown
+## Control Dropdown
 
 | <center>Identifier </center>  |  <center>Type  </center> | <center> Boundable  </center> |  <center>DefaultValue </center>  |  <center>Description  </center>    |  
 |-----------|------|-----------|--------------|----------------| 
