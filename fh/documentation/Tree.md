@@ -1,4 +1,4 @@
-## Kontrolka Tree
+## Control Tree
 
 | <center>Identifier </center>  |  <center>Type  </center> | <center> Boundable  </center> |  <center>DefaultValue </center>  |  <center>Description  </center>    |  
 |-----------|------|-----------|--------------|----------------|
