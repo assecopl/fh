@@ -1,4 +1,4 @@
-##1. Kontrolka BarChart
+##1. Control BarChart
 
 | <center>Identifier </center>  |  <center>Type  </center> | <center> Boundable  </center> |  <center>DefaultValue </center>  |  <center>Description  </center>    |  
 |-----------|------|-----------|--------------|----------------|
