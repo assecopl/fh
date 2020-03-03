@@ -1,10 +1,10 @@
 ## List of controls attributes
 
+
+[Accrodion](documentation/Accordion.md)
+
 <details>
-<summary>[Accrodion](/Accordion.md)</summary>
-</details>
-<details>
-<summary>[BarChart](/BarChart.md)</summary>
+<summary>[BarChart](../BarChart.md)</summary>
 </details>
 <details>
 <summary>[Button](/Button.md)</summary>
