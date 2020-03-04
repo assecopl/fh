@@ -1,10 +1,10 @@
 
-#Utworzenie aplikacji demo
-##1. Cel
+# Utworzenie aplikacji demo
+## 1. Cel
 Poniższa instrukcja przedstawia sposób utworzenia i uruchomienia prostej aplikacji opartej na bibliotece **FH Framework**, dostępnej w publicznym repozytorium Maven:  https://mvnrepository.com/artifact/pl.fhframework
 
-##2. Konfiguracja projektu
-###2.1 Maven
+## 2. Konfiguracja projektu
+### 2.1 Maven
 - W pierwszej kolejności należy utworzyć projekt maven:
 ~~~~
 <groupId>com.example.fhdemo</groupId>
@@ -60,13 +60,13 @@ Poniżej pełny obraz pliku **pom.xml**:
 </project>
 ~~~~
 
-###2.2 Elementy statyczne
+### 2.2 Elementy statyczne
 W zasobach projektu w lokalizacji **/resources/static/img/** można umieścić własne dwa pliki graficzne:
 
 - **logo_s.png** - logo pojawiające się na oknie logownia
 - **logo_w.png** - nazwa lub logo aplikacji pojawiające się w lewym górnym rogu aplikacji
 
-###2.3 Parametry konfiguracyjne
+### 2.3 Parametry konfiguracyjne
 Należy utworzyć plik **application.properties** i uzupełnić o poniższe parametry.
 
 - Ustawienie portu serwera:
@@ -107,7 +107,7 @@ system.usecases.classes=pl.fhframework.app.menu.MenuUC,pl.fhframework.app.menu.N
 fhframework.layout.templates=full,panels
 ~~~~
 
-###2.4 Nowy moduł FH
+### 2.4 Nowy moduł FH
 Tworzona aplikacja demo będzie modułem w ramach **FH Framework** dlatego należy w katalogu zasobów dodać plik **module.sys**, który będzie dostarczał podstawowych informacji o module, tj.:
 - nazwa modułu
 - labelka modułu
@@ -119,8 +119,8 @@ Poniżej zawartość pliku **/resources/module.sys**
 <subsystem name="fh-demo" label="FH Demo" basePackage="com.example.fhdemo" productUUID="73f1ebe0-0dc9-4b6e-be99-3df8241e0ac2"/>
 ~~~~
 
-##3. Utworzenie przykładowego przypadku użycia
-###3.1 Formularz
+## 3. Utworzenie przykładowego przypadku użycia
+### 3.1 Formularz
 W pierwszej kolejności należy utworzyć formulrz, który zostanie wyświetlony w ramach przypadku użycia. Przykładowy formularz będzie posiadał wyłącznie pole wyświetlające przykładowy tekst oraz przycisk pozwalający na zamknięcie przypadku użycia.
 
 Poniżej znajduje się zawartość klasy formularza **FhDemoForm.java**:
@@ -216,7 +216,7 @@ public class FhDemoForm extends Form<String> {
 }
 ~~~~
 
-###3.2 Przypadek użycia
+### 3.2 Przypadek użycia
 W drugiej kolejności należy stworzyć klasę przypadku użycia, który będzie mógł być uruchomiony z pozycji menu aplikacji. Przypadek użycia wyświetli formularz z punkt 3.1 oraz zareaguje na akcję przycisku zamknięcia przypadku użycia.
 
 Poniżej znajduje się zawartość klasy przypadku użycia **FhDemoUC.java**:
@@ -243,7 +243,7 @@ public class FhDemoUC implements IInitialUseCase {
 }
 ~~~~
 
-###3.3 Definicja menu aplikacji
+### 3.3 Definicja menu aplikacji
 W ostatnim kroku należy utworzyć plik **menu.xml**, w którym określimy aby nasz przypadek użycia pojawił się na drzewku menu aplikacji. 
 
 Poniżej znajduje się zawartość pliku definiującego menu **/resource/menu.xml**:
@@ -251,7 +251,7 @@ Poniżej znajduje się zawartość pliku definiującego menu **/resource/menu.xm
 <UseCase ref="com.example.fhdemo.FhDemoUC" label="Demo use case"/>
 ~~~~
 
-##4. Budowa
+## 4. Budowa
 Budowę aplikacji wykonujemy poleceniem **mvn** w głównym katalogu projektu:
 ~~~~
 mvn clean install
@@ -304,7 +304,7 @@ d:\fh-demo>mvn clean install
 [INFO] ------------------------------------------------------------------------
 ~~~~
 
-##5. Uruchomienie
+## 5. Uruchomienie
 Uruchamiamy aplikację wskazująć jako klasę startową:
 ~~~~
 pl.fhframework.app.DefaultApplication
@@ -441,5 +441,5 @@ Hibernate: update SEC_ROLE_INSTANCES set USER_ACCOUNT_ID=? where ID=?
 2020-03-04 09:48:52.947  INFO 32276 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8090 (http) with context path ''
 ~~~~
 
-##6. Logowanie
+## 6. Logowanie
 Po uruchomieniu aplikacji przechodzimy do http://localhost:8090 i logujemy się na użytkownika **admin**, hasło **admin**
