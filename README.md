@@ -30,4 +30,4 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 ##  Demo Application 
 
-[Creating a sample application](fh/demo-app/doemo-app.md)
+[Creating a sample application](fh/demo-app/demo-app.md)
