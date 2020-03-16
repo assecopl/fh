@@ -1,11 +1,11 @@
 
-# Utworzenie aplikacji demo
-## 1. Cel
-Poniższa instrukcja przedstawia sposób utworzenia i uruchomienia prostej aplikacji opartej na bibliotece **FH Framework**, dostępnej w publicznym repozytorium Maven:  https://mvnrepository.com/artifact/pl.fhframework
+# Creating demo application
+## 1. Goal
+The following instruction describe how to create and run a simple application based on the **FH Framework library**, available in the public Maven repository:  https://mvnrepository.com/artifact/pl.fhframework
 
-## 2. Konfiguracja projektu
+## 2. Configuration
 ### 2.1 Maven
-- W pierwszej kolejności należy utworzyć projekt maven:
+- First you need to create a maven project:
 ~~~~
 <groupId>com.example.fhdemo</groupId>
 <artifactId>fh-demo</artifactId>
@@ -13,7 +13,7 @@ Poniższa instrukcja przedstawia sposób utworzenia i uruchomienia prostej aplik
 <name>fh-demo</name>
 ~~~~
 
-- Następnie w pliku **pom.xml** należy ustawić moduł **fh-compile-bom** jako komponent rodzica:
+- Then you need to set **fh-compile-bom** as the parent component in the **pom.xml** file:
 ~~~~
 <parent>
     <groupId>pl.fhframework</groupId>
@@ -22,7 +22,7 @@ Poniższa instrukcja przedstawia sposób utworzenia i uruchomienia prostej aplik
 </parent>
 ~~~~
 
-- W tym samym pliku należy także dodać zależność do **defaultApplication**, będącym bazową implementacją aplikacji stworzonej przy użyciu **FH Framework**:
+- Next you need to add dependency to **defaultApplication**, which is a basic implementation of the **FH Framework** application:
 ~~~~
 <dependency>
     <groupId>pl.fhframework</groupId>
@@ -31,7 +31,7 @@ Poniższa instrukcja przedstawia sposób utworzenia i uruchomienia prostej aplik
 </dependency>
 ~~~~
 
-Poniżej pełny obraz pliku **pom.xml**:
+Full **pom.xml** file content:
 ~~~~
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -60,22 +60,22 @@ Poniżej pełny obraz pliku **pom.xml**:
 </project>
 ~~~~
 
-### 2.2 Elementy statyczne
-W zasobach projektu w lokalizacji **/resources/static/img/** można umieścić własne dwa pliki graficzne:
+### 2.2 Static elements
+You can place your own two image files in the project resources in the location **/resources/static/img/**
 
-- **logo_s.png** - logo pojawiające się na oknie logownia
-- **logo_w.png** - nazwa lub logo aplikacji pojawiające się w lewym górnym rogu aplikacji
+- **logo_s.png** - logo graphic appearing on the login window
+- **logo_w.png** - application name or logo graphic appearing in the upper left corner of the application
 
-### 2.3 Parametry konfiguracyjne
-Należy utworzyć plik **application.properties** i uzupełnić o poniższe parametry.
+### 2.3 Application properties
+You need to create **application.properties** file with following properties.
 
-- Ustawienie portu serwera:
+- Setting server port:
 ~~~~
 # Server port
 server.port=8090
 ~~~~
 
-- Ustawienie namiarów na lokalną bazę danych. Jako przykład została skonfigurowana baza danych **H2**:
+- Setting a local database connection:
 ~~~~
 # Database configuration
 spring.datasource.driverClassName=org.h2.Driver
@@ -87,7 +87,7 @@ spring.datasource.min-pool-size=2
 spring.datasource.max-pool-size=10
 ~~~~
 
-- Poniższe ustawienia sprawią, że podczas pierwszego uruchomienia aplikacji do systemu zostanie dodany użytkownik **admin** i będzie posiadał jedną rolę **Administrator**. Podstawowa konfiguracja aplikacji opartej na FH Framework tworzy tabele użytkowników i ról w lokalnej bazie danych. Istnieje także możliwość podpięcia aplikacji do zewnętrznego źródła informacji o użytkownikach i rolach np. LDAP, AD, REST.
+- The following settings will cause that the user **admin** will be added to the system during the first launch of the application and will have one role **Administrator**. The basic configuration of the **FH Framework** application creates users and roles tables in the local database. It is also possible to connect the application to an external source of information about users and roles, e.g. LDAP, AD, REST.
 ~~~~
 # Generate default users and roles when database is empty.
 fhframework.security.provider.generate-default-data=true
@@ -99,7 +99,7 @@ fhframework.security.provider.default-admin-pass=admin
 fhframework.security.provider.default-admin-role=Administrator
 ~~~~
 
-- Ustawienie systemowych przypadków użycia dla naszej aplikacji. Poniższe dwa przypadki użycia odpowiadają za wyświetlania paska menu aplikacji oraz górnego paska navigacyjnego. Oba przypadki użycia są dostępne razem z **FH Framework**:  
+- Setting system use cases for our application. The following two use cases are responsible for displaying the application menu bar and the top navigation bar. Both use cases are available in **FH Framework**:  
 ~~~~
 # System use case classes
 system.usecases.classes=pl.fhframework.app.menu.MenuUC,pl.fhframework.app.menu.NavbarUC
@@ -107,23 +107,23 @@ system.usecases.classes=pl.fhframework.app.menu.MenuUC,pl.fhframework.app.menu.N
 fhframework.layout.templates=full,panels
 ~~~~
 
-### 2.4 Nowy moduł FH
-Tworzona aplikacja demo będzie modułem w ramach **FH Framework** dlatego należy w katalogu zasobów dodać plik **module.sys**, który będzie dostarczał podstawowych informacji o module, tj.:
-- nazwa modułu
-- labelka modułu
-- główny pakiet JAVA modułu
-- unikalny identyfikator UUID modułu
+### 2.4 New FH module
+The created demo application will be a **FH Framework** module, therefore you should add the **module.sys** file in the resource directory, which will provide basic information about the module, i.e.:
+- module unique name
+- module label
+- main java package of the module
+- unique module UUID identifier
 
-Poniżej zawartość pliku **/resources/module.sys**
+Full **/resources/module.sys** file content:
 ~~~~
 <subsystem name="fh-demo" label="FH Demo" basePackage="com.example.fhdemo" productUUID="73f1ebe0-0dc9-4b6e-be99-3df8241e0ac2"/>
 ~~~~
 
-## 3. Utworzenie przykładowego przypadku użycia
-### 3.1 Formularz
-W pierwszej kolejności należy utworzyć formulrz, który zostanie wyświetlony w ramach przypadku użycia. Przykładowy formularz będzie posiadał wyłącznie pole wyświetlające przykładowy tekst oraz przycisk pozwalający na zamknięcie przypadku użycia.
+## 3. Creating example use case
+### 3.1 Form
+First you need to create a form that will be displayed as part of the use case. The sample form will have only a field displaying the sample text and a button to close the use case.
 
-Poniżej znajduje się zawartość klasy formularza **FhDemoForm.java**:
+Full **FhDemoForm.java** file content:
 ~~~~
 package com.example.fhdemo;
 
@@ -216,10 +216,10 @@ public class FhDemoForm extends Form<String> {
 }
 ~~~~
 
-### 3.2 Przypadek użycia
-W drugiej kolejności należy stworzyć klasę przypadku użycia, który będzie mógł być uruchomiony z pozycji menu aplikacji. Przypadek użycia wyświetli formularz z punkt 3.1 oraz zareaguje na akcję przycisku zamknięcia przypadku użycia.
+### 3.2 Use Case
+Next you need to create a use case class that can be started from the applications menu. The use case will display the form from point 3.1 and will react to the action of closing the use case.
 
-Poniżej znajduje się zawartość klasy przypadku użycia **FhDemoUC.java**:
+Full **FhDemoUC.java** file content:
 ~~~~
 package com.example.fhdemo;
 
@@ -243,21 +243,21 @@ public class FhDemoUC implements IInitialUseCase {
 }
 ~~~~
 
-### 3.3 Definicja menu aplikacji
-W ostatnim kroku należy utworzyć plik **menu.xml**, w którym określimy aby nasz przypadek użycia pojawił się na drzewku menu aplikacji. 
+### 3.3 Application menu
+In the last step you need to create the **menu.xml** file, in which we will specify that our use case will appear in the application menu tree. 
 
-Poniżej znajduje się zawartość pliku definiującego menu **/resource/menu.xml**:
+Full **/resource/menu.xml** file content:
 ~~~~
 <UseCase ref="com.example.fhdemo.FhDemoUC" label="Demo use case"/>
 ~~~~
 
-## 4. Budowa
-Budowę aplikacji wykonujemy poleceniem **mvn** w głównym katalogu projektu:
+## 4. Building application
+We build application using the **mvn** command in the main project directory:
 ~~~~
 mvn clean install
 ~~~~
 
-Poniżej znajdują się logi wykonanej budowy:
+Below are the logs of building the application:
 ~~~~
 d:\fh-demo>mvn clean install
 [INFO] Scanning for projects...
@@ -304,13 +304,13 @@ d:\fh-demo>mvn clean install
 [INFO] ------------------------------------------------------------------------
 ~~~~
 
-## 5. Uruchomienie
-Uruchamiamy aplikację wskazująć jako klasę startową:
+## 5. Running application
+We run the application with following class as a startup class:
 ~~~~
 pl.fhframework.app.DefaultApplication
 ~~~~
 
-Poniżej znajdują się logi uruchomienia aplikacji:
+Below are the logs of running the application:
 ~~~~
                                                                                            
 ,------.,--.     ,------.                                                         ,--.     
@@ -441,5 +441,5 @@ Hibernate: update SEC_ROLE_INSTANCES set USER_ACCOUNT_ID=? where ID=?
 2020-03-04 09:48:52.947  INFO 32276 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8090 (http) with context path ''
 ~~~~
 
-## 6. Logowanie
-Po uruchomieniu aplikacji przechodzimy do http://localhost:8090 i logujemy się na użytkownika **admin**, hasło **admin**
+## 6. Login
+After starting the application go to the http://localhost:8090 and log in as a user **admin**, password **admin**
