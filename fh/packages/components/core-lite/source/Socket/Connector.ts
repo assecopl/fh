@@ -197,7 +197,7 @@ class Connector {
         connector.retryCount += 1;
 
         let testRequest = new XMLHttpRequest();
-        testRequest.open('HEAD', connector.util.getPath('/'), true);
+        testRequest.open('HEAD', connector.util.getPath(''), true);
 
         testRequest.onload = function () {
             if (testRequest.readyState === 4) {

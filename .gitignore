@@ -1,4 +1,5 @@
 .svn
+*.iml
 target
 /fh/packages/applications/default-application/node_modules/.bin
 /fh/packages/applications/default-application/node_modules/.cache

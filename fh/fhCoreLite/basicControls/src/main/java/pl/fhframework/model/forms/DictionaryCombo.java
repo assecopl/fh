@@ -190,7 +190,7 @@ public class DictionaryCombo extends Combo implements IGroupingComponent<Diction
     }
 
     protected String objectToString(Object s) {
-        if(s == null) return "";
+        if (s == null) return "";
 
         if (s.getClass().equals(String.class)) {
             return (String) s;
@@ -229,7 +229,7 @@ public class DictionaryCombo extends Combo implements IGroupingComponent<Diction
             BindingResult selectedBindingResult = getModelBinding().getBindingResult();
             if (selectedBindingResult != null) {
                 Object value = selectedBindingResult.getValue();
-                if (!Objects.equals(value, (selectedItem != null ? this.dataProvider.getCode(selectedItem) : null))) {
+                if (!this.dataProvider.areObjectsEquals(value, (selectedItem != null ? this.dataProvider.getCode(selectedItem) : null))) {
                     List<Object> allParamsList = new LinkedList<>();
                     allParamsList.add(value);
                     allParamsList.addAll(this.getValuesFromDictionaryComboParameters(this.getValueParamsList));
@@ -270,6 +270,11 @@ public class DictionaryCombo extends Combo implements IGroupingComponent<Diction
         final ElementChanges elementChanges = super.updateView();
         this.processFiltering("");
         this.processFilterBinding(elementChanges, true);
+        this.selectedItem = null;
+        this.processValueBinding(elementChanges);
+        if (getModelBinding() != null) {
+            getModelBinding().setValue(null);
+        }
         this.refreshView();
         return elementChanges;
 

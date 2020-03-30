@@ -5,7 +5,7 @@
 
     <groupId>pl.fhframework</groupId>
     <artifactId>fh-boot-client-bom</artifactId>
-    <version>4.5.6</version>
+    <version>4.5.11</version>
     <packaging>pom</packaging>
     <url>https://github.com/assecopl/fh</url>
 
@@ -15,7 +15,7 @@
    <parent>
         <groupId>pl.fhframework</groupId>
         <artifactId>fh-boot-bom</artifactId>
-        <version>4.5.6</version>
+        <version>4.5.11</version>
        <relativePath>../fh-boot-bom</relativePath>
     </parent>
 

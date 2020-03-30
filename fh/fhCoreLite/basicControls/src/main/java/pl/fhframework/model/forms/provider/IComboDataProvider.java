@@ -39,4 +39,13 @@ public interface IComboDataProvider<SRC, RESULT> {
      */
     String getDisplayValue(SRC element);
 
+
+    /**
+     * Metoda porównujica zwracane obiekty
+     * @param element1
+     * @param element2
+     * @return
+     */
+    Boolean areObjectsEquals(RESULT element1, RESULT element2);
+
 }

@@ -544,6 +544,10 @@ abstract class HTMLFormComponent extends FormComponent {
         this.handlemarginAndPAddingStyles();
     }
 
+    public hasHeight():boolean {
+        return this.componentObj.height != undefined && this.componentObj.height != "" && this.componentObj.height != null;
+    }
+
     handleHeight() {
         if (this.componentObj.height != undefined) {
             let height = this.componentObj.height;
