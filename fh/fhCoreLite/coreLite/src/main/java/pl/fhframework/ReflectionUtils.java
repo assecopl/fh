@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
 
 public class ReflectionUtils {
 
-    public static abstract class AnyGenericType {} // TODO: FH_GENERICS
+    public static abstract class AnyGenericType {} // TODO: LUNA_GENERICS
 
     @AllArgsConstructor
     @Getter
@@ -120,14 +120,14 @@ public class ReflectionUtils {
             String typeVarName = TypeVariable.class.cast(childType).getName();
             TypeVariable[] genricParentTypeVars = ReflectionUtils.getRawClass(parentType).getTypeParameters();
             Type[] parentTypeVars = ReflectionUtils.getGenericArguments(parentType);
-            for (int varIndex = 0; varIndex < parentTypeVars.length; varIndex++) { // TODO: FH Generics
+            for (int varIndex = 0; varIndex < parentTypeVars.length; varIndex++) { // TODO: LUNA Generics
                 if (parentTypeVars[varIndex] instanceof TypeVariable &&
                         ((TypeVariable) parentTypeVars[varIndex]).getName().equals(typeVarName) ||
                                 genricParentTypeVars[varIndex].getName().equals(typeVarName)) {
                     return ReflectionUtils.getGenericArguments(parentType)[varIndex];
                 }
             }
-            // TODO: FH Generics
+            // TODO: LUNA Generics
             //throw new FhBindingException("Cannot resolve " + childType.toString() + " in " + parentType.toString());
             return AnyGenericType.class;
         } else if (childType instanceof Class) {
@@ -753,7 +753,7 @@ public class ReflectionUtils {
         } else if (type instanceof ParameterizedType) {
             return ParameterizedType.class.cast(type).getActualTypeArguments();
         } else if (type instanceof TypeVariable){
-            return new Class<?> [] {AnyGenericType.class}; // TODO: FH_GENERICS
+            return new Class<?> [] {AnyGenericType.class}; // TODO: LUNA_GENERICS
         } else {
             throw new RuntimeException("Not supported type: " + type.getClass().getName());
         }
@@ -799,7 +799,7 @@ public class ReflectionUtils {
         } else if (type instanceof GenericArrayType) {
             return Array.class;
         } else if (throwExp) {
-            return AnyGenericType.class; // TODO: FH_GENERICS
+            return AnyGenericType.class; // TODO: LUNA_GENERICS
         }
         return null;
     }
@@ -1015,7 +1015,7 @@ public class ReflectionUtils {
 
     public static boolean isAssignablFrom(Class<?> class1, Class<?> class2) {
         if (class1 == AnyGenericType.class || class2 == AnyGenericType.class) {
-            return true; // TODO: FH_GENERICS, for now delegate generics check till compile time
+            return true; // TODO: LUNA_GENERICS, for now delegate generics check till compile time
         }
         if (isGeneratedDynamicClass(class1) && isGeneratedDynamicClass(class2)) {
             return getClassName(class1).equals(getClassName(class2));

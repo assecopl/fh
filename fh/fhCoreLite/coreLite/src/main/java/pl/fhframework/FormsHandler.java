@@ -391,9 +391,9 @@ public abstract class FormsHandler {
     }
 
     protected void serviceTransportError(Throwable exception) {
-        FhLogger.errorSuppressed("Connection lost {}", this.getConnectionId());
+        FhLogger.error("Connection lost {}", this.getConnectionId());
         if (exception != null) {
-            FhLogger.errorSuppressed(exception);
+            FhLogger.error(exception);
         }
     }
 

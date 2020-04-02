@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import pl.fhframework.core.cloud.event.LocalServerDefinitionChangedEvent;
 
 /**
- * Informs about server definition in FH Share after security data has changed.
+ * Informs about server definition in LUNA Share after security data has changed.
  */
 @Component
 public class LocalServerDefinitionUpdateInformer {

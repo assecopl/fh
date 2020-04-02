@@ -41,7 +41,7 @@ public interface IComboDataProvider<SRC, RESULT> {
 
 
     /**
-     * Metoda porównujica zwracane obiekty
+     * Metoda porównująca zwracane obiekty
      * @param element1
      * @param element2
      * @return

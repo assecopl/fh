@@ -439,7 +439,6 @@ class SelectComboMenuOptimized extends InputText {
          */
         let bounding = this.autocompleter.getBoundingClientRect();
         let rightOverlap = bounding.right - (window.innerWidth || document.documentElement.clientWidth);
-        let bottomOverlap = bounding.bottom - (window.innerHeight || document.documentElement.clientHeight);
 
         if (rightOverlap > -17) {
             this.autocompleter.style.setProperty('right', '0px', "important");
@@ -452,32 +451,33 @@ class SelectComboMenuOptimized extends InputText {
         if (formType === 'STANDARD') {
             parent = $(this.component).closest('.panel,.splitContainer,.hasHeight');
 
-
-            //If autocompleter is about to open in container with fixed height we change it's open direction. Direction will be UP.
+            //If outocompleter is about to open in container wity fixed height we change it's open direction. Direction will be UP.
             if(parent.hasClass('hasHeight')){
                 const parentBound = parent[0].getBoundingClientRect();
                 let completerYmaks = bounding.height + bounding.top;
                 let parentYmaks = parentBound.top + parentBound.height;
-                //Put it as sibling of parent becouse parent has height and elements inside it wont overflow it. Close it when parent begins to scroll.
                 if(completerYmaks > parentYmaks){
-                    this.handleContainerOverflow(parent.parent(),  this.autocompleter, true);
-                } else {
-                    this.handleContainerOverflow(parent.parent(),  this.autocompleter);
+                    this.autocompleter.style.setProperty('top', "-"+(bounding.height+2)+"px" , "important");
                 }
-                parent.on("scroll", this.closeAutocomplete.bind(this));
-            } else if(bottomOverlap > 20){
-                this.inputGroupElement.classList.add("dropup");
+
             }
             if (!parent.hasClass('floating') && !parent.hasClass('splitContainer') ) {
                 return;
             }
         } else if (formType === 'MODAL' || formType === 'MODAL_OVERFLOW') {
             parent = $(this.component).closest('.modal-content');
-            this.handleContainerOverflow(parent, this.autocompleter);
         } else {
             console.error('Parent not defined.');
             return;
         }
+
+
+        parent.append(this.autocompleter);
+        let _component = $(this.component);
+        let _autocompleter = $(this.autocompleter);
+        _autocompleter.css('top', _component.offset().top - parent.offset().top + this.component.offsetHeight);
+        _autocompleter.css('left', _component.offset().left - parent.offset().left);
+        _autocompleter.css('width', _component.width());
     }
 
     closeAutocomplete() {
@@ -493,29 +493,26 @@ class SelectComboMenuOptimized extends InputText {
          */
         this.autocompleter.style.setProperty('right', '', null);
         this.autocompleter.style.setProperty('left', '', null);
-        this.autocompleter.style.setProperty('top', '', null);
 
         let parent = null;
         if (formType === 'STANDARD') {
             parent = $(this.component).closest('.panel');
 
-            if (!this.inputGroupElement.contains(this.autocompleter)) {
-                this.inputGroupElement.appendChild(this.autocompleter);
-            }
-
             if (!parent.hasClass('floating')) {
                 return;
             }
         } else if (formType === 'MODAL' || formType === 'MODAL_OVERFLOW') {
-            if (!this.inputGroupElement.contains(this.autocompleter)) {
-                this.inputGroupElement.appendChild(this.autocompleter);
-            }
+            parent = $(this.component).closest('.modal-content');
         } else {
             console.error('Parent not defined.');
             return;
         }
 
+        parent.find('.autocompleter').remove();
+        this.component.appendChild(this.autocompleter);
         this.input.focus();
+
+
     }
 
     extractChangedAttributes() {

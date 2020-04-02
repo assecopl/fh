@@ -1,14 +1,22 @@
 import {HTMLFormComponent} from "fh-forms-handler";
 import {TableOptimized} from "./TableOptimized";
-import {TableRow} from "../TableRow";
 
-class TableRowOptimized extends TableRow {
+class TableRowOptimized extends HTMLFormComponent {
+    private readonly mainId: string;
+    private isEmpty: any;
     readonly parent: TableOptimized;
     // private onRowClick:any = null;
     // private selectable:boolean = true;
+    private onRowClickEvent:() => void = null;
 
     constructor(componentObj: any, parent: TableOptimized & any) {
         super(componentObj, parent);
+
+        this.onRowClickEvent = this.componentObj.onRowClickEvent;
+        this.combinedId = this.parentId + '[' + this.id + ']';
+        this.mainId = this.componentObj.mainId;
+        this.isEmpty = this.componentObj.empty;
+        this.container = parent.dataWrapper;
     }
 
     create() {
@@ -61,7 +69,36 @@ class TableRowOptimized extends TableRow {
      */
     public display(): void {
         super.display();
+        // this.container.appendChild(this.htmlElement);
     }
+
+
+    public render() {
+        // console.log("TableRowOptimized render - do nothing");
+    }
+
+    public highlightRow(scrollAnimate:boolean = false) {
+        const idx = ((this.parent.rawValue) || []).findIndex(function (element, index) {
+                return element == this.mainId
+        }.bind(this));
+            if (idx != -1) {
+                this.component.classList.add('table-primary');
+                let container = $(this.parent.component);
+                let scrollTo = $(this.component);
+                if (this.parent.rawValue.length < 2) {
+                    let containerHeight = container.height();
+                    let containerScrollTop = container.scrollTop();
+                    let realPositionElement = scrollTo.position().top;
+                    if (realPositionElement < containerScrollTop || realPositionElement
+                        > containerScrollTop
+                        + containerHeight) {
+                        this.parent.scrolToRow($(this.component), scrollAnimate);
+                    }
+                }
+            } else {
+                this.component.classList.remove('table-primary');
+            }
+    };
 }
 
 export {TableRowOptimized};

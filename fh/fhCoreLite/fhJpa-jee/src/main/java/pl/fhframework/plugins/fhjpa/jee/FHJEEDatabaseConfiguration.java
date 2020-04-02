@@ -92,7 +92,7 @@ public class FHJEEDatabaseConfiguration {
     @Bean
     @Primary
     @Qualifier("fhTransactionManager")
-    public PlatformTransactionManager fhTransactionManager(@Qualifier("fhEntityManagerFactory") EntityManagerFactory emf) {
+    public PlatformTransactionManager pumaTransactionManager(@Qualifier("fhEntityManagerFactory") EntityManagerFactory emf) {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(emf);
         return transactionManager;

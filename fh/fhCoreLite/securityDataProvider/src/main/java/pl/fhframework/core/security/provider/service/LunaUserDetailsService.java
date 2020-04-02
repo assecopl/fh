@@ -18,7 +18,7 @@ import java.util.Set;
  */
 @Service
 @Transactional
-public class FhUserDetailsService implements UserDetailsService {
+public class LunaUserDetailsService implements UserDetailsService {
 
     private UserAccountProvider userAccountProvider;
 

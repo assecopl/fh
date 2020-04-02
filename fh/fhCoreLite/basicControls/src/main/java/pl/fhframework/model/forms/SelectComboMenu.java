@@ -15,7 +15,7 @@ import pl.fhframework.model.PresentationStyleEnum;
 import pl.fhframework.model.dto.ElementChanges;
 import pl.fhframework.model.dto.InMessageEventData;
 import pl.fhframework.model.dto.ValueChange;
-import pl.fhframework.model.forms.optimized.ColumnOptimized;
+import pl.fhframework.model.forms.designer.InputFieldDesignerPreviewProvider;
 import pl.fhframework.model.forms.validation.ValidationFactory;
 import pl.fhframework.validation.*;
 
@@ -31,7 +31,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
 @DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, value = "Enables users to quickly find and select from a pre-populated list of values as they type, leveraging searching and filtering.",
         icon = "fa fa-outdent")
 @DesignerControl(defaultWidth = 3)
-@Control(parents = {PanelGroup.class, Group.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = true)
+@Control(parents = {PanelGroup.class, Group.class, Column.class, Tab.class, Row.class, Form.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = true)
 public class SelectComboMenu extends BaseInputFieldWithKeySupport {
     private static final String ON_SPECIAL_KEY_ATTR = "onSpecialKey";
     private static final String ON_DBL_SPECIAL_KEY_ATTR = "onDblSpecialKey";

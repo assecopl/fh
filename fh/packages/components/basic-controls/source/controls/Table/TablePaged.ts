@@ -115,7 +115,7 @@ class TablePaged extends Table {
                         this.htmlElement.querySelector('.table-pagination').replaceChild(pageInfo, this.pageInfo);
                         this.pageInfo = pageInfo;
 
-                        this.scrollTopInside();
+                        $(this.component).scrollTop(0);
                         $(window).trigger('pageChanged.table');
                         break;
                     case 'totalPages':
@@ -123,14 +123,12 @@ class TablePaged extends Table {
                         let paginator2 = this.buildPaginator();
                         this.htmlElement.querySelector('.table-pagination').replaceChild(paginator2, this.paginator);
                         this.paginator = paginator2;
-                        this.scrollTopInside();
                         break;
                     case 'totalRows':
                         this.totalRows = newValue;
                         let pageInfo2 = this.buildPageInfo();
                         this.htmlElement.querySelector('.table-pagination').replaceChild(pageInfo2, this.pageInfo);
                         this.pageInfo = pageInfo2;
-                        this.scrollTopInside();
                         break;
                 }
             }.bind(this));

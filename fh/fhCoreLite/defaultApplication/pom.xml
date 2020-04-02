@@ -5,7 +5,7 @@
 
     <artifactId>defaultApplication</artifactId>
     <groupId>pl.fhframework</groupId>
-    <version>4.5.11</version>
+    <version>4.5.6</version>
     <packaging>jar</packaging>
     <url>https://github.com/assecopl/fh</url>
 
@@ -15,7 +15,7 @@
     <parent>
         <groupId>pl.fhframework</groupId>
         <artifactId>fh-boot-bom</artifactId>
-        <version>4.5.11</version>
+        <version>4.5.6</version>
         <relativePath>../../BOM/fh-boot-bom</relativePath>
     </parent>
 
@@ -90,6 +90,16 @@
                         <configuration>
                             <nodeVersion>v11.0.0</nodeVersion>
                             <yarnVersion>v1.10.0</yarnVersion>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>yarn config</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>yarn</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>config set registry http://10.10.24.221:8089</arguments>
                         </configuration>
                     </execution>
                     <execution>
