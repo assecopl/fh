@@ -15,6 +15,7 @@ class InputDate extends InputText implements LanguageChangeObserver {
     protected datepickerEnabled: boolean;
     protected highlightToday: boolean;
     protected inputDateHeight: any;
+    protected maskPlugin: any;
 
     /**
      * Czy uzywac trybu scislego biblioteki momentjs
@@ -183,13 +184,13 @@ class InputDate extends InputText implements LanguageChangeObserver {
 
         this.inputGroupElement.classList.add('date');
         if (this.componentObj.iconAlignment === 'BEFORE') {
-            this.inputGroupElement.insertBefore(addonDiv, this.inputGroupElement.firstChild);
+            this.inputGroupElement.insertBefore(addonDiv, this.component);
         } else if (this.componentObj.iconAlignment === 'AFTER') {
             addonDiv.classList.remove('input-group-prepend');
             addonDiv.classList.add('input-group-append');
             this.inputGroupElement.appendChild(addonDiv);
         } else {
-            this.inputGroupElement.insertBefore(addonDiv, this.inputGroupElement.firstChild);
+            this.inputGroupElement.insertBefore(addonDiv, this.component);
         }
 
         this.component.classList.add('datepickerInput');
@@ -298,7 +299,7 @@ class InputDate extends InputText implements LanguageChangeObserver {
                 jitMasking: this.maskDynamic,
                 placeholder: this.input.placeholder,
                 definitions: {},
-                insertMode: 0,
+                insertMode: true,
                 alias: "date",
                 mask: this.mask
             }).mask(this.input);

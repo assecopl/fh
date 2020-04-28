@@ -164,7 +164,7 @@ class ApplicationLock {
         if (typeof callback === 'function') {
             callback(content, data);
         }
-        $(dialog).dialog({modal: true, width: 600}).siblings('.ui-dialog-titlebar').remove();
+        $(dialog).dialog({modal: true, width: 600, closeOnEscape: withClose}).siblings('.ui-dialog-titlebar').remove();
         $(dialog).dialog("moveToTop");
 
         return dialog;

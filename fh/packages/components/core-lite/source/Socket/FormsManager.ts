@@ -619,50 +619,37 @@ class FormsManager {
 
     showDesignerModelProperties() {
         let formDesignerModelProperties = this.layoutHandler.getLayoutContainer("formDesignerModelProperties");
-        // document.getElementById('formDesignerModelProperties');
         let formDesignerComponents = this.layoutHandler.getLayoutContainer("formDesignerComponents");
-        // document.getElementById('formDesignerComponents');
-        let toolbox = this.layoutHandler.getLayoutContainer("designerToolbox");
-        // document.getElementById('designerToolbox');
-        let properties = this.layoutHandler.getLayoutContainer("designerProperties");
-        // document.getElementById('designerProperties');
+        let toolbox = this.layoutHandler.getLayoutContainer("formDesignerToolbox");
+        let properties = this.layoutHandler.getLayoutContainer("formDesignerProperties");
 
         if (toolbox !== null && properties !== null) {
-            [toolbox, properties].forEach(function (element) {
-                element.classList.add('non-visible');
+            [toolbox, properties, formDesignerComponents].forEach( element => {
+                element.classList.add('d-none');
             });
         }
 
-        formDesignerComponents.classList.add('d-none');
         formDesignerModelProperties.classList.remove('d-none');
     }
 
     hideDesignerModelProperties() {
         let formDesignerModelProperties = this.layoutHandler.getLayoutContainer("formDesignerModelProperties");
-        // document.getElementById('formDesignerModelProperties');
         let formDesignerComponents = this.layoutHandler.getLayoutContainer("formDesignerComponents");
-        // document.getElementById('formDesignerComponents');
-        let toolbox = this.layoutHandler.getLayoutContainer("designerToolbox");
-        // document.getElementById('designerToolbox');
-        let properties = this.layoutHandler.getLayoutContainer("designerProperties");
-        //document.getElementById('designerProperties');
+        let toolbox = this.layoutHandler.getLayoutContainer("formDesignerToolbox");
+        let properties = this.layoutHandler.getLayoutContainer("formDesignerProperties");
 
         formDesignerModelProperties.classList.add('d-none');
 
         if (toolbox !== null && properties !== null) {
-            [toolbox, properties].forEach(function (element) {
-                element.classList.remove('non-visible');
+            [toolbox, properties, formDesignerComponents].forEach( element => {
+                element.classList.remove('d-none');
             });
         }
-
-        formDesignerComponents.classList.remove('d-none');
     }
 
     collapseMenuForm() {
         let mainForm = this.layoutHandler.getLayoutContainer("mainForm");
-        // document.getElementById('mainForm');
         let menuForm = this.layoutHandler.getLayoutContainer("menuForm");
-        // document.getElementById('menuForm');
         let formDesigner = this.layoutHandler.getLayoutContainer("formDesigner").querySelector('.row');
         let formsContainer = mainForm.parentElement;
         let menuIcon = document.getElementById('menuToggler');
@@ -676,7 +663,7 @@ class FormsManager {
             menuToggler.id = 'menuToggler';
 
             let menuTogglerIcon = document.createElement('span');
-            ['fas', 'fa-caret-right', 'menuExpandRight'].forEach(function (cssStyle) {
+            ['fas', 'fa-caret-right', 'menuExpandRight'].forEach( cssStyle => {
                 menuTogglerIcon.classList.add(cssStyle);
             });
             menuTogglerIcon.id = 'menuTogglerIcon';

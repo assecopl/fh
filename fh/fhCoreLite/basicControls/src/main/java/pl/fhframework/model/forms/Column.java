@@ -37,6 +37,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
  * on server side to construct columns of Table components and has is not processed by javascript
  * directly.
  */
+@TemplateControl(tagName = "fh-table-column")
 @DesignerControl(defaultWidth = -1)
 @Control(parents = {Table.class, Column.class}, invalidParents = {TablePaged.class, ColumnPaged.class})
 @OverridenPropertyAnnotations(
@@ -283,6 +284,7 @@ public class Column extends GroupingComponent<FormElement> implements CompactLay
         TableCell tableCell = createEmptyCell();
 
         RowIteratorMetadata mainTableIteratorMetadata = lowLevelRowMetadata.getIteratorData().get(getTable().getIterator());
+        tableCell.setRowIndex(mainTableIteratorMetadata.getIndex());
         final int mainTableIteratorIndex = mainTableIteratorMetadata.getIndex();
 
         // call fatory to produce cell components

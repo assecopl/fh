@@ -18,7 +18,7 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
     protected keyEventTimer: any;                //timer identifier
     protected doneEventInterval: number = 500;   //event delay in miliseconds
 
-    private loopDown:boolean = true; //key event loop turn on/off
+    private loopDown:boolean = false; //key event loop turn on/off
 
     constructor(componentObj: any, parent: HTMLFormComponent) {
         super(componentObj, parent);
@@ -83,14 +83,17 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
                     if (next && next.length == 0 && this.loopDown) {
                         next = $(this.htmlElement).find('tbody tr:not(.emptyRow)').first();
                     }
-
                     if (next && next.length > 0) {
                         current.removeClass('table-primary');
                         next.addClass('table-primary');
                         this.scrolToRow(next);
                         this.keyEventTimer = setTimeout(function (elem) {
-                            elem.trigger('click');
+                            elem? elem.trigger('click') : false;
                         }, this.doneEventInterval, next);
+                    } else {
+                        this.keyEventTimer = setTimeout(function (elem) {
+                            elem ? elem.trigger('click') : false;
+                        }, this.doneEventInterval, current);
                     }
                 } else if (e.which == 38) { // strzalka w gore
                     e.preventDefault();
@@ -103,18 +106,21 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
                     } else {
                         prev = current.prev('tr:not(.emptyRow)');
                     }
-
                     if (prev && prev.length == 0) {
                         $(this.component).scrollTop(0);
+                        this.keyEventTimer = setTimeout(function (elem) {
+                            elem ? elem.trigger('click') : false;
+                        }, this.doneEventInterval, current);
                     } else if (prev && prev.length > 0) {
                         current.removeClass('table-primary');
                         prev.addClass('table-primary');
                         this.scrolToRow(prev);
                         this.keyEventTimer = setTimeout(function (elem) {
-                            elem.trigger('click');
+                            elem ? elem.trigger('click') : false;
                         }, this.doneEventInterval, prev);
-
                     }
+
+
                 } else if (e.which == 33 || e.which == 36) { // pgup i home
                     e.preventDefault();
 
@@ -147,30 +153,26 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
         if (oldSelected && oldSelected.length) {
             [].forEach.call(oldSelected, function (row) {
                 row.classList.remove('table-primary');
+                if (this.selectionCheckboxes) {
+                    row.firstChild.querySelector('input[type="checkbox"]').checked = false;
+                }
             }.bind(this));
         }
         (this.rawValue || []).forEach(function (value) {
             if (value != -1) {
                 const row: TableRowOptimized = this.rows[parseInt(value)];
                 row.highlightRow(scrollAnimate);
-
+                if (this.selectionCheckboxes) {
+                    row.component.querySelector('input[type="checkbox"]').checked = true;
+                }
             }
+
+
         }.bind(this));
     };
 
     update(change) {
         super.update(change);
-        if (change.changedAttributes) {
-            $.each(change.changedAttributes, function (name, newValue) {
-                switch (name) {
-                    case 'selectedRowNumber':
-                        this.rawValue = change.changedAttributes['selectedRowNumber'];
-                        this.highlightSelectedRows();
-
-                        break;
-                }
-            }.bind(this));
-        }
     };
 
 

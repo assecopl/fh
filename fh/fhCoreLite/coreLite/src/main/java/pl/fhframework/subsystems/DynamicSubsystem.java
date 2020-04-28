@@ -1,14 +1,15 @@
 package pl.fhframework.subsystems;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import pl.fhframework.XmlAttributeReader;
+import pl.fhframework.configuration.FHConfiguration;
 import pl.fhframework.core.io.FhResource;
 import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.core.uc.IUseCase;
 import pl.fhframework.core.util.FileUtils;
-import pl.fhframework.XmlAttributeReader;
-import pl.fhframework.configuration.FHConfiguration;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -32,6 +33,7 @@ class DynamicSubsystem extends Subsystem {
      */
     @Getter
     @Setter(AccessLevel.PACKAGE)
+    @JsonIgnore
     private FhResource source;
 
     @Getter

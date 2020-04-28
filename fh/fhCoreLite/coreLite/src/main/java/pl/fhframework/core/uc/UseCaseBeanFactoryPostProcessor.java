@@ -48,10 +48,11 @@ public class UseCaseBeanFactoryPostProcessor implements BeanFactoryPostProcessor
     public void registerBean(Class<?> clazz, String beanName, boolean lazyInit, boolean registerOld) {
         BeanDefinitionRegistry registry = ((BeanDefinitionRegistry ) beanFactory);
 
-        String oldBeanName = StringUtils.decapitalize(clazz.getName());
+        // @FeignClient is causing race condition on beans name, leave old bean name
+        /*String oldBeanName = StringUtils.decapitalize(clazz.getName());
         if (!oldBeanName.equals(beanName) && registry.isBeanNameInUse(oldBeanName)) {
             registry.removeBeanDefinition(oldBeanName);
-        }
+        }*/
         if (registry.isBeanNameInUse(beanName)) {
             if (registerOld) {
                 Class<?> oldBean = ReflectionUtils.getRealClass(beanFactory.getBean(beanName));

@@ -128,9 +128,13 @@ class TableOptimized extends TableWithKeyboardEvents {
                         this.visibleRows = newValue;
                         this.tableData = change.changedAttributes['tableRows'];
                         this.refreshData(true);
+                    case 'selectedRowNumber':
+                        this.rawValue = change.changedAttributes['selectedRowNumber'];
+                        this.highlightSelectedRows();
                         break;
                 }
             }.bind(this));
+            this.updateFixedHeaderWidth();
         }
     }
 
@@ -161,7 +165,7 @@ class TableOptimized extends TableWithKeyboardEvents {
                 onRowClickEvent: null
             };
             if (this.selectable && this.onRowClick) {
-                rowData.onRowClickEvent = this.onRowClickEvent.bind(this, event, index)
+                rowData.onRowClickEvent = this.onRowClickEvent.bind(this, index)
             }
 
             this.addRow(rowData, index);
@@ -174,16 +178,6 @@ class TableOptimized extends TableWithKeyboardEvents {
 
     public get dataWrapper(): HTMLDivElement {
         return this._dataWrapper;
-    }
-
-    /**
-     * Turn on render for designer purpose
-     */
-    public render() {
-        super.render();
-        if (!this.onRowClick || this.onRowClick === '-') {
-            this.highlightSelectedRows(true);
-        }
     }
 
     public display() {
@@ -323,7 +317,7 @@ class TableOptimized extends TableWithKeyboardEvents {
     };
 
 
-    onRowClickEvent(event, index) {
+    onRowClickEvent(index) {
         if (this.accessibility != 'EDIT') return;
 
         let mainId = index;

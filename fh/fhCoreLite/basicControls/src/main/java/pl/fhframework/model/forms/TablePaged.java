@@ -1,31 +1,27 @@
 package pl.fhframework.model.forms;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-
+import pl.fhframework.annotations.*;
+import pl.fhframework.binding.*;
 import pl.fhframework.core.FhBindingException;
 import pl.fhframework.core.FhException;
 import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.core.util.CollectionsUtils;
-import pl.fhframework.annotations.*;
-import pl.fhframework.binding.*;
 import pl.fhframework.model.dto.ElementChanges;
+import pl.fhframework.model.dto.InMessageEventData;
 import pl.fhframework.model.dto.ValueChange;
 import pl.fhframework.model.forms.utils.LanguageResolver;
-import pl.fhframework.model.dto.InMessageEventData;
 
-import java.util.*;
 import java.util.Iterator;
-
-import lombok.Getter;
-import lombok.Setter;
+import java.util.*;
 
 import static org.springframework.data.domain.Sort.Direction;
 import static org.springframework.data.domain.Sort.Order;
-import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.BEHAVIOR;
-import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.CONTENT;
+import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.*;
 
 @Control(parents = {GroupingComponent.class}, invalidParents = {Table.class}, canBeDesigned = true)
 @OverridenPropertyAnnotations(
@@ -95,6 +91,13 @@ public class TablePaged extends Table {
     @XMLProperty(defaultValue = "true")
     @DocumentedComponentAttribute(value = "If defaultSortBy is set this property decides if default order is ascending ", defaultValue = "true")
     private boolean defaultSortByAsc = true;
+
+    @Getter
+    @Setter
+    @XMLProperty(defaultValue = "false")
+    @DocumentedComponentAttribute(value = "Add additional pagination and page size select above the table")
+    @DesignerXMLProperty(functionalArea = SPECIFIC, priority = 16)
+    private boolean paginationAboveTable = false;
 
     @Getter
     private String language;

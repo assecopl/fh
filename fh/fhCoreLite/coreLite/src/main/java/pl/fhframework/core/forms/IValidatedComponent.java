@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import pl.fhframework.binding.ModelBinding;
 import pl.fhframework.model.PresentationStyleEnum;
 import pl.fhframework.model.dto.ElementChanges;
+import pl.fhframework.model.forms.Component;
 import pl.fhframework.model.forms.Form;
+import pl.fhframework.model.forms.IGroupingComponent;
 
 import java.util.Collections;
 import java.util.List;
@@ -58,6 +60,12 @@ public interface IValidatedComponent {
      * @return this component's id.
      */
     String getId();
+
+    /**
+     * Returns parent grouping component
+     * @return Parent grouping component
+     */
+    IGroupingComponent<? extends Component> getGroupingParentComponent();
 
     @JsonIgnore
     default List<ModelBinding> getAllBingings() {

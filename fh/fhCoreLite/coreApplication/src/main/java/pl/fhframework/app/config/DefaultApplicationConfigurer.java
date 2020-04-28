@@ -62,6 +62,8 @@ public class DefaultApplicationConfigurer {
         cssUrls.put(FhNavbarConfiguration.MATERIA_CSS, null);
         cssUrls.put(FhNavbarConfiguration.BASE_CSS, null);
 
+        cssUrls.put("sketchy", String.format(FhNavbarConfiguration.BOOTSWATCH_THEME_URL, "sketchy"));
+        cssUrls.put("cyborg", String.format(FhNavbarConfiguration.BOOTSWATCH_THEME_URL, "cyborg"));
         cssUrls.put("cosmo", String.format(FhNavbarConfiguration.BOOTSWATCH_THEME_URL, "cosmo"));
         cssUrls.put("superhero", String.format(FhNavbarConfiguration.BOOTSWATCH_THEME_URL, "superhero"));
         cssUrls.put("lux", String.format(FhNavbarConfiguration.BOOTSWATCH_THEME_URL, "lux"));

@@ -1,13 +1,14 @@
 package pl.fhframework.model.forms;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.util.CollectionUtils;
-
-import pl.fhframework.core.forms.IValidatedComponent;
-import pl.fhframework.core.util.StringUtils;
 import pl.fhframework.BindingResult;
 import pl.fhframework.annotations.*;
 import pl.fhframework.binding.ModelBinding;
+import pl.fhframework.core.forms.IValidatedComponent;
+import pl.fhframework.core.util.StringUtils;
 import pl.fhframework.helper.AutowireHelper;
 import pl.fhframework.model.PresentationStyleEnum;
 import pl.fhframework.model.dto.ElementChanges;
@@ -17,8 +18,7 @@ import pl.fhframework.validation.IValidationResults;
 
 import java.util.*;
 
-import lombok.Getter;
-import lombok.Setter;
+import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.SPECIFIC;
 
 @Control(parents = {}, canBeDesigned = true)
 @DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, value = "Component to aggregate validation messages", icon = "fa fa-exclamation")
@@ -59,6 +59,15 @@ public class ValidateMessages extends FormElement implements IComponentsReferrer
 
     @JsonIgnore
     private boolean showAttributeAsLabel;
+
+
+    @Getter
+    @Setter
+    @XMLProperty(defaultValue = "status")
+    @DocumentedComponentAttribute(value = "Define role of content presented by this element.Used to improve Accesibality. https://www.w3.org/TR/wai-aria/#landmark_roles")
+    @DesignerXMLProperty(functionalArea = SPECIFIC, priority = 90)
+    private String htmlAccessibilityRole = "status"; // Defoult role for this component is "status";
+
 
     public ValidateMessages(Form form) {
         super(form);
@@ -149,7 +158,17 @@ public class ValidateMessages extends FormElement implements IComponentsReferrer
                     if (StringUtils.isNullOrEmpty(label) && validationComponent instanceof BaseInputField && ((BaseInputField) validationComponent).getLabelModelBinding() != null) {
                         label = ((BaseInputField) validationComponent).convertBindingValueToString(((BaseInputField) validationComponent).getLabelModelBinding().getBindingResult());
                     }
-                    if (StringUtils.isNullOrEmpty(label) && showAttributeAsLabel) {
+                    if (validationComponent.getGroupingParentComponent() != null && validationComponent.getGroupingParentComponent() instanceof TableCell) {
+                        TableCell tableCell = ((TableCell) validationComponent.getGroupingParentComponent());
+                        Column tableColumn = (Column) tableCell.getGroupingParentComponent();
+                        Table table = tableColumn.getTable();
+                        String tableName = StringUtils.isNullOrEmpty(table.getLabel()) ? table.getId() : table.getLabel();
+
+                        int colNumber = table.getColumns().indexOf(tableColumn) + 1;
+                        int cellNunber = tableCell.getRowIndex() + 1;
+
+                        label = getForm().getAbstractUseCase().getUserSession().getValidationResults().getErrorMessage("fh.core.validation.field.table_field_error", tableName, cellNunber, colNumber);
+                    } else if (StringUtils.isNullOrEmpty(label) && showAttributeAsLabel) {
                         label = convertIdToLabel(validationComponent.getId());
                     }
                 }
@@ -165,7 +184,8 @@ public class ValidateMessages extends FormElement implements IComponentsReferrer
         return msg;
     }
 
-    private Optional<FormElement> findComponentBasedOnAttribute(Component basicFormElement, String attribute, Object parentObject) {
+    private Optional<FormElement> findComponentBasedOnAttribute(Component basicFormElement, String
+            attribute, Object parentObject) {
         // todo: optimize
         if (attribute == null || parentObject == null) {
             return Optional.empty();

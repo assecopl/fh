@@ -5,7 +5,7 @@
 
     <groupId>pl.fhframework</groupId>
     <artifactId>commons-bom</artifactId>
-    <version>4.5.6</version>
+    <version>4.6.3</version>
     <packaging>pom</packaging>
 
     <name>commons-bom</name>
@@ -19,7 +19,7 @@
     </parent>
 
     <properties>
-        <fh.version>4.5.6</fh.version>
+        <fh.version>4.6.3</fh.version>
         <springboot.version>2.1.0.RELEASE</springboot.version>
         <hibernate.version>5.4.1.Final</hibernate.version>
         <postgresql.version>42.2.5</postgresql.version>
@@ -133,6 +133,18 @@
                 <version>4.1</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-configuration2</artifactId>
+                <version>2.1.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-beanutils</groupId>
+                <artifactId>commons-beanutils</artifactId>
+                <version>1.9.3</version>
+            </dependency>
+
             <!-- commons apaches -->
 
             <!-- slfs and logback logger -->
@@ -192,6 +204,11 @@
                 <groupId>com.sun.xml.bind</groupId>
                 <artifactId>jaxb-xjc</artifactId>
                 <version>2.4.0-b180830.0438</version>
+            </dependency>
+            <dependency>
+                <groupId>com.zaxxer</groupId>
+                <artifactId>nuprocess</artifactId>
+                <version>2.0.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -1,5 +1,5 @@
 import * as moment from 'moment';
-import 'pc-bootstrap4-datetimepicker/build/js/bootstrap-datetimepicker.min';
+import 'imports-loader?moment,define=>false,exports=>false!../../external/bootstrap-datetimepicker.min';
 import {InputDate} from "./InputDate";
 import {InputTimestampPL} from './i18n/InputTimestamp.pl';
 import {InputTimestampEN} from './i18n/InputTimestamp.en';
@@ -43,8 +43,8 @@ class InputTimestamp extends InputDate implements LanguageChangeObserver {
         ['fc', 'inputTimestamp', 'form-control'].forEach(function (cssClass) {
             input.classList.add(cssClass);
         });
-
-        // input.type = 'datetime-local';
+        input.id = this.id;
+        input.type = 'text';
 
         input.placeholder = this.format;
 

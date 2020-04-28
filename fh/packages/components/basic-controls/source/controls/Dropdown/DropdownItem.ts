@@ -18,7 +18,7 @@ class DropdownItem extends OutputLabel {
 
     create() {
         let label = document.createElement('span');
-        label.id = this.id;
+        label.id = this.id + '_label';
         ['fc', 'outputLabel'].forEach(function (cssClass) {
             label.classList.add(cssClass);
         });
@@ -28,11 +28,15 @@ class DropdownItem extends OutputLabel {
         this.hintElement = this.component;
 
         this.labelComponent = this.component;
-        this.labelComponent.id = this.id + "___label"; // przeniesienie identyfikatora z utworzonej etykiety
+        this.labelComponent.id = label.id; // przeniesienie identyfikatora z utworzonej etykiety
 
         let element = document.createElement('a');
         element.classList.add('dropdown-item');
         element.id = this.id;
+
+        this.labelComponent.setAttribute('for', this.id);
+        this.labelComponent.setAttribute('aria-label', this.fhml.resolveValueTextOrEmpty(this.componentObj.value));
+        element.setAttribute('aria-labeledby', this.labelComponent.id);
 
         if (this.url) {
             element.href = this.url;

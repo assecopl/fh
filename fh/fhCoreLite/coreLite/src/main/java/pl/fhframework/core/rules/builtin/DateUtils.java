@@ -237,6 +237,6 @@ public class DateUtils {
     }
 
     public static String getTimestamp() {
-        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_mm_ss"));
+        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
     }
 }

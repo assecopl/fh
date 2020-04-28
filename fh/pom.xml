@@ -4,7 +4,7 @@
 
 	<groupId>pl.fhframework</groupId>
 	<artifactId>fhFramework</artifactId>
-	<version>4.5.6</version>
+	<version>4.6.3</version>
 	<packaging>pom</packaging>
 
 	<name>FH</name>
@@ -14,12 +14,13 @@
 	<parent>
 		<groupId>pl.fhframework</groupId>
 		<artifactId>fh-compile-bom</artifactId>
-		<version>4.5.6</version>
+		<version>4.6.3</version>
 		<relativePath>./BOM/fh-compile-bom</relativePath>
 	</parent>
 
 	<modules>
 		<module>BOM</module>
+<!--		<module>buildserver</module> !-->
 		<module>fhCoreLite</module>
 	</modules>
 

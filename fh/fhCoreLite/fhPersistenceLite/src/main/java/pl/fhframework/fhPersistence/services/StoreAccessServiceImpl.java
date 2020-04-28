@@ -791,6 +791,8 @@ public class StoreAccessServiceImpl implements StoreAccessService {
             return "localDateTimeValue";
         } else if (Enum.class.isAssignableFrom(fieldType)) {
             return "stringValue";
+        } else if (BaseEntity.class.isAssignableFrom(fieldType)) {
+            return "id";
         }
         throw new FhException(String.format("Uknown type of attribute on path: ", fieldType.getSimpleName()));
     }

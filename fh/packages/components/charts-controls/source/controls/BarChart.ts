@@ -30,7 +30,7 @@ class BarChart extends HTMLFormComponent {
         container.appendChild(canvas);
 
         this.component = container;
-        this.wrap();
+        this.wrap(true);
         this.handlemarginAndPAddingStyles();
         this.display();
 

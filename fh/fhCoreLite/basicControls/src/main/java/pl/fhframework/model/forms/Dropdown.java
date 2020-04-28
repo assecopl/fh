@@ -19,6 +19,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
 /**
  * Created by k.czajkowski on 20.01.2017.
  */
+@TemplateControl(tagName = "fh-dropdown")
 @Control(parents = {ButtonGroup.class, PanelGroup.class, Group.class, Tab.class, Row.class, Form.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = true)
 @DesignerControl(defaultWidth = 2)
 @DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, value = "PanelGroup component responsible for the grouping of DropdownItems.", icon = "fa fa-caret-square-down")

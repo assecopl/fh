@@ -1,7 +1,7 @@
-package pl.fhframework.core.security.provider.service;
+package pl.fhframework.core.session;
 
 import org.springframework.core.io.Resource;
-import pl.fhframework.core.security.provider.model.SessionInfo;
+import pl.fhframework.core.security.model.SessionInfo;
 
 import java.util.List;
 
@@ -38,5 +38,12 @@ public interface IUserSessionService {
      * @return count of sessions that message was successfully send to
      */
     public int sendMessage(List<String> userSessionIds, String title, String message);
+
+    /**
+     * Returns name of active use case for given user session.
+     * @param sessionId user session id
+     * @return name of active use case
+     */
+    String getUserActiveFunctionality(String sessionId);
 
 }

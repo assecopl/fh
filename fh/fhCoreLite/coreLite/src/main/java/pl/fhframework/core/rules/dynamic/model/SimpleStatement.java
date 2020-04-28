@@ -1,6 +1,8 @@
 package pl.fhframework.core.rules.dynamic.model;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,8 +19,10 @@ import java.util.List;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE)
 public abstract class SimpleStatement extends Statement implements Serializable {
     @XmlMixed
+    @JsonIgnore
     private List<String> values = new ArrayList<>();
 
+    @JsonGetter
     public String getValue() {
         if (values.size() == 1) {
             return values.get(0);

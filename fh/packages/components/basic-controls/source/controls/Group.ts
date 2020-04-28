@@ -29,10 +29,6 @@ class Group extends HTMLFormComponent {
         this.hintElement = this.component;
         this.wrap(true);
         this.addStyles();
-        /*
-         this.htmlElement = this.component;
-         this.contentWrapper = this.htmlElement;
-         */
         this.display();
 
         if (this.componentObj.subelements) {

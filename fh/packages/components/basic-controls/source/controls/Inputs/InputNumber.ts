@@ -4,7 +4,7 @@ import {FhContainer} from "fh-forms-handler";
 import {FormComponentKeySupport} from "fh-forms-handler";
 
 class InputNumber extends HTMLFormComponent {
-    private input: any;
+    public input: any;
     private keySupport: FormComponentKeySupport;
     protected keySupportCallback: any;
     private isTextarea: any;
@@ -14,6 +14,8 @@ class InputNumber extends HTMLFormComponent {
     private onChange: any;
     private valueChanged: boolean;
     protected inputmaskEnabled: boolean;
+    private maxFractionDigits:any;
+    private maxIntigerDigits:any;
 
     constructor(componentObj: any, parent: HTMLFormComponent) {
         if (componentObj.rawValue != undefined) {
@@ -33,6 +35,9 @@ class InputNumber extends HTMLFormComponent {
 
         this.onInput = this.componentObj.onInput;
         this.onChange = this.componentObj.onChange;
+
+        this.maxFractionDigits = this.componentObj.maxFractionDigits != undefined ? this.componentObj.maxFractionDigits : null;
+        this.maxIntigerDigits = this.componentObj.maxIntigerDigits != undefined ? this.componentObj.maxIntigerDigits : null;
 
         this.input = null;
         this.valueChanged = false;
@@ -89,7 +94,7 @@ class InputNumber extends HTMLFormComponent {
             // @ts-ignore
             Inputmask({
                 radixPoint: ".",
-                regex: "^([-]?[.\\d]+)$"
+                regex: this.resolveRegex()
             }).mask(this.input);
             this.inputmaskEnabled = true;
         }
@@ -223,6 +228,36 @@ class InputNumber extends HTMLFormComponent {
 
         super.destroy(removeFromParent);
     }
+
+
+    resolveRegex(){
+        let fractionMark = "[\\d]*)"; // Matches between one and unlimited times
+        let integerMark = "[\\d]*"; // Matches between one and unlimited times
+        let separatorMark = "([.]{0,1}" //Matches between zero and one times
+
+        if(this.maxFractionDigits != null) {
+            if (this.maxFractionDigits == 0) {
+                fractionMark = "";
+                separatorMark = "";
+            } else {
+                fractionMark = "[\\d]{0,"+this.maxFractionDigits+"})"
+            }
+        }
+
+        if(this.maxIntigerDigits != null) {
+            if (this.maxIntigerDigits == 0) {
+                integerMark = "[0]{1}"; // Only 0 can be put before separator
+            } else {
+                integerMark = "[\\d]{0,"+this.maxIntigerDigits+"}"
+            }
+        }
+
+        return "^([-]?"+integerMark+""+separatorMark+""+fractionMark+")$";
+
+    }
+
+
+
 }
 
 export {InputNumber};

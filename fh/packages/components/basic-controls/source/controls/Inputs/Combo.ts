@@ -31,14 +31,15 @@ class Combo extends InputText {
     private multiselectRawValue: any;
     private multiselectOldValue: any;
     private changeToFired: boolean;
-    private firedEventData: any;
 
     private onInputTimer: any;
     private openOnFocus: boolean = true;
     private readonly onInputTimeout: number;
 
     private cursorPositionOnLastSpecialKey: any;
-    private rawValueOnLastSpecialKey: any;
+
+    //Is focus on dropdown element. For IE11 click on srcoll problem.
+    private autocompleterFocus:boolean = false;
 
     constructor(componentObj: any, parent: HTMLFormComponent) {
         super(componentObj, parent);
@@ -54,7 +55,6 @@ class Combo extends InputText {
         this.cleared = false;
         this.lastCursorPosition = this.componentObj.cursor;
         this.blurEvent = false;
-
         this.openOnFocus = typeof this.componentObj.openOnFocus === 'undefined' ? true : this.componentObj.openOnFocus;
         this.emptyValue = this.componentObj.emptyValue;
         this.onSpecialKey = this.componentObj.onSpecialKey;
@@ -225,13 +225,26 @@ class Combo extends InputText {
                 if (this.openOnFocus) {
                     this.openAutocomplete();
                 }
+                this.autocompleterFocus = false;
+
             }
         }.bind(this));
-        input.addEventListener('blur', function () {
-            this.closeAutocomplete();
-            if (this.multiselect) {
-                this.addTag(this.input.value);
+        input.addEventListener('blur', function (event) {
+            //For IE11. Check if event was fired by action on dropdown element.
+            if(!this.autocompleterFocus) {
+                this.closeAutocomplete();
+
+                if (this.multiselect) {
+                    this.addTag(this.input.value);
+                }
+            } else {
+                //IE11 Put back focus on input.
+                this.input.focus();
+                this.autocompleterFocus = false;
+                return false;
             }
+
+
         }.bind(this));
         if (this.onChange) {
             $(input).on('blur', function (event) {
@@ -251,7 +264,9 @@ class Combo extends InputText {
         });
         autocompleter.id = this.id + '_autocompleter';
 
+
         this.autocompleter = autocompleter;
+
         this.component = this.input;
         this.focusableComponent = input;
         this.hintElement = this.component;
@@ -338,18 +353,17 @@ class Combo extends InputText {
 
     openAutocomplete() {
         let formType = this.getFormType();
-        let componentsContainer = this.component.closest('.card-body');
+        let componentsContainer = $(this.component).closest('.card-body');
         let containerHeightAfterListDisplay;
         let containerHeightBeforeListDisplay;
-
-        if (componentsContainer) {
-            containerHeightBeforeListDisplay = componentsContainer.scrollHeight;
+        if (componentsContainer.length > 0) {
+            containerHeightBeforeListDisplay = componentsContainer[0].scrollHeight;
         }
 
         this.autocompleter.classList.add('show');
 
         if (this.formId === 'designerProperties') {
-            containerHeightAfterListDisplay = componentsContainer.scrollHeight;
+            containerHeightAfterListDisplay = componentsContainer[0].scrollHeight;
         }
 
         if (containerHeightAfterListDisplay > containerHeightBeforeListDisplay) {
@@ -359,24 +373,55 @@ class Combo extends InputText {
             });
         }
 
+        /**
+         * Check if component will overflow window
+         * and change direction of view if necessary.
+         */
+        let bounding = this.autocompleter.getBoundingClientRect();
+        let rightOverlap = bounding.right - (window.innerWidth || document.documentElement.clientWidth);
+        let bottomOverlap = bounding.bottom - (window.innerHeight || document.documentElement.clientHeight);
+
+        if (rightOverlap > -17) {
+            this.autocompleter.style.setProperty('right', '0px', "important");
+            this.autocompleter.style.setProperty('left', 'auto', "important");
+        }
+
+        //IE11 Set true for autocompleter actions. We need to prevent focusout on input then.
+        this.autocompleter.addEventListener('mousedown', function (event) {
+            this.autocompleterFocus = true;
+        }.bind(this));
+
         let parent = null;
 
         if (formType === 'STANDARD') {
-            parent = $(this.component).closest('.panel,.splitContainer');
-            if (!parent.hasClass('floating') && !parent.hasClass('splitContainer')) {
+            parent = $(this.component).closest('.panel,.splitContainer,.hasHeight');
+
+            //If autocompleter is about to open in container with fixed height we change it's open direction. Direction will be UP.
+            if(parent.hasClass('hasHeight')){
+                const parentBound = parent[0].getBoundingClientRect();
+                let completerYmaks = bounding.height + bounding.top;
+                let parentYmaks = parentBound.top + parentBound.height;
+                //Put it as sibling of parent becouse parent has height and elements inside it wont overflow it. Close it when parent begins to scroll.
+                if(completerYmaks > parentYmaks){
+                    this.handleContainerOverflow(parent.parent(),  this.autocompleter, true);
+                } else {
+                    this.handleContainerOverflow(parent.parent(),  this.autocompleter);
+                }
+
+                parent.on("scroll", this.closeAutocomplete.bind(this));
+            } else if(bottomOverlap > 20){
+                this.inputGroupElement.classList.add("dropup");
+            }
+            if (!parent.hasClass('floating') && !parent.hasClass('splitContainer') ) {
                 return;
             }
         } else if (formType === 'MODAL' || formType === 'MODAL_OVERFLOW') {
             parent = $(this.component).closest('.modal-content');
+            this.handleContainerOverflow(parent, this.autocompleter);
+        } else {
+            console.error('Parent not defined.');
+            return;
         }
-
-        parent.append(this.autocompleter);
-        let _component = $(this.component);
-        let _autocompleter = $(this.autocompleter);
-
-        _autocompleter.css('top', _component.offset().top - parent.offset().top + this.component.offsetHeight);
-        _autocompleter.css('left', _component.offset().left - parent.offset().left);
-        _autocompleter.css('width', this.component.offsetParent.offsetWidth);
     };
 
     createClearButton() {
@@ -437,20 +482,31 @@ class Combo extends InputText {
         let formType = this.getFormType();
 
         this.autocompleter.classList.remove('show');
+        this.autocompleter.classList.remove('dropup');
+
+        /**
+         * Clear inline styles for right direction view.
+         */
+        this.autocompleter.style.setProperty('right', '', null);
+        this.autocompleter.style.setProperty('left', '', null);
+        this.autocompleter.style.setProperty('top', '', null);
 
         let parent = null;
         if (formType === 'STANDARD') {
             parent = $(this.component).closest('.panel');
 
+            if (!this.inputGroupElement.contains(this.autocompleter)) {
+                this.inputGroupElement.appendChild(this.autocompleter);
+            }
+
             if (!parent.hasClass('floating')) {
                 return;
             }
         } else if (formType === 'MODAL' || formType === 'MODAL_OVERFLOW') {
-            parent = $(this.component).closest('.modal-content');
+            if (!this.inputGroupElement.contains(this.autocompleter)) {
+                this.inputGroupElement.appendChild(this.autocompleter);
+            }
         }
-
-        parent.find('.autocompleter').remove();
-        this.component.appendChild(this.autocompleter);
     };
 
     extractChangedAttributes() {
@@ -532,8 +588,12 @@ class Combo extends InputText {
 
                 let a = document.createElement('a');
                 a.classList.add('dropdown-item');
-                let displayValue = itemValue.displayAsTarget ? itemValue.targetValue : itemValue.displayedValue;
-
+                let displayValue;
+                if (this.formId === 'designerProperties') {
+                    displayValue = itemValue.displayAsTarget ? itemValue.targetValue : itemValue.displayedValueWithoutExtras;
+                } else {
+                    displayValue = itemValue.displayAsTarget ? itemValue.targetValue : itemValue.displayedValue;
+                }
                 let disabled = false;
                 if (this.multiselect && this.tagslist.indexOf(displayValue) >= 0) {
                     a.classList.add('disabled');

@@ -76,7 +76,9 @@ class SelectOneMenu extends HTMLFormComponent {
             componetParent.appendChild(wrapperDiv);
         }
 
-        this.htmlElement.querySelector('.col-form-label').classList.add('selectOneMenuLabel');
+        if(this.labelElement) {
+            this.htmlElement.querySelector('.col-form-label').classList.add('selectOneMenuLabel');
+        }
 
         if (this.component.classList.contains('servicesListControl')) {
             this.htmlElement.classList.add('servicesListControlWrapper');

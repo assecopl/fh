@@ -12,14 +12,12 @@ import pl.fhframework.core.generator.ModelElement;
 import pl.fhframework.core.generator.ModelElementType;
 import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.model.dto.ElementChanges;
-import pl.fhframework.model.forms.attribute.HintPlacement;
-import pl.fhframework.model.forms.attribute.HintTrigger;
-import pl.fhframework.model.forms.attribute.HorizontalAlign;
-import pl.fhframework.model.forms.attribute.VerticalAlign;
+import pl.fhframework.model.forms.attribute.*;
 
 import java.util.Set;
 
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.LOOK_AND_STYLE;
+import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.SPECIFIC;
 
 /**
  * Base component/root of all visual and non visual components. Contains common logic inherited
@@ -38,6 +36,15 @@ public abstract class FormElement extends Component {
     private static final String HINT_ATTR = "hint";
     private static final String HINT_PLACEMENT_ATTR = "hintPlacement";
     private static final String HINT_TRIGGER_ATTR = "hintTrigger";
+    private static final String HINT_TYPE_ATTR = "hintType";
+
+
+    @Getter
+    @Setter
+    @XMLProperty
+    @DocumentedComponentAttribute(value = "Define role of content presented by this element.Used to improve Accesibality. https://www.w3.org/TR/wai-aria/#landmark_roles")
+    @DesignerXMLProperty(functionalArea = SPECIFIC, priority = 90)
+    private String htmlAccessibilityRole;
 
     /**
      * Height of the component
@@ -151,6 +158,18 @@ public abstract class FormElement extends Component {
     @DesignerXMLProperty(functionalArea = LOOK_AND_STYLE, priority = 85)
     @DocumentedComponentAttribute(defaultValue = "HOVER_FOCUS", value = "Trigger of the hint for component. Available values: HOVER_FOCUS, HOVER. If value is not set then position will be HOVER_FOCUS.")
     private HintTrigger hintTrigger;
+
+
+    /**
+     * Placement of the hint for component
+     */
+    @Getter
+    @Setter
+    @XMLProperty(value = HINT_TYPE_ATTR)
+    @DesignerXMLProperty(functionalArea = LOOK_AND_STYLE, priority = 86)
+    @DocumentedComponentAttribute(defaultValue = "STANDARD", value = "Switches between stnadard presentation and static presentation. Static presentation makes hint appears after clikc on '?' icon. Icon will appear after label or as input group element")
+    private HintType hintType = HintType.STANDARD;
+
 
     /**
      * Left margin of the component

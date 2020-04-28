@@ -7,6 +7,7 @@ import pl.fhframework.validation.ValidationManager;
 
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.CONTENT;
 
+@TemplateControl(tagName = "fh-input-checkbox")
 @DesignerControl(defaultWidth = 2)
 @DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, value = "CheckBox is component which let a user select MANY of a limited number of choices. It is" +
         " displayed as HTML input type = checkbox element.", icon = "fa fa-check-square")

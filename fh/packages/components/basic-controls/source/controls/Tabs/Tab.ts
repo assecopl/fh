@@ -22,6 +22,7 @@ class Tab extends HTMLFormComponent {
         ['fc', 'tab-pane', 'col-12'].forEach(function (cssClass) {
             tab.classList.add(cssClass);
         });
+        tab.setAttribute("role", "tabpanel");
 
         let nav = document.createElement('li');
         nav.classList.add('nav-item');
@@ -31,6 +32,7 @@ class Tab extends HTMLFormComponent {
         link.innerHTML = this.fhml.resolveValueTextOrEmpty(this.componentObj.label);
         link.dataset.tabId = this.id;
         link.setAttribute("data-toggle", "tab");
+        link.setAttribute("role", "tab");
 
 
         let row = document.createElement('div');

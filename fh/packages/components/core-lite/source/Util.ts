@@ -182,7 +182,7 @@ class Util {
         while(element && element.id != parentId) {
 
             offsetTop += element.offsetTop;
-            console.log("getOfsetTop", element.id, element, offsetTop);
+            // console.log("getOfsetTop", element.id, element, offsetTop);
             element = element.offsetParent;
         }
         return offsetTop;

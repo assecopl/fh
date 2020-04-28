@@ -25,6 +25,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
  * Every field is parsed as json for javascript. If field should be ingored by JSON, use
  * <code>@JsonIgnore</code>. There can be used any annotations for json generator.
  */
+@TemplateControl(tagName = "fh-select-one-menu")
 @DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, value = "Component responsible for displaying list of values, " +
         "with possibility of selecting only one value.", icon = "fa fa-caret-square-down")
 @DesignerControl(defaultWidth = 3)

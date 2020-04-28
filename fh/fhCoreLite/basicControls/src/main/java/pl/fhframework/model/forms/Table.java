@@ -66,6 +66,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
  *  <Column label="Name" value="{item.name}"/>
  * </Table>}</pre>
  */
+@TemplateControl(tagName = "fh-table")
 @Control(parents = {Tab.class, GroupingComponent.class, Row.class, Form.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = true)
 @DocumentedComponent(category = DocumentedComponent.Category.TABLE_AND_TREE ,value = "Table that allows to arrange data like text, images, links, other tables, etc. into rows and columns of cells.", icon = "fa fa-table")
 public class Table extends Repeater implements ITabular, IChangeableByClient, IEventSourceContainer, IRowNumberOffsetSupplier, Boundable, CompactLayout, IDesignerEventListener, IHasBoundableLabel {
@@ -110,6 +111,7 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
     @JsonIgnore
     @Getter
     @Setter
+    @TwoWayBinding
     @XMLProperty(SELECTED)
     @DocumentedComponentAttribute(boundable = true, value = "Selected table row")
     @DesignerXMLProperty(functionalArea = CONTENT, priority = 11, bindingOnly = true)

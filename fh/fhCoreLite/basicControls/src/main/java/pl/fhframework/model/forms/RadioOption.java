@@ -26,6 +26,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
  * RadioOption
  * It is used to add common logic to options group eg. reaction to 'on change' events.
  */
+@TemplateControl(tagName = "fh-radio-option")
 @Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
 @DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, value = "RadioOption represents single radio component", icon = "fa fa-circle", ignoreFields = {"emptyValue", "emptyLabel"})
 public class RadioOption extends BaseInputField implements IPairableComponent<String> {

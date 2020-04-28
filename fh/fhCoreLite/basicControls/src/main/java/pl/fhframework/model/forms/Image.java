@@ -34,6 +34,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
 public class Image extends FormElement implements TableComponent<Image> {
 
     public static final String ATTR_SRC = "src";
+    public static final String ATTR_ALT = "alt";
     public static final String ATTR_ON_AREA_CLICK = "onAreaClick";
     public static final String ATTR_ON_CLICK = "onClick";
     public static final String ATTR_IMAGE_AREAS = "imageAreas";
@@ -88,6 +89,18 @@ public class Image extends FormElement implements TableComponent<Image> {
     @DesignerXMLProperty(commonUse = true, previewValueProvider = BindingExpressionDesignerPreviewProvider.class, priority = 100, functionalArea = CONTENT)
     @DocumentedComponentAttribute(boundable = true, value = "Represents label for created component. Supports FHML - FH Markup Language.")
     private ModelBinding labelModelBinding;
+
+
+    @Getter
+    private String alt;
+
+    @JsonIgnore
+    @Getter
+    @Setter
+    @XMLProperty(required = true, value = ATTR_ALT)
+    @DesignerXMLProperty(commonUse = true, previewValueProvider = BindingExpressionDesignerPreviewProvider.class, functionalArea = CONTENT)
+    @DocumentedComponentAttribute(boundable = true, value = "Component alternative information/description.")
+    private ModelBinding<String> altModelBinding;
 
     public Image(Form form) {
         super(form);
@@ -149,6 +162,9 @@ public class Image extends FormElement implements TableComponent<Image> {
         if (srcModelBinding != null) {
             src = srcModelBinding.resolveValueAndAddChanges(this, elementChange, src, ATTR_SRC);
         }
+        if (altModelBinding != null) {
+            alt = altModelBinding.resolveValueAndAddChanges(this, elementChange, alt, ATTR_ALT);
+        }
         if(labelModelBinding != null) {
             label = labelModelBinding.resolveValueAndAddChanges(this, elementChange, label, ATTR_LABEL);
         }
@@ -165,6 +181,7 @@ public class Image extends FormElement implements TableComponent<Image> {
     public void doCopy(Table table, Map<String, String> iteratorReplacements, Image clone) {
         TableComponent.super.doCopy(table, iteratorReplacements, clone);
         clone.setSrc(this.getSrc());
+        clone.setAlt(this.getAlt());
         clone.setOnClick(table.getRowBinding(this.getOnClick(), clone, iteratorReplacements));
         clone.setOnAreaClick(table.getRowBinding(this.getOnAreaClick(), clone, iteratorReplacements));
         clone.setLabelModelBinding(table.getRowBinding(this.getLabelModelBinding(), clone, iteratorReplacements));

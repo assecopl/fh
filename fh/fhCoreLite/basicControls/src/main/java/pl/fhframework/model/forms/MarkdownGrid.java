@@ -8,14 +8,16 @@ import pl.fhframework.annotations.Control;
 import pl.fhframework.annotations.DesignerXMLProperty;
 import pl.fhframework.annotations.DocumentedComponentAttribute;
 import pl.fhframework.annotations.XMLProperty;
-import pl.fhframework.binding.ModelBinding;
+import pl.fhframework.binding.*;
 import pl.fhframework.core.resource.MarkdownRepository;
 import pl.fhframework.model.dto.ElementChanges;
+import pl.fhframework.model.dto.InMessageEventData;
 import pl.fhframework.model.dto.ValueChange;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Control(parents = {PanelGroup.class, Group.class, Column.class, Tab.class, Row.class, Form.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = true)
 public class MarkdownGrid extends FormElement implements IChangeableByClient {
@@ -24,6 +26,7 @@ public class MarkdownGrid extends FormElement implements IChangeableByClient {
     private static final String SUBSYSTEM_ATTR = "subsystem";
     private static final String SELECTED_ITEM_ATTR = "selectedItem";
     private static final String SELECTED_INDEX_ATTR = "selectedIndex";
+    private static final String ON_FOLDER_DOUBLE_CLICK = "onFolderDoubleClick";
 
     @JsonIgnore
     private MarkdownRepository.MarkdownEntry selectedItem;
@@ -50,6 +53,13 @@ public class MarkdownGrid extends FormElement implements IChangeableByClient {
 
     @Getter
     private String subsystem;
+
+
+    @Getter
+    @XMLProperty(value = ON_FOLDER_DOUBLE_CLICK, defaultValue = "-")
+    @DocumentedComponentAttribute(value = "If the table row is clicked twice that method will be executed")
+    private ActionBinding onFolderDoubleClick;
+
 
     @JsonIgnore
     @Getter
@@ -133,6 +143,23 @@ public class MarkdownGrid extends FormElement implements IChangeableByClient {
         refreshView();
 
         return changes;
+    }
+
+    @Override
+    public Optional<ActionBinding> getEventHandler(InMessageEventData eventData) {
+        if (eventData.getEventType().equals(ON_FOLDER_DOUBLE_CLICK)){
+            return Optional.ofNullable(onFolderDoubleClick);
+        } else {
+            return super.getEventHandler(eventData);
+        }
+    }
+
+    public void setOnFolderDoubleClick(ActionBinding onFolderDoubleClick) {
+        this.onFolderDoubleClick = onFolderDoubleClick;
+    }
+
+    public IActionCallbackContext setOnFolderDoubleClick(IActionCallback onFolderDoubleClick) {
+        return CallbackActionBinding.createAndSet(onFolderDoubleClick, this::setOnFolderDoubleClick);
     }
 
 }

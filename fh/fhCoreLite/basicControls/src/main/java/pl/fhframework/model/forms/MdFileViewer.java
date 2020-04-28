@@ -10,6 +10,7 @@ import pl.fhframework.model.forms.designer.BindingExpressionDesignerPreviewProvi
 import pl.fhframework.model.forms.model.LabelPosition;
 import pl.fhframework.model.forms.optimized.ColumnOptimized;
 import pl.fhframework.model.forms.widgets.Widget;
+import pl.fhframework.subsystems.ModuleRegistry;
 
 import java.util.Map;
 
@@ -44,14 +45,17 @@ public class MdFileViewer extends FormElement implements TableComponent<MdFileVi
     private ModelBinding<String> srcModelBinding;
 
 
-    /**
-     * Left margin of the component
-     */
+    @Getter
+    @Setter
+    @XMLProperty
+    @DocumentedComponentAttribute(boundable = true, value = "Module for md files. Represent base module for relatives urls to other md files.")
+    private String moduleId;
+
     @Getter
     @Setter
     @XMLProperty
     @DesignerXMLProperty(functionalArea = CONTENT)
-    @DocumentedComponentAttribute(boundable = true, value = "Resource base path for md files. Represent base path for relatives urls to other md files.")
+    @DocumentedComponentAttribute(boundable = true, value = "Base path for md files placed in resources. Represent base path for relatives urls to other md files.")
     private String resourceBasePath;
 
     @Getter
@@ -79,6 +83,7 @@ public class MdFileViewer extends FormElement implements TableComponent<MdFileVi
     @Override
     public void init() {
         super.init();
+        this.setModuleId(ModuleRegistry.getModuleId(this.getForm().getClass()));
     }
 
     @Override
@@ -105,6 +110,7 @@ public class MdFileViewer extends FormElement implements TableComponent<MdFileVi
         TableComponent.super.doCopy(table, iteratorReplacements, clone);
         clone.setSrc(this.getSrc());
         clone.setLabelModelBinding(table.getRowBinding(this.getLabelModelBinding(), clone, iteratorReplacements));
+        clone.setModuleId(this.getModuleId());
         clone.setResourceBasePath(this.getResourceBasePath());
 
     }

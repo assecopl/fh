@@ -6,15 +6,16 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.util.ReflectionUtils;
+import pl.fhframework.BindingResult;
+import pl.fhframework.annotations.*;
 import pl.fhframework.aspects.snapshots.model.IUnmanagedUseCaseParameter;
+import pl.fhframework.aspects.snapshots.model.SkipSnapshot;
+import pl.fhframework.binding.*;
 import pl.fhframework.core.designer.IdAttributeDesignerSupport;
 import pl.fhframework.core.generator.ModelElement;
 import pl.fhframework.core.generator.ModelElementType;
 import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.core.util.StringUtils;
-import pl.fhframework.BindingResult;
-import pl.fhframework.annotations.*;
-import pl.fhframework.binding.*;
 import pl.fhframework.events.DesignViewEvent;
 import pl.fhframework.events.IDesignEventSource;
 import pl.fhframework.events.IEventSource;
@@ -23,10 +24,12 @@ import pl.fhframework.model.dto.ElementChanges;
 import pl.fhframework.model.dto.InMessageEventData;
 import pl.fhframework.model.dto.ValueChange;
 
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.*;
+import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.CONTENT;
+import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.LOOK_AND_STYLE;
 
 /**
  * Created by krzysztof.kobylarek on 2016-12-20.
@@ -128,6 +131,12 @@ public class Component implements Cloneable, IDesignEventSource, IEventSource, I
     @DesignerXMLProperty(skip = true)
     @DocumentedComponentAttribute(value = "If the component is dropped on form edited in designer.")
     private ActionBinding onDesignerToolboxDrop;
+
+    @JsonIgnore
+    @Getter
+    @Setter
+    @SkipSnapshot
+    private IGenerationUtils generationUtils;
 
     public Component(Form form) {
         this.form = form;
@@ -483,4 +492,23 @@ public class Component implements Cloneable, IDesignEventSource, IEventSource, I
         initDone = false;
     }
 
+    public interface IGenerationUtils {
+        List<ComponentAttr> getAttributes();
+        Object getFieldValue(Field field);
+        String getTagName();
+    }
+
+    @Getter
+    @Setter
+    public static class ComponentAttr { // todo: move
+        private String name;
+        private Object value;
+        private Class<?> type;
+
+        public ComponentAttr(String name, Object value, Class<?> type) {
+            this.name = name;
+            this.value = value;
+            this.type = type;
+        }
+    }
 }

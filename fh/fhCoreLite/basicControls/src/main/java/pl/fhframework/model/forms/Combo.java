@@ -19,6 +19,7 @@ import pl.fhframework.model.dto.ElementChanges;
 import pl.fhframework.model.dto.InMessageEventData;
 import pl.fhframework.model.dto.ValueChange;
 import pl.fhframework.model.forms.designer.InputFieldDesignerPreviewProvider;
+import pl.fhframework.model.forms.optimized.ColumnOptimized;
 import pl.fhframework.model.forms.validation.ValidationFactory;
 import pl.fhframework.validation.*;
 
@@ -30,10 +31,11 @@ import java.util.stream.Collectors;
 
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.*;
 
+@TemplateControl(tagName = "fh-combo")
 @DesignerControl(defaultWidth = 3)
 @DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, value = "Enables users to quickly find and select from a pre-populated list of values as they type, leveraging searching and filtering.",
         icon = "fa fa-outdent")
-@Control(parents = {PanelGroup.class, Group.class, Column.class, Tab.class, Row.class, Form.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = true)
+@Control(parents = {PanelGroup.class, Group.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = true)
 public class Combo extends BaseInputFieldWithKeySupport {
 
     /**
@@ -76,6 +78,8 @@ public class Combo extends BaseInputFieldWithKeySupport {
 
         private Long targetId;
 
+        private String displayedValueWithoutExtras;
+
         public ComboItemDTO(String targetValue, Long targetId) {
             this.displayAsTarget = true;
             this.targetValue = targetValue;
@@ -95,6 +99,7 @@ public class Combo extends BaseInputFieldWithKeySupport {
             this.targetId = comboItem.getTargetId();
             this.displayedValue = comboItem.getDisplayedValue();
             this.targetCursorPosition = comboItem.getTargetCursorPosition();
+            this.displayedValueWithoutExtras = comboItem.getFullHintWithoutExtras();
         }
     }
 

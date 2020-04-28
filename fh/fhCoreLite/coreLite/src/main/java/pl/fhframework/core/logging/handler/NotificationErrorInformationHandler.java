@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import pl.fhframework.WebSocketContext;
+import pl.fhframework.core.FhAuthorizationException;
 import pl.fhframework.core.logging.ErrorInformation;
 import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.FormsHandler;
@@ -30,8 +31,17 @@ public class NotificationErrorInformationHandler implements NonResponsiveInforma
     @Override
     public boolean handle(UserSession session, IErrorCarrierMessage message, List<ErrorInformation> errors, FormsHandler formsHandler, String requestId) {
         if (errors.size() > 0) {
-            eventRegistry.fireNotificationEvent(NotificationEvent.Level.ERROR,
-                    buildMessage(errors));
+            Throwable throwable = errors.get(0).getException();
+            if (throwable != null && throwable.getCause() != null) {
+                throwable = throwable.getCause();
+            }
+            if (throwable instanceof FhAuthorizationException) {
+                eventRegistry.fireNotificationEvent(NotificationEvent.Level.WARNING,
+                        throwable.getMessage());
+            } else {
+                eventRegistry.fireNotificationEvent(NotificationEvent.Level.ERROR,
+                        buildMessage(errors));
+            }
         }
 
         return true;

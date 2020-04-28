@@ -3,6 +3,7 @@ package pl.fhframework.model.forms;
 import pl.fhframework.annotations.Control;
 import pl.fhframework.annotations.DesignerControl;
 import pl.fhframework.annotations.DocumentedComponent;
+import pl.fhframework.annotations.TemplateControl;
 
 /**
  * Class representing xml component of Spacer. Every field represents xml attribute of spacer tag.
@@ -11,6 +12,7 @@ import pl.fhframework.annotations.DocumentedComponent;
  * json generator.
  */
 @DesignerControl(defaultWidth = 2)
+@TemplateControl(tagName = "fh-spacer")
 @Control(parents = {PanelGroup.class, Group.class, Repeater.class, Column.class, Tab.class, Row.class, Form.class, Footer.class, Dropdown.class}, canBeDesigned = true, invalidParents = {Table.class})
 @DocumentedComponent(category = DocumentedComponent.Category.ARRANGEMENT, value = "Component used to create spaces in a layout", icon = "fas fa-arrows-alt-h")
 public class Spacer extends FormElement implements Invisible {

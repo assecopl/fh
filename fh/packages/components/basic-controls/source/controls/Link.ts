@@ -15,10 +15,10 @@ class Link extends HTMLFormComponent {
     }
 
     create() {
-        var link = document.createElement('a');
+        let link = document.createElement('a');
 
-        var isIcon = !!this.componentObj.icon;
-        var inner;
+        let isIcon = !!this.componentObj.icon;
+        let inner;
 
         link.id = this.id;
         link.classList.add('fc');
@@ -32,8 +32,8 @@ class Link extends HTMLFormComponent {
             '{').replace('\\)', '}') : '';
 
         if (isIcon) {
-            var icon = document.createElement('i');
-            var classes = this.componentObj.icon.split(' ');
+            let icon = document.createElement('i');
+            let classes = this.componentObj.icon.split(' ');
             switch (classes[0]) {
                 case 'fa':
                     icon.classList.add('fa-fw');
@@ -57,12 +57,12 @@ class Link extends HTMLFormComponent {
             link.innerHTML += link.href;
         }
 
-        var additionalWrapper = document.createElement('div');
+        let additionalWrapper = document.createElement('div');
         additionalWrapper.classList.add('link-wrapper');
         additionalWrapper.appendChild(link);
         this.component = additionalWrapper;
         this.hintElement = this.component;
-        this.wrap(true);
+        this.wrap();
         if (this.stickedLabel) {
             this.htmlElement.classList.add('stickedLabel');
         }
@@ -70,9 +70,38 @@ class Link extends HTMLFormComponent {
         this.display();
     };
 
-    wrap(skipLabel) {
-        super.wrap(skipLabel);
-        this.htmlElement.classList.add('form-group');
+    wrap() {
+        let wrapper = document.createElement('div');
+        ['fc', 'wrapper', 'form-group'].forEach(function (cssClass) {
+            wrapper.classList.add(cssClass);
+        });
+
+        if (this.width) {
+            // @ts-ignore
+            this.setWrapperWidth(wrapper, undefined, this.width);
+        } else {
+            wrapper.classList.add('inline');
+        }
+
+        if (this.componentObj.value) {
+            let label = document.createElement('label');
+            let labelValue = this.fhml.resolveValueTextOrEmpty(this.componentObj.value);
+            let labelId = this.id + '_label';
+            label.id = labelId;
+            label.classList.add('col-form-label');
+            label.classList.add('sr-only');
+            label.innerHTML = labelValue;
+            label.setAttribute('for', this.id);
+            label.setAttribute('aria-label', labelValue);
+            this.component.insertBefore(label, this.component.firstChild);
+            this.labelElement = label;
+            this.component.setAttribute('aria-describedby', label.id);
+        }
+
+        wrapper.appendChild(this.component);
+        this.htmlElement = wrapper;
+        this.contentWrapper = this.component;
+
     };
 
     update(change) {

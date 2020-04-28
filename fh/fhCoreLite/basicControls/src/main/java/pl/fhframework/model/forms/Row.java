@@ -20,6 +20,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
         property = "width"
 )
 @DesignerControl
+@TemplateControl(tagName = "fh-row")
 @Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Form.class, Repeater.class, Group.class, SplitContainer.class}, invalidParents = {Row.class, Table.class}, canBeDesigned = true)
 @DocumentedComponent(category = DocumentedComponent.Category.ARRANGEMENT, value = "Row component is responsible for placing components in one row", icon = "fa fa-bars")
 public class Row extends GroupingComponent<Component> {

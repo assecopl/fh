@@ -21,6 +21,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
  * Class represents Tab as grouping element. Tab consists of label and layout position. Example:
  * {@code <Group></Group>} Should be used within TabContainer.
  */
+@TemplateControl(tagName = "fh-tab")
 @Control(parents = {TabContainer.class, Wizard.class})
 @DocumentedComponent(ignoreFields = {"width"},
         value = "Tab component which represents a single tab", icon = "fa fa-window-maximize")

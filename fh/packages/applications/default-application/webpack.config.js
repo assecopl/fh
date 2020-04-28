@@ -31,7 +31,7 @@ module.exports = function (cmdEnv) {
         module: {
             rules: [{
                 test: /\.css$/,
-                exclude: /node_modules/,
+                exclude: [/node_modules/, /dist/, /build/],
                 use: [{
                     loader: MiniCssExtractPlugin.loader,
                     options: {}
@@ -39,8 +39,8 @@ module.exports = function (cmdEnv) {
                     loader: 'css-loader'
                 }]
             }, {
-                test: /\.tsx?$/,
-                exclude: /node_modules/,
+                test: /\.(d.)?tsx?$/,
+                exclude: [/node_modules/, /dist/, /build/],
                 use: [{
                     loader: 'babel-loader'
                 }, {
@@ -48,7 +48,7 @@ module.exports = function (cmdEnv) {
                 }]
             }, {
                 test: /\.js$/,
-                exclude: /node_modules/,
+                exclude: [/node_modules/, /dist/, /build/],
                 use: {
                     loader: 'babel-loader'
                 }

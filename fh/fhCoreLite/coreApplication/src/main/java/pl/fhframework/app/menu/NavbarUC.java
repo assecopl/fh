@@ -5,10 +5,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.UrlResource;
 import pl.fhframework.app.config.DefaultApplicationConfigurer;
 import pl.fhframework.app.config.FhNavbarConfiguration;
+import pl.fhframework.app.preferences.UserPreferencesUC;
 import pl.fhframework.core.logging.FlushableRollingFileAppender;
 import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.core.rules.builtin.FhUserUtils;
 import pl.fhframework.core.security.model.IBusinessRole;
+import pl.fhframework.core.uc.IUseCaseNoCallback;
 import pl.fhframework.core.uc.IUseCaseRefreshListener;
 import pl.fhframework.core.uc.UseCase;
 import pl.fhframework.core.util.LogUtils;
@@ -119,6 +121,11 @@ public class NavbarUC implements INavbar, ISystemUseCase, IUseCaseRefreshListene
     @Action
     public void setLanguagePolish() {
         this.setLanguage(NavbarForm.Language.POLISH.getValue());
+    }
+
+    @Action
+    public void openPreferences() {
+        runUseCase(UserPreferencesUC.class, IUseCaseNoCallback.getCallback());
     }
 
     @Action

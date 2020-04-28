@@ -13,6 +13,7 @@ class PanelGroup extends HTMLFormComponent {
     private collapsedOld: any;
     private headingElement: any;
     protected forceHeader: any;
+    protected headingTypeValue: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" = null;
 
     constructor(componentObj: any, parent: HTMLFormComponent) {
         super(componentObj, parent);
@@ -21,6 +22,7 @@ class PanelGroup extends HTMLFormComponent {
 
         this.isCollapsible = Boolean(this.componentObj.collapsible);
         this.onToggle = this.componentObj.onToggle;
+        this.headingTypeValue = this.componentObj.headingTypeValue? this.componentObj.headingTypeValue : "span";
         this.collapsed = Boolean(this.componentObj.collapsed);
         this.collapseToggler = null;
         this.collapseChanged = false;
@@ -45,12 +47,13 @@ class PanelGroup extends HTMLFormComponent {
         heading.classList.add('card-header');
         heading.classList.add('d-flex');
 
-        let titleElm = document.createElement('span');
+        let titleElm = document.createElement(this.componentObj.label != null ? this.headingTypeValue: "span"); //Default span
         titleElm.classList.add('mr-auto');
         titleElm.classList.add('card-title');
         titleElm.classList.add('mb-0');
 
         let titleElmIn = document.createElement('span');
+        titleElmIn.id = this.id + '_label';
         titleElm.appendChild(titleElmIn);
 
         if (this.componentObj.label != null) {

@@ -38,12 +38,15 @@ public class GenerationContext {
     @Getter
     private List<CodeRange> resolvedRangesList = new ArrayList<>();
 
+    private boolean wasNewLine = true;
+
     public GenerationContext addCode(String codeFormat, String... args) {
         if (args.length > 0) {
             this.code.append(String.format(codeFormat, (Object[]) args));
         } else {
             this.code.append(codeFormat);
         }
+        wasNewLine = false;
         return this;
     }
 
@@ -60,6 +63,20 @@ public class GenerationContext {
 
     public GenerationContext addLine() {
         this.code.append('\n');
+        wasNewLine = true;
+        return this;
+    }
+
+    public GenerationContext addLineIfNeeded() {
+        if (!wasNewLine) {
+            addLine();
+        }
+        return this;
+    }
+
+    public GenerationContext markLineNotNeeded() {
+        wasNewLine = true;
+
         return this;
     }
 
@@ -72,6 +89,11 @@ public class GenerationContext {
     public GenerationContext addSection(GenerationContext context, int indent) {
         addInlineSection(context, indent);
         addLine();
+        return this;
+    }
+
+    public GenerationContext addSectionWithoutLine(GenerationContext context, int indent) {
+        addInlineSection(context, indent);
         return this;
     }
 
@@ -133,7 +155,7 @@ public class GenerationContext {
         return "<<<" + uuid + ">>>";
     }
 
-    private String indent(int indent, String line) {
+    public static String indent(int indent, String line) {
         return StringUtils.repeat(INDENT, indent) + line;
     }
 

@@ -23,6 +23,7 @@ import java.util.Optional;
  * <p>
  * Example: {@code <TabContainer></TabContainer>}
  */
+@TemplateControl(tagName = "fh-tab-container")
 @Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
 @DocumentedComponent(category = DocumentedComponent.Category.ARRANGEMENT, value = "TabContainer component which represents a containrt containing a single tabs", icon = "fas fa-window-maximize")
 public class TabContainer extends GroupingComponent<Tab> implements IChangeableByClient, Boundable, CompactLayout, IDesignerEventListener {

@@ -10,8 +10,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
 public @interface Control {
-    String[] jsFiles() default "";
-
     /**
      * List of valid parents. Includes subclasses of listed classes.
      */

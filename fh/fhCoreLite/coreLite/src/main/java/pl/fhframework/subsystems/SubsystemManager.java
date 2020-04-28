@@ -1,14 +1,18 @@
 package pl.fhframework.subsystems;
 
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import pl.fhframework.ISystemUseCase;
 import pl.fhframework.core.FhSubsystemException;
 import pl.fhframework.core.io.FhResource;
 import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.core.uc.IInitialUseCase;
 import pl.fhframework.ReflectionUtils;
+import pl.fhframework.core.util.StringUtils;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
@@ -25,8 +29,15 @@ public class SubsystemManager {
     private List<String> systemUseCasesDisabledUrls;
 
     @Getter
-    @Value("#{'${system.usecases.classes}'.split(',')}")
-    private List<String> systemUseCases;
+    @Value("${system.usecases.classes:}")
+    private String systemUseCasesInclude;
+
+    @Getter
+    @Value("${system.usecases.exclude.classes:}")
+    private String systemUseCasesExclude;
+
+    @Autowired(required = false)
+    private List<ISystemUseCase> systemUseCasesBeans = new ArrayList<>();
 
     private static Map<String, List<Subsystem>> qualifiedPackageToSubsystem = new HashMap<>();
     private static List<Subsystem> _subsystemInfos = new ArrayList<>();
@@ -37,6 +48,21 @@ public class SubsystemManager {
     @Getter
     private static List<Class<?>> basicPackages = Collections.unmodifiableList(_basicPackages);
 
+    @Getter
+    List<String> systemUseCases = new ArrayList<>();
+
+    @PostConstruct
+    void init() {
+        if (StringUtils.isNullOrEmpty(systemUseCasesInclude)) {
+            systemUseCasesBeans.forEach(uc -> systemUseCases.add(uc.getClass().getName()));
+        }
+        else {
+            systemUseCases.addAll(Arrays.asList(systemUseCasesInclude.split(",")));
+        }
+        if (!StringUtils.isNullOrEmpty(systemUseCasesExclude)) {
+            systemUseCases.removeAll(Arrays.asList(systemUseCasesExclude.split(",")));
+        }
+    }
 
     public static void loadAllSubsystems(Class<?>... basicPackagesIndicators) {
         for (Class<?> basicPackageIndicator : basicPackagesIndicators) {
@@ -122,5 +148,4 @@ public class SubsystemManager {
     public String getAutostartedUseCase() {
         return autostartedUseCase;
     }
-
 }

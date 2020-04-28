@@ -1,19 +1,19 @@
 import 'bootstrap/js/dist/tooltip';
-import {FormComponent} from "./FormComponent";
-import {FhContainer} from "../FhContainer";
-import getDecorators from "inversify-inject-decorators";
-import {I18n} from "../I18n/I18n";
-import {FHML} from "../FHML";
-import {AdditionalButton} from "./AdditionalButton";
+import {FormComponent} from './FormComponent';
+import {FhContainer} from '../FhContainer';
+import getDecorators from 'inversify-inject-decorators';
+import {I18n} from '../I18n/I18n';
+import {FHML} from '../FHML';
+import {AdditionalButton} from './AdditionalButton';
 import * as $ from 'jquery';
 
 let {lazyInject} = getDecorators(FhContainer);
 
 abstract class HTMLFormComponent extends FormComponent {
-    @lazyInject("FHML")
+    @lazyInject('FHML')
     protected fhml: FHML;
 
-    @lazyInject("I18n")
+    @lazyInject('I18n')
     protected i18n: I18n;
 
     protected container: HTMLElement;
@@ -39,6 +39,8 @@ abstract class HTMLFormComponent extends FormComponent {
     protected hint: any;
     protected hintPlacement: string;
     protected hintTrigger: string;
+    public hintType: 'STANDARD' | 'STATIC' = 'STANDARD';
+    public hintInputGroup: boolean = false;
     protected hintInitialized: boolean = false;
     public rawValue: any;
     private areSubcomponentsRendered: boolean;
@@ -50,25 +52,35 @@ abstract class HTMLFormComponent extends FormComponent {
     private static bootstrapColSeparateCahrsRegexp: RegExp = /(,|;|\|\/|\|)/g;
     protected focusableComponent: HTMLElement;
     public type: string;
+    public input: any;
+
+    public autocomplete: string = null;
+    public ariaLabel: string = null;
+    public htmlAccessibilityRole: string = null;
+
 
     protected constructor(componentObj: any, parent: FormComponent) {
         super(componentObj, parent);
-
 
         if (this.parent != null) {
             this.container = this.parent.contentWrapper;
         } else { // FORM
             this.container = document.getElementById(this.parentId);
             if (this.container == null && this.parentId != 'MODAL_VIRTUAL_CONTAINER') {
-                throw "Container '" + this.parentId + "' not found";
+                throw 'Container \'' + this.parentId + '\' not found';
             }
         }
         this.combinedId = this.parentId + '_' + this.id;
 
+        this.hintType = this.componentObj.hintType;
+        this.hintInputGroup = this.componentObj.hintInputGroup ? this.componentObj.hintInputGroup : false;
         this.accessibility = this.componentObj.accessibility;
         this.invisible = this.componentObj.invisible;
         this.presentationStyle = this.componentObj.presentationStyle;
         this.requiredField = this.componentObj.required;
+        this.autocomplete = this.componentObj.autocomplete ? this.componentObj.autocomplete : null;
+        this.ariaLabel = this.componentObj.ariaLabel ? this.componentObj.ariaLabel : null;
+        this.htmlAccessibilityRole = this.componentObj.htmlAccessibilityRole ? this.componentObj.htmlAccessibilityRole : null;
         this.designMode = this.componentObj.designMode || (this.parent != null && this.parent.designMode);
         if (this.designMode) {
             this.buildDesingerToolbox();
@@ -96,10 +108,10 @@ abstract class HTMLFormComponent extends FormComponent {
         this.hintPlacement = this.componentObj.hintPlacement || 'auto';
         if (this.componentObj.hintTrigger) {
             switch (this.componentObj.hintTrigger) {
-                case "HOVER_FOCUS":
+                case 'HOVER_FOCUS':
                     this.hintTrigger = 'hover focus';
                     break;
-                case "HOVER":
+                case 'HOVER':
                     this.hintTrigger = 'hover';
                     break;
             }
@@ -112,7 +124,7 @@ abstract class HTMLFormComponent extends FormComponent {
             let a: any = this;
             while ((a = a.parent) != null) {
                 if (a.component != null && a.component.classList.contains('designerToolbox')) {
-                    (<any>FhContainer.get('Designer')).onDesignerToolboxComponentCreated(a);
+                    (<any> FhContainer.get('Designer')).onDesignerToolboxComponentCreated(a);
                     break;
                 }
             }
@@ -143,20 +155,21 @@ abstract class HTMLFormComponent extends FormComponent {
 
     /* Append component to container */
     display() {
+        this.processAutocomplete(this.autocomplete);
         this.setAccessibility(this.accessibility);
         this.setPresentationStyle(this.presentationStyle);
         this.enableStyleClasses();
         this.setRequiredField(this.requiredField);
 
         if (this.designMode) {
-            (<any>FhContainer.get('Designer')).addToolboxListeners(this);
+            (<any> FhContainer.get('Designer')).addToolboxListeners(this);
 
             if (this.toolbox) {
                 this.htmlElement.appendChild(this.toolbox);
             }
 
             if (this.component.classList.contains('tabContainer')) {
-                this.component.addEventListener('click', function (e) {
+                this.component.addEventListener('click', function(e) {
                     e.stopImmediatePropagation();
                     e.preventDefault();
 
@@ -170,7 +183,7 @@ abstract class HTMLFormComponent extends FormComponent {
             }
             // click on Column Value Label opens Column properties
             if (this.component.classList.contains('valueBasedLabel')) {
-                this.component.addEventListener('click', function (e) {
+                this.component.addEventListener('click', function(e) {
                     e.stopImmediatePropagation();
                     e.preventDefault();
                     let columnId = this.component.dataset.columnId;
@@ -179,7 +192,7 @@ abstract class HTMLFormComponent extends FormComponent {
                 }.bind(this));
             }
             if (this.component.classList.contains('outputLabel')) {
-                this.component.addEventListener('click', function (e) {
+                this.component.addEventListener('click', function(e) {
                     e.stopImmediatePropagation();
                     e.preventDefault();
                     this.component.focus();
@@ -189,7 +202,7 @@ abstract class HTMLFormComponent extends FormComponent {
                     });
                 }.bind(this));
             }
-            this.htmlElement.addEventListener('click', function (e) {
+            this.htmlElement.addEventListener('click', function(e) {
                 e.stopImmediatePropagation();
                 e.preventDefault();
                 this.component.focus();
@@ -199,7 +212,7 @@ abstract class HTMLFormComponent extends FormComponent {
                 });
             }.bind(this));
             if (this.contentWrapper && this.contentWrapper.classList.contains('button')) {
-                this.component.addEventListener('click', function (e) {
+                this.component.addEventListener('click', function(e) {
                     this.component.focus();
                     e.stopImmediatePropagation();
                     e.preventDefault();
@@ -210,7 +223,7 @@ abstract class HTMLFormComponent extends FormComponent {
                 }.bind(this));
             }
             if (this.contentWrapper && this.contentWrapper.classList.contains('selectOneMenu')) {
-                this.component.addEventListener('click', function (e) {
+                this.component.addEventListener('click', function(e) {
                     this.component.focus();
                     e.stopImmediatePropagation();
                     this.fireEvent('onformedit_elementedit', 'elementedit');
@@ -220,7 +233,7 @@ abstract class HTMLFormComponent extends FormComponent {
                 }.bind(this));
             }
             if (this.contentWrapper && this.contentWrapper.classList.contains('fileUpload')) {
-                this.component.addEventListener('click', function (e) {
+                this.component.addEventListener('click', function(e) {
                     this.component.focus();
                     e.stopImmediatePropagation();
                     e.preventDefault();
@@ -249,10 +262,11 @@ abstract class HTMLFormComponent extends FormComponent {
     }
 
     renderSubcomponents() {
-        this.components.forEach(function (component) {
+        this.components.forEach(function(component) {
             component.render();
         });
     }
+
 
     initHint() {
         if (this.hintElement && !this.hintInitialized && this.hint) {
@@ -264,11 +278,63 @@ abstract class HTMLFormComponent extends FormComponent {
                 boundary: 'window'
             };
 
-            $(this.hintElement).tooltip(tooltipOptions);
+            if (this.hintType == 'STATIC') {
 
+                if (tooltipOptions.placement == 'auto') {
+                    tooltipOptions.placement = 'top';
+                }
+
+                //Change tooltip trigger to click
+                tooltipOptions.trigger = 'click';
+                //Create tooltip element
+                const ttip = document.createElement('i');
+                ttip.className = 'hint-ico-help fa';
+                ttip.setAttribute('aria-hidden', 'true');
+                this.hintElement = ttip;
+                if (this.inputGroupElement && this.hintInputGroup) {
+                    let ttipButton = document.createElement('div');
+                    this.inputGroupElement.classList.add('hint-static');
+                    let span = document.createElement('span');
+                    span.classList.add('input-group-text');
+                    span.appendChild(ttip);
+                    ttip.classList.add('fa-question');
+                    ttipButton.appendChild(span);
+
+                    this.htmlElement.classList.add('hasInputHelpIcon');
+
+                    this.hintElement = ttipButton;
+                    ttipButton.classList.add('input-group-append');
+                    this.inputGroupElement.appendChild(ttipButton);
+                } else {
+                    /**
+                     * Change typical behaviour by overwrite this function in component.
+                     */
+                    ttip.classList.add('fa-question-circle');
+                    ttip.classList.add('pl-2');
+                    const element = this.processStaticHintElement(ttip);
+                    element ? element.classList.add('hint-static') : null;
+                }
+            }
+
+
+            $(this.hintElement).tooltip(tooltipOptions);
             this.hintInitialized = true;
         }
     }
+
+    /**
+     *
+     * @param ttip
+     */
+    public processStaticHintElement(ttip: any): HTMLElement {
+        if (this.labelElement && !this.labelElement.classList.contains('sr-only')) {
+            this.labelElement.appendChild(ttip);
+            return this.labelElement;
+        } else {
+            return null;
+        }
+    }
+
 
     destroyHint() {
         if (this.hintElement && this.hintInitialized) {
@@ -336,10 +402,13 @@ abstract class HTMLFormComponent extends FormComponent {
 
         if (change.changedAttributes) {
 
-            $.each(change.changedAttributes, function (name, newValue) {
+            $.each(change.changedAttributes, function(name, newValue) {
                 switch (name) {
                     case 'accessibility':
                         this.setAccessibility(newValue);
+                        break;
+                    case 'autocomplete':
+                        this.processAutocomplete(newValue);
                         break;
                     case 'presentationStyle':
                         this.setPresentationStyle(newValue);
@@ -390,7 +459,7 @@ abstract class HTMLFormComponent extends FormComponent {
 
     processAddedComponents(change) {
         if (change.addedComponents) {
-            Object.keys(change.addedComponents).forEach(function (afterId) {
+            Object.keys(change.addedComponents).forEach(function(afterId) {
                 let referenceNode = null;
                 if (afterId === '-') {
                     referenceNode = this.contentWrapper.firstChild || null;
@@ -399,7 +468,7 @@ abstract class HTMLFormComponent extends FormComponent {
                     referenceNode = typeof elem !== 'undefined' ? elem.nextSibling || null : null;
                 }
 
-                change.addedComponents[afterId].forEach(function (componentObj) {
+                change.addedComponents[afterId].forEach(function(componentObj) {
                     let component = this.findComponent(componentObj.id);
                     if (component instanceof HTMLFormComponent) {
                         if (referenceNode) {
@@ -501,29 +570,29 @@ abstract class HTMLFormComponent extends FormComponent {
             this.parent.setPresentationStyle(presentationStyle);
         }
 
-        ['border', 'border-success', 'border-info', 'border-warning', 'border-danger', 'is-invalid'].forEach(function (cssClass) {
+        ['border', 'border-success', 'border-info', 'border-warning', 'border-danger', 'is-invalid'].forEach(function(cssClass) {
             this.getMainComponent().classList.remove(cssClass);
         }.bind(this));
 
         switch (presentationStyle) {
             case 'BLOCKER':
             case 'ERROR':
-                ['is-invalid', 'border', 'border-danger'].forEach(function (cssClass) {
+                ['is-invalid', 'border', 'border-danger'].forEach(function(cssClass) {
                     this.getMainComponent().classList.add(cssClass);
                 }.bind(this));
                 break;
             case 'OK':
-                ['border', 'border-success'].forEach(function (cssClass) {
+                ['border', 'border-success'].forEach(function(cssClass) {
                     this.getMainComponent().classList.add(cssClass);
                 }.bind(this));
                 break;
             case 'INFO':
-                ['border', 'border-info'].forEach(function (cssClass) {
+                ['border', 'border-info'].forEach(function(cssClass) {
                     this.getMainComponent().classList.add(cssClass);
                 }.bind(this));
                 break;
             case 'WARNING':
-                ['border', 'border-warning'].forEach(function (cssClass) {
+                ['border', 'border-warning'].forEach(function(cssClass) {
                     this.getMainComponent().classList.add(cssClass);
                 }.bind(this));
                 break;
@@ -544,8 +613,8 @@ abstract class HTMLFormComponent extends FormComponent {
         this.handlemarginAndPAddingStyles();
     }
 
-    public hasHeight():boolean {
-        return this.componentObj.height != undefined && this.componentObj.height != "" && this.componentObj.height != null;
+    public hasHeight(): boolean {
+        return this.componentObj.height != undefined && this.componentObj.height != '' && this.componentObj.height != null;
     }
 
     handleHeight() {
@@ -666,7 +735,7 @@ abstract class HTMLFormComponent extends FormComponent {
 
     enableStyleClasses() {
         if (this.styleClasses.length && this.styleClasses[0] != '') {
-            this.styleClasses.forEach(function (cssClass) {
+            this.styleClasses.forEach(function(cssClass) {
                 if (cssClass) {
                     this.component.classList.add(cssClass);
                 }
@@ -676,7 +745,7 @@ abstract class HTMLFormComponent extends FormComponent {
 
     setWrapperWidth(wrapper: HTMLDivElement, oldWidth: string[], newWidth: string[]) {
         if (oldWidth) {
-            oldWidth.forEach(function (width) {
+            oldWidth.forEach(function(width) {
                 if (HTMLFormComponent.bootstrapColRegexp.test(width)) {
                     //In bootstrap 4 "co-xs-12" was replaced with "col-12" so we need to delete it from string.
                     wrapper.classList.remove('col-' + width.replace('xs-', '-'));
@@ -689,7 +758,7 @@ abstract class HTMLFormComponent extends FormComponent {
             }.bind(this));
         }
 
-        newWidth.forEach(function (width) {
+        newWidth.forEach(function(width) {
             if (HTMLFormComponent.bootstrapColRegexp.test(width)) {
                 //In bootstrap 4 "co-xs-12" was replaced with "col-12" so we need to delete it from string.
                 wrapper.classList.add('col-' + width.replace('xs-', '-'));
@@ -705,7 +774,7 @@ abstract class HTMLFormComponent extends FormComponent {
     protected wrap(skipLabel: boolean = false, isInputElement: boolean = false) {
         let wrappedComponent = this.innerWrap();
         let wrapper = document.createElement('div');
-        ['fc', 'wrapper'].forEach(function (cssClass) {
+        ['fc', 'wrapper'].forEach(function(cssClass) {
             wrapper.classList.add(cssClass);
         });
 
@@ -720,26 +789,50 @@ abstract class HTMLFormComponent extends FormComponent {
             wrapper.classList.add('inline');
         }
 
+        //if (!skipLabel) {
+        //    let label = document.createElement('label');
+        //    label.classList.add('col-form-label');
+        //    // label.classList.add('card-title');
+        //    label.htmlFor = this.id;
+        //    label.innerHTML = this.fhml.resolveValueTextOrEmpty(this.componentObj.label);
+        //    wrapper.appendChild(label);
+        //    this.labelElement = label;
+        //}
+
         if (!skipLabel) {
-            let label = document.createElement('label');
-            label.classList.add('col-form-label');
-            // label.classList.add('card-title');
-            label.htmlFor = this.id;
-            label.innerHTML = this.fhml.resolveValueTextOrEmpty(this.componentObj.label);
-            wrapper.appendChild(label);
-            this.labelElement = label;
+
+            const labelValue = this.fhml.resolveValueTextOrEmpty(this.componentObj.label);
+            if (labelValue.length > 0) {
+                let label = document.createElement('label');
+                label.classList.add('col-form-label');
+                // label.classList.add('card-title');
+                label.innerHTML = labelValue;
+                label.id = this.id+"_label";
+
+                label.setAttribute('for', this.componentObj.id);
+                //this.component.setAttribute('aria-describedby', label.id);
+
+                wrapper.appendChild(label);
+                this.labelElement = label;
+
+                if (!isInputElement) {
+                    this.component.setAttribute("aria-labelledby", label.id)
+                } else {
+                    label.htmlFor = this.id;
+                }
+
+            } else {
+                this.processAriaLabel();
+            }
+        } else {
+            this.processAriaLabel();
         }
 
         if (isInputElement) {
             let inputGroup = document.createElement('div');
-            // this.component.classList.add('input-group');
             inputGroup.classList.add('input-group');
             wrapper.appendChild(inputGroup);
             inputGroup.appendChild(wrappedComponent);
-
-            if (this.component.classList.contains('inputTimestamp')) {
-                inputGroup.id = this.componentObj.id;
-            }
 
             this.inputGroupElement = inputGroup;
         } else {
@@ -751,7 +844,7 @@ abstract class HTMLFormComponent extends FormComponent {
         }
 
         if (this.wrapperStyle) {
-            let existingStyleClasses = wrapper.getAttribute('style') || "";
+            let existingStyleClasses = wrapper.getAttribute('style') || '';
             wrapper.setAttribute('style', existingStyleClasses + this.wrapperStyle);
         }
 
@@ -759,13 +852,10 @@ abstract class HTMLFormComponent extends FormComponent {
             wrapper.classList.add('mr-auto');
         }
 
-
+        this.processHtmlAccessibilityRole();
         this.htmlElement = wrapper;
         this.contentWrapper = this.component;
 
-        if (!skipLabel) {
-            this.updateLabelClass(this.componentObj.label);
-        }
     }
 
     protected innerWrap() {
@@ -788,7 +878,7 @@ abstract class HTMLFormComponent extends FormComponent {
             if (activeComponents.length) {
 
                 if (isUserAgentIE && !NodeList.prototype.forEach) {
-                    NodeList.prototype.forEach = function (callback, thisArg) {
+                    NodeList.prototype.forEach = function(callback, thisArg) {
                         thisArg = thisArg || window;
                         for (let i = 0; i < this.length; i++) {
                             callback.call(thisArg, this[i], i, this);
@@ -990,8 +1080,8 @@ abstract class HTMLFormComponent extends FormComponent {
 
         if (highlightedElements.length) {
             highlightedElements.forEach(element => {
-                element.classList.remove('toolboxElementHighlight')
-            })
+                element.classList.remove('toolboxElementHighlight');
+            });
         }
 
         // check if formToolboxTools accordion is expanded and if so, collapse its elements first
@@ -1004,14 +1094,14 @@ abstract class HTMLFormComponent extends FormComponent {
                     button.setAttribute('aria-expanded', 'false');
                     button.classList.add('collapsed');
                 }
-            })
+            });
         }
 
         // check if designerElementTree is collapsed and if so, expand it first
         let collapseBtn = designerElementTree.querySelector('.btn');
         if (collapseBtn && collapseBtn.classList.contains('collapsed')) {
             collapseBtn.setAttribute('aria-expanded', 'true');
-            collapseBtn.classList.remove("collapsed");
+            collapseBtn.classList.remove('collapsed');
             designerElementTree.querySelector('.collapse').classList.add('show');
         }
 
@@ -1068,7 +1158,7 @@ abstract class HTMLFormComponent extends FormComponent {
                         caret.firstChild.classList.add('fa-caret-down');
                     }
                 }
-            })
+            });
         }
 
     }
@@ -1083,13 +1173,13 @@ abstract class HTMLFormComponent extends FormComponent {
             this.htmlElement.style.marginLeft = this.componentObj.marginLeft;
         }
         if (this.componentObj.marginRight) {
-            this.htmlElement.style.marginRight = this.componentObj.marginRight
+            this.htmlElement.style.marginRight = this.componentObj.marginRight;
         }
         if (this.componentObj.marginTop) {
-            this.htmlElement.style.marginTop = this.componentObj.marginTop
+            this.htmlElement.style.marginTop = this.componentObj.marginTop;
         }
         if (this.componentObj.marginBottom) {
-            this.htmlElement.style.marginBottom = this.componentObj.marginBottom
+            this.htmlElement.style.marginBottom = this.componentObj.marginBottom;
         }
 
         if (this.componentObj.paddingLeft) {
@@ -1099,10 +1189,10 @@ abstract class HTMLFormComponent extends FormComponent {
             this.htmlElement.style.paddingRight = this.componentObj.paddingRight;
         }
         if (this.componentObj.paddingTop) {
-            this.htmlElement.style.paddingTop = this.componentObj.paddingTop
+            this.htmlElement.style.paddingTop = this.componentObj.paddingTop;
         }
         if (this.componentObj.paddingBottom) {
-            this.htmlElement.style.paddingBottom = this.componentObj.paddingBottom
+            this.htmlElement.style.paddingBottom = this.componentObj.paddingBottom;
         }
     }
 
@@ -1112,18 +1202,18 @@ abstract class HTMLFormComponent extends FormComponent {
      */
     private handleWidth(width: string = this.componentObj.width) {
         if (!width) {
-            width = this.getDefaultWidth()
+            width = this.getDefaultWidth();
         }
 
         if (width) {
             // Delete unwanted spaces
             width = width.trim();
             //Replace un wanted chars
-            width = width.replace(HTMLFormComponent.bootstrapColSeparateCahrsRegexp, " ");
+            width = width.replace(HTMLFormComponent.bootstrapColSeparateCahrsRegexp, ' ');
             //Replace multi spaces with one
             width = width.replace(/\s\s+/g, ' ');
 
-            this.width = width.split(" ");
+            this.width = width.split(' ');
         }
     }
 
@@ -1131,7 +1221,7 @@ abstract class HTMLFormComponent extends FormComponent {
      * Logic moved to function so it can be overrided by children classes.
      */
     protected buildDesingerToolbox() {
-        (<any>FhContainer.get('Designer')).buildToolbox(this.getAdditionalButtons(), this);
+        (<any> FhContainer.get('Designer')).buildToolbox(this.getAdditionalButtons(), this);
 
     }
 
@@ -1156,10 +1246,42 @@ abstract class HTMLFormComponent extends FormComponent {
                     (activeElementTagName !== 'input' &&
                         activeElementTagName !== 'select' &&
                         activeElementTagName !== 'textarea' &&
-                        !activeElement.classList.contains("form-control")))) {
+                        !activeElement.classList.contains('form-control')))) {
                     deleteBtn.click();
                 }
             }
+        }
+    }
+
+    /**
+     * Ads autocomplete attribiute to input element i both exists on element.
+     */
+    protected processAutocomplete(value: string = this.autocomplete) {
+        if (this.autocomplete && this.input) {
+            this.input.setAttribute('autocomplete', value);
+        }
+    }
+
+    /**
+     * Ads aria-label attribiute to element.
+     */
+    protected processAriaLabel(value: string = this.ariaLabel) {
+        //Add attribute only when there is no label on component.
+        if (this.ariaLabel && !this.labelElement) {
+            if (this.input) {
+                this.input.setAttribute('aria-label', value);
+            } else {
+                this.component.setAttribute('aria-label', value);
+            }
+        }
+    }
+
+    /**
+     * Ads role attribiute to element.
+     */
+    protected processHtmlAccessibilityRole(value: string = this.htmlAccessibilityRole) {
+        if (this.htmlAccessibilityRole) {
+            this.component.setAttribute('role', value);
         }
     }
 

@@ -16,4 +16,6 @@ public interface IComboItem {
     }
 
     public Long getTargetId();
+
+    public String getFullHintWithoutExtras();
 }
