@@ -66,12 +66,11 @@ public class InputTimestamp extends BaseInputFieldWithKeySupport {
     @JsonIgnore
     @Override
     public Optional<String> getOptionalFormatter() {
-        ModelBinding m = this.getModelBinding();
-        BindingResult b = m.getBindingResult();
-        if (m instanceof CompiledBinding) {
-            if(((CompiledBinding) m).getTargetType() == Date.class){
-                return Optional.of(DEFAULT_DATE_TIME_FORMATTER);
-            }
+        ModelBinding<?> m = this.getModelBinding();
+        BindingResult<?> b = m.getBindingResult();
+        if (m instanceof CompiledBinding && ((CompiledBinding<?>) m).getTargetType() == Date.class ||
+                b.getTargetType() == Date.class) {
+            return Optional.of(DEFAULT_DATE_TIME_FORMATTER);
         }
 
         return Optional.of(OPTIONAL_LOCAL_DATE_TIME_FORMATTER);

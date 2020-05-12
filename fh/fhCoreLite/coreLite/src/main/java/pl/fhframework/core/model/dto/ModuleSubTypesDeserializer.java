@@ -7,8 +7,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.jsontype.TypeDeserializer;
 import com.fasterxml.jackson.databind.jsontype.impl.TypeDeserializerBase;
-import pl.fhframework.core.util.DynamicTypeDeserializerUtils;
 import pl.fhframework.ReflectionUtils;
+import pl.fhframework.core.logging.FhLogger;
+import pl.fhframework.core.model.dto.client.NotSupportedService;
+import pl.fhframework.core.util.DynamicTypeDeserializerUtils;
 
 import java.io.IOException;
 
@@ -29,7 +31,12 @@ public class ModuleSubTypesDeserializer extends StdDeserializer {
     public Object deserializeWithType(JsonParser jsonParser, DeserializationContext ctxt, TypeDeserializer typeDeserializer) throws IOException {
         ObjectMapper mapper = (ObjectMapper) jsonParser.getCodec();
         JsonNode node = mapper.readTree(jsonParser);
-
-        return mapper.treeToValue(node, DynamicTypeDeserializerUtils.getSubType(ReflectionUtils.getClassForName(((TypeDeserializerBase)typeDeserializer).baseTypeName()), node.get(typeDeserializer.getPropertyName()).asText()));
+        String subType = node.get(typeDeserializer.getPropertyName()).asText();
+        Class<?> type = DynamicTypeDeserializerUtils.getSubType(ReflectionUtils.getClassForName(((TypeDeserializerBase)typeDeserializer).baseTypeName()), subType);
+        if (type == null) {
+            FhLogger.warn("Unknown type {}. Appropriate jar is missing.", subType);
+            return new NotSupportedService(0, subType);
+        }
+        return mapper.treeToValue(node, type);
     }
 }

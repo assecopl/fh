@@ -1,4 +1,3 @@
-@import '~pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.min.css';
 @import "css/Accordion.css";
 @import "css/ApplicationLock.css";
 @import "css/Button.css";
@@ -13,6 +12,7 @@
 @import "css/Image.css";
 @import "css/InputDate.css";
 @import "css/InputText.css";
+@import "css/InputTimestamp.css";
 @import "css/Link.css";
 @import "css/Modal.css";
 @import "css/MdFileViewer.css";

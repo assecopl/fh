@@ -149,6 +149,7 @@ public class Button extends FormElementWithConfirmationSupport implements TableC
         clonedButton.setOnClick(table.getRowBinding(this.getOnClick(), clonedButton, iteratorReplacements));
         clonedButton.setLabelModelBinding(table.getRowBinding(this.getLabelModelBinding(), clonedButton, iteratorReplacements));
         clonedButton.setStyleModelBinding(table.getRowBinding(this.getStyleModelBinding(), clonedButton, iteratorReplacements));
+        clonedButton.setAriaLabelBinding(table.getRowBinding(this.getAriaLabelBinding(), clonedButton, iteratorReplacements));
     }
 
     @Override

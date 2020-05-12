@@ -5,7 +5,7 @@
 
     <artifactId>defaultApplication</artifactId>
     <groupId>pl.fhframework</groupId>
-    <version>4.6-SNAPSHOT</version>
+    <version>4.7-SNAPSHOT</version>
     <packaging>jar</packaging>
     <url>https://github.com/assecopl/fh</url>
 
@@ -15,7 +15,7 @@
     <parent>
         <groupId>pl.fhframework</groupId>
         <artifactId>fh-boot-bom</artifactId>
-        <version>4.6-SNAPSHOT</version>
+        <version>4.7-SNAPSHOT</version>
         <relativePath>../../BOM/fh-boot-bom</relativePath>
     </parent>
 
@@ -88,7 +88,7 @@
                             <goal>install-node-and-yarn</goal>
                         </goals>
                         <configuration>
-                            <nodeVersion>v11.0.0</nodeVersion>
+                            <nodeVersion>v12.16.2</nodeVersion>
                             <yarnVersion>v1.10.0</yarnVersion>
                         </configuration>
                     </execution>
@@ -100,13 +100,13 @@
                         </goals>
                     </execution>
                     <execution>
-                        <id>yarn lerna run build</id>
+                        <id>yarn run build</id>
                         <phase>generate-resources</phase>
                         <goals>
                             <goal>yarn</goal>
                         </goals>
                         <configuration>
-                            <arguments>lerna run build</arguments>
+                            <arguments>run build</arguments>
                         </configuration>
                     </execution>
                 </executions>

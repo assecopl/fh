@@ -1,39 +1,29 @@
 package pl.fhframework.model.forms;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.core.convert.ConversionFailedException;
-
+import pl.fhframework.BindingResult;
+import pl.fhframework.annotations.*;
+import pl.fhframework.binding.*;
 import pl.fhframework.core.FhBindingException;
 import pl.fhframework.core.forms.IHasBoundableLabel;
 import pl.fhframework.core.forms.IValidatedComponent;
 import pl.fhframework.core.util.StringUtils;
-import pl.fhframework.BindingResult;
-import pl.fhframework.annotations.DesignerControl;
-import pl.fhframework.annotations.DesignerXMLProperty;
-import pl.fhframework.annotations.DocumentedComponentAttribute;
-import pl.fhframework.annotations.XMLProperty;
-import pl.fhframework.binding.*;
 import pl.fhframework.model.PresentationStyleEnum;
 import pl.fhframework.model.dto.ElementChanges;
+import pl.fhframework.model.dto.InMessageEventData;
 import pl.fhframework.model.dto.ValueChange;
 import pl.fhframework.model.forms.attribute.IconAlignment;
 import pl.fhframework.model.forms.designer.BindingExpressionDesignerPreviewProvider;
 import pl.fhframework.model.forms.designer.InputFieldDesignerPreviewProvider;
 import pl.fhframework.model.forms.model.LabelPosition;
 import pl.fhframework.model.forms.validation.ValidationFactory;
-import pl.fhframework.validation.ConstraintViolation;
-import pl.fhframework.validation.FieldValidationResult;
-import pl.fhframework.validation.FormFieldHints;
-import pl.fhframework.validation.IValidationResults;
-import pl.fhframework.validation.ValidationManager;
-import pl.fhframework.model.dto.InMessageEventData;
+import pl.fhframework.validation.*;
 
 import java.text.ParseException;
 import java.util.*;
-
-import lombok.Getter;
-import lombok.Setter;
 
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.*;
 
@@ -51,6 +41,19 @@ public abstract class BaseInputField extends FormElementWithConfirmationSupport 
     protected static final String VALIDATION_LABEL_ATTR = "validationLabel";
     protected static final String PRESENTATION_STYLE_ATTR = "presentationStyle";
     protected static final String MESSAGE_FOR_FIELD_ATTR = "messageForField";
+    protected static final String AUTOCOMPLETE_ATTR = "autocomplete";
+    protected static final String HINT_INPUT_GROUP_ATTR = "hintInputGroup";
+
+
+    /**
+     * Placement of the hint for component
+     */
+    @Getter
+    @Setter
+    @XMLProperty(value = HINT_INPUT_GROUP_ATTR, defaultValue = "false")
+    @DesignerXMLProperty(functionalArea = LOOK_AND_STYLE, priority = 86)
+    @DocumentedComponentAttribute(defaultValue = "STANDARD", value = "Static presentation makes hint appears after clikc on '?' icon that will appear as input group element.")
+    private Boolean hintInputGroup = false;
 
     @Getter
     @Setter
@@ -59,6 +62,7 @@ public abstract class BaseInputField extends FormElementWithConfirmationSupport 
     @JsonIgnore
     @Getter
     @Setter
+    @TwoWayBinding
     @XMLProperty(value = VALUE_ATTR, aliases = Combo.SELECTED_ITEM_ATTR)
     // when changing @DesignerXMLProperty also change in @OverridenPropertyAnnotations on InputNumber,CheckBox,InputDate,InputText,InputTimestamp
     @DesignerXMLProperty(commonUse = true, previewValueProvider = InputFieldDesignerPreviewProvider.class, priority = 80, functionalArea = CONTENT)
@@ -130,9 +134,9 @@ public abstract class BaseInputField extends FormElementWithConfirmationSupport 
 
     @Getter
     @Setter
-    @XMLProperty(defaultValue = "before")
+    @XMLProperty(defaultValue = "BEFORE")
     @DesignerXMLProperty(priority = 83, functionalArea = LOOK_AND_STYLE)
-    @DocumentedComponentAttribute(defaultValue = "before", boundable = true, value = "Icon alignment - possible values are before or after. Final alignment depends of component where this attribute is used.")
+    @DocumentedComponentAttribute(defaultValue = "BEFORE", boundable = true, value = "Icon alignment - possible values are before or after. Final alignment depends of component where this attribute is used.")
     private IconAlignment iconAlignment;
 
     @Getter
@@ -169,6 +173,23 @@ public abstract class BaseInputField extends FormElementWithConfirmationSupport 
     @JsonIgnore
     @Getter
     protected boolean validConversion = true;
+
+    /*
+        WCAG 2.1 1.3.5 implementation
+        Values : https://www.w3.org/TR/html52/sec-forms.html#autofill-detail-tokens
+    */
+    @Getter
+    private String autocomplete = null;
+
+    @JsonIgnore
+    @Getter
+    @Setter
+    @XMLProperty(value = AUTOCOMPLETE_ATTR)
+    @DesignerXMLProperty(commonUse = true, priority = 110, functionalArea = BEHAVIOR)
+    @DocumentedComponentAttribute(boundable = true, value = "Represents 'autocomplete' attribute. Help browsers suggest right content. More at : https://www.w3.org/TR/html52/sec-forms.html#autofill-detail-tokens")
+    private ModelBinding autocompleteModelBinding;
+
+
 
     public BaseInputField(Form form) {
         super(form);
@@ -225,6 +246,7 @@ public abstract class BaseInputField extends FormElementWithConfirmationSupport 
         }
         boolean refreshView = processValueBinding(elementChanges);
         refreshView |= processLabelBinding(elementChanges);
+        refreshView |= processAutocompleteBinding(elementChanges);
         this.prepareComponentAfterValidation(elementChanges);
         if (refreshView) {
             refreshView();
@@ -284,6 +306,17 @@ public abstract class BaseInputField extends FormElementWithConfirmationSupport 
         if (!areValuesTheSame(newLabelValue, label)) {
             this.label = newLabelValue;
             elementChanges.addChange(LABEL_ATTR, this.label);
+            return true;
+        }
+        return false;
+    }
+
+    protected boolean processAutocompleteBinding(ElementChanges elementChanges) {
+        BindingResult bidingResult = autocompleteModelBinding != null ? autocompleteModelBinding.getBindingResult() : null;
+        String newValue = bidingResult == null ? null : this.convertBindingValueToString(bidingResult);
+        if (!areValuesTheSame(newValue, autocomplete)) {
+            this.autocomplete = newValue;
+            elementChanges.addChange(AUTOCOMPLETE_ATTR, this.autocomplete);
             return true;
         }
         return false;
@@ -397,7 +430,10 @@ public abstract class BaseInputField extends FormElementWithConfirmationSupport 
         inputFieldClone.setLabelPosition(getLabelPosition());
         inputFieldClone.setInputSize(getInputSize());
         inputFieldClone.setLabelSize(getLabelSize());
-        inputFieldClone.setLabelId(getLabelId());
+        inputFieldClone.setHintInputGroup(getHintInputGroup());
+        inputFieldClone.setAutocompleteModelBinding(table.getRowBinding(getAutocompleteModelBinding(), inputFieldClone, iteratorReplacements));
+        inputFieldClone.setAriaLabelBinding(table.getRowBinding(this.getAriaLabelBinding(), inputFieldClone, iteratorReplacements));
+
     }
 
     protected String convertMainValueToString(Object value, Optional<String> converterName) {
@@ -413,3 +449,4 @@ public abstract class BaseInputField extends FormElementWithConfirmationSupport 
     }
 
 }
+

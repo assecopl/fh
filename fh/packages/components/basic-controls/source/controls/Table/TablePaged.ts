@@ -5,15 +5,19 @@ import {HTMLFormComponent} from "fh-forms-handler";
 
 class TablePaged extends Table {
     private pageSizeSelect: any;
+    private pageSizeSelect_clone: any;
     private sortedBy: any;
     private paginator: HTMLElement;
+    private paginator_second: HTMLElement;
     private pageInfo: HTMLElement;
+    private pageInfo_second: HTMLElement;
+    private paginationAboveTable:boolean = false;
     private pageSize: number;
     private sortDirection: any;
 
     private readonly onPageChange: any;
-    private readonly totalPages: number;
-    private readonly totalRows: number;
+    private totalPages: number;
+    private totalRows: number;
     private currentPage: any;
     private readonly paginatorOffset: any;
     private pageChangeListeners: HTMLElement[];
@@ -31,6 +35,7 @@ class TablePaged extends Table {
         this.pageInfo = null;
         this.totalPages = this.componentObj.totalPages;
         this.totalRows = this.componentObj.totalRows;
+        this.paginationAboveTable = this.componentObj.paginationAboveTable? this.componentObj.paginationAboveTable : false;
         this.currentPage = this.componentObj.pageable.pageNumber || 0;
         this.paginatorOffset = 2;
         this.onPageChange = this.componentObj.onPageChange;
@@ -42,6 +47,7 @@ class TablePaged extends Table {
         this.pageSize = this.componentObj.pageable.pageSize || 10;
 
         this.pageSizeSelect = null;
+        this.pageSizeSelect_clone = null;
     }
 
 
@@ -69,33 +75,81 @@ class TablePaged extends Table {
             this.pageSizeSelect.appendChild(option);
         }.bind(this));
         this.pageSizeSelect.value = this.pageSize;
-        this.pageSizeSelect.addEventListener('change', this.pageSizeSelectEvent.bind(this));
+        this.pageSizeSelect.addEventListener('change', function (event){
+            this.pageSizeSelectEvent(event);
+            if(this.paginationAboveTable) {
+                this.pageSizeSelect_clone.value = this.pageSizeSelect.value;
+            }
+        }.bind(this));
         this.pageSizeSelect.disabled = (this.accessibility != 'EDIT');
+
 
         let pageInfo = this.buildPageInfo();
 
         box.appendChild(this.pageSizeSelect);
+
+
         let cecordsText = this.__('rows per page');
         cecordsText.classList.add('pl-3');
-        this.buildTablePagedToolsLabels(select, box);
+
+        this.buildTablePagedToolsLabels(this.pageSizeSelect, box);
+
         box.appendChild(cecordsText);
         toolsRow.appendChild(box);
 
-        let pagination = document.createElement('div');
-        pagination.id = this.id + '_pagination';
-        pagination.classList.add('table-pagination');
-        pagination.classList.add('col-md-6');
-        pagination.classList.add('text-right');
+        let pagination = this.createPaginationElement();
+
+        pagination.classList.add('pagination-first');
 
         let paginator = this.buildPaginator();
+
         pagination.appendChild(pageInfo);
         pagination.appendChild(paginator);
+
         this.buildTablePagedToolsLabels(pagination, toolsRow);
         toolsRow.appendChild(pagination);
 
         this.htmlElement.appendChild(toolsRow);
         this.paginator = paginator;
         this.pageInfo = pageInfo;
+
+        if(this.paginationAboveTable) {
+            let toolsRow_clone = document.createElement('div');
+            toolsRow_clone.classList.add('row');
+            toolsRow_clone.classList.add('toolsRow');
+            let box_clone = document.createElement('div');
+            box_clone.id = box.id;
+            box_clone.classList.add('rowsCountSelector');
+            box_clone.classList.add('form-inline');
+            box_clone.classList.add('col-md-6');
+
+            this.pageSizeSelect_clone = this.pageSizeSelect.cloneNode(true);
+            this.pageSizeSelect_clone.value = this.pageSize;
+            this.pageSizeSelect_clone.addEventListener('change', function (){
+                this.pageSizeSelectEvent(event);
+                this.pageSizeSelect.value = this.pageSizeSelect_clone.value;
+            }.bind(this));
+            this.buildTablePagedToolsLabels(this.pageSizeSelect_clone, box_clone);
+
+            box_clone.appendChild(this.pageSizeSelect_clone);
+            box_clone.appendChild(cecordsText.cloneNode(true));
+
+
+            toolsRow_clone.appendChild(box_clone);
+
+            let pagination_clone = this.createPaginationElement();
+            pagination_clone.classList.add('pagination-second');
+
+            let pageInfo_second = this.buildPageInfo();
+            pagination_clone.appendChild(pageInfo_second);
+            let paginator_second = this.buildPaginator();
+            pagination_clone.appendChild(paginator_second);
+            this.buildTablePagedToolsLabels(pagination_clone, toolsRow_clone);
+            toolsRow_clone.appendChild(pagination_clone);
+            this.htmlElement.prepend(toolsRow_clone);
+            this.paginator_second = paginator_second;
+            this.pageInfo_second = pageInfo_second;
+        }
     };
 
     pageSizeSelectEvent(event) {
@@ -129,29 +183,20 @@ class TablePaged extends Table {
                     case 'pageNumber':
                         this.currentPage = newValue;
 
-                        let paginator = this.buildPaginator();
-                        this.htmlElement.querySelector('.table-pagination').replaceChild(paginator, this.paginator);
-                        this.paginator = paginator;
-
-                        let pageInfo = this.buildPageInfo();
-                        this.htmlElement.querySelector('.table-pagination').replaceChild(pageInfo, this.pageInfo);
-                        this.pageInfo = pageInfo;
+                        this.updatePaginator();
+                        this.updatePageInfo();
 
                         this.scrollTopInside();
                         $(window).trigger('pageChanged.table');
                         break;
                     case 'totalPages':
                         this.totalPages = newValue;
-                        let paginator2 = this.buildPaginator();
-                        this.htmlElement.querySelector('.table-pagination').replaceChild(paginator2, this.paginator);
-                        this.paginator = paginator2;
+                        this.updatePaginator();
                         this.scrollTopInside();
                         break;
                     case 'totalRows':
                         this.totalRows = newValue;
-                        let pageInfo2 = this.buildPageInfo();
-                        this.htmlElement.querySelector('.table-pagination').replaceChild(pageInfo2, this.pageInfo);
-                        this.pageInfo = pageInfo2;
+                        this.updatePageInfo();
                         this.scrollTopInside();
                         break;
                 }
@@ -378,6 +423,36 @@ class TablePaged extends Table {
         }.bind(this));
 
         super.destroy(removeFromParent);
+    }
+
+    protected updatePageInfo() {
+        let pageInfo = this.buildPageInfo();
+        this.htmlElement.querySelector('.pagination-first').replaceChild(pageInfo, this.pageInfo);
+        this.pageInfo = pageInfo;
+        if(this.paginationAboveTable) {
+            let pageInfo_second = this.buildPageInfo();
+            this.htmlElement.querySelector('.pagination-second').replaceChild(pageInfo_second, this.pageInfo_second);
+            this.pageInfo_second = pageInfo_second;
+        }
+    }
+
+    protected updatePaginator(){
+        let paginator2 = this.buildPaginator();
+        this.htmlElement.querySelector('.pagination-first').replaceChild(paginator2, this.paginator);
+        this.paginator = paginator2;
+        if(this.paginationAboveTable) {
+            let paginator_second2 = this.buildPaginator();
+            this.htmlElement.querySelector('.pagination-second').replaceChild(paginator_second2, this.paginator_second);
+            this.paginator_second = paginator_second2;
+        }
+    }
+    protected createPaginationElement() {
+        let pagination = document.createElement('div');
+        pagination.id = this.id + '_pagination';
+        pagination.classList.add('table-pagination');
+        pagination.classList.add('col-md-6');
+        pagination.classList.add('text-right');
+        return pagination;
     }
 }
 

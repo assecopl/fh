@@ -153,30 +153,26 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
         if (oldSelected && oldSelected.length) {
             [].forEach.call(oldSelected, function (row) {
                 row.classList.remove('table-primary');
+                if (this.selectionCheckboxes) {
+                    row.firstChild.querySelector('input[type="checkbox"]').checked = false;
+                }
             }.bind(this));
         }
         (this.rawValue || []).forEach(function (value) {
             if (value != -1) {
                 const row: TableRowOptimized = this.rows[parseInt(value)];
                 row.highlightRow(scrollAnimate);
-
+                if (this.selectionCheckboxes) {
+                    row.component.querySelector('input[type="checkbox"]').checked = true;
+                }
             }
+
+
         }.bind(this));
     };
 
     update(change) {
         super.update(change);
-        if (change.changedAttributes) {
-            $.each(change.changedAttributes, function (name, newValue) {
-                switch (name) {
-                    case 'selectedRowNumber':
-                        this.rawValue = change.changedAttributes['selectedRowNumber'];
-                        this.highlightSelectedRows();
-
-                        break;
-                }
-            }.bind(this));
-        }
     };
 
 

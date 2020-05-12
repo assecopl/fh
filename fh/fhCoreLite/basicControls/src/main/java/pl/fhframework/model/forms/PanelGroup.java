@@ -41,7 +41,7 @@ public class PanelGroup extends GroupingComponentWithHeadingHierarchy<Component>
 
     @Getter
     @Setter
-    @XMLProperty
+    @XMLProperty(defaultValue = "false")
     @DocumentedComponentAttribute(defaultValue = "false", value = "Defines if group can be collapsed or expanded. False by default.")
     private boolean collapsible = false;
 

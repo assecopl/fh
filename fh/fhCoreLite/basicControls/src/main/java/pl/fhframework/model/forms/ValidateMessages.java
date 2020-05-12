@@ -1,13 +1,14 @@
 package pl.fhframework.model.forms;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.util.CollectionUtils;
-
-import pl.fhframework.core.forms.IValidatedComponent;
-import pl.fhframework.core.util.StringUtils;
 import pl.fhframework.BindingResult;
 import pl.fhframework.annotations.*;
 import pl.fhframework.binding.ModelBinding;
+import pl.fhframework.core.forms.IValidatedComponent;
+import pl.fhframework.core.util.StringUtils;
 import pl.fhframework.helper.AutowireHelper;
 import pl.fhframework.model.PresentationStyleEnum;
 import pl.fhframework.model.dto.ElementChanges;
@@ -17,8 +18,7 @@ import pl.fhframework.validation.IValidationResults;
 
 import java.util.*;
 
-import lombok.Getter;
-import lombok.Setter;
+import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.SPECIFIC;
 
 @Control(parents = {}, canBeDesigned = true)
 @DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, value = "Component to aggregate validation messages", icon = "fa fa-exclamation")
@@ -59,6 +59,15 @@ public class ValidateMessages extends FormElement implements IComponentsReferrer
 
     @JsonIgnore
     private boolean showAttributeAsLabel;
+
+
+    @Getter
+    @Setter
+    @XMLProperty(defaultValue = "status")
+    @DocumentedComponentAttribute(value = "Define role of content presented by this element.Used to improve Accesibality. https://www.w3.org/TR/wai-aria/#landmark_roles")
+    @DesignerXMLProperty(functionalArea = SPECIFIC, priority = 90)
+    private String htmlAccessibilityRole = "status"; // Defoult role for this component is "status";
+
 
     public ValidateMessages(Form form) {
         super(form);

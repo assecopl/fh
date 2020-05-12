@@ -100,7 +100,8 @@ public class ModelListenerImpl implements ModelListener {
 
     @Override
     public Object getMethodCalled(Object target, Method method, Class fieldType) {
-        Object retVal = modelProxyService.getAttributeValue((BaseEntity) target, StringUtils.firstLetterToLower(method.getName().substring(3)));
+        String fieldName = StringUtils.firstLetterToLower(boolean.class.isAssignableFrom(fieldType) ? method.getName().substring(2) : method.getName().substring(3));
+        Object retVal = modelProxyService.getAttributeValue((BaseEntity) target, fieldName);
         if (isInitialized(target) && isSnapshotEnabled(target)) {
             if (getConversationManager().snapshotExists()) {
                 if (Collection.class.isAssignableFrom(fieldType) || Map.class.isAssignableFrom(fieldType)) {

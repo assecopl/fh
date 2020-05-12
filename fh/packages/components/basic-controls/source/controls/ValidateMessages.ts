@@ -10,6 +10,7 @@ class ValidateMessages extends HTMLFormComponent {
     }
 
     create() {
+
         var message = document.createElement('div');
         message.id = this.id;
         message.classList.add('alert');
@@ -33,7 +34,6 @@ class ValidateMessages extends HTMLFormComponent {
                 message.classList.add('alert-danger');
                 break;
         }
-        message['role'] = 'alert';
 
         this.component = message;
         this.wrap();
@@ -41,6 +41,7 @@ class ValidateMessages extends HTMLFormComponent {
         this.display();
 
         this.setMessages(this.componentObj.validateMessages);
+        console.log("ValidateMessages", this.componentObj.htmlAccessibilityRole , this.componentObj.htmlRole)
     };
 
     update(change) {

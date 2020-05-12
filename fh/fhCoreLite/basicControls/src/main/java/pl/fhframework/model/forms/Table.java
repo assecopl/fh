@@ -111,6 +111,7 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
     @JsonIgnore
     @Getter
     @Setter
+    @TwoWayBinding
     @XMLProperty(SELECTED)
     @DocumentedComponentAttribute(boundable = true, value = "Selected table row")
     @DesignerXMLProperty(functionalArea = CONTENT, priority = 11, bindingOnly = true)

@@ -4,18 +4,18 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.expression.Expression;
+import pl.fhframework.BindingResult;
+import pl.fhframework.annotations.*;
+import pl.fhframework.binding.*;
 import pl.fhframework.core.FhBindingException;
 import pl.fhframework.core.util.JsonUtil;
 import pl.fhframework.core.util.SpelUtils;
 import pl.fhframework.core.util.StringUtils;
-import pl.fhframework.BindingResult;
-import pl.fhframework.annotations.*;
-import pl.fhframework.binding.*;
 import pl.fhframework.model.PresentationStyleEnum;
 import pl.fhframework.model.dto.ElementChanges;
 import pl.fhframework.model.dto.InMessageEventData;
 import pl.fhframework.model.dto.ValueChange;
-import pl.fhframework.model.forms.designer.InputFieldDesignerPreviewProvider;
+import pl.fhframework.model.forms.optimized.ColumnOptimized;
 import pl.fhframework.model.forms.validation.ValidationFactory;
 import pl.fhframework.validation.*;
 
@@ -26,12 +26,11 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.CONTENT;
-import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.SPECIFIC;
 
 @DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, value = "Enables users to quickly find and select from a pre-populated list of values as they type, leveraging searching and filtering.",
         icon = "fa fa-outdent")
 @DesignerControl(defaultWidth = 3)
-@Control(parents = {PanelGroup.class, Group.class, Column.class, Tab.class, Row.class, Form.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = true)
+@Control(parents = {PanelGroup.class, Group.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = true)
 public class SelectComboMenu extends BaseInputFieldWithKeySupport {
     private static final String ON_SPECIAL_KEY_ATTR = "onSpecialKey";
     private static final String ON_DBL_SPECIAL_KEY_ATTR = "onDblSpecialKey";
@@ -41,6 +40,7 @@ public class SelectComboMenu extends BaseInputFieldWithKeySupport {
     protected static final String TEXT = "text";
     private static final String FILTERED_VALUES = "filteredValues";
     private static final String HIGHLIGHTED_VALUE = "highlightedValue";
+    private static final String FIRE_CHANGE_ACTION = "fireChange";
     private static final String FILTER_FUNCTION_ATTR = "filterFunction";
     protected static final String SELECTED_INDEX_ATTR = "selectedIndex";
     private static final String FORMATTER_ATTR = "formatter";
@@ -163,6 +163,9 @@ public class SelectComboMenu extends BaseInputFieldWithKeySupport {
     @JsonIgnore
     protected boolean filterInvoked;
 
+    @JsonIgnore
+    protected boolean fireOnchange = false;
+
     @Getter
     @Setter
     @XMLProperty
@@ -278,6 +281,7 @@ public class SelectComboMenu extends BaseInputFieldWithKeySupport {
                 this.selectedItemIndex = entry.indexOf(item);
                 this.selectedItem = filteredObjectValues.get(this.selectedItemIndex);
                 this.rawValue = toRawValue(this.selectedItem);
+                this.fireOnchange = true;
                 return;
             }
         }
@@ -361,6 +365,7 @@ public class SelectComboMenu extends BaseInputFieldWithKeySupport {
     public ElementChanges updateView() {
         final ElementChanges elementChanges = super.updateView();
         boolean selectedBindingChanged = elementChanges.getChangedAttributes().containsKey(RAW_VALUE_ATTR);
+//        boolean selectedBindingChanged = elementChanges.getChangedAttributes().containsKey(SELECTED_INDEX_ATTR);
 
         if (freeTypingBinding != null) {
             freeTyping = freeTypingBinding.resolveValueAndAddChanges(this, elementChanges, freeTyping, FREE_TYPING);
@@ -378,6 +383,12 @@ public class SelectComboMenu extends BaseInputFieldWithKeySupport {
 
         if (elementChanges.containsAnyChanges()) {
             refreshView();
+        }
+
+        if(this.fireOnchange){
+            //Fire Onchange event from frontend when model has change after serach.
+            elementChanges.addChange(FIRE_CHANGE_ACTION, true);
+            this.fireOnchange = false;
         }
 
         return elementChanges;
@@ -436,6 +447,7 @@ public class SelectComboMenu extends BaseInputFieldWithKeySupport {
             filterInvoked = false;
             result = true;
         }
+
 
         return result;
     }

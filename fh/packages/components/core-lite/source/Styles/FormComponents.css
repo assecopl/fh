@@ -127,15 +127,6 @@ span.required {
     display: block;
 }
 
-.input-group-prepend.datepickerbutton .input-group-text,
-.input-group-append.datepickerbutton .input-group-text {
-    height: 100%;
-}
-
-.input-group.date .fc.inputDate.datepickerInput {
-    height: 100%;
-}
-
 .radioOption.form-check.form-group:focus {
     outline: none;
 }
@@ -160,4 +151,9 @@ span.required {
 .inputLabel {
     margin-bottom: 0;
     min-width: 100%;
+}
+
+.hint-ico-help.fa {
+    line-height: inherit;
+    cursor:pointer;
 }

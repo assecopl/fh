@@ -1,12 +1,12 @@
 {
   "name": "root",
-  "private": true,
-  "devDependencies": {
-    "lerna": "3.18.5"
+  "version": "4.7.0-SNAPSHOT",
+  "scripts": {
+    "build": "cd applications/default-application && yarn run build"
   },
+  "private": true,
   "workspaces": [
     "components/*",
     "applications/*"
-  ],
-  "main": "dist/Module.js"
+  ]
 }

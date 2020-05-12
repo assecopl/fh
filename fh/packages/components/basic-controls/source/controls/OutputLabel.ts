@@ -1,13 +1,13 @@
-import {HTMLFormComponent} from "fh-forms-handler";
-import * as lodash from "lodash";
-import getDecorators from "inversify-inject-decorators";
-import {FhContainer} from "fh-forms-handler";
-import {FH} from "fh-forms-handler";
+import {HTMLFormComponent} from 'fh-forms-handler';
+import * as lodash from 'lodash';
+import getDecorators from 'inversify-inject-decorators';
+import {FhContainer} from 'fh-forms-handler';
+import {FH} from 'fh-forms-handler';
 
 let {lazyInject} = getDecorators(FhContainer);
 
 class OutputLabel extends HTMLFormComponent {
-    @lazyInject("FH")
+    @lazyInject('FH')
     protected fh: FH;
 
     private icon: string;
@@ -33,9 +33,9 @@ class OutputLabel extends HTMLFormComponent {
 
         // output labels for table columns in Designer
         if (this.designMode) {
-            let labelId = label.id.split("_");
+            let labelId = label.id.split('_');
             let columnLabelMarkers = ['value', 'based', 'label'];
-            let columnValueLabel = "";
+            let columnValueLabel = '';
 
             columnLabelMarkers.forEach(attribute => {
                 if (labelId.indexOf(attribute) !== -1) {
@@ -47,17 +47,17 @@ class OutputLabel extends HTMLFormComponent {
                 label.classList.add('valueBasedLabel');
             }
 
-            let columnId = labelId.slice(0,3).join("_");
+            let columnId = labelId.slice(0, 3).join('_');
             label.dataset.columnId = columnId;
         }
 
 
-        ['fc', 'outputLabel'].forEach(function (cssClass) {
+        ['fc', 'outputLabel'].forEach(function(cssClass) {
             label.classList.add(cssClass);
         });
 
         if (this.onClick) {
-            label.addEventListener('click', function (event) {
+            label.addEventListener('click', function(event) {
                 event.stopPropagation();
                 this.fireEventWithLock('onClick', this.onClick, event);
                 event.target.blur();
@@ -77,7 +77,7 @@ class OutputLabel extends HTMLFormComponent {
         super.update(change);
 
         if (change.changedAttributes) {
-            $.each(change.changedAttributes, function (name, newValue) {
+            $.each(change.changedAttributes, function(name, newValue) {
                 switch (name) {
                     case 'value':
                         this.componentObj.value = newValue;
@@ -136,7 +136,7 @@ class OutputLabel extends HTMLFormComponent {
         // @ts-ignore
         if (this.fh.isIE() && this.parent.ieFocusFixEnabled == true) {
             let wrapper = document.createElement('div-a');
-            ['fc', 'wrapper'].forEach(function (cssClass) {
+            ['fc', 'wrapper'].forEach(function(cssClass) {
                 wrapper.classList.add(cssClass);
             });
 
@@ -148,6 +148,23 @@ class OutputLabel extends HTMLFormComponent {
 
     getDefaultWidth(): string {
         return 'md-2';
+    }
+
+
+    /**
+     * @Overwrite parent function
+     * @param ttip
+     * @return HTMLElement
+     */
+    public processStaticHintElement(ttip: any) {
+        //if label is invisible we add static hint to content.
+        if (this.labelElement && this.labelElement.classList.contains('sr-only')) {
+            // add info to content.
+            this.component.appendChild(ttip);
+            return this.component;
+        } else {
+            return super.processStaticHintElement(ttip);
+        }
     }
 }
 

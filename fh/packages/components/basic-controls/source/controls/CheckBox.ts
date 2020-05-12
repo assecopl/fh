@@ -39,9 +39,10 @@ class CheckBox extends HTMLFormComponent {
         this.hintElement = this.component;
         this.wrap(false);
 
-        let label = this.htmlElement.getElementsByTagName('label')[0];
-        label.classList.remove('col-form-label');
-        label.classList.add('form-check-label');
+        if(this.labelElement) {
+            this.labelElement.classList.remove('col-form-label');
+            this.labelElement.classList.add('form-check-label');
+        }
         if (this.stickedLabel) {
             this.htmlElement.classList.add('stickedLabel');
         }
@@ -142,17 +143,19 @@ class CheckBox extends HTMLFormComponent {
     };
 
     setPresentationStyle(presentationStyle) {
-        ['is-invalid'].forEach(function (cssClass) {
-            this.labelElement.classList.remove(cssClass);
-        }.bind(this));
+        if(this.labelElement) {
+            ['is-invalid'].forEach(function(cssClass) {
+                this.labelElement.classList.remove(cssClass);
+            }.bind(this));
 
-        switch (presentationStyle) {
-            case 'BLOCKER':
-            case 'ERROR':
-                ['is-invalid'].forEach(function (cssClass) {
-                    this.labelElement.classList.add(cssClass);
-                }.bind(this));
-                break;
+            switch (presentationStyle) {
+                case 'BLOCKER':
+                case 'ERROR':
+                    ['is-invalid'].forEach(function(cssClass) {
+                        this.labelElement.classList.add(cssClass);
+                    }.bind(this));
+                    break;
+            }
         }
 
         super.setPresentationStyle(presentationStyle);
@@ -169,6 +172,16 @@ class CheckBox extends HTMLFormComponent {
         }
 
         super.destroy(removeFromParent);
+    }
+
+    /**
+     * @Overwrite parent function
+     * @param ttip
+     */
+    public processStaticHintElement(ttip: any) {
+        //if label is invisible we add static hint to content.
+            this.htmlElement.appendChild(ttip);
+            return this.htmlElement;
     }
 }
 
