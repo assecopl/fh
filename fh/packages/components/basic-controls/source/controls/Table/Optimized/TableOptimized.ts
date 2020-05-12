@@ -25,6 +25,8 @@ class TableOptimized extends TableWithKeyboardEvents {
     private loadInfo: HTMLElement;
     private sortDirection: any;
 
+    private timeoutedRows:Map<any, any> =  new Map<any, any>();
+
     /**
      * Rewrited logic
      */
@@ -48,6 +50,13 @@ class TableOptimized extends TableWithKeyboardEvents {
         }.bind(this));
         this.rows = [];
     };
+
+    clearTimeouts() {
+        this.timeoutedRows.forEach(function (id, key) {
+           clearTimeout(id);
+        }.bind(this));
+        this.timeoutedRows.clear();
+    }
 
     create() {
 
@@ -150,6 +159,8 @@ class TableOptimized extends TableWithKeyboardEvents {
      * @param clearSelection
      */
     refreshData(clearSelection = undefined) {
+        //Clear timeouts in case new rows will be loaded before last load finish.
+        this.clearTimeouts();
         if (clearSelection) {
             this.rawValue = [];
             this.changesQueue.queueValueChange(null);
@@ -304,13 +315,16 @@ class TableOptimized extends TableWithKeyboardEvents {
          * Przy aktualizacji rekordy dodawane są od razu.
          */
         if (this.startSize && index > this.startSize && !this.firstShow) {
-            setTimeout(function (row, callback, updateFixedHeaderWidth) {
+          const timeOutId =   setTimeout(function (row, callback, updateFixedHeaderWidth) {
                 row.create();
                 updateFixedHeaderWidth();
                 if (callback) {
                     callback();
                 }
-            }, (100 * (index)), row, func, this.updateFixedHeaderWidth.bind(this))
+                //Delete row timeout from list after finish loading.
+                this.timeoutedRows.delete(row.id);
+            }.bind(this), (100 * (index)), row, func, this.updateFixedHeaderWidth.bind(this));
+            this.timeoutedRows.set(row.id, timeOutId);
         } else {
             row.create();
         }
@@ -372,6 +386,13 @@ class TableOptimized extends TableWithKeyboardEvents {
             this.addMinRowRows();
         }
     };
+
+    destroy(removeFromParent: boolean) {
+        //Stop loading columns
+       this.clearTimeouts();
+
+        super.destroy(removeFromParent);
+    }
 
 
 }

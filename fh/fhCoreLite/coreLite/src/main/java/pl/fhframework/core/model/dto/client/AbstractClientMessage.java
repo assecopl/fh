@@ -1,7 +1,6 @@
 package pl.fhframework.core.model.dto.client;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
 
 /**
@@ -17,7 +16,7 @@ import lombok.Data;
 public abstract class AbstractClientMessage {
     private String serviceId;
 
-    private final String type;
+    private String type;
 
     public AbstractClientMessage(String type) {
         this.type = type;
