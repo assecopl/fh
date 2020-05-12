@@ -1,3 +1,4 @@
+4.4.20
 - Dodanie obsługi TLS w MailClient, nowe properties'y fh.mail.server.startTlsEnabled, fh.mail.server.startTlsRequired. Włączając TLS należy zaimportować certyfikat serwera pocztowego do truststore (np. openssl s_client -connect localhost:587 -servername localhost -showcerts -starttls smtp -prexit 2>&1 </dev/null | sed -n '/-----BEGIN/,/-----END/p' > ~/smptcert.pem | sudo keytool -importcert -file ~/smptcert.pem -alias smptcert -keystore ~/cacerts) i ustawić properties'y javax.net.ssl.trustStore=./cacerts i javax.net.ssl.trustStorePassword=
 
 4.4.9

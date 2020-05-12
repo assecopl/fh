@@ -4,7 +4,7 @@
 
     <artifactId>securityDataProvider</artifactId>
     <groupId>pl.fhframework.core.security.provider</groupId>
-    <version>4.4.19</version>
+    <version>4.4.30</version>
     <packaging>jar</packaging>
 
     <name>securityDataProvider</name>
@@ -13,7 +13,7 @@
     <parent>
         <groupId>pl.fhframework</groupId>
         <artifactId>fhCoreLite</artifactId>
-        <version>4.4.19</version>
+        <version>4.4.30</version>
     </parent>
 
     <properties>
@@ -25,7 +25,7 @@
         <dependency>
             <groupId>pl.fhframework.persistence</groupId>
             <artifactId>fhPersistenceLite</artifactId>
-            <version>4.4.19</version>
+            <version>4.4.30</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>

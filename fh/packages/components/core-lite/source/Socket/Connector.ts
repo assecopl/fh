@@ -187,8 +187,9 @@ class Connector {
                 this.i18n.__('connection_lost_message'),
                 this.i18n.__('connection_lost_button1'),
                 "window.FhContainer.get('Connector').closeDialog();window.FhContainer.get('Connector').onClose()",
-                this.i18n.__('connection_lost_button2'),
-                "window.FhContainer.get('Connector').closeDialog()"
+                null,//this.i18n.__('connection_lost_button2'),
+                null,//"window.FhContainer.get('Connector').closeDialog()"
+                false
             );
             return;
         }
@@ -197,7 +198,7 @@ class Connector {
         connector.retryCount += 1;
 
         let testRequest = new XMLHttpRequest();
-        testRequest.open('HEAD', connector.util.getPath('/'), true);
+        testRequest.open('OPTIONS', connector.util.getPath(''), true);
 
         testRequest.onload = function () {
             if (testRequest.readyState === 4) {
@@ -205,7 +206,10 @@ class Connector {
                     this.applicationLock.createInfoDialog(
                         this.i18n.__('session_expired_message'),
                         this.i18n.__('session_expired_button'),
-                        'window.location.reload(true)'
+                        'window.location.reload(true)',
+                        null,
+                        null,
+                        false
                     );
                     return;
                 }

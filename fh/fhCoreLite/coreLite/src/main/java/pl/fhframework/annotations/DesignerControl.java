@@ -14,6 +14,8 @@ public @interface DesignerControl {
 
     boolean canStackPropertiesForm() default false;
 
+    boolean forceShowInElementTree() default false;
+
     class Utils {
         public static DesignerControl getDesignerControlProperties(Class<? extends Component> clazz) {
             Objects.requireNonNull(clazz);

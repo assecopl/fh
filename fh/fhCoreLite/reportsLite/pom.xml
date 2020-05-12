@@ -4,7 +4,7 @@
 
     <artifactId>reportsLite</artifactId>
     <groupId>pl.fhframework.reports</groupId>
-    <version>4.4.19</version>
+    <version>4.4.30</version>
     <packaging>jar</packaging>
 
     <name>FhReportsLite</name>
@@ -14,7 +14,7 @@
     <parent>
         <groupId>pl.fhframework</groupId>
         <artifactId>fhCoreLite</artifactId>
-        <version>4.4.19</version>
+        <version>4.4.30</version>
     </parent>
 
     <properties>
@@ -27,7 +27,7 @@
             <groupId>pl.fhframework</groupId>
             <artifactId>coreLite</artifactId>
             <!--<version>${fh.version}</version>-->
-            <version>4.4.19</version>
+            <version>4.4.30</version>
         </dependency>
         <dependency>
             <groupId>net.sf.jasperreports</groupId>

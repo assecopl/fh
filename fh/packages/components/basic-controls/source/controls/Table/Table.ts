@@ -1,4 +1,4 @@
-import {AdditionalButton, HTMLFormComponent, FhContainer} from "fh-forms-handler";
+import {AdditionalButton, HTMLFormComponent, FhContainer, FormComponent} from "fh-forms-handler";
 import {TableWithKeyboardEvents} from "./Abstract/TableWithKeyboardEvents";
 
 class Table extends TableWithKeyboardEvents {
@@ -21,6 +21,8 @@ class Table extends TableWithKeyboardEvents {
     protected header: HTMLTableSectionElement;
     protected footer: HTMLTableSectionElement = null;
     private _dataWrapper: HTMLTableSectionElement;
+
+    private checkAllArray: Array<any> = []
 
     constructor(componentObj: any, parent: HTMLFormComponent) {
         super(componentObj, parent);
@@ -79,11 +81,7 @@ class Table extends TableWithKeyboardEvents {
         heading.appendChild(headingRow);
         this.header = heading;
 
-        if (this.selectionCheckboxes) {
-            let cell = document.createElement('th');
-            cell.classList.add('selectionColumn');
-            headingRow.appendChild(cell);
-        }
+
 
         let body = document.createElement('tbody');
 
@@ -111,6 +109,10 @@ class Table extends TableWithKeyboardEvents {
 
         this.contentWrapper = headingRow;
         this._dataWrapper = body;
+
+        if (this.selectionCheckboxes && this.multiselect) {
+            this.addCheckAllCell();
+        }
 
         this.addStyles();
         this.display();
@@ -355,6 +357,7 @@ class Table extends TableWithKeyboardEvents {
         }
 
         this.clearRows();
+        this.checkAllArray = [];
         for (let i = 0; i < this.visibleRows; i++) {
             let row = this.tableData[i];
             let rowData = {
@@ -363,6 +366,7 @@ class Table extends TableWithKeyboardEvents {
                 empty: row.empty,
                 data: row.tableCells
             };
+            this.checkAllArray.push(i);
             if (this.rowIndexMappings) {
                 rowData.mainId = this.rowIndexMappings[i];
             }
@@ -424,45 +428,6 @@ class Table extends TableWithKeyboardEvents {
     };
 
 
-    /**
-     * @override
-     * Used for standard tables
-     * @param scrollAnimate
-     */
-    highlightSelectedRows(scrollAnimate:boolean = false) {
-        let oldSelected = this.table.querySelectorAll('.table-primary');
-        if (oldSelected && oldSelected.length) {
-            [].forEach.call(oldSelected, function (row) {
-                row.classList.remove('table-primary');
-
-                if (this.selectionCheckboxes) {
-                    row.firstChild.querySelector('input[type="checkbox"]').checked = false;
-                }
-            }.bind(this));
-        }
-        (this.rawValue || []).forEach(function (value) {
-            if (value != -1) {
-                let row = this.table.querySelector(('[data-main-id="' + value + '"]'));
-                row.classList.add('table-primary');
-                let container = $(this.component);
-                let scrollTo = $(row);
-                if (this.rawValue.length < 2) {
-                    let containerHeight = container.height();
-                    let containerScrollTop = container.scrollTop();
-                    let realPositionElement = scrollTo.position().top;
-                    if (realPositionElement < containerScrollTop || realPositionElement
-                        > containerScrollTop
-                        + containerHeight) {
-                        this.scrolToRow(scrollTo, scrollAnimate);
-                    }
-                }
-                if (this.selectionCheckboxes) {
-                    row.firstChild.querySelector('input[type="checkbox"]').checked = true;
-                }
-            }
-        }.bind(this));
-    };
-
     collectAllChanges() {
         let allChanges = [];
 
@@ -497,6 +462,15 @@ class Table extends TableWithKeyboardEvents {
             if (this.rawValue.length == 0) {
                 this.rawValue.push(-1);
             }
+        }
+    };
+
+
+    selectAllRows(selectOrClear) {
+        if(selectOrClear) {
+            this.rawValue = this.checkAllArray;
+        } else {
+            this.rawValue = [-1];
         }
     };
 
@@ -539,7 +513,64 @@ class Table extends TableWithKeyboardEvents {
         }
     }
 
+    protected getAllComponents() {
+        let result: FormComponent[] = this.components;
 
+        this.rows.forEach((value) => {
+            result = result.concat(value.components);
+        });
+
+        return result;
+    }
+
+    /**
+     * Ads Cell to header with checkbox for selecting all records on current page.
+     */
+    protected addCheckAllCell(){
+        let cell = document.createElement('th');
+        cell.classList.add('selectionColumn');
+        cell.style.width = "40px"
+
+        let checkbox = document.createElement('input');
+        checkbox.id = "header_check_all_"+this.id;
+        checkbox.type = 'checkbox';
+        checkbox.style.pointerEvents = 'none';
+        checkbox.classList.add('selectionCheckbox');
+        checkbox.classList.add('selectionCheckboxAll');
+        cell.appendChild(checkbox);
+
+        let checkboxLabel = document.createElement('label');
+        checkboxLabel.setAttribute('for', checkbox.id);
+        cell.appendChild(checkboxLabel);
+
+        cell.addEventListener('click', function (event) {
+            event.stopPropagation();
+            if (this.accessibility != 'EDIT') return;
+
+            let element = event.target;
+            if (event.currentTarget != null) {
+                element = event.currentTarget;
+            }
+            element.firstChild.checked = !element.firstChild.checked;
+
+            this.selectAllRows(element.firstChild.checked);
+
+            this.changesQueue.queueValueChange(this.rawValue);
+            if (!this.onRowClick || this.onRowClick === '-') {
+                this.highlightSelectedRows();
+            }
+
+            if (this._formId === 'FormPreview') {
+                this.fireEvent('onRowClick', this.onRowClick);
+            } else {
+                this.fireEventWithLock('onRowClick', this.onRowClick, event);
+            }
+        }.bind(this));
+
+
+
+        this.contentWrapper.appendChild(cell);
+    }
 
 }
 

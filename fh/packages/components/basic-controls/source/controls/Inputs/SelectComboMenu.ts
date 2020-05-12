@@ -1,5 +1,6 @@
 import {InputText} from "./InputText";
 import {HTMLFormComponent} from 'fh-forms-handler';
+import * as _ from "lodash";
 
 class SelectComboMenu extends InputText {
     protected values: any;
@@ -62,7 +63,7 @@ class SelectComboMenu extends InputText {
         // must be before onInput/onChange events
         this.keySupport.addKeyEventListeners(input);
 
-        input.addEventListener('input', this.inputInputEvent.bind(this));
+        input.addEventListener('input',  this.inputInputEvent.bind(this));
         $(input).on('paste', this.inputPasteEvent.bind(this));
         $(input).on('focus', function () {
             this.input.select();
@@ -70,7 +71,7 @@ class SelectComboMenu extends InputText {
         $(input).on('keydown', this.inputKeydownEvent.bind(this));
 
         if (this.onInput) {
-            input.addEventListener('input', this.inputInputEvent2.bind(this));
+            input.addEventListener('input', _.debounce(this.inputInputEvent2.bind(this), this.getInputDebounceTime()));
         }
         if (this.onSpecialKey || this.onDblSpecialKey) {
             input.addEventListener('keyup', this.specialKeyCapture.bind(this, true)); // firing event
@@ -91,6 +92,16 @@ class SelectComboMenu extends InputText {
         autocompleter.id = this.id + '_autocompleter';
 
         this.autocompleter = autocompleter;
+
+        /**
+         * Prevent clicking on autocompleter from bubbling.
+         * There is problem when component is placed inside focusable element(Table).
+         * Clicking on scroll bar makes input lose his focus and close autocompleter automaticly
+         */
+        this.autocompleter.addEventListener("mousedown", function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+        })
         this.setValues(this.values);
         this.component = this.input;
         this.focusableComponent = input;
@@ -121,6 +132,10 @@ class SelectComboMenu extends InputText {
         return this.input;
     }
 
+    protected getInputDebounceTime() {
+        return 300;
+    }
+
     defineDefinitionSymbols(): void {
         super.defineDefinitionSymbols();
     }
@@ -136,6 +151,7 @@ class SelectComboMenu extends InputText {
         let icon = document.createElement('i');
         icon.classList.add('fa');
         icon.classList.add('fa-sort-down');
+
 
         button.addEventListener('mousedown', function (e) {
             e.preventDefault();
@@ -309,7 +325,7 @@ class SelectComboMenu extends InputText {
 
     inputInputEvent2() {
         if (this.accessibility === 'EDIT') {
-            this.fireEvent('onInput', this.onInput);
+                this.fireEvent('onInput', this.onInput);
         }
     }
 
@@ -357,7 +373,6 @@ class SelectComboMenu extends InputText {
 
     update(change) {
         super.update(change);
-
         if (change.changedAttributes) {
             $.each(change.changedAttributes, function (name, newValue) {
                 switch (name) {
@@ -365,8 +380,10 @@ class SelectComboMenu extends InputText {
                         if (newValue) {
                             this.input.value = newValue;
                             this.rawValue = newValue;
+                            //Must be before change oldValue
                             this.oldValue = newValue;
                             this.highlighted = this.findByValue(newValue);
+
                         } else {
                             if (this.emptyLabel && this.emptyLabelText) {
                                 this.input.value = this.emptyLabelText;
@@ -394,9 +411,17 @@ class SelectComboMenu extends InputText {
                         }
                         this.hightlightValue();
                         break;
+                    case 'fireChange':
+                        //Event fired after model update from search text.
+                        if (this.onChange && this.accessibility === 'EDIT') {
+                            this.fireEventWithLock('onChange', this.onChange);
+                        }
+                        break;
                 }
             }.bind(this));
         }
+
+
     }
 
     updateModel() {
@@ -459,46 +484,48 @@ class SelectComboMenu extends InputText {
          */
         let bounding = this.autocompleter.getBoundingClientRect();
         let rightOverlap = bounding.right - (window.innerWidth || document.documentElement.clientWidth);
+        let bottomOverlap = bounding.bottom - (window.innerHeight || document.documentElement.clientHeight);
 
         if (rightOverlap > -17) {
             this.autocompleter.style.setProperty('right', '0px', "important");
             this.autocompleter.style.setProperty('left', 'auto', "important");
         }
 
-
-        let parent = null;
+        let parent: JQuery<any> = null;
+        const sumHeight = bounding.height + this.inputGroupElement.offsetHeight + 30; //Height of autocompleter and input.
 
         if (formType === 'STANDARD') {
             parent = $(this.component).closest('.panel,.splitContainer,.hasHeight');
 
-            //If outocompleter is about to open in container wity fixed height we change it's open direction. Direction will be UP.
-            if(parent.hasClass('hasHeight')){
-                const parentBound = parent[0].getBoundingClientRect();
-                let completerYmaks = bounding.height + bounding.top;
-                let parentYmaks = parentBound.top + parentBound.height;
-                if(completerYmaks > parentYmaks){
-                    this.autocompleter.style.setProperty('top', "-"+(bounding.height+2)+"px" , "important");
-                }
 
+            //If autocompleter is about to open in container with fixed height we change it's open direction. Direction will be UP.
+            if (parent.hasClass('hasHeight')) {
+                const parentBound = parent[0].getBoundingClientRect();
+
+                //Chcek if autocompleter i bigger ten parent fixed container so it will be open nex to it to prevent disapering.
+                const biggerThenParent = (parentBound.height <= sumHeight);
+                const completerYmaks = bounding.height + bounding.top;
+                const parentYmaks = parentBound.top + parentBound.height;
+                //Put it as sibling of parent becouse parent has height and elements inside it wont overflow it. Close it when parent begins to scroll.
+                if (biggerThenParent) {
+                    this.handleContainerOverflow($("body"), this.autocompleter, (completerYmaks > parentYmaks));
+                    parent.on("scroll", this.closeAutocomplete.bind(this));
+                } else {
+                    (completerYmaks > parentYmaks) ? this.inputGroupElement.classList.add("dropup") : "";
+                }
+            } else if (bottomOverlap > 20) {
+                this.inputGroupElement.classList.add("dropup");
             }
-            if (!parent.hasClass('floating') && !parent.hasClass('splitContainer') ) {
+            if (!parent.hasClass('floating') && !parent.hasClass('splitContainer')) {
                 return;
             }
         } else if (formType === 'MODAL' || formType === 'MODAL_OVERFLOW') {
             parent = $(this.component).closest('.modal-content');
+            this.handleContainerOverflow(parent, this.autocompleter);
         } else {
             console.error('Parent not defined.');
             return;
         }
-
-
-        parent.append(this.autocompleter);
-        let _component = $(this.component);
-        let _autocompleter = $(this.autocompleter);
-
-        _autocompleter.css('top', _component.offset().top - parent.offset().top + this.component.offsetHeight);
-        _autocompleter.css('left', _component.offset().left - parent.offset().left);
-        _autocompleter.css('width', _component.width());
     }
 
     closeAutocomplete() {
@@ -508,32 +535,36 @@ class SelectComboMenu extends InputText {
         let formType = this.getFormType();
 
         this.autocompleter.classList.remove('show');
+        this.inputGroupElement.classList.remove("dropup");
 
         /**
          * Clear inline styles for right direction view.
          */
         this.autocompleter.style.setProperty('right', '', null);
         this.autocompleter.style.setProperty('left', '', null);
+        this.autocompleter.style.setProperty('top', '', null);
 
         let parent = null;
         if (formType === 'STANDARD') {
             parent = $(this.component).closest('.panel');
 
+            if (!this.inputGroupElement.contains(this.autocompleter)) {
+                this.inputGroupElement.appendChild(this.autocompleter);
+            }
+
             if (!parent.hasClass('floating')) {
                 return;
             }
         } else if (formType === 'MODAL' || formType === 'MODAL_OVERFLOW') {
-            parent = $(this.component).closest('.modal-content');
+            if (!this.inputGroupElement.contains(this.autocompleter)) {
+                this.inputGroupElement.appendChild(this.autocompleter);
+            }
         } else {
             console.error('Parent not defined.');
             return;
         }
 
-        parent.find('.autocompleter').remove();
-        this.component.appendChild(this.autocompleter);
         this.input.focus();
-
-
     }
 
     extractChangedAttributes() {

@@ -1,5 +1,5 @@
 import * as moment from 'moment';
-import 'pc-bootstrap4-datetimepicker/build/js/bootstrap-datetimepicker.min';
+import 'imports-loader?moment,define=>false,exports=>false!../../external/bootstrap-datetimepicker.min';
 import {InputDate} from "./InputDate";
 import {InputTimestampPL} from './i18n/InputTimestamp.pl';
 import {InputTimestampEN} from './i18n/InputTimestamp.en';

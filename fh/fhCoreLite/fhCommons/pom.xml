@@ -4,7 +4,7 @@
 
     <artifactId>fhCommons</artifactId>
     <groupId>pl.fhframework.commons</groupId>
-    <version>4.4.19</version>
+    <version>4.4.30</version>
     <packaging>jar</packaging>
 
     <name>fhCommons</name>
@@ -13,7 +13,7 @@
     <parent>
         <groupId>pl.fhframework</groupId>
         <artifactId>fhCoreLite</artifactId>
-        <version>4.4.19</version>
+        <version>4.4.30</version>
     </parent>
 
     <properties>

@@ -169,6 +169,7 @@ public class Repeater extends FormElement implements IEditableGroupingComponent<
         modelRefSize = collectionData.size();
         if (oldModelRefSize != modelRefSize) {
             List<IterationContext> newBindedSubcomponents = new LinkedList<>();
+            List<?> collectionArray = new ArrayList<>(collectionData);
             for (int index = 0; index < modelRefSize; ++index) {
                 // already have theese rows
                 if (oldModelRefSize > index) {
@@ -176,6 +177,7 @@ public class Repeater extends FormElement implements IEditableGroupingComponent<
                     for (IterationContext existingComponent : bindedSubcomponents) { // not using lambda as index is not final...
                         if (existingComponent.getIndex().equals(index)) {
                             newBindedSubcomponents.add(existingComponent);
+                            existingComponent.getComponent().getBindingContext().getIteratorContext().put(iterator, collectionArray.get(index));
                         }
                     }
                 } else {
@@ -183,6 +185,7 @@ public class Repeater extends FormElement implements IEditableGroupingComponent<
                     List<FormElement> newComponents = interatorComponentFactory.createComponentsForIterator(this, NO_OFFSET_ROW_NUMBER, index);
                     for (FormElement newComponent : newComponents) {
                         newBindedSubcomponents.add(new IterationContext(index, newComponent));
+                        newComponent.getBindingContext().getIteratorContext().put(iterator, collectionArray.get(index));
                     }
                 }
             }

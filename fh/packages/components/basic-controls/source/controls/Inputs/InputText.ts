@@ -295,6 +295,17 @@ class InputText extends HTMLFormComponent {
         }
     }
 
+    handleContainerOverflow(parent:JQuery<any>, autocompleter, up:boolean = false) {
+        parent.append(autocompleter);
+        if(up){
+            $(autocompleter).css('top', $(this.component).offset().top - parent.offset().top - autocompleter.offsetHeight - 2);
+        } else {
+            $(autocompleter).css('top', $(this.component).offset().top - parent.offset().top + this.component.offsetHeight);
+        }
+        $(autocompleter).css('left', $(this.component).offset().left - parent.offset().left);
+        $(autocompleter).css('width', this.component.offsetParent.offsetWidth);
+    }
+
     removeInputPlaceholder(event) {
         const key = event.keyCode;
         const targetAttributes = event.target.attributes;

@@ -5,7 +5,7 @@
 
     <groupId>pl.fhframework</groupId>
     <artifactId>bom-project-lite</artifactId>
-    <version>4.4.19</version>
+    <version>4.4.30</version>
     <packaging>pom</packaging>
 
     <name>bom-projects-lite</name>

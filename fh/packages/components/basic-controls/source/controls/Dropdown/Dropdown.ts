@@ -1,6 +1,5 @@
 import 'bootstrap/js/dist/dropdown';
-import {HTMLFormComponent} from "fh-forms-handler";
-import {AdditionalButton} from "fh-forms-handler";
+import {AdditionalButton, HTMLFormComponent} from "fh-forms-handler";
 
 class Dropdown extends HTMLFormComponent {
     protected button: any;

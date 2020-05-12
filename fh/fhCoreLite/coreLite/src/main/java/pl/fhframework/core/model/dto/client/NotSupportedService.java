@@ -3,8 +3,6 @@ package pl.fhframework.core.model.dto.client;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import lombok.Data;
 
-import java.util.Date;
-
 /**
  * Message indicates that service with id "serviceId" is not supported (eg. browser doesn't support ceratin functions)
  */
@@ -20,5 +18,11 @@ public class NotSupportedService extends AbstractClientMessage {
 
     public NotSupportedService() {
         super(TYPE);
+    }
+
+    public NotSupportedService(Integer code, String reason) {
+        this();
+        this.code = code;
+        this.reason = reason;
     }
 }

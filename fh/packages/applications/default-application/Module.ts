@@ -29,7 +29,7 @@ class FhApplication {
         let connector = FhContainer.get<(target: string, reconnectCallback: () => void, openCallback: () => void) => Connector>("Connector")(
             util.getPath(context), () => {
                 FhContainer.get<ApplicationLock>('ApplicationLock')
-                    .createInfoDialog('Połączenie z serwerem zostało przerwane. Ponawiam próbę połączenia...');
+                    .createInfoDialog('Połączenie z serwerem zostało przerwane. Ponawiam próbę połączenia...', null, null, null, null, false);
             }, () => {
                 FhContainer.get<ApplicationLock>('ApplicationLock')
                     .closeInfoDialog();
