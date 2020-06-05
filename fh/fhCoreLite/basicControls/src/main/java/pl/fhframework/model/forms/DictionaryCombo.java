@@ -270,11 +270,6 @@ public class DictionaryCombo extends Combo implements IGroupingComponent<Diction
         final ElementChanges elementChanges = super.updateView();
         this.processFiltering("");
         this.processFilterBinding(elementChanges, true);
-        this.selectedItem = null;
-        this.processValueBinding(elementChanges);
-        if (getModelBinding() != null) {
-            getModelBinding().setValue(null);
-        }
         this.refreshView();
         return elementChanges;
 

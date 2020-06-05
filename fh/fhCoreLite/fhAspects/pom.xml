@@ -4,7 +4,7 @@
 
     <artifactId>fhAspects</artifactId>
     <groupId>pl.fhframework.aspects</groupId>
-    <version>4.5.6</version>
+    <version>4.5.14</version>
     <packaging>jar</packaging>
     <url>https://github.com/assecopl/fh</url>
 
@@ -14,7 +14,7 @@
     <parent>
         <groupId>pl.fhframework</groupId>
         <artifactId>fhCoreLite</artifactId>
-        <version>4.5.6</version>
+        <version>4.5.14</version>
     </parent>
 
     <properties>

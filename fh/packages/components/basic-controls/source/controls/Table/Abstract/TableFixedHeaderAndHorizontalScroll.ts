@@ -321,6 +321,15 @@ abstract class TableFixedHeaderAndHorizontalScroll extends HTMLFormComponent {
         }
     }
 
+    public scrollTopInside(){
+        if(this.hasHeight()) {
+            /**
+             * If table is inside scrollable container we scoll it to the top when selection need to be cleared.
+             */
+            $(this.component).scrollTop(0);
+        }
+    }
+
     // fixedHeaderEvent(e) {
     //     const el = e.target;
     //     $(this.header)

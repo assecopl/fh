@@ -7,9 +7,11 @@ import org.hibernate.LazyInitializationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
+import pl.fhframework.configuration.FHConfiguration;
 import pl.fhframework.core.*;
 import pl.fhframework.core.logging.*;
 import pl.fhframework.core.logging.handler.IErrorInformationHandler;
+import pl.fhframework.core.model.dto.client.InClientData;
 import pl.fhframework.core.security.AuthorizationManager;
 import pl.fhframework.core.uc.IUseCase;
 import pl.fhframework.core.uc.handlers.IOnEventHandleError;
@@ -17,7 +19,6 @@ import pl.fhframework.core.uc.handlers.UseCaseErrorsHandler;
 import pl.fhframework.core.uc.url.UseCaseUrl;
 import pl.fhframework.core.uc.url.UseCaseUrlParser;
 import pl.fhframework.core.util.DebugUtils;
-import pl.fhframework.configuration.FHConfiguration;
 import pl.fhframework.core.util.JsonUtil;
 import pl.fhframework.core.util.StringUtils;
 import pl.fhframework.event.dto.EventDTO;
@@ -25,7 +26,6 @@ import pl.fhframework.event.dto.SessionTimeoutEvent;
 import pl.fhframework.events.IClientDataHandler;
 import pl.fhframework.events.UseCaseRequestContext;
 import pl.fhframework.model.dto.*;
-import pl.fhframework.core.model.dto.client.InClientData;
 import pl.fhframework.model.forms.Form;
 import pl.fhframework.model.forms.FormState;
 import pl.fhframework.model.forms.IGroupingComponent;
@@ -391,9 +391,9 @@ public abstract class FormsHandler {
     }
 
     protected void serviceTransportError(Throwable exception) {
-        FhLogger.error("Connection lost {}", this.getConnectionId());
+        FhLogger.errorSuppressed("Connection lost {}", this.getConnectionId());
         if (exception != null) {
-            FhLogger.error(exception);
+            FhLogger.errorSuppressed(exception);
         }
     }
 
@@ -509,7 +509,7 @@ public abstract class FormsHandler {
         requestContext.setLayout(userSession.getUseCaseContainer().resolveUseCaseLayout());
 
         List<Throwable> formsExeptions = new ArrayList<>();
-        for (Form<?> form : userSession.getUseCaseContainer().getFormsContainer().getManagedForms()) {
+        for (Form<?> form : new ArrayList<>(userSession.getUseCaseContainer().getFormsContainer().getManagedForms())) {
             boolean alreadyVisible = !userSession.getUseCaseRequestContext().getFormsToDisplay().contains(form);
 
             form.updateClientKnownFormState(requestContext.getChanges(), alreadyVisible);

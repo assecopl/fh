@@ -8,5 +8,5 @@
     "components/*",
     "applications/*"
   ],
-  "main": "dist/Module.js"
+  "main": "Module.ts"
 }

@@ -1,5 +1,5 @@
 import * as moment from 'moment';
-import {HTMLFormComponent, FormComponent} from 'fh-forms-handler';
+import {HTMLFormComponent, FormComponent, FhContainer} from 'fh-forms-handler';
 import {LanguageChangeObserver} from "fh-forms-handler";
 import {InputText} from "../InputText";
 import {InputDatePL} from "../i18n/InputDate.pl";
@@ -27,7 +27,7 @@ class InputDateOptimized extends InputText implements LanguageChangeObserver {
         this.backendFormat = 'YYYY-MM-DD';
         this.format = this.componentObj.format || 'YYYY-MM-DD';
         // @ts-ignore
-        // this.keySupport = FhContainer.get("FormComponentKeySupport")(this.componentObj, this);
+        this.keySupport = FhContainer.get("FormComponentKeySupport")(this.componentObj, this);
         this.mask = this.format.replace(/[a-zA-Z]/g, '9');
         this.maskEnabled = this.componentObj.maskEnabled || false;
         this.maskDynamic = this.componentObj.maskDynamic || false;
@@ -272,6 +272,31 @@ class InputDateOptimized extends InputText implements LanguageChangeObserver {
         }
 
         return attrs;
+    };
+
+    protected disableMask() {
+        if (this.maskEnabled && this.inputmaskEnabled) {
+            // @ts-ignore
+            Inputmask.remove(this.input);
+            this.inputmaskEnabled = false;
+        }
+    }
+
+    protected applyMask() {
+        if (this.maskEnabled && !this.inputmaskEnabled) {
+            // @ts-ignore
+            this.maskPlugin = Inputmask({
+                clearMaskOnLostFocus: false,
+                greedy: false,
+                jitMasking: this.maskDynamic,
+                placeholder: this.input.placeholder,
+                definitions: {},
+                insertMode: 0,
+                alias: "date",
+                mask: this.mask
+            }).mask(this.input);
+            this.inputmaskEnabled = true;
+        }
     };
 
     wrap(skipLabel, isInputElement) {

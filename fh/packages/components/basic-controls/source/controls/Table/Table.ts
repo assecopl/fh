@@ -156,10 +156,11 @@ class Table extends TableWithKeyboardEvents {
                         this.tableData = change.changedAttributes['tableRows'];
                         this.refreshData(true);
                         this.updateFixedHeaderWidth();
+                        this.scrollTopInside();
                         break;
                     case 'selectedRowNumber':
                         this.rawValue = change.changedAttributes['selectedRowNumber'];
-                        this.highlightSelectedRows();
+                            this.highlightSelectedRows();
                         break;
                     case 'rowStylesMapping':
                         this.rowStylesMapping = newValue;
@@ -371,7 +372,7 @@ class Table extends TableWithKeyboardEvents {
         this.addMinRowRows();
 
         if (this.onRowClick === '-' || !clearSelection) {
-            this.highlightSelectedRows();
+            this.highlightSelectedRows(false);
         }
     };
 
@@ -422,53 +423,6 @@ class Table extends TableWithKeyboardEvents {
         return result;
     };
 
-
-    /**
-     * @override
-     * Used for standard tables
-     * @param scrollAnimate
-     */
-    highlightSelectedRows(scrollAnimate: boolean = false) {
-        let oldSelected = this.table.querySelectorAll('.table-primary');
-        if (oldSelected && oldSelected.length) {
-            [].forEach.call(oldSelected, function (row) {
-                row.classList.remove('table-primary');
-
-                if (this.selectionCheckboxes) {
-                    row.firstChild.querySelector('input[type="checkbox"]').checked = false;
-                }
-            }.bind(this));
-        }
-        (this.rawValue || []).forEach(function (value) {
-            if (value != -1) {
-                let row = this.table.querySelector(('[data-main-id="' + value + '"]'));
-                row.classList.add('table-primary');
-                let container = $(this.component);
-                let scrollTo = $(row);
-                if (this.rawValue.length < 2) {
-                    let containerHeight = container.height();
-                    let containerScrollTop = container.scrollTop();
-                    let realPositionElement = scrollTo.position().top;
-                    if (realPositionElement < containerScrollTop || realPositionElement
-                        > containerScrollTop
-                        + containerHeight) {
-                        this.scrolToRow(scrollTo, scrollAnimate);
-                    }
-                }
-                if (this.selectionCheckboxes) {
-                    row.firstChild.querySelector('input[type="checkbox"]').checked = true;
-                }
-            } else {
-                if(this.hasHeight()) {
-                    /**
-                     * If table is inside scrollable container we scoll it to the top when selection need to be cleared.
-                     */
-                    $(this.component).scrollTop(0);
-                }
-
-            }
-        }.bind(this));
-    };
 
     collectAllChanges() {
         let allChanges = [];
@@ -555,6 +509,8 @@ class Table extends TableWithKeyboardEvents {
 
         return result;
     }
+
+
 }
 
 export {Table};

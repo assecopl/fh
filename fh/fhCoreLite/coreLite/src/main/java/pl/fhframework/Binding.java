@@ -6,15 +6,14 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.util.Pair;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
-
+import pl.fhframework.binding.ComponentBindingContext;
+import pl.fhframework.binding.RowNumberBindingContext;
 import pl.fhframework.core.FhBindingException;
+import pl.fhframework.core.generator.I18nBindingResolver;
 import pl.fhframework.core.i18n.MessageService;
 import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.core.util.CollectionsUtils;
-import pl.fhframework.binding.ComponentBindingContext;
-import pl.fhframework.binding.RowNumberBindingContext;
 import pl.fhframework.format.FhConversionService;
-import pl.fhframework.core.generator.I18nBindingResolver;
 import pl.fhframework.helper.AutowireHelper;
 import pl.fhframework.model.forms.Form;
 import pl.fhframework.model.forms.PageModel;
@@ -26,12 +25,7 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.ParseException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Created by Gabriel on 2015-12-15.
@@ -241,6 +235,11 @@ public class Binding {
                     return result;
                 }
             }
+            if (bindingContext.getIteratorContext().containsKey(binding)) {
+                BindingData result = new BindingData();
+                result.container = bindingContext.getIteratorContext().get(binding);
+                return result;
+            }
         }
 
         if (bindingCache.containsKey(binding)) {
@@ -266,30 +265,13 @@ public class Binding {
                 bindingData.fieldName = binding.substring(coords + 1);
                 BindingData containerBiding;
                 if (containerPath.charAt(containerPath.length() - 1) == ']') {
-                    String indexString = containerPath.substring(containerPath.lastIndexOf("[") + 1, containerPath.length() - 1);
-                    int index = Integer.parseInt(indexString);
-                    containerPath = containerPath.substring(0, containerPath.lastIndexOf("["));
-                    containerBiding = getBindingData(containerPath, bindingContext);
-                    Object fieldValue = getFieldValue(containerBiding.container, containerBiding.fieldName);
-                    if (fieldValue instanceof List) {
-                        bindingData.container = ((List) fieldValue).get(index);
-                    } else if (fieldValue instanceof Page) {
-                        bindingData.container = ((Page) fieldValue).getContent().get(index);
-                    } else if (fieldValue instanceof PageModel)
-                        bindingData.container = ((PageModel) fieldValue).getPage().getContent().get(index);
-                    else if (fieldValue instanceof Collection) {
-                        bindingData.container = CollectionsUtils.get((Collection) fieldValue, index);
-                    } else if (fieldValue == null) {
-                        return null;
-                    } else {
-                        throw new FhBindingException(fieldValue.getClass().getName() + " is not supported in collection binding");
-                    }
+                    if (fillContainerByIdx(bindingContext, bindingData, containerPath)) return null;
                 } else {
                     containerBiding = getBindingData(containerPath, bindingContext);
                     bindingData.container = getFieldValue(containerBiding.container, containerBiding.fieldName);
                 }
-
-
+            } else if (binding.charAt(binding.length() - 1) == ']') {
+                if (fillContainerByIdx(bindingContext, bindingData, binding)) return null;
             } else if (binding.startsWith("THIS[")) {
                 String indexString = binding.substring(binding.indexOf("[") + 1, binding.length() - 1);
                 int index = Integer.parseInt(indexString);
@@ -301,6 +283,29 @@ public class Binding {
             }
             return bindingData;
         }
+    }
+
+    private boolean fillContainerByIdx(ComponentBindingContext bindingContext, BindingData bindingData, String containerPath) {
+        BindingData containerBiding;
+        String indexString = containerPath.substring(containerPath.lastIndexOf("[") + 1, containerPath.length() - 1);
+        int index = Integer.parseInt(indexString);
+        containerPath = containerPath.substring(0, containerPath.lastIndexOf("["));
+        containerBiding = getBindingData(containerPath, bindingContext);
+        Object fieldValue = getFieldValue(containerBiding.container, containerBiding.fieldName);
+        if (fieldValue instanceof List) {
+            bindingData.container = ((List) fieldValue).get(index);
+        } else if (fieldValue instanceof Page) {
+            bindingData.container = ((Page) fieldValue).getContent().get(index);
+        } else if (fieldValue instanceof PageModel)
+            bindingData.container = ((PageModel) fieldValue).getPage().getContent().get(index);
+        else if (fieldValue instanceof Collection) {
+            bindingData.container = CollectionsUtils.get((Collection) fieldValue, index);
+        } else if (fieldValue == null) {
+            return true;
+        } else {
+            throw new FhBindingException(fieldValue.getClass().getName() + " is not supported in collection binding");
+        }
+        return false;
     }
 
     private String getMessageByKey(String bundle, String key) {

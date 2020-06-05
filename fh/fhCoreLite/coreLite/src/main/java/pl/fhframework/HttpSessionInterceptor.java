@@ -5,6 +5,7 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor;
+import pl.fhframework.core.logging.FhLogger;
 
 import javax.servlet.http.HttpSession;
 import java.util.Map;
@@ -20,6 +21,7 @@ public class HttpSessionInterceptor extends HttpSessionHandshakeInterceptor {
         boolean res = super.beforeHandshake(request, response, wsHandler, attributes);
         HttpSession httpSession = getSession(request);
         WebSocketSessionManager.prepareHttpSession(httpSession);
+        FhLogger.info("HttpSession prepared");
         attributes.put(WebSocketSessionManager.HTTP_SESSION_KEY, httpSession);
         return res;
     }

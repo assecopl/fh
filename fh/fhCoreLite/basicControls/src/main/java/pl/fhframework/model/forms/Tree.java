@@ -1,25 +1,19 @@
 package pl.fhframework.model.forms;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import pl.fhframework.core.util.StringUtils;
+import lombok.Getter;
+import lombok.Setter;
 import pl.fhframework.BindingResult;
 import pl.fhframework.annotations.*;
 import pl.fhframework.binding.AdHocActionBinding;
 import pl.fhframework.binding.AdHocModelBinding;
 import pl.fhframework.binding.ModelBinding;
+import pl.fhframework.core.util.StringUtils;
 import pl.fhframework.model.dto.ElementChanges;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * This component can be used in XML Form. Most logic is based on component - Repeater, for dynamic
@@ -202,6 +196,7 @@ public class Tree extends GroupingComponent<TreeElement> implements Boundable, C
 
                     groupingComponent.getSubcomponents().add(clonedTreeElement);
                     clonedTreeElement.setGroupingParentComponent(groupingComponent);
+                    clonedTreeElement.getBindingContext().getIteratorContext().putAll(((Component) groupingComponent).getBindingContext().getIteratorContext());
                     getForm().addToElementIdToFormElement(clonedTreeElement);
                 }
             } else if (bindedCollection.size() < groupingComponent.getSubcomponents().size()) {

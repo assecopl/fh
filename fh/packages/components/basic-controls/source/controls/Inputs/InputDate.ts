@@ -298,7 +298,7 @@ class InputDate extends InputText implements LanguageChangeObserver {
                 jitMasking: this.maskDynamic,
                 placeholder: this.input.placeholder,
                 definitions: {},
-                insertMode: 0,
+                insertMode: true,
                 alias: "date",
                 mask: this.mask
             }).mask(this.input);

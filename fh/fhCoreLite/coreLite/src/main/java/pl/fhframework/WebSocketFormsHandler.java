@@ -12,19 +12,22 @@ import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.ConcurrentWebSocketSessionDecorator;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
+import pl.fhframework.accounts.SingleLoginLockManager;
 import pl.fhframework.core.FhFrameworkException;
 import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.core.security.UserAttributesTempCache;
 import pl.fhframework.core.security.model.NoneBusinessRole;
 import pl.fhframework.core.websocket.HeartbeatWebSocketHandlerDecorator;
-import pl.fhframework.accounts.SingleLoginLockManager;
 import pl.fhframework.event.dto.RedirectEvent;
 import pl.fhframework.model.dto.AbstractMessage;
 import pl.fhframework.model.dto.OutMessageEventHandlingResult;
 import pl.fhframework.model.security.SystemUser;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
@@ -199,13 +202,13 @@ public class WebSocketFormsHandler extends FormsHandler {
         public void handleTextMessage(WebSocketSession session, TextMessage input) throws Exception {
             session = concurrentWebSocketSessions.getOrDefault(session.getId(), session);
 
-            WebSocketSessionManager.setWebSocketSession(session);
+            WebSocketSession prev = WebSocketSessionManager.setWebSocketSession(session);
             try {
                 handle(session, input);
             } catch (Throwable e) {
                 FhLogger.errorSuppressed("Error during handling request", e);
             } finally {
-                WebSocketSessionManager.setWebSocketSession(null);
+                WebSocketSessionManager.setWebSocketSession(prev);
             }
         }
 
@@ -213,13 +216,13 @@ public class WebSocketFormsHandler extends FormsHandler {
         public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
             session = concurrentWebSocketSessions.getOrDefault(session.getId(), session);
 
-            WebSocketSessionManager.setWebSocketSession(session);
+            WebSocketSession prev = WebSocketSessionManager.setWebSocketSession(session);
             try {
                 transportError(session, exception);
             } catch (Throwable e) {
                 FhLogger.errorSuppressed(e);
             } finally {
-                WebSocketSessionManager.setWebSocketSession(null);
+                WebSocketSessionManager.setWebSocketSession(prev);
             }
         }
 
@@ -228,7 +231,7 @@ public class WebSocketFormsHandler extends FormsHandler {
             session = new ConcurrentWebSocketSessionDecorator(session, webSocketConfiguration.getSendTimeLimit(), webSocketConfiguration.getTextBufferSize());
             concurrentWebSocketSessions.put(session.getId(), session);
 
-            WebSocketSessionManager.setWebSocketSession(session);
+            WebSocketSession prev = WebSocketSessionManager.setWebSocketSession(session);
             try {
                 String sessionId = WebSocketSessionManager.getHttpSession().getId();
                 String userName = sessionId; // for guests take sessionId as name, it provides proper function of windows session overtake
@@ -254,13 +257,13 @@ public class WebSocketFormsHandler extends FormsHandler {
                 if (!loginLockManager.isLoggedIn(userName)) {
                     userNames.put(userName, session);
                     connect(session);
-                    loginLockManager.assignUserLogin(userName, WebSocketSessionManager.getHttpSession().getId());
+                    loginLockManager.assignUserLogin(userName, WebSocketSessionManager.getHttpSession(session).getId());
                 }
             } catch (Throwable e) {
                 FhLogger.errorSuppressed("Error during connection init", e);
                 throw e;
             } finally {
-                WebSocketSessionManager.setWebSocketSession(null);
+                WebSocketSessionManager.setWebSocketSession(prev);
             }
         }
 
@@ -269,7 +272,7 @@ public class WebSocketFormsHandler extends FormsHandler {
             session = concurrentWebSocketSessions.getOrDefault(session.getId(), session);
 
             wssRepository.onConnectionClosed(session);
-            WebSocketSessionManager.setWebSocketSession(session);
+            WebSocketSession prev = WebSocketSessionManager.setWebSocketSession(session);
 
             // should never happen, but then without this code can loop error for ever
             if (status.getCode() == CloseStatus.TOO_BIG_TO_PROCESS.getCode()) {
@@ -286,12 +289,12 @@ public class WebSocketFormsHandler extends FormsHandler {
                 if (webSocketSession != null && session.getId().equals(webSocketSession.getId())) {
                     loginLockManager.releaseUserLogin(userName, WebSocketSessionManager.getHttpSession().getId());
                     userNames.remove(userName);
+                    WebSocketSessionManager.sustainSession(session);
                 }
-                WebSocketSessionManager.sustainSession(session);
             } catch (Throwable e) {
                 FhLogger.errorSuppressed("Error during connection closing", e);
             } finally {
-                WebSocketSessionManager.setWebSocketSession(null);
+                WebSocketSessionManager.setWebSocketSession(prev);
                 concurrentWebSocketSessions.remove(session.getId());
             }
         }
