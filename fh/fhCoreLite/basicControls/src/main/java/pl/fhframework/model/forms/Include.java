@@ -43,7 +43,7 @@ import java.util.function.Supplier;
 
 @Control(canBeDesigned = true)
 @DesignerControl
-@DocumentedComponent(category = DocumentedComponent.Category.ARRANGEMENT, value = "Component used to include xml templates into main form view", icon = "fa fa-cubes")
+@DocumentedComponent(category = DocumentedComponent.Category.ARRANGEMENT, documentationExample = true, value = "Component used to include xml templates into main form view", icon = "fa fa-cubes")
 @JsonIgnoreType
 @JsonSerialize(using = Include.Serializer.class)
 public class Include extends GroupingComponent<Component> implements Includeable {

@@ -152,6 +152,7 @@ class Table extends TableWithKeyboardEvents {
                         this.rowIndexMappings = newValue;
                         this.refreshData(true);
                         this.updateFixedHeaderWidth();
+                        this.scrollTopInside();
                         break;
                     case 'displayedRowsCount':
                         this.visibleRows = change.changedAttributes['displayedRowsCount'];
@@ -181,13 +182,13 @@ class Table extends TableWithKeyboardEvents {
         }
     };
 
-    onRowClickEvent(event) {
+    onRowClickEvent(event, mainId) {
         if (this.accessibility != 'EDIT') return;
-        let element = event.target;
-        while (element.tagName !== 'TR' && (element = element.parentElement)) {
-        }
+        //let element = event.target;
+        //while (element.tagName !== 'TR' && (element = element.parentElement)) {
+        //}
 
-        let mainId = parseInt(element.dataset.mainId);
+        //let mainId = parseInt(element.dataset.mainId);
 
         if (this.multiselect == false) {
             if (event.ctrlKey) {
@@ -232,7 +233,7 @@ class Table extends TableWithKeyboardEvents {
         if (this.selectable && this.onRowClick) {
             // @ts-ignore
             row.component.style.cursor = 'pointer';
-            row.htmlElement.addEventListener('click', this.onRowClickEvent.bind(this));
+            row.htmlElement.addEventListener('click', this.onRowClickEvent.bind(this,event, row.mainId));
         }
         if (this.onRowDoubleClick) {
             // @ts-ignore
@@ -315,7 +316,7 @@ class Table extends TableWithKeyboardEvents {
         row._parent = null;
         row.contentWrapper = null;
         row.container = null;
-        row.htmlElement.removeEventListener('click', this.onRowClickEvent.bind(this));
+        row.htmlElement.removeEventListener('click', this.onRowClickEvent.bind(this, row.mainId));
 
         $(row.htmlElement).unbind().remove();
         row.htmlElement = null;

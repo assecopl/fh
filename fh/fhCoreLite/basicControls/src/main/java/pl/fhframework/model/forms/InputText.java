@@ -28,7 +28,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
 
 @DesignerControl(defaultWidth = 3)
 @TemplateControl(tagName = "fh-input-text")
-@DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, value = "InputText component is responsible for displaying simple field, where user can write some data" +
+@DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, documentationExample = true, value = "InputText component is responsible for displaying simple field, where user can write some data" +
         " plus label representing this field.", icon = "fa fa-edit")
 @Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
 @OverridenPropertyAnnotations(
@@ -58,6 +58,14 @@ public class InputText extends BaseInputFieldWithKeySupport implements IBodyXml 
             "as html tag: <textarea></textarea>. Otherwise, simple <input/>.")
     @DesignerXMLProperty(functionalArea = LOOK_AND_STYLE, priority = 93)
     private Integer rowsCount;
+
+    @Getter
+    @Setter
+    @XMLProperty
+    @DocumentedComponentAttribute(value = "If set to true, then InputText component will be represented " +
+            "as html tag: <textarea></textarea> and height will adjust automaticly to the content.")
+    @DesignerXMLProperty(functionalArea = LOOK_AND_STYLE, priority = 94)
+    private Boolean rowsCountAuto;
 
     @Getter
     @Setter

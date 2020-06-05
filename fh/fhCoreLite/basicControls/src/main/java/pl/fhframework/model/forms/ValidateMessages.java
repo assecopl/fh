@@ -21,7 +21,7 @@ import java.util.*;
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.SPECIFIC;
 
 @Control(parents = {}, canBeDesigned = true)
-@DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, value = "Component to aggregate validation messages", icon = "fa fa-exclamation")
+@DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, documentationExample = true, value = "Component to aggregate validation messages", icon = "fa fa-exclamation")
 public class ValidateMessages extends FormElement implements IComponentsReferrer {
 
     public static final String ANY_COMPONENT = "*";

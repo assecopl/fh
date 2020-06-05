@@ -22,7 +22,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
 @TemplateControl(tagName = "fh-dropdown")
 @Control(parents = {ButtonGroup.class, PanelGroup.class, Group.class, Tab.class, Row.class, Form.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = true)
 @DesignerControl(defaultWidth = 2)
-@DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, value = "PanelGroup component responsible for the grouping of DropdownItems.", icon = "fa fa-caret-square-down")
+@DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, documentationExample = true, value = "PanelGroup component responsible for the grouping of DropdownItems.", icon = "fa fa-caret-square-down")
 public class Dropdown extends GroupingComponent<FormElement> implements Boundable, Styleable, IHasBoundableLabel, CompactLayout, IDesignerEventListener {
 
     public static final String ATTR_LABEL = "label";

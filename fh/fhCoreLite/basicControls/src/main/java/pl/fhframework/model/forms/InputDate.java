@@ -19,7 +19,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
  */
 @TemplateControl(tagName = "fh-input-date")
 @DesignerControl(defaultWidth = 3)
-@DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, value = "Component responsible for displaying field, where user can set only date.", icon = "fa fa-calendar")
+@DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, documentationExample = true, value = "Component responsible for displaying field, where user can set only date.", icon = "fa fa-calendar")
 @Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Group.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = true)
 @OverridenPropertyAnnotations(
         property = "modelBinding",

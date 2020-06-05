@@ -48,7 +48,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
         designerXmlProperty = @DesignerXMLProperty(skip = true),
         property = "height"
 )
-@DocumentedComponent(value = "It is used to construct columns of Table components.", icon = "fa fa-columns")
+@DocumentedComponent(value = "It is used to construct columns of Table components.", documentationExample = true, icon = "fa fa-columns")
 public class Column extends GroupingComponent<FormElement> implements CompactLayout, IMultipleIteratorRepeatable<Table>, ICompilerAwareComponent, IHasBoundableLabel {
 
     public static final String ATTR_LABEL = "label";

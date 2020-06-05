@@ -33,7 +33,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
 
 @TemplateControl(tagName = "fh-combo")
 @DesignerControl(defaultWidth = 3)
-@DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, value = "Enables users to quickly find and select from a pre-populated list of values as they type, leveraging searching and filtering.",
+@DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, documentationExample = true, value = "Enables users to quickly find and select from a pre-populated list of values as they type, leveraging searching and filtering.",
         icon = "fa fa-outdent")
 @Control(parents = {PanelGroup.class, Group.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = true)
 public class Combo extends BaseInputFieldWithKeySupport {

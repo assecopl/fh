@@ -5,7 +5,7 @@
 
 	<groupId>pl.fhframework</groupId>
     <artifactId>cache-standalone</artifactId>
-    <version>4.6.4</version>
+    <version>4.6.6</version>
     <packaging>jar</packaging>
 	<url>https://github.com/assecopl/fh</url>
 
@@ -15,7 +15,7 @@
     <parent>
         <groupId>pl.fhframework</groupId>
         <artifactId>fhCoreLite</artifactId>
-        <version>4.6.4</version>
+        <version>4.6.6</version>
     </parent>
 
     <dependencies>

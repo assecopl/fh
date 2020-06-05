@@ -5,7 +5,7 @@
 
     <artifactId>chartsControls</artifactId>
     <groupId>pl.fhframework</groupId>
-    <version>4.6.4</version>
+    <version>4.6.6</version>
     <packaging>jar</packaging>
     <url>https://github.com/assecopl/fh</url>
 
@@ -15,7 +15,7 @@
     <parent>
         <groupId>pl.fhframework</groupId>
         <artifactId>fhCoreLite</artifactId>
-        <version>4.6.4</version>
+        <version>4.6.6</version>
     </parent>
 
     <properties>
@@ -27,13 +27,13 @@
         <dependency>
             <groupId>pl.fhframework</groupId>
             <artifactId>basicControls</artifactId>
-            <version>4.6.4</version>
+            <version>4.6.6</version>
         </dependency>
         <dependency>
             <groupId>pl.fhframework</groupId>
             <artifactId>coreLite</artifactId>
             <!--<version>${fh.version}</version>-->
-            <version>4.6.4</version>
+            <version>4.6.6</version>
         </dependency>
 
         <dependency>
@@ -76,7 +76,7 @@
         <!--<dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
-            <version>4.6.4</version>
+            <version>4.6.6</version>
         </dependency>-->
 
     </dependencies>

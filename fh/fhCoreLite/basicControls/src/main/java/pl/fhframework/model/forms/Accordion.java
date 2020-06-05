@@ -18,7 +18,7 @@ import java.util.Optional;
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.BEHAVIOR;
 
 @Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Group.class}, canBeDesigned = true)
-@DocumentedComponent(category = DocumentedComponent.Category.ARRANGEMENT, value = "PanelGroup component responsible for the grouping of sub-elements, only one uncollapsed group will be allowed.", icon = "fa fa-caret-down")
+@DocumentedComponent(category = DocumentedComponent.Category.ARRANGEMENT, documentationExample = true, value = "PanelGroup component responsible for the grouping of sub-elements, only one uncollapsed group will be allowed.", icon = "fa fa-caret-down")
 public class Accordion extends GroupingComponent<FormElement> implements Boundable, IChangeableByClient, CompactLayout, IDesignerEventListener {
 
     private static final String ATTR_ACTIVE_GROUP = "activeGroup";

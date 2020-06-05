@@ -300,6 +300,7 @@ class InputDate extends InputText implements LanguageChangeObserver {
                 placeholder: this.input.placeholder,
                 definitions: {},
                 insertMode: true,
+                shiftPositions:false,
                 alias: "date",
                 mask: this.mask
             }).mask(this.input);

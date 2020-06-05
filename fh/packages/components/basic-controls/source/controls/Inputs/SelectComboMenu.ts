@@ -6,18 +6,18 @@ class SelectComboMenu extends InputText {
     protected values: any;
     protected autocompleter: any;
     protected selectedIndex: any;
-    private highlighted: any;
-    private blurEvent: any;
-    private blurEventWithoutChange: boolean = false;
-    private readonly onSpecialKey: any;
-    private readonly onDblSpecialKey: any;
-    private readonly freeTyping: boolean;
-    private openButton: HTMLDivElement;
-    private changeToFired: boolean;
-    private rawValueOnLatSpecialKey: any;
-    private autocompleteOpen: boolean;
-    private readonly emptyLabel: boolean;
-    private readonly emptyLabelText: string;
+    protected highlighted: any;
+    protected blurEvent: any;
+    protected blurEventWithoutChange: boolean = false;
+    protected onSpecialKey: any;
+    protected onDblSpecialKey: any;
+    protected freeTyping: boolean;
+    protected openButton: HTMLDivElement;
+    protected changeToFired: boolean;
+    protected rawValueOnLatSpecialKey: any;
+    protected autocompleteOpen: boolean;
+    protected emptyLabel: boolean;
+    protected emptyLabelText: string;
 
     constructor(componentObj: any, parent: HTMLFormComponent) {
         super(componentObj, parent);
@@ -43,7 +43,7 @@ class SelectComboMenu extends InputText {
         this.input = input;
         input.id = this.id;
         input.type = 'text';
-        if (this.emptyLabel && this.rawValue === "") {
+        if (this.rawValue === "") {
             input.value = this.emptyLabelText;
             this.rawValue = this.emptyLabelText;
             this.oldValue = this.emptyLabelText;
@@ -92,6 +92,16 @@ class SelectComboMenu extends InputText {
         autocompleter.id = this.id + '_autocompleter';
 
         this.autocompleter = autocompleter;
+
+        /**
+         * Prevent clicking on autocompleter from bubbling.
+         * There is problem when component is placed inside focusable element(Table).
+         * Clicking on scroll bar makes input lose his focus and close autocompleter automaticly
+         */
+        this.autocompleter.addEventListener("mousedown", function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+        })
         this.setValues(this.values);
         this.component = this.input;
         this.focusableComponent = input;
@@ -123,7 +133,7 @@ class SelectComboMenu extends InputText {
     }
 
     protected getInputDebounceTime() {
-        return 300;
+        return 200;
     }
 
     defineDefinitionSymbols(): void {
@@ -141,6 +151,7 @@ class SelectComboMenu extends InputText {
         let icon = document.createElement('i');
         icon.classList.add('fa');
         icon.classList.add('fa-sort-down');
+
 
         button.addEventListener('mousedown', function (e) {
             e.preventDefault();
@@ -191,12 +202,8 @@ class SelectComboMenu extends InputText {
             let shouldBlur = true;
             if (this.highlighted != null) {
                 let element = this.highlighted.element.firstChild;
-                this.selectedIndex = parseInt(element.dataset.index);
-                if (this.emptyLabel) {
-                    this.selectedIndex = this.selectedIndex - 1;
-                }
-
-                this.input.value = element.dataset.targetValue;
+                    this.selectedIndex = this.selectedIndex;
+                this.input.value = this.highlighted.displayAsTarget ? this.highlighted.targetValue : this.highlighted.displayedValue;;
             }
             this.updateModel();
             if (this.onChange && (this.rawValue !== this.oldValue || this.changeToFired)) {
@@ -267,7 +274,7 @@ class SelectComboMenu extends InputText {
                     let current = this.findValueByElement(options[h]);
                     if (current) {
                         this.input.value = current.targetValue;
-                        this.selectedIndex = h - (this.emptyLabel ? 1 : 0);
+                        this.selectedIndex = h;
                         this.highlighted = current;
                         this.updateModel();
                         if (this.onChange && (this.rawValue !== this.oldValue || this.changeToFired)) {
@@ -343,11 +350,23 @@ class SelectComboMenu extends InputText {
     inputBlurEvent() {
         this.closeAutocomplete();
 
-        if (this.emptyLabel && this.rawValue == null) {
-            this.input.value = this.emptyLabelText;
-            this.selectedIndex = -1;
-            this.updateModel();
-            this.changeToFired = true;
+        if(this.rawValue == null) {
+            //if (this.emptyLabel) {
+                this.input.value = this.emptyLabelText;
+                this.selectedIndex = -1;
+                this.updateModel();
+                this.changeToFired = true;
+            //} else {
+                //if (this.highlighted != null) {
+                    //let element = this.highlighted.element.firstChild;
+                    //this.selectedIndex = parseInt(element.dataset.index);
+                    //if (this.emptyLabel) {
+                    //    this.selectedIndex = this.selectedIndex - 1;
+                    //}
+
+                    //this.input.value = this.oldValue;
+                //}
+            //}
         }
     }
 
@@ -374,16 +393,17 @@ class SelectComboMenu extends InputText {
                             this.highlighted = this.findByValue(newValue);
 
                         } else {
-                            if (this.emptyLabel && this.emptyLabelText) {
+                            if (this.emptyLabelText) {
                                 this.input.value = this.emptyLabelText;
                                 this.rawValue = this.emptyLabelText;
                                 this.oldValue = this.emptyLabelText;
-                                this.highlighted = this.findByValue(this.emptyLabelText);
+                                this.highlighted = this.findByValue("nullValue");
                             } else {
                                 this.input.value = null;
                                 this.rawValue = null;
                                 this.oldValue = null;
-                                this.highlighted = this.findByValue(this.emptyLabelText);
+                                this.highlighted = null;
+                                this.highlighted = this.findByValue("nullValue");
                             }
                         }
                         this.hightlightValue();
@@ -422,15 +442,18 @@ class SelectComboMenu extends InputText {
 
     hightlightValue() {
         for (let value of this.values) {
-            value.element.classList.remove('selected');
+            if(value.element) {
+                value.element.classList.remove('selected');
+            }
         }
 
         if (this.highlighted == null) {
             return;
         }
-
-        this.highlighted.element.classList.add('selected');
-        this.autocompleter.scrollTop = this.highlighted.element.offsetTop;
+        if(this.highlighted.element) {
+            this.highlighted.element.classList.add('selected');
+            this.autocompleter.scrollTop = this.highlighted.element.offsetTop;
+        }
     }
 
     findByValue(value) {
@@ -496,7 +519,6 @@ class SelectComboMenu extends InputText {
                 const completerYmaks = bounding.height + bounding.top;
                 const parentYmaks = parentBound.top + parentBound.height;
                 //Put it as sibling of parent becouse parent has height and elements inside it wont overflow it. Close it when parent begins to scroll.
-                console.log("biggerThenParent", parentBound.height, sumHeight, bounding.height, this.inputGroupElement.offsetHeight);
                 if (biggerThenParent) {
                     this.handleContainerOverflow($("body"), this.autocompleter, (completerYmaks > parentYmaks));
                     parent.on("scroll", this.closeAutocomplete.bind(this));
@@ -565,11 +587,11 @@ class SelectComboMenu extends InputText {
             return {};
         }
 
-        if (this.rawValue !== this.oldValue) {
+        if (this.rawValue !== this.oldValue || this.rawValue == null) {
             this.oldValue = this.rawValue;
 
             if (this.selectedIndex != null) {
-                return {selectedIndex: this.selectedIndex};
+                return {selectedIndex: this.selectedIndex -1};
             } else {
                 return {text: this.rawValue};
             }
@@ -581,14 +603,6 @@ class SelectComboMenu extends InputText {
     setValues(values) {
         while (this.autocompleter.firstChild) {
             this.autocompleter.removeChild(this.autocompleter.firstChild);
-        }
-
-        if (this.emptyLabel) {
-            values.unshift({
-                displayAsTarget: true,
-                targetId: -1,
-                targetValue: this.emptyLabelText
-            });
         }
 
         this.values = values;
@@ -608,7 +622,12 @@ class SelectComboMenu extends InputText {
 
             let a = document.createElement('a');
             a.classList.add('dropdown-item');
+            if(i==0){
+                a.classList.add( this.emptyLabel ? 'dropdown-empty' : 'd-none');
+            }
+
             let displayValue = itemValue.displayAsTarget ? itemValue.targetValue : itemValue.displayedValue;
+
 
             let disabled = false;
 
@@ -619,18 +638,18 @@ class SelectComboMenu extends InputText {
             // escape and parse FHML
             displayValue = this.resolveValue(displayValue);
             a.innerHTML = displayValue;
-            a.addEventListener('mousedown', function (index, targetValue, targetId, event) {
+            a.addEventListener('mousedown', function (index, targetItem) {
                 event.preventDefault();
 
                 if (this.accessibility !== 'EDIT' || disabled) {
                     return;
                 }
-                this.highlighted = this.findByValue(targetValue);
-                this.selectedIndex = index;
-                if (this.emptyLabel) {
-                    this.selectedIndex = this.selectedIndex - 1;
-                }
-                this.input.value = targetValue;
+                this.highlighted = this.findByValue(targetItem.targetValue);
+                this.selectedIndex = index ;
+                //if (this.emptyLabel) {
+                //    this.selectedIndex = this.selectedIndex - 1;
+                //}
+                this.input.value = itemValue.displayAsTarget ? itemValue.targetValue : itemValue.displayedValue;
 
                 this.updateModel();
                 if (this.onChange && (this.rawValue !== this.oldValue)) {
@@ -640,7 +659,7 @@ class SelectComboMenu extends InputText {
 
                 this.closeAutocomplete();
                 this.input.select();
-            }.bind(this, i, itemValue.targetValue, itemValue.targetId));
+            }.bind(this, i, itemValue));
 
             li.appendChild(a);
             this.autocompleter.appendChild(li);

@@ -132,6 +132,7 @@ class TableOptimized extends TableWithKeyboardEvents {
                     case 'rowIndexMappings':
                         this.rowIndexMappings = newValue;
                         this.refreshData(true);
+
                         break;
                     case 'displayedRowsCount':
                         this.visibleRows = newValue;
@@ -164,6 +165,7 @@ class TableOptimized extends TableWithKeyboardEvents {
         if (clearSelection) {
             this.rawValue = [];
             this.changesQueue.queueValueChange(null);
+            this.scrollTopInside();
         }
         this.clearRows();
         this.tableData != null ? this.tableData.forEach(function (row: any, index: number) {
@@ -393,6 +395,19 @@ class TableOptimized extends TableWithKeyboardEvents {
 
         super.destroy(removeFromParent);
     }
+
+    // noinspection JSUnusedGlobalSymbols
+    setPresentationStyle(presentationStyle) {
+        if (this.parent != null) {
+            // @ts-ignore
+            this.parent.setPresentationStyle(presentationStyle);
+        }
+    }
+
+    accessibilityResolve(node: HTMLElement, access: string) {
+        // intentionally left blank
+    }
+
 
 
 }

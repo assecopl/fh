@@ -25,7 +25,7 @@ import java.util.Optional;
  */
 @TemplateControl(tagName = "fh-tab-container")
 @Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
-@DocumentedComponent(category = DocumentedComponent.Category.ARRANGEMENT, value = "TabContainer component which represents a containrt containing a single tabs", icon = "fas fa-window-maximize")
+@DocumentedComponent(category = DocumentedComponent.Category.ARRANGEMENT, documentationExample = true, value = "TabContainer component which represents a containrt containing a single tabs", icon = "fas fa-window-maximize")
 public class TabContainer extends GroupingComponent<Tab> implements IChangeableByClient, Boundable, CompactLayout, IDesignerEventListener {
 
     public static final String TYPE_NAME = "TabContainer";
@@ -48,7 +48,7 @@ public class TabContainer extends GroupingComponent<Tab> implements IChangeableB
     @JsonIgnore
     @XMLProperty(value = ATTR_ACTIVE_TAB_INDEX)
     @DesignerXMLProperty(allowedTypes = Integer.class)
-    @DocumentedComponentAttribute(defaultValue = "0", boundable = true, value = "Represents the index of the active tab")
+    @DocumentedComponentAttribute(defaultValue = "0", boundable = true, value = "Represents the index of the active tab. If '" + ATTR_ACTIVE_TAB_ID + "' binding is also used, then this attribute is read-only")
     private ModelBinding modelBinding;
 
     @Getter
@@ -56,7 +56,7 @@ public class TabContainer extends GroupingComponent<Tab> implements IChangeableB
     @JsonIgnore
     @XMLProperty(value = ATTR_ACTIVE_TAB_ID)
     @DesignerXMLProperty(allowedTypes = String.class)
-    @DocumentedComponentAttribute(boundable = true, value = "Represents the identification of the active tab")
+    @DocumentedComponentAttribute(boundable = true, value = "Represents the identification of the active tab. The attribute has precedence over '" + ATTR_ACTIVE_TAB_INDEX + "' if both are used")
     private ModelBinding tabIdBinding;
 
     public TabContainer(Form form) {

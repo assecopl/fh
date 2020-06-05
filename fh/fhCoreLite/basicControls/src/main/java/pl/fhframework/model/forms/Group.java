@@ -23,7 +23,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
 @TemplateControl(tagName = "fh-group")
 @DesignerControl(defaultWidth = 12)
 @Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class, SplitContainer.class}, invalidParents = {Table.class}, canBeDesigned = true)
-@DocumentedComponent(category = DocumentedComponent.Category.ARRANGEMENT, value = "Group component is responsible for placing components in one group, that does not intersects with other form components", icon = "fa fa-columns")
+@DocumentedComponent(category = DocumentedComponent.Category.ARRANGEMENT, documentationExample = true, value = "Group component is responsible for placing components in one group, that does not intersects with other form components", icon = "fa fa-columns")
 public class Group extends GroupingComponent<Component> implements IDesignerEventListener {
 
     private static final String ATTR_ON_CLICK = "onClick";

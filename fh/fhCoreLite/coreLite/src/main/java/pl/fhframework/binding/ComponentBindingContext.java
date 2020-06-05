@@ -1,6 +1,7 @@
 package pl.fhframework.binding;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,6 +16,8 @@ public class ComponentBindingContext implements Cloneable {
 
     private List<RowNumberBindingContext> rowNumberBindingContexts = new ArrayList<>();
     private Map<String, Object> iteratorContext = new HashMap<>();
+    @Setter
+    private String cachePrefix = "";
 
     @Override
     public ComponentBindingContext clone() throws CloneNotSupportedException {

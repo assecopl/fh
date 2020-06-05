@@ -21,7 +21,7 @@ import java.util.Objects;
 
 
 @Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Form.class, Repeater.class, Group.class, SplitContainer.class}, invalidParents = {Anchor.class, Table.class}, canBeDesigned = false)
-@DocumentedComponent(category = DocumentedComponent.Category.OTHERS, value = "Anchor component is responsible for the scrolling whole page or scorllable container to specific invisiable point.", icon = "fa fa-anchor")
+@DocumentedComponent(category = DocumentedComponent.Category.OTHERS, documentationExample = true, value = "Anchor component is responsible for the scrolling whole page or scorllable container to specific invisiable point.", icon = "fa fa-anchor")
 public class Anchor extends FormElement implements Boundable {
     private static final String SCROLL_ATTR = "scroll";
     private static final String ANIMATE_DURATION_ATTR = "animateDuration";

@@ -29,7 +29,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
  */
 @TemplateControl(tagName = "fh-output-label")
 @Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
-@DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, value = "Label component is responsible for displaying value.", icon = "fa fa-font")
+@DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, documentationExample = true, value = "Label component is responsible for displaying value.", icon = "fa fa-font")
 @DesignerControl(defaultWidth = 2)
 public class OutputLabel extends FormElement implements TableComponent<OutputLabel>, Iconable, IBodyXml {
 

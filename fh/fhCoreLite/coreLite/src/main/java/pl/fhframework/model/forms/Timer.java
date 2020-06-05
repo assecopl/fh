@@ -17,7 +17,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
  * Class representing xml component of Timer.
  */
 @Control(parents = {Form.class}, canBeDesigned = true)
-@DocumentedComponent(value = "Timer which periodically runs events", icon = "fa fa-clock")
+@DocumentedComponent(documentationExample = true, value = "Timer which periodically runs events", icon = "fa fa-clock")
 @DesignerControl(defaultWidth = 1)
 public class Timer extends NonVisualFormElement {
 

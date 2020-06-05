@@ -68,7 +68,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
  */
 @TemplateControl(tagName = "fh-table")
 @Control(parents = {Tab.class, GroupingComponent.class, Row.class, Form.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = true)
-@DocumentedComponent(category = DocumentedComponent.Category.TABLE_AND_TREE ,value = "Table that allows to arrange data like text, images, links, other tables, etc. into rows and columns of cells.", icon = "fa fa-table")
+@DocumentedComponent(category = DocumentedComponent.Category.TABLE_AND_TREE, documentationExample = true,value = "Table that allows to arrange data like text, images, links, other tables, etc. into rows and columns of cells.", icon = "fa fa-table")
 public class Table extends Repeater implements ITabular, IChangeableByClient, IEventSourceContainer, IRowNumberOffsetSupplier, Boundable, CompactLayout, IDesignerEventListener, IHasBoundableLabel {
 
     protected static final String LABEL_ATTR = "label";

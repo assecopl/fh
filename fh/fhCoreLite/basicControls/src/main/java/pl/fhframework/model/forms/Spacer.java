@@ -14,7 +14,7 @@ import pl.fhframework.annotations.TemplateControl;
 @DesignerControl(defaultWidth = 2)
 @TemplateControl(tagName = "fh-spacer")
 @Control(parents = {PanelGroup.class, Group.class, Repeater.class, Column.class, Tab.class, Row.class, Form.class, Footer.class, Dropdown.class}, canBeDesigned = true, invalidParents = {Table.class})
-@DocumentedComponent(category = DocumentedComponent.Category.ARRANGEMENT, value = "Component used to create spaces in a layout", icon = "fas fa-arrows-alt-h")
+@DocumentedComponent(category = DocumentedComponent.Category.ARRANGEMENT, documentationExample = true, value = "Component used to create spaces in a layout", icon = "fas fa-arrows-alt-h")
 public class Spacer extends FormElement implements Invisible {
 
     public Spacer(Form form) {

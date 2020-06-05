@@ -165,7 +165,10 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
                 if (this.selectionCheckboxes) {
                     row.component.querySelector('input[type="checkbox"]').checked = true;
                 }
+            } else {
+                this.scrollTopInside();
             }
+
 
 
         }.bind(this));

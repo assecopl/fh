@@ -3,10 +3,12 @@ import {InputTextPL} from './i18n/InputText.pl';
 import {InputTextEN} from './i18n/InputText.en';
 import {HTMLFormComponent, FormComponent, FormComponentKeySupport} from "fh-forms-handler";
 import {FhContainer} from "fh-forms-handler";
+import * as autosize from '../../external/autosize.min.js';
 
 class InputText extends HTMLFormComponent {
     protected keySupport: FormComponentKeySupport;
     private readonly isTextarea: boolean;
+    private readonly textareaAutosize: boolean;
     private readonly inputType: any;
     protected keySupportCallback: any;
     private valueChanged: any;
@@ -43,7 +45,8 @@ class InputText extends HTMLFormComponent {
         this.i18n.registerStrings('pl', InputTextPL);
         this.i18n.registerStrings('en', InputTextEN);
 
-        this.isTextarea = this.componentObj.rowsCount && this.componentObj.rowsCount > 0;
+        this.isTextarea = (this.componentObj.rowsCount && this.componentObj.rowsCount > 0) || this.componentObj.rowsCountAuto;
+        this.textareaAutosize = this.componentObj.rowsCountAuto || false;
         this.inputType = this.componentObj.inputType || null;
         this.placeholder = this.componentObj.placeholder || null;
         this.maxLength = this.componentObj.maxLength || null;
@@ -131,6 +134,11 @@ class InputText extends HTMLFormComponent {
             this.htmlElement.classList.add('servicesListControlWrapper');
         }
 
+        if(this.isTextarea && this.textareaAutosize){
+            // @ts-ignore
+            autosize(this.input);
+        }
+
         if(this.fh.isIE()){
             /**
              * For IE only - prevent of content delete by ESC key press (27)
@@ -166,15 +174,19 @@ class InputText extends HTMLFormComponent {
             groupSpan.appendChild(icon);
 
             if (this.componentObj.iconAlignment === 'BEFORE') {
-                this.inputGroupElement.insertBefore(group, this.component);
+                this.inputGroupElement.insertBefore(group, this.getMainComponent());
             } else if (this.componentObj.iconAlignment === 'AFTER') {
                 group.classList.remove('input-group-prepend');
                 group.classList.add('input-group-append');
                 this.inputGroupElement.appendChild(group);
             } else {
-                this.inputGroupElement.insertBefore(group, this.component);
+                this.inputGroupElement.insertBefore(group, this.getMainComponent());
             }
         }
+    }
+
+    protected getMainComponent() {
+        return this.component;
     }
 
     onInputEvent() {
@@ -386,6 +398,10 @@ class InputText extends HTMLFormComponent {
                         }
                         this.input.value = newValue;
                         this.lastValidMaskedValue = newValue;
+                        if(this.isTextarea && this.textareaAutosize){
+                            // @ts-ignore
+                            autosize.update(this.input);
+                        }
                         break;
                     case 'maxLengthBinding':
                         this.maxLength = newValue;

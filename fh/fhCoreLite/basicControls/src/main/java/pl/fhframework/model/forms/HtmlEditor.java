@@ -23,7 +23,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
 @OverridenPropertyAnnotations(designerXmlProperty = @DesignerXMLProperty(skip = true), property = "rawValue")
 @DesignerControl(defaultWidth = 12)
 @Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
-@DocumentedComponent(category = DocumentedComponent.Category.IMAGE_HTML_MD, value = "Visual HTML text editor. Allows visual editing of text in HTML markup.", icon = "fa fa-eye")
+@DocumentedComponent(category = DocumentedComponent.Category.IMAGE_HTML_MD, documentationExample = true, value = "Visual HTML text editor. Allows visual editing of text in HTML markup.", icon = "fa fa-eye")
 public class HtmlEditor extends BaseInputField {
     public static final String ATTR_TEXT = "text";
 

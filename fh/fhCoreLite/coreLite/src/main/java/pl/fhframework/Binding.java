@@ -241,12 +241,12 @@ public class Binding {
                 return result;
             }
         }
-
-        if (bindingCache.containsKey(binding)) {
-            return bindingCache.get(binding);
+        String bindingCacheKey = expandCacheKey(binding, bindingContext);
+        if (bindingCache.containsKey(bindingCacheKey)) {
+            return bindingCache.get(bindingCacheKey);
         } else {
             BindingData bindingData = new BindingData();
-            bindingCache.put(binding, bindingData);
+            bindingCache.put(bindingCacheKey, bindingData);
             Pair<String, String> bundleAndKeyFrom = I18nBindingResolver.getBundleAndKeyFrom(binding);
             if (bundleAndKeyFrom != null) {
                 bindingData.container = null;
@@ -283,6 +283,10 @@ public class Binding {
             }
             return bindingData;
         }
+    }
+
+    private String expandCacheKey(String binding, ComponentBindingContext bindingContext) {
+        return bindingContext != null ? bindingContext.getCachePrefix() + binding : binding;
     }
 
     private boolean fillContainerByIdx(ComponentBindingContext bindingContext, BindingData bindingData, String containerPath) {

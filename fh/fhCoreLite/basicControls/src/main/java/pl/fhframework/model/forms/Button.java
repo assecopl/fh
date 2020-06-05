@@ -30,7 +30,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
  */
 @TemplateControl(tagName = "fh-button")
 @Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Form.class, ButtonGroup.class, Group.class, Row.class, Footer.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = true)
-@DocumentedComponent(category = DocumentedComponent.Category.BUTTONS_AND_OTHER, value = "Button which represents HTML input", icon = "fa fa-square")
+@DocumentedComponent(category = DocumentedComponent.Category.BUTTONS_AND_OTHER, documentationExample = true, value = "Button which represents HTML input", icon = "fa fa-square")
 @DesignerControl(defaultWidth = 2)
 public class Button extends FormElementWithConfirmationSupport implements TableComponent<Button>, Styleable, IHasBoundableLabel {
 

@@ -5,7 +5,7 @@
 
     <artifactId>coreApplication</artifactId>
     <groupId>pl.fhframework</groupId>
-    <version>4.6.4</version>
+    <version>4.6.6</version>
     <packaging>jar</packaging>
     <url>https://github.com/assecopl/fh</url>
 
@@ -15,7 +15,7 @@
     <parent>
         <groupId>pl.fhframework</groupId>
         <artifactId>fh-boot-bom</artifactId>
-        <version>4.6.4</version>
+        <version>4.6.6</version>
         <relativePath>../../BOM/fh-boot-bom</relativePath>
     </parent>
 
@@ -49,11 +49,6 @@
         <dependency>
             <groupId>pl.fhframework.core.security.provider</groupId>
             <artifactId>securityDataProvider-jdbc</artifactId>
-            <version>${fh.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>pl.fhframework.core.security.permission</groupId>
-            <artifactId>permissionProvider-jdbc</artifactId>
             <version>${fh.version}</version>
         </dependency>
         <dependency>

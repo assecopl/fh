@@ -24,7 +24,7 @@ import java.util.function.Consumer;
  * mateusz.zaremba
  */
 @Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
-@DocumentedComponent(category = DocumentedComponent.Category.ARRANGEMENT, value = "Wizard component which represents container with tabs", icon = "fa fa-window-maximize")
+@DocumentedComponent(category = DocumentedComponent.Category.ARRANGEMENT, documentationExample = true, value = "Wizard component which represents container with tabs", icon = "fa fa-window-maximize")
 public class Wizard extends GroupingComponent<Tab> implements IChangeableByClient, Boundable, CompactLayout, IDesignerEventListener {
 
     public static final String TYPE_NAME = "Wizard";

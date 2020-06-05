@@ -74,7 +74,8 @@ class TableRow extends HTMLFormComponent {
                 let containerHeight = container.height();
                 let containerScrollTop = container.scrollTop();
                 let realPositionElement = scrollTo.position().top;
-                let elementHeight = scrollTo.height();
+                //Get 80% element height, we don't need to be strict.
+                let elementHeight = scrollTo.height() * 0.8;
                 if ((realPositionElement - elementHeight) < containerScrollTop || realPositionElement + elementHeight
                     > containerScrollTop
                     + containerHeight) {

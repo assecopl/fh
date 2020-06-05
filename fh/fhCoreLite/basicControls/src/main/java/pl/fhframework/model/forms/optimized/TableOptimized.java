@@ -54,7 +54,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
  * </Table>}</pre>
  */
 @Control(parents = {Tab.class, GroupingComponent.class, Row.class, Form.class, Repeater.class}, invalidParents = {TableOptimized.class}, canBeDesigned = true)
-@DocumentedComponent(category = DocumentedComponent.Category.TABLE_AND_TREE, value = "TableOptimized", icon = "fa fa-table")
+@DocumentedComponent(category = DocumentedComponent.Category.TABLE_AND_TREE, documentationExample = true, value = "TableOptimized", icon = "fa fa-table")
 public class TableOptimized extends  Repeater implements ITabular, IChangeableByClient, IEventSourceContainer, IRowNumberOffsetSupplier, Boundable, CompactLayout, IDesignerEventListener, IHasBoundableLabel {
 
     protected static final String LABEL_ATTR = "label";

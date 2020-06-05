@@ -23,7 +23,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
  */
 @TemplateControl(tagName = "fh-tab")
 @Control(parents = {TabContainer.class, Wizard.class})
-@DocumentedComponent(ignoreFields = {"width"},
+@DocumentedComponent(documentationExample = true, ignoreFields = {"width"},
         value = "Tab component which represents a single tab", icon = "fa fa-window-maximize")
 public class Tab extends GroupingComponent implements IHasBoundableLabel, IDesignerEventListener {
 

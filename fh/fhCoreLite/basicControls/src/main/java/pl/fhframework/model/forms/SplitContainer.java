@@ -13,7 +13,7 @@ import pl.fhframework.model.forms.designer.SizePxDesignerPreviewProvider;
 import pl.fhframework.model.forms.optimized.ColumnOptimized;
 
 @Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
-@DocumentedComponent(category = DocumentedComponent.Category.ARRANGEMENT, value = "Container component responsible for placing components on a single line with movable column", icon = "fa fa-columns")
+@DocumentedComponent(category = DocumentedComponent.Category.ARRANGEMENT, documentationExample = true, value = "Container component responsible for placing components on a single line with movable column", icon = "fa fa-columns")
 public class SplitContainer extends GroupingComponent<FormElement> implements IDesignerEventListener, CompactLayout {
 
     public static final String SIZE_LEFT_ATTR = "sizeLeft";

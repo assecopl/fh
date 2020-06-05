@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
  * This component can be used in XML Form. Most logic is based on component - Repeater, for dynamic
  * binding resolving and cloning components.
  */
-@DocumentedComponent(category = DocumentedComponent.Category.TABLE_AND_TREE, ignoreFields = {"width"},
+@DocumentedComponent(category = DocumentedComponent.Category.TABLE_AND_TREE, documentationExample = true, ignoreFields = {"width"},
         value = "Tree component is responsible for display certain relation between parent and childs. "
                 + "This component is similar too Repeater, but relation is visible.", icon = "fa fa-tree")
 @Control(parents = {PanelGroup.class, Group.class, Column.class, Tab.class, Row.class, Form.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = true)
@@ -197,6 +197,7 @@ public class Tree extends GroupingComponent<TreeElement> implements Boundable, C
                     groupingComponent.getSubcomponents().add(clonedTreeElement);
                     clonedTreeElement.setGroupingParentComponent(groupingComponent);
                     clonedTreeElement.getBindingContext().getIteratorContext().putAll(((Component) groupingComponent).getBindingContext().getIteratorContext());
+                    clonedTreeElement.getBindingContext().setCachePrefix(((Component) groupingComponent).getBindingContext().getCachePrefix());
                     getForm().addToElementIdToFormElement(clonedTreeElement);
                 }
             } else if (bindedCollection.size() < groupingComponent.getSubcomponents().size()) {

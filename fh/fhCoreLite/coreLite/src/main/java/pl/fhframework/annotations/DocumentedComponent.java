@@ -21,6 +21,8 @@ public @interface DocumentedComponent {
 
     String[] ignoreFields() default "";
 
+    boolean documentationExample() default false;
+
     Category category() default Category.OTHERS;
 
     enum Category {

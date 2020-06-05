@@ -13,7 +13,7 @@ import pl.fhframework.model.forms.designer.IDesignerEventListener;
         designerXmlProperty = @DesignerXMLProperty(skip = true),
         property = "labelModelBinding"
 )
-@DocumentedComponent(category = DocumentedComponent.Category.BUTTONS_AND_OTHER, value = "Button component responsible for the grouping of ThreeDotsMenuItems in a table row.", icon = "fa fa-ellipsis-v")
+@DocumentedComponent(category = DocumentedComponent.Category.BUTTONS_AND_OTHER, documentationExample = true, value = "Button component responsible for the grouping of ThreeDotsMenuItems in a table row.", icon = "fa fa-ellipsis-v")
 public class ThreeDotsMenu extends Dropdown implements Boundable, Styleable, IHasBoundableLabel, CompactLayout, IDesignerEventListener {
 
     @Getter

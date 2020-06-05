@@ -146,7 +146,7 @@ class TablePaged extends Table {
             pagination_clone.appendChild(paginator_second);
             this.buildTablePagedToolsLabels(pagination_clone, toolsRow_clone);
             toolsRow_clone.appendChild(pagination_clone);
-            this.htmlElement.prepend(toolsRow_clone);
+            $(this.htmlElement).prepend(toolsRow_clone);
             this.paginator_second = paginator_second;
             this.pageInfo_second = pageInfo_second;
         }

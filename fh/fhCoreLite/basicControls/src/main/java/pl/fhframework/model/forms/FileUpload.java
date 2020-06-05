@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.*;
 
 @DesignerControl(defaultWidth = 2)
-@DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, value = "Component responsible for file upload", icon = "fa fa-upload")
+@DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, documentationExample = true, value = "Component responsible for file upload", icon = "fa fa-upload")
 @Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
 public class FileUpload extends FormElement implements TableComponent<FileUpload>, IChangeableByClient, Boundable, IValidatedComponent, IFileMaxSized, IResourced, IHasBoundableLabel, Styleable {
     private static final String REQUIRED_ATTR = "required";

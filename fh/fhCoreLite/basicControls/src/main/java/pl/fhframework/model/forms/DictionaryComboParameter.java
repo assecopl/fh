@@ -18,7 +18,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
 
 @DesignerControl(defaultWidth = -1)
 @Control(parents = {DictionaryCombo.class}, canBeDesigned = false)
-@DocumentedComponent(value = "It is used to construct columns of Table components.", icon = "fa fa-columns")
+@DocumentedComponent(documentationExample = true, value = "It is used to construct columns of Table components.", icon = "fa fa-columns")
 @ModelElement(type = ModelElementType.HIDDEN)
 public class DictionaryComboParameter extends FormElement implements Boundable{
 

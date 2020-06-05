@@ -116,9 +116,24 @@ public class FormComponentsDocumentationService {
         if (predicate == null) {
             return annotatedClasses;
         }
+        List<Class<?>> fhStandardControls = filterStandardControlsDocumentation(annotatedClasses);
         /*return annotatedClasses
                 .stream().filter(predicate).collect(Collectors.toList());*/
-        return new ArrayList<>(annotatedClasses);
+        return new ArrayList<>(fhStandardControls);
+    }
+
+    private  List<Class<?>> filterStandardControlsDocumentation(List<Class<?>> annotatedClasses) {
+        List<Class<?>> fhStandardControls = new ArrayList<>();
+
+        for (Class<?> annotatedClass : annotatedClasses) {
+            DocumentedComponent documentedComponentAnnotation = annotatedClass.getAnnotation(DocumentedComponent.class);
+
+            if (documentedComponentAnnotation.documentationExample()) {
+                fhStandardControls.add(annotatedClass);
+            }
+        }
+
+        return fhStandardControls;
     }
 
     private void collectDocumentedAttributes(Class<?> clazz, ComponentElement element, List<String> attributeExcludes) {

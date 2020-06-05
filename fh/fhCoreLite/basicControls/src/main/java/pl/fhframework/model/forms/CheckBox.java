@@ -9,7 +9,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
 
 @TemplateControl(tagName = "fh-input-checkbox")
 @DesignerControl(defaultWidth = 2)
-@DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, value = "CheckBox is component which let a user select MANY of a limited number of choices. It is" +
+@DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, documentationExample = true, value = "CheckBox is component which let a user select MANY of a limited number of choices. It is" +
         " displayed as HTML input type = checkbox element.", icon = "fa fa-check-square")
 @Control(parents = {PanelGroup.class, Group.class, Column.class, Tab.class, Row.class, Form.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = true)
 @OverridenPropertyAnnotations(

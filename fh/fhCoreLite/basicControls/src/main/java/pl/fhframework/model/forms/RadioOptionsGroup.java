@@ -13,7 +13,7 @@ import pl.fhframework.model.forms.optimized.ColumnOptimized;
 @TemplateControl(tagName = "fh-radio-options-group")
 @DesignerControl(defaultWidth = 3)
 @Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
-@DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, value = "RadioOptionsGroup component aggregating single radio components", icon = "fa fa-ellipsis-v", ignoreFields = {"emptyValue", "emptyLabel"})
+@DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, documentationExample = true, value = "RadioOptionsGroup component aggregating single radio components", icon = "fa fa-ellipsis-v", ignoreFields = {"emptyValue", "emptyLabel"})
 public class RadioOptionsGroup extends BaseInputListField {
 
     public RadioOptionsGroup(Form form) {

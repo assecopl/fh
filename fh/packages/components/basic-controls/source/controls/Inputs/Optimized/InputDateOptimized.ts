@@ -292,6 +292,7 @@ class InputDateOptimized extends InputText implements LanguageChangeObserver {
         }
     }
 
+
     protected applyMask() {
         if (this.maskEnabled && !this.inputmaskEnabled) {
             // @ts-ignore
@@ -301,7 +302,8 @@ class InputDateOptimized extends InputText implements LanguageChangeObserver {
                 jitMasking: this.maskDynamic,
                 placeholder: this.input.placeholder,
                 definitions: {},
-                insertMode: 0,
+                insertMode: true,
+                shiftPositions:false,
                 alias: "date",
                 mask: this.mask
             }).mask(this.input);

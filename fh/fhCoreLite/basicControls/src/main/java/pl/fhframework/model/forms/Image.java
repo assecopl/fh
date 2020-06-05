@@ -30,7 +30,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
 @Setter
 @DesignerControl(defaultWidth = 6)
 @Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Group.class, Widget.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = true)
-@DocumentedComponent(category = DocumentedComponent.Category.IMAGE_HTML_MD, value = "Image component for displaying image and marking points on it (optionally)", icon = "fa fa-image")
+@DocumentedComponent(category = DocumentedComponent.Category.IMAGE_HTML_MD, documentationExample = true, value = "Image component for displaying image and marking points on it (optionally)", icon = "fa fa-image")
 public class Image extends FormElement implements TableComponent<Image> {
 
     public static final String ATTR_SRC = "src";

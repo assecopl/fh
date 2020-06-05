@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.CONTENT;
 
-@DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, value = "Enables users to quickly find and select from a pre-populated list of values as they type, leveraging searching and filtering.",
+@DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, documentationExample = true, value = "Enables users to quickly find and select from a pre-populated list of values as they type, leveraging searching and filtering.",
         icon = "fa fa-outdent")
 @DesignerControl(defaultWidth = 3)
 @Control(parents = {PanelGroup.class, Group.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = true)
@@ -59,6 +59,13 @@ public class SelectComboMenu extends BaseInputFieldWithKeySupport {
 
         private Long targetId;
 
+        public SelectComboItemDTO(String targetValue, Long targetId, String displayedValue) {
+            this.displayAsTarget = false;
+            this.targetValue = targetValue;
+            this.displayedValue = displayedValue;
+            this.targetId = targetId;
+        }
+
         public SelectComboItemDTO(String targetValue, Long targetId) {
             this.displayAsTarget = true;
             this.targetValue = targetValue;
@@ -76,7 +83,7 @@ public class SelectComboMenu extends BaseInputFieldWithKeySupport {
     @Getter
     @Setter
     @XMLProperty
-    @DocumentedComponentAttribute(defaultValue = "false", value = "Determines if empty value should be displayed on list of options.")
+    @DocumentedComponentAttribute(defaultValue = "false", value = "Determines if empty value should be displayed on list of options. Remember to set parameter for empty label text (emptyLabelText).")
     @DesignerXMLProperty(priority = 60, functionalArea = CONTENT)
     protected boolean emptyLabel;
 
@@ -243,27 +250,6 @@ public class SelectComboMenu extends BaseInputFieldWithKeySupport {
     public void updateModel(ValueChange valueChange) {
         Object textObj = valueChange.getStringAttribute(TEXT);
 
-        if (textObj != null && textObj.equals("")) {
-            this.filterText = "";
-            processFiltering(this.filterText);
-            this.selectedItemIndex = -1;
-            this.selectedItem = null;
-            this.rawValue = null;
-            changeSelectedItemBinding();
-        } else if (textObj != null) {
-            String text = (String) textObj;
-            this.filterText = text;
-            processFiltering(text);
-            firstLoad = false;
-            selectItemByFilterText();
-            changeSelectedItemBinding();
-            // if free typing is allowed, use typed value as selected item
-            if (freeTyping) {
-                this.selectedItem = StringUtils.emptyToNull(text);
-                this.rawValue = (String) this.selectedItem;
-                changeSelectedItemBinding();
-            }
-        }
         if (valueChange.hasAttributeChanged(SELECTED_INDEX_ATTR)) {
             this.selectedItemIndex = valueChange.getIntAttribute(SELECTED_INDEX_ATTR);
             this.selectedItem = (this.selectedItemIndex >= 0) ? this.filteredObjectValues.get(selectedItemIndex) : null;
@@ -271,11 +257,27 @@ public class SelectComboMenu extends BaseInputFieldWithKeySupport {
             this.rawValue = (selectedItem != null) ? toRawValue(selectedItem) : null;
             this.filterText = rawValue != null ? rawValue : "";
             processFiltering(this.filterText);
+        } else {
+
+                String text = (String) textObj;
+                this.filterText = text;
+                processFiltering(text);
+                firstLoad = false;
+                selectItemByFilterText();
+                changeSelectedItemBinding();
+                // if free typing is allowed, use typed value as selected item
+                if (freeTyping) {
+                    this.selectedItem = StringUtils.emptyToNull(text);
+                    this.rawValue = (String) this.selectedItem;
+                    changeSelectedItemBinding();
+                }
         }
+
     }
 
     private void selectItemByFilterText() {
         List<SelectComboItemDTO> entry = collectValues(filteredObjectValues);
+
         for (SelectComboItemDTO item : entry) {
             if (Objects.equals(this.filterText, item.isDisplayAsTarget() ? item.getTargetValue() : item.getDisplayedValue())) {
                 this.selectedItemIndex = entry.indexOf(item);
@@ -473,6 +475,16 @@ public class SelectComboMenu extends BaseInputFieldWithKeySupport {
 
     private List<SelectComboItemDTO> collectValues(List<Object> valuesToConvert) {
         List<SelectComboItemDTO> filteredConvertedValues = new LinkedList<>();
+
+        /**
+         * Add empty element to evry list.
+         * Empty value will be always on list for proper null value binding with frontend.
+         */
+
+        SelectComboItemDTO nullItem = new SelectComboItemDTO(
+                "nullValue", -1L, this.emptyLabelText);
+        filteredConvertedValues.add(nullItem);
+
         AtomicReference<Long> idx = new AtomicReference<>(0L);
         valuesToConvert.forEach(value -> {
             SelectComboItemDTO item;
@@ -485,16 +497,13 @@ public class SelectComboMenu extends BaseInputFieldWithKeySupport {
             idx.getAndSet(idx.get() + 1);
             filteredConvertedValues.add(item);
         });
+
+
+
         return filteredConvertedValues;
     }
 
     private SelectComboItemDTO collectValue(Object value) {
-        if (value == null) {
-            if (this.emptyLabel) {
-                return new SelectComboItemDTO(this.emptyLabelText, -1L);
-            }
-            return null;
-        }
 
         AtomicReference<Long> idx = new AtomicReference<>(0L);
         SelectComboItemDTO item;

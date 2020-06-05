@@ -13,7 +13,16 @@ import org.springframework.core.ResolvableType;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
+import pl.fhframework.ISystemUseCase;
+import pl.fhframework.ReflectionUtils;
+import pl.fhframework.SessionManager;
+import pl.fhframework.UserSession;
+import pl.fhframework.annotations.Action;
 import pl.fhframework.aspects.conversation.IUseCaseConversation;
+import pl.fhframework.binding.ActionBinding;
+import pl.fhframework.binding.ActionSignature;
+import pl.fhframework.binding.CallbackActionBinding;
+import pl.fhframework.binding.IActionCallback;
 import pl.fhframework.core.*;
 import pl.fhframework.core.cloud.IExportedCloudServerRegistry;
 import pl.fhframework.core.cloud.config.CloudRegistryUseCaseInfo;
@@ -38,25 +47,16 @@ import pl.fhframework.core.uc.instance.UseCaseInitializer;
 import pl.fhframework.core.uc.meta.UseCaseActionInfo;
 import pl.fhframework.core.uc.meta.UseCaseInfo;
 import pl.fhframework.core.uc.meta.UseCaseMetadataRegistry;
+import pl.fhframework.core.uc.service.UseCaseLayoutService;
 import pl.fhframework.core.uc.url.*;
 import pl.fhframework.core.util.CollectionsUtils;
 import pl.fhframework.core.util.ComponentsUtils;
 import pl.fhframework.core.util.DebugUtils;
 import pl.fhframework.core.util.JsonUtil;
-import pl.fhframework.ISystemUseCase;
-import pl.fhframework.ReflectionUtils;
-import pl.fhframework.SessionManager;
-import pl.fhframework.UserSession;
-import pl.fhframework.annotations.Action;
-import pl.fhframework.binding.ActionBinding;
-import pl.fhframework.binding.ActionSignature;
-import pl.fhframework.binding.CallbackActionBinding;
-import pl.fhframework.binding.IActionCallback;
 import pl.fhframework.event.EventRegistry;
 import pl.fhframework.event.dto.NotificationEvent;
 import pl.fhframework.events.*;
 import pl.fhframework.forms.IFormsUtils;
-import pl.fhframework.core.uc.service.UseCaseLayoutService;
 import pl.fhframework.model.PresentationStyleEnum;
 import pl.fhframework.model.dto.AbstractMessage;
 import pl.fhframework.model.dto.InMessageEventData;
@@ -526,7 +526,16 @@ public class UseCaseContainer implements Serializable {
                     ((UniversalCallbackHandler) callback).apply(method, args != null ? args : new Object[0]);
                     return null;
                 } else {
-                    return method.invoke(callback, args);
+                    try {
+                        return method.invoke(callback, args);
+                    } catch (InvocationTargetException ex) {
+                        if (ex.getCause() instanceof RuntimeException) {
+                            throw ex.getCause();
+                        }
+                        else {
+                            throw new FhException(ex.getCause());
+                        }
+                    }
                 }
             });
         }
