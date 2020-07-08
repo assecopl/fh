@@ -1,6 +1,6 @@
 import * as moment from 'moment';
-import 'imports-loader?moment,define=>false,exports=>false!../../external/inputmask';
-import 'imports-loader?moment,define=>false,exports=>false!../../external/bootstrap-datepicker';
+import '../../external/inputmask.js';
+import '../../external/bootstrap-datepicker.js';
 import {InputText} from "./InputText";
 import {InputDatePL} from './i18n/InputDate.pl';
 import {InputDateEN} from './i18n/InputDate.en';

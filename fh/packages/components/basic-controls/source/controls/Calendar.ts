@@ -2,8 +2,7 @@ import {HTMLFormComponent} from "fh-forms-handler";
 import * as _ from "lodash";
 import * as moment from 'moment';
 import * as $ from 'jquery';
-import 'imports-loader?moment,define=>false,exports=>false!../external/bootstrap-datepicker';
-
+import '../external/bootstrap-datepicker.js';
 class Calendar extends HTMLFormComponent {
     private readonly blockedDates: any;
     private readonly values: any;

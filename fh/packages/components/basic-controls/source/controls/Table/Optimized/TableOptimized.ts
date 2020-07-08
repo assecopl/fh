@@ -1,11 +1,11 @@
-import {FhContainer, HTMLFormComponent} from "fh-forms-handler";
+import {FhContainer, FormComponent, HTMLFormComponent} from "fh-forms-handler";
 import {TableWithKeyboardEvents} from "./../Abstract/TableWithKeyboardEvents";
 import {TableRowOptimized} from "./TableRowOptimized";
 
 class TableOptimized extends TableWithKeyboardEvents {
     protected readonly visibleRows: any;
     protected readonly tableData: any[] = null;
-    protected rows: Array<TableRowOptimized> = [];
+    protected rows: Array<any> = [];
     protected readonly rowIndexMappings: any;
     protected readonly minRows: number = null;
     protected readonly startSize: number = null;
@@ -406,6 +406,16 @@ class TableOptimized extends TableWithKeyboardEvents {
 
     accessibilityResolve(node: HTMLElement, access: string) {
         // intentionally left blank
+    }
+
+    protected getAllComponents() {
+        let result: FormComponent[] = this.components;
+
+        this.rows.forEach((value) => {
+            result = result.concat(value.components);
+        });
+
+        return result;
     }
 
 

@@ -1,4 +1,4 @@
-import 'imports-loader?moment,define=>false,exports=>false!../../external/inputmask';
+import '../../external/inputmask.js';
 import {HTMLFormComponent, FormComponent} from "fh-forms-handler";
 import {FhContainer} from "fh-forms-handler";
 import {FormComponentKeySupport} from "fh-forms-handler";

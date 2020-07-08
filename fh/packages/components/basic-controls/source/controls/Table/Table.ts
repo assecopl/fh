@@ -14,6 +14,7 @@ class Table extends TableWithKeyboardEvents {
     protected readonly onRowClick: any;
     private readonly onRowDoubleClick: any;
     private readonly selectionCheckboxes: any;
+    private readonly synchronizeScrolling: string;
     private selectionChanged: any;
     public totalColumns: number;
     protected ieFocusFixEnabled: boolean;
@@ -36,7 +37,7 @@ class Table extends TableWithKeyboardEvents {
         this.tableGrid = this.componentObj.tableGrid || 'hide';
         this.tableStripes = this.componentObj.tableStripes || 'hide';
         this.ieFocusFixEnabled = this.componentObj.ieFocusFixEnabled || false;
-
+        this.synchronizeScrolling = this.componentObj.synchronizeScrolling || null;
         this._dataWrapper = null;
         this.onRowDoubleClick = this.componentObj.onRowDoubleClick;
         this.selectionCheckboxes = this.componentObj.selectionCheckboxes || false;
@@ -82,7 +83,6 @@ class Table extends TableWithKeyboardEvents {
         this.header = heading;
 
 
-
         let body = document.createElement('tbody');
 
         table.appendChild(heading);
@@ -98,8 +98,15 @@ class Table extends TableWithKeyboardEvents {
             } else {
                 table.style.tableLayout = 'initial';
             }
-
             div.classList.add('table-responsive');
+
+            if (this.synchronizeScrolling) {
+                div.addEventListener('scroll', function (e) {
+                    $('#' + this.synchronizeScrolling).parent('.table-responsive')
+                        .scrollTop($(div).scrollTop())
+                        .scrollLeft($(div).scrollLeft());
+                }.bind(this));
+            }
         }
 
         div.appendChild(table);
@@ -162,8 +169,12 @@ class Table extends TableWithKeyboardEvents {
                         this.scrollTopInside();
                         break;
                     case 'selectedRowNumber':
+                        //Chcek if values are same and set no selection. We don't need to fire higlight logic again.
+                        const noSelected = (this.rawValue[0] == -1 && newValue[0] == -1)
                         this.rawValue = change.changedAttributes['selectedRowNumber'];
+                        if(!noSelected) {
                             this.highlightSelectedRows();
+                        }
                         break;
                     case 'rowStylesMapping':
                         this.rowStylesMapping = newValue;
@@ -184,11 +195,6 @@ class Table extends TableWithKeyboardEvents {
 
     onRowClickEvent(event, mainId) {
         if (this.accessibility != 'EDIT') return;
-        //let element = event.target;
-        //while (element.tagName !== 'TR' && (element = element.parentElement)) {
-        //}
-
-        //let mainId = parseInt(element.dataset.mainId);
 
         if (this.multiselect == false) {
             if (event.ctrlKey) {
@@ -233,7 +239,7 @@ class Table extends TableWithKeyboardEvents {
         if (this.selectable && this.onRowClick) {
             // @ts-ignore
             row.component.style.cursor = 'pointer';
-            row.htmlElement.addEventListener('click', this.onRowClickEvent.bind(this,event, row.mainId));
+            row.htmlElement.addEventListener('click', function(e) { this.onRowClickEvent(e, row.mainId) }.bind(this));
         }
         if (this.onRowDoubleClick) {
             // @ts-ignore
@@ -316,7 +322,7 @@ class Table extends TableWithKeyboardEvents {
         row._parent = null;
         row.contentWrapper = null;
         row.container = null;
-        row.htmlElement.removeEventListener('click', this.onRowClickEvent.bind(this, row.mainId));
+        row.htmlElement.removeEventListener('click',function(e) { this.onRowClickEvent(e, row.mainId) }.bind(this));
 
         $(row.htmlElement).unbind().remove();
         row.htmlElement = null;
@@ -468,7 +474,7 @@ class Table extends TableWithKeyboardEvents {
 
 
     selectAllRows(selectOrClear) {
-        if(selectOrClear) {
+        if (selectOrClear) {
             this.rawValue = this.checkAllArray;
         } else {
             this.rawValue = [-1];
@@ -527,13 +533,13 @@ class Table extends TableWithKeyboardEvents {
     /**
      * Ads Cell to header with checkbox for selecting all records on current page.
      */
-    protected addCheckAllCell(){
+    protected addCheckAllCell() {
         let cell = document.createElement('th');
         cell.classList.add('selectionColumn');
         cell.style.width = "40px"
 
         let checkbox = document.createElement('input');
-        checkbox.id = "header_check_all_"+this.id;
+        checkbox.id = "header_check_all_" + this.id;
         checkbox.type = 'checkbox';
         checkbox.style.pointerEvents = 'none';
         checkbox.classList.add('selectionCheckbox');
@@ -567,7 +573,6 @@ class Table extends TableWithKeyboardEvents {
                 this.fireEventWithLock('onRowClick', this.onRowClick, event);
             }
         }.bind(this));
-
 
 
         this.contentWrapper.appendChild(cell);

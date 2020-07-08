@@ -138,7 +138,7 @@ class SelectComboMenuOptimized extends SelectComboMenu {
                 a.classList.add( this.emptyLabel ? 'dropdown-empty' : 'd-none');
             }
 
-            let displayValue = itemValue.displayAsTarget ? itemValue.targetValue : itemValue.displayedValue;
+            let displayValue = itemValue.displayAsTarget ? itemValue.targetValue : (itemValue.displayedValue ? itemValue.displayedValue : "");
 
             let disabled = false;
 
@@ -160,7 +160,7 @@ class SelectComboMenuOptimized extends SelectComboMenu {
                 //if (this.emptyLabel) {
                 //    this.selectedIndex = this.selectedIndex - 1;
                 //}
-                this.input.value = itemValue.displayAsTarget ? itemValue.targetValue : itemValue.displayedValue;
+                this.input.value = itemValue.displayAsTarget ? itemValue.targetValue : (itemValue.displayedValue ? itemValue.displayedValue : "");
 
                 this.updateModel();
                 if (this.onChange && (this.rawValue !== this.oldValue)) {

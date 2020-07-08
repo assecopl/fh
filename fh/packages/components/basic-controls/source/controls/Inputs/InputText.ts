@@ -1,9 +1,9 @@
-import 'imports-loader?moment,define=>false,exports=>false!../../external/inputmask';
 import {InputTextPL} from './i18n/InputText.pl';
 import {InputTextEN} from './i18n/InputText.en';
 import {HTMLFormComponent, FormComponent, FormComponentKeySupport} from "fh-forms-handler";
 import {FhContainer} from "fh-forms-handler";
 import * as autosize from '../../external/autosize.min.js';
+import '../../external/inputmask.js';
 
 class InputText extends HTMLFormComponent {
     protected keySupport: FormComponentKeySupport;
@@ -134,18 +134,23 @@ class InputText extends HTMLFormComponent {
             this.htmlElement.classList.add('servicesListControlWrapper');
         }
 
-        if(this.isTextarea && this.textareaAutosize){
+        if (this.isTextarea && this.textareaAutosize) {
             // @ts-ignore
+            input.classList.add("input-autosize");
             autosize(this.input);
+            //Additional logic to update height after display
+            setTimeout(function () {
+                autosize.update(this.input);
+            }.bind(this), 0)
         }
 
-        if(this.fh.isIE()){
+        if (this.fh.isIE()) {
             /**
              * For IE only - prevent of content delete by ESC key press (27)
              */
             this.input.addEventListener('keydown', e => {
                 var keyCode = (window.event) ? e.which : e.keyCode;
-                if(keyCode == 27){ //Escape keycode
+                if (keyCode == 27) { //Escape keycode
                     e.preventDefault();
                     e.stopPropagation();
                     return false;
@@ -325,9 +330,9 @@ class InputText extends HTMLFormComponent {
         }
     }
 
-    handleContainerOverflow(parent:JQuery<any>, autocompleter, up:boolean = false) {
+    handleContainerOverflow(parent: JQuery<any>, autocompleter, up: boolean = false) {
         parent.append(autocompleter);
-        if(up){
+        if (up) {
             $(autocompleter).css('top', $(this.component).offset().top - parent.offset().top - autocompleter.offsetHeight - 2);
         } else {
             $(autocompleter).css('top', $(this.component).offset().top - parent.offset().top + this.component.offsetHeight);
@@ -398,7 +403,7 @@ class InputText extends HTMLFormComponent {
                         }
                         this.input.value = newValue;
                         this.lastValidMaskedValue = newValue;
-                        if(this.isTextarea && this.textareaAutosize){
+                        if (this.isTextarea && this.textareaAutosize) {
                             // @ts-ignore
                             autosize.update(this.input);
                         }
@@ -492,8 +497,22 @@ class InputText extends HTMLFormComponent {
         super.destroy(removeFromParent);
     }
 
-    public getDefaultWidth():string {
+    public getDefaultWidth(): string {
         return 'md-3';
+    }
+
+    public render() {
+        console.log("InputTextRender", this.id)
+        super.render();
+        // if (this.isTextarea && this.textareaAutosize) {
+        //     // @ts-ignore
+        //     setTimeout(function () {
+        //         console.log("InputTextRender", this.id)
+        //         autosize.update(this.input);
+        //     }.bind(this), 0)
+        //
+        // }
+
     }
 }
 

@@ -1,0 +1,28 @@
+export declare let InputTimestampPL: {
+    today: string;
+    clear: string;
+    close: string;
+    selectMonth: string;
+    prevMonth: string;
+    nextMonth: string;
+    selectYear: string;
+    prevYear: string;
+    nextYear: string;
+    selectDecade: string;
+    prevDecade: string;
+    nextDecade: string;
+    prevCentury: string;
+    nextCentury: string;
+    pickHour: string;
+    incrementHour: string;
+    decrementHour: string;
+    pickMinute: string;
+    incrementMinute: string;
+    decrementMinute: string;
+    pickSecond: string;
+    incrementSecond: string;
+    decrementSecond: string;
+    togglePeriod: string;
+    selectTime: string;
+    selectDate: string;
+};

@@ -203,7 +203,7 @@ class SelectComboMenu extends InputText {
             if (this.highlighted != null) {
                 let element = this.highlighted.element.firstChild;
                     this.selectedIndex = this.selectedIndex;
-                this.input.value = this.highlighted.displayAsTarget ? this.highlighted.targetValue : this.highlighted.displayedValue;;
+                this.input.value = this.highlighted.displayAsTarget ? this.highlighted.targetValue : (this.highlighted.displayedValue ? this.highlighted.displayedValue : "");
             }
             this.updateModel();
             if (this.onChange && (this.rawValue !== this.oldValue || this.changeToFired)) {
@@ -273,7 +273,7 @@ class SelectComboMenu extends InputText {
 
                     let current = this.findValueByElement(options[h]);
                     if (current) {
-                        this.input.value = current.targetValue;
+                        this.input.value = current.displayAsTarget ? current.targetValue : (current.displayedValue ? current.displayedValue : "");
                         this.selectedIndex = h;
                         this.highlighted = current;
                         this.updateModel();
@@ -386,11 +386,12 @@ class SelectComboMenu extends InputText {
                 switch (name) {
                     case 'rawValue':
                         if (newValue) {
-                            this.input.value = newValue;
+                            this.highlighted = this.findByValue(newValue);
+                            this.input.value = this.highlighted.displayAsTarget ? this.highlighted.targetValue : (this.highlighted.displayedValue ? this.highlighted.displayedValue : "");
                             this.rawValue = newValue;
                             //Must be before change oldValue
                             this.oldValue = newValue;
-                            this.highlighted = this.findByValue(newValue);
+
 
                         } else {
                             if (this.emptyLabelText) {
@@ -614,7 +615,7 @@ class SelectComboMenu extends InputText {
         let index = 0;
 
         this.autocompleter.classList.remove('isEmpty');
-
+            console.log("Values", values)
         for (let i = 0, len = values.length; i < len; i++) {
             let itemValue = values[i];
             let li = document.createElement('li');
@@ -626,7 +627,7 @@ class SelectComboMenu extends InputText {
                 a.classList.add( this.emptyLabel ? 'dropdown-empty' : 'd-none');
             }
 
-            let displayValue = itemValue.displayAsTarget ? itemValue.targetValue : itemValue.displayedValue;
+            let displayValue = itemValue.displayAsTarget ? itemValue.targetValue : (itemValue.displayedValue ? itemValue.displayedValue : "");
 
 
             let disabled = false;
@@ -649,7 +650,7 @@ class SelectComboMenu extends InputText {
                 //if (this.emptyLabel) {
                 //    this.selectedIndex = this.selectedIndex - 1;
                 //}
-                this.input.value = itemValue.displayAsTarget ? itemValue.targetValue : itemValue.displayedValue;
+                this.input.value = itemValue.displayAsTarget ? itemValue.targetValue : (itemValue.displayedValue ? itemValue.displayedValue : "");
 
                 this.updateModel();
                 if (this.onChange && (this.rawValue !== this.oldValue)) {

@@ -180,6 +180,13 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
     @Getter
     @Setter
     @XMLProperty
+    @DocumentedComponentAttribute(value = "Id of another which scroll should be synchronized with this table. This option works only if horizontalScrolling is enabled.")
+    @DesignerXMLProperty(functionalArea = SPECIFIC, priority = 79)
+    protected String synchronizeScrolling;
+
+    @Getter
+    @Setter
+    @XMLProperty
     @DocumentedComponentAttribute(value = "Minimum of displayed rows.")
     @DesignerXMLProperty(functionalArea = LOOK_AND_STYLE, priority = 73)
     private Integer minRows;

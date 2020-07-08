@@ -1,0 +1,52 @@
+/// <reference types="jquery" />
+declare class FormsManager {
+    private applicationLock;
+    private socketHandler;
+    private i18n;
+    private util;
+    private layoutHandler;
+    duringShutdown: boolean;
+    private openedForms;
+    private usedContainers;
+    eventQueue: any[];
+    private pendingRequestsCount;
+    private currentMouseDownElement;
+    private formObj;
+    firedEventData: any;
+    private lastActiveElementId;
+    private lastClosedFormId;
+    constructor();
+    openForm(formObj: any): void;
+    openForms(formsList: any): void;
+    closeForm(form: any): void;
+    closeForms(formsList: any): void;
+    findForm(formId: any): any;
+    handleExternalEvents(eventList: any): void;
+    findFormByContainer(containerId: any): any;
+    focusComponent(componentId: any, containerId: any): void;
+    applyChanges(changesList: any): void;
+    fireEvent(eventType: any, actionName: any, formId: any, componentId: any, deferredEvent: any, doLock: any, params?: any): boolean;
+    fireHttpMultiPartEvent(eventType: any, actionName: any, formId: any, componentId: any, url: any, data: FormData): {
+        abortRequest: () => void;
+        promise: JQuery.Promise<any, any, any>;
+    };
+    handleEvent(requestId: any, resultOrArray: any): void;
+    triggerQueue(): void;
+    getLocationHash(): string;
+    registerBodyMouseEvents(): void;
+    informElementMouseDown(element: any): void;
+    onBodyMouseUp(event: any): void;
+    onBodyMouseDown(event: any): void;
+    ensureFunctionalityUnavailableDuringShutdown(): boolean;
+    buildDesignerContainers(): void;
+    removeDesignerContainers(): void;
+    handleDesignerContainerWidth(dContainerType: string, width?: string): void;
+    private handleDesignerContainerWidthPx;
+    private handleDesignerContainerWidthDefault;
+    showDesignerModelProperties(): void;
+    hideDesignerModelProperties(): void;
+    collapseMenuForm(): void;
+    uncollapseMenuForm(): void;
+    toggleMenu(): void;
+}
+export { FormsManager };

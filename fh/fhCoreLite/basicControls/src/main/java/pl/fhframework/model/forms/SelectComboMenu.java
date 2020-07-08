@@ -70,6 +70,7 @@ public class SelectComboMenu extends BaseInputFieldWithKeySupport {
             this.displayAsTarget = true;
             this.targetValue = targetValue;
             this.targetId = targetId;
+            this.displayedValue = targetValue;
         }
 
         public SelectComboItemDTO(IComboItem comboItem) {
@@ -281,7 +282,8 @@ public class SelectComboMenu extends BaseInputFieldWithKeySupport {
         for (SelectComboItemDTO item : entry) {
             if (Objects.equals(this.filterText, item.isDisplayAsTarget() ? item.getTargetValue() : item.getDisplayedValue())) {
                 this.selectedItemIndex = entry.indexOf(item);
-                this.selectedItem = filteredObjectValues.get(this.selectedItemIndex);
+                //Array is always bigger (null value was added at the beginning of it) then filteredObjectValues so we need to minus selected index to get right value.
+                this.selectedItem = filteredObjectValues.get(this.selectedItemIndex -1 );
                 this.rawValue = toRawValue(this.selectedItem);
                 this.fireOnchange = true;
                 return;
@@ -482,7 +484,7 @@ public class SelectComboMenu extends BaseInputFieldWithKeySupport {
          */
 
         SelectComboItemDTO nullItem = new SelectComboItemDTO(
-                "nullValue", -1L, this.emptyLabelText);
+                "nullValue", -1L, this.emptyLabelText == null ? "" : this.emptyLabelText);
         filteredConvertedValues.add(nullItem);
 
         AtomicReference<Long> idx = new AtomicReference<>(0L);

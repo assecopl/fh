@@ -1,0 +1,37 @@
+import { HTMLFormComponent } from "./HTMLFormComponent";
+declare class Form extends HTMLFormComponent {
+    private layoutHandler;
+    formType: string;
+    private drag;
+    private dragging;
+    private resizing;
+    private position;
+    private dimensions;
+    private onManualModalClose;
+    private keyupEvent;
+    private resourcesUrlPrefix;
+    state: string;
+    viewMode: string;
+    private windowListenerMouseMove;
+    private windowListenerMouseUp;
+    private modalDeferred;
+    protected headingTypeValue: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+    protected afterInitActions: Array<any>;
+    constructor(formObj: any, parent?: any);
+    create(): void;
+    destroy(removeFromParent: any): void;
+    update(change: any): void;
+    buildForm(): any;
+    buildModalForm(): HTMLDivElement;
+    focusFirstActiveInputElement(): void;
+    buildFloatingForm(): HTMLDivElement;
+    buildStandardForm(): HTMLDivElement;
+    buildHeaderForm(): HTMLDivElement;
+    buildCloseButton(): HTMLButtonElement;
+    mouseDown(event: any): void;
+    addCloudIcon(titleElement: any): void;
+    setPresentationStyle(presentationStyle: any): void;
+    addAfterInitActions(action: () => void): void;
+    private fireAfterInitActions;
+}
+export { Form };
