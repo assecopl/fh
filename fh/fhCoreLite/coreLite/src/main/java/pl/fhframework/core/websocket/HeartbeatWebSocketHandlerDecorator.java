@@ -7,6 +7,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.*;
 import org.springframework.web.socket.handler.WebSocketHandlerDecorator;
+import pl.fhframework.UserSession;
+import pl.fhframework.WebSocketSessionManager;
+import pl.fhframework.WebSocketSessionRepository;
 import pl.fhframework.aop.services.FhThreadHandler;
 import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.WebSocketRFC6455HeartbeatExecutor;
@@ -24,6 +27,9 @@ public class HeartbeatWebSocketHandlerDecorator extends WebSocketHandlerDecorato
 
     @Autowired
     protected ApplicationContext context;
+
+    @Autowired
+    protected WebSocketSessionRepository webSocketSessionRepository;
 
     public HeartbeatWebSocketHandlerDecorator(WebSocketHandler handler) {
         super(handler);
@@ -46,7 +52,7 @@ public class HeartbeatWebSocketHandlerDecorator extends WebSocketHandlerDecorato
             if (binaryMessage.getPayloadLength() == 1) {
                 if (binaryMessage.getPayload().get(0) == 0x09) {
                     try {
-                        session.sendMessage(new PongMessage());
+                        getWebSocketSession(session).sendMessage(new PongMessage());
                     } catch (IOException ex) {
                         FhLogger.error("Can't send Pong message", ex);
                     }
@@ -56,7 +62,7 @@ public class HeartbeatWebSocketHandlerDecorator extends WebSocketHandlerDecorato
         } else if (message instanceof PingMessage) {
             PingMessage pingMessage = (PingMessage) message;
             try {
-                session.sendMessage(new PongMessage(pingMessage.getPayload()));
+                getWebSocketSession(session).sendMessage(new PongMessage(pingMessage.getPayload()));
             } catch (IOException ex) {
                 FhLogger.error("Can't send Pong message", ex);
             }
@@ -85,4 +91,15 @@ public class HeartbeatWebSocketHandlerDecorator extends WebSocketHandlerDecorato
         }
         return heartbeatWebSocketExecutor;
     }
+
+    protected WebSocketSession getWebSocketSession(WebSocketSession session) {
+        try {
+            UserSession userSession = WebSocketSessionManager.getSession(session);
+            return webSocketSessionRepository.getSession(userSession).orElse(session);
+        } catch (Throwable exp) {
+            FhLogger.errorSuppressed("Can't get socket for Heartbeat",  exp);
+            return session;
+        }
+    }
+
 }

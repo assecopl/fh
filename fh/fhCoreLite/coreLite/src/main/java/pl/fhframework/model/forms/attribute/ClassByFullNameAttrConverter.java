@@ -1,5 +1,6 @@
 package pl.fhframework.model.forms.attribute;
 
+import pl.fhframework.core.FhCL;
 import pl.fhframework.model.forms.Component;
 
 /**
@@ -13,7 +14,7 @@ public class ClassByFullNameAttrConverter implements IComponentAttributeTypeConv
             return null;
         } else {
             try {
-                return Class.forName(value);
+                return FhCL.classLoader.loadClass(value);
             } catch (ClassNotFoundException e) {
                 throw new RuntimeException("Cannot find class passed as XML attribute: " + value);
             }

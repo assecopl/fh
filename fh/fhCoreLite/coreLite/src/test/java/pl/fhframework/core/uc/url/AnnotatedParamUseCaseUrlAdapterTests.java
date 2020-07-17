@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.format.number.NumberStyleFormatter;
+import pl.fhframework.core.FhCL;
 import pl.fhframework.core.uc.url.annotatedClasses.*;
 import pl.fhframework.format.FhConversionService;
 
@@ -14,7 +15,7 @@ public class AnnotatedParamUseCaseUrlAdapterTests {
 
     private static final String ALIAS = "alias";
 
-    private static final ClassLoader LOADER = AnnotatedParamUseCaseUrlAdapterTests.class.getClassLoader();
+    private static final ClassLoader LOADER = FhCL.classLoader;
 
 
     private AnnotatedParamsUseCaseUrlAdapter adapter;

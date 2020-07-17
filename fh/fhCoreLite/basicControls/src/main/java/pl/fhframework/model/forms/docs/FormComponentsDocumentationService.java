@@ -5,19 +5,18 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
-
+import pl.fhframework.ReflectionUtils;
+import pl.fhframework.annotations.*;
+import pl.fhframework.binding.ModelBinding;
+import pl.fhframework.consts.DocumentationCategoryConsts;
+import pl.fhframework.core.FhCL;
+import pl.fhframework.core.designer.ComponentElement;
+import pl.fhframework.core.designer.DocumentedAttribute;
 import pl.fhframework.core.designer.IDocumentationUseCase;
 import pl.fhframework.core.i18n.MessageService;
 import pl.fhframework.core.logging.FhLogger;
-import pl.fhframework.ReflectionUtils;
-import pl.fhframework.annotations.*;
-import pl.fhframework.annotations.Control;
-import pl.fhframework.binding.ModelBinding;
-import pl.fhframework.consts.DocumentationCategoryConsts;
 import pl.fhframework.model.forms.Form;
 import pl.fhframework.model.forms.attributes.AttributeHolder;
-import pl.fhframework.core.designer.ComponentElement;
-import pl.fhframework.core.designer.DocumentedAttribute;
 import pl.fhframework.model.forms.docs.model.FormComponentDocumentationHolder;
 import pl.fhframework.model.forms.docs.model.FormElementCategory;
 
@@ -81,9 +80,9 @@ public class FormComponentsDocumentationService {
                 DocumentedComponent.Category category = classAnnotation.category();
                 //if category attribute is set look for form and model inside *.<category>.* package i.e. for maps search in pl.fhframework.docs.forms.component.map3d package
                 try {
-                    formDocumentationComponentClassName = (Class<? extends ComponentElement>) Class.forName(String.format(pathParams.getModelClassPath(), "", formComponentSimpleName));
+                    formDocumentationComponentClassName = (Class<? extends ComponentElement>) FhCL.classLoader.loadClass(String.format(pathParams.getModelClassPath(), "", formComponentSimpleName));
                     element = appContext.getBean(formDocumentationComponentClassName);
-                    element.setForm((Class<? extends Form>) Class.forName(String.format(pathParams.getFormClassPath(), "", formComponentSimpleName)));
+                    element.setForm((Class<? extends Form>) FhCL.classLoader.loadClass(String.format(pathParams.getFormClassPath(), "", formComponentSimpleName)));
                     element.setUseCase((Class<IDocumentationUseCase>) ReflectionUtils.tryGetClassForName(String.format(pathParams.getUcClassPath(), "", formComponentSimpleName)));
 
                     element.setDescription(classAnnotation.value());

@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.util.StringUtils;
+import pl.fhframework.core.FhCL;
 import pl.fhframework.core.FhSubsystemException;
 import pl.fhframework.core.FhUseCaseException;
 import pl.fhframework.core.events.ISubsystemLifecycleListener;
@@ -174,7 +175,7 @@ public abstract class Subsystem {
 
     public UseCaseProcess getUseCaseProcess(String useCaseId) {
         try {
-            Class<?> clazz = Class.forName(useCaseId);
+            Class<?> clazz = FhCL.classLoader.loadClass(useCaseId);
             if (IUseCase.class.isAssignableFrom(clazz)) {
                 return getUseCaseProcess(clazz);
             }else{
@@ -232,7 +233,7 @@ public abstract class Subsystem {
     public void addUseCaseReference(String reference){
         _initiateUseCasesHoldersIds.add(reference);
         try{
-            Class<? extends IUseCase> staticClazz = (Class<? extends IUseCase>) Class.forName(reference);
+            Class<? extends IUseCase> staticClazz = (Class<? extends IUseCase>) FhCL.classLoader.loadClass(reference);
             idPU2SourcePU.put(reference, staticClazz);
         } catch (ClassNotFoundException e) {
             //Calculating path of described dynamic PU with given id.

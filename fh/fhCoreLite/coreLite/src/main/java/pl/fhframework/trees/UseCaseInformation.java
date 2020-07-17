@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.util.CollectionUtils;
+import pl.fhframework.XmlAttributeReader;
+import pl.fhframework.annotations.ElementPresentedOnTree;
+import pl.fhframework.core.FhCL;
 import pl.fhframework.core.cloud.config.ExposedMenuElement;
 import pl.fhframework.core.cloud.config.ExposedUseCaseDefinition;
 import pl.fhframework.core.security.AuthorizationManager;
@@ -11,8 +14,6 @@ import pl.fhframework.core.security.annotations.SystemFunction;
 import pl.fhframework.core.security.annotations.SystemRole;
 import pl.fhframework.core.uc.meta.UseCaseInfo;
 import pl.fhframework.core.uc.meta.UseCaseMetadataRegistry;
-import pl.fhframework.XmlAttributeReader;
-import pl.fhframework.annotations.ElementPresentedOnTree;
 import pl.fhframework.model.security.SystemUser;
 
 import java.util.*;
@@ -125,7 +126,7 @@ public class UseCaseInformation implements ITreeElement {
             if (this.ref == null || this.ref.isEmpty()) {
                 this.dynamic = true;
             } else {
-                Class.forName(this.ref);
+                FhCL.classLoader.loadClass(this.ref);
                 this.dynamic = false;
             }
         } catch (ClassNotFoundException e) {

@@ -7,6 +7,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Service;
+import pl.fhframework.core.FhCL;
 import pl.fhframework.core.cloud.config.ExposedMenuElement;
 import pl.fhframework.core.cloud.config.ExposedUseCaseDefinition;
 import pl.fhframework.core.cloud.event.LocalServerDefinitionChangedEvent;
@@ -16,7 +17,10 @@ import pl.fhframework.model.security.SystemUser;
 import pl.fhframework.subsystems.Subsystem;
 import pl.fhframework.subsystems.SubsystemManager;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
@@ -72,7 +76,7 @@ public class SubsystemElementsLiteTree extends SubsystemElementsTree {
 
     protected void setAllowedSystemFunctionsFor(UseCaseInformation useCaseInformation) {
         try {
-            Class clazz = Class.forName(useCaseInformation.getRef());
+            Class clazz = FhCL.classLoader.loadClass(useCaseInformation.getRef());
             if (clazz != null) {
                 useCaseInformation.setAllowedSystemFunctions(
                         UseCaseInformation.getAllowedSystemFunctions(clazz)
@@ -85,7 +89,7 @@ public class SubsystemElementsLiteTree extends SubsystemElementsTree {
 
     protected void setAllowedSystemRolesFor(UseCaseInformation useCaseInformation) {
         try {
-            Class clazz = Class.forName(useCaseInformation.getRef());
+            Class clazz = FhCL.classLoader.loadClass(useCaseInformation.getRef());
             if (clazz != null) {
                 useCaseInformation.setAllowedSystemRoles(
                         UseCaseInformation.getAllowedSystemRoles(clazz)

@@ -13,8 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.configuration.FHConfiguration;
+import pl.fhframework.core.FhCL;
+import pl.fhframework.core.logging.FhLogger;
 
 import java.util.concurrent.TimeUnit;
 
@@ -34,7 +35,7 @@ public class StandaloneCacheConfiguration {
                         .transport()
                         .clusterName(clusterName)
                         .defaultTransport();
-        if (getClass().getClassLoader().getResource("jgroups.xml") != null) {
+        if (FhCL.classLoader.getResource("jgroups.xml") != null) {
             transportConfigurationBuilder.addProperty("configurationFile", "jgroups.xml");
         }
         GlobalConfiguration conf = transportConfigurationBuilder.build();

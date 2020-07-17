@@ -162,7 +162,11 @@ public class WebSocketSessionManager implements ISessionManagerImpl {
     }
 
     public UserSession getSession() {
-        HttpSession sessionHttp = getHttpSession();
+        return getSession(getWebSocketSession());
+    }
+
+    public static UserSession getSession(WebSocketSession session) {
+        HttpSession sessionHttp = getHttpSession(session);
         return getUserSessionRepository().getUserSession(sessionHttp.getId());
     }
 

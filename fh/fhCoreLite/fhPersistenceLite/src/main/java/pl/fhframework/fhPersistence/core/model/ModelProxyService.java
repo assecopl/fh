@@ -16,7 +16,9 @@ import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
+import pl.fhframework.ReflectionUtils;
 import pl.fhframework.aspects.snapshots.SnapshotsModelAspect;
+import pl.fhframework.core.FhCL;
 import pl.fhframework.core.FhConversationException;
 import pl.fhframework.core.FhException;
 import pl.fhframework.core.datasource.StoreAccessService;
@@ -29,7 +31,6 @@ import pl.fhframework.core.rules.dynamic.model.predicates.ExistsInCondition;
 import pl.fhframework.fhPersistence.conversation.ConversationManager;
 import pl.fhframework.fhPersistence.conversation.ConversationManagerUtils;
 import pl.fhframework.fhPersistence.core.EntityManagerRepository;
-import pl.fhframework.ReflectionUtils;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -359,7 +360,7 @@ public class ModelProxyService {
 
     protected Class getClassForName(String className) {
         try {
-            return Class.forName(className);
+            return FhCL.classLoader.loadClass(className);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Unknown class", e);
         }

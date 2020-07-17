@@ -12,6 +12,7 @@ import pl.fhframework.annotations.CompilationTraversable;
 import pl.fhframework.annotations.Control;
 import pl.fhframework.annotations.DocumentedComponent;
 import pl.fhframework.annotations.XMLProperty;
+import pl.fhframework.core.FhCL;
 import pl.fhframework.core.FhException;
 import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.model.dto.ElementChanges;
@@ -89,7 +90,7 @@ public class DictionaryCombo extends Combo implements IGroupingComponent<Diction
     private void resolveDataProvider() throws ClassNotFoundException {
 
         if (this.provider != null) {
-            Class<? extends IComboDataProvider> providerClass = (Class<? extends IComboDataProvider>) Class.forName(String.format(this.provider));
+            Class<? extends IComboDataProvider> providerClass = (Class<? extends IComboDataProvider>) FhCL.classLoader.loadClass(String.format(this.provider));
             this.dataProvider = pl.fhframework.helper.AutowireHelper.getBean(providerClass);
         }
     }

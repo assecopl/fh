@@ -508,10 +508,10 @@ public class UseCaseContainer implements Serializable {
             Class[] interfaces;
             ClassLoader classLoader;
             if (callback instanceof UniversalCallbackHandler) {
-                classLoader = useCaseMetadata.getClazz().getClassLoader();
+                classLoader = FhCL.classLoader;
                 interfaces = new Class[]{(Class<IUseCaseOutputCallback>) ReflectionUtils.getClassForName(useCaseMetadata.getCallbackClassStr(), classLoader)};
             } else {
-                classLoader = callback.getClass().getClassLoader();
+                classLoader = FhCL.classLoader;
                 interfaces = callback.getClass().getInterfaces();
             }
 
@@ -1527,7 +1527,7 @@ public class UseCaseContainer implements Serializable {
             } else {
                 newUseCaseContext = new LocalUrlUseCaseContext(
                         useCaseInfo.get().getClazz(),
-                        prepareNoOpCallback((Class<IUseCaseOutputCallback>) ReflectionUtils.getClassForName(useCaseInfo.get().getCallbackClassStr(), useCaseInfo.get().getClazz().getClassLoader())));
+                        prepareNoOpCallback((Class<IUseCaseOutputCallback>) ReflectionUtils.getClassForName(useCaseInfo.get().getCallbackClassStr(), FhCL.classLoader)));
             }
 
             try {
@@ -1787,7 +1787,7 @@ public class UseCaseContainer implements Serializable {
     }
 
     protected <C> C prepareNoOpCallback(Class<C> callBackClass) {
-        return (C) Proxy.newProxyInstance(callBackClass.getClassLoader(), new Class[]{callBackClass}, (p, m, a) -> null);
+        return (C) Proxy.newProxyInstance(FhCL.classLoader, new Class[]{callBackClass}, (p, m, a) -> null);
     }
 
     private <C extends IUseCaseOutputCallback, U extends IUseCase<C>> UseCaseContext<C, U> createUseCaseContext(Class<U> knownUseCaseClass, Object[] params, C callback) {

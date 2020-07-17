@@ -1,5 +1,6 @@
 package pl.fhframework.subsystems;
 
+import pl.fhframework.core.FhCL;
 import pl.fhframework.core.FhException;
 import pl.fhframework.core.FhSubsystemException;
 import pl.fhframework.core.events.ISubsystemLifecycleListener;
@@ -49,7 +50,7 @@ class DynamicSubsystemReader extends XMLReader<Subsystem, Subsystem> {
                 String classAttr = xmlAttributeReader.getAttributeValue("class");
                 if (classAttr != null) {
                     try {
-                        listenerSubsystem.addlifecycleListener((Class<? extends ISubsystemLifecycleListener>) Class.forName(xmlAttributeReader.getAttributeValue("class")));
+                        listenerSubsystem.addlifecycleListener((Class<? extends ISubsystemLifecycleListener>) FhCL.classLoader.loadClass(xmlAttributeReader.getAttributeValue("class")));
                     } catch (ClassNotFoundException e) {
                         throw new FhException("Lifecycle listener class not found: " + classAttr);
                     }
@@ -68,7 +69,7 @@ class DynamicSubsystemReader extends XMLReader<Subsystem, Subsystem> {
                 String systemfunctions = xmlAttributeReader.getAttributeValue("ref");
                 if (systemfunctions != null && !systemfunctions.isEmpty()) {
                     try {
-                        Class<ISystemFunctionsMapper> systemFunctionsClass = (Class<ISystemFunctionsMapper>) Class.forName(systemfunctions);
+                        Class<ISystemFunctionsMapper> systemFunctionsClass = (Class<ISystemFunctionsMapper>) FhCL.classLoader.loadClass(systemfunctions);
                         mapperSubsystem.setSystemFunctionsMapper(systemFunctionsClass.newInstance());
                     } catch (Exception e) {
                         throw new FhSubsystemException("Mapper init failed for:" + systemfunctions, e);

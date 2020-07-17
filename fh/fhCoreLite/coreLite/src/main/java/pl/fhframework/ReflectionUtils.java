@@ -311,7 +311,7 @@ public class ReflectionUtils {
         for (BeanDefinition bd : scanner.findCandidateComponents(rootPackage)) {
             String controllerClazzName = bd.getBeanClassName();
             try {
-                Class<?> controllerClazz = Class.forName(controllerClazzName);
+                Class<?> controllerClazz = FhCL.classLoader.loadClass(controllerClazzName);
                 annotatedClasses.add((Class<T>) controllerClazz);
             } catch (ClassNotFoundException e) {
                 throw new FhFrameworkException("Invalid application build - no class '" + controllerClazzName + "'");
@@ -335,7 +335,7 @@ public class ReflectionUtils {
         for (BeanDefinition bd : scanner.findCandidateComponents(packageName)) {
             String controllerClazzName = bd.getBeanClassName();
             try {
-                Class<?> controllerClazz = Class.forName(controllerClazzName);
+                Class<?> controllerClazz = FhCL.classLoader.loadClass(controllerClazzName);
                 if (requiredBaseClazz != null && !requiredBaseClazz.isAssignableFrom(controllerClazz)) {
                     throw new FhFrameworkException("Annotated class'" + controllerClazz.getName() + "' does not inherit the required type '" + requiredBaseClazz.getSimpleName() + "'!!!");
                 }
@@ -362,7 +362,7 @@ public class ReflectionUtils {
             for (BeanDefinition bd : scanner.findCandidateComponents(pcg)) {
                 String controllerClazzName = bd.getBeanClassName();
                 try {
-                    Class<?> controllerClazz = Class.forName(controllerClazzName);
+                    Class<?> controllerClazz = FhCL.classLoader.loadClass(controllerClazzName);
                     if (filterBaseClazz != null && filterBaseClazz.isAssignableFrom(controllerClazz)) {
                         annotatedClasses.add((Class<T>) controllerClazz);
                     }
@@ -395,7 +395,7 @@ public class ReflectionUtils {
         for (BeanDefinition bd : scanner.findCandidateComponents(packageName)) {
             String clazzName = bd.getBeanClassName();
             try {
-                Class<?> foundClazz = Class.forName(clazzName);
+                Class<?> foundClazz = FhCL.classLoader.loadClass(clazzName);
                 classesFound.add((Class<T>) foundClazz);
             } catch (ClassNotFoundException e) {
                 throw new FhFrameworkException("Invalid application build - no class '" + clazzName + "'");
@@ -861,15 +861,15 @@ public class ReflectionUtils {
 
 
     public static Class<?> tryGetClassForName(String fullClassName) {
-        return tryGetClassForName(fullClassName, ReflectionUtils.class.getClassLoader());
+        return tryGetClassForName(fullClassName, FhCL.classLoader);
     }
 
     public static Class<?> getClassForName(String fullClassName) {
-        return getClassForName(fullClassName, ReflectionUtils.class.getClassLoader());
+        return getClassForName(fullClassName, FhCL.classLoader);
     }
 
     public static Type tryGetTypeForName(String fullTypeName) {
-        return tryGetTypeForName(fullTypeName, ReflectionUtils.class.getClassLoader());
+        return tryGetTypeForName(fullTypeName, FhCL.classLoader);
     }
     /**
      * Finds a matching public method.

@@ -11,6 +11,7 @@ import org.springframework.core.type.filter.AssignableTypeFilter;
 import pl.fhframework.ReflectionUtils;
 import pl.fhframework.app.config.FhApplication;
 import pl.fhframework.config.PackagesScanConfiguration;
+import pl.fhframework.core.FhCL;
 import pl.fhframework.core.FhFrameworkException;
 import pl.fhframework.core.io.FhResource;
 import pl.fhframework.core.logging.FhLogger;
@@ -54,6 +55,8 @@ public class DefaultApplication extends SpringBootServletInitializer {
     }
 
     protected static void preConfigureSpring() {
+        Thread.currentThread().setContextClassLoader(FhCL.classLoader);
+
         List<String> basePackages = ModuleRegistry.getLoadedModules().stream().map(subsystem -> subsystem.getBasePackage()).collect(Collectors.toList());
         String property = basePackages.stream().collect(Collectors.joining(","));
 

@@ -15,6 +15,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.stereotype.Component;
+import pl.fhframework.core.FhCL;
 import pl.fhframework.core.FhFrameworkException;
 import pl.fhframework.core.dynamic.DynamicClassName;
 import pl.fhframework.core.events.ISubsystemLifecycleListener;
@@ -65,7 +66,7 @@ public class ModuleRegistry implements ApplicationListener<ContextRefreshedEvent
     private DefaultServiceLocator describableServiceRegistry;
 
     static {
-        ClassLoader classLoader = ModuleRegistry.class.getClassLoader();
+        ClassLoader classLoader = FhCL.classLoader;
         try {
             PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
             List<Resource> resources = new ArrayList<>();
@@ -188,7 +189,7 @@ public class ModuleRegistry implements ApplicationListener<ContextRefreshedEvent
             AbstractBeanDefinition abstractBeanDefinition = (AbstractBeanDefinition) beanDefinition;
             try {
                 if (abstractBeanDefinition.getResource().getURL().toExternalForm().startsWith(subsystem.getBaseClassPath().getURL().toExternalForm())) {
-                    Class<? extends IUseCase> useCaseClazz = (Class<? extends IUseCase>) Class.forName(abstractBeanDefinition.getBeanClassName());
+                    Class<? extends IUseCase> useCaseClazz = (Class<? extends IUseCase>) FhCL.classLoader.loadClass(abstractBeanDefinition.getBeanClassName());
                     subsystem.addUseCase(useCaseClazz);
                     UseCaseMetadataRegistry.INSTANCE.add(useCaseClazz, subsystem);
                 }
@@ -211,7 +212,7 @@ public class ModuleRegistry implements ApplicationListener<ContextRefreshedEvent
             AbstractBeanDefinition abstractBeanDefinition = (AbstractBeanDefinition) beanDefinition;
             try {
                 if (abstractBeanDefinition.getResource().getURL().toExternalForm().startsWith(subsystem.getBaseClassPath().getURL().toExternalForm())) {
-                    Class<?> clazz = Class.forName(abstractBeanDefinition.getBeanClassName());
+                    Class<?> clazz = FhCL.classLoader.loadClass(abstractBeanDefinition.getBeanClassName());
                     if (clazz.getAnnotation(AccessibilityRule.class) != null) {
                         RuleMetadataRegistry.INSTANCE.addAccessibilityRule(clazz, subsystem, clazz.getAnnotation(AccessibilityRule.class).categories());
                     } else if (clazz.getAnnotation(ValidationRule.class) != null) {
