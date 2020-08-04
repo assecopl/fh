@@ -1,3 +1,0 @@
-<subsystem name="fhCore" label="Fh Core" productLabel="Core" productUUID="557f04b2-0ccb-4800-89a1-6ef1bd531a6a" basePackage="pl.fhframework.core">
-    <systemFunctionsMapper ref="pl.fhframework.core.SystemFunctionsMapper"/>
-</subsystem>

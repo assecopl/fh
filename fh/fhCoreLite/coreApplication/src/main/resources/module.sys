@@ -1,2 +1,0 @@
-<subsystem name="defaultApplication" label="Default FH Application" productUUID="8c33b3ad-a159-4c1f-9bd8-cdba0a9f1028" basePackage="pl.fhframework.app" access="private">
-</subsystem>

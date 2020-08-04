@@ -1,6 +1,6 @@
 import {Container, inject, injectable} from "inversify";
 import getDecorators from "inversify-inject-decorators";
-import * as Cookies from "js.cookie";
+import * as Cookies from "js-cookie";
 import {ShutdownEventPL} from '../Events/i18n/ShutdownEvent.pl';
 import {ShutdownEventEN} from '../Events/i18n/ShutdownEvent.en';
 import {FormsManagerPL} from '../I18n/FormsManager.pl';

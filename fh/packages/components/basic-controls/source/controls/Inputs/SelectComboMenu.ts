@@ -350,23 +350,20 @@ class SelectComboMenu extends InputText {
     inputBlurEvent() {
         this.closeAutocomplete();
 
-        if(this.rawValue == null) {
-            //if (this.emptyLabel) {
+
+        if (this.highlighted != null) {
+            let element = this.highlighted.element.firstChild;
+            this.selectedIndex = this.selectedIndex;
+            this.input.value = this.highlighted.displayAsTarget ? this.highlighted.targetValue : (this.highlighted.displayedValue ? this.highlighted.displayedValue : "");
+            this.updateModel();
+        } else {
+            if (this.rawValue == null) {
+                //if (this.emptyLabel) {
                 this.input.value = this.emptyLabelText;
-                this.selectedIndex = -1;
+                this.selectedIndex = 1;
                 this.updateModel();
                 this.changeToFired = true;
-            //} else {
-                //if (this.highlighted != null) {
-                    //let element = this.highlighted.element.firstChild;
-                    //this.selectedIndex = parseInt(element.dataset.index);
-                    //if (this.emptyLabel) {
-                    //    this.selectedIndex = this.selectedIndex - 1;
-                    //}
-
-                    //this.input.value = this.oldValue;
-                //}
-            //}
+            }
         }
     }
 
@@ -385,9 +382,14 @@ class SelectComboMenu extends InputText {
             $.each(change.changedAttributes, function (name, newValue) {
                 switch (name) {
                     case 'rawValue':
+
                         if (newValue) {
                             this.highlighted = this.findByValue(newValue);
-                            this.input.value = this.highlighted.displayAsTarget ? this.highlighted.targetValue : (this.highlighted.displayedValue ? this.highlighted.displayedValue : "");
+                            if(!this.highlighted && this.freeTyping){
+                                this.input.value = newValue;
+                            } else {
+                                this.input.value = this.highlighted.displayAsTarget ? this.highlighted.targetValue : (this.highlighted.displayedValue ? this.highlighted.displayedValue : "");
+                            }
                             this.rawValue = newValue;
                             //Must be before change oldValue
                             this.oldValue = newValue;
@@ -464,8 +466,9 @@ class SelectComboMenu extends InputText {
                 return option;
             }
         }
-
-        return null;
+        //If not found we return first element as it represents null value.
+        // return null if freeTyping option is enabled as element won't be on list.
+        return this.freeTyping ? null : this.values[0];
     }
 
     findValueByElement(value) {

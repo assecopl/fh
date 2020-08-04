@@ -1,4 +1,5 @@
 export let ApplicationLockPL = {
   "error.title": "Błąd",
-  "close.label": "Zamknij"
+  "close.label": "Zamknij",
+  "error.info": "Informacja"
 };

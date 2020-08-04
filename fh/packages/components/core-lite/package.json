@@ -1,6 +1,6 @@
 {
   "name": "fh-forms-handler",
-  "version": "4.6.7",
+  "version": "4.6.8",
   "main": "Module.ts",
   "types": "dist/Module.d.ts",
   "scripts": {
@@ -27,6 +27,6 @@
     "copyfiles": "2.1.1",
     "@fortawesome/fontawesome-free": "5.9.0",
     "jquery-ui": "1.12.1",
-    "js.cookie": "0.0.4"
+    "js-cookie": "^2.2.1"
   }
 }

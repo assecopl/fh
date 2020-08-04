@@ -1,3 +1,0 @@
-<subsystem name="fh-reports-core" label="Fh Reports" productLabel="Core" productUUID="557f04b2-0ccb-4800-89a1-6ef1bd531a6a" basePackage="pl.fhframework.core.reports">
-    <systemFunctionsMapper ref="pl.fhframework.core.reports.SystemFunctionsMapper"/>
-</subsystem>

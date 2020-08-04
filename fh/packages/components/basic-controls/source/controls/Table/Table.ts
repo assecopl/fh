@@ -337,7 +337,6 @@ class Table extends TableWithKeyboardEvents {
     };
 
     redrawColumns() {
-        this.calculateColumnWidths();
         this.components.forEach(function (column: any) {
             if (column.componentObj.type === 'Column') {
                 column.calculateColspan();
@@ -348,6 +347,7 @@ class Table extends TableWithKeyboardEvents {
             this.removeMinRowRows();
             this.addMinRowRows();
         }
+        this.recalculateColumnWidths();
     };
 
     addComponent(componentObj) {

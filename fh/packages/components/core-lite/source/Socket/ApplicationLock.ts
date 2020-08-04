@@ -192,8 +192,8 @@ class ApplicationLock {
             this.reconnectInfo = null;
         }
         this.reconnectInfo = this.createErrorDialog([], function (content) {
-            ApplicationLock.appendDialogElements(content, info, button1Name, button1OnClick, button2Name, button2OnClick);
-        }, withClose);
+            this.appendDialogElements(content, info, button1Name, button1OnClick, button2Name, button2OnClick);
+        }.bind(this), withClose);
     }
 
     public closeInfoDialog(): void {
@@ -203,11 +203,11 @@ class ApplicationLock {
         }
     }
 
-    private static appendDialogElements(content, info, button1Name, button1OnClick, button2Name, button2OnClick) {
+    private appendDialogElements(content, info, button1Name, button1OnClick, button2Name, button2OnClick) {
         let wrapper = document.createElement('div');
         let htmlDialog =
             '<div class="modal-header">' +
-            '<h5 class="modal-title">Informacja</h5>' +
+            '<h5 class="modal-title">' + this.i18n.__("error.info") + '</h5>' +
             '</div>' +
             '<div class="modal-body">' +
             '<div class="row eq-row">' +

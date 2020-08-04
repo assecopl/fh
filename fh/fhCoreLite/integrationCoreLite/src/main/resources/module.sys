@@ -1,2 +1,0 @@
-<subsystem name="integrationLite" label="Fh Integration" productLabel="Integration" productUUID="1f198982-bb3b-4dd2-89c8-ecd209d973cc" basePackage="pl.fhframework.integration.core">
-</subsystem>

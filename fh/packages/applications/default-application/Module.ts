@@ -1,6 +1,6 @@
 import * as $ from 'jquery';
 import "reflect-metadata";
-import {FhContainer} from "fh-forms-handler";
+import {FhContainer, I18n} from "fh-forms-handler";
 import './Module.css';
 
 import {Connector, SocketHandler, FH, ApplicationLock, CustomActions, Util} from "fh-forms-handler";
@@ -8,6 +8,8 @@ import {FormsHandler} from "fh-forms-handler";
 import {FhModule} from "fh-forms-handler";
 import {BasicControls} from "fh-basic-controls";
 import {ChartsControls} from "fh-charts-controls";
+import {ModulePL} from "./Module.pl";
+import {ModuleEN} from "./Module.en";
 
 class FhApplication {
     static registerModule(module: { new(): FhModule }) {
@@ -26,10 +28,15 @@ class FhApplication {
 
     static init(context: string = 'socketForms') {
         let util = FhContainer.get<Util>('Util');
+
+        let i18n = FhContainer.get<I18n>('I18n');
+        i18n.registerStrings('pl', ModulePL);
+        i18n.registerStrings('en', ModuleEN);
+
         let connector = FhContainer.get<(target: string, reconnectCallback: () => void, openCallback: () => void) => Connector>("Connector")(
             util.getPath(context), () => {
                 FhContainer.get<ApplicationLock>('ApplicationLock')
-                    .createInfoDialog('Połączenie z serwerem zostało przerwane. Ponawiam próbę połączenia...', null, null, null, null, false);
+                    .createInfoDialog(i18n.__('error.connection_lost'), null, null, null, null, false);
             }, () => {
                 FhContainer.get<ApplicationLock>('ApplicationLock')
                     .closeInfoDialog();
