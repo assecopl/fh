@@ -18,7 +18,7 @@
     "typescript": "3.5.3"
   },
   "dependencies": {
-    "jquery": "3.4.0",
+    "jquery": "3.5.1",
     "popper.js": "1.16.0",
     "bootstrap": "4.4.1",
     "inversify": "5.0.1",
