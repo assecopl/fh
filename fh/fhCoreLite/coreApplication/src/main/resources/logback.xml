@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- i.a. default colored console appender -->
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+    <!-- for help go to: http://logback.qos.ch/manual/appenders.html#SiftingAppender -->
+    <appender name="SIFT" class="ch.qos.logback.classic.sift.SiftingAppender">
+        <!-- possible options: -->
+        <!--<timeout>30 minutes</timeout>-->
+        <!--<maxAppenderCount>1000</maxAppenderCount>-->
+
+        <!-- FH user session disriminator, exports filename as "logFileName" attribute -->
+        <discriminator class="pl.fhframework.core.logging.UserSessionBasedDiscriminator">
+            <nonUserFileName>fh-server.log</nonUserFileName>
+            <!--
+                 Possible tags: $user$, $sessionId$, $creationDate$, $creationTimestamp$.
+                 To avoid putting all users' logs into a single file, atleast use $user$ and $sessionId$
+
+                 WARNING: If doing any changes make them also in LogUtils.FILE_MASK field
+             -->
+            <userFileName>users/$user$_$creationTimestamp$_$sessionId$.log</userFileName>
+        </discriminator>
+        <sift>
+            <!-- for help go to: http://logback.qos.ch/manual/appenders.html#RollingFileAppender -->
+            <appender name="FILE-${logFileName}" class="pl.fhframework.core.logging.FlushableRollingFileAppender">
+                <file>./log/${logFileName}</file>
+                <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                    <fileNamePattern>./log/${logFileName}.%d{yyyy-MM-dd}</fileNamePattern>
+                </rollingPolicy>
+
+                <encoder>
+                    <pattern>%d [%thread] %-5level %logger{35} - %msg%n</pattern>
+                </encoder>
+            </appender>
+        </sift>
+    </appender>
+
+    <!-- enable debug of FH and PURA classes -->
+    <logger name="pl.fhframework" level="ERROR" />
+    <logger name="pl.fhframework" level="ERROR" />
+    <logger name="com.atomikos" level="ERROR" />
+
+    <root level="INFO">
+        <appender-ref ref="SIFT" />
+        <appender-ref ref="CONSOLE" /> <!-- defined in included base.xml -->
+    </root>
+</configuration>

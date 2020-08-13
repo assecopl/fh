@@ -131,7 +131,7 @@ abstract class TableFixedHeaderAndHorizontalScroll extends HTMLFormComponent {
         $('.' + column.id).css("width", column.htmlElement.dataset.originalWidth);
     }
 
-    private calculateColumnsWidth() {
+    public calculateColumnsWidth() {
         const colCount = this.components.length;
         //To keep proper size - first we need to set px then rewrite it to %.
         (this.components || []).forEach(function (column, index) {
