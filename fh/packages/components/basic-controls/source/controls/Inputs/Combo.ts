@@ -38,6 +38,8 @@ class Combo extends InputText {
 
     private cursorPositionOnLastSpecialKey: any;
 
+    private revertToOldValue:boolean = false;
+
     //Is focus on dropdown element. For IE11 click on srcoll problem.
     private autocompleterFocus:boolean = false;
 
@@ -108,7 +110,10 @@ class Combo extends InputText {
             let keyCode = event.which;
             let options = this.autocompleter.querySelectorAll('li:not(.dropdown-header)');
             if (keyCode === 9 || keyCode === 13) {
+                // tab or enter
                 let shouldBlur = true;
+                this.revertToOldValue = false;
+                this.input.title = "";
                 if (this.highlighted != null) {
                     let element = options[this.highlighted].firstChild;
                     this.selectedIndexGroup = element.dataset.group;
@@ -117,6 +122,8 @@ class Combo extends InputText {
                     const val = this.values[this.selectedIndexGroup][this.selectedIndex];
                     if (val) {
                         this.input.value = val.displayAsTarget ? val.targetValue : val.displayedValue;
+                        //WCAG Screen reader - Set title for input to makes it will be read after select.
+                        this.input.title = val.displayAsTarget ? val.targetValue : val.displayedValue;
                     }
                     if (element.dataset.targetCursorPosition !== undefined) {
                         this.setCursorPositionToInput(parseInt(element.dataset.targetCursorPosition));
@@ -138,6 +145,8 @@ class Combo extends InputText {
                     type: 'keypress',
                     which: 9
                 });
+            }else if (keyCode == 27) {
+
             } else {
                 let move = 0;
                 switch (keyCode) {
@@ -150,6 +159,7 @@ class Combo extends InputText {
                 }
                 if ((keyCode === 40 || keyCode === 38) && !this.autocompleter.classList.contains('isEmpty')) {
                     let current = options[this.highlighted];
+                   this.revertToOldValue = true;
                     if (current) {
                         current.classList.remove('selected');
                     }
@@ -168,6 +178,11 @@ class Combo extends InputText {
                     this.highlighted = this.highlighted % options.length;
                     options[this.highlighted].classList.add('selected');
                     this.autocompleter.scrollTop = options[this.highlighted].offsetTop;
+                    let element = options[this.highlighted].firstChild;
+                    const val = this.values[element.dataset.group][element.dataset.index];
+                    if (val) {
+                        this.input.value = val.displayAsTarget ? val.targetValue : val.displayedValue;
+                    }
                 }
                 if (this.multiselect && keyCode == 8 && $(this.input).val() === '' && this.tagslist.length > 0) {
                     event.preventDefault();
@@ -231,6 +246,7 @@ class Combo extends InputText {
         }.bind(this));
         input.addEventListener('blur', function (event) {
             //For IE11. Check if event was fired by action on dropdown element.
+
             if(!this.autocompleterFocus) {
                 this.closeAutocomplete();
 
@@ -242,6 +258,12 @@ class Combo extends InputText {
                 this.input.focus();
                 this.autocompleterFocus = false;
                 return false;
+            }
+            if(!this.multiselectOldValue && this.input.value !== this.rawValue){
+                input.value = this.rawValue;
+            }
+            if(this.multiselectOldValue && this.multiselectRawValue !== this.multiselectOldValue){
+                input.value = this.multiselectOldValue;
             }
 
 

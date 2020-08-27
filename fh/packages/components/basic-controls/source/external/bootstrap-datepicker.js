@@ -1,4 +1,5 @@
 /* =========================================================
+ * TODO Changed By LUNA TEAM !!
  * bootstrap-datepicker.js
  * Repo: https://github.com/uxsolutions/bootstrap-datepicker/
  * Demo: https://eternicode.github.io/bootstrap-datepicker/
@@ -1463,6 +1464,10 @@
                     }
                     if (newViewDate) {
                         this.focusDate = this.viewDate = newViewDate;
+                        if (this.o.keyboardNavigation) {
+                            this._toggle_multidate(newViewDate);
+                            // dateChanged = true;
+                        }
                         this.setValue();
                         this.fill();
                         e.preventDefault();

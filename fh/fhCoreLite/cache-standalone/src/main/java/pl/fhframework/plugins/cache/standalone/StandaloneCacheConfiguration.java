@@ -11,11 +11,12 @@ import org.infinispan.manager.DefaultCacheManager;
 import org.infinispan.manager.EmbeddedCacheManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import pl.fhframework.configuration.FHConfiguration;
-import pl.fhframework.core.FhCL;
 import pl.fhframework.core.logging.FhLogger;
+import pl.fhframework.core.util.StringUtils;
 
 import java.util.concurrent.TimeUnit;
 
@@ -26,6 +27,9 @@ public class StandaloneCacheConfiguration {
     @Autowired
     private FHConfiguration fhConfiguration;
 
+    @Value("${fh.cache.jgroups.configurationFile:jgroups_fh_default.xml}")
+    private String jgroupsConfigurationFile;
+
     @Bean
     public EmbeddedCacheManager infiniSpanCacheManager(@Qualifier("asyncReplicationConfig") org.infinispan.configuration.cache.Configuration asyncReplicationConfig) {
         String clusterName = fhConfiguration.getClusterName();
@@ -35,8 +39,8 @@ public class StandaloneCacheConfiguration {
                         .transport()
                         .clusterName(clusterName)
                         .defaultTransport();
-        if (FhCL.classLoader.getResource("jgroups.xml") != null) {
-            transportConfigurationBuilder.addProperty("configurationFile", "jgroups.xml");
+        if (!StringUtils.isNullOrEmpty(jgroupsConfigurationFile)) {
+            transportConfigurationBuilder.addProperty("configurationFile", jgroupsConfigurationFile);
         }
         GlobalConfiguration conf = transportConfigurationBuilder.build();
 

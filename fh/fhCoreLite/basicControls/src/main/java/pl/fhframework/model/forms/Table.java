@@ -88,6 +88,13 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
 
     @Getter
     @Setter
+    @XMLProperty(defaultValue = "true")
+    @DocumentedComponentAttribute(defaultValue = "true", value = "Turns on/off table header checkbox to select/unselect all rows. Works only with 'selectionCheckboxes' option trun on.")
+    @DesignerXMLProperty(functionalArea = SPECIFIC, priority = 10)
+    private boolean selectAllChceckbox = true;
+
+    @Getter
+    @Setter
     @XMLProperty
     @DocumentedComponentAttribute(value = "Enables row selection feature.")
     @DesignerXMLProperty(functionalArea = SPECIFIC, priority = 15)

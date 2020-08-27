@@ -63,7 +63,11 @@ public class FormWriter {
     }
 
     public static void saveXml(Form form, Path targetPath, boolean preserveIds) {
-        String xml = toXml(form, preserveIds);
+        saveXml(form, targetPath, preserveIds, false);
+    }
+
+    public static void saveXml(Form form, Path targetPath, boolean preserveIds, boolean splitAvailabilityConfiguration) {
+        String xml = toXml(form, preserveIds, splitAvailabilityConfiguration);
         try {
             Files.createDirectories(targetPath.getParent());
             Files.write(targetPath, xml.getBytes(Charset.forName("UTF-8")));
@@ -72,8 +76,12 @@ public class FormWriter {
         }
     }
 
+    public static String toXml(Component form, boolean preserveIds, boolean splitAvailabilityConfiguration) {
+        return prettyPrintXml(elementToXml(form, preserveIds, splitAvailabilityConfiguration));
+    }
+
     public static String toXml(Component form, boolean preserveIds) {
-        return prettyPrintXml(elementToXml(form, preserveIds));
+        return prettyPrintXml(elementToXml(form, preserveIds, false));
     }
 
     public static String convertToXmlAttributeValue(Class<? extends Component> componentClass, Field componentField, Object componentFieldValue) {
@@ -231,6 +239,10 @@ public class FormWriter {
     }
 
     public static String elementToXml(Component element, boolean preserveIds) {
+        return elementToXml(element, preserveIds, false);
+    }
+
+    public static String elementToXml(Component element, boolean preserveIds, boolean splitAvailabilityConfiguration) {
         // remember already added immediate children to avoid getting the same component from different source (subcomponent, annotations etc.)
         Set<Component> alreadyAddedChildren = new HashSet<>();
 
@@ -243,7 +255,7 @@ public class FormWriter {
 
         // add all embedded components
         if (element instanceof Form) {
-            xml.append(stringifyAvailabilityTag(Form.class.cast(element)));
+            xml.append(stringifyAvailabilityTag(Form.class.cast(element), splitAvailabilityConfiguration));
             // avoid adding again because of XMLMetadataSubelement annotation
             alreadyAddedChildren.add(Form.class.cast(element).getAvailabilityConfiguration());
         }
@@ -290,7 +302,7 @@ public class FormWriter {
         return subelements;
     }
 
-    private static String stringifyAvailabilityTag(Form form) {
+    private static String stringifyAvailabilityTag(Form form, boolean splitAvailabilityConfiguration) {
         if (form.getAvailabilityConfiguration() == null
                 || form.getAvailabilityConfiguration().getSettings().isEmpty()) {
             return "";
@@ -299,7 +311,7 @@ public class FormWriter {
         StringBuilder sb = new StringBuilder();
         sb.append("<" + AvailabilityConfiguration.class.getSimpleName() + ">");
         for (AvailabilityConfiguration.FormSetting setting : form.getAvailabilityConfiguration().getSettings()) {
-            sb.append(setting.toXml());
+            sb.append(setting.toXml(splitAvailabilityConfiguration));
         }
         sb.append("</" + AvailabilityConfiguration.class.getSimpleName() + ">");
         return sb.toString();

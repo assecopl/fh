@@ -14,6 +14,7 @@ class Table extends TableWithKeyboardEvents {
     protected readonly onRowClick: any;
     private readonly onRowDoubleClick: any;
     private readonly selectionCheckboxes: any;
+    private readonly selectAllChceckbox: boolean;
     private readonly synchronizeScrolling: string;
     private selectionChanged: any;
     public totalColumns: number;
@@ -41,6 +42,7 @@ class Table extends TableWithKeyboardEvents {
         this._dataWrapper = null;
         this.onRowDoubleClick = this.componentObj.onRowDoubleClick;
         this.selectionCheckboxes = this.componentObj.selectionCheckboxes || false;
+        this.selectAllChceckbox = this.componentObj.selectAllChceckbox == false ? this.componentObj.selectAllChceckbox : true;
         this.selectionChanged = false;
 
         this.componentObj.verticalAlign = this.componentObj.verticalAlign || 'top';
@@ -133,7 +135,7 @@ class Table extends TableWithKeyboardEvents {
             let footer = document.createElement('tfoot');
             let row = document.createElement('tr');
             let footCell = document.createElement('td');
-            footCell.colSpan = this.componentObj.columns.length;
+            footCell.colSpan = this.componentObj.columns ? this.componentObj.columns.length : 0;
             row.appendChild(footCell);
             footer.appendChild(row);
             this.table.appendChild(footer);
@@ -538,42 +540,45 @@ class Table extends TableWithKeyboardEvents {
         cell.classList.add('selectionColumn');
         cell.style.width = "40px"
 
-        let checkbox = document.createElement('input');
-        checkbox.id = "header_check_all_" + this.id;
-        checkbox.type = 'checkbox';
-        checkbox.style.pointerEvents = 'none';
-        checkbox.classList.add('selectionCheckbox');
-        checkbox.classList.add('selectionCheckboxAll');
-        cell.appendChild(checkbox);
+        if(this.selectAllChceckbox) {
+            let checkbox = document.createElement('input');
+            checkbox.id = "header_check_all_" + this.id;
+            checkbox.type = 'checkbox';
+            checkbox.style.pointerEvents = 'none';
+            checkbox.classList.add('selectionCheckbox');
+            checkbox.classList.add('selectionCheckboxAll');
+            cell.appendChild(checkbox);
 
-        let checkboxLabel = document.createElement('label');
-        checkboxLabel.setAttribute('for', checkbox.id);
-        cell.appendChild(checkboxLabel);
 
-        cell.addEventListener('click', function (event) {
-            event.stopPropagation();
-            if (this.accessibility != 'EDIT') return;
+            let checkboxLabel = document.createElement('label');
+            checkboxLabel.setAttribute('for', checkbox.id);
+            cell.appendChild(checkboxLabel);
 
-            let element = event.target;
-            if (event.currentTarget != null) {
-                element = event.currentTarget;
-            }
-            element.firstChild.checked = !element.firstChild.checked;
 
-            this.selectAllRows(element.firstChild.checked);
+            cell.addEventListener('click', function (event) {
+                event.stopPropagation();
+                if (this.accessibility != 'EDIT') return;
 
-            this.changesQueue.queueValueChange(this.rawValue);
-            if (!this.onRowClick || this.onRowClick === '-') {
-                this.highlightSelectedRows();
-            }
+                let element = event.target;
+                if (event.currentTarget != null) {
+                    element = event.currentTarget;
+                }
+                element.firstChild.checked = !element.firstChild.checked;
 
-            if (this._formId === 'FormPreview') {
-                this.fireEvent('onRowClick', this.onRowClick);
-            } else {
-                this.fireEventWithLock('onRowClick', this.onRowClick, event);
-            }
-        }.bind(this));
+                this.selectAllRows(element.firstChild.checked);
 
+                this.changesQueue.queueValueChange(this.rawValue);
+                if (!this.onRowClick || this.onRowClick === '-') {
+                    this.highlightSelectedRows();
+                }
+
+                if (this._formId === 'FormPreview') {
+                    this.fireEvent('onRowClick', this.onRowClick);
+                } else {
+                    this.fireEventWithLock('onRowClick', this.onRowClick, event);
+                }
+            }.bind(this));
+        }
 
         this.contentWrapper.appendChild(cell);
     }

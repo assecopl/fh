@@ -13,6 +13,7 @@ import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.core.util.StringUtils;
 
 import java.lang.reflect.Modifier;
+import java.util.Objects;
 
 @Component
 public class UseCaseBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
@@ -57,7 +58,9 @@ public class UseCaseBeanFactoryPostProcessor implements BeanFactoryPostProcessor
         if (redefinition) {
             if (registerOld) {
                 Class<?> oldBean = ReflectionUtils.getRealClass(beanFactory.getBean(beanName));
-                registerBean(oldBean, lazyInit);
+                if (!Objects.equals(oldBean, clazz)) {
+                    registerBean(oldBean, lazyInit);
+                }
             }
             registry.removeBeanDefinition(beanName);
             FhLogger.warn("Redefining bean '{}'", beanName);

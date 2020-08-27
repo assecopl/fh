@@ -229,6 +229,12 @@ class SelectComboMenu extends InputText {
             this.openAutocomplete();
         } else if (keyCode == 27) {
             // escape
+
+            //WCAG - Revert input value.
+            let selected = this.findValueByElement(options[this.selectedIndex? this.selectedIndex: 0]);
+            this.input.value = selected.displayAsTarget ? selected.targetValue : (selected.displayedValue ? selected.displayedValue : "");
+            this.highlighted = selected;
+
             this.hightlightValue();
             this.closeAutocomplete();
         } else {
@@ -251,31 +257,24 @@ class SelectComboMenu extends InputText {
                 }
                 if ((move < 0 && h === 0) || (h + move) >= options.length) return;
 
-                if (this.autocompleteOpen) {
-                    if (h === null && move === 1) {
-                        h = 1;
-                    } else {
-                        h = h + move;
-                    }
+                if (h === null && move === 1) {
+                    h = 1;
+                } else {
+                    h = h + move;
+                }
 
-                    let next = this.findValueByElement(options[h]);
+                let next = this.findValueByElement(options[h]);
 
-                    if (next) {
+                if(next) {
+                    if (this.autocompleteOpen) {
                         this.highlighted = next;
                         this.hightlightValue();
-                    }
-                } else {
-                    if (h === null && move === 1) {
-                        h = 1;
+                        //WCAG - Set input value for screen readers (NVDA)
+                        this.input.value = next.displayAsTarget ? next.targetValue : (next.displayedValue ? next.displayedValue : "");
                     } else {
-                        h = h + move;
-                    }
-
-                    let current = this.findValueByElement(options[h]);
-                    if (current) {
-                        this.input.value = current.displayAsTarget ? current.targetValue : (current.displayedValue ? current.displayedValue : "");
+                        this.input.value = next.displayAsTarget ? next.targetValue : (next.displayedValue ? next.displayedValue : "");
                         this.selectedIndex = h;
-                        this.highlighted = current;
+                        this.highlighted = next;
                         this.updateModel();
                         if (this.onChange && (this.rawValue !== this.oldValue || this.changeToFired)) {
                             this.fireEventWithLock('onChange', this.onChange);
