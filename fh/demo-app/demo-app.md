@@ -40,12 +40,6 @@ The following instruction describe how to create and run a simple application ba
 
 ~~~~
 
-
-
-
-
-
-
 Full **pom.xml** file content:
 ~~~~
 <?xml version="1.0" encoding="UTF-8"?>
