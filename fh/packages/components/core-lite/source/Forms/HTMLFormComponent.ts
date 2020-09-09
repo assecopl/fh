@@ -983,15 +983,23 @@ abstract class HTMLFormComponent extends FormComponent {
                 return;
             }
 
-            if (this.component.classList.contains('field-required')) {
-                if (this.component.contains(this.requiredElement)) {
-                    this.component.removeChild(this.requiredElement);
+            if (this.componentObj.type === 'RadioOption' || this.componentObj.type === 'RadioOptionsGroup' || this.componentObj.type === 'CheckBox') {
+                let label = this.htmlElement.firstChild;
+                let controlLabelWithText = label.innerText.length;
+                if (controlLabelWithText) {
+                    label.removeChild(this.requiredElement);
+                } else {
+                    this.htmlElement.removeChild(this.requiredElement);
                 }
-                if (this.inputGroupElement.contains(this.requiredElement)) {
+
+            } else {
+                if (this.inputGroupElement != null) {
                     this.inputGroupElement.removeChild(this.requiredElement);
+                } else if (this.component.classList.contains('field-required')) {
+                    this.component.removeChild(this.requiredElement);
+                } else {
+                    this.htmlElement.removeChild(this.requiredElement);
                 }
-            } else if (this.htmlElement.requiredElement) {
-                this.htmlElement.removeChild(this.requiredElement);
             }
 
             this.requiredElement = null;

@@ -379,7 +379,7 @@ public class AvailabilityConfiguration extends Component {
         @Override
         protected void appendXmlBody(StringBuilder sb, boolean splitAvailabilityConfiguration) {
             for (FormSetting setting : subordinateSettings) {
-                sb.append(setting.toXml());
+                sb.append(setting.toXml(splitAvailabilityConfiguration));
             }
         }
 

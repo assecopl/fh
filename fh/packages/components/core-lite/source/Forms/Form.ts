@@ -4,6 +4,7 @@ import * as $ from 'jquery';
 import {FhContainer} from "../FhContainer";
 import {LayoutHandler} from "../LayoutHandler";
 import getDecorators from "inversify-inject-decorators";
+import * as focusTrap  from 'focus-trap';
 
 let {lazyInject} = getDecorators(FhContainer);
 
@@ -30,6 +31,8 @@ class Form extends HTMLFormComponent {
     protected headingTypeValue: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" = null;
 
     protected afterInitActions:Array<any> = [];
+
+    protected focusTrap:focusTrap.FocusTrap = null;
 
     constructor(formObj: any, parent: any = null) {
         super(formObj, parent);
@@ -153,7 +156,36 @@ class Form extends HTMLFormComponent {
                 this.renderSubcomponents();
                 this.modalDeferred.resolve();
                 this.focusFirstActiveInputElement();
+
+                /**
+                 * WCAG(Srean Reader) Block focus on elements that are outside/under opened modal.
+                 * Used FocusTrap library : https://www.npmjs.com/package/focus-trap
+                 * We can't block key modal functionality so errors will be only log to console.
+                 */
+                try {
+                    if(this.htmlElement) {
+                        // @ts-ignore
+                        this.focusTrap = focusTrap(this.htmlElement, {});
+                        this.focusTrap.activate();
+                    }
+                } catch (e) {
+                    console.log(focusTrap)
+                    console.info(e);
+                }
             }.bind(this));
+
+            /**
+             * WCAG(Srean Reader) Deactivate focus trpa on modal close.
+             */
+            $(this.htmlElement).on('hidden.bs.modal', function (e) {
+                try {
+                    if (this.focusTrap) {
+                        this.focusTrap.deactivate();
+                    }
+                } catch (e) {
+                    console.info(e);
+                }
+            }.bind(this))
         } else {
             this.renderSubcomponents();
             this.focusFirstActiveInputElement();

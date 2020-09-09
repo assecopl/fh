@@ -520,12 +520,13 @@ public class Combo extends BaseInputFieldWithKeySupport {
         if (this.cleared) {
             this.filterText = "";
             updateFilterTextBinding();
+            processFiltering(this.filterText);
         }
         processFilterTextBinding(elementChanges);
         setFilterFunction();
         refreshAvailability(elementChanges);
         boolean valuesChanged = processValuesBinding();
-        if (selectedBindingChanged || valuesChanged) {
+        if (selectedBindingChanged || valuesChanged ) {
             processFiltering(this.filterText);
         }
         processFilterBinding(elementChanges, valuesChanged);
@@ -625,7 +626,7 @@ public class Combo extends BaseInputFieldWithKeySupport {
     }
 
     protected boolean processFilterBinding(ElementChanges elementChanges, boolean valuesChanged) {
-        if (!preload && firstLoad && StringUtils.isNullOrEmpty(this.filterText) && !valuesChanged) {
+        if (!preload && firstLoad && StringUtils.isNullOrEmpty(this.filterText) && !valuesChanged && !this.cleared) {
             return false;
         }
         if (filterInvoked || valuesChanged) {

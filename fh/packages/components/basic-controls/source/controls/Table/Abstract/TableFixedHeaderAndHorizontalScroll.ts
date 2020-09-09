@@ -41,7 +41,7 @@ abstract class TableFixedHeaderAndHorizontalScroll extends HTMLFormComponent {
 
         if (this.fixedHeader) {
             this.table.classList.add('tableOptimizedFixedHeader');
-            this.table.classList.add('tableFixedHeader');
+            // this.table.classList.add('tableFixedHeader');
             this.inputGroupElement.style.position = "relative";
             this.inputGroupElement.className = "";
         }
@@ -104,10 +104,12 @@ abstract class TableFixedHeaderAndHorizontalScroll extends HTMLFormComponent {
             let columnWidth = column.htmlElement.offsetWidth;
             try {
                 //Try to get actual column width from table
-
                 columnWidth = $(this.table).find("." + column.id)[0].getBoundingClientRect().width;
-            } catch (e) {
 
+                console.log("calculateColumnWidth", column.htmlElement.offsetWidth, columnWidth, this.convertToPrecentageWidth(columnWidth) , this.component.clientWidth)
+
+            } catch (e) {
+                    console.warn(e);
             }
             let offsetWidth: any = columnWidth + "px";
             if (precentage) {
@@ -398,7 +400,7 @@ abstract class TableFixedHeaderAndHorizontalScroll extends HTMLFormComponent {
     }
 
     public convertToPrecentageWidth(widthInPx: any) {
-        return (((widthInPx / this.component.clientWidth)) * 100).toExponential(0);
+        return (((widthInPx / this.component.clientWidth)) * 100).toExponential(2);
     }
 
     update(change) {

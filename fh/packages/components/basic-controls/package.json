@@ -1,6 +1,6 @@
 {
   "name": "fh-basic-controls",
-  "version": "4.6.11",
+  "version": "4.6.12",
   "main": "Module.ts",
   "types": "dist/Module.d.ts",
   "scripts": {
@@ -23,7 +23,7 @@
   "dependencies": {
     "bootstrap": "4.4.1",
     "copyfiles": "2.1.1",
-    "fh-forms-handler": "4.6.11",
+    "fh-forms-handler": "4.6.12",
     "highlightjs": "9.12.0",
     "hotkeys-js": "3.6.14",
     "jquery": "3.4.0",

@@ -23,6 +23,10 @@ public class IsRequired implements Validator<BaseInputField> {
     protected static final String STRING_EMPTY = "";
 
     public boolean canProcessValidation(BaseInputField baseInputField) {
+
+        if(baseInputField.getRequiredBinding() != null && baseInputField.getRequiredBinding().getBindingResult() != null){
+            return baseInputField.getRequiredBinding().getBindingResult().getValue();
+        }
         return baseInputField.isRequired();
     }
 
