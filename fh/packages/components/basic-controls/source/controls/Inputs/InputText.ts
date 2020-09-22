@@ -23,6 +23,8 @@ class InputText extends HTMLFormComponent {
     protected readonly textAlign: string;
     private readonly height: any;
     protected format: string;
+    protected emptyValue: any;
+    protected onEmptyValue: any;
     private timeoutFunction: any;
     private readonly inputTimeout: number;
     protected inputmaskEnabled: boolean;
@@ -53,6 +55,7 @@ class InputText extends HTMLFormComponent {
 
         this.onInput = this.componentObj.onInput;
         this.onChange = this.componentObj.onChange;
+        this.emptyValue = this.componentObj.emptyValue;
 
         this.input = null;
         this.valueChanged = false;
@@ -122,6 +125,7 @@ class InputText extends HTMLFormComponent {
 
         let skipLabel = this.styleClasses.indexOf('hideLabel') !== -1;
         this.wrap(skipLabel, true);
+        this.createClearButton();
         this.createIcon();
         this.display();
         this.addStyles();
@@ -157,6 +161,36 @@ class InputText extends HTMLFormComponent {
                 }
             });
 
+        }
+    }
+
+    createClearButton() {
+        if (this.emptyValue && this.emptyValue === true) {
+            let button = document.createElement('div');
+            button.classList.add('input-group-append');
+            button.classList.add('clearButton');
+
+            let buttonSpan = document.createElement('span');
+            buttonSpan.classList.add('input-group-text');
+
+            let icon = document.createElement('i');
+            icon.classList.add('fa');
+            icon.classList.add('fa-times');
+
+            button.addEventListener('click', function (event) {
+                if (this.accessibility === 'EDIT') {
+                    this.input.value = '';
+                    this.updateModel();
+                    if (this.onChange) {
+                        this.fireEventWithLock('onChange', this.onChange, event);
+                    }
+                    this.input.focus();
+                }
+            }.bind(this));
+
+            buttonSpan.appendChild(icon);
+            button.appendChild(buttonSpan);
+            this.component.parentNode.appendChild(button);
         }
     }
 

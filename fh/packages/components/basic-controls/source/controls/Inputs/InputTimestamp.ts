@@ -67,6 +67,7 @@ class InputTimestamp extends InputDate implements LanguageChangeObserver {
             locale: this.i18n.selectedLanguage,
             useStrict: true,
             format: this.format,
+            // allowInputToggle: true,
             defaultDate: InputDate.isDateValid(this.rawValue, this.format)? this.rawValue : '',
             keepInvalid: true
         });
@@ -76,7 +77,36 @@ class InputTimestamp extends InputDate implements LanguageChangeObserver {
 
         $(this.input).on('blur', this.inputBlurEvent.bind(this));
         $(this.input).on('change', this.inputChangeEvent.bind(this));
+        // $(this.component).on('keydown', function (event){
+        //     console.log("DOWN");
+        //     let keyCode = event.key || event.keyCode;
+        //     if(keyCode == 40 || keyCode == "ArrowDown") {
+        //         console.log("DOWN", $(this.inputGroupElement).data("DateTimePicker"));
+        //         (<any>$(this.inputGroupElement)).data("DateTimePicker").show();
+        //         (<any>$(this.inputGroupElement)).data("DateTimePicker").attachDatePickerElementEvents();
+        //     }
+        // }.bind(this));
     };
+
+    inputBlurEvent() {
+        this.input.value = InputDate.toDateOrLeave(this.input.value, this.format, this.format);
+        this.updateModel();
+        //Reinitialize for keyboard support. Don;t know why but
+        let component = (<any>$(this.inputGroupElement));
+        let data = component.data("DateTimePicker");
+        if (data != null) data.destroy();
+        (<any>$(this.inputGroupElement)).datetimepicker({
+            locale: this.i18n.selectedLanguage,
+            useStrict: true,
+            format: this.format,
+            // allowInputToggle: true,
+            defaultDate: InputDate.isDateValid(this.rawValue, this.format)? this.rawValue : '',
+            keepInvalid: true
+        });
+
+        $(this.inputGroupElement).data("DateTimePicker").date(
+            InputDate.toDateOrLeave(this.rawValue, this.backendFormat, this.format));
+    }
 
     applyDatepicker() {
         return;

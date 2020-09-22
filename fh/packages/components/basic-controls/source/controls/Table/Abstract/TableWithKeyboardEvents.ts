@@ -87,6 +87,7 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
                         current.removeClass('table-primary');
                         next.addClass('table-primary');
                         this.scrolToRow(next);
+                        this.scrolIntoView(next);
                         this.keyEventTimer = setTimeout(function (elem) {
                             elem? elem.trigger('click') : false;
                         }, this.doneEventInterval, next);
@@ -115,6 +116,7 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
                         current.removeClass('table-primary');
                         prev.addClass('table-primary');
                         this.scrolToRow(prev);
+                        this.scrolIntoView(prev);
                         this.keyEventTimer = setTimeout(function (elem) {
                             elem ? elem.trigger('click') : false;
                         }, this.doneEventInterval, prev);
@@ -129,6 +131,7 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
                     if (first && first.length > 0) {
                         $(this.component).scrollTop(0);
                         first.trigger('click');
+                        this.scrolIntoView(first);
                     }
                 } else if (e.which == 34 || e.which == 35) { // pgdown i end
                     e.preventDefault();
@@ -138,6 +141,8 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
                     if (last && last.length > 0) {
                         $(this.component).scrollTop($(last).position().top);
                         last.trigger('click');
+                        this.scrolIntoView(last);
+
                     }
                 }
             }

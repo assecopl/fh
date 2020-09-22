@@ -20,15 +20,14 @@ class Combo extends InputText {
     private lastCursorPosition: any;
     private blurEvent: any;
     private blurEventWithoutChange: boolean;
-    private readonly emptyValue: any;
     private readonly onSpecialKey: any;
     private readonly onDblSpecialKey: any;
-    private onEmptyValue: any;
     private readonly multiselect: boolean;
     private readonly freeTyping: boolean;
     private tagslist: Array<string> = [];
     private tagsInputData: any;
     private multiselectRawValue: any;
+    private widthRatio: number;
     private multiselectOldValue: any;
     private changeToFired: boolean;
 
@@ -57,6 +56,7 @@ class Combo extends InputText {
         this.cleared = false;
         this.lastCursorPosition = this.componentObj.cursor;
         this.blurEvent = false;
+        this.widthRatio = this.componentObj.widthRatio;
         this.openOnFocus = typeof this.componentObj.openOnFocus === 'undefined' ? true : this.componentObj.openOnFocus;
         this.emptyValue = this.componentObj.emptyValue;
         this.onSpecialKey = this.componentObj.onSpecialKey;
@@ -121,9 +121,9 @@ class Combo extends InputText {
                     this.forceSendSelectedIndex = true;
                     const val = this.values[this.selectedIndexGroup][this.selectedIndex];
                     if (val) {
-                        this.input.value = val.displayAsTarget ? val.targetValue : val.displayedValue;
+                        this.input.value = this.getInputValue(val);
                         //WCAG Screen reader - Set title for input to makes it will be read after select.
-                        this.input.title = val.displayAsTarget ? val.targetValue : val.displayedValue;
+                        this.input.title = this.input.value;
                     }
                     if (element.dataset.targetCursorPosition !== undefined) {
                         this.setCursorPositionToInput(parseInt(element.dataset.targetCursorPosition));
@@ -181,7 +181,7 @@ class Combo extends InputText {
                     let element = options[this.highlighted].firstChild;
                     const val = this.values[element.dataset.group][element.dataset.index];
                     if (val) {
-                        this.input.value = val.displayAsTarget ? val.targetValue : val.displayedValue;
+                        this.input.value = this.getInputValue(val);
                     }
                 }
                 if (this.multiselect && keyCode == 8 && $(this.input).val() === '' && this.tagslist.length > 0) {
@@ -261,9 +261,6 @@ class Combo extends InputText {
             }
             if(!this.multiselectOldValue && this.input.value !== this.rawValue){
                 input.value = this.rawValue;
-            }
-            if(this.multiselectOldValue && this.multiselectRawValue !== this.multiselectOldValue){
-                input.value = this.multiselectOldValue;
             }
 
 
@@ -382,10 +379,15 @@ class Combo extends InputText {
             containerHeightBeforeListDisplay = componentsContainer[0].scrollHeight;
         }
 
+
         this.autocompleter.classList.add('show');
 
         if (this.formId === 'designerProperties') {
             containerHeightAfterListDisplay = componentsContainer[0].scrollHeight;
+        }
+
+        if (this.widthRatio) {
+            this.autocompleter.style.width = (this.autocompleter.offsetWidth * (this.widthRatio/100) ) + "px";
         }
 
         if (containerHeightAfterListDisplay > containerHeightBeforeListDisplay) {
@@ -502,6 +504,11 @@ class Combo extends InputText {
 
     closeAutocomplete() {
         let formType = this.getFormType();
+
+        if (this.widthRatio) {
+            this.autocompleter.style.width = "";
+        }
+
 
         this.autocompleter.classList.remove('show');
         this.autocompleter.classList.remove('dropup');
@@ -913,6 +920,12 @@ class Combo extends InputText {
 
     getDefaultWidth(): string {
         return super.getDefaultWidth();
+    }
+
+    //Added function to override it on DictionaryCombo
+    //Retrun to classic behaviour as it was before March 2020 changes for DictioanryCombo.
+    public getInputValue(val){
+            return  val.targetValue;
     }
 }
 

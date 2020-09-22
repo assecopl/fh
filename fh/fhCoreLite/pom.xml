@@ -4,7 +4,7 @@
 
 	<groupId>pl.fhframework</groupId>
 	<artifactId>fhCoreLite</artifactId>
-	<version>4.6.12</version>
+	<version>4.6.13</version>
 	<packaging>pom</packaging>
 	<url>https://github.com/assecopl/fh</url>
 
@@ -14,7 +14,7 @@
 	<parent>
 		<groupId>pl.fhframework</groupId>
 		<artifactId>fh-compile-bom</artifactId>
-		<version>4.6.12</version>
+		<version>4.6.13</version>
 		<relativePath>../BOM/fh-compile-bom</relativePath>
 	</parent>
 

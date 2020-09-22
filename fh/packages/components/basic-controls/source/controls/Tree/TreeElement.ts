@@ -52,6 +52,14 @@ class TreeElement extends HTMLFormComponent {
         this.contentWrapper.classList.add('treeNodeBody');
         this.contentWrapper.addEventListener('click', this.labelClicked.bind(this));
 
+        /**
+         * Allow tree elements to be tabbable. Adde support to select element with Enter key
+         */
+        this.contentWrapper.setAttribute("tabindex","0");
+        this.contentWrapper.addEventListener("keydown", this.keydownEvents.bind(this))
+
+
+
         this.techIconElement = document.createElement('span');
         // this.techIconElement.classList.add('icon');
         // this.techIconElement.classList.add('expand-icon');
@@ -349,6 +357,64 @@ class TreeElement extends HTMLFormComponent {
         }
         return false;
     };
+
+    public keydownEvents(event) {
+        //Use ke in favour of keyCode(deprecated).
+        const htmlElement = event.target;
+        let keyCode = event.key || event.keyCode;
+
+        if(keyCode == 13 || keyCode == "Enter"){
+            this.labelClicked(event);
+        } else if(keyCode == 39 || keyCode == "ArrowRight") {
+            event.preventDefault();
+            event.stopPropagation();
+            if(this.collapsed){
+                this.labelClicked(event);
+            }
+        } else if(keyCode == 37 || keyCode == "ArrowLeft") {
+            event.preventDefault();
+            event.stopPropagation();
+            if(!this.collapsed){
+                this.labelClicked(event);
+            }
+        }else if(keyCode == 38 || keyCode == "ArrowUp") {
+            event.preventDefault();
+            event.stopPropagation();
+            let innerIdx = Number.parseInt(htmlElement.dataset.hierarchy);
+            const tree = htmlElement.dataset.hierarchy_parent;
+            if(Number.isInteger(innerIdx)) {
+                while (innerIdx >= 0 && innerIdx != -1) {
+                    innerIdx--;
+                    const prev = $("#" + tree).find(".hierarchy_" + innerIdx).first();
+                    if (prev.is(":visible")) {
+                        prev.focus();
+                        innerIdx = -1;
+                    }
+                }
+            }
+        } else if(keyCode == 40 || keyCode == "ArrowDown") {
+            event.preventDefault();
+            event.stopPropagation();
+            let innerIdx = Number.parseInt(htmlElement.dataset.hierarchy);
+            let max_nodes = Number.parseInt(htmlElement.dataset.hierarchy_max);
+            const tree = htmlElement.dataset.hierarchy_parent;
+            if(Number.isInteger(innerIdx)) {
+                while (innerIdx <= max_nodes && innerIdx != -1) {
+                    innerIdx++;
+                    const next = $("#" + tree).find(".hierarchy_" + innerIdx).first();
+                    if (next) {
+                        if (next.is(":visible")) {
+                            next.focus();
+                            innerIdx = -1;
+                        }
+                    } else {
+                        //Stop if there are no nodes.
+                        innerIdx = -1;
+                    }
+                }
+            }
+        }
+    }
 }
 
 export {TreeElement};

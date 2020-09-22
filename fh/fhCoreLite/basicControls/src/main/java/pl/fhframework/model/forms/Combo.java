@@ -237,6 +237,13 @@ public class Combo extends BaseInputFieldWithKeySupport {
     protected boolean multiselect;
 
     @Getter
+    @Setter
+    @XMLProperty
+    @DocumentedComponentAttribute(value = "Set autocompleter width based on field's width.")
+    @DesignerXMLProperty(functionalArea = SPECIFIC, priority = 10)
+    protected Integer widthRatio;
+
+    @Getter
     protected String multiselectRawValue;
 
     @JsonIgnore
@@ -702,11 +709,11 @@ public class Combo extends BaseInputFieldWithKeySupport {
             return this.convertValueToString(s, formatter.get());
         }
 
-        if (displayFunctionBinding != null) {
+        if (displayFunctionBinding != null && s != null) {
             return objectToStringAsDisplayFunction(s);
         }
 
-        if (displayExpression != null) {
+        if (displayExpression != null && s != null) {
             return objectToStringAsDisplayExpresssion(s);
         }
 

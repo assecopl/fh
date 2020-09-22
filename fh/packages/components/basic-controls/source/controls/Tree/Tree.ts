@@ -48,6 +48,22 @@ class Tree extends HTMLFormComponent {
         if (this.componentObj.lazy === false && this.componentObj.expanded === true) {
             this.expandAll();
         }
+
+        /**
+         * Process all nodes and add data for Keyboard Arrow Up and Down support
+         * Create flat hierarchy of components to easily move to next/ previous element
+         * Logic is implemented on TreeElement.
+         */
+        const treeNodes = $(this.component).find('.treeNodeBody');
+        const treeId = this.id;
+        treeNodes.each(function (index) {
+            this.dataset.hierarchy = index; //Position in hierarchy
+            this.dataset.hierarchy_parent = treeId; //Parent tree id , needed to konw inside which html element we will search for other hierarchy elements
+            this.dataset.hierarchy_max = treeNodes.length;
+            $(this).addClass("hierarchy_"+index);
+        });
+
+
     };
 
     decomposeIcon(icon) {

@@ -41,6 +41,7 @@ public class InputText extends BaseInputFieldWithKeySupport implements IBodyXml 
     private static final String MASK = "mask";
     private static final String MAX_LENGTH_BINDING = "maxLengthBinding";
     private static final String FORMATTER_BINDING = "formatterBinding";
+    private static final String EMPTY_VALUE_ATTR = "emptyValue";
     private static final String REQUIRED_REGEX_BINDING = "requiredRegexBinding";
 
     // basic attributes
@@ -58,6 +59,17 @@ public class InputText extends BaseInputFieldWithKeySupport implements IBodyXml 
             "as html tag: <textarea></textarea>. Otherwise, simple <input/>.")
     @DesignerXMLProperty(functionalArea = LOOK_AND_STYLE, priority = 93)
     private Integer rowsCount;
+
+    @Getter
+    private boolean emptyValue;
+
+    @JsonIgnore
+    @Getter
+    @Setter
+    @XMLProperty(EMPTY_VALUE_ATTR)
+    @DesignerXMLProperty(functionalArea = DesignerXMLProperty.PropertyFunctionalArea.CONTENT)
+    @DocumentedComponentAttribute(defaultValue = "false", value = "Defines if value passed can be empty", boundable = true)
+    private ModelBinding<Boolean> emptyValueBinding;
 
     @Getter
     @Setter
@@ -245,6 +257,7 @@ public class InputText extends BaseInputFieldWithKeySupport implements IBodyXml 
         clone.setOnInput(table.getRowBinding(getOnInput(), clone, iteratorReplacements));
         clone.setFormatter(getFormatter());
         clone.setMaxLengthBinding(table.getRowBinding(getMaxLengthBinding(), clone, iteratorReplacements));
+        clone.setEmptyValueBinding(table.getRowBinding(getEmptyValueBinding(), clone, iteratorReplacements));
         clone.setFormatterBinding(table.getRowBinding(getFormatterBinding(), clone, iteratorReplacements));
         clone.setRequiredRegexBinding(table.getRowBinding(getRequiredRegexBinding(), clone, iteratorReplacements));
     }
@@ -348,6 +361,9 @@ public class InputText extends BaseInputFieldWithKeySupport implements IBodyXml 
         processMask(elementChanges);
         processMaxLength(elementChanges);
         processRequiredRegex();
+        if (emptyValueBinding != null) {
+            emptyValue = emptyValueBinding.resolveValueAndAddChanges(this, elementChanges, emptyValue, EMPTY_VALUE_ATTR);
+        }
         this.language = LanguageResolver.languageChanges(getForm().getAbstractUseCase().getUserSession(), this.language, elementChanges);
         return elementChanges;
     }

@@ -172,7 +172,8 @@ class FileUpload extends HTMLFormComponent {
                         let allowedExtensions = this.extensions.replace(new RegExp('\\.', 'g'),
                             '').split(',');
                         let sentFileExtension = fileNameSplit[fileNameSplit.length - 1];
-                        if (allowedExtensions.indexOf(sentFileExtension) === -1) {
+                        let index = allowedExtensions.findIndex(c => c.toLowerCase() === sentFileExtension.toLowerCase());
+                        if (index === -1) {
                             FhContainer.get<NotificationEvent>('Events.NotificationEvent').fire({
                                 level: 'error',
                                 message: this.__('incorrect file extension', [this.extensions, sentFileExtension]).innerText

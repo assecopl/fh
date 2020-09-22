@@ -105,9 +105,6 @@ abstract class TableFixedHeaderAndHorizontalScroll extends HTMLFormComponent {
             try {
                 //Try to get actual column width from table
                 columnWidth = $(this.table).find("." + column.id)[0].getBoundingClientRect().width;
-
-                console.log("calculateColumnWidth", column.htmlElement.offsetWidth, columnWidth, this.convertToPrecentageWidth(columnWidth) , this.component.clientWidth)
-
             } catch (e) {
                     console.warn(e);
             }
@@ -357,6 +354,36 @@ abstract class TableFixedHeaderAndHorizontalScroll extends HTMLFormComponent {
             $(this.component).scrollTop(offset);
         }
     }
+
+    /**
+     *     Check if component is visiable inside viewport and scroll window to show it if needed.
+     *     Used With Keyboard navigation -> Arrow up, Arrow down, Page down , Page Up
+     */
+    public scrolIntoView(rowObject: any) {
+
+        if (typeof jQuery === "function" && rowObject instanceof jQuery) {
+            rowObject = rowObject[0];
+        }
+        var rect = rowObject.getBoundingClientRect();
+
+        console.log("scrolIntoView", rect.bottom, rect.top, rect.bottom - (window.innerHeight || document.documentElement.clientHeight) )
+
+        if(rect.bottom > (window.innerHeight || document.documentElement.clientHeight)) {
+            //Scroll down
+            let dif = rect.bottom - (window.innerHeight || document.documentElement.clientHeight)
+            let y = window.scrollY + (rowObject.clientHeight > dif ? rowObject.clientHeight : dif);
+            window.scroll({top:y > 0 ? y : 0})
+
+        } else if (rect.top <= 0) {
+            //Scroll up
+            let dif = rect.top * (-1);
+            let y = window.scrollY - (rowObject.clientHeight > dif ? rowObject.clientHeight : dif);
+            window.scroll({top:y > 0 ? y : 0})
+        }
+
+    }
+
+
 
     public scrollTopInside() {
         if (this.hasHeight()) {
