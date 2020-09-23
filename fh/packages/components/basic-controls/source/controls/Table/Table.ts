@@ -349,7 +349,9 @@ class Table extends TableWithKeyboardEvents {
             this.removeMinRowRows();
             this.addMinRowRows();
         }
-        this.recalculateColumnWidths();
+        if (this.fixedHeader) {
+            this.recalculateColumnWidths();
+        }
     };
 
     addComponent(componentObj) {

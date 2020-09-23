@@ -18,7 +18,7 @@ The following instruction describe how to create and run a simple application ba
 <parent>
     <groupId>pl.fhframework</groupId>
     <artifactId>fh-compile-bom</artifactId>
-    <version>4.6.13</version>
+    <version>4.6.14</version>
 </parent>
 ~~~~
 
@@ -50,7 +50,7 @@ Full **pom.xml** file content:
     <parent>
         <groupId>pl.fhframework</groupId>
         <artifactId>fh-compile-bom</artifactId>
-        <version>4.6.10</version>
+        <version>4.6.14</version>
     </parent>
 
     <groupId>com.example.fhdemo</groupId>

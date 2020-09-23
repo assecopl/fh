@@ -352,7 +352,7 @@ class SelectComboMenu extends InputText {
 
         if (this.highlighted != null) {
             let element = this.highlighted.element.firstChild;
-            this.selectedIndex = this.selectedIndex;
+            this.selectedIndex = parseInt(element.dataset.index);
             this.input.value = this.highlighted.displayAsTarget ? this.highlighted.targetValue : (this.highlighted.displayedValue ? this.highlighted.displayedValue : "");
             this.updateModel();
         } else {

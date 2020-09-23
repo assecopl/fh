@@ -91,6 +91,7 @@ class Tab extends HTMLFormComponent {
             $(this.navElement).find('a').one('shown.bs.tab', function () {
                 while (this.contentWrapper.firstChild) this.contentWrapper.removeChild(this.contentWrapper.firstChild);
                 this.renderSubcomponents();
+
                 this.isRendered = true;
             }.bind(this));
         }
