@@ -1,3 +1,5 @@
+4.6.15
+- Dodanie możliwości wywołania przekierowania na zewnętrzny URL z wykorzystaniem metody HTTP POST (EventRegistry#fireRedirectPostEvent)
 - Dodanie parametru 'fh.cache.jgroups.configurationFile' - umożliwia wskazanie pliku xml z konfiguracją jgroups
 - Dodanie profili: fh-standalone (domyślnie włączony, dodaje zależności xxx-standalone), fh-tomcat (domyślnie włączony, dodaje zależność fh-tomcat), fh-h2 (domyślnie włączony dodaje zależności do H2). Profile można wyłączyć parametrem: skip-fh-standalone, skip-fh-tomcat, skip-fh-h2
 - Dodanie obsługi TLS w MailClient, nowe properties'y fh.mail.server.startTlsEnabled, fh.mail.server.startTlsRequired. Włączając TLS należy zaimportować certyfikat serwera pocztowego do truststore (np. openssl s_client -connect localhost:587 -servername localhost -showcerts -starttls smtp -prexit 2>&1 </dev/null | sed -n '/-----BEGIN/,/-----END/p' > ~/smptcert.pem | sudo keytool -importcert -file ~/smptcert.pem -alias smptcert -keystore ~/cacerts) i ustawić properties'y javax.net.ssl.trustStore=./cacerts i javax.net.ssl.trustStorePassword=

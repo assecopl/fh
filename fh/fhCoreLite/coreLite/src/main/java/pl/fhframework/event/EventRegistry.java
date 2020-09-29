@@ -77,6 +77,14 @@ public class EventRegistry {
         getEvents().add(new RedirectEvent(uuid, url, newWindow, closeable));
     }
 
+    public void fireRedirectPostEvent(String url) {
+        getEvents().add(new RedirectPostEvent(url));
+    }
+
+    public void fireRedirectPostEvent(String url, Map<String, String> params) {
+        getEvents().add(new RedirectPostEvent(url, params));
+    }
+
     public void fireCloseTabEvent(String uuid) {
         getEvents().add(new CloseTabEvent(uuid));
     }

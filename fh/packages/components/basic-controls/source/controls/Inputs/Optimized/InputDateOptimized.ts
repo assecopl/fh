@@ -96,7 +96,7 @@ class InputDateOptimized extends InputText implements LanguageChangeObserver {
         $(this.input).on('input', this.onValueInput.bind(this));
         $(this.input).on('blur', this.inputBlurEvent.bind(this));
         $(this.input).on('change', this.inputChangeEvent.bind(this));
-
+        this.inputGroupElement.id = this.id + "_inputGroup"
         this.display();
     };
 
@@ -122,7 +122,8 @@ class InputDateOptimized extends InputText implements LanguageChangeObserver {
                 language: this.i18n.selectedLanguage,
                 autoclose: 1,
                 showOnFocus: 0,
-                inline: false
+                inline: false,
+                container: "#"+this.inputGroupElement.id
             };
             if (this.highlightToday) {
                 options.todayHighlight = true;

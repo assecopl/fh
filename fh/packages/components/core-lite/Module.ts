@@ -18,6 +18,7 @@ import {StylesheetChangeEvent} from './source/Events/StylesheetChangeEvent';
 import {LanguageChangeEvent} from './source/Events/LanguageChangeEvent';
 import {RedirectEvent} from './source/Events/RedirectEvent';
 import {RedirectHomeEvent} from './source/Events/RedirectHomeEvent';
+import {RedirectPostEvent} from './source/Events/RedirectPostEvent';
 import {SessionTimeoutEvent} from './source/Events/SessionTimeoutEvent';
 import {ShutdownEvent} from './source/Events/ShutdownEvent';
 import {MessageEvent} from './source/Events/MessageEvent';
@@ -69,6 +70,7 @@ class FormsHandler extends FhModule {
         FhContainer.bind<BaseEvent>('Events.LanguageChangeEvent').to(LanguageChangeEvent).inRequestScope();
         FhContainer.bind<BaseEvent>('Events.RedirectEvent').to(RedirectEvent).inRequestScope();
         FhContainer.bind<BaseEvent>('Events.RedirectHomeEvent').to(RedirectHomeEvent).inRequestScope();
+        FhContainer.bind<BaseEvent>('Events.RedirectPostEvent').to(RedirectPostEvent).inRequestScope();
         FhContainer.bind<BaseEvent>('Events.CloseTabEvent').to(CloseTabEvent).inRequestScope();
         FhContainer.bind<BaseEvent>('Events.ShutdownEvent').to(ShutdownEvent).inRequestScope();
         FhContainer.bind<BaseEvent>('Events.MessageEvent').to(MessageEvent).inRequestScope();

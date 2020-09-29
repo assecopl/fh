@@ -1236,6 +1236,9 @@ public class UseCaseContainer implements Serializable {
     }
 
     public void onSessionRefresh() {
+        if (!runningUseCasesStack.isEmpty()) {
+            onSessionRefresh(runningUseCasesStack.getFirst());
+        }
         systemContainerForUseCase.forEach((cont, uc) -> this.onSessionRefresh(uc));
     }
 

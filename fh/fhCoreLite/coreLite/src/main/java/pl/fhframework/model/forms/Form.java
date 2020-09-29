@@ -25,6 +25,7 @@ import pl.fhframework.core.security.AuthorizationManager;
 import pl.fhframework.core.uc.IFormUseCaseContext;
 import pl.fhframework.core.util.SpelUtils;
 import pl.fhframework.core.util.StringUtils;
+import pl.fhframework.events.I18nFormElement;
 import pl.fhframework.events.IEventSource;
 import pl.fhframework.events.IEventSourceContainer;
 import pl.fhframework.forms.FiledsHighlightingList;
@@ -914,6 +915,14 @@ public abstract class Form<T> extends GroupingComponentWithHeadingHierarchy<Comp
 
     public String convertValueToString(Object value, String converter) {
         return bindingMethods.convertValueToString(value, converter);
+    }
+
+    public void onSessionLanguageChange(String lang) {
+        doActionForEverySubcomponent(c -> {
+            if (c instanceof I18nFormElement) {
+                ((I18nFormElement) c).onSessionLanguageChange(lang);
+            }
+        });
     }
 
     @Override

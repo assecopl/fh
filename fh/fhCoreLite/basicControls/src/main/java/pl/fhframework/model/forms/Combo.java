@@ -14,6 +14,7 @@ import pl.fhframework.core.util.StringUtils;
 import pl.fhframework.BindingResult;
 import pl.fhframework.annotations.*;
 import pl.fhframework.binding.*;
+import pl.fhframework.events.I18nFormElement;
 import pl.fhframework.model.PresentationStyleEnum;
 import pl.fhframework.model.dto.ElementChanges;
 import pl.fhframework.model.dto.InMessageEventData;
@@ -36,7 +37,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
 @DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, documentationExample = true, value = "Enables users to quickly find and select from a pre-populated list of values as they type, leveraging searching and filtering.",
         icon = "fa fa-outdent")
 @Control(parents = {PanelGroup.class, Group.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = true)
-public class Combo extends BaseInputFieldWithKeySupport {
+public class Combo extends BaseInputFieldWithKeySupport implements I18nFormElement {
 
     /**
      * Old name of value property used by Combo
@@ -64,6 +65,12 @@ public class Combo extends BaseInputFieldWithKeySupport {
     private static final String DISPLAY_FUNCTION_ATTR = "displayFunction";
     private static final String DISPLAY_RULE_ATTR = "displayExpression";
     private static final String ATTR_OPEN_ON_FOCUS = "openOnFocus";
+
+    @Override
+    public void onSessionLanguageChange(String lang) {
+        languageChanged = true;
+        refreshView();
+    }
 
     @Getter
     protected static class ComboItemDTO {
@@ -184,6 +191,10 @@ public class Combo extends BaseInputFieldWithKeySupport {
     @Getter
     @Setter
     protected boolean cleared = false;
+
+    @Getter
+    @Setter
+    protected boolean languageChanged = false;
 
     @JsonIgnore
     protected BiPredicate<Object, String> filterFunction;
@@ -532,7 +543,7 @@ public class Combo extends BaseInputFieldWithKeySupport {
         processFilterTextBinding(elementChanges);
         setFilterFunction();
         refreshAvailability(elementChanges);
-        boolean valuesChanged = processValuesBinding();
+        boolean valuesChanged = (this.multiselect && languageChanged) || processValuesBinding();
         if (selectedBindingChanged || valuesChanged ) {
             processFiltering(this.filterText);
         }
@@ -546,6 +557,7 @@ public class Combo extends BaseInputFieldWithKeySupport {
             refreshView();
         }
         this.cleared = false;
+        this.languageChanged = false;
 
         return elementChanges;
     }
@@ -651,7 +663,7 @@ public class Combo extends BaseInputFieldWithKeySupport {
             BindingResult selectedBindingResult = getModelBinding().getBindingResult();
             if (selectedBindingResult != null) {
                 Object value = selectedBindingResult.getValue();
-                if (!Objects.equals(value, selectedItem)) {
+                if (!Objects.equals(value, selectedItem) || (this.multiselect && this.languageChanged)) {
                     this.selectedItem = value;
                     if (isMultiselect()) {
                         this.selectedItem = new ArrayList<>((List) value);
