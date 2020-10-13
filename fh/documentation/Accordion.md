@@ -1,5 +1,5 @@
 
-## Control Accordion 
+##1. Kontrolka Accordion 
 
 | <center>Identifier </center>  |  <center>Type  </center> | <center> Boundable  </center> |  <center>DefaultValue </center>  |  <center>Description  </center>    |  
 |-----------|------|-----------|--------------|----------------|

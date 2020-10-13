@@ -122,9 +122,16 @@ class InputDateOptimized extends InputText implements LanguageChangeObserver {
                 language: this.i18n.selectedLanguage,
                 autoclose: 1,
                 showOnFocus: 0,
-                inline: false,
-                container: "#"+this.inputGroupElement.id
+                inline: false
             };
+            const form = this.formsManager.findForm(this.formId);
+            /**
+             * If form has active focus trap option we need to place dynamic date element next to input element to prevent interaction blocking
+             */
+            if(form && form.blockFocusForModal){
+                options["container"] =  "#"+this.inputGroupElement.id;
+            }
+
             if (this.highlightToday) {
                 options.todayHighlight = true;
             }

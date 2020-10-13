@@ -5,7 +5,7 @@
 
     <artifactId>securityDataProvider-ad</artifactId>
     <groupId>pl.fhframework.core.security.provider</groupId>
-    <version>4.6.15</version>
+    <version>4.6.16</version>
     <packaging>jar</packaging>
     <url>https://github.com/assecopl/fh</url>
 
@@ -15,7 +15,7 @@
     <parent>
         <groupId>pl.fhframework</groupId>
         <artifactId>fhCoreLite</artifactId>
-        <version>4.6.15</version>
+        <version>4.6.16</version>
     </parent>
 
     <dependencies>

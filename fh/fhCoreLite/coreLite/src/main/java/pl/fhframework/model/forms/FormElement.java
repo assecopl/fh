@@ -16,8 +16,7 @@ import pl.fhframework.model.forms.attribute.*;
 
 import java.util.Set;
 
-import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.LOOK_AND_STYLE;
-import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.SPECIFIC;
+import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.*;
 
 /**
  * Base component/root of all visual and non visual components. Contains common logic inherited
@@ -43,7 +42,7 @@ public abstract class FormElement extends Component {
     @Setter
     @XMLProperty(value = "htmlAccessibilityRole")
     @DocumentedComponentAttribute(value = "Defines role of content presented by this element.Used to improve Accessibility. https://www.w3.org/TR/wai-aria/#landmark_roles")
-    @DesignerXMLProperty(functionalArea = SPECIFIC, priority = 90)
+    @DesignerXMLProperty(functionalArea = WCAG, priority = 1)
     protected String htmlAccessibilityRole;
 
     /**

@@ -29,6 +29,7 @@ class Form extends HTMLFormComponent {
     private windowListenerMouseUp: any;
     private modalDeferred;
     protected headingTypeValue: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" = null;
+    protected blockFocusForModal:boolean = false;
 
     protected afterInitActions:Array<any> = [];
 
@@ -43,7 +44,8 @@ class Form extends HTMLFormComponent {
         this.viewMode = this.componentObj.viewMode;
         this.state = this.componentObj.state;
         this.headingTypeValue = this.componentObj.headingTypeValue? this.componentObj.headingTypeValue : null;
-
+        this.blockFocusForModal = this.componentObj.blockFocusForModal? this.componentObj.blockFocusForModal : false;
+        console.log("this.componentObj.blockFocusForModal", this.componentObj.blockFocusForModal)
 
         /* TODO: remove after changing Java */
         if (this.componentObj.modal) {
@@ -162,30 +164,34 @@ class Form extends HTMLFormComponent {
                  * Used FocusTrap library : https://www.npmjs.com/package/focus-trap
                  * We can't block key modal functionality so errors will be only log to console.
                  */
-                try {
-                    if(this.htmlElement) {
-                        // @ts-ignore
-                        this.focusTrap = focusTrap(this.htmlElement, {});
-                        this.focusTrap.activate();
+                if(this.blockFocusForModal) {
+                    try {
+                        if (this.htmlElement) {
+                            // @ts-ignore
+                            this.focusTrap = focusTrap(this.htmlElement, {});
+                            this.focusTrap.activate();
+                        }
+                    } catch (e) {
+                        console.log(focusTrap)
+                        console.info(e);
                     }
-                } catch (e) {
-                    console.log(focusTrap)
-                    console.info(e);
                 }
             }.bind(this));
 
             /**
              * WCAG(Srean Reader) Deactivate focus trpa on modal close.
              */
-            $(this.htmlElement).on('hidden.bs.modal', function (e) {
-                try {
-                    if (this.focusTrap) {
-                        this.focusTrap.deactivate();
+            if(this.blockFocusForModal) {
+                $(this.htmlElement).on('hidden.bs.modal', function (e) {
+                    try {
+                        if (this.focusTrap) {
+                            this.focusTrap.deactivate();
+                        }
+                    } catch (e) {
+                        console.info(e);
                     }
-                } catch (e) {
-                    console.info(e);
-                }
-            }.bind(this))
+                }.bind(this))
+            }
         } else {
             this.renderSubcomponents();
             this.focusFirstActiveInputElement();

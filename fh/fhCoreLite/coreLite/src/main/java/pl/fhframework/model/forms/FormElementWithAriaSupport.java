@@ -10,6 +10,7 @@ import pl.fhframework.binding.ModelBinding;
 import pl.fhframework.model.dto.ElementChanges;
 
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.CONTENT;
+import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.WCAG;
 
 /**
  *  Base component with aria  support.
@@ -26,8 +27,8 @@ public abstract class FormElementWithAriaSupport extends FormElement implements 
     @Getter
     @Setter
     @XMLProperty(value = ATTR_ARIA_LABEL)
-    @DesignerXMLProperty(priority = 200, functionalArea = CONTENT)
-    @DocumentedComponentAttribute(boundable = true, value = "Binding represents value from confirmation message, used inside of '{}', like {model}.")
+    @DesignerXMLProperty(priority = 2, functionalArea = WCAG)
+    @DocumentedComponentAttribute(boundable = true, value = "Use aria-label to provide an invisible label where a visible label cannot be used. Value will be read by screen reader.")
     public ModelBinding ariaLabelBinding = null;
 
     public FormElementWithAriaSupport(Form form) {

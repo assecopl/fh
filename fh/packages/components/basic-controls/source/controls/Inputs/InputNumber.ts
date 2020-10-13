@@ -11,6 +11,7 @@ class InputNumber extends HTMLFormComponent {
     private placeholder: any;
     private maxLength: any;
     private onInput: any;
+    private textAlign: string;
     private onChange: any;
     private valueChanged: boolean;
     protected inputmaskEnabled: boolean;
@@ -34,6 +35,7 @@ class InputNumber extends HTMLFormComponent {
         this.inputmaskEnabled = false;
 
         this.onInput = this.componentObj.onInput;
+        this.textAlign = this.componentObj.textAlign;
         this.onChange = this.componentObj.onChange;
 
         this.maxFractionDigits = this.componentObj.maxFractionDigits != undefined ? this.componentObj.maxFractionDigits : null;
@@ -54,6 +56,13 @@ class InputNumber extends HTMLFormComponent {
         ['fc', 'InputNumber', 'form-control'].forEach(function (cssClass) {
             input.classList.add(cssClass);
         });
+
+        console.log(this.textAlign);
+        if (this.textAlign === 'RIGHT') {
+            input.classList.add('text-right');
+        } else if (this.textAlign === 'CENTER') {
+            input.classList.add('text-center');
+        }
 
         if (this.placeholder) {
             input.placeholder = this.placeholder;

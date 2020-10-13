@@ -2,11 +2,11 @@ import {AdditionalButton, HTMLFormComponent, FhContainer, FormComponent} from "f
 import {TableWithKeyboardEvents} from "./Abstract/TableWithKeyboardEvents";
 
 class Table extends TableWithKeyboardEvents {
-    protected readonly visibleRows: any;
-    protected readonly tableData: any;
+    protected visibleRows: any;
+    protected tableData: any;
     protected rows: Array<any> = [];
-    protected readonly rowIndexMappings: any;
-    private readonly rowStylesMapping: any;
+    protected rowIndexMappings: any;
+    private rowStylesMapping: any;
     private readonly minRows: any;
     private readonly rowHeight: any;
     private readonly tableGrid: any;
@@ -23,6 +23,8 @@ class Table extends TableWithKeyboardEvents {
     protected header: HTMLTableSectionElement;
     protected footer: HTMLTableSectionElement = null;
     private _dataWrapper: HTMLTableSectionElement;
+
+    public lastRowClicked: number = null;
 
     private checkAllArray: Array<any> = []
 
@@ -148,8 +150,6 @@ class Table extends TableWithKeyboardEvents {
 
         this.refreshData();
         this.initExtends();
-
-
     }
 
     update(change) {
@@ -174,7 +174,7 @@ class Table extends TableWithKeyboardEvents {
                         //Chcek if values are same and set no selection. We don't need to fire higlight logic again.
                         const noSelected = (this.rawValue[0] == -1 && newValue[0] == -1)
                         this.rawValue = change.changedAttributes['selectedRowNumber'];
-                        if(!noSelected) {
+                        if (!noSelected) {
                             this.highlightSelectedRows();
                         }
                         break;
@@ -211,6 +211,9 @@ class Table extends TableWithKeyboardEvents {
         } else {
             if (event.ctrlKey) {
                 this.selectRow(mainId);
+
+            } else if (event.shiftKey) {
+                this.selectRows(mainId);
             } else {
                 this.rawValue = [];
                 this.rawValue.push(mainId);
@@ -227,6 +230,9 @@ class Table extends TableWithKeyboardEvents {
         } else {
             this.fireEventWithLock('onRowClick', this.onRowClick);
         }
+
+        this.lastRowClicked = mainId;
+
     }
 
     addRow(rowObj) {
@@ -241,31 +247,15 @@ class Table extends TableWithKeyboardEvents {
         if (this.selectable && this.onRowClick) {
             // @ts-ignore
             row.component.style.cursor = 'pointer';
-            row.htmlElement.addEventListener('click', function(e) { this.onRowClickEvent(e, row.mainId) }.bind(this));
+            row.htmlElement.addEventListener('click', function (e) {
+                this.onRowClickEvent(e, row.mainId)
+            }.bind(this));
         }
         if (this.onRowDoubleClick) {
             // @ts-ignore
             row.component.style.cursor = 'pointer';
-            row.htmlElement.addEventListener('dblclick', function (event) {
-                if (this.accessibility != 'EDIT') return;
-                let element = event.target;
-                while (element.tagName !== 'TR' && (element = element.parentElement)) {
-                }
-
-                let mainId = parseInt(element.dataset.mainId);
-                this.rawValue = [];
-                this.rawValue.push(mainId);
-
-                this.changesQueue.queueValueChange(this.rawValue);
-                if (!this.onRowDoubleClick || this.onRowDoubleClick === '-') {
-                    this.highlightSelectedRows();
-                }
-
-                if (this._formId === 'FormPreview') {
-                    this.fireEvent('onRowDoubleClick', this.onRowDoubleClick);
-                } else {
-                    this.fireEventWithLock('onRowDoubleClick', this.onRowDoubleClick, event);
-                }
+            row.htmlElement.addEventListener('dblclick', function (e) {
+                this.onRowDblClick(e, null);
             }.bind(this));
         }
         if (this.selectable && this.selectionCheckboxes) {
@@ -291,8 +281,12 @@ class Table extends TableWithKeyboardEvents {
                 }
                 element.firstChild.checked = !element.firstChild.checked;
 
-                this.selectRow(element.parentElement.dataset.mainId);
+                if (event.shiftKey) {
+                    this.selectRows(element.parentElement.dataset.mainId);
+                } else {
+                    this.selectRow(element.parentElement.dataset.mainId);
 
+                }
                 this.changesQueue.queueValueChange(this.rawValue);
                 if (!this.onRowClick || this.onRowClick === '-') {
                     this.highlightSelectedRows();
@@ -307,6 +301,28 @@ class Table extends TableWithKeyboardEvents {
             row.contentWrapper.insertBefore(cell, row.contentWrapper.firstChild);
         }
     };
+
+    onRowDblClick(event, target) {
+        if (this.accessibility != 'EDIT') return;
+        let element = target || event.target;
+        while (element.tagName !== 'TR' && (element = element.parentElement)) {
+        }
+
+        let mainId = parseInt(element.dataset.mainId);
+        this.rawValue = [];
+        this.rawValue.push(mainId);
+
+        this.changesQueue.queueValueChange(this.rawValue);
+        if (!this.onRowDoubleClick || this.onRowDoubleClick === '-') {
+            this.highlightSelectedRows();
+        }
+
+        if (this._formId === 'FormPreview') {
+            this.fireEvent('onRowDoubleClick', this.onRowDoubleClick);
+        } else {
+            this.fireEventWithLock('onRowDoubleClick', this.onRowDoubleClick);
+        }
+    }
 
     deleteRow(row) {
         row.components.forEach(column => {
@@ -324,7 +340,9 @@ class Table extends TableWithKeyboardEvents {
         row._parent = null;
         row.contentWrapper = null;
         row.container = null;
-        row.htmlElement.removeEventListener('click',function(e) { this.onRowClickEvent(e, row.mainId) }.bind(this));
+        row.htmlElement.removeEventListener('click', function (e) {
+            this.onRowClickEvent(e, row.mainId)
+        }.bind(this));
 
         $(row.htmlElement).unbind().remove();
         row.htmlElement = null;
@@ -349,9 +367,7 @@ class Table extends TableWithKeyboardEvents {
             this.removeMinRowRows();
             this.addMinRowRows();
         }
-        if (this.fixedHeader) {
-            this.recalculateColumnWidths();
-        }
+        this.recalculateColumnWidths();
     };
 
     addComponent(componentObj) {
@@ -464,12 +480,72 @@ class Table extends TableWithKeyboardEvents {
     };
 
     selectRow(mainId) {
+
         let index = this.rawValue.indexOf(parseInt(mainId));
         if (index == -1) {
             this.rawValue.push(mainId);
+            this.rawValue.sort();
         } else if (index != -1) {
             this.rawValue.splice(index, 1);
             this.rawValue.filter(idx => idx > -1);
+            if (this.rawValue.length == 0) {
+                this.rawValue.push(-1);
+            }
+        }
+    };
+
+    selectRows(mainId) {
+        mainId = parseInt(mainId);
+        let index = this.rawValue.indexOf(mainId);
+        let lastRowCLicked = this.lastRowClicked ? this.lastRowClicked : 0;
+        if (index == -1) {
+            //Select Rows
+
+            //select all rows before first selected row
+            if (mainId < lastRowCLicked) {
+                while (mainId < lastRowCLicked) {
+                    lastRowCLicked--;
+                    let x = this.rawValue.indexOf(lastRowCLicked);
+                    if (x == -1) {
+                        this.rawValue.push(lastRowCLicked);
+                    }
+                }
+            }
+            //select all rows after last selected row
+            if (mainId > lastRowCLicked) {
+                while (mainId > lastRowCLicked) {
+                    lastRowCLicked++;
+                    let x = this.rawValue.indexOf(lastRowCLicked);
+                    if (x == -1) {
+                        this.rawValue.push(lastRowCLicked);
+                    }
+                }
+            }
+        } else if (index != -1) {
+            //deselect rows
+            // this.rawValue.filter(idx => idx > -1);
+            //deselect all rows before first selected row
+            if (mainId < lastRowCLicked) {
+                while (mainId <= lastRowCLicked) {
+                    let x = this.rawValue.indexOf(lastRowCLicked);
+                    if (x != -1) {
+                        this.rawValue.splice(x, 1);
+                    }
+                    lastRowCLicked--;
+                }
+            }
+            //deselect all rows after last selected row
+            else if (mainId > lastRowCLicked) {
+                while (mainId >= lastRowCLicked) {
+
+                    let x = this.rawValue.indexOf(lastRowCLicked);
+                    if (x != -1) {
+                        this.rawValue.splice(x, 1);
+                    }
+                    lastRowCLicked++;
+                }
+            }
+            // this.rawValue.filter(idx => idx > -1);
             if (this.rawValue.length == 0) {
                 this.rawValue.push(-1);
             }
@@ -542,7 +618,7 @@ class Table extends TableWithKeyboardEvents {
         cell.classList.add('selectionColumn');
         cell.style.width = "40px"
 
-        if(this.selectAllChceckbox) {
+        if (this.selectAllChceckbox) {
             let checkbox = document.createElement('input');
             checkbox.id = "header_check_all_" + this.id;
             checkbox.type = 'checkbox';

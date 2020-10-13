@@ -3,6 +3,7 @@ package pl.fhframework.model.forms;
 import lombok.Getter;
 import lombok.Setter;
 import pl.fhframework.annotations.*;
+import pl.fhframework.model.forms.attribute.HorizontalAlign;
 import pl.fhframework.model.forms.designer.InputFieldDesignerPreviewProvider;
 import pl.fhframework.model.forms.optimized.ColumnOptimized;
 
@@ -16,7 +17,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
         property = "modelBinding",
         designerXmlProperty = @DesignerXMLProperty(allowedTypes = Number.class, commonUse = true, previewValueProvider = InputFieldDesignerPreviewProvider.class, priority = 80, functionalArea = CONTENT))
 public class InputNumber extends BaseInputFieldWithKeySupport {
-
+    private static final String TEXTALIGN_ATTR = "textAlign";
 
     @Getter
     @Setter
@@ -31,6 +32,13 @@ public class InputNumber extends BaseInputFieldWithKeySupport {
     @DesignerXMLProperty(priority = 122, functionalArea = SPECIFIC)
     @DocumentedComponentAttribute(value = "Defines how many integer digits can be used.")
     private Integer maxIntigerDigits;
+
+    @Getter
+    @Setter
+    @XMLProperty(value = TEXTALIGN_ATTR)
+    @DesignerXMLProperty(functionalArea = LOOK_AND_STYLE, priority = 98)
+    @DocumentedComponentAttribute(defaultValue = "left", value = "Inner text align.")
+    private HorizontalAlign textAlign;
 
     public InputNumber(Form form) {
         super(form);

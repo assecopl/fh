@@ -15,6 +15,9 @@ class PanelGroup extends HTMLFormComponent {
     protected forceHeader: any;
     protected headingTypeValue: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" = null;
 
+    public iconOpened: string;
+    public iconClosed: string;
+
     constructor(componentObj: any, parent: HTMLFormComponent) {
         super(componentObj, parent);
 
@@ -31,6 +34,9 @@ class PanelGroup extends HTMLFormComponent {
         this.borderVisible = Boolean(this.componentObj.borderVisible);
         this.collapsedOld = this.collapsed;
         this.headingElement = null;
+
+        this.iconOpened = this.componentObj.iconOpened? this.componentObj.iconOpened : "fa-arrow-down";
+        this.iconClosed = this.componentObj.iconClosed? this.componentObj.iconClosed : "fa-arrow-up";
     }
 
     create() {
@@ -77,10 +83,10 @@ class PanelGroup extends HTMLFormComponent {
             // let text = document.createElement('span');
             if (this.collapsed) {
                 group.classList.add('collapsed');
-                icon.classList.add('fa-arrow-down');
+                icon.classList.add(this.iconOpened);
                 // text.appendChild(document.createTextNode('rozwiń'));
             } else {
-                icon.classList.add('fa-arrow-up');
+                icon.classList.add(this.iconClosed);
                 // text.appendChild(document.createTextNode('zwiń'));
             }
 
@@ -201,8 +207,8 @@ class PanelGroup extends HTMLFormComponent {
     collapse() {
         // let text = this.collapseToggler.firstChild;
         let icon = this.collapseToggler.firstChild; //childNodes[1];
-        icon.classList.remove('fa-arrow-up');
-        icon.classList.add('fa-arrow-down');
+        icon.classList.remove(this.iconClosed);
+        icon.classList.add(this.iconOpened);
         // text.removeChild(text.firstChild);
         // text.appendChild(document.createTextNode('rozwiń'));
         this.component.classList.add('collapsed');
@@ -211,8 +217,8 @@ class PanelGroup extends HTMLFormComponent {
     uncollapse() {
         // let text = this.collapseToggler.firstChild;
         let icon = this.collapseToggler.firstChild; //childNodes[1];
-        icon.classList.remove('fa-arrow-down');
-        icon.classList.add('fa-arrow-up');
+        icon.classList.remove(this.iconOpened);
+        icon.classList.add(this.iconClosed);
         // text.removeChild(text.firstChild);
         // text.appendChild(document.createTextNode('zwiń'));
         this.component.classList.remove('collapsed');

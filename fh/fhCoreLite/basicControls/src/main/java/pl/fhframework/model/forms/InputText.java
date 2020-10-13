@@ -11,6 +11,7 @@ import pl.fhframework.model.TextAlignEnum;
 import pl.fhframework.model.dto.ElementChanges;
 import pl.fhframework.model.dto.InMessageEventData;
 import pl.fhframework.model.forms.config.BasicControlsConfiguration;
+import pl.fhframework.model.forms.designer.BindingExpressionDesignerPreviewProvider;
 import pl.fhframework.model.forms.designer.InputFieldDesignerPreviewProvider;
 import pl.fhframework.model.forms.designer.RegExAttributeDesignerSupport;
 import pl.fhframework.model.forms.optimized.ColumnOptimized;
@@ -44,13 +45,17 @@ public class InputText extends BaseInputFieldWithKeySupport implements IBodyXml 
     private static final String EMPTY_VALUE_ATTR = "emptyValue";
     private static final String REQUIRED_REGEX_BINDING = "requiredRegexBinding";
 
-    // basic attributes
+    @JsonIgnore
     @Getter
     @Setter
-    @XMLProperty
-    @DocumentedComponentAttribute(value = "If there is some value, then there will be visible placeholder for <input>.")
-    @DesignerXMLProperty(functionalArea = LOOK_AND_STYLE, priority = 82)
-    private String placeholder;
+    @XMLProperty(value = "placeholder")
+    @DocumentedComponentAttribute(boundable = true, value = "If there is some value, then there will be visible placeholder for <input>.")
+    @DesignerXMLProperty(functionalArea = LOOK_AND_STYLE, previewValueProvider = BindingExpressionDesignerPreviewProvider.class, priority = 82)
+    private ModelBinding<String> placeholderBinding;
+
+    @Getter
+    @Setter
+    private String placeholder = "";
 
     @Getter
     @Setter
@@ -246,7 +251,6 @@ public class InputText extends BaseInputFieldWithKeySupport implements IBodyXml 
     public void doCopy(Table table, Map<String, String> iteratorReplacements, BaseInputField baseClone) {
         super.doCopy(table, iteratorReplacements, baseClone);
         InputText clone = (InputText) baseClone;
-        clone.setPlaceholder(getPlaceholder());
         clone.setRowsCount(getRowsCount());
         clone.setMaxLength(getMaxLength());
         clone.setMask(getMask());
@@ -258,6 +262,7 @@ public class InputText extends BaseInputFieldWithKeySupport implements IBodyXml 
         clone.setFormatter(getFormatter());
         clone.setMaxLengthBinding(table.getRowBinding(getMaxLengthBinding(), clone, iteratorReplacements));
         clone.setEmptyValueBinding(table.getRowBinding(getEmptyValueBinding(), clone, iteratorReplacements));
+        clone.setPlaceholderBinding(table.getRowBinding(getPlaceholderBinding(), clone, iteratorReplacements));
         clone.setFormatterBinding(table.getRowBinding(getFormatterBinding(), clone, iteratorReplacements));
         clone.setRequiredRegexBinding(table.getRowBinding(getRequiredRegexBinding(), clone, iteratorReplacements));
     }
@@ -285,6 +290,23 @@ public class InputText extends BaseInputFieldWithKeySupport implements IBodyXml 
                 this.refreshView();
                 this.mask = mask;
                 elementChanges.addChange(MASK, this.mask);
+            }
+        }
+    }
+
+    private void processPlaceholder(ElementChanges elementChanges) {
+        if (placeholderBinding == null) {
+            return;
+        }
+
+        BindingResult placeholderBindingResult = placeholderBinding.getBindingResult();
+        if (placeholderBindingResult != null) {
+            String placeholder = this.convertValueToString(placeholderBindingResult.getValue());
+
+            if (!areValuesTheSame(placeholder, this.placeholder)) {
+                this.refreshView();
+                this.placeholder = placeholder;
+                elementChanges.addChange("placeholder", this.placeholder);
             }
         }
     }
@@ -361,6 +383,7 @@ public class InputText extends BaseInputFieldWithKeySupport implements IBodyXml 
         processMask(elementChanges);
         processMaxLength(elementChanges);
         processRequiredRegex();
+        processPlaceholder(elementChanges);
         if (emptyValueBinding != null) {
             emptyValue = emptyValueBinding.resolveValueAndAddChanges(this, elementChanges, emptyValue, EMPTY_VALUE_ATTR);
         }

@@ -95,7 +95,6 @@ abstract class TableFixedHeaderAndHorizontalScroll extends HTMLFormComponent {
     };
 
     private calculateColumnWidth(column: any, precentage: boolean) {
-
             this.lastThColumn = column;
             if (!column.htmlElement.dataset.originalWidth) {
                 column.htmlElement.dataset.originalWidth = column.htmlElement.style.width;
@@ -107,6 +106,9 @@ abstract class TableFixedHeaderAndHorizontalScroll extends HTMLFormComponent {
                 columnWidth = $(this.table).find("." + column.id)[0].getBoundingClientRect().width;
             } catch (e) {
                     console.warn(e);
+            }
+            if (columnWidth == 0) {
+                return;
             }
             let offsetWidth: any = columnWidth + "px";
             if (precentage) {

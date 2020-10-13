@@ -1,5 +1,4 @@
-
-import {FhContainer, HTMLFormComponent} from "fh-forms-handler";
+import {HTMLFormComponent} from "fh-forms-handler";
 import {TableFixedHeaderAndHorizontalScroll} from "./TableFixedHeaderAndHorizontalScroll";
 import {TableRowOptimized} from "./../Optimized/TableRowOptimized";
 
@@ -12,13 +11,14 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
     protected readonly selectable: boolean = true;
     protected readonly onRowClick: any = null;
     protected ctrlIsPressed: any = false;
+    protected shiftIsPressed: any = false;
     protected rows: Array<TableRowOptimized> = [];
-    protected multiselect:boolean = false;
+    protected multiselect: boolean = false;
 
     protected keyEventTimer: any;                //timer identifier
     protected doneEventInterval: number = 500;   //event delay in miliseconds
 
-    private loopDown:boolean = false; //key event loop turn on/off
+    private loopDown: boolean = false; //key event loop turn on/off
 
     constructor(componentObj: any, parent: HTMLFormComponent) {
         super(componentObj, parent);
@@ -30,7 +30,7 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
 
     }
 
-    protected initExtends(){
+    protected initExtends() {
         super.initExtends();
         if (this.selectable && this.onRowClick) {
             this.table.addEventListener('keydown', this.tableKeydownEvent.bind(this));
@@ -45,12 +45,16 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
         if (event.which == "17") {
             this.ctrlIsPressed = true;
         }
+        if (event.which == "16") {
+            this.shiftIsPressed = true;
+        }
     }
 
 
     //Realese ctrl click for keyboard events
-    public  tableKeyupEvent(e) {
+    public tableKeyupEvent(e) {
         this.ctrlIsPressed = false;
+        this.shiftIsPressed = false;
         if (e.which == 9 && $(document.activeElement).is(":input")) {
             let parent = $(document.activeElement).parents('tbody tr:not(.emptyRow)');
             if (parent && parent.length > 0) {
@@ -61,6 +65,9 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
 
     tableMousedownEvent(event) {
         if (event.ctrlKey) {
+            event.preventDefault();
+        }
+        if (event.shiftKey) {
             event.preventDefault();
         }
     }
@@ -89,7 +96,7 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
                         this.scrolToRow(next);
                         this.scrolIntoView(next);
                         this.keyEventTimer = setTimeout(function (elem) {
-                            elem? elem.trigger('click') : false;
+                            elem ? elem.trigger('click') : false;
                         }, this.doneEventInterval, next);
                     } else {
                         this.keyEventTimer = setTimeout(function (elem) {
@@ -144,6 +151,13 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
                         this.scrolIntoView(last);
 
                     }
+                } else if (e.which == 13) {
+                    e.preventDefault();
+
+                    let current = $(this.htmlElement).find('tbody tr.table-primary');
+                    if (current.length) {
+                        this.onRowDblClick(e, current[0]);
+                    }
                 }
             }
         }.bind(this));
@@ -153,7 +167,7 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
      * Used For Optimized Tables
      * @param scrollAnimate
      */
-    protected highlightSelectedRows(scrollAnimate:boolean = false) {
+    protected highlightSelectedRows(scrollAnimate: boolean = false) {
         let oldSelected = this.table.querySelectorAll('.table-primary');
         if (oldSelected && oldSelected.length) {
             [].forEach.call(oldSelected, function (row) {
@@ -175,7 +189,6 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
             }
 
 
-
         }.bind(this));
     };
 
@@ -193,7 +206,7 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
         super.destroy(removeFromParent);
     }
 
-    public keyEventLoopDownTurnOff(){
+    public keyEventLoopDownTurnOff() {
         this.loopDown = false;
     }
 

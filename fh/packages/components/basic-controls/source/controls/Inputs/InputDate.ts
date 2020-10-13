@@ -102,7 +102,8 @@ class InputDate extends InputText implements LanguageChangeObserver {
         $(this.input).on('blur', this.inputBlurEvent.bind(this));
         $(this.input).on('change', this.inputChangeEvent.bind(this));
 
-        this.inputGroupElement.id = this.id + "_inputGroup"
+        this.inputGroupElement.id = this.id + "_inputGroup";
+        this.inputGroupElement.classList.add('designer-ignore');
         if (this.accessibility == 'EDIT') {
             this.applyMask();
             this.applyDatepicker();
@@ -124,13 +125,20 @@ class InputDate extends InputText implements LanguageChangeObserver {
                 language: this.i18n.selectedLanguage,
                 autoclose: 1,
                 showOnFocus: 0,
-                inline: false,
-                container: "#"+this.inputGroupElement.id
+                inline: false
             };
-            console.log("#"+this.inputGroupElement.id);
+            const form = this.formsManager.findForm(this.formId);
+            /**
+             * If form has active focus trap option we need to place dynamic date element next to input element to prevent interaction blocking
+             */
+            if(form && form.blockFocusForModal){
+                options["container"] =  "#"+this.inputGroupElement.id;
+            }
+
             if (this.highlightToday) {
                 options.todayHighlight = true;
             }
+
             try {
                 // @ts-ignore
                 $(this.inputGroupElement).datepicker(options);

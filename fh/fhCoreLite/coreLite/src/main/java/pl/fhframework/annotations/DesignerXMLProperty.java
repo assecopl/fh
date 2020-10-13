@@ -118,7 +118,8 @@ public @interface DesignerXMLProperty {
         CONTENT("Content"),
         LOOK_AND_STYLE("Look & Style"),
         BEHAVIOR("Behavior"),
-        SPECIFIC("Specific");
+        SPECIFIC("Specific"),
+        WCAG("WCAG");
 
         private final String text;
 

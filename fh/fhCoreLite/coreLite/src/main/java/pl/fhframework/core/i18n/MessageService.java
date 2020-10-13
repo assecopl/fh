@@ -171,7 +171,7 @@ public class MessageService {
             }
             MessageService.MessageBundle allBundles = getAllBundles();
             String fullClassKey = ENUM_KEY_PREFIX + enumValue.getClass().getCanonicalName() + "." + enumValue.name();
-            String value = allBundles.getMessage(fullClassKey, null, getUserLanguage(), enumValue.name());
+            String value = allBundles.getMessage(fullClassKey, null, getUserLanguage(), null);
             if (value != null) {
                 return value;
             }

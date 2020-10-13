@@ -431,6 +431,9 @@ class InputText extends HTMLFormComponent {
         if (change.changedAttributes) {
             $.each(change.changedAttributes, function (name, newValue) {
                 switch (name) {
+                    case 'placeholder':
+                        this.input.placeholder = newValue;
+                        break;
                     case 'rawValue':
                         if (!newValue && newValue !== 0) {
                             this.input.placeholder = "";

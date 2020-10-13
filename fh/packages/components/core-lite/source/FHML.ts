@@ -5,6 +5,7 @@ class FHML {
     private supportedTags: any[];
     private escapedMap: { "&": string; "<": string; ">": string; "\"": string; "`": string };
 
+
     constructor() {
         this.supportedTags = [];
         this.escapedMap = { // not escaping ' = / as they are FHML input and output characters
@@ -81,6 +82,212 @@ class FHML {
 
             return icon.outerHTML;
         }, '([a-z \-]+)', true);
+
+
+        const additionalTags: TagMetaType[] = [
+
+            {
+                //New line tag
+                tag: 'br/',
+                tagConstructor: (match, contents) => {
+
+                    var br = document.createElement('br');
+
+                    return br.outerHTML;
+
+                },
+
+                noContent: true
+
+            },
+
+            {
+                //Text with custom css class
+                tag: 'className',
+                tagConstructor: (match, classes, contents) => {
+
+                    var span = document.createElement('span');
+
+                    span.classList.add('fhml');
+
+                    classes.split(',').forEach((cssClass) => {
+
+                        span.classList.add(cssClass);
+
+                    });
+
+                    span.innerHTML = contents;
+
+                    return span.outerHTML;
+
+                },
+
+                attr: '([a-zA-Z0-9\-\, ]+)'
+
+            },
+
+            {
+                //text strikethrough
+                tag: 'del',
+
+                tagConstructor: (match, contents) => {
+
+                    var del = document.createElement('del');
+                    del.classList.add('fhml');
+                    del.innerHTML = contents;
+
+                    return del.outerHTML;
+
+                },
+                noContent: false
+            },
+
+            {
+                //text strikethrough
+                tag: 's',
+                tagConstructor: (match, contents) => {
+
+                    var del = document.createElement('del');
+                    del.classList.add('fhml');
+                    del.innerHTML = contents;
+
+                    return del.outerHTML;
+
+                },
+
+                noContent: false
+
+            },
+
+            {
+                //text highlight
+                tag: 'mark',
+
+                tagConstructor: (match, contents) => {
+
+                    var mark = document.createElement('mark');
+                    mark.classList.add('fhml');
+                    mark.innerHTML = contents;
+
+                    return mark.outerHTML;
+
+                },
+
+                noContent: false
+
+            },
+
+            {
+                //A section that is quoted from another source
+                tag: 'blockquote',
+
+                tagConstructor: (match, contents) => {
+
+                    var blockquote = document.createElement('blockquote');
+                    blockquote.classList.add('fhml');
+                    blockquote.classList.add('blockquote')
+
+                    blockquote.innerHTML = contents;
+
+                    return blockquote.outerHTML;
+
+                },
+
+                noContent: false
+
+            },
+
+            {
+                //A section that is quoted from another source
+                tag: 'q',
+                tagConstructor: (match, contents) => {
+
+                    var blockquote = document.createElement('blockquote');
+                    blockquote.classList.add('fhml');
+                    blockquote.classList.add('blockquote')
+
+                    blockquote.innerHTML = contents;
+
+                    return blockquote.outerHTML;
+
+                },
+                noContent: false
+            },
+
+            {
+                //Blocquote footer / footer
+                tag: 'bqFooter',
+                tagConstructor: (match, contents) => {
+
+                    var blockquote = document.createElement('footer');
+                    blockquote.classList.add('fhml');
+                    blockquote.classList.add('blockquote-footer')
+
+                    blockquote.innerHTML = contents;
+
+                    return blockquote.outerHTML;
+
+                },
+                noContent: false
+
+            },
+
+            {
+                //List tag
+                tag: 'ul',
+                tagConstructor: (match, contents) => {
+
+                    var ul = document.createElement('ul');
+                    ul.classList.add('fhml');
+                    ul.innerHTML = contents;
+
+                    return ul.outerHTML;
+                },
+                noContent: false
+            },
+
+            {
+                //List element tag
+                tag: 'li',
+                tagConstructor: (match, contents) => {
+                    var li = document.createElement('li');
+                    li.classList.add('fhml');
+                    li.innerHTML = contents;
+                    return li.outerHTML;
+                },
+                noContent: false
+
+            },
+
+            {
+                //text as computer code in a document
+                tag: 'code',
+                tagConstructor: (match, contents) => {
+
+                    var span = document.createElement('span');
+                    span.classList.add('fhml');
+                    span.classList.add('highlight');
+                    span.classList.add('fhml-code');
+                    span.classList.add('p-2');
+                    span.style.background = '#dcdce5';
+                    span.style.display = 'inline-block'
+                    span.innerHTML = '<pre class="mb-0"><code>' + contents + '</code></pre>';
+
+                    return span.outerHTML;
+
+                },
+
+                noContent: false
+
+            }
+
+        ]
+
+        for (const tagMeta of additionalTags) {
+            this.registerTag(tagMeta.tag, tagMeta.tagConstructor, tagMeta.attr, tagMeta.noContent);
+        }
+
+
     }
 
 
@@ -158,9 +365,23 @@ class FHML {
         }
     };
 
-    public removeHtmlTags(text:string){
+    public removeHtmlTags(text: string) {
         return text.replace(/<\/?[^>]+(>|$)/g, "").trim();
     };
+
 }
 
 export {FHML};
+
+
+export type TagMetaType = {
+
+    tag: string,
+
+    tagConstructor: (...args: any[]) => string,
+
+    attr?: any,
+
+    noContent?: boolean
+
+};

@@ -12,3 +12,18 @@
     background-color: transparent;
     color: #007bff;
 }
+
+.fc.accordion .card-header button .collapsibleIconOpened {
+        display: none;
+}
+
+.fc.accordion .card-header button.collapsed .collapsibleIconOpened {
+    display: block;
+}
+
+.fc.accordion .card-header button .collapsibleIconClosed {
+    display: block;
+}
+.fc.accordion .card-header button.collapsed .collapsibleIconClosed {
+    display: none;
+}

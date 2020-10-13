@@ -1,5 +1,6 @@
 import {HTMLFormComponent} from "fh-forms-handler";
 import {AdditionalButton} from "fh-forms-handler";
+import {Tab} from "./Tab";
 
 class TabContainer extends HTMLFormComponent {
     private static designerActiveTabs: any = {};
@@ -139,6 +140,11 @@ class TabContainer extends HTMLFormComponent {
 
 
     activateTab(tabIndex) {
+        this.components.forEach(component => {
+            if (component instanceof Tab) {
+                (<Tab>component).deactivate();
+            }
+        })
         if (this.components[tabIndex]) {
             (<any>this.components[tabIndex]).activate();
             this.activeTabIndex = tabIndex;

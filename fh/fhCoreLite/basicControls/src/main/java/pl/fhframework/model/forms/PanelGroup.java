@@ -27,6 +27,8 @@ public class PanelGroup extends GroupingComponentWithHeadingHierarchy<Component>
     public static final String ON_TOGGLE = "onToggle";
     public static final String LABEL_ATTR = "label";
     public static final String BORDER_VISIBLE_ATTR = "borderVisible";
+    public static final String ICON_OPENED = "iconOpened";
+    public static final String ICON_CLOSED = "iconClosed";
 
     @Getter
     private String label;
@@ -70,6 +72,30 @@ public class PanelGroup extends GroupingComponentWithHeadingHierarchy<Component>
             " Depends on attribute: collapsible, if it's not set then binding will not be resolved. False by default.")
     private ModelBinding modelBindingForState = new StaticBinding<>(false);
 
+
+    @Getter
+    private String iconOpened;
+
+    @JsonIgnore
+    @Getter
+    @Setter
+    @XMLProperty(value = ICON_OPENED, defaultValue = "fa-arrow-down")
+    @DocumentedComponentAttribute(defaultValue = "fa-arrow-down", boundable = true, value = "Icon for panel that is open. Please refer to http://fontawesome.io/icons/ for all available icons.")
+    @DesignerXMLProperty(priority = 84, functionalArea = LOOK_AND_STYLE)
+    private ModelBinding<String> iconOpenedBinding;
+
+    @Getter
+    private String iconClosed;
+
+    @JsonIgnore
+    @Getter
+    @Setter
+    @XMLProperty(value = ICON_CLOSED,defaultValue = "fa-arrow-up")
+    @DocumentedComponentAttribute(defaultValue = "fa-arrow-up", boundable = true, value = "Icon for closed panel. Please refer to http://fontawesome.io/icons/ for all available icons.")
+    @DesignerXMLProperty(priority = 84, functionalArea = LOOK_AND_STYLE)
+    private ModelBinding<String> iconClosedBinding;
+
+
     public PanelGroup(Form form) {
         super(form);
     }
@@ -83,6 +109,14 @@ public class PanelGroup extends GroupingComponentWithHeadingHierarchy<Component>
         if (isCollapsible()) {
             resolveBindingForCollapsed(elementChanges);
         }
+
+        if (iconOpenedBinding != null) {
+            iconOpened = iconOpenedBinding.resolveValueAndAddChanges(this, elementChanges, iconOpened, ICON_OPENED);
+        }
+        if (iconClosedBinding != null) {
+            iconClosed = iconClosedBinding.resolveValueAndAddChanges(this, elementChanges, iconClosed, ICON_CLOSED);
+        }
+
         return elementChanges;
     }
 

@@ -61,6 +61,7 @@ public abstract class Form<T> extends GroupingComponentWithHeadingHierarchy<Comp
     public static final String ON_MANUAL_MODAL_CLOSE = "onManualModalClose";
     private static final String DEFAULT_LAYOUT = "vertical";
     private static final String STATE_ATTRIBUTE = "state";
+    private static final String BLOCK_FOCUS_FOR_MODAL_ATTR = "blockFocusForModal";
 
     public enum ViewMode {
         NORMAL,
@@ -329,6 +330,14 @@ public abstract class Form<T> extends GroupingComponentWithHeadingHierarchy<Comp
     @Setter
     @SkipSnapshot
     private IFormGenerationUtils generationUtils;
+
+    @Getter
+    @Setter
+    @XMLProperty(value = BLOCK_FOCUS_FOR_MODAL_ATTR)
+    @DesignerXMLProperty(functionalArea = BEHAVIOR, priority = 1)
+    @DocumentedComponentAttribute(value = "WCAG: You can block focus on elements that are outside modal by setting this option to\"true\". " +
+            "Be aware that such a modal must be large enough to show every element that pops up, such as InputDate, Combo, SelectComboMenu, InputTimestamp.")
+    private Boolean blockFocusForModal;
 
     public Form() {
         super(null);
