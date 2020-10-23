@@ -58,9 +58,11 @@ class FormsManager {
         this.registerBodyMouseEvents();
     }
 
+    public getActiveForm() {
+        return this.openedForms.length > 0 ? this.openedForms[this.openedForms.length - 1] : null;
+    }
+
     public openForm(formObj) {
-
-
         let form = (<any>FhContainer.get('Form'))(formObj);
         this.openedForms.push(form);
         this.usedContainers[form.containerId] = form;

@@ -158,6 +158,12 @@ public abstract class Form<T> extends GroupingComponentWithHeadingHierarchy<Comp
     @XMLProperty(defaultValue = "false")
     private boolean hideHeader;
 
+    @Getter
+    @Setter
+    @DocumentedComponentAttribute("Should first active form field be focused.")
+    @XMLProperty(defaultValue = "true")
+    private boolean focusFirstElement;
+
     /**
      * Form's content layout. Currently mapped to HTML display: block, inline or absolute
      */

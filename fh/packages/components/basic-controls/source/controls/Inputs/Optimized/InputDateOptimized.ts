@@ -213,8 +213,8 @@ class InputDateOptimized extends InputText implements LanguageChangeObserver {
                 this.container.addEventListener('mouseover', this.initActions.bind(this));
                 break;
             case 'VIEW':
-                this.input.addEventListener('focus', this.initActions.bind(this));
-                this.container.addEventListener('mouseover', this.initActions.bind(this));
+                this.input.removeEventListener('focus', this.initActions.bind(this));
+                this.container.removeEventListener('mouseover', this.initActions.bind(this));
                 break;
             case 'DEFECTED':
                 this.disableDatepicker();

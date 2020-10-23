@@ -53,7 +53,10 @@ class DropdownItem extends OutputLabel {
         this.display();
     };
 
-    onClickEvent() {
+    onClickEvent(event) {
+        event.stopPropagation();
+        // @ts-ignore
+        $(this.parent.component).dropdown('toggle');
         this.fireEventWithLock('onClick', this.onClick);
     }
 

@@ -5,8 +5,7 @@ package pl.fhframework.model.forms.attribute;
  */
 public enum FormType {
 
-    STANDARD, MODAL, MODAL_OVERFLOW, FLOATING, HEADER;
-
+    STANDARD, MODAL, MODAL_OVERFLOW, FLOATING, HEADER, MINIMAL;
     @Override
     public String toString() {
         return name().toLowerCase();

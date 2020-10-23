@@ -427,7 +427,8 @@ class TablePaged extends Table {
 
     protected updatePageInfo() {
         let pageInfo = this.buildPageInfo();
-        this.htmlElement.querySelector('.pagination-first').replaceChild(pageInfo, this.pageInfo);
+        // this.htmlElement.querySelector('.pagination-first').replaceChild(pageInfo, this.pageInfo);
+        $(this.pageInfo).replaceWith(pageInfo);
         this.pageInfo = pageInfo;
         if(this.paginationAboveTable) {
             let pageInfo_second = this.buildPageInfo();
@@ -438,11 +439,13 @@ class TablePaged extends Table {
 
     protected updatePaginator(){
         let paginator2 = this.buildPaginator();
-        this.htmlElement.querySelector('.pagination-first').replaceChild(paginator2, this.paginator);
+        // this.htmlElement.querySelector('.pagination-first').replaceChild(paginator2, this.paginator);
+        $(this.paginator).replaceWith(paginator2);
         this.paginator = paginator2;
         if(this.paginationAboveTable) {
             let paginator_second2 = this.buildPaginator();
-            this.htmlElement.querySelector('.pagination-second').replaceChild(paginator_second2, this.paginator_second);
+            // this.htmlElement.querySelector('.pagination-second').replaceChild(paginator_second2, this.paginator_second);
+            $(this.paginator_second).replaceWith(paginator_second2);
             this.paginator_second = paginator_second2;
         }
     }

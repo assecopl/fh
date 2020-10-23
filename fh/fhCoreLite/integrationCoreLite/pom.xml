@@ -4,7 +4,7 @@
 
     <groupId>pl.fhframework.integration</groupId>
     <artifactId>integrationCoreLite</artifactId>
-    <version>4.6.16</version>
+    <version>4.6.18</version>
     <packaging>jar</packaging>
     <url>https://github.com/assecopl/fh</url>
 
@@ -14,7 +14,7 @@
     <parent>
         <groupId>pl.fhframework</groupId>
         <artifactId>fhCoreLite</artifactId>
-        <version>4.6.16</version>
+        <version>4.6.18</version>
     </parent>
 
     <dependencies>

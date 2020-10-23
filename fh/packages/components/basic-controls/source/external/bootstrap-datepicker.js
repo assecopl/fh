@@ -1,5 +1,5 @@
 /* =========================================================
- * TODO Changed By LUNA TEAM !!
+ * @MODIFIED
  * bootstrap-datepicker.js
  * Repo: https://github.com/uxsolutions/bootstrap-datepicker/
  * Demo: https://eternicode.github.io/bootstrap-datepicker/

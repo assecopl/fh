@@ -23,6 +23,7 @@ class Form extends HTMLFormComponent {
     private onManualModalClose: any;
     private keyupEvent: any;
     private resourcesUrlPrefix: string;
+    private focusFirstElement: boolean;
     public state: string;
     public viewMode: string;
     private windowListenerMouseMove: any;
@@ -42,10 +43,11 @@ class Form extends HTMLFormComponent {
         this.formId = this.id;
         this.formType = formObj.formType;
         this.viewMode = this.componentObj.viewMode;
+        this.focusFirstElement = this.componentObj.focusFirstElement;
         this.state = this.componentObj.state;
         this.headingTypeValue = this.componentObj.headingTypeValue? this.componentObj.headingTypeValue : null;
         this.blockFocusForModal = this.componentObj.blockFocusForModal? this.componentObj.blockFocusForModal : false;
-        console.log("this.componentObj.blockFocusForModal", this.componentObj.blockFocusForModal)
+        // console.log("this.componentObj.blockFocusForModal", this.componentObj.blockFocusForModal)
 
         /* TODO: remove after changing Java */
         if (this.componentObj.modal) {
@@ -172,7 +174,7 @@ class Form extends HTMLFormComponent {
                             this.focusTrap.activate();
                         }
                     } catch (e) {
-                        console.log(focusTrap)
+                        console.log(focusTrap);
                         console.info(e);
                     }
                 }
@@ -303,6 +305,9 @@ class Form extends HTMLFormComponent {
             case 'STANDARD':
                 form = this.buildStandardForm();
                 break;
+            case 'MINIMAL':
+                form = this.buildMinimalForm();
+                break;
             case 'MODAL':
             case 'MODAL_OVERFLOW':
                 form = this.buildModalForm();
@@ -398,7 +403,7 @@ class Form extends HTMLFormComponent {
     };
 
     focusFirstActiveInputElement() {
-        if (this.designMode) {
+        if (this.designMode || !this.focusFirstElement) {
             return;
         }
 
@@ -539,6 +544,25 @@ class Form extends HTMLFormComponent {
 
         body.appendChild(row);
         form.appendChild(body);
+
+        return form;
+    };
+
+    buildMinimalForm() {
+        var form = document.createElement('div');
+
+        form.id = this.id;
+
+        ['fc', 'form'].forEach(function (cssClass) {
+            form.classList.add(cssClass);
+        });
+
+        var row = document.createElement('div');
+        row.classList.add('row');
+        row.classList.add('eq-row');
+        this.contentWrapper = row;
+
+        form.appendChild(row);
 
         return form;
     };

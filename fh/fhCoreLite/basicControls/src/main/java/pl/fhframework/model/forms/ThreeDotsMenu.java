@@ -21,7 +21,7 @@ public class ThreeDotsMenu extends Dropdown implements Boundable, Styleable, IHa
 
     @Getter
     @Setter
-    private Style style = Style.LIGHT;
+    private Style style = Style.LINK;
 
     public ThreeDotsMenu(Form form) {
         super(form);

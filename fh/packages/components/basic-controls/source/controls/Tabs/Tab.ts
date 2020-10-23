@@ -101,9 +101,7 @@ class Tab extends HTMLFormComponent {
     deactivate() {
         let dismissHints = (components) => {
             components.forEach(function(component) {
-                if (component.hintElement) {
-                    $(component.hintElement).tooltip('hide');
-                }
+                component.hideHint();
 
                 dismissHints(component.components);
             });

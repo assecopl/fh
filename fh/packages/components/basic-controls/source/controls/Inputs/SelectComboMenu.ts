@@ -35,7 +35,7 @@ class SelectComboMenu extends InputText {
         this.freeTyping = this.componentObj.freeTyping;
 
         this.emptyLabel = this.componentObj.emptyLabel || false;
-        this.emptyLabelText = this.componentObj.emptyLabelText || '';
+        this.emptyLabelText = this.componentObj.emptyLabelText || "";
     }
 
     create() {
@@ -43,7 +43,7 @@ class SelectComboMenu extends InputText {
         this.input = input;
         input.id = this.id;
         input.type = 'text';
-        if (this.rawValue === "") {
+        if (this.emptyLabel && (this.rawValue === "" || this.rawValue === null)) {
             input.value = this.emptyLabelText;
             this.rawValue = this.emptyLabelText;
             this.oldValue = this.emptyLabelText;
@@ -82,6 +82,7 @@ class SelectComboMenu extends InputText {
         $(input).on('blur', this.inputBlurEvent.bind(this));
         if (this.onChange) {
             $(input).on('blur', this.inputBlurEvent2.bind(this));
+
         }
 
         let autocompleter = document.createElement('ul');
@@ -180,6 +181,7 @@ class SelectComboMenu extends InputText {
         }
         this.updateModel();
         if (this.onChange && (this.rawValue !== this.oldValue)) {
+            console.log("change.inputPasteEvent")
             this.fireEventWithLock('onChange', this.onChange);
             this.changeToFired = false
         }
@@ -356,10 +358,9 @@ class SelectComboMenu extends InputText {
             this.input.value = this.highlighted.displayAsTarget ? this.highlighted.targetValue : (this.highlighted.displayedValue ? this.highlighted.displayedValue : "");
             this.updateModel();
         } else {
-            if (this.rawValue == null) {
-                //if (this.emptyLabel) {
+            if (this.rawValue == null || this.rawValue == "") {
                 this.input.value = this.emptyLabelText;
-                this.selectedIndex = 1;
+                this.selectedIndex = 0;
                 this.updateModel();
                 this.changeToFired = true;
             }
@@ -367,7 +368,14 @@ class SelectComboMenu extends InputText {
     }
 
     inputBlurEvent2() {
-        if (this.accessibility === 'EDIT' && !this.blurEventWithoutChange && (this.changeToFired || this.rawValue !== this.oldValue)) {
+        //Simplify empty value to null;
+        const rawValue = this.processNullValue(this.rawValue);
+        const oldValue = this.processNullValue(this.oldValue)
+
+        if (this.accessibility === 'EDIT'
+            && !this.blurEventWithoutChange &&
+            (this.changeToFired || rawValue !== oldValue)
+        ) {
             this.blurEvent = true;
             this.fireEventWithLock('onChange', this.onChange);
             this.changeToFired = false;
@@ -378,6 +386,14 @@ class SelectComboMenu extends InputText {
     update(change) {
         super.update(change);
         if (change.changedAttributes) {
+            /**
+             * filteredValues need to be proceesed first. Before rawValue and highlightedValue.
+             */
+            if(change.changedAttributes['filteredValues']) {
+                this.highlighted = null;
+                this.setValues(change.changedAttributes['filteredValues']);
+            }
+
             $.each(change.changedAttributes, function (name, newValue) {
                 switch (name) {
                     case 'rawValue':
@@ -410,10 +426,6 @@ class SelectComboMenu extends InputText {
                         }
                         this.hightlightValue();
                         break;
-                    case 'filteredValues':
-                        this.highlighted = null;
-                        this.setValues(newValue);
-                        break;
                     case 'highlightedValue':
                         if (newValue == null) {
                             this.highlighted = null;
@@ -437,9 +449,6 @@ class SelectComboMenu extends InputText {
 
     updateModel() {
         this.rawValue = this.input.value;
-        if (this.rawValue === "") {
-            this.rawValue = null;
-        }
     }
 
     hightlightValue() {
@@ -590,11 +599,12 @@ class SelectComboMenu extends InputText {
             return {};
         }
 
-        if (this.rawValue !== this.oldValue || this.rawValue == null) {
+        if (this.rawValue !== this.oldValue || this.rawValue == null || this.rawValue == "") {
             this.oldValue = this.rawValue;
-
             if (this.selectedIndex != null) {
-                return {selectedIndex: this.selectedIndex -1};
+                return {selectedIndex: this.selectedIndex};
+            } else if(this.rawValue == null || this.rawValue == ""){
+                return {selectedIndex: 0};
             } else {
                 return {text: this.rawValue};
             }
@@ -617,7 +627,6 @@ class SelectComboMenu extends InputText {
         let index = 0;
 
         this.autocompleter.classList.remove('isEmpty');
-            console.log("Values", values)
         for (let i = 0, len = values.length; i < len; i++) {
             let itemValue = values[i];
             let li = document.createElement('li');
@@ -741,6 +750,19 @@ class SelectComboMenu extends InputText {
         }
 
         super.destroy(removeFromParent);
+    }
+
+
+    /**
+     * Sinplifies empty value to null. It can be null , "" or emptyLabelText.
+     * @param val
+     */
+    public processNullValue(val:any):any {
+        if(val == null || val == "" || val == this.emptyLabelText){
+            return null;
+        } else {
+            return val;
+        }
     }
 }
 

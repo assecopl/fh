@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.util.StringUtils;
 import pl.fhframework.core.security.CoreSecurityManager;
 import pl.fhframework.core.security.ISecurityDataProvider;
 import pl.fhframework.core.security.model.IBusinessRole;
@@ -25,15 +26,26 @@ public class RestSecurityManager extends CoreSecurityManager {
 
     @Override
     public SystemUser buildSystemUser(Principal principal) {
-        IUserAccount userAccount = securityDataProvider.findUserAccountByLogin(principal.getName());
-        String firstName = userAccount.getFirstName();
-        String lastName = userAccount.getLastName();
+        String firstName = null;
+        String lastName = null;
+        String userLogin = null;
+        if (principal != null) {
+            IUserAccount userAccount = securityDataProvider.findUserAccountByLogin(principal.getName());
+            if (userAccount != null) {
+                firstName = userAccount.getFirstName();
+                lastName = userAccount.getLastName();
+                userLogin = userAccount.getLogin();
+            }
+        }
 
         SystemUser systemUser = new SystemUser(principal, firstName, lastName);
+
         // for liferay
-        Field login = ReflectionUtils.findField(SystemUser.class, "login");
-        ReflectionUtils.makeAccessible(login);
-        ReflectionUtils.setField(login, systemUser, userAccount.getLogin());
+        if (!StringUtils.isEmpty(userLogin)) {
+            Field login = ReflectionUtils.findField(SystemUser.class, "login");
+            ReflectionUtils.makeAccessible(login);
+            ReflectionUtils.setField(login, systemUser, userLogin);
+        }
 
         Set<IBusinessRole> userBusinessRoles = getUserBusinessRoles(systemUser);
         systemUser.getBusinessRoles().addAll(userBusinessRoles);

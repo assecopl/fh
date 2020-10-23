@@ -174,6 +174,9 @@ public class SelectComboMenu extends BaseInputFieldWithKeySupport {
     @JsonIgnore
     protected boolean fireOnchange = false;
 
+    @JsonIgnore
+    protected boolean highlightNullValue = false;
+
     @Getter
     @Setter
     @XMLProperty
@@ -253,11 +256,15 @@ public class SelectComboMenu extends BaseInputFieldWithKeySupport {
 
         if (valueChange.hasAttributeChanged(SELECTED_INDEX_ATTR)) {
             this.selectedItemIndex = valueChange.getIntAttribute(SELECTED_INDEX_ATTR);
-            this.selectedItem = (this.selectedItemIndex >= 0) ? this.filteredObjectValues.get(selectedItemIndex) : null;
+            this.selectedItem = (this.selectedItemIndex > 0) ? this.filteredObjectValues.get(selectedItemIndex -1 ) : null;
             changeSelectedItemBinding();
             this.rawValue = (selectedItem != null) ? toRawValue(selectedItem) : null;
             this.filterText = rawValue != null ? rawValue : "";
             processFiltering(this.filterText);
+            if(this.selectedItemIndex == 0){
+                highlightNullValue = true;
+            }
+
         } else {
 
                 String text = (String) textObj;
@@ -270,7 +277,7 @@ public class SelectComboMenu extends BaseInputFieldWithKeySupport {
                 if (freeTyping) {
                     this.selectedItem = StringUtils.emptyToNull(text);
                     this.rawValue = (String) this.selectedItem;
-                    this.selectedItemIndex = -1;
+//                    this.selectedItemIndex = -1;
                     changeSelectedItemBinding();
                 }
         }
@@ -435,7 +442,7 @@ public class SelectComboMenu extends BaseInputFieldWithKeySupport {
     }
 
     private boolean processFilterBinding(ElementChanges elementChanges, boolean valuesChanged) {
-        if (!preload && firstLoad && StringUtils.isNullOrEmpty(this.filterText) && !valuesChanged) {
+        if (!preload && firstLoad &&  !valuesChanged && !filterInvoked) {
             return false;
         }
 
@@ -484,8 +491,7 @@ public class SelectComboMenu extends BaseInputFieldWithKeySupport {
          * Empty value will be always on list for proper null value binding with frontend.
          */
 
-        SelectComboItemDTO nullItem = new SelectComboItemDTO(
-                "nullValue", -1L, this.emptyLabelText == null ? "" : this.emptyLabelText);
+        SelectComboItemDTO nullItem = getNullItem();
         filteredConvertedValues.add(nullItem);
 
         AtomicReference<Long> idx = new AtomicReference<>(0L);
@@ -506,7 +512,17 @@ public class SelectComboMenu extends BaseInputFieldWithKeySupport {
         return filteredConvertedValues;
     }
 
+    private SelectComboItemDTO getNullItem() {
+        return new SelectComboItemDTO(
+                "nullValue", -1L, this.emptyLabelText == null ? "" : this.emptyLabelText);
+    }
+
     private SelectComboItemDTO collectValue(Object value) {
+
+        if(highlightNullValue){
+            highlightNullValue = false;
+            return getNullItem();
+        }
 
         AtomicReference<Long> idx = new AtomicReference<>(0L);
         SelectComboItemDTO item;
