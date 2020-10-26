@@ -44,6 +44,7 @@ public class DefaultApplication extends SpringBootServletInitializer {
     }
 
     public static void fhApplicationInit() {
+        Thread.currentThread().setContextClassLoader(FhCL.classLoader);
         registerModules();
         preConfigureSpring();
     }
@@ -55,8 +56,6 @@ public class DefaultApplication extends SpringBootServletInitializer {
     }
 
     protected static void preConfigureSpring() {
-        Thread.currentThread().setContextClassLoader(FhCL.classLoader);
-
         List<String> basePackages = ModuleRegistry.getLoadedModules().stream().map(subsystem -> subsystem.getBasePackage()).collect(Collectors.toList());
         String property = basePackages.stream().collect(Collectors.joining(","));
 

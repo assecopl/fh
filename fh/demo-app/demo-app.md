@@ -18,7 +18,7 @@ The following instruction describe how to create and run a simple application ba
 <parent>
     <groupId>pl.fhframework</groupId>
     <artifactId>fh-compile-bom</artifactId>
-    <version>4.5.6</version>
+    <version>4.5.17</version>
 </parent>
 ~~~~
 
@@ -31,7 +31,18 @@ The following instruction describe how to create and run a simple application ba
 </dependency>
 ~~~~
 
-Full **pom.xml** file content:
+- Next you need to add dependency to **security-persmission**, which is a basic implementation of the **FH Framework** permission provider:
+
+~~~~
+<dependency>
+    <groupId>pl.fhframework.core.security.permission</groupId>
+    <artifactId>permissionProvider-jdbc</artifactId>
+    <version>${fh.version}</version>
+</dependency>
+~~~~
+
+-Full **pom.xml** file content:
+
 ~~~~
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -41,7 +52,7 @@ Full **pom.xml** file content:
     <parent>
         <groupId>pl.fhframework</groupId>
         <artifactId>fh-compile-bom</artifactId>
-        <version>4.5.6</version>
+        <version>4.5.17</version>
     </parent>
 
     <groupId>com.example.fhdemo</groupId>
@@ -53,6 +64,11 @@ Full **pom.xml** file content:
         <dependency>
             <groupId>pl.fhframework</groupId>
             <artifactId>defaultApplication</artifactId>
+            <version>${fh.version}</version>
+        </dependency>
+		<dependency>
+            <groupId>pl.fhframework.core.security.permission</groupId>
+            <artifactId>permissionProvider-jdbc</artifactId>
             <version>${fh.version}</version>
         </dependency>
     </dependencies>

@@ -11,6 +11,7 @@ import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.UriUtils;
 import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.BindingResult;
 import pl.fhframework.SessionManager;
@@ -168,7 +169,8 @@ public class FileUploadDownloadController {
         }
 
         try (InputStream resourceIs = resource.getInputStream()) {
-            response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"");
+            response.setHeader(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=\"%s\"; filename*=UTF-8''%s",
+                    pl.fhframework.core.util.StringUtils.latinize(resource.getFilename()), UriUtils.encode(resource.getFilename(), "UTF-8")));
             calcContentLength(resource, response);
             if (resource instanceof TemporaryResource && !StringUtils.isEmpty(((TemporaryResource) resource).getContentType())) {
                 response.setContentType(((TemporaryResource) resource).getContentType());

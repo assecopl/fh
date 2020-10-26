@@ -4,7 +4,7 @@
 
     <artifactId>permissionProvider-rest</artifactId>
     <groupId>pl.fhframework.core.security.permission</groupId>
-    <version>4.5.15</version>
+    <version>4.5.17</version>
     <packaging>jar</packaging>
     <url>https://github.com/assecopl/fh</url>
 
@@ -14,7 +14,7 @@
     <parent>
         <groupId>pl.fhframework</groupId>
         <artifactId>fhCoreLite</artifactId>
-        <version>4.5.15</version>
+        <version>4.5.17</version>
     </parent>
 
     <dependencies>
