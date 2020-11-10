@@ -53,6 +53,8 @@ abstract class TableFixedHeaderAndHorizontalScroll extends HTMLFormComponent {
             this.handleColumnResize();
         }.bind(this));
         this.component.onscroll = this.handleFixedHeader.bind(this);
+        this.handleFixedHeader();
+        this.handleColumnResize();
 
     };
 
@@ -314,7 +316,7 @@ abstract class TableFixedHeaderAndHorizontalScroll extends HTMLFormComponent {
     public updateFixedHeaderWidth() {
         if (this.componentObj.height && this.fixedHeader && this.initFixedHeader) {
             const scrollbarWidth = this.component.offsetWidth - this.component.clientWidth;
-            if (scrollbarWidth != this.scrollbarWidth && this.fixedHeaderWrapper) {
+            if (this.component.clientWidth != 0 && scrollbarWidth != this.scrollbarWidth && this.fixedHeaderWrapper) {
                 let outterWidth = this.component.style.width ? this.component.style.width : "100%";
                 this.fixedHeaderWrapper.style.width = "calc(" + outterWidth + " - " + scrollbarWidth + "px)";
                 this.scrollbarWidth = scrollbarWidth;
@@ -429,7 +431,7 @@ abstract class TableFixedHeaderAndHorizontalScroll extends HTMLFormComponent {
     }
 
     public convertToPrecentageWidth(widthInPx: any) {
-        return (((widthInPx / this.component.clientWidth)) * 100).toExponential(2);
+        return (((widthInPx / this.component.clientWidth)) * 100.0).toExponential(6);
     }
 
     update(change) {

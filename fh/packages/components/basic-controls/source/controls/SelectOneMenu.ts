@@ -215,9 +215,9 @@ class SelectOneMenu extends HTMLFormComponent {
 
         if (this.emptyValue && this.emptyValue == true) {
             this.clearButton.removeEventListener('click', this.buttonClickEvent.bind(this));
-
-            super.destroy(removeFromParent);
         }
+
+        super.destroy(removeFromParent);
     }
 }
 

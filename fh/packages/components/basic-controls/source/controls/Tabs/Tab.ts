@@ -98,19 +98,6 @@ class Tab extends HTMLFormComponent {
         $(this.navElement).find('a').tab('show');
     };
 
-    deactivate() {
-        let dismissHints = (components) => {
-            components.forEach(function(component) {
-                component.hideHint();
-
-                dismissHints(component.components);
-            });
-        }
-        if (this.isRendered) {
-            dismissHints(this.components);
-        }
-    }
-
     setAccessibility(accessibility) {
         // Alvays show in design mode.
         if (accessibility === 'HIDDEN' && this.designMode === true) {

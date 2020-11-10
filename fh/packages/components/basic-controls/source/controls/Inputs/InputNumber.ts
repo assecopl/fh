@@ -14,16 +14,18 @@ class InputNumber extends HTMLFormComponent {
     private textAlign: string;
     private onChange: any;
     private valueChanged: boolean;
+    private readonly radixPoint: string;
     protected inputmaskEnabled: boolean;
     private maxFractionDigits:any;
     private maxIntigerDigits:any;
 
     constructor(componentObj: any, parent: HTMLFormComponent) {
         if (componentObj.rawValue != undefined) {
-            componentObj.rawValue = componentObj.rawValue.replace(',', '.');
+            componentObj.rawValue = componentObj.rawValue.replace(',', componentObj.radixPoint);
         }
 
         super(componentObj, parent);
+        this.radixPoint = componentObj.radixPoint || '.';
 
         if (componentObj.rawValue == undefined && componentObj.value == undefined) {
             this.oldValue = '';
@@ -57,7 +59,6 @@ class InputNumber extends HTMLFormComponent {
             input.classList.add(cssClass);
         });
 
-        console.log(this.textAlign);
         if (this.textAlign === 'RIGHT') {
             input.classList.add('text-right');
         } else if (this.textAlign === 'CENTER') {
@@ -100,9 +101,9 @@ class InputNumber extends HTMLFormComponent {
 
     applyMask() {
         if (!this.inputmaskEnabled) {
-            // @ts-ignore
+            //@ts-ignore
             Inputmask({
-                radixPoint: ".",
+                radixPoint: this.radixPoint,
                 regex: this.resolveRegex()
             }).mask(this.input);
             this.inputmaskEnabled = true;
@@ -111,7 +112,7 @@ class InputNumber extends HTMLFormComponent {
 
     disableMask() {
         if (this.inputmaskEnabled) {
-            // @ts-ignore
+            //@ts-ignore
             Inputmask.remove(this.input);
             this.inputmaskEnabled = false;
         }
@@ -162,7 +163,7 @@ class InputNumber extends HTMLFormComponent {
             switch (name) {
                 case 'rawValue':
                     if (newValue != undefined) {
-                        newValue = newValue.replace(',', '.')
+                        newValue = newValue.replace(',', this.radixPoint);
                     }
                     this.input.value = newValue;
                     break;
@@ -242,8 +243,7 @@ class InputNumber extends HTMLFormComponent {
     resolveRegex(){
         let fractionMark = "[\\d]*)"; // Matches between one and unlimited times
         let integerMark = "[\\d]*"; // Matches between one and unlimited times
-        let separatorMark = "([.]{0,1}" //Matches between zero and one times
-
+        let separatorMark = "([" + this.radixPoint + "]{0,1}" //Matches between zero and one times
         if(this.maxFractionDigits != null) {
             if (this.maxFractionDigits == 0) {
                 fractionMark = "";
@@ -265,8 +265,9 @@ class InputNumber extends HTMLFormComponent {
 
     }
 
-
-
+    public getDefaultWidth(): string {
+        return 'md-3';
+    }
 }
 
 export {InputNumber};

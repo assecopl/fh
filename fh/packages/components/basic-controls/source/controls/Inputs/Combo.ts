@@ -880,6 +880,7 @@ class Combo extends InputText {
                 if (this.invisible) {
                     this.htmlElement.classList.add('invisible');
                 } else {
+                    this.hideHint();
                     this.htmlElement.classList.add('d-none');
                 }
                 break;

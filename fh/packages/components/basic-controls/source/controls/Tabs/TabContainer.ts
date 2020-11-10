@@ -138,13 +138,7 @@ class TabContainer extends HTMLFormComponent {
         this.accessibility = accessibility;
     }
 
-
     activateTab(tabIndex) {
-        this.components.forEach(component => {
-            if (component instanceof Tab) {
-                (<Tab>component).deactivate();
-            }
-        })
         if (this.components[tabIndex]) {
             (<any>this.components[tabIndex]).activate();
             this.activeTabIndex = tabIndex;

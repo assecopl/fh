@@ -24,6 +24,7 @@ public enum CoreSystemFunction implements ISystemFunctionId {
     public static final String CORE_RULES_PERSISTENCE_READ = "core/rules/persistence/read";
     public static final String CORE_RULES_PERSISTENCE_DELETE = "core/rules/persistence/delete";
     public static final String CORE_SERVICES_NOTIFICATION = "core/services/notification";
+    public static final String CORE_SERVICES_MESSAGE = "core/services/message";
     public static final String CORE_SERVICES_USER = "core/services/user";
     public static final String CORE_MAIL_SENDING = "core/mail/sending";
     public static final String CORE_LOGS = "core/logs";

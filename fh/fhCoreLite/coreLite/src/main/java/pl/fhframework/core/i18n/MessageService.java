@@ -32,7 +32,7 @@ public class MessageService {
     @Autowired
     private ApplicationContext applicationContext;
 
-    @Value("${fhframework.language.default:en-GB}")
+    @Value("${fhframework.language.default:pl}")
     private String defaultLanguage;
 
     /**

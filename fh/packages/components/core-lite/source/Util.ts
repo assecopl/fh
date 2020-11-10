@@ -104,6 +104,10 @@ class Util {
                 closeCallback();
             }
         });
+        $(modalDialog).on('shown.bs.modal', function () {
+            $(modalDialog).find('.modal-body-button').trigger('focus');
+        });
+
 
         $('#' + modalDialogId).modal({backdrop: 'static', keyboard: false});
     }

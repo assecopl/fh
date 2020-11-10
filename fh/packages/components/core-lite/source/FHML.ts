@@ -258,7 +258,21 @@ class FHML {
                 noContent: false
 
             },
-
+            {
+                //List element tag
+                tag: 'counter',
+                tagConstructor: (match, contents) => {
+                    var li = document.createElement('span');
+                    li.classList.add('badge');
+                    li.classList.add('badge-danger');
+                    if (contents <= 0) {
+                        li.classList.add('d-none');
+                    }
+                    li.innerHTML = contents;
+                    return li.outerHTML;
+                },
+                noContent: false
+            },
             {
                 //text as computer code in a document
                 tag: 'code',

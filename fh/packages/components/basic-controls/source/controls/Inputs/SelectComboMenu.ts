@@ -408,19 +408,19 @@ class SelectComboMenu extends InputText {
                             this.rawValue = newValue;
                             //Must be before change oldValue
                             this.oldValue = newValue;
-
-
                         } else {
                             if (this.emptyLabelText) {
                                 this.input.value = this.emptyLabelText;
                                 this.rawValue = this.emptyLabelText;
                                 this.oldValue = this.emptyLabelText;
+                                this.selectedIndex = 0;
                                 this.highlighted = this.findByValue("nullValue");
                             } else {
                                 this.input.value = null;
                                 this.rawValue = null;
                                 this.oldValue = null;
                                 this.highlighted = null;
+                                this.selectedIndex = 0;
                                 this.highlighted = this.findByValue("nullValue");
                             }
                         }
@@ -470,7 +470,7 @@ class SelectComboMenu extends InputText {
     findByValue(value) {
         value = value || '';
         for (let option of this.values) {
-            if (option.targetValue.trim() === value.trim()) {
+            if (option.targetValue && option.targetValue.trim() === value.trim()) {
                 return option;
             }
         }
@@ -710,6 +710,7 @@ class SelectComboMenu extends InputText {
                 if (this.invisible) {
                     this.htmlElement.classList.add('invisible');
                 } else {
+                    this.hideHint();
                     this.htmlElement.classList.add('d-none');
                 }
                 break;

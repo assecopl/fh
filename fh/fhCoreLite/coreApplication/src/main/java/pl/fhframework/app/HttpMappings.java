@@ -19,11 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.springframework.web.servlet.i18n.SessionLocaleResolver;
-import org.springframework.web.util.WebUtils;
 import pl.fhframework.core.ResourceNotFoundException;
 import pl.fhframework.core.i18n.MessageService;
 import pl.fhframework.core.logging.FhLogger;
@@ -37,7 +32,6 @@ import pl.fhframework.subsystems.Subsystem;
 
 import javax.annotation.Resource;
 import javax.jws.WebParam;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -48,12 +42,9 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 
-/**
- * Created by krzysztof.kobylarek on 2017-05-17.
- */
 @Controller
 @EnableWebMvc
-public class HttpMappings extends WebMvcConfigurerAdapter {
+public class HttpMappings {
     @Autowired
     private ImageRepository imageRepository;
 
@@ -73,24 +64,11 @@ public class HttpMappings extends WebMvcConfigurerAdapter {
     private MessageService messageService;
 
     @Bean
-    public LocaleResolver localeResolver() {
-        SessionLocaleResolver slr = new SessionLocaleResolver();
-        slr.setDefaultLocale(new Locale("pl"));
-        return slr;
-    }
-
-    @Bean
     public ReloadableResourceBundleMessageSource messageSource() {
         ReloadableResourceBundleMessageSource bundleMessageSource = new ReloadableResourceBundleMessageSource();
         bundleMessageSource.setBasename("classpath:i18n/messages");
         bundleMessageSource.setDefaultEncoding("UTF-8");
         return bundleMessageSource;
-    }
-
-    @Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/").setViewName("index");
-        registry.addViewController("/login").setViewName("login");
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -187,21 +165,6 @@ public class HttpMappings extends WebMvcConfigurerAdapter {
         return model;
     }
 
-    private static final String[] CLASSPATH_RESOURCE_LOCATIONS = {
-            "classpath:/META-INF/resources/", "classpath:/resources/",
-            "classpath:/static/", "classpath:/public/"};
-
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        if (!registry.hasMappingForPattern("/webjars/**")) {
-            registry.addResourceHandler("/webjars/**").addResourceLocations(
-                    "classpath:/META-INF/resources/webjars/");
-        }
-        if (!registry.hasMappingForPattern("/**")) {
-            registry.addResourceHandler("/**").addResourceLocations(
-                    CLASSPATH_RESOURCE_LOCATIONS);
-        }
-    }
 
     //customize the error message
     private String getErrorMessage(HttpServletRequest request, HttpServletResponse response, String key) {
@@ -230,16 +193,7 @@ public class HttpMappings extends WebMvcConfigurerAdapter {
     }
 
     private Locale getLocale(HttpServletRequest request, HttpServletResponse response) {
-        Locale locale;
-        Cookie langCookie = WebUtils.getCookie(request, "USERLANG");
-        if (langCookie != null) {
-            locale = Locale.forLanguageTag(langCookie.getValue());
-            localeResolver.setLocale(request, response, locale);
-        } else {
-            locale = request.getLocale();
-        }
-
-        return locale;
+        return localeResolver.resolveLocale(request);
     }
 
     private ResponseEntity getFile(File file) throws ResourceNotFoundException {
