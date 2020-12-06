@@ -1,6 +1,5 @@
 <!--
-LAYOUT : UseCaseLayoutService.mainLayout
-Default FH layout with backward compatibility
+LAYOUT : fhframework.layout.templates=designer
 -->
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
@@ -30,9 +29,15 @@ Default FH layout with backward compatibility
     </nav>
     <div class="container-fluid">
         <div class="row">
-            <div id="menuForm" class="col-sm-12 col-md-3 col-lg-3 col-xl-2 mt-3"
-                 th:classappend="${@environment.getProperty('fh.application.menu.hide') == 'true'}?hidden"></div>
-            <div id="mainForm" class="col mt-3"></div>
+            <div id="mainForm" class="d-none"></div>
+            <div id="formDesigner" class="col">
+                <div class="row">
+                    <div id="menuForm" class="col-md-2 d-none"></div>
+                    <div id="formDesignerToolbox" class="col-md-2"></div>
+                    <div id="formDesignerComponents" class="col"></div>
+                    <div id="formDesignerProperties" class="col-md-2"></div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

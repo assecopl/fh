@@ -707,6 +707,8 @@ abstract class HTMLFormComponent extends FormComponent {
             if (inputElement) {
                 inputElement.classList.add('stretched');
                 inputElement.style.width = 'calc(100% - ' + property + ')';
+                //Prevent oversized input-group elemtns.
+                inputElement.style.alignSelf = 'flex-start';
             }
         } else {
             let labelWidth = Math.max(0, Math.min(99, parseInt(property)));

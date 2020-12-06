@@ -149,7 +149,6 @@ class Table extends TableWithKeyboardEvents {
         }
 
         this.refreshData();
-        this.initExtends();
     }
 
     update(change) {
@@ -598,6 +597,7 @@ class Table extends TableWithKeyboardEvents {
             //Show highlighted record after showing table again , Works only with animate set to true.
             this.highlightSelectedRows(true);
         }
+        this.initExtends();
     }
 
     protected getAllComponents() {

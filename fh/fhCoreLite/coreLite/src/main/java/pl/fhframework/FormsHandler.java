@@ -451,6 +451,8 @@ public abstract class FormsHandler {
         clientDataHandlerMap.getOrDefault(message.getClientMessage().getType(), Collections.emptyList()).forEach(clientDataHandler -> clientDataHandler.handleClientData(message.getClientMessage()));
 
         OutMessageEventHandlingResult eventHandlingResult = new OutMessageEventHandlingResult();
+
+        eventHandlingResult.setLayout(context.getUserSession().getUseCaseContainer().resolveUseCaseLayout());
         eventHandlingResult.setEvents(context.getUserSession().getUseCaseRequestContext().getEvents());
         sendResponse(requestId, eventHandlingResult, context);
         context.getUserSession().getUseCaseRequestContext().getEvents().clear();

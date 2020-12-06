@@ -5,7 +5,7 @@
 
     <groupId>pl.fhframework</groupId>
     <artifactId>fh-boot-bom</artifactId>
-    <version>4.6.19</version>
+    <version>4.6.20</version>
     <packaging>pom</packaging>
     <url>https://github.com/assecopl/fh</url>
 
@@ -63,7 +63,7 @@
         <version.infinispan.starter>2.0.0.Final</version.infinispan.starter>
         <version.roaster>2.20.0.Final</version.roaster>
 
-        <fh.version>4.6.19</fh.version>
+        <fh.version>4.6.20</fh.version>
         <fh.version.display>${fh.version}</fh.version.display>
         <springboot.version>2.1.0.RELEASE</springboot.version>
         <hibernate.version>5.4.1.Final</hibernate.version>
@@ -160,7 +160,7 @@
                     <dependency>
                         <groupId>pl.fhframework</groupId>
                         <artifactId>fh-springboot-bom</artifactId>
-                        <version>4.6.19</version>
+                        <version>4.6.20</version>
                         <scope>import</scope>
                         <type>pom</type>
                     </dependency>
@@ -237,7 +237,7 @@
                     <dependency>
                         <groupId>pl.fhframework</groupId>
                         <artifactId>fh-springboot-bom</artifactId>
-                        <version>4.6.19</version>
+                        <version>4.6.20</version>
                         <scope>import</scope>
                         <type>pom</type>
                     </dependency>
@@ -270,7 +270,7 @@
                     <dependency>
                         <groupId>pl.fhframework</groupId>
                         <artifactId>fh-springboot-bom</artifactId>
-                        <version>4.6.19</version>
+                        <version>4.6.20</version>
                         <scope>import</scope>
                         <type>pom</type>
                     </dependency>
@@ -295,7 +295,7 @@
                     <dependency>
                         <groupId>pl.fhframework</groupId>
                         <artifactId>fh-springboot-bom</artifactId>
-                        <version>4.6.19</version>
+                        <version>4.6.20</version>
                         <scope>import</scope>
                         <type>pom</type>
                     </dependency>
@@ -326,7 +326,7 @@
                     <dependency>
                         <groupId>pl.fhframework</groupId>
                         <artifactId>fh-jboss-eap6.4-bom</artifactId>
-                        <version>4.6.19</version>
+                        <version>4.6.20</version>
                         <scope>import</scope>
                         <type>pom</type>
                     </dependency>

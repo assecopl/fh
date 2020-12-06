@@ -5,6 +5,8 @@ import {FhContainer} from "fh-forms-handler";
 import * as autosize from '../../external/autosize.min.js';
 import '../../external/inputmask.js';
 
+declare const ENV_IS_DEVELOPMENT: boolean;
+
 class InputText extends HTMLFormComponent {
     protected keySupport: FormComponentKeySupport;
     private readonly isTextarea: boolean;
@@ -539,17 +541,19 @@ class InputText extends HTMLFormComponent {
     }
 
     public render() {
-        console.log("InputTextRender", this.id)
-        super.render();
-        // if (this.isTextarea && this.textareaAutosize) {
-        //     // @ts-ignore
-        //     setTimeout(function () {
-        //         console.log("InputTextRender", this.id)
-        //         autosize.update(this.input);
-        //     }.bind(this), 0)
-        //
-        // }
+        if (ENV_IS_DEVELOPMENT) {
+            console.log("InputTextRender", this.id);
+            // if (this.isTextarea && this.textareaAutosize) {
+            //     // @ts-ignore
+            //     setTimeout(function () {
+            //         console.log("InputTextRender", this.id)
+            //         autosize.update(this.input);
+            //     }.bind(this), 0)
+            //
+            // }
+        }
 
+        super.render();
     }
 }
 

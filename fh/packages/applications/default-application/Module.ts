@@ -56,17 +56,11 @@ $(function () {
     FhApplication.registerCallback('hideMenu', function () {
         let menu = document.getElementById('menuForm');
         menu.classList.add('d-none');
-
-        let main = document.getElementById('mainForm');
-        main.classList.remove('col-md-9', 'col-lg-9', 'col-xl-10');
     });
 
     FhApplication.registerCallback('showMenu', function () {
         let menu = document.getElementById('menuForm');
         menu.classList.remove('d-none');
-
-        let main = document.getElementById('mainForm');
-        main.classList.add('col-md-9', 'col-lg-9', 'col-xl-10');
     });
 
     // Kalendarz

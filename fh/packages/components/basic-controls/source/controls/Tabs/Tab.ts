@@ -1,6 +1,7 @@
 import 'bootstrap/js/dist/tab';
 import {HTMLFormComponent} from "fh-forms-handler";
 import {AdditionalButton} from "fh-forms-handler";
+import {TabContainer} from "./TabContainer";
 
 class Tab extends HTMLFormComponent {
     private navElement: any;
@@ -130,7 +131,13 @@ class Tab extends HTMLFormComponent {
         this.accessibility = accessibility;
     };
 
+    protected focusComponent(path, index, options) {
+        (<TabContainer>this.parent).activateTab(this.tabIndex);
+        return super.focusComponent(path, index, options);
+    }
+
     focusCurrentComponent(deferred, options) {
+        console.warn(arguments);
         let tabContainer = this.component.parentNode;
         // if (tabContainer.scrollHeight > tabContainer.offsetHeight) {
         options.scrollableElement = tabContainer;

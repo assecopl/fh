@@ -22,20 +22,7 @@ class InputTimestamp extends InputDate implements LanguageChangeObserver {
         // @ts-ignore
         this.keySupport = FhContainer.get("FormComponentKeySupport")(this.componentObj, this);
 
-        (<any>$.fn).datetimepicker.defaults.tooltips = this.tooltipsI18n[this.i18n.selectedLanguage];
-        $.extend(true, (<any>$.fn).datetimepicker.defaults, {
-            icons: {
-                time: 'far fa-clock',
-                date: 'far fa-calendar',
-                up: 'fas fa-arrow-up',
-                down: 'fas fa-arrow-down',
-                previous: 'fas fa-chevron-left',
-                next: 'fas fa-chevron-right',
-                today: 'fas fa-calendar-check',
-                clear: 'far fa-trash-alt',
-                close: 'far fa-times-circle'
-            }
-        });
+       this.initTimestampDefaults();
     }
 
     create() {
@@ -95,6 +82,7 @@ class InputTimestamp extends InputDate implements LanguageChangeObserver {
         let component = (<any>$(this.inputGroupElement));
         let data = component.data("DateTimePicker");
         if (data != null) data.destroy();
+        this.initTimestampDefaults();
         (<any>$(this.inputGroupElement)).datetimepicker({
             locale: this.i18n.selectedLanguage,
             useStrict: true,
@@ -161,6 +149,24 @@ class InputTimestamp extends InputDate implements LanguageChangeObserver {
         this.i18n.unsubscribe(this);
 
         super.destroy(removeFromParent);
+    }
+
+
+    initTimestampDefaults(){
+        (<any>$.fn).datetimepicker.defaults.tooltips = this.tooltipsI18n[this.i18n.selectedLanguage];
+        $.extend(true, (<any>$.fn).datetimepicker.defaults, {
+            icons: {
+                time: 'far fa-clock',
+                date: 'far fa-calendar',
+                up: 'fas fa-arrow-up',
+                down: 'fas fa-arrow-down',
+                previous: 'fas fa-chevron-left',
+                next: 'fas fa-chevron-right',
+                today: 'fas fa-calendar-check',
+                clear: 'far fa-trash-alt',
+                close: 'far fa-times-circle'
+            }
+        });
     }
 }
 

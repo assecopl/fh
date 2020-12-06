@@ -68,42 +68,10 @@ class FormsManager {
         this.usedContainers[form.containerId] = form;
         this.formObj = formObj;
 
-        if (form !== null && form.id === 'designerToolbox' || form.id === 'designerComponents' || form.id === 'FormPreview') {
-            this.buildDesignerContainers();
-            this.collapseMenuForm();
-        }
-
-        if (form.container !== null && form.container.id === 'formDesignerModelProperties') {
-            this.showDesignerModelProperties();
-
-            let mainForm = this.layoutHandler.getLayoutContainer("mainForm");
-            // document.getElementById('mainForm');
-            let formDesignerContainers = this.layoutHandler.getLayoutContainer("formDesigner");
-            // document.getElementById('formDesigner');
-            if (!mainForm.contains(formDesignerContainers)) {
-                this.buildDesignerContainers();
-                this.collapseMenuForm();
-            }
-        }
-
         form.create();
 
-        /**
-         * Set Designer Behaviour.
-         *
-         */
         if (form.container.id && form.container.id == "formDesignerComponents") {
             (<any>FhContainer.get('Designer')).setBehaviour(form.componentObj.behaviour);
-        }
-
-        if (form.id === 'designerComponents' || (form.container.id == 'designedFormContainer' && form.designMode)) {
-            if (formObj.designContainerType && !formObj.modal) {
-                this.handleDesignerContainerWidth(formObj.designContainerType, formObj.designContainerWidth)
-            } else if (formObj.width && formObj.formType != 'MODAL' && formObj.formType != 'MODAL_OVERFLOW') {
-                this.handleDesignerContainerWidthPx(formObj.width)
-            } else {
-                this.handleDesignerContainerWidthDefault();
-            }
         }
     }
 
@@ -134,20 +102,7 @@ class FormsManager {
         this.usedContainers[form.containerId] = null;
         this.openedForms.splice(this.openedForms.indexOf(form), 1);
 
-        if (form !== null && form.id === 'designerToolbox' || form.id === 'designerComponents' || form.id === 'FormPreview') {
-            this.removeDesignerContainers();
-            this.uncollapseMenuForm();
-        }
-
-        if (form.container !== null && form.container.id === 'formDesignerModelProperties') {
-            this.hideDesignerModelProperties();
-
-            if (this.openedForms.find(form => form.id == 'designerComponents') == undefined) {
-                this.removeDesignerContainers();
-                this.uncollapseMenuForm();
-            }
-        }
-        if(document.activeElement) {
+        if (document.activeElement) {
             this.lastActiveElementId = document.activeElement.id || null;
         }
         this.lastClosedFormId = form.id;
@@ -196,7 +151,7 @@ class FormsManager {
         }.bind(this));
     }
 
-    findFormByContainer(containerId){
+    findFormByContainer(containerId) {
         let form = null;
         for (let i = 0; i < this.openedForms.length; i++) {
             if (this.openedForms[i].parentId === containerId) {
@@ -517,188 +472,6 @@ class FormsManager {
             );
         }
         return !this.duringShutdown;
-    }
-
-    buildDesignerContainers() {
-        let mainForm = this.layoutHandler.getLayoutContainer("mainForm");
-        let formDesignerContainers = this.layoutHandler.getLayoutContainer("formDesigner");
-        let formsContainer = mainForm.parentElement;
-
-        if (mainForm !== undefined && mainForm.children.length > 0) {
-            if (mainForm.children[0].id !== 'formDesigner') {
-                mainForm.children[0].classList.add('d-none');
-            }
-        }
-
-        mainForm.classList.remove('col-sm-12');
-        mainForm.classList.remove('col-md-9');
-        mainForm.classList.remove('col-lg-9');
-        mainForm.classList.remove('col-xl-10');
-
-        if (mainForm.contains(formDesignerContainers)) {
-            return;
-        } else {
-            formsContainer.removeChild(formDesignerContainers);
-            mainForm.appendChild(formDesignerContainers);
-        }
-
-        if (formDesignerContainers.classList.contains('d-none')) {
-            formDesignerContainers.classList.remove('d-none');
-        }
-    }
-
-    removeDesignerContainers() {
-        let mainForm = this.layoutHandler.getLayoutContainer("mainForm");
-        let menuForm = this.layoutHandler.getLayoutContainer("menuForm");
-        let menuFormInner = document.getElementById('menuFormInner');
-        let toolboxForm = this.layoutHandler.getLayoutContainer("formDesignerToolbox");
-        let formDesignerContainers = this.layoutHandler.getLayoutContainer("formDesigner");
-
-        let formDesignerComponents = this.layoutHandler.getLayoutContainer("formDesignerComponents");
-        let formsContainer = mainForm.parentElement;
-
-        if (!mainForm.contains(formDesignerContainers)) {
-            return;
-        } else {
-            if (toolboxForm.contains(menuFormInner)) {
-                toolboxForm.removeChild(menuFormInner);
-                menuForm.appendChild(menuFormInner);
-            }
-
-            if (mainForm.children.length > 0) {
-                mainForm.children[0].classList.remove('d-none');
-                mainForm.removeChild(formDesignerContainers);
-            }
-
-            //FIXME Generuje porblemy przy przłączaniu layout-u.
-            mainForm.classList.add('col-sm-12');
-            mainForm.classList.add('col-md-9');
-            mainForm.classList.add('col-lg-9');
-            mainForm.classList.add('col-xl-10');
-
-            formDesignerContainers.classList.add('d-none');
-            formsContainer.appendChild(formDesignerContainers);
-
-        }
-    }
-
-    public handleDesignerContainerWidth(dContainerType: string, width: string = null): void {
-        //Set parametr designer cintainer type for designer object
-        (<any>FhContainer.get('Designer')).setDesignContainerType(dContainerType);
-
-        let formDesignerComponents = this.layoutHandler.getLayoutContainer("designedFormContainer", true);
-
-        if (formDesignerComponents.length > 0) {
-            formDesignerComponents.removeClass(function (index, className) {
-                return (className.match(/(^|\s)fh-dc-\S+/g) || []).join(' ');
-            });
-            if (width) {
-                formDesignerComponents.css('width', width);
-            } else {
-                formDesignerComponents.css('width', "");
-                formDesignerComponents.addClass('fh-dc-' + dContainerType.toLocaleLowerCase());
-            }
-        }
-    }
-
-    private handleDesignerContainerWidthPx(width: string) {
-        let formDesignerComponents = this.layoutHandler.getLayoutContainer("designedFormContainer", true);
-
-        if (formDesignerComponents.length > 0) {
-            formDesignerComponents.removeClass(function (index, className) {
-                return (className.match(/(^|\s)fh-dc-\S+/g) || []).join(' ');
-            });
-            formDesignerComponents.css('width', width);
-        }
-    }
-
-    private handleDesignerContainerWidthDefault() {
-        let currentDesigner = (<any>FhContainer.get('Designer')).designContainerType;
-        let formDesignerComponents = this.layoutHandler.getLayoutContainer("designedFormContainer", true);
-        this.handleDesignerContainerWidth(currentDesigner);
-    }
-
-
-    showDesignerModelProperties() {
-        let formDesignerModelProperties = this.layoutHandler.getLayoutContainer("formDesignerModelProperties");
-        let formDesignerComponents = this.layoutHandler.getLayoutContainer("formDesignerComponents");
-        let toolbox = this.layoutHandler.getLayoutContainer("formDesignerToolbox");
-        let properties = this.layoutHandler.getLayoutContainer("formDesignerProperties");
-
-        if (toolbox !== null && properties !== null) {
-            [toolbox, properties, formDesignerComponents].forEach( element => {
-                element.classList.add('d-none');
-            });
-        }
-
-        formDesignerModelProperties.classList.remove('d-none');
-    }
-
-    hideDesignerModelProperties() {
-        let formDesignerModelProperties = this.layoutHandler.getLayoutContainer("formDesignerModelProperties");
-        let formDesignerComponents = this.layoutHandler.getLayoutContainer("formDesignerComponents");
-        let toolbox = this.layoutHandler.getLayoutContainer("formDesignerToolbox");
-        let properties = this.layoutHandler.getLayoutContainer("formDesignerProperties");
-
-        formDesignerModelProperties.classList.add('d-none');
-
-        if (toolbox !== null && properties !== null) {
-            [toolbox, properties, formDesignerComponents].forEach( element => {
-                element.classList.remove('d-none');
-            });
-        }
-    }
-
-    collapseMenuForm() {
-        let mainForm = this.layoutHandler.getLayoutContainer("mainForm");
-        let menuForm = this.layoutHandler.getLayoutContainer("menuForm");
-        let formDesigner = this.layoutHandler.getLayoutContainer("formDesigner").querySelector('.row');
-        let formsContainer = mainForm.parentElement;
-        let menuIcon = document.getElementById('menuToggler');
-        let formDesignerToolbox = document.getElementById('formDesignerToolbox');
-
-        if (formsContainer.contains(menuIcon) || menuForm.parentElement.contains(menuIcon)) {
-            return;
-        } else {
-            menuForm.classList.add('d-none');
-            let menuToggler = document.createElement('div');
-            menuToggler.id = 'menuToggler';
-
-            let menuTogglerIcon = document.createElement('span');
-            ['fas', 'fa-caret-right', 'menuExpandRight'].forEach( cssStyle => {
-                menuTogglerIcon.classList.add(cssStyle);
-            });
-            menuTogglerIcon.id = 'menuTogglerIcon';
-            menuToggler.appendChild(menuTogglerIcon);
-
-            if (mainForm.parentElement === menuForm.parentElement) {
-                formDesigner.insertBefore(menuToggler, formDesignerToolbox);
-            } else {
-                menuForm.parentElement.insertBefore(menuToggler, menuForm);
-            }
-
-            menuToggler.addEventListener('click', this.toggleMenu.bind(this));
-        }
-    }
-
-    uncollapseMenuForm() {
-        let menuForm = this.layoutHandler.getLayoutContainer("menuForm");
-        // document.getElementById('menuForm');
-        let menuToggler = this.layoutHandler.getLayoutContainer("menuToggler");
-        // document.getElementById('menuToggler');
-        let formDesigner = this.layoutHandler.getLayoutContainer("formDesigner").querySelector('.row');
-
-        if (!menuForm.classList.contains('d-none')) {
-            return;
-        } else {
-            menuToggler.removeEventListener('click', this.toggleMenu.bind(this));
-            if (formDesigner.contains(menuToggler)) {
-                formDesigner.removeChild(menuToggler);
-            } else {
-                menuForm.parentElement.removeChild(menuToggler);
-            }
-            menuForm.classList.remove('d-none');
-        }
     }
 
     toggleMenu() {

@@ -71,10 +71,6 @@ class TabContainer extends HTMLFormComponent {
         if (!tabNav.parentNode.classList.contains('active')) {
             let tabId = tabNav.dataset.tabId;
             let tab = this.findTab(tabId);
-            this.changesQueue.queueValueChange(tab.tabIndex);
-            if (this.onTabChange) {
-                this.fireEvent('onTabChange', this.onTabChange);
-            }
             this.activateTab(tab.tabIndex);
         }
     };
@@ -140,6 +136,10 @@ class TabContainer extends HTMLFormComponent {
 
     activateTab(tabIndex) {
         if (this.components[tabIndex]) {
+            this.changesQueue.queueValueChange(tabIndex);
+            if (this.onTabChange) {
+                this.fireEvent('onTabChange', this.onTabChange);
+            }
             (<any>this.components[tabIndex]).activate();
             this.activeTabIndex = tabIndex;
             if (this.designMode) {

@@ -1,7 +1,6 @@
 .fc.splitContainer {
     display: flex;
     flex-wrap: wrap;
-    overflow-x: hidden;
 }
 .fc.splitContainer .splitPanel {
     flex-basis: 100px;
