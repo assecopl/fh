@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.Getter;
 import org.springframework.aop.framework.Advised;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
@@ -139,6 +140,9 @@ public class UseCaseContainer implements Serializable {
 
     @Autowired
     protected ISessionLogger sessionLogger;
+
+    @Value("${fh.web.guests.authenticate.path:authenticateGuest}")
+    private String authenticateGuestPath;
 
     @Getter
     private FormsContainer formsContainer = new FormsContainer();
@@ -1398,7 +1402,7 @@ public class UseCaseContainer implements Serializable {
         if (eventData.isEventPresent()) {
             // check if event source component is in proper state to send request
             if (eventUseCaseContext == null || !eventUseCaseContext.canProcessEvent(eventData)) {
-                throw new FhFormException("Request for given form component cannot be processed.");
+                throw new FhFormException(String.format("Request for given form component cannot be processed - formId: '%s', eventType: '%s', sourceId: '%s', action: '%s', ", eventData.getFormId(), eventData.getEventType(), eventData.getEventSourceId(), eventData.getActionName()));
             }
 
             try {
@@ -1559,7 +1563,7 @@ public class UseCaseContainer implements Serializable {
             } catch (FhAuthorizationException pae) {
                 if (userSession.getSystemUser().isGuest()) {
                     clearUseCaseStack();
-                    eventRegistry.fireRedirectEvent("/login" + url.getUrl().substring(1), false);
+                    eventRegistry.fireRedirectEvent(authenticateGuestPath + url.getUrl().substring(url.getUrl().indexOf('#')), false);
                     return true;
                 } else {
                     throw pae;

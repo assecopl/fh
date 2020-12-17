@@ -50,6 +50,7 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
         }
     }
 
+    abstract onRowClickEvent(e, mainId, silent);
 
     //Realese ctrl click for keyboard events
     public tableKeyupEvent(e) {
@@ -58,7 +59,8 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
         if (e.which == 9 && $(document.activeElement).is(":input")) {
             let parent = $(document.activeElement).parents('tbody tr:not(.emptyRow)');
             if (parent && parent.length > 0) {
-                parent.trigger('click');
+                // @ts-ignore
+                this.onRowClickEvent({ ctrlKey: false, shiftKey: false }, parent[0].dataset.mainId, true);
             }
         }
     }

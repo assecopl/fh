@@ -18,6 +18,7 @@ import java.util.Optional;
 
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.*;
 
+@OverridenPropertyAnnotations(designerXmlProperty = @DesignerXMLProperty(readOnlyInDesigner = true), property = "hintType")
 @TemplateControl(tagName = "fh-panel-group")
 @Control(parents = {Accordion.class, PanelGroup.class, Group.class, SplitContainer.class, Repeater.class, Column.class, Tab.class, Row.class, Form.class}, invalidParents = {Table.class}, canBeDesigned = true)
 @DocumentedComponent(category = DocumentedComponent.Category.ARRANGEMENT, documentationExample = true, value = "PanelGroup component is responsible for the grouping of sub-elements with optional header and collapsing", icon = "fa fa-object-group")

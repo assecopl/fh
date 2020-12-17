@@ -1,6 +1,6 @@
 {
   "name": "fh-charts-controls",
-  "version": "4.6.20",
+  "version": "4.6.21",
   "main": "Module.ts",
   "types": "dist/Module.d.ts",
   "scripts": {
@@ -13,13 +13,13 @@
   "devDependencies": {
     "@types/bootstrap": "4.3.1",
     "@types/jquery": "3.3.31",
-    "@types/jqueryui": "1.12.7",
+    "@types/jqueryui": "1.12.10",
     "less": "3.9.0",
     "typescript": "3.5.1"
   },
   "dependencies": {
     "chart.js": "2.8.0",
-    "fh-forms-handler": "4.6.20",
+    "fh-forms-handler": "4.6.21",
     "copyfiles": "2.1.1"
   }
 }

@@ -194,7 +194,7 @@ class Table extends TableWithKeyboardEvents {
         }
     };
 
-    onRowClickEvent(event, mainId) {
+    onRowClickEvent(event, mainId, silent = false) {
         if (this.accessibility != 'EDIT') return;
 
         if (this.multiselect == false) {
@@ -224,10 +224,12 @@ class Table extends TableWithKeyboardEvents {
             this.highlightSelectedRows();
         }
 
-        if (this._formId === 'FormPreview') {
-            this.fireEvent('onRowClick', this.onRowClick);
-        } else {
-            this.fireEventWithLock('onRowClick', this.onRowClick);
+        if (!silent) {
+            if (this._formId === 'FormPreview') {
+                this.fireEvent('onRowClick', this.onRowClick);
+            } else {
+                this.fireEventWithLock('onRowClick', this.onRowClick);
+            }
         }
 
         this.lastRowClicked = mainId;
@@ -479,7 +481,6 @@ class Table extends TableWithKeyboardEvents {
     };
 
     selectRow(mainId) {
-
         let index = this.rawValue.indexOf(parseInt(mainId));
         if (index == -1) {
             this.rawValue.push(mainId);

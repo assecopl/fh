@@ -1017,10 +1017,13 @@ public class ReflectionUtils {
         if (class1 == AnyGenericType.class || class2 == AnyGenericType.class) {
             return true; // TODO: FH_Generics, for now delegate generics check till compile time
         }
-        if (isGeneratedDynamicClass(class1) && isGeneratedDynamicClass(class2)) {
-            return getClassName(class1).equals(getClassName(class2));
+        if (!mapPrimitiveToWrapper(class1).isAssignableFrom(mapPrimitiveToWrapper(class2))) {
+            if (isGeneratedDynamicClass(class1) && isGeneratedDynamicClass(class2)) {
+                return getClassName(class1).equals(getClassName(class2));
+            }
+            return false;
         }
-        return mapPrimitiveToWrapper(class1).isAssignableFrom(mapPrimitiveToWrapper(class2));
+        return true;
     }
 
     /**

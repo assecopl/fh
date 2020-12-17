@@ -23,6 +23,7 @@ import java.util.Optional;
  * <p>
  * Example: {@code <TabContainer></TabContainer>}
  */
+@OverridenPropertyAnnotations(designerXmlProperty = @DesignerXMLProperty(readOnlyInDesigner = true), property = "hintType")
 @TemplateControl(tagName = "fh-tab-container")
 @Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
 @DocumentedComponent(category = DocumentedComponent.Category.ARRANGEMENT, documentationExample = true, value = "TabContainer component which represents a containrt containing a single tabs", icon = "fas fa-window-maximize")

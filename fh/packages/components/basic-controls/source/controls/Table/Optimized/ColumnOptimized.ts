@@ -111,7 +111,7 @@ class ColumnOptimized extends HTMLFormComponent {
                         // setting accessibility done in HTMLFormComponent.update()
                         // just redraw columns
                         let parentTable = this.parent;
-                        while (parentTable.componentObj.type !== 'Table') {
+                        while (parentTable.componentObj.type !== 'TableOptimized') {
                             parentTable = parentTable.parent;
                         }
                         parentTable.redrawColumns();

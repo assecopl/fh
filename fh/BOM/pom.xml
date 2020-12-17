@@ -1,90 +1,80 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-
-    <groupId>pl.fhframework</groupId>
-    <artifactId>bom-project-lite</artifactId>
-    <version>4.6.20</version>
-    <packaging>pom</packaging>
-    <url>https://github.com/assecopl/fh</url>
-
-    <name>bom-projects-lite</name>
-    <description>Configurable dependencies information set</description>
-
-    <modules>
-        <module>fh-boot-bom</module>
-        <module>fh-compile-bom</module>
-        <module>commons-bom</module>
-        <module>fh-boot-client-bom</module>
-        <module>fh-springboot-bom</module>
-    </modules>
-
-    <licenses>
-        <license>
-            <name>The Apache License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-        </license>
-    </licenses>
-
-    <developers>
-        <developer>
-            <name>Gabriel Kurzac</name>
-            <email>gabriel.kurzac@asseco.pl</email>
-            <organization>Asseco Poland S.A.</organization>
-            <organizationUrl>https://pl.asseco.com</organizationUrl>
-        </developer>
-    </developers>
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
-
-    <scm>
-        <connection>scm:git:git://github.com/assecopl/fh.git</connection>
-        <developerConnection>scm:git:ssh://github.com:assecopl/fh.git</developerConnection>
-        <url>http://github.com/assecopl/fh/tree/master</url>
-    </scm>
-
-    <profiles>
-        <profile>
-            <id>release</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.7</version>
-                        <extensions>true</extensions>
-                        <configuration>
-                            <serverId>ossrh</serverId>
-                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.5</version>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>pl.fhframework</groupId>
+  <artifactId>bom-project-lite</artifactId>
+  <version>4.6.21</version>
+  <packaging>pom</packaging>
+  <url>https://github.com/assecopl/fh</url>
+  <name>bom-projects-lite</name>
+  <description>Configurable dependencies information set</description>
+  <modules>
+    <module>fh-boot-bom</module>
+    <module>fh-compile-bom</module>
+    <module>commons-bom</module>
+    <module>fh-boot-client-bom</module>
+    <module>fh-springboot-bom</module>
+  </modules>
+  <licenses>
+    <license>
+      <name>The Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <name>Gabriel Kurzac</name>
+      <email>gabriel.kurzac@asseco.pl</email>
+      <organization>Asseco Poland S.A.</organization>
+      <organizationUrl>https://pl.asseco.com</organizationUrl>
+    </developer>
+  </developers>
+  <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>
+  <scm>
+    <connection>scm:git:git://github.com/assecopl/fh.git</connection>
+    <developerConnection>scm:git:ssh://github.com:assecopl/fh.git</developerConnection>
+    <url>http://github.com/assecopl/fh/tree/master</url>
+  </scm>
+  <profiles>
+    <profile>
+      <id>release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.sonatype.plugins</groupId>
+            <artifactId>nexus-staging-maven-plugin</artifactId>
+            <version>1.6.7</version>
+            <extensions>true</extensions>
+            <configuration>
+              <serverId>ossrh</serverId>
+              <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+              <autoReleaseAfterClose>true</autoReleaseAfterClose>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>1.5</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>

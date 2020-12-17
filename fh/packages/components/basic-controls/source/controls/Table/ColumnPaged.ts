@@ -131,6 +131,9 @@ class ColumnPaged extends HTMLFormComponent {
         if (change.changedAttributes) {
             $.each(change.changedAttributes, function (name) {
                 switch (name) {
+                    case 'sortable':
+                        this.isSortable = Boolean(change.changedAttributes['sortable']);
+                        break;
                     case 'accessibility':
                         // setting accessibility done in HTMLFormComponent.update()
                         // just redraw columns

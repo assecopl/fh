@@ -542,7 +542,7 @@ class InputText extends HTMLFormComponent {
 
     public render() {
         if (ENV_IS_DEVELOPMENT) {
-            console.log("InputTextRender", this.id);
+            // console.log("InputTextRender", this.id);
             // if (this.isTextarea && this.textareaAutosize) {
             //     // @ts-ignore
             //     setTimeout(function () {

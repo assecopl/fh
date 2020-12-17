@@ -3,7 +3,7 @@ import {Table} from "./Table";
 import {AdditionalButton} from "fh-forms-handler";
 
 class Column extends HTMLFormComponent {
-    private readonly isSortable: any;
+    private isSortable: any;
     private sorter: any;
     private readonly rowspan: any;
     private readonly subColumnsExists: boolean;

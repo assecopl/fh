@@ -106,6 +106,13 @@ public class HttpMappings {
 
     }
 
+    @RequestMapping(value = "/${fh.web.guests.authenticate.path:authenticateGuest}", method = RequestMethod.GET)
+    public ModelAndView authenticateGuest() {
+        ModelAndView model = new ModelAndView();
+        model.setViewName("redirect:/");
+        return model;
+    }
+
     @RequestMapping(value = "/image", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public ResponseEntity image(
             @WebParam(name = "module") String module,

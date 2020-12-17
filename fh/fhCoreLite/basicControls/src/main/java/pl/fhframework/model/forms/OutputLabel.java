@@ -31,6 +31,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
 @Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
 @DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, documentationExample = true, value = "Label component is responsible for displaying value.", icon = "fa fa-font")
 @DesignerControl(defaultWidth = 2)
+@OverridenPropertyAnnotations(designerXmlProperty = @DesignerXMLProperty(readOnlyInDesigner = true), property = "hintType")
 public class OutputLabel extends FormElement implements TableComponent<OutputLabel>, Iconable, IBodyXml {
 
     public static final String ATTR_VALUE = "value";

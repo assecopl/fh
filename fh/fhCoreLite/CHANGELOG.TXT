@@ -1,4 +1,5 @@
 4.6.15
+- Wyciek pamięci w obszarze Metaspace - proxy tworzone przez Spring (ProxyFacotyr/cglib) powodowało wyciek pamieci Metaspace - przejście na natywny Proxy.newProxyInstance
 - Dodanie możliwości wywołania przekierowania na zewnętrzny URL z wykorzystaniem metody HTTP POST (EventRegistry#fireRedirectPostEvent)
 - Dodanie parametru 'fh.cache.jgroups.configurationFile' - umożliwia wskazanie pliku xml z konfiguracją jgroups
 - Dodanie profili: fh-standalone (domyślnie włączony, dodaje zależności xxx-standalone), fh-tomcat (domyślnie włączony, dodaje zależność fh-tomcat), fh-h2 (domyślnie włączony dodaje zależności do H2). Profile można wyłączyć parametrem: skip-fh-standalone, skip-fh-tomcat, skip-fh-h2

@@ -23,6 +23,7 @@ import pl.fhframework.model.forms.validation.ValidationFactory;
 import pl.fhframework.validation.*;
 
 import java.text.ParseException;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.*;
@@ -210,7 +211,7 @@ public abstract class BaseInputField extends FormElementWithConfirmationSupport 
                 this.updateBindingForValue(this.rawValue, modelBinding, modelBinding.getBindingExpression(), this.getOptionalFormatter());
                 this.validConversion = true;
             } catch (FhBindingException cfe) {
-                if (cfe.getCause() instanceof ConversionFailedException || cfe.getCause() instanceof ParseException) {
+                if (cfe.getCause() instanceof ConversionFailedException || cfe.getCause() instanceof ParseException || cfe.getCause() instanceof DateTimeParseException) {
                     this.validConversion = false;
                     processCoversionException(cfe);
                 }
