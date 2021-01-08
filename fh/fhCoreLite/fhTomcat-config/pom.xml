@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>pl.fhframework</groupId>
   <artifactId>fhTomcat-config</artifactId>
-  <version>4.6.21</version>
+  <version>4.6.23</version>
   <packaging>jar</packaging>
   <url>https://github.com/assecopl/fh</url>
   <name>fhTomcat-config</name>
@@ -10,7 +10,7 @@
   <parent>
     <groupId>pl.fhframework</groupId>
     <artifactId>fhCoreLite</artifactId>
-    <version>4.6.21</version>
+    <version>4.6.23</version>
   </parent>
   <dependencies>
     <dependency>

@@ -126,7 +126,6 @@ class Table extends TableWithKeyboardEvents {
         }
 
         this.addStyles();
-        this.display();
 
         if (this.componentObj.columns) {
             this.totalColumns = this.componentObj.columns.length;
@@ -592,13 +591,14 @@ class Table extends TableWithKeyboardEvents {
         return this._dataWrapper;
     }
 
-    render() {
-        super.render();
+    display() {
+        super.display();
+
+        this.updateFixedHeaderWidth();
         if (!this.onRowClick || this.onRowClick === '-') {
             //Show highlighted record after showing table again , Works only with animate set to true.
             this.highlightSelectedRows(true);
         }
-        this.initExtends();
     }
 
     protected getAllComponents() {

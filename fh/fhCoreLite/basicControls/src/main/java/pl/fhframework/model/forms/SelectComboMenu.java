@@ -260,9 +260,12 @@ public class SelectComboMenu extends BaseInputFieldWithKeySupport {
             changeSelectedItemBinding();
             this.rawValue = (selectedItem != null) ? toRawValue(selectedItem) : null;
             this.filterText = rawValue != null ? rawValue : "";
-            processFiltering(this.filterText);
             if(this.selectedItemIndex == 0){
                 highlightNullValue = true;
+            }
+            else {
+                this.highlightedObjectValue = selectedItem;
+                filterInvoked = true;
             }
 
         } else {

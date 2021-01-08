@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Created by krzysztof.kobylarek on 2016-12-01.
@@ -36,11 +37,17 @@ public class ComponentsUtils {
             return component;
         } else if (component instanceof IGroupingComponent) {
             IGroupingComponent<? extends Component> groupingComponent = (IGroupingComponent) component;
-            for (Component _component : groupingComponent.getSubcomponents()) {
+
+            List<? extends Component> subelements = groupingComponent.getSubcomponents();
+            if (component instanceof IRepeatable) {
+                subelements = ((IRepeatable)component).getBindedSubcomponents().stream().map(IterationContext::getComponent).collect(Collectors.toList());
+            }
+
+            for (Component _component : subelements) {
                 if (FormElement.class.isInstance(_component) && id.equals(_component.getId()))
                     return (FormElement) _component;
             }
-            for (Component _component : groupingComponent.getSubcomponents()) {
+            for (Component _component : subelements) {
                 if (FormElement.class.isInstance(_component)) {
                     FormElement c = find((FormElement) _component, id);
                     if (c != null)

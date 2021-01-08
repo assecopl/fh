@@ -31,8 +31,8 @@ class TableRow extends HTMLFormComponent {
         if (this.onRowClickEvent) {
             // @ts-ignore
             this.component.style.cursor = 'pointer';
-            this.htmlElement.addEventListener('click', function () {
-                this.onRowClickEvent();
+            this.htmlElement.addEventListener('click', function (e) {
+                this.onRowClickEvent(e);
                 this.highlightRow();
             }.bind(this));
         }

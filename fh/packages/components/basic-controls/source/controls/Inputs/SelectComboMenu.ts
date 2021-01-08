@@ -516,7 +516,7 @@ class SelectComboMenu extends InputText {
         }
 
         let parent: JQuery<any> = null;
-        const sumHeight = bounding.height + this.inputGroupElement.offsetHeight + 30; //Height of autocompleter and input.
+        const sumHeight = bounding.height + this.inputGroupElement.offsetHeight + 10; //Height of autocompleter and input.
 
         if (formType === 'STANDARD') {
             parent = $(this.component).closest('.panel,.splitContainer,.hasHeight');
@@ -527,7 +527,7 @@ class SelectComboMenu extends InputText {
                 const parentBound = parent[0].getBoundingClientRect();
 
                 //Chcek if autocompleter i bigger ten parent fixed container so it will be open nex to it to prevent disapering.
-                const biggerThenParent = (parentBound.height <= sumHeight);
+                const biggerThenParent = (parentBound.height - (bounding.top - parentBound.top) <= sumHeight);
                 const completerYmaks = bounding.height + bounding.top;
                 const parentYmaks = parentBound.top + parentBound.height;
                 //Put it as sibling of parent becouse parent has height and elements inside it wont overflow it. Close it when parent begins to scroll.

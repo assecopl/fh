@@ -90,8 +90,14 @@ class Tab extends HTMLFormComponent {
     activate = function () {
         if (!this.isRendered) {
             $(this.navElement).find('a').one('shown.bs.tab', function () {
-                while (this.contentWrapper.firstChild) this.contentWrapper.removeChild(this.contentWrapper.firstChild);
-                this.renderSubcomponents();
+                let renderSubcomponents = function (component) {
+                    component.render();
+                    component.display();
+
+                    component.components.forEach(renderSubcomponents);
+                };
+
+                this.components.forEach(renderSubcomponents);
 
                 this.isRendered = true;
             }.bind(this));
@@ -137,7 +143,6 @@ class Tab extends HTMLFormComponent {
     }
 
     focusCurrentComponent(deferred, options) {
-        console.warn(arguments);
         let tabContainer = this.component.parentNode;
         // if (tabContainer.scrollHeight > tabContainer.offsetHeight) {
         options.scrollableElement = tabContainer;

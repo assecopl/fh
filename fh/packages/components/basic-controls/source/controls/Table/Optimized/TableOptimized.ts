@@ -104,12 +104,9 @@ class TableOptimized extends TableWithKeyboardEvents {
             this.addComponents(this.componentObj.columns);
         }
 
-        this.refreshData();
-
-
         this.display();
         this.initExtends();
-
+        this.refreshData();
     };
 
     toInt = function (stringOrInt) {
@@ -178,7 +175,9 @@ class TableOptimized extends TableWithKeyboardEvents {
                 onRowClickEvent: null
             };
             if (this.selectable && this.onRowClick) {
-                rowData.onRowClickEvent = this.onRowClickEvent.bind(this, index)
+                rowData.onRowClickEvent = function (e) {
+                    this.onRowClickEvent(e, index)
+                }.bind(this)
             }
 
             this.addRow(rowData, index);
@@ -219,7 +218,9 @@ class TableOptimized extends TableWithKeyboardEvents {
         row._parent = null;
         row.contentWrapper = null;
         row.container = null;
-        row.htmlElement.removeEventListener('click', this.onRowClickEvent.bind(this));
+        row.htmlElement.addEventListener('click', function (e) {
+            this.onRowClickEvent(e, row.mainId)
+        }.bind(this));
 
         $(row.htmlElement).unbind().remove();
         row.htmlElement = null;
@@ -254,9 +255,8 @@ class TableOptimized extends TableWithKeyboardEvents {
                 };
                 this.addRow(rowData, i);
                 let row = this.rows[i];
-                row.htmlElement.style.pointerEvents = 'none';
-                row.htmlElement.classList.add('emptyRow');
-                row.htmlElement.style.backgroundColor = null;
+                row.isEmpty = true;
+
             }
             this.recalculateGripHeight();
         }
@@ -316,9 +316,10 @@ class TableOptimized extends TableWithKeyboardEvents {
          * Oddelegowanie następuje tylko dla pierwszego renderowania tabeli.
          * Przy aktualizacji rekordy dodawane są od razu.
          */
-        if (this.startSize && index > this.startSize && !this.firstShow) {
+        // if (this.startSize && index > this.startSize && !this.firstShow) {
           const timeOutId =   setTimeout(function (row, callback, updateFixedHeaderWidth) {
                 row.create();
+                row.display();
                 updateFixedHeaderWidth();
                 if (callback) {
                     callback();
@@ -327,19 +328,18 @@ class TableOptimized extends TableWithKeyboardEvents {
                 this.timeoutedRows.delete(row.id);
             }.bind(this), (100 * (index)), row, func, this.updateFixedHeaderWidth.bind(this));
             this.timeoutedRows.set(row.id, timeOutId);
-        } else {
-            row.create();
-        }
+        // } else {
+        //     row.create();
+        //     row.display();
+        // }
     };
 
 
-    onRowClickEvent(index) {
+    onRowClickEvent(event, mainId, silent = false) {
         if (this.accessibility != 'EDIT') return;
 
-        let mainId = index;
-
         if (this.multiselect == false) {
-            if (this.ctrlIsPressed) {
+            if (event.ctrlKey) {
                 if (this.rawValue.indexOf(mainId) !== -1) {
                     this.rawValue = [];
                     this.rawValue.push(-1);
@@ -349,8 +349,9 @@ class TableOptimized extends TableWithKeyboardEvents {
                 this.rawValue.push(mainId);
             }
         } else {
-            if (this.ctrlIsPressed) {
+            if (event.ctrlKey) {
                 this.selectRow(mainId);
+
             } else {
                 this.rawValue = [];
                 this.rawValue.push(mainId);
@@ -370,6 +371,7 @@ class TableOptimized extends TableWithKeyboardEvents {
         let index = this.rawValue.indexOf(parseInt(mainId));
         if (index == -1) {
             this.rawValue.push(mainId);
+            this.rawValue.sort();
         } else if (index != -1) {
             this.rawValue.splice(index, 1);
             this.rawValue.filter(idx => idx > -1);
@@ -378,6 +380,8 @@ class TableOptimized extends TableWithKeyboardEvents {
             }
         }
     };
+
+
 
     redrawColumns() {
         this.calculateColumnWidths();

@@ -25,8 +25,8 @@ class TableRowOptimized extends TableRow {
         if (this.onRowClickEvent) {
             // @ts-ignore
             this.component.style.cursor = 'pointer';
-            this.htmlElement.addEventListener('click', function () {
-                this.onRowClickEvent();
+            this.htmlElement.addEventListener('click', function (e) {
+                this.onRowClickEvent(e);
                 this.highlightRow();
             }.bind(this));
         }
@@ -34,20 +34,21 @@ class TableRowOptimized extends TableRow {
         if (this.componentObj.data) {
             this.addComponents(this.componentObj.data);
         }
-        this.highlightRow();
-        this.display();
-
     };
 
     addComponent(componentObj) {
         super.addComponent(componentObj, 'TableCellOptimized');
     };
-    /**
-     * @Override
-     * @param accessibility
-     */
+
     public display(): void {
         super.display();
+        this.highlightRow();
+
+        if (this.isEmpty) {
+            this.htmlElement.style.pointerEvents = 'none';
+            this.htmlElement.classList.add('emptyRow');
+            this.htmlElement.style.backgroundColor = null;
+        }
     }
 }
 

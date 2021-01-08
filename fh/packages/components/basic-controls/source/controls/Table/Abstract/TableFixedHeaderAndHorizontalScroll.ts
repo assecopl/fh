@@ -176,7 +176,7 @@ abstract class TableFixedHeaderAndHorizontalScroll extends HTMLFormComponent {
                 table.classList.add('clonedTableHeader');
                 table.id = table.id + "_clone";
                 table.style.cssText += "background:white;margin-bottom:0px;";
-                outter.style.cssText = "position:absolute;top:0px;left:0px;width:calc(" + outterWidth + " - " + this.scrollbarWidth + "px);overflow:hidden";
+                outter.style.cssText = "position:absolute;top:0px;left:0px;z-index:4;width:calc(" + outterWidth + " - " + this.scrollbarWidth + "px);overflow:hidden";
                 //append main table header into cloned table.
                 table.appendChild(this.header);
 

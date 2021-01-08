@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>pl.fhframework</groupId>
   <artifactId>coreLite</artifactId>
-  <version>4.6.21</version>
+  <version>4.6.23</version>
   <packaging>jar</packaging>
   <url>https://github.com/assecopl/fh</url>
   <name>CoreLite</name>
@@ -10,7 +10,7 @@
   <parent>
     <groupId>pl.fhframework</groupId>
     <artifactId>fhCoreLite</artifactId>
-    <version>4.6.21</version>
+    <version>4.6.23</version>
   </parent>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -24,12 +24,12 @@
     <dependency>
       <groupId>pl.fhframework.aspects</groupId>
       <artifactId>fhAspects</artifactId>
-      <version>4.6.21</version>
+      <version>4.6.23</version>
     </dependency>
     <dependency>
       <groupId>pl.fhframework.commons</groupId>
       <artifactId>fhCommons</artifactId>
-      <version>4.6.21</version>
+      <version>4.6.23</version>
     </dependency>
     <dependency>
       <groupId>commons-io</groupId>

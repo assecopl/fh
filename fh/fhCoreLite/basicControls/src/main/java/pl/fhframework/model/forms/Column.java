@@ -358,6 +358,7 @@ public class Column extends GroupingComponent<FormElement> implements CompactLay
         tableCell.setRowspan(1);
         tableCell.setProcessComponentStateChange(false);
         tableCell.setGroupingParentComponent(this);
+        tableCell.init();
 
         for (FormElement prototypeCellComponent : prototype.getSubcomponents()) {
             getForm().addToElementIdToFormElement(prototypeCellComponent);
