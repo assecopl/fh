@@ -2,6 +2,7 @@ import 'bootstrap/js/dist/tab';
 import {HTMLFormComponent} from "fh-forms-handler";
 import {AdditionalButton} from "fh-forms-handler";
 import {TabContainer} from "./TabContainer";
+import {Repeater} from "../Repeater";
 
 class Tab extends HTMLFormComponent {
     private navElement: any;
@@ -90,9 +91,12 @@ class Tab extends HTMLFormComponent {
     activate = function () {
         if (!this.isRendered) {
             $(this.navElement).find('a').one('shown.bs.tab', function () {
+                while (this.contentWrapper.firstChild) this.contentWrapper.removeChild(this.contentWrapper.firstChild);
+                this.renderSubcomponents();
                 let renderSubcomponents = function (component) {
-                    component.render();
-                    component.display();
+                    if (!(component instanceof Repeater)) {
+                        component.display();
+                    }
 
                     component.components.forEach(renderSubcomponents);
                 };

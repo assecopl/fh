@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>permissionProvider-standalone</artifactId>
   <groupId>pl.fhframework.core.security.permission</groupId>
-  <version>4.6.23</version>
+  <version>4.6.24</version>
   <packaging>jar</packaging>
   <url>https://github.com/assecopl/fh</url>
   <name>permissionProvider-standalone</name>
@@ -10,7 +10,7 @@
   <parent>
     <groupId>pl.fhframework</groupId>
     <artifactId>fhCoreLite</artifactId>
-    <version>4.6.23</version>
+    <version>4.6.24</version>
   </parent>
   <dependencies>
     <dependency>

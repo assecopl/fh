@@ -193,8 +193,9 @@ class TableOptimized extends TableWithKeyboardEvents {
     }
 
     public display() {
-        this.addStyles();
         super.display();
+        this.addStyles();
+        this.updateFixedHeaderWidth();
     }
 
     /**

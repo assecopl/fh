@@ -516,7 +516,7 @@ class SelectComboMenu extends InputText {
         }
 
         let parent: JQuery<any> = null;
-        const sumHeight = bounding.height + this.inputGroupElement.offsetHeight + 10; //Height of autocompleter and input.
+        const sumHeight = bounding.height + this.inputGroupElement.offsetHeight + 20; //Height of autocompleter and input.
 
         if (formType === 'STANDARD') {
             parent = $(this.component).closest('.panel,.splitContainer,.hasHeight');
@@ -527,15 +527,18 @@ class SelectComboMenu extends InputText {
                 const parentBound = parent[0].getBoundingClientRect();
 
                 //Chcek if autocompleter i bigger ten parent fixed container so it will be open nex to it to prevent disapering.
-                const biggerThenParent = (parentBound.height - (bounding.top - parentBound.top) <= sumHeight);
-                const completerYmaks = bounding.height + bounding.top;
-                const parentYmaks = parentBound.top + parentBound.height;
+                const biggerThenParent = (parentBound.height <= sumHeight);
+                const placeUnder = (parentBound.height - (bounding.top - parentBound.top) > sumHeight) ;
+                const placeAbove = (parentBound.height - (bounding.bottom - parentBound.bottom) > sumHeight) ;
                 //Put it as sibling of parent becouse parent has height and elements inside it wont overflow it. Close it when parent begins to scroll.
-                if (biggerThenParent) {
-                    this.handleContainerOverflow($("body"), this.autocompleter, (completerYmaks > parentYmaks));
+                if (biggerThenParent || (!placeAbove && ! placeUnder)) {
+                    this.handleContainerOverflow($("body"), this.autocompleter, false);
                     parent.on("scroll", this.closeAutocomplete.bind(this));
+                    $(window).on("scroll", this.closeAutocomplete.bind(this));
+                    //Reaclculate position - maybe it will be used.
+                    // $(window).on("scroll", this.handleContainerOverflow.bind(this,$("body"), this.autocompleter, false));
                 } else {
-                    (completerYmaks > parentYmaks) ? this.inputGroupElement.classList.add("dropup") : "";
+                    (!placeUnder) ? this.inputGroupElement.classList.add("dropup") : "";
                 }
             } else if (bottomOverlap > 20) {
                 this.inputGroupElement.classList.add("dropup");
@@ -546,6 +549,8 @@ class SelectComboMenu extends InputText {
         } else if (formType === 'MODAL' || formType === 'MODAL_OVERFLOW') {
             parent = $(this.component).closest('.modal-content');
             this.handleContainerOverflow(parent, this.autocompleter);
+            parent.on("scroll",  this.closeAutocomplete.bind(this));
+            $(window).on("scroll",  this.closeAutocomplete.bind(this));
         } else {
             console.error('Parent not defined.');
             return;

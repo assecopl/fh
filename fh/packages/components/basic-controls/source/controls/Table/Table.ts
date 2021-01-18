@@ -126,6 +126,7 @@ class Table extends TableWithKeyboardEvents {
         }
 
         this.addStyles();
+        // this.display();
 
         if (this.componentObj.columns) {
             this.totalColumns = this.componentObj.columns.length;
@@ -148,6 +149,12 @@ class Table extends TableWithKeyboardEvents {
         }
 
         this.refreshData();
+    }
+
+    display() {
+        super.display();
+        this.updateFixedHeaderWidth();
+        this.highlightSelectedRows(true);
     }
 
     update(change) {
@@ -591,14 +598,13 @@ class Table extends TableWithKeyboardEvents {
         return this._dataWrapper;
     }
 
-    display() {
-        super.display();
-
-        this.updateFixedHeaderWidth();
+    render() {
+        super.render();
         if (!this.onRowClick || this.onRowClick === '-') {
             //Show highlighted record after showing table again , Works only with animate set to true.
             this.highlightSelectedRows(true);
         }
+        this.initExtends();
     }
 
     protected getAllComponents() {
