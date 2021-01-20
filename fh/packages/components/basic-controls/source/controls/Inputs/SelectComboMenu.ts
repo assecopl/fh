@@ -522,23 +522,26 @@ class SelectComboMenu extends InputText {
             parent = $(this.component).closest('.panel,.splitContainer,.hasHeight');
 
 
+
             //If autocompleter is about to open in container with fixed height we change it's open direction. Direction will be UP.
             if (parent.hasClass('hasHeight')) {
                 const parentBound = parent[0].getBoundingClientRect();
+                const inputBounding = this.inputGroupElement.getBoundingClientRect();
 
                 //Chcek if autocompleter i bigger ten parent fixed container so it will be open nex to it to prevent disapering.
                 const biggerThenParent = (parentBound.height <= sumHeight);
-                const placeUnder = (parentBound.height - (bounding.top - parentBound.top) > sumHeight) ;
-                const placeAbove = (parentBound.height - (bounding.bottom - parentBound.bottom) > sumHeight) ;
+                const placeUnder = (parentBound.height - (inputBounding.bottom - parentBound.top) > sumHeight) ;
+                const placeAbove =  (inputBounding.top - parentBound.top > sumHeight) ;
                 //Put it as sibling of parent becouse parent has height and elements inside it wont overflow it. Close it when parent begins to scroll.
                 if (biggerThenParent || (!placeAbove && ! placeUnder)) {
                     this.handleContainerOverflow($("body"), this.autocompleter, false);
-                    parent.on("scroll", this.closeAutocomplete.bind(this));
-                    $(window).on("scroll", this.closeAutocomplete.bind(this));
+                    //React to all scrollable elements and hide absolute autocompleter.
+                    document.addEventListener('scroll', this.closeAutocomplete.bind(this), true)
                     //Reaclculate position - maybe it will be used.
-                    // $(window).on("scroll", this.handleContainerOverflow.bind(this,$("body"), this.autocompleter, false));
+                    // document.addEventListener('scroll', this.handleContainerOverflow.bind(this,$("body"), this.autocompleter, false), true);
                 } else {
                     (!placeUnder) ? this.inputGroupElement.classList.add("dropup") : "";
+                    $(parent).on("scroll", this.closeAutocomplete.bind(this));
                 }
             } else if (bottomOverlap > 20) {
                 this.inputGroupElement.classList.add("dropup");
@@ -549,8 +552,10 @@ class SelectComboMenu extends InputText {
         } else if (formType === 'MODAL' || formType === 'MODAL_OVERFLOW') {
             parent = $(this.component).closest('.modal-content');
             this.handleContainerOverflow(parent, this.autocompleter);
-            parent.on("scroll",  this.closeAutocomplete.bind(this));
-            $(window).on("scroll",  this.closeAutocomplete.bind(this));
+            document.addEventListener('scroll', this.closeAutocomplete.bind(this), true);
+            //Reaclculate position - maybe it will be used.
+            // document.addEventListener('scroll', this.handleContainerOverflow.bind(this,$("body"), this.autocompleter, false), true);
+
         } else {
             console.error('Parent not defined.');
             return;
@@ -573,8 +578,10 @@ class SelectComboMenu extends InputText {
         this.autocompleter.style.setProperty('left', '', null);
         this.autocompleter.style.setProperty('top', '', null);
 
+
         let parent = null;
         if (formType === 'STANDARD') {
+            document.removeEventListener('scroll', this.closeAutocomplete.bind(this), true);
             parent = $(this.component).closest('.panel');
 
             if (!this.inputGroupElement.contains(this.autocompleter)) {
@@ -588,6 +595,7 @@ class SelectComboMenu extends InputText {
             if (!this.inputGroupElement.contains(this.autocompleter)) {
                 this.inputGroupElement.appendChild(this.autocompleter);
             }
+            document.removeEventListener('scroll', this.closeAutocomplete.bind(this), true);
         } else {
             console.error('Parent not defined.');
             return;

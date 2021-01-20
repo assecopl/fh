@@ -187,6 +187,10 @@ class Tab extends HTMLFormComponent {
 
     // noinspection JSUnusedGlobalSymbols
     setPresentationStyle(presentationStyle) {
+        if(presentationStyle === undefined){
+            return;
+        }
+
         let nestedTabs = this.parent.parent.componentObj.type === 'Tab' ? true : false;
         ['border', 'border-success', 'border-info', 'border-warning', 'border-danger', 'is-invalid'].forEach(function (cssClass) {
             this.navElement.classList.remove(cssClass);
