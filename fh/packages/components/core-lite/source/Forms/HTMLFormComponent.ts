@@ -1,4 +1,5 @@
 import 'bootstrap/js/dist/tooltip';
+import 'bootstrap/js/dist/popover';
 import {FormComponent} from './FormComponent';
 import {FhContainer} from '../FhContainer';
 import getDecorators from 'inversify-inject-decorators';
@@ -6,6 +7,7 @@ import {I18n} from '../I18n/I18n';
 import {FHML} from '../FHML';
 import {AdditionalButton} from './AdditionalButton';
 import * as $ from 'jquery';
+import {Placement, PopoverOption, TooltipOption, Trigger} from "bootstrap";
 
 let {lazyInject} = getDecorators(FhContainer);
 
@@ -37,9 +39,12 @@ abstract class HTMLFormComponent extends FormComponent {
     protected readonly wrapperStyle: string;
     private readonly language: any;
     protected hint: any;
-    protected hintPlacement: string;
-    protected hintTrigger: string;
-    public hintType: 'STANDARD' | 'STATIC' = 'STANDARD';
+    public hintTitle: string = "";
+    public hintAriaLabel: string = null;
+    protected hintIcon: string = null;
+    protected hintPlacement: Placement;
+    protected hintTrigger: Trigger;
+    public hintType: 'STANDARD' | 'STANDARD_POPOVER' | 'STATIC' | 'STATIC_POPOVER' | 'STATIC_POPOVER_LEFT' | 'STATIC_LEFT' = 'STANDARD';
     public hintInputGroup: boolean = false;
     protected hintInitialized: boolean = false;
     public rawValue: any;
@@ -106,6 +111,8 @@ abstract class HTMLFormComponent extends FormComponent {
 
         this.hint = this.componentObj.hint || null;
         this.hintPlacement = this.componentObj.hintPlacement || 'auto';
+        this.hintIcon = this.componentObj.hintIcon || null;
+        this.hintAriaLabel = this.componentObj.hintAriaLabel || null;
         if (this.componentObj.hintTrigger) {
             switch (this.componentObj.hintTrigger) {
                 case 'HOVER_FOCUS':
@@ -138,6 +145,9 @@ abstract class HTMLFormComponent extends FormComponent {
         this.translationItems = [];
 
         this.labelElement = null;
+
+
+        this.hintTitle = this.componentObj.hintTitle ? this.fhml.parse(this.componentObj.hintTitle) : this.fhml.parse(this.componentObj.label)
     }
 
     /* Create component and assign it's HTML to this.htmlElement */
@@ -269,7 +279,11 @@ abstract class HTMLFormComponent extends FormComponent {
 
     hideHint() {
         if (this.hintElement) {
-            $(this.hintElement).tooltip('hide');
+            if (this.hintType == 'STANDARD_POPOVER' || this.hintType == 'STATIC_POPOVER' || this.hintType == 'STATIC_POPOVER_LEFT') {
+                $(this.hintElement).popover('hide');
+            } else {
+                $(this.hintElement).tooltip('hide');
+            }
 
             if (this.hintType === 'STATIC') {
                 let tip = $(this.hintElement).attr('aria-describedby');
@@ -284,15 +298,16 @@ abstract class HTMLFormComponent extends FormComponent {
 
     initHint() {
         if (this.hintElement && !this.hintInitialized && this.hint) {
-            let tooltipOptions: any = {
+            let tooltipOptions: TooltipOption = {
                 placement: this.hintPlacement,
                 title: this.hint,
                 trigger: this.hintTrigger,
                 html: true,
                 boundary: 'window'
+                // selector: '#'+this.id
             };
 
-            if (this.hintType == 'STATIC') {
+            if (this.hintType == 'STATIC' || this.hintType == 'STATIC_POPOVER' || this.hintType == 'STATIC_LEFT' || this.hintType == 'STATIC_POPOVER_LEFT') {
 
                 if (tooltipOptions.placement == 'auto') {
                     tooltipOptions.placement = 'top';
@@ -301,38 +316,97 @@ abstract class HTMLFormComponent extends FormComponent {
                 //Change tooltip trigger to click
                 tooltipOptions.trigger = 'click';
                 //Create tooltip element
-                const ttip = document.createElement('i');
-                ttip.className = 'hint-ico-help fa';
-                ttip.setAttribute('aria-hidden', 'true');
+                const ttip = document.createElement('button');
+                ttip.className = 'btn hint-ico-help fa';
+
+                if(this.hintAriaLabel) {
+                    ttip.setAttribute('aria-label', this.hintAriaLabel);
+                } else {
+                    ttip.setAttribute('aria-haspopup', 'true');
+                }
                 this.hintElement = ttip;
                 if (this.inputGroupElement && this.hintInputGroup) {
                     let ttipButton = document.createElement('div');
                     this.inputGroupElement.classList.add('hint-static');
-                    let span = document.createElement('span');
-                    span.classList.add('input-group-text');
-                    span.appendChild(ttip);
-                    ttip.classList.add('fa-question');
-                    ttipButton.appendChild(span);
+
+                    if(this.hintIcon){
+                        this.hintIcon.toString().split(" ").forEach(value => {
+                            const c = value.trim();
+                             ttip.classList.add(c);
+                        })
+                    } else {
+                        ttip.classList.add('fa-question');
+                    }
+                    ttip.classList.add("input-group-text");
 
                     this.htmlElement.classList.add('hasInputHelpIcon');
 
-                    this.hintElement = ttipButton;
-                    ttipButton.classList.add('input-group-append');
-                    this.inputGroupElement.appendChild(ttipButton);
+                    this.hintElement = ttip;
+                    ttip.classList.add('input-group-append');
+                    this.inputGroupElement.appendChild(ttip);
                 } else {
+                    // p-0 px-1 border-0
+                    ttip.classList.add("border-0");
+                    ttip.classList.add("px-1");
+                    ttip.classList.add("p-0");
                     /**
                      * Change typical behaviour by overwrite this function in component.
                      */
-                    ttip.classList.add('fa-question-circle');
-                    ttip.classList.add('pl-2');
+                    if(this.hintIcon){
+                        this.hintIcon.toString().split(" ").forEach(value => {
+                            const c = value.trim();
+                            ttip.classList.add(c);
+                        })
+                    } else {
+                        ttip.classList.add('fa-question');
+                    }
+
                     const element = this.processStaticHintElement(ttip);
                     element ? element.classList.add('hint-static') : null;
                 }
+
+
+            }
+
+            if (this.hintType == 'STANDARD' || this.hintType == 'STATIC' || this.hintType == 'STATIC_LEFT') {
+                $(this.hintElement).tooltip(tooltipOptions);
+                this.hintElement.classList.add("fh-tooltip");
+                this.hintInitialized = true;
+            }
+            if (this.hintType == 'STANDARD_POPOVER' || this.hintType == 'STATIC_POPOVER' || this.hintType == 'STATIC_POPOVER_LEFT') {
+                const popOptions: PopoverOption = tooltipOptions;
+                popOptions.content = tooltipOptions.title;
+                popOptions.title = this.hintTitle ? this.hintTitle : "";
+
+                //Add close buuton to static popovers
+                if (this.hintType != "STANDARD_POPOVER") {
+                    popOptions.title += '<i class="close popoverer-close fa fa-times pull-right" />'
+                }
+
+                $(this.hintElement).popover(popOptions);
+                this.hintElement.classList.add("fh-popover");
+
+                //Add close buuton logic to static popovers
+                if (this.hintType != "STANDARD_POPOVER") {
+                    $(this.hintElement).on('shown.bs.popover', function () {
+                        // console.log("id", this.id );
+                        // console.log("poper", $(this.hintElement).data('bs.popover') );
+                        const popover = $(this.hintElement).data('bs.popover');
+                        if (typeof popover !== "undefined") {
+                            const tip = popover.tip;
+                            const close = $(tip).find('.close')
+                            close.css("cursor", "pointer");
+                            close.bind('click', function () {
+                                popover.hide();
+                            });
+
+                        }
+                    }.bind(this));
+                }
+                this.hintInitialized = true;
             }
 
 
-            $(this.hintElement).tooltip(tooltipOptions);
-            this.hintInitialized = true;
         }
     }
 
@@ -342,7 +416,13 @@ abstract class HTMLFormComponent extends FormComponent {
      */
     public processStaticHintElement(ttip: any): HTMLElement {
         if (this.labelElement && !this.labelElement.classList.contains('sr-only')) {
-            this.labelElement.appendChild(ttip);
+            if (this.hintType == "STATIC_LEFT" || this.hintType == 'STATIC_POPOVER_LEFT') {
+                ttip.classList.add('mr-1');
+                $(this.labelElement).prepend(ttip);
+            } else {
+                ttip.classList.add('ml-2');
+                this.labelElement.appendChild(ttip);
+            }
             return this.labelElement;
         } else {
             return null;
@@ -352,7 +432,7 @@ abstract class HTMLFormComponent extends FormComponent {
 
     destroyHint() {
         if (this.hintElement && this.hintInitialized) {
-            if (this.hintType === 'STATIC') {
+            if (this.hintType === 'STATIC' || this.hintType === 'STATIC_LEFT') {
                 let tip = $(this.hintElement).attr('aria-describedby');
                 let tipElement = $('#' + tip);
                 if (tipElement) {
@@ -361,10 +441,16 @@ abstract class HTMLFormComponent extends FormComponent {
                     tipElement.tooltip('dispose');
                 }
             }
+            if (this.hintType == 'STANDARD_POPOVER' || this.hintType == 'STATIC_POPOVER' || this.hintType == 'STATIC_POPOVER_LEFT') {
+                $(this.hintElement).popover('hide');
+                $(this.hintElement).popover('disable');
+                $(this.hintElement).popover('dispose');
+            }else {
+                $(this.hintElement).tooltip('hide');
+                $(this.hintElement).tooltip('disable');
+                $(this.hintElement).tooltip('dispose');
+            }
 
-            $(this.hintElement).tooltip('hide');
-            $(this.hintElement).tooltip('disable');
-            $(this.hintElement).tooltip('dispose');
 
             this.hintInitialized = false;
         }
@@ -1317,6 +1403,24 @@ abstract class HTMLFormComponent extends FormComponent {
     protected processHtmlAccessibilityRole(value: string = this.htmlAccessibilityRole) {
         if (this.htmlAccessibilityRole) {
             this.component.setAttribute('role', value);
+        }
+    }
+
+    /**
+     * Function that close all bootstrap hints inside component based on css class
+     */
+    public hideAllHints(){
+        if(this.component) {
+            $(this.component).find(".fh-tooltip").each(function( index ) {
+                try {
+                    $(this).tooltip('hide');
+                }catch (e) {}
+            });
+            $(this.component).find(".fh-popover").each(function( index ) {
+                try {
+                    $(this).popover('hide');
+                }catch (e) {}
+            })
         }
     }
 

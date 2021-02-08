@@ -110,6 +110,8 @@ public class BarChart extends Chart {
         for (ChartSeries chartSeries : valuesList) {
             ChartSeries series = new ChartSeries();
             series.setLabel(chartSeries.getLabel());
+            series.setType(chartSeries.getType());
+            series.setFill(chartSeries.isFill());
             series.setData(new LinkedHashMap<>(chartSeries.getData()));
             barChartModel.addSeries(series);
         }

@@ -21,10 +21,10 @@ class BarChart extends HTMLFormComponent {
     }
 
     create() {
-        var container = document.createElement('div');
+        let container = document.createElement('div');
         container.id = this.id;
 
-        var canvas = document.createElement('canvas');
+        let canvas = document.createElement('canvas');
         this.canvas = canvas;
 
         container.appendChild(canvas);
@@ -39,8 +39,8 @@ class BarChart extends HTMLFormComponent {
     };
 
     update(change) {
-        var xAxis = this.chart.options.scales.xAxes[0];
-        var yAxis = this.chart.options.scales.yAxes[0];
+        let xAxis = this.chart.options.scales.xAxes[0];
+        let yAxis = this.chart.options.scales.yAxes[0];
         $.each(change.changedAttributes, function (name, newValue) {
             switch (name) {
                 case 'title':
@@ -66,7 +66,7 @@ class BarChart extends HTMLFormComponent {
                 case 'values':
                     if (newValue) {
                         this.series = newValue;
-                        var newDatasets = this.convertData(this.series);
+                        let newDatasets = this.convertData(this.series);
                         newDatasets.forEach(function (set, setId) {
                             set.data.forEach(function (item, itemId) {
                                 this.chart.data.datasets[setId].data[itemId] = item;
@@ -76,7 +76,7 @@ class BarChart extends HTMLFormComponent {
                     }
                     break;
                 case 'colors':
-                    var datasets = this.chart.data.datasets;
+                    let datasets = this.chart.data.datasets;
                     datasets.forEach(function (set, index) {
                         if (newValue[index]) {
                             set.backgroundColor = newValue[index];
@@ -94,11 +94,11 @@ class BarChart extends HTMLFormComponent {
     };
 
     displayChart() {
-        var ctx = this.canvas;
+        let ctx = this.canvas;
 
-        var datasets = this.convertData(this.series, this.colors);
-        var initialSeries = this.series[0];
-        var labels;
+        let datasets = this.convertData(this.series, this.colors);
+        let initialSeries = this.series[0];
+        let labels;
         if (initialSeries) {
             labels = Object.keys(initialSeries.data);
         }
@@ -139,21 +139,23 @@ class BarChart extends HTMLFormComponent {
     };
 
     convertData(allSeries, colors) {
-        var datasets = [];
+        let datasets = [];
         colors = colors || [];
         allSeries.forEach(function (series, index) {
-            var data = [];
+            let data = [];
             series.color = colors[index];
-            for (var value in series.data) {
+            for (let value in series.data) {
                 if (series.data.hasOwnProperty(value)) {
                     data.push(series.data[value]);
                 }
             }
-            var dataset = {
+            let dataset = {
                 data: data,
+                type: series.type,
                 label: series.label,
+                fill: series.fill,
                 backgroundColor: series.color || this.dynamicColors(),
-                borderWidth: 0
+                borderColor: series.color || this.dynamicColors()
             };
             datasets.push(dataset);
         }.bind(this));
@@ -162,17 +164,17 @@ class BarChart extends HTMLFormComponent {
     };
 
     poolColors(a) {
-        var pool = [];
-        for (var i = 0; i < a; i++) {
+        let pool = [];
+        for (let i = 0; i < a; i++) {
             pool.push(this.dynamicColors());
         }
         return pool;
     };
 
     dynamicColors() {
-        var r = Math.floor(Math.random() * 255);
-        var g = Math.floor(Math.random() * 255);
-        var b = Math.floor(Math.random() * 255);
+        let r = Math.floor(Math.random() * 255);
+        let g = Math.floor(Math.random() * 255);
+        let b = Math.floor(Math.random() * 255);
 
         return "rgb(" + r + "," + g + "," + b + ")";
     };

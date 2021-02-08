@@ -135,7 +135,17 @@ class TabContainer extends HTMLFormComponent {
     }
 
     activateTab(tabIndex) {
+        this.components.forEach((component, index) => {
+            if(index != tabIndex) {
+                // component.update({acce})
+            }
+        })
         if (this.components[tabIndex]) {
+            this.components.forEach((c:HTMLFormComponent, index) => {
+                if(index != tabIndex){
+                    c.hideAllHints();
+                }
+            })
             this.changesQueue.queueValueChange(tabIndex);
             if (this.onTabChange) {
                 this.fireEvent('onTabChange', this.onTabChange);

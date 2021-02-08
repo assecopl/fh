@@ -35,3 +35,8 @@
     pointer-events: none;
     outline: none;
 }
+
+button.input-group-append.btn {
+    border-bottom-left-radius: 0px;
+    border-top-left-radius: 0px;
+}

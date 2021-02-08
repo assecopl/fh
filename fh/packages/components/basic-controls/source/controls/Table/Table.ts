@@ -126,7 +126,8 @@ class Table extends TableWithKeyboardEvents {
         }
 
         this.addStyles();
-        // this.display();
+        //FIXME https://jira.asseco.pl/browse/PUSLUNA-510
+        this.display();
 
         if (this.componentObj.columns) {
             this.totalColumns = this.componentObj.columns.length;
@@ -154,7 +155,8 @@ class Table extends TableWithKeyboardEvents {
     display() {
         super.display();
         this.updateFixedHeaderWidth();
-        this.highlightSelectedRows(true);
+        //FIXME https://jira.asseco.pl/browse/PUSLUNA-510
+        // this.highlightSelectedRows(true);
     }
 
     update(change) {

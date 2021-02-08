@@ -8,6 +8,7 @@ import pl.fhframework.annotations.DesignerXMLProperty;
 import pl.fhframework.annotations.DocumentedComponentAttribute;
 import pl.fhframework.annotations.XMLProperty;
 import pl.fhframework.binding.ModelBinding;
+import pl.fhframework.configuration.FHConfiguration;
 import pl.fhframework.core.generator.ModelElement;
 import pl.fhframework.core.generator.ModelElementType;
 import pl.fhframework.core.logging.FhLogger;
@@ -34,6 +35,8 @@ public abstract class FormElement extends Component {
     private static final String PIXED_POSITIVE_REGEX = "([0-9]+)((px)?)";
     private static final String HINT_ATTR = "hint";
     private static final String HINT_PLACEMENT_ATTR = "hintPlacement";
+    private static final String HINT_TITLE_ATTR = "hintTitle";
+    private static final String HINT_ARIA_LABEL_ATTR = "hintAriaLabel";
     private static final String HINT_TRIGGER_ATTR = "hintTrigger";
     private static final String HINT_TYPE_ATTR = "hintType";
 
@@ -138,6 +141,55 @@ public abstract class FormElement extends Component {
     @DocumentedComponentAttribute(value = "Hint for component, visible after hovering over specified component part", boundable = true)
     private ModelBinding<String> hintBinding;
 
+
+    /**
+     * Hint for component
+     */
+    @Getter
+    @DesignerXMLProperty(functionalArea = LOOK_AND_STYLE, priority = 89)
+    private String hintTitle;
+
+    /**
+     * Placement of the hint for component
+     */
+    @JsonIgnore
+    @Getter
+    @Setter
+    @XMLProperty(value = HINT_TITLE_ATTR)
+    @DesignerXMLProperty(functionalArea = LOOK_AND_STYLE, priority = 89)
+    @DocumentedComponentAttribute(value = "Hint title for POPOVER hint types")
+    private ModelBinding<String> hintTitleBinding;
+
+
+    /**
+     * Hint for component
+     */
+    @Getter
+    @DesignerXMLProperty(functionalArea = LOOK_AND_STYLE, priority = 89)
+    private String hintAriaLabel;
+
+    /**
+     * Placement of the hint for component
+     */
+    @JsonIgnore
+    @Getter
+    @Setter
+    @XMLProperty(value = HINT_ARIA_LABEL_ATTR)
+    @DesignerXMLProperty(functionalArea = LOOK_AND_STYLE, priority = 89)
+    @DocumentedComponentAttribute(value = "WCAG: Define additonal description for hint icon that will be exposed to the accessibility API (Screen readers).")
+    private ModelBinding<String> hintAriaLabelBinding;
+
+    /**
+     * Style classes defined for component, separated by ',' character
+     */
+    @Getter
+    @Setter
+    @XMLProperty
+    @DesignerXMLProperty(functionalArea = LOOK_AND_STYLE, priority = 86)
+    @DocumentedComponentAttribute("Define icon for static hint presenation. Please refer to http://fontawesome.io/icons/ for all available icons. ")
+    private String hintIcon;
+
+
     /**
      * Placement of the hint for component
      */
@@ -164,10 +216,10 @@ public abstract class FormElement extends Component {
      */
     @Getter
     @Setter
-    @XMLProperty(value = HINT_TYPE_ATTR, defaultValue = "STANDARD")
+    @XMLProperty(value = HINT_TYPE_ATTR, required = false)
     @DesignerXMLProperty(functionalArea = LOOK_AND_STYLE, priority = 86)
-    @DocumentedComponentAttribute(defaultValue = "STANDARD", value = "Switches between stnadard presentation and static presentation. Static presentation makes hint appears after clikc on '?' icon. Icon will appear after label or as input group element")
-    private HintType hintType = HintType.STANDARD;
+    @DocumentedComponentAttribute(value = "Switches between stnadard presentation and static presentation. Static presentation makes hint appears after clikc on '?' icon. Icon will appear after label or as input group element")
+    private HintType hintType = null;
 
 
     /**
@@ -268,6 +320,10 @@ public abstract class FormElement extends Component {
         paddingRight = tryParseAttributeInPixelUnit(paddingRight, "paddingRight", true);
         paddingTop = tryParseAttributeInPixelUnit(paddingTop, "paddingTop", true);
         paddingBottom = tryParseAttributeInPixelUnit(paddingBottom, "paddingBottom", true);
+
+        if(this.hintType == null) {
+            this.hintType = FHConfiguration.getInstance() == null ? HintType.STANDARD : FHConfiguration.getInstance().getFormElementHintType();
+        }
     }
 
     /**
@@ -339,6 +395,14 @@ public abstract class FormElement extends Component {
 
         if (hintBinding != null) {
             hint = hintBinding.resolveValueAndAddChanges(this, elementChanges, hint, HINT_ATTR);
+        }
+
+        if (hintTitleBinding != null) {
+            hintTitle = hintTitleBinding.resolveValueAndAddChanges(this, elementChanges, hintTitle, HINT_TITLE_ATTR);
+        }
+
+        if (hintAriaLabelBinding != null) {
+            hintAriaLabel = hintAriaLabelBinding.resolveValueAndAddChanges(this, elementChanges, hintAriaLabel, HINT_ARIA_LABEL_ATTR);
         }
 
         IGroupingComponent parent = getGroupingParentComponent();

@@ -11,7 +11,7 @@ class TablePaged extends Table {
     private paginator_second: HTMLElement;
     private pageInfo: HTMLElement;
     private pageInfo_second: HTMLElement;
-    private paginationAboveTable:boolean = false;
+    private paginationAboveTable: boolean = false;
     private pageSize: number;
     private sortDirection: any;
 
@@ -21,6 +21,9 @@ class TablePaged extends Table {
     private currentPage: any;
     private readonly paginatorOffset: any;
     private pageChangeListeners: HTMLElement[];
+
+    private pageSizes: Number[] = [5, 10, 15, 25];
+    private pageSizeAsButtons: boolean = false;
 
 
     constructor(componentObj: any, parent: HTMLFormComponent) {
@@ -35,7 +38,7 @@ class TablePaged extends Table {
         this.pageInfo = null;
         this.totalPages = this.componentObj.totalPages;
         this.totalRows = this.componentObj.totalRows;
-        this.paginationAboveTable = this.componentObj.paginationAboveTable? this.componentObj.paginationAboveTable : false;
+        this.paginationAboveTable = this.componentObj.paginationAboveTable ? this.componentObj.paginationAboveTable : false;
         this.currentPage = this.componentObj.pageable.pageNumber || 0;
         this.paginatorOffset = 2;
         this.onPageChange = this.componentObj.onPageChange;
@@ -45,6 +48,8 @@ class TablePaged extends Table {
         this.sortDirection = null;
 
         this.pageSize = this.componentObj.pageable.pageSize || 10;
+        this.pageSizeAsButtons = this.componentObj.pageSizeAsButtons || false;
+        this.pageSizes =  this.componentObj.pageSizes || [5, 10, 15, 25];
 
         this.pageSizeSelect = null;
         this.pageSizeSelect_clone = null;
@@ -64,30 +69,11 @@ class TablePaged extends Table {
         box.classList.add('form-inline');
         box.classList.add('col-md-6');
 
-        let select = document.createElement('select');
-        select.id = this.id + '_rowsPerPageSelector';
-        select.classList.add('form-control');
-        this.pageSizeSelect = select;
-        [5, 10, 15, 25].forEach(function (number) {
-            let option = document.createElement('option');
-            option.value = number;
-            option.appendChild(document.createTextNode(number));
-            this.pageSizeSelect.appendChild(option);
-        }.bind(this));
-        this.pageSizeSelect.value = this.pageSize;
-        this.pageSizeSelect.addEventListener('change', function (event){
-            this.pageSizeSelectEvent(event);
-            if(this.paginationAboveTable) {
-                this.pageSizeSelect_clone.value = this.pageSizeSelect.value;
-            }
-        }.bind(this));
-        this.pageSizeSelect.disabled = (this.accessibility != 'EDIT');
-
+       this.pageSizeSelect = this.buildPageSizeSelect();
 
         let pageInfo = this.buildPageInfo();
 
         box.appendChild(this.pageSizeSelect);
-
 
         let cecordsText = this.__('rows per page');
         cecordsText.classList.add('pl-3');
@@ -113,7 +99,7 @@ class TablePaged extends Table {
         this.paginator = paginator;
         this.pageInfo = pageInfo;
 
-        if(this.paginationAboveTable) {
+        if (this.paginationAboveTable) {
             let toolsRow_clone = document.createElement('div');
             toolsRow_clone.classList.add('row');
             toolsRow_clone.classList.add('toolsRow');
@@ -123,12 +109,7 @@ class TablePaged extends Table {
             box_clone.classList.add('form-inline');
             box_clone.classList.add('col-md-6');
 
-            this.pageSizeSelect_clone = this.pageSizeSelect.cloneNode(true);
-            this.pageSizeSelect_clone.value = this.pageSize;
-            this.pageSizeSelect_clone.addEventListener('change', function (){
-                this.pageSizeSelectEvent(event);
-                this.pageSizeSelect.value = this.pageSizeSelect_clone.value;
-            }.bind(this));
+            this.pageSizeSelect_clone =  this.buildPageSizeSelect();
             this.buildTablePagedToolsLabels(this.pageSizeSelect_clone, box_clone);
 
             box_clone.appendChild(this.pageSizeSelect_clone);
@@ -152,8 +133,63 @@ class TablePaged extends Table {
         }
     };
 
-    pageSizeSelectEvent(event) {
-        this.pageSize = event.target.value;
+
+    buildPageSizeSelect():HTMLElement {
+        let select = null;
+        if (!this.pageSizeAsButtons) {
+            select = document.createElement('select');
+            select.id = this.id + '_rowsPerPageSelector';
+            select.classList.add('form-control');
+            this.pageSizes.forEach(function (number) {
+                let option = document.createElement('option');
+                option.value = number;
+                option.appendChild(document.createTextNode(number));
+                select.appendChild(option);
+            }.bind(this));
+            select.value = this.pageSize;
+            select.addEventListener('change', function (event) {
+                this.pageSizeSelectEvent(event.target.value);
+                this.pageSizeSelect.value = event.target.value;
+                if (this.paginationAboveTable) {
+                    this.pageSizeSelect_clone.value = event.target.value;
+                }
+            }.bind(this));
+            select.disabled = (this.accessibility != 'EDIT');
+        }
+
+        if (this.pageSizeAsButtons) {
+            select = document.createElement('div');
+            select.id = this.id + '_rowsPerPageSelector';
+            select.classList.add('btn-group');
+            select.setAttribute("role", "group");
+            this.pageSizes.forEach(function (number) {
+                let button = document.createElement('button');
+                button.classList.add('btn');
+                button.classList.add('btn_'+number.toString());
+                button.classList.add('btn-outline-primary');
+                button.classList.add('page-link');
+                if(this.pageSize == number){
+                    button.classList.add('active');
+                }
+
+                button.innerText = number.toString();
+                button.addEventListener('click', function (event:any) {
+                    $(this.pageSizeSelect).find('button').removeClass('active');
+                    $(this.pageSizeSelect).find('.btn_'+number.toString()).addClass('active');
+                    this.pageSizeSelectEvent(number);
+                    if (this.paginationAboveTable) {
+                        $(this.pageSizeSelect_clone).find('button').removeClass('active');
+                        $(this.pageSizeSelect_clone).find('.btn_'+number.toString()).addClass('active');
+                    }
+                }.bind(this))
+                select.appendChild(button);
+            }.bind(this));
+        }
+        return select
+    }
+
+    pageSizeSelectEvent(size:any) {
+        this.pageSize = size;
         this.changesQueue.queueAttributeChange('pageSize', this.toInt(this.pageSize));
         this.fireEventWithLock('onPageSizeChange', null);
     }
@@ -170,7 +206,7 @@ class TablePaged extends Table {
         } else if (tablePagedTool.classList.contains('table-pagination')) {
             label.innerHTML = 'pagination';
         }
-        this.component.setAttribute('aria-describedby',  labelId);
+        this.component.setAttribute('aria-describedby', labelId);
         toolContainer.appendChild(label);
     }
 
@@ -260,7 +296,7 @@ class TablePaged extends Table {
         let recordsLabel = this.__('records');
         let counterLeft = document.createElement('span');
         counterLeft.innerText = recordsFrom + ' - ' + recordsTo;
-        let recordsFromLabel=  this.__('records_from');
+        let recordsFromLabel = this.__('records_from');
 
         let counterRight = document.createElement('span');
         counterRight.innerText = this.totalRows.toString();
@@ -430,25 +466,26 @@ class TablePaged extends Table {
         // this.htmlElement.querySelector('.pagination-first').replaceChild(pageInfo, this.pageInfo);
         $(this.pageInfo).replaceWith(pageInfo);
         this.pageInfo = pageInfo;
-        if(this.paginationAboveTable) {
+        if (this.paginationAboveTable) {
             let pageInfo_second = this.buildPageInfo();
             this.htmlElement.querySelector('.pagination-second').replaceChild(pageInfo_second, this.pageInfo_second);
             this.pageInfo_second = pageInfo_second;
         }
     }
 
-    protected updatePaginator(){
+    protected updatePaginator() {
         let paginator2 = this.buildPaginator();
         // this.htmlElement.querySelector('.pagination-first').replaceChild(paginator2, this.paginator);
         $(this.paginator).replaceWith(paginator2);
         this.paginator = paginator2;
-        if(this.paginationAboveTable) {
+        if (this.paginationAboveTable) {
             let paginator_second2 = this.buildPaginator();
             // this.htmlElement.querySelector('.pagination-second').replaceChild(paginator_second2, this.paginator_second);
             $(this.paginator_second).replaceWith(paginator_second2);
             this.paginator_second = paginator_second2;
         }
     }
+
     protected createPaginationElement() {
         let pagination = document.createElement('div');
         pagination.id = this.id + '_pagination';

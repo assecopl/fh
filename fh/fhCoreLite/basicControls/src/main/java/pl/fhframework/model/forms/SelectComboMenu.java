@@ -260,13 +260,11 @@ public class SelectComboMenu extends BaseInputFieldWithKeySupport {
             changeSelectedItemBinding();
             this.rawValue = (selectedItem != null) ? toRawValue(selectedItem) : null;
             this.filterText = rawValue != null ? rawValue : "";
+            processFiltering(this.filterText);
             if(this.selectedItemIndex == 0){
                 highlightNullValue = true;
             }
-            else {
-                this.highlightedObjectValue = selectedItem;
-                filterInvoked = true;
-            }
+
 
         } else {
 
@@ -369,10 +367,21 @@ public class SelectComboMenu extends BaseInputFieldWithKeySupport {
         filteredObjectValues.clear();
         filteredObjectValues.addAll(values);
 
-        highlightedObjectValue = values.stream()
-                .filter(d -> filterFunction.test(d, text))
-                .findAny().orElse(null);
+        //Exact match first
+        if(this.filterFunctionBinding == null || this.filterFunctionBinding.getBindingResult() == null) {
+            highlightedObjectValue = values.stream()
+                    .filter(d -> {
+                        if (StringUtils.isNullOrEmpty(text)) return false;
+                        return objectToString(d).equalsIgnoreCase(text);
+                    })
+                    .findAny().orElse(null);
+        }
 
+        if(highlightedObjectValue == null) {
+            highlightedObjectValue = values.stream()
+                    .filter(d -> filterFunction.test(d, text))
+                    .findAny().orElse(null);
+        }
         filterInvoked = true;
     }
 

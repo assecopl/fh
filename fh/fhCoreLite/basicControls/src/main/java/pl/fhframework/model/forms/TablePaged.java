@@ -14,6 +14,8 @@ import pl.fhframework.core.util.CollectionsUtils;
 import pl.fhframework.model.dto.ElementChanges;
 import pl.fhframework.model.dto.InMessageEventData;
 import pl.fhframework.model.dto.ValueChange;
+import pl.fhframework.model.forms.attribute.CommaSeparatedStringListAttrConverter;
+import pl.fhframework.model.forms.config.BasicControlsConfiguration;
 import pl.fhframework.model.forms.utils.LanguageResolver;
 
 import java.util.Iterator;
@@ -101,6 +103,21 @@ public class TablePaged extends Table {
     private boolean paginationAboveTable = false;
 
     @Getter
+    @Setter
+    @XMLProperty(required = false)
+    @DocumentedComponentAttribute(value = "Change page size select into button group.")
+    @DesignerXMLProperty(functionalArea = SPECIFIC, priority = 17)
+    private Boolean pageSizeAsButtons = null;
+
+
+    @Getter
+    @Setter
+    @XMLProperty(converter = CommaSeparatedStringListAttrConverter.class, required = false)
+    @DocumentedComponentAttribute(value = "Define possible page sizes. Coma separated. Default value is 5,10,15,25")
+    @DesignerXMLProperty(functionalArea = SPECIFIC, priority = 17)
+    private List<String> pageSizes = null;
+
+    @Getter
     private String language;
 
     private static final int PAGE_START = 0;
@@ -130,6 +147,12 @@ public class TablePaged extends Table {
         }
         pageNumber = PAGE_START;
         changePageOrSize(pageNumber, pageSize);
+        if(this.pageSizeAsButtons == null) {
+            this.setPageSizeAsButtons(BasicControlsConfiguration.getInstance().getTablePagedPageSizeAsButtons());
+        }
+        if(this.pageSizes == null) {
+            this.pageSizes = new CommaSeparatedStringListAttrConverter().fromXML(this, BasicControlsConfiguration.getInstance().getTablePagedPageSizes());
+        }
     }
 
     @Override

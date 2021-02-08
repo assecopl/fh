@@ -65,6 +65,7 @@ import {ThreeDotsMenu} from "./source/controls/Dropdown/ThreeDotsMenu";
 import { DictionaryCombo } from './source/controls/Inputs/DictionaryCombo';
 import {Anchor} from "./source/controls/Anchor";
 import {DropdownDivider} from "./source/controls/Dropdown/DropdownDivider";
+import {EmbedPage} from "./source/controls/EmbedPage";
 
 class BasicControls extends FhModule {
     protected registerComponents() {
@@ -456,6 +457,12 @@ class BasicControls extends FhModule {
             .toFactory<ColumnOptimized>(() => {
                 return (componentObj: any, parent: any) => {
                     return new ColumnOptimized(componentObj, parent);
+                };
+            });
+        FhContainer.bind<(componentObj: any, parent: any) => EmbedPage>("EmbedPage")
+            .toFactory<EmbedPage>(() => {
+                return (componentObj: any, parent: any) => {
+                    return new EmbedPage(componentObj, parent);
                 };
             });
     }

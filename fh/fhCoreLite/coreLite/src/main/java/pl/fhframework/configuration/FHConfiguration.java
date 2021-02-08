@@ -18,9 +18,23 @@ import java.util.Arrays;
 import java.util.Optional;
 
 import lombok.Getter;
+import pl.fhframework.model.forms.attribute.HintType;
+
+import javax.annotation.PostConstruct;
 
 @Component
 public class FHConfiguration {
+    private static FHConfiguration INSTANCE;
+
+    @PostConstruct
+    void init () {
+        INSTANCE = this;
+    }
+
+    public static FHConfiguration getInstance() {
+        return INSTANCE;
+    }
+
     @Autowired
     private Environment environment;
 
@@ -37,6 +51,10 @@ public class FHConfiguration {
     @Getter
     @Value("${fhframework.designer.usingPrivateModules:false}")
     private boolean designerUsingPrivateModules;
+
+    @Value("${fh.web.formElement.hintTpe:STANDARD}")
+    @Getter
+    public HintType formElementHintType;
 
     public static final String DEFAULT_MAIN_CONTAINER = "mainForm";
 

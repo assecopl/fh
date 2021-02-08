@@ -40,6 +40,9 @@
     margin-bottom: 20px;
     font-size: 12px;
 }
+.fc.wrapper .toolsRow .btn {
+    font-size: 12px;
+}
 .fc.wrapper .toolsRow .table-pagination .pagination {
     margin: 0;
 }
