@@ -8,6 +8,7 @@ import java.util.Map;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.sift.AbstractDiscriminator;
 import ch.qos.logback.core.util.OptionHelper;
+import pl.fhframework.core.util.ILogUtils;
 
 /**
  * Created by Piotr on 2017-01-09.
@@ -15,14 +16,6 @@ import ch.qos.logback.core.util.OptionHelper;
 public class UserSessionBasedDiscriminator extends AbstractDiscriminator<ILoggingEvent> {
 
     private static final String EXPORTED_FILENAME = "logFileName";
-
-    public static final String USER_TAG = "$user$";
-
-    public static final String SESSION_TAG = "$sessionId$";
-
-    public static final String CREATION_DATE_TAG = "$creationDate$";
-
-    public static final String CREATION_TIMESTAMP_TAG = "$creationTimestamp$";
 
     private String nonUserFileName;
 
@@ -38,10 +31,10 @@ public class UserSessionBasedDiscriminator extends AbstractDiscriminator<ILoggin
             return nonUserFileName;
         } else {
             return userFileName
-                    .replace(USER_TAG, userSession.getSystemUser().getLogin())
-                    .replace(SESSION_TAG, userSession.getConversationUniqueId())
-                    .replace(CREATION_TIMESTAMP_TAG, userSession.getCreationTimestampString())
-                    .replace(CREATION_DATE_TAG, userSession.getCreationDateString());
+                    .replace(ILogUtils.USER_TAG, userSession.getSystemUser().getLogin())
+                    .replace(ILogUtils.SESSION_TAG, userSession.getConversationUniqueId())
+                    .replace(ILogUtils.CREATION_TIMESTAMP_TAG, userSession.getCreationTimestampString())
+                    .replace(ILogUtils.CREATION_DATE_TAG, userSession.getCreationDateString());
         }
     }
 

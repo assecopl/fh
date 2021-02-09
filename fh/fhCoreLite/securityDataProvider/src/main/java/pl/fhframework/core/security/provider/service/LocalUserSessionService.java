@@ -13,7 +13,7 @@ import pl.fhframework.core.security.model.SessionInfo;
 import pl.fhframework.core.session.ForceLogoutService;
 import pl.fhframework.core.session.IUserSessionService;
 import pl.fhframework.core.session.UserSessionRepository;
-import pl.fhframework.core.util.LogUtils;
+import pl.fhframework.core.util.ILogUtils;
 import pl.fhframework.core.util.StringUtils;
 import pl.fhframework.event.dto.ForcedLogoutEvent;
 
@@ -36,6 +36,9 @@ public class LocalUserSessionService implements IUserSessionService {
     @Autowired
     private ForceLogoutService forceLogoutService;
 
+    @Autowired(required = false)
+    private ILogUtils logUtils;
+
     @Override
     public List<SessionInfo> getUserSessions() {
         return new ArrayList<>(userSessionRepository.getAllUserSessionsInfo().values());
@@ -48,13 +51,14 @@ public class LocalUserSessionService implements IUserSessionService {
 
     @Override
     public Resource donwloadUserLog(String userSessionConversationId) {
-        UserSession userSession = findUserSession(userSessionConversationId);
-        if (userSession != null) {
-            URL log = LogUtils.getUserLogFile(userSession);
-            return new UrlResource(log);
-        } else {
-            return null;
+        if (logUtils != null) {
+            UserSession userSession = findUserSession(userSessionConversationId);
+            if (userSession != null) {
+                URL log = logUtils.getUserLogFile(userSession);
+                return new UrlResource(log);
+            }
         }
+        return null;
     }
 
     @Override

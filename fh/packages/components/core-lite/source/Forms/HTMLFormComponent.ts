@@ -279,17 +279,21 @@ abstract class HTMLFormComponent extends FormComponent {
 
     hideHint() {
         if (this.hintElement) {
-            if (this.hintType == 'STANDARD_POPOVER' || this.hintType == 'STATIC_POPOVER' || this.hintType == 'STATIC_POPOVER_LEFT') {
+            if (this.hintType == 'STANDARD_POPOVER') {
                 $(this.hintElement).popover('hide');
             } else {
                 $(this.hintElement).tooltip('hide');
             }
 
-            if (this.hintType === 'STATIC') {
+            if (this.hintType === 'STATIC' || this.hintType == 'STATIC_POPOVER' || this.hintType == 'STATIC_POPOVER_LEFT') {
                 let tip = $(this.hintElement).attr('aria-describedby');
                 let tipElement = $('#' + tip);
                 if (tipElement) {
-                    tipElement.tooltip('hide');
+                    if(this.hintType == 'STATIC_POPOVER' || this.hintType == 'STATIC_POPOVER_LEFT') {
+                        tipElement.popover('hide');
+                    } else {
+                        tipElement.tooltip('hide');
+                    }
                 }
             }
 
@@ -432,13 +436,20 @@ abstract class HTMLFormComponent extends FormComponent {
 
     destroyHint() {
         if (this.hintElement && this.hintInitialized) {
-            if (this.hintType === 'STATIC' || this.hintType === 'STATIC_LEFT') {
+            if (this.hintType === 'STATIC' || this.hintType === 'STATIC_LEFT' || this.hintType == 'STATIC_POPOVER' || this.hintType == 'STATIC_POPOVER_LEFT') {
                 let tip = $(this.hintElement).attr('aria-describedby');
                 let tipElement = $('#' + tip);
                 if (tipElement) {
-                    tipElement.tooltip('hide');
-                    tipElement.tooltip('disable');
-                    tipElement.tooltip('dispose');
+                    if(this.hintType == 'STATIC_POPOVER' || this.hintType == 'STATIC_POPOVER_LEFT') {
+                        tipElement.popover('hide');
+                        tipElement.popover('disable');
+                        tipElement.popover('dispose');
+                    } else {
+                        tipElement.tooltip('hide');
+                        tipElement.tooltip('disable');
+                        tipElement.tooltip('dispose');
+                    }
+
                 }
             }
             if (this.hintType == 'STANDARD_POPOVER' || this.hintType == 'STATIC_POPOVER' || this.hintType == 'STATIC_POPOVER_LEFT') {

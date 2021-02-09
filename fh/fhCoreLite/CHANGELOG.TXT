@@ -1,3 +1,5 @@
+-  wydzielona została zależność od "logback" do osobnego modułu "fhLogback". W nowym module jest konfiguracja "logback.xml" oraz wszystkie dependencies do logback, slf4j, xxx-over-slf4j. Aby zachować stare działanie aplikacji (np.: pobieranie logów użytkownia) trzeba ręcznie dodać zależność w swojej aplikacji do "fhLogback"
+
 4.6.15
 - Wyciek pamięci w obszarze Metaspace - proxy tworzone przez Spring (ProxyFacotyr/cglib) powodowało wyciek pamieci Metaspace - przejście na natywny Proxy.newProxyInstance
 - Dodanie możliwości wywołania przekierowania na zewnętrzny URL z wykorzystaniem metody HTTP POST (EventRegistry#fireRedirectPostEvent)

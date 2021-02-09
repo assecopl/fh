@@ -3,21 +3,21 @@ package pl.fhframework.app.menu;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.UrlResource;
+import pl.fhframework.ISystemUseCase;
+import pl.fhframework.annotations.Action;
 import pl.fhframework.app.config.DefaultApplicationConfigurer;
 import pl.fhframework.app.config.FhNavbarConfiguration;
 import pl.fhframework.app.preferences.UserPreferencesUC;
-import pl.fhframework.core.logging.FlushableRollingFileAppender;
 import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.core.rules.builtin.FhUserUtils;
 import pl.fhframework.core.security.model.IBusinessRole;
 import pl.fhframework.core.uc.IUseCaseNoCallback;
 import pl.fhframework.core.uc.IUseCaseRefreshListener;
 import pl.fhframework.core.uc.UseCase;
-import pl.fhframework.core.util.LogUtils;
+import pl.fhframework.core.util.ILogUtils;
 import pl.fhframework.core.util.StringUtils;
-import pl.fhframework.ISystemUseCase;
-import pl.fhframework.annotations.Action;
 import pl.fhframework.event.EventRegistry;
+import pl.fhframework.event.dto.NotificationEvent;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -38,6 +38,9 @@ public class NavbarUC implements INavbar, ISystemUseCase, IUseCaseRefreshListene
 
     @Autowired
     private EventRegistry eventRegistry;
+
+    @Autowired(required = false)
+    private ILogUtils logUtils;
 
     @Value("${server.servlet.context-path:/}")
     private String contextRoot;
@@ -108,9 +111,13 @@ public class NavbarUC implements INavbar, ISystemUseCase, IUseCaseRefreshListene
 
     @Action
     public void downloadUserLog() {
-        FhLogger.info(this.getClass(), FlushableRollingFileAppender.FLUSH_MESSAGE);
-        URL log = LogUtils.getUserLogFile(this.getUserSession());
-        eventRegistry.fireDownloadEvent(new UrlResource(log));
+        if (logUtils != null) {
+            FhLogger.info(this.getClass(), ILogUtils.FLUSH_MESSAGE);
+            URL log = logUtils.getUserLogFile(this.getUserSession());
+            eventRegistry.fireDownloadEvent(new UrlResource(log));
+        } else {
+            eventRegistry.fireNotificationEvent(NotificationEvent.Level.WARNING, "Log file per user is not supported. Provide ILogUtils implementation.");
+        }
     }
 
     @Override

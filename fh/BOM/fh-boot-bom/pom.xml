@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>pl.fhframework</groupId>
   <artifactId>fh-boot-bom</artifactId>
-  <version>4.8.1</version>
+  <version>4.8.2</version>
   <packaging>pom</packaging>
   <url>https://github.com/assecopl/fh</url>
   <name>fh-boot</name>
@@ -51,7 +51,7 @@
     <cxf.version>3.1.6</cxf.version>
     <version.infinispan.starter>2.0.0.Final</version.infinispan.starter>
     <version.roaster>2.20.0.Final</version.roaster>
-    <fh.version>4.8.1</fh.version>
+    <fh.version>4.8.2</fh.version>
     <fh.version.display>${fh.version}</fh.version.display>
     <springboot.version>2.1.0.RELEASE</springboot.version>
     <hibernate.version>5.4.1.Final</hibernate.version>
@@ -144,7 +144,7 @@
           <dependency>
             <groupId>pl.fhframework</groupId>
             <artifactId>fh-springboot-bom</artifactId>
-            <version>4.8.1</version>
+            <version>4.8.2</version>
             <scope>import</scope>
             <type>pom</type>
           </dependency>
@@ -187,7 +187,35 @@
         </dependency>
         <dependency>
           <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter</artifactId>
+          <!-- SpringBoot in WildFly needs ConsoleHandler, do not remove
+          https://stackoverflow.com/questions/33623030/wildfly-9-0-1-wflyctl0158-handler-console-is-not-found
+          JBoss Knowledge base says you should ensure right jars (logback-classic-x.x.x.jar and logback-core-x.x.x.jar
+          in that case) are in WEB-INF/lib directory if you are using an application framework.
+          -->
+          <!--<exclusions>
+            <exclusion>
+              <groupId>org.springframework.boot</groupId>
+              <artifactId>spring-boot-starter-logging</artifactId>
+            </exclusion>
+          </exclusions>-->
+        </dependency>
+        <dependency>
+          <groupId>org.springframework.boot</groupId>
           <artifactId>spring-boot-starter-web</artifactId>
+          <!-- SpringBoot in WildFly needs ConsoleHandler, do not remove
+          https://stackoverflow.com/questions/33623030/wildfly-9-0-1-wflyctl0158-handler-console-is-not-found
+          JBoss Knowledge base says you should ensure right jars (logback-classic-x.x.x.jar and logback-core-x.x.x.jar
+          in that case) are in WEB-INF/lib directory if you are using an application framework.
+          -->
+          <!--
+                   <exclusions>
+                     <exclusion>
+                       <groupId>org.springframework.boot</groupId>
+                       <artifactId>spring-boot-starter-logging</artifactId>
+                     </exclusion>
+                   </exclusions>
+         -->
         </dependency>
         <dependency>
           <groupId>org.springframework.boot</groupId>
@@ -216,7 +244,7 @@
           <dependency>
             <groupId>pl.fhframework</groupId>
             <artifactId>fh-springboot-bom</artifactId>
-            <version>4.8.1</version>
+            <version>4.8.2</version>
             <scope>import</scope>
             <type>pom</type>
           </dependency>
@@ -249,7 +277,7 @@
           <dependency>
             <groupId>pl.fhframework</groupId>
             <artifactId>fh-springboot-bom</artifactId>
-            <version>4.8.1</version>
+            <version>4.8.2</version>
             <scope>import</scope>
             <type>pom</type>
           </dependency>
@@ -274,7 +302,7 @@
           <dependency>
             <groupId>pl.fhframework</groupId>
             <artifactId>fh-springboot-bom</artifactId>
-            <version>4.8.1</version>
+            <version>4.8.2</version>
             <scope>import</scope>
             <type>pom</type>
           </dependency>
@@ -305,7 +333,7 @@
           <dependency>
             <groupId>pl.fhframework</groupId>
             <artifactId>fh-jboss-eap6.4-bom</artifactId>
-            <version>4.8.1</version>
+            <version>4.8.2</version>
             <scope>import</scope>
             <type>pom</type>
           </dependency>
