@@ -301,10 +301,15 @@ abstract class HTMLFormComponent extends FormComponent {
     }
 
     initHint() {
+        const fhml = FhContainer.get<FHML>('FHML');
+        let hintParsed = this.hint;
+        if (fhml.needParse(hintParsed)) {
+            hintParsed = fhml.parse(hintParsed);
+        }
         if (this.hintElement && !this.hintInitialized && this.hint) {
             let tooltipOptions: TooltipOption = {
                 placement: this.hintPlacement,
-                title: this.hint,
+                title: hintParsed,
                 trigger: this.hintTrigger,
                 html: true,
                 boundary: 'window'
@@ -318,7 +323,7 @@ abstract class HTMLFormComponent extends FormComponent {
                 }
 
                 //Change tooltip trigger to click
-                tooltipOptions.trigger = 'click';
+                tooltipOptions.trigger = this.hintTrigger || 'click hover';
                 //Create tooltip element
                 const ttip = document.createElement('button');
                 ttip.className = 'btn hint-ico-help fa';
@@ -331,6 +336,12 @@ abstract class HTMLFormComponent extends FormComponent {
                 this.hintElement = ttip;
                 if (this.inputGroupElement && this.hintInputGroup) {
                     let ttipButton = document.createElement('div');
+                    ttipButton.onmouseenter = (ev: MouseEvent) => {
+                        (ev.target as any).click();
+                    };
+                    ttipButton.onmouseleave =(ev: MouseEvent) => {
+                        (ev.target as any).click();
+                    };
                     this.inputGroupElement.classList.add('hint-static');
 
                     if(this.hintIcon){
@@ -339,7 +350,7 @@ abstract class HTMLFormComponent extends FormComponent {
                              ttip.classList.add(c);
                         })
                     } else {
-                        ttip.classList.add('fa-question');
+                        ttip.classList.add('fa-question-circle');
                     }
                     ttip.classList.add("input-group-text");
 
@@ -351,7 +362,7 @@ abstract class HTMLFormComponent extends FormComponent {
                 } else {
                     // p-0 px-1 border-0
                     ttip.classList.add("border-0");
-                    ttip.classList.add("px-1");
+                    ttip.classList.add("px-0");
                     ttip.classList.add("p-0");
                     /**
                      * Change typical behaviour by overwrite this function in component.
@@ -362,7 +373,7 @@ abstract class HTMLFormComponent extends FormComponent {
                             ttip.classList.add(c);
                         })
                     } else {
-                        ttip.classList.add('fa-question');
+                        ttip.classList.add('fa-question-circle');
                     }
 
                     const element = this.processStaticHintElement(ttip);
@@ -929,6 +940,7 @@ abstract class HTMLFormComponent extends FormComponent {
             if (labelValue.length > 0) {
                 let label = document.createElement('label');
                 label.classList.add('col-form-label');
+                label.classList.add('align-items-end');
                 // label.classList.add('card-title');
                 label.innerHTML = labelValue;
                 label.id = this.id + "_label";

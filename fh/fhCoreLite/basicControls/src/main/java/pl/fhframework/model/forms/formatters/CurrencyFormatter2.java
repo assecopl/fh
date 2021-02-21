@@ -18,7 +18,7 @@ public class CurrencyFormatter2 implements Formatter<BigDecimal> {
         pSymbols.setDecimalSeparator(',');
         pSymbols.setGroupingSeparator(' ');
         setDecimalFormatSymbols(pSymbols);
-        setGroupingUsed(false);
+        setGroupingUsed(true);
         setParseBigDecimal(true);
         setMinimumFractionDigits(2);
         setMaximumFractionDigits(2);

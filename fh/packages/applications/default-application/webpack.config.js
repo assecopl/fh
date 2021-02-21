@@ -31,7 +31,7 @@ module.exports = function (cmdEnv) {
         module: {
             rules: [{
                 test: /\.css$/,
-                exclude: [/node_modules/, /dist/, /build/],
+//                exclude: [/node_modules/, /dist/, /build/],
                 use: [{
                     loader: MiniCssExtractPlugin.loader,
                     options: {}

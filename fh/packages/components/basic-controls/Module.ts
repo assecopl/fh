@@ -66,6 +66,7 @@ import { DictionaryCombo } from './source/controls/Inputs/DictionaryCombo';
 import {Anchor} from "./source/controls/Anchor";
 import {DropdownDivider} from "./source/controls/Dropdown/DropdownDivider";
 import {EmbedPage} from "./source/controls/EmbedPage";
+import {PanelGroupWrapper} from "./source/controls/PanelGroupWrapper";
 
 class BasicControls extends FhModule {
     protected registerComponents() {
@@ -259,6 +260,12 @@ class BasicControls extends FhModule {
             .toFactory<Accordion>(() => {
                 return (componentObj: any, parent: any) => {
                     return new Accordion(componentObj, parent);
+                };
+            });
+        FhContainer.bind<(componentObj: any, parent: any) => PanelGroupWrapper>("PanelGroupWrapper")
+            .toFactory<PanelGroupWrapper>(() => {
+                return (componentObj: any, parent: any) => {
+                    return new PanelGroupWrapper(componentObj, parent);
                 };
             });
         FhContainer.bind<(componentObj: any, parent: any) => Link>("Link")
@@ -465,6 +472,7 @@ class BasicControls extends FhModule {
                     return new EmbedPage(componentObj, parent);
                 };
             });
+
     }
 }
 

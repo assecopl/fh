@@ -2,9 +2,9 @@ import {HTMLFormComponent} from "fh-forms-handler";
 import {AdditionalButton} from "fh-forms-handler";
 
 class PanelGroup extends HTMLFormComponent {
-    protected readonly isCollapsible: any;
+    protected isCollapsible: any;
     private readonly onToggle: any;
-    private collapsed: any;
+    public collapsed: any;
     private collapseToggler: any;
     private collapseChanged: any;
     protected groupToolbox: any;
@@ -200,8 +200,15 @@ class PanelGroup extends HTMLFormComponent {
         } else {
             this.collapse();
         }
-        this.collapsed = !this.collapsed;
-        this.collapseChanged = true;
+
+
+        /**
+         * Ads support for PanelGroupWrapper toggleAll value callculations.
+         */
+        if(this.parent["updateToggleAllStatus"] && this.parent.componentObj.type == "PanelGroupWrapper") {
+            (this.parent as any).updateToggleAllStatus()
+        }
+
     };
 
     collapse() {
@@ -212,6 +219,8 @@ class PanelGroup extends HTMLFormComponent {
         // text.removeChild(text.firstChild);
         // text.appendChild(document.createTextNode('rozwiń'));
         this.component.classList.add('collapsed');
+        this.collapsed = true;
+        this.collapseChanged = true;
     };
 
     uncollapse() {
@@ -222,6 +231,8 @@ class PanelGroup extends HTMLFormComponent {
         // text.removeChild(text.firstChild);
         // text.appendChild(document.createTextNode('zwiń'));
         this.component.classList.remove('collapsed');
+        this.collapsed = false;
+        this.collapseChanged = true;
     };
 
     extractChangedAttributes() {
