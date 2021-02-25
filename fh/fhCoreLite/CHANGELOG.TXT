@@ -1,3 +1,10 @@
+- Dodanie Kerberos Security Data Provider, pozwalającego na uwierzytelnianie użytkownika na podstawie konta domenowego w oparciu o serwer kerberos
+
+4.8.3
+- w przypadku niemożności zaaplikowania komunikatu z frontu, wyjątek (wyskakujący na ekranie użytkownika) został zastąpiony wpisem do loga.
+- wpisy komponentu SessionLogger zostały przeniesione na poziom DEBUG, bo na poziomie INFO zaśmiecały log.
+
+4.8.2
 -  wydzielona została zależność od "logback" do osobnego modułu "fhLogback". W nowym module jest konfiguracja "logback.xml" oraz wszystkie dependencies do logback, slf4j, xxx-over-slf4j. Aby zachować stare działanie aplikacji (np.: pobieranie logów użytkownia) trzeba ręcznie dodać zależność w swojej aplikacji do "fhLogback"
 
 4.6.15

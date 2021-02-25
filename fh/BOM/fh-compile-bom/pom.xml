@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>pl.fhframework</groupId>
   <artifactId>fh-compile-bom</artifactId>
-  <version>4.8.3</version>
+  <version>4.8.4</version>
   <packaging>pom</packaging>
   <url>https://github.com/assecopl/fh</url>
   <name>fh-compile-bom</name>
@@ -21,7 +21,7 @@
     <cxf.version>3.1.6</cxf.version>
     <version.infinispan.starter>2.0.0.Final</version.infinispan.starter>
     <version.roaster>2.20.0.Final</version.roaster>
-    <fh.version>4.8.3</fh.version>
+    <fh.version>4.8.4</fh.version>
     <springboot.version>2.1.0.RELEASE</springboot.version>
     <hibernate.version>5.4.1.Final</hibernate.version>
     <aspectj.version>1.9.4</aspectj.version>
@@ -42,18 +42,18 @@
   </developers>
   <distributionManagement>
     <snapshotRepository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      <id>nexus-snapshots</id>
+      <url>http://172.25.107.188:8081/repository/icdts-snapshots/</url>
     </snapshotRepository>
     <repository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+      <id>nexus-releases</id>
+      <url>http://172.25.107.188:8081/repository/icdts-releases/</url>
     </repository>
   </distributionManagement>
   <scm>
-    <connection>scm:git:git://github.com/assecopl/fh.git</connection>
-    <developerConnection>scm:git:ssh://github.com:assecopl/fh.git</developerConnection>
-    <url>http://github.com/assecopl/fh/tree/master</url>
+    <connection>scm:git:https://crkz.poland.asseco.corp/par/luna/luna-4-8</connection>
+    <developerConnection>scm:git:https://crkz.poland.asseco.corp/par/luna/luna-4-8</developerConnection>
+    <url>https://crkz.poland.asseco.corp/par/luna/luna-4-8</url>
   </scm>
   <dependencyManagement>
     <dependencies>
@@ -124,7 +124,7 @@
       <dependency>
         <groupId>pl.fhframework</groupId>
         <artifactId>commons-bom</artifactId>
-        <version>4.8.3</version>
+        <version>4.8.4</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>

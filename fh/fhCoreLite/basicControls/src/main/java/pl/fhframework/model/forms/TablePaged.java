@@ -36,6 +36,7 @@ public class TablePaged extends Table {
     private static final String DIRECTION_ATTRIBUTE = "direction";
     private static final String CURRENT_PAGE_ATTRIBUTE = "currentPage";
     private static final String PAGE_SIZE_ATTRIBUTE = "pageSize";
+    private static final String PAGE_SIZES_ATTRIBUTE = "pageSizes";
 
     @Getter
     @Setter
@@ -109,13 +110,16 @@ public class TablePaged extends Table {
     @DesignerXMLProperty(functionalArea = SPECIFIC, priority = 17)
     private Boolean pageSizeAsButtons = null;
 
+    @Getter
+    private List<String> pageSizes = null;
 
+    @JsonIgnore
     @Getter
     @Setter
-    @XMLProperty(converter = CommaSeparatedStringListAttrConverter.class, required = false)
+    @XMLProperty(value = PAGE_SIZES_ATTRIBUTE, converter = CommaSeparatedStringListAttrConverter.class, required = false)
     @DocumentedComponentAttribute(value = "Define possible page sizes. Coma separated. Default value is 5,10,15,25")
     @DesignerXMLProperty(functionalArea = SPECIFIC, priority = 17)
-    private List<String> pageSizes = null;
+    private ModelBinding<List<String>> pageSizesModelBinding;
 
     @Getter
     private String language;
@@ -150,9 +154,7 @@ public class TablePaged extends Table {
         if(this.pageSizeAsButtons == null) {
             this.setPageSizeAsButtons(BasicControlsConfiguration.getInstance().getTablePagedPageSizeAsButtons());
         }
-        if(this.pageSizes == null) {
-            this.pageSizes = new CommaSeparatedStringListAttrConverter().fromXML(this, BasicControlsConfiguration.getInstance().getTablePagedPageSizes());
-        }
+        this.pageSizes = new CommaSeparatedStringListAttrConverter().fromXML(this, BasicControlsConfiguration.getInstance().getTablePagedPageSizes());
     }
 
     @Override
@@ -312,6 +314,10 @@ public class TablePaged extends Table {
             elementChange.addChange(DISPLAYED_PAGE_SIZE, pageSize);
             pageNumber = pageable.getPageNumber();
             elementChange.addChange(DISPLAYED_PAGE_NUMBER, pageNumber);
+        }
+
+        if(this.pageSizesModelBinding != null && this.pageSizesModelBinding.getBindingResult() != null) {
+            this.pageSizesModelBinding.resolveValueAndAddChanges(this, elementChange, pageSizes, PAGE_SIZES_ATTRIBUTE);
         }
 
         this.language = LanguageResolver.languageChanges(getForm().getAbstractUseCase().getUserSession(), this.language, elementChange);

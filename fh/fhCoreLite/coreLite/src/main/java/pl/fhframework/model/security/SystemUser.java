@@ -45,6 +45,15 @@ public class SystemUser {
         this.surname = surname;
     }
 
+    public SystemUser(Principal principal, String username, String name, String surname) {
+        this.login = username;
+        this.guest = false;
+        this.principal = principal;
+        this.businessRoles = new ArrayList<>();
+        this.name = name != null ? name : this.login;
+        this.surname = surname;
+    }
+
     public boolean hasAnyRole(Collection<String> roleNames) {
         for (IBusinessRole userRole : businessRoles) {
             if (roleNames.contains(userRole.getRoleName())) {
