@@ -56,9 +56,11 @@ class DropdownItem extends OutputLabel {
     onClickEvent(event) {
         event.stopPropagation();
         // @ts-ignore
-        const parent = event.target.closest('dropdown');
+        const parent = event.target.closest('.dropdown');
         if (parent) {
             $(parent).dropdown('toggle');
+        } else {
+            $((this.parent as any).component).dropdown('toggle');
         }
         this.fireEventWithLock('onClick', this.onClick);
     }

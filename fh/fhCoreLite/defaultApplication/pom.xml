@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>defaultApplication</artifactId>
   <groupId>pl.fhframework</groupId>
-  <version>4.8.4</version>
+  <version>4.8.5</version>
   <packaging>jar</packaging>
   <url>https://github.com/assecopl/fh</url>
   <name>defaultApplication</name>
@@ -10,7 +10,7 @@
   <parent>
     <groupId>pl.fhframework</groupId>
     <artifactId>fh-boot-bom</artifactId>
-    <version>4.8.4</version>
+    <version>4.8.5</version>
     <relativePath>../../BOM/fh-boot-bom</relativePath>
   </parent>
   <properties>

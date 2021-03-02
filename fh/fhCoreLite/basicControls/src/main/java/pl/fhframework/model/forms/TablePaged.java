@@ -5,6 +5,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import pl.fhframework.BindingResult;
 import pl.fhframework.annotations.*;
 import pl.fhframework.binding.*;
 import pl.fhframework.core.FhBindingException;
@@ -20,6 +24,7 @@ import pl.fhframework.model.forms.utils.LanguageResolver;
 
 import java.util.Iterator;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.springframework.data.domain.Sort.Direction;
 import static org.springframework.data.domain.Sort.Order;
@@ -116,10 +121,10 @@ public class TablePaged extends Table {
     @JsonIgnore
     @Getter
     @Setter
-    @XMLProperty(value = PAGE_SIZES_ATTRIBUTE, converter = CommaSeparatedStringListAttrConverter.class, required = false)
+    @XMLProperty(value = PAGE_SIZES_ATTRIBUTE, required = false)
     @DocumentedComponentAttribute(value = "Define possible page sizes. Coma separated. Default value is 5,10,15,25")
-    @DesignerXMLProperty(functionalArea = SPECIFIC, priority = 17)
-    private ModelBinding<List<String>> pageSizesModelBinding;
+    @DesignerXMLProperty(allowedTypes = {Collection.class, String.class}, functionalArea = SPECIFIC, priority = 17)
+    private ModelBinding pageSizesModelBinding;
 
     @Getter
     private String language;
@@ -151,7 +156,7 @@ public class TablePaged extends Table {
         }
         pageNumber = PAGE_START;
         changePageOrSize(pageNumber, pageSize);
-        if(this.pageSizeAsButtons == null) {
+        if (this.pageSizeAsButtons == null) {
             this.setPageSizeAsButtons(BasicControlsConfiguration.getInstance().getTablePagedPageSizeAsButtons());
         }
         this.pageSizes = new CommaSeparatedStringListAttrConverter().fromXML(this, BasicControlsConfiguration.getInstance().getTablePagedPageSizes());
@@ -222,12 +227,10 @@ public class TablePaged extends Table {
                             if (muliselectCol != null) {
                                 muliselectCol.removeAll(bindedObjectsList);
                                 muliselectCol.addAll((Collection) newSelectedElement);
-                            }
-                            else {
+                            } else {
                                 getSelectedElementBinding().setValue(newSelectedElement);
                             }
-                        }
-                        else {
+                        } else {
                             getSelectedElementBinding().setValue(newSelectedElement);
                         }
                     } else {
@@ -316,9 +319,31 @@ public class TablePaged extends Table {
             elementChange.addChange(DISPLAYED_PAGE_NUMBER, pageNumber);
         }
 
-        if(this.pageSizesModelBinding != null && this.pageSizesModelBinding.getBindingResult() != null) {
-            this.pageSizesModelBinding.resolveValueAndAddChanges(this, elementChange, pageSizes, PAGE_SIZES_ATTRIBUTE);
+        if (pageSizesModelBinding != null) {
+            BindingResult pageSizesModelBindingResult = pageSizesModelBinding.getBindingResult();
+            if (pageSizesModelBindingResult != null) {
+                Object value = pageSizesModelBindingResult.getValue();
+                if (value instanceof String) {
+                    String valuesAsString = (String) value;
+                    List<String> allValues = new CommaSeparatedStringListAttrConverter().fromXML(this, valuesAsString);
+                    if (allValues.size() > 0) {
+                        if (!Objects.equals(pageSizes, allValues)) {
+                            pageSizes = allValues;
+                            elementChange.addChange(PAGE_SIZES_ATTRIBUTE, pageSizes);
+                        }
+                    }
+                } else if (value instanceof List) {
+                    List<String> valuesAsList = (List<String>) value;
+                    if (valuesAsList.size() > 0) {
+                        if (!Objects.equals(pageSizes, valuesAsList)) {
+                            pageSizes = valuesAsList;
+                            elementChange.addChange(PAGE_SIZES_ATTRIBUTE, pageSizes);
+                        }
+                    }
+                }
+            }
         }
+
 
         this.language = LanguageResolver.languageChanges(getForm().getAbstractUseCase().getUserSession(), this.language, elementChange);
 
