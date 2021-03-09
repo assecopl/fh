@@ -1,36 +1,32 @@
 package pl.fhframework.model.forms.messages;
 
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
+import pl.fhframework.UserSession;
+import pl.fhframework.binding.AdHocActionBinding;
+import pl.fhframework.binding.AdHocModelBinding;
+import pl.fhframework.binding.ModelBinding;
+import pl.fhframework.binding.StaticBinding;
+import pl.fhframework.configuration.FHConfiguration;
 import pl.fhframework.core.i18n.MessageService;
 import pl.fhframework.core.messages.Action;
 import pl.fhframework.core.messages.IMessages;
 import pl.fhframework.core.messages.MessagePopup;
 import pl.fhframework.core.uc.UseCaseContainer;
 import pl.fhframework.core.util.StringUtils;
-import pl.fhframework.UserSession;
-import pl.fhframework.binding.*;
-import pl.fhframework.configuration.FHConfiguration;
+import pl.fhframework.events.ViewEvent;
 import pl.fhframework.helper.AutowireHelper;
 import pl.fhframework.model.forms.Button;
 import pl.fhframework.model.forms.Canvas;
 import pl.fhframework.model.forms.OutputLabel;
 import pl.fhframework.model.forms.Spacer;
-import pl.fhframework.events.ViewEvent;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
+import pl.fhframework.model.forms.attribute.FormType;
 
 import javax.annotation.PostConstruct;
-
-import lombok.Getter;
-import pl.fhframework.model.forms.attribute.FormType;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import static pl.fhframework.model.forms.attribute.FormType.MODAL;
 import static pl.fhframework.model.forms.attribute.FormType.MODAL_OVERFLOW;
@@ -514,6 +510,9 @@ public class Messages implements IMessages {
                 button.setWidth("sm-4");
                 String actionName = nextActionName();
                 button.setLabelModelBinding(binding(actionButton.getButtonLabel(), button));
+                if(actionButton.getButtonStyle() != null) {
+                    button.setStyleModelBinding(binding(actionButton.getButtonStyle(), button));
+                }
                 button.setOnClick(new AdHocActionBinding(actionName, dialog, dialog));
                 dialog.addSubcomponent(button);
                 UseCaseContainer.PopupMessageUseCaseContextMessage useCaseWrapper = (UseCaseContainer.PopupMessageUseCaseContextMessage) dialog.getAbstractUseCase();

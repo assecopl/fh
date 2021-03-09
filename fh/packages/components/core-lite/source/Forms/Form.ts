@@ -159,7 +159,7 @@ class Form extends HTMLFormComponent {
                 while (this.contentWrapper != null && this.contentWrapper.firstChild) this.contentWrapper.removeChild(this.contentWrapper.firstChild);
                 this.renderSubcomponents();
                 this.modalDeferred.resolve();
-                this.focusFirstActiveInputElement();
+                this.focusFirstActiveInputElement(true);
 
                 /**
                  * WCAG(Srean Reader) Block focus on elements that are outside/under opened modal.
@@ -402,12 +402,19 @@ class Form extends HTMLFormComponent {
         return form;
     };
 
-    focusFirstActiveInputElement() {
+    focusFirstActiveInputElement(focusModalButton = false) {
         if (this.designMode || !this.focusFirstElement) {
             return;
         }
 
-        $(this.component).find(':input:enabled:not([readonly]):not(button):first').trigger('focus');
+        const input = $(this.component).find(':input:enabled:not([readonly]):not(button):first')
+        if(input.length > 0) {
+            input.trigger('focus');
+        } else {
+            if(focusModalButton) {
+                $(this.component).find('button.button:first').trigger('focus');
+            }
+        }
     }
 
     buildFloatingForm() {
