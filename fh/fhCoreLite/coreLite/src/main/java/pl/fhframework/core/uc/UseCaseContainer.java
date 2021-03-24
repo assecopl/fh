@@ -1399,7 +1399,7 @@ public class UseCaseContainer implements Serializable {
             // check if event source component is in proper state to send request
             if (eventUseCaseContext == null || !eventUseCaseContext.canProcessEvent(eventData)) {
                 String msg = String.format("Request for given form component cannot be processed - formId: '%s', eventType: '%s', sourceId: '%s', action: '%s', ", eventData.getFormId(), eventData.getEventType(), eventData.getEventSourceId(), eventData.getActionName());
-                FhLogger.error(msg);
+                FhLogger.errorSuppressed(msg);
                 return;
             }
 

@@ -51,6 +51,7 @@ class TabContainer extends HTMLFormComponent {
 
         if (this.componentObj.subelements) {
             this.addComponents(this.componentObj.subelements);
+            this.activateTab(this.activeTabIndex);
         }
     };
 
@@ -119,6 +120,8 @@ class TabContainer extends HTMLFormComponent {
                 this.accessibilityResolve(this.component, 'EDIT');
                 break;
             case 'VIEW':
+                this.navElement.classList.remove('d-none');
+                this.navElement.classList.remove('invisible');
                 this.accessibilityResolve(this.component, 'VIEW');
                 break;
             case 'HIDDEN':

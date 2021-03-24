@@ -533,10 +533,10 @@ class SelectComboMenu extends InputText {
                 const placeUnder = (parentBound.height - (inputBounding.bottom - parentBound.top) > sumHeight) ;
                 const placeAbove =  (inputBounding.top - parentBound.top > sumHeight) ;
                 //Put it as sibling of parent becouse parent has height and elements inside it wont overflow it. Close it when parent begins to scroll.
-                if (biggerThenParent || (!placeAbove && ! placeUnder)) {
+                if (biggerThenParent || (!placeAbove && !placeUnder)) {
                     this.handleContainerOverflow($("body"), this.autocompleter, false);
-                    //React to all scrollable elements and hide absolute autocompleter.
-                    document.addEventListener('scroll', this.closeAutocomplete.bind(this), true)
+                    //React to parent scroll and hide absolute autocompleter.
+                    $(parent).on("scroll", this.closeAutocomplete.bind(this));
                     //Reaclculate position - maybe it will be used.
                     // document.addEventListener('scroll', this.handleContainerOverflow.bind(this,$("body"), this.autocompleter, false), true);
                 } else {
@@ -612,7 +612,7 @@ class SelectComboMenu extends InputText {
             return {};
         }
 
-        if (this.rawValue !== this.oldValue || this.rawValue == null || this.rawValue == "") {
+        if (this.rawValue !== this.oldValue) {
             this.oldValue = this.rawValue;
             if (this.selectedIndex != null) {
                 return {selectedIndex: this.selectedIndex};

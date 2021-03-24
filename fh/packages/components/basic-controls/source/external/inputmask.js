@@ -2698,7 +2698,9 @@
                 }
                 return _inherits(InputmaskElement, _HTMLElement), InputmaskElement;
             }(_wrapNativeSuper(HTMLElement));
-            customElements.define("input-mask", InputmaskElement);
+            if (!customElements.get("input-mask")) {
+                customElements.define("input-mask", InputmaskElement);
+            }
         }
     } ], installedModules = {}, __webpack_require__.m = modules, __webpack_require__.c = installedModules,
         __webpack_require__.d = function(exports, name, getter) {

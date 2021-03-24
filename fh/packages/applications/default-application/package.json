@@ -1,6 +1,6 @@
 {
   "name": "fh-application",
-  "version": "4.8.6",
+  "version": "4.8.7",
   "main": "Module.ts",
   "private": true,
   "scripts": {
@@ -16,6 +16,7 @@
     "@babel/core": "7.4.5",
     "@babel/polyfill": "7.4.4",
     "@babel/preset-env": "7.4.5",
+    "@types/select2": "4.0.53",
     "babel-loader": "8.0.6",
     "css-loader": "1.0.1",
     "file-loader": "2.0.0",
@@ -28,15 +29,15 @@
     "webpack": "4.18.0",
     "tslint": "5.17.0",
     "typescript": "3.5.1",
-    "mini-css-extract-plugin": "0.4.5",
+    "mini-css-extract-plugin": "0.12.0",
     "optimize-css-assets-webpack-plugin": "5.0.1",
     "webpack-cli": "3.1.0",
     "webpack-merge": "4.2.1",
     "postcss-wrapper-loader": "1.0.1"
   },
   "dependencies": {
-    "fh-forms-handler": "4.8.6",
-    "fh-basic-controls": "4.8.6",
-    "fh-charts-controls": "4.8.6"
+    "fh-forms-handler": "4.8.7",
+    "fh-basic-controls": "4.8.7",
+    "fh-charts-controls": "4.8.7"
   }
 }

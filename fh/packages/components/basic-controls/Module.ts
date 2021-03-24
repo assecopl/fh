@@ -1,4 +1,5 @@
 import './source/Module.css';
+
 import {Tree} from "./source/controls/Tree/Tree";
 import {TreeElement} from "./source/controls/Tree/TreeElement";
 import {Group} from "./source/controls/Group";
@@ -46,6 +47,7 @@ import {Row} from './source/controls/Row';
 import {RadioOption} from "./source/controls/RadioOption";
 import {KeyboardEvent} from "./source/controls/KeyboardEvent";
 import {SelectComboMenu} from "./source/controls/Inputs/SelectComboMenu";
+import {Select2Combo} from "./source/controls/Inputs/Select2Combo";
 import {FhContainer} from "fh-forms-handler";
 import {MdFileViewer} from "./source/controls/MdFileViewer";
 import {HtmlEditor} from "./source/controls/HtmlEditor";
@@ -62,7 +64,8 @@ import {InputDateOptimized} from "./source/controls/Inputs/Optimized/InputDateOp
 import {SelectComboMenuOptimized} from "./source/controls/Inputs/Optimized/SelectComboMenuOptimized";
 import {ThreeDotsMenuItem} from "./source/controls/Dropdown/ThreeDotsMenuItem";
 import {ThreeDotsMenu} from "./source/controls/Dropdown/ThreeDotsMenu";
-import { DictionaryCombo } from './source/controls/Inputs/DictionaryCombo';
+import {DictionaryCombo} from './source/controls/Inputs/DictionaryCombo';
+import {Select2DictionaryCombo} from './source/controls/Inputs/Select2DictionaryCombo';
 import {Anchor} from "./source/controls/Anchor";
 import {DropdownDivider} from "./source/controls/Dropdown/DropdownDivider";
 import {EmbedPage} from "./source/controls/EmbedPage";
@@ -316,6 +319,12 @@ class BasicControls extends FhModule {
                     return new DictionaryCombo(componentObj, parent);
                 };
             });
+        FhContainer.bind<(componentObj: any, parent: any) => Select2DictionaryCombo>("Select2DictionaryCombo")
+            .toFactory<Select2DictionaryCombo>(() => {
+                return (componentObj: any, parent: any) => {
+                    return new Select2DictionaryCombo(componentObj, parent);
+                };
+            });
         FhContainer.bind<(componentObj: any, parent: any) => Combo>("Combo")
             .toFactory<Combo>(() => {
                 return (componentObj: any, parent: any) => {
@@ -326,6 +335,12 @@ class BasicControls extends FhModule {
             .toFactory<SelectComboMenu>(() => {
                 return (componentObj: any, parent: any) => {
                     return new SelectComboMenu(componentObj, parent);
+                };
+            });
+        FhContainer.bind<(componentObj: any, parent: any) => Select2Combo>("Select2Combo")
+            .toFactory<Select2Combo>(() => {
+                return (componentObj: any, parent: any) => {
+                    return new Select2Combo(componentObj, parent);
                 };
             });
         FhContainer.bind<(componentObj: any, parent: any) => InputDate>("InputDate")
@@ -529,6 +544,7 @@ export {
     RadioOption,
     KeyboardEvent,
     SelectComboMenu,
+    Select2Combo,
     MdFileViewer,
     HtmlEditor,
     FhModule,

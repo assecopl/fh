@@ -1097,6 +1097,10 @@ abstract class HTMLFormComponent extends FormComponent {
                 let spanRequired = document.createElement('span');
                 spanRequired.classList.add('input-group-text');
                 spanRequired.classList.add('input-required');
+                spanRequired.style.paddingLeft = '0.5rem';
+                spanRequired.style.paddingRight = '0';
+                spanRequired.style.background = 'transparent';
+                spanRequired.style.border = 'transparent';
                 spanRequired.appendChild(iconRequired);
 
                 let divRequired = document.createElement('div');
@@ -1105,8 +1109,8 @@ abstract class HTMLFormComponent extends FormComponent {
 
                 this.requiredElement = divRequired;
 
-                if (this.inputGroupElement != null) {
-                    this.inputGroupElement.appendChild(this.requiredElement);
+                if (this.labelElement != null) {
+                    this.labelElement.appendChild(this.requiredElement);
                 } else if (this.component.classList.contains('field-required')) {
                     this.component.appendChild(this.requiredElement);
                 } else {
@@ -1129,8 +1133,8 @@ abstract class HTMLFormComponent extends FormComponent {
                 }
 
             } else {
-                if (this.inputGroupElement != null) {
-                    this.inputGroupElement.removeChild(this.requiredElement);
+                if (this.labelElement != null) {
+                    this.labelElement.removeChild(this.requiredElement);
                 } else if (this.component.classList.contains('field-required')) {
                     this.component.removeChild(this.requiredElement);
                 } else {

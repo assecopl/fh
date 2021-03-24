@@ -10,30 +10,30 @@ class Combo extends InputText {
 
     protected values: any;
     protected autocompleter: any;
-    private selectedIndexGroup: any;
-    private selectedIndex: any;
-    private removedIndex: any;
-    private highlighted: any;
-    private forceSendSelectedIndex: any;
-    private cleared: any;
-    private addedTag: boolean;
-    private lastCursorPosition: any;
-    private blurEvent: any;
-    private blurEventWithoutChange: boolean;
-    private readonly onSpecialKey: any;
-    private readonly onDblSpecialKey: any;
-    private readonly multiselect: boolean;
-    private readonly freeTyping: boolean;
-    private tagslist: Array<string> = [];
-    private tagsInputData: any;
-    private multiselectRawValue: any;
-    private widthRatio: number;
-    private multiselectOldValue: any;
-    private changeToFired: boolean;
+    protected selectedIndexGroup: any;
+    protected selectedIndex: any;
+    protected removedIndex: any;
+    protected highlighted: any;
+    protected forceSendSelectedIndex: any;
+    protected cleared: any;
+    protected addedTag: boolean;
+    protected lastCursorPosition: any;
+    protected blurEvent: any;
+    protected blurEventWithoutChange: boolean;
+    protected readonly onSpecialKey: any;
+    protected readonly onDblSpecialKey: any;
+    protected readonly multiselect: boolean;
+    protected readonly freeTyping: boolean;
+    protected tagslist: Array<string> = [];
+    protected tagsInputData: any;
+    protected multiselectRawValue: any;
+    protected widthRatio: number;
+    protected multiselectOldValue: any;
+    protected changeToFired: boolean;
 
-    private onInputTimer: any;
-    private openOnFocus: boolean = true;
-    private readonly onInputTimeout: number;
+    protected onInputTimer: any;
+    protected openOnFocus: boolean = true;
+    protected readonly onInputTimeout: number;
 
     private cursorPositionOnLastSpecialKey: any;
 

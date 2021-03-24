@@ -126,7 +126,7 @@ public class SelectComboMenu extends BaseInputFieldWithKeySupport {
     @JsonIgnore
     protected Object selectedItem;
 
-    @JsonIgnore
+    @Getter
     protected Integer selectedItemIndex;
 
     @Getter
@@ -285,7 +285,8 @@ public class SelectComboMenu extends BaseInputFieldWithKeySupport {
 
     }
 
-    private void selectItemByFilterText() {
+
+    protected void selectItemByFilterText() {
         List<SelectComboItemDTO> entry = collectValues(filteredObjectValues);
 
         for (SelectComboItemDTO item : entry) {
@@ -357,13 +358,13 @@ public class SelectComboMenu extends BaseInputFieldWithKeySupport {
         return allBindings;
     }
 
-    private void changeSelectedItemBinding() {
+    protected void changeSelectedItemBinding() {
         if (getModelBinding() != null) {
             getModelBinding().setValue(selectedItem);
         }
     }
 
-    private void processFiltering(String text) {
+    protected void processFiltering(String text) {
         filteredObjectValues.clear();
         filteredObjectValues.addAll(values);
 
@@ -495,7 +496,7 @@ public class SelectComboMenu extends BaseInputFieldWithKeySupport {
         return false;
     }
 
-    private List<SelectComboItemDTO> collectValues(List<Object> valuesToConvert) {
+    protected List<SelectComboItemDTO> collectValues(List<Object> valuesToConvert) {
         List<SelectComboItemDTO> filteredConvertedValues = new LinkedList<>();
 
         /**
@@ -548,7 +549,7 @@ public class SelectComboMenu extends BaseInputFieldWithKeySupport {
         return item;
     }
 
-    private String toRawValue(Object s) {
+    protected String toRawValue(Object s) {
         if (s instanceof List) {
             return JsonUtil.writeValue(((List) s).stream().map(this::toRawElementValue).collect(Collectors.toList()));
         }

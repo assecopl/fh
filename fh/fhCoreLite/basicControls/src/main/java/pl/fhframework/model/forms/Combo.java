@@ -51,7 +51,7 @@ public class Combo extends BaseInputFieldWithKeySupport implements I18nFormEleme
     private static final String VALUES_ATTR = "values";
     protected static final String TEXT = "text";
     protected static final String ADDED_TAG = "addedTag";
-    private static final String FILTERED_VALUES = "filteredValues";
+    protected static final String FILTERED_VALUES = "filteredValues";
     private static final String FILTER_FUNCTION_ATTR = "filterFunction";
     private static final String FILTER_TEXT = "filterText";
     protected static final String SELECTED_INDEX_ATTR = "selectedIndex";
@@ -60,11 +60,11 @@ public class Combo extends BaseInputFieldWithKeySupport implements I18nFormEleme
     protected static final String CLEARED = "cleared";
     private static final String FORMATTER_ATTR = "formatter";
     protected static final String CURSOR = "cursor";
-    private static final String FREE_TYPING = "freeTyping";
-    private static final String EMPTY_VALUE_ATTR = "emptyValue";
-    private static final String DISPLAY_FUNCTION_ATTR = "displayFunction";
-    private static final String DISPLAY_RULE_ATTR = "displayExpression";
-    private static final String ATTR_OPEN_ON_FOCUS = "openOnFocus";
+    protected static final String FREE_TYPING = "freeTyping";
+    protected static final String EMPTY_VALUE_ATTR = "emptyValue";
+    protected static final String DISPLAY_FUNCTION_ATTR = "displayFunction";
+    protected static final String DISPLAY_RULE_ATTR = "displayExpression";
+    protected static final String ATTR_OPEN_ON_FOCUS = "openOnFocus";
 
     @Override
     public void onSessionLanguageChange(String lang) {
@@ -205,13 +205,13 @@ public class Combo extends BaseInputFieldWithKeySupport implements I18nFormEleme
     @XMLProperty(value = FILTER_FUNCTION_ATTR)
     @DesignerXMLProperty(allowedTypes = BiPredicate.class)
     @DocumentedComponentAttribute(defaultValue = "Default function: (model, value) -> ((String) model).toLowerCase().contains(value.toLowerCase())", boundable = true, value = "Name of model object (java.util.function.BiPredicate) which will be used to filter items by text.")
-    private ModelBinding filterFunctionBinding;
+    protected ModelBinding filterFunctionBinding;
 
     @JsonIgnore
     protected boolean filterInvoked;
 
     @Getter
-    private boolean emptyValue;
+    protected boolean emptyValue;
 
     @JsonIgnore
     @Getter
@@ -219,7 +219,7 @@ public class Combo extends BaseInputFieldWithKeySupport implements I18nFormEleme
     @XMLProperty(EMPTY_VALUE_ATTR)
     @DesignerXMLProperty(functionalArea = DesignerXMLProperty.PropertyFunctionalArea.CONTENT)
     @DocumentedComponentAttribute(defaultValue = "false", value = "Defines if value passed can be empty", boundable = true)
-    private ModelBinding<Boolean> emptyValueBinding;
+    protected ModelBinding<Boolean> emptyValueBinding;
 
     @Getter
     @Setter
@@ -262,7 +262,7 @@ public class Combo extends BaseInputFieldWithKeySupport implements I18nFormEleme
     @Setter
     @XMLProperty(value = FREE_TYPING)
     @DocumentedComponentAttribute(boundable = true, defaultValue = "false", value = "Defines if new values could be typed be user.  Binding changes may not be respected after initially showing this control.")
-    private ModelBinding<Boolean> freeTypingBinding;
+    protected ModelBinding<Boolean> freeTypingBinding;
 
     protected Class<?> modelType = String.class;
 
@@ -562,7 +562,7 @@ public class Combo extends BaseInputFieldWithKeySupport implements I18nFormEleme
         return elementChanges;
     }
 
-    private void processFilterTextBinding(ElementChanges elementChanges) {
+    protected void processFilterTextBinding(ElementChanges elementChanges) {
         if (getModelBinding() == null || getModelBinding().getBindingResult() == null || getModelBinding().getBindingResult().getValue() == null) {
             if (getFilterTextBinding() != null) {
                 BindingResult filterTextResult = getFilterTextBinding().getBindingResult();
@@ -583,7 +583,7 @@ public class Combo extends BaseInputFieldWithKeySupport implements I18nFormEleme
 
     }
 
-    private void setFilterFunction() {
+    protected void setFilterFunction() {
         BindingResult filterBindingResult = getFilterFunctionBinding() != null ? getFilterFunctionBinding().getBindingResult() : null;
         if (filterBindingResult != null) {
             this.filterFunction = (BiPredicate<Object, String>) filterBindingResult.getValue();
@@ -782,7 +782,7 @@ public class Combo extends BaseInputFieldWithKeySupport implements I18nFormEleme
         this.formatter = formatter;
     }
 
-    private boolean processCursorBinding(FormElement formElement, ElementChanges elementChanges) {
+    protected boolean processCursorBinding(FormElement formElement, ElementChanges elementChanges) {
         if (getCursorBinding() != null) {
             Integer oldValue = getCursor();
             if (getCursorBinding() != null) {

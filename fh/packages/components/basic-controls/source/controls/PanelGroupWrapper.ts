@@ -52,8 +52,13 @@ class PanelGroupWrapper extends HTMLFormComponent {
         checkbox.value = "true"
         checkbox.type = 'checkbox'
         checkbox.checked == this.toggleAll ? false : true;
+        checkbox.style.marginTop = '0px';
+        checkbox.style.marginRight = '10px';
+        checkbox.style.marginLeft = '0px';
+        checkbox.style.display = 'block';
         checkbox.classList.add('form-check-input');
         label.classList.add('form-check-label');
+        label.style.marginLeft = '25px';
 
         label.innerText = this.i18n.__('panelgroupwrapper.show_all')
 
