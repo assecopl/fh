@@ -8,6 +8,7 @@ import {FHML} from '../FHML';
 import {AdditionalButton} from './AdditionalButton';
 import * as $ from 'jquery';
 import {Placement, PopoverOption, TooltipOption, Trigger} from "bootstrap";
+import {ComponentExtender} from './ComponentExtender';
 
 let {lazyInject} = getDecorators(FhContainer);
 
@@ -169,7 +170,6 @@ abstract class HTMLFormComponent extends FormComponent {
         this.setAccessibility(this.accessibility);
         this.setPresentationStyle(this.presentationStyle);
         this.enableStyleClasses();
-        this.setRequiredField(this.requiredField);
 
         if (this.designMode) {
             (<any>FhContainer.get('Designer')).addToolboxListeners(this);
@@ -256,9 +256,18 @@ abstract class HTMLFormComponent extends FormComponent {
         }
 
         this.container.appendChild(this.htmlElement);
+
+        this.setRequiredField(this.requiredField);
         if (this.hint !== null) {
             this.initHint();
         }
+
+        const createChain = ComponentExtender.getInstance().getStaticExtenders(this.constructor.name, 'create');
+        createChain.forEach((ext) => {
+            if (ext) {
+                ext(this.componentObj, this);
+            }
+        })
     }
 
     render() {
@@ -521,6 +530,13 @@ abstract class HTMLFormComponent extends FormComponent {
             this.htmlElement = null;
         }
 
+        const createChain = ComponentExtender.getInstance().getStaticExtenders(this.constructor.name, 'destroy');
+        createChain.forEach((ext) => {
+            if (ext) {
+                ext(this.componentObj, this);
+            }
+        })
+
         super.destroy(removeFromParent);
 
         document.removeEventListener('keyup', this.handleDeleteBtnEvent);
@@ -562,8 +578,19 @@ abstract class HTMLFormComponent extends FormComponent {
                         break;
                     case 'label':
                         if (this.labelElement != null) {
+                            this.destroyHint();
                             this.labelElement.innerHTML = this.fhml.resolveValueTextOrEmpty(newValue);
                             this.updateLabelClass(newValue);
+                            if (this.requiredField) {
+                                if (['RadioOption', 'RadioOptionsGroup','CheckBox'].indexOf(this.componentObj.type) === -1) {
+                                    this.labelElement.appendChild(this.requiredElement);
+                                } else {
+                                    this.setRequiredField(this.requiredField);
+                                }
+                            }
+                            if (this.hint) {
+                                this.initHint();
+                            }
                         }
                         break;
                     case 'hint':
@@ -576,6 +603,12 @@ abstract class HTMLFormComponent extends FormComponent {
                         break;
                 }
             }.bind(this));
+            const createChain = ComponentExtender.getInstance().getStaticExtenders(this.constructor.name, 'update');
+            createChain.forEach((ext) => {
+                if (ext) {
+                    ext(change.changedAttributes, this.componentObj, this);
+                }
+            })
         }
     }
 
@@ -1108,7 +1141,7 @@ abstract class HTMLFormComponent extends FormComponent {
                 divRequired.appendChild(spanRequired);
 
                 this.requiredElement = divRequired;
-
+                
                 if (this.labelElement != null) {
                     this.labelElement.appendChild(this.requiredElement);
                 } else if (this.component.classList.contains('field-required')) {
@@ -1133,6 +1166,7 @@ abstract class HTMLFormComponent extends FormComponent {
                 }
 
             } else {
+
                 if (this.labelElement != null) {
                     this.labelElement.removeChild(this.requiredElement);
                 } else if (this.component.classList.contains('field-required')) {

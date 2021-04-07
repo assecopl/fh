@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>basicControls</artifactId>
   <groupId>pl.fhframework</groupId>
-  <version>4.8.7</version>
+  <version>4.8.8</version>
   <packaging>jar</packaging>
   <url>https://github.com/assecopl/fh</url>
   <name>basicControls</name>
@@ -10,7 +10,7 @@
   <parent>
     <groupId>pl.fhframework</groupId>
     <artifactId>fhCoreLite</artifactId>
-    <version>4.8.7</version>
+    <version>4.8.8</version>
   </parent>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -20,7 +20,7 @@
     <dependency>
       <groupId>pl.fhframework</groupId>
       <artifactId>coreLite</artifactId>
-      <version>4.8.7</version>
+      <version>4.8.8</version>
     </dependency>
     <dependency>
       <groupId>commons-lang</groupId>

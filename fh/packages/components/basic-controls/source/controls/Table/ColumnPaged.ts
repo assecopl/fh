@@ -24,6 +24,8 @@ class ColumnPaged extends HTMLFormComponent {
     create() {
 
         let column = document.createElement('th');
+        column.id = this.id;
+        column.classList.add(this.id);
         if (this.width && this.width.length > 0) {
             column.style.width = this.width[0].includes("px")? this.width[0]: this.width[0]  + '%';
         }

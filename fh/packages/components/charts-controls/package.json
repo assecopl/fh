@@ -1,6 +1,6 @@
 {
   "name": "fh-charts-controls",
-  "version": "4.8.7",
+  "version": "4.8.8",
   "main": "dist/Module.js",
   "types": "dist/Module.d.ts",
   "scripts": {
@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "chart.js": "2.8.0",
-    "fh-forms-handler": "4.8.7",
+    "fh-forms-handler": "4.8.8",
     "copyfiles": "2.1.1"
   }
 }

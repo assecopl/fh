@@ -31,6 +31,7 @@ import {FormComponentKeySupport} from "./source/Forms/FormComponentKeySupport";
 import {FormComponentChangesQueue} from "./source/Forms/FormComponentChangesQueue";
 import {Form} from "./source/Forms/Form";
 import {HTMLFormComponent} from './source/Forms/HTMLFormComponent';
+import {ComponentExtender} from './source/Forms/ComponentExtender';
 import {AdditionalButton} from './source/Forms/AdditionalButton';
 import {FormComponent} from './source/Forms/FormComponent';
 import {WindowEventsListener} from './source/Forms/WindowEventsListener';
@@ -115,6 +116,7 @@ export {
     FormComponentKeySupport,
     FormComponent,
     HTMLFormComponent,
+    ComponentExtender,
     FHML,
     LanguageChangeObserver,
     WindowEventsListener,

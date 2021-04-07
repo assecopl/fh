@@ -26,6 +26,8 @@ abstract class TableFixedHeaderAndHorizontalScroll extends HTMLFormComponent {
     protected secondOffset: any;
     protected initColumnResize: boolean = false;
 
+    protected mouseoverUpdate:boolean = false;
+
     constructor(componentObj: any, parent: HTMLFormComponent) {
         super(componentObj, parent);
         this.fixedHeader = this.componentObj.fixedHeader || false;
@@ -49,12 +51,17 @@ abstract class TableFixedHeaderAndHorizontalScroll extends HTMLFormComponent {
          * Fire fixed header logic after tabel dispaly becouse we need to have widths to fixed columns widths.
          */
         this.component.addEventListener('mouseover', function () {
-            this.handleFixedHeader();
-            this.handleColumnResize();
+           if(!this.mouseoverUpdate) {
+               this.recalculateColumnWidths();
+               this.recalculateGripHeight()
+           }
+           this.mouseoverUpdate = true;
         }.bind(this));
         this.component.onscroll = this.handleFixedHeader.bind(this);
+
         this.handleFixedHeader();
         this.handleColumnResize();
+
 
     };
 
@@ -165,7 +172,7 @@ abstract class TableFixedHeaderAndHorizontalScroll extends HTMLFormComponent {
     handleFixedHeader() {
         if (this.fixedHeader && this.inputGroupElement && !this.initFixedHeader && (!this.designMode || this._formId === 'FormPreview')) {
             // if(this.fh.isIE()) {
-                this.calculateColumnsWidth();
+
 
                 this.scrollbarWidth = this.component.offsetWidth - this.component.clientWidth;
                 let outter: HTMLDivElement = document.createElement('div');
@@ -192,6 +199,14 @@ abstract class TableFixedHeaderAndHorizontalScroll extends HTMLFormComponent {
                 outter.appendChild(table);
 
                 this.clonedTable = table;
+
+                this.clonedTable.addEventListener('mouseover', function () {
+                    if (!this.mouseoverUpdate) {
+                        this.recalculateColumnWidths();
+                        this.recalculateGripHeight()
+                    }
+                    this.mouseoverUpdate = true;
+                }.bind(this));
 
                 this.inputGroupElement.appendChild(outter);
 
