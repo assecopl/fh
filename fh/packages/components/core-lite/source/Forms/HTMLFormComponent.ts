@@ -122,6 +122,9 @@ abstract class HTMLFormComponent extends FormComponent {
                 case 'HOVER':
                     this.hintTrigger = 'hover';
                     break;
+                case 'CLICK': 
+                    this.hintTrigger = 'click';
+                    break;
             }
         } else {
             this.hintTrigger = 'hover focus';

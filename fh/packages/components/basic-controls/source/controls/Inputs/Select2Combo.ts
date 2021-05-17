@@ -103,7 +103,7 @@ class Select2Combo extends InputText {
     public onValueChange(e) {
         this.updateModel();
         this.getCurrentSelections();
-        if (this.onChange && this.accessibility === 'EDIT') {
+        if (this.onChange && this.accessibility === 'EDIT' && (this.rawValue !== this.oldValue)) {
             this.fireEventWithLock('onChange', this.onChange);
         }
 
@@ -292,6 +292,7 @@ class Select2Combo extends InputText {
                         break;
                     case 'rawValue':
                         this.rawValue = newValue;
+                        this.oldValue = newValue;
 
                         let index = this.findIndexByValue(newValue);
                         $(this.input).val(index);
