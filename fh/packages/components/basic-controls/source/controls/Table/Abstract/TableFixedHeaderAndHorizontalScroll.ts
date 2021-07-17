@@ -50,13 +50,11 @@ abstract class TableFixedHeaderAndHorizontalScroll extends HTMLFormComponent {
         /**
          * Fire fixed header logic after tabel dispaly becouse we need to have widths to fixed columns widths.
          */
-        this.component.addEventListener('mouseover', function () {
-           if(!this.mouseoverUpdate) {
-               this.recalculateColumnWidths();
-               this.recalculateGripHeight()
-           }
-           this.mouseoverUpdate = true;
-        }.bind(this));
+        if(!this.mouseoverUpdate) {
+            this.recalculateColumnWidths();
+            this.recalculateGripHeight()
+        }
+        this.mouseoverUpdate = true;
         this.component.onscroll = this.handleFixedHeader.bind(this);
 
         this.handleFixedHeader();
