@@ -1,5 +1,5 @@
 .svn
-target
+**/target
 /fh/packages/applications/default-application/node_modules/.bin
 /fh/packages/applications/default-application/node_modules/.cache
 /fh/packages/components/basic-controls/node_modules/.bin
@@ -9,4 +9,9 @@ target
 /fh/packages/node/yarn
 /fh/packages/node_modules
 /fh/packages/yarn.lock
-/.idea/
+**/.idea/
+**/dist
+**/*.iml
+**/node
+**/node_modules/
+**/build/

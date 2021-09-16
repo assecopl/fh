@@ -56,6 +56,15 @@ jobs:
     - name: Autobuild
       uses: github/codeql-action/autobuild@v1
 
+    - if: matrix.language == 'java'
+      name: Build Java
+      uses: actions/setup-java@v2
+      with:
+        java-version: '8'
+        distribution: 'adopt'
+        cache: maven
+      run: mvn -B package
+
     # ℹ️ Command-line programs to run using the OS shell.
     # 📚 https://git.io/JvXDl
 
