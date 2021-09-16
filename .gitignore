@@ -9,3 +9,4 @@ target
 /fh/packages/node/yarn
 /fh/packages/node_modules
 /fh/packages/yarn.lock
+/.idea/
