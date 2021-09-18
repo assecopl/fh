@@ -14,7 +14,7 @@
 		<groupId>pl.fhframework</groupId>
 		<artifactId>fh-compile-bom</artifactId>
 		<version>4.5-SNAPSHOT</version>
-		<relativePath>../BOM/fh-compile-bom</relativePath>
+		<relativePath>../bom-project-lite/fh-compile-bom</relativePath>
 	</parent>
 
 	<!-- CUT IT -->
