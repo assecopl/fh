@@ -298,22 +298,7 @@
     </profiles>
 
 
-    <pluginRepositories>
-        <pluginRepository>
-            <id>fh</id>
-            <url>http://10.10.24.219:8081/repository/puma-all/</url>
-        </pluginRepository>
-    </pluginRepositories>
-
     <repositories>
-        <repository>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <id>fh</id>
-            <name>Fh</name>
-            <url>http://10.10.24.219:8081/repository/puma-all/</url>
-        </repository>
         <repository>
             <id>osgeo</id>
             <name>Open Source Geospatial Foundation Repository</name>
