@@ -14,11 +14,11 @@ public interface FhNavbarConfiguration extends IFhConfiguration {
     String BASE_CSS = "default";
 
     /**
-     * Return customized list of css <id, url> available within Navigation Bar
+     * Return customized list of css &lt;id, url&gt; available within Navigation Bar
      *
      * @param defaultCssUrls map with fh default css styles
      *
-     * @return list of css <id, url>
+     * @return list of css &lt;id, url&gt;
      */
     default Map<String, String> bootstrapCssUrlList(Map<String, String> defaultCssUrls) {
         return defaultCssUrls;

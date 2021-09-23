@@ -53,7 +53,7 @@ public class CompiledClassesHelper {
         addSuffixToId(component, suffix);
         if (component instanceof IGroupingComponent) {
             ((IGroupingComponent<?>) component).doActionForEverySubcomponentInlcudingRepeated(child -> {
-                addSuffixToId(component, suffix);
+                addSuffixToIdWithSubcomponents(child, suffix);
             });
         }
     }

@@ -24,7 +24,9 @@ public interface Styleable {
         WARNING,
         DANGER,
         LINK,
-        LIGHT;
+        LIGHT,
+        DARK,
+        SECONDARY;
 
         private static Map<String, Style> stylesMap = new HashMap<>(6);
 
@@ -37,6 +39,8 @@ public interface Styleable {
             stylesMap.put("danger", DANGER);
             stylesMap.put("link", LINK);
             stylesMap.put("light", LIGHT);
+            stylesMap.put("dark", DARK);
+            stylesMap.put("secondary", SECONDARY);
         }
 
         @JsonValue

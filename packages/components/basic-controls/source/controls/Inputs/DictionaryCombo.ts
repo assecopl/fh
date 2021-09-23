@@ -9,6 +9,11 @@ class DictionaryCombo extends Combo {
     constructor(componentObj: any, parent: HTMLFormComponent) {
         super(componentObj, parent);
     }
+
+    public getInputValue(val){
+            return  val.displayAsTarget ? val.targetValue : val.displayedValue;
+    }
+
 }
 
 export {DictionaryCombo}

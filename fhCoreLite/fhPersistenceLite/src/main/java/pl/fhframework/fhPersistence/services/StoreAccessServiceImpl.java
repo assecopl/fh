@@ -5,6 +5,7 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.expression.spel.ast.PropertyOrFieldReference;
 import org.springframework.stereotype.Service;
+import pl.fhframework.ReflectionUtils;
 import pl.fhframework.core.FhBindingException;
 import pl.fhframework.core.FhException;
 import pl.fhframework.core.datasource.StoreAccessService;
@@ -17,8 +18,8 @@ import pl.fhframework.core.rules.dynamic.model.dataaccess.*;
 import pl.fhframework.core.rules.dynamic.model.predicates.*;
 import pl.fhframework.core.util.StringUtils;
 import pl.fhframework.fhPersistence.core.EntityManagerRepository;
+import pl.fhframework.fhPersistence.core.model.ModelConfig;
 import pl.fhframework.fhPersistence.core.model.ModelProxyService;
-import pl.fhframework.ReflectionUtils;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -39,11 +40,14 @@ import java.util.stream.Collectors;
  */
 @Service
 public class StoreAccessServiceImpl implements StoreAccessService {
-    @Autowired
+    @Autowired(required = false)
     protected EntityManagerRepository entityManagerRepository;
 
     @Autowired
     protected ModelProxyService modelProxy;
+
+    @Autowired
+    protected ModelConfig modelConfig;
 
     public <S extends BaseEntity> List<S> storeRead(Class<S> type) {
             EntityManager em = entityManagerRepository.getEntityManager();
@@ -196,9 +200,22 @@ public class StoreAccessServiceImpl implements StoreAccessService {
         allAttributes.putAll(currIterAttrs);
 
         String selectClause = count != null ? "count(" + rootAlias + ")" : rootAlias;
-        String fromClause;
 
-        fromClause = String.format("%s %s", getEntityName(type), rootAlias);
+        return storeFindQueryStr(allAttributes, queryParams, iterMap, rootSelect, where, orderby, count, type, iter, rootAlias, joinClauseList, selectClause);
+        // todo:
+            /*
+            StringBuilder sb = new StringBuilder();
+            String objectType = modelConfig.getStaticClassForExtendedClass(type).getName();
+            sb.append("select static, (select dyn from DynamicObject dyn where dyn.staticObjectType='");
+            sb.append(objectType).append("' and dyn.staticObjectId = static.id) from ");
+            sb.append(objectType).append(" static");
+            // todo: entity name
+            return sb.toString();
+            */
+    }
+
+    protected String storeFindQueryStr(Map<String, PathAttribute> allAttributes, List<Object> queryParams, Map<String, Class> iterMap, boolean rootSelect, Filter where, SortBy orderby, Count count, Class type, String iter, String rootAlias, List<String> joinClauseList, String selectClause) {
+        String fromClause = String.format("%s %s", getEntityName(type), rootAlias);
 
         String queryStr = String.format("select %s from %s %s where %s%s %s",
                 selectClause,
@@ -210,19 +227,13 @@ public class StoreAccessServiceImpl implements StoreAccessService {
 
 
         return queryStr;
-        // todo:
-            /*
-            StringBuilder sb = new StringBuilder();
-            String objectType = dynamicModelConfig.getStaticClassForExtendedClass(type).getName();
-            sb.append("select static, (select dyn from DynamicObject dyn where dyn.staticObjectType='");
-            sb.append(objectType).append("' and dyn.staticObjectId = static.id) from ");
-            sb.append(objectType).append(" static");
-            // todo: entity name
-            return sb.toString();
-            */
     }
 
     protected String getEntityName(Class type) {
+        return getEntityName(type, false, false);
+    }
+
+    protected String getEntityName(Class type, boolean dynamic, boolean hybrid) {
         Entity entityAnnotation = (Entity) type.getAnnotation(Entity.class);
         if (StringUtils.isNullOrEmpty(entityAnnotation.name())) {
             return type.getSimpleName();
@@ -305,40 +316,88 @@ public class StoreAccessServiceImpl implements StoreAccessService {
                 if (!joinedAssociation.containsKey(parentAttribute.getPath())) {
                     joinedAssociation.put(parentAttribute.getPath(), parentAttribute.getAlias());
                     if (!reverse || !parentAttribute.getParentPath().equals(pathAttribute.getRootPath())) {
-                            joinStrList.add(String.format("%s %s %s on %s.%s = %s", joinType, getEntityName(pathAttribute.getParentType()), parentAttribute.getAlias(),
+                        if (modelConfig.isNonOwningField(parentAttribute.getParentType(), parentAttribute.getName())) {
+                            String mappedName = ((Map<String, String>)modelConfig.getNonOwningRelationsForClass(parentAttribute.getParentType())).get(parentAttribute.getName());
+
+                            joinStrList.add(String.format("%s %s %s on %s = %s.%s", joinType, getEntityName(pathAttribute.getParentType(), false, false), parentAttribute.getAlias(),
+                                    parentAttribute.getParentAlias(), parentAttribute.getAlias(), mappedName));
+                        } else {
+                            joinStrList.add(String.format("%s %s %s on %s.%s = %s", joinType, getEntityName(pathAttribute.getParentType(), false, false), parentAttribute.getAlias(),
                                     parentAttribute.getParentAlias(), parentAttribute.getName(), parentAttribute.getAlias()));
+                        }
                     }
                     else {
+                        if (modelConfig.isNonOwningField(parentAttribute.getParentType(), parentAttribute.getName())) {
+                            String mappedName = ((Map<String, String>)modelConfig.getNonOwningRelationsForClass(parentAttribute.getParentType())).get(parentAttribute.getName());
+
+                            pathAttribute.setWhereCondition(String.format("%s = %s.%s",
+                                    parentAttribute.getParentAlias(), parentAttribute.getAlias(), mappedName));
+                        } else {
                             pathAttribute.setWhereCondition(String.format("%s.%s = %s",
                                     parentAttribute.getParentAlias(), parentAttribute.getName(), parentAttribute.getAlias()));
+                        }
                     }
                 }
-            } else {
+            }
+            else {
                 if (!joinedAssociation.containsKey(pathAttribute.getParentPathWithType())) {
                     joinedAssociation.put(pathAttribute.getParentPathWithType(), pathAttribute.getParentAlias());
-                    joinStrList.add(String.format("%s %s %s on %s.%s = %s", joinType, getEntityName(pathAttribute.getParentType()), pathAttribute.getParentAlias(),
-                            parentAttribute.getParentAlias(), parentAttribute.getName(), pathAttribute.getParentAlias()));
+
+                    if (modelConfig.isNonOwningField(parentAttribute.getParentType(), parentAttribute.getName())) {
+                        String mappedName = ((Map<String, String>)modelConfig.getNonOwningRelationsForClass(parentAttribute.getParentType())).get(parentAttribute.getName());
+
+                        joinStrList.add(String.format("%s %s %s on %s = %s.%s", joinType, getEntityName(pathAttribute.getParentType(), false, false), pathAttribute.getParentAlias(),
+                                parentAttribute.getParentAlias(), pathAttribute.getParentAlias(), mappedName));
+                    } else {
+                        joinStrList.add(String.format("%s %s %s on %s.%s = %s", joinType, getEntityName(pathAttribute.getParentType(), false, false), pathAttribute.getParentAlias(),
+                                parentAttribute.getParentAlias(), parentAttribute.getName(), pathAttribute.getParentAlias()));
+                    }
                 }
             }
         } else {
             String fkAlias = parentAttribute.getAlias() + "fk";
             String parentAlias = joinedAssociation.get(parentAttribute.getParentPath());
             String alias = parentAttribute.getAlias() + "dyn";
-            if (!reverse) {
-                joinStrList.add(String.format("%s %s.attributes %s on %s.name = '%s'", joinType, parentAlias, fkAlias, fkAlias, parentAttribute.getName()));
-                joinStrList.add(String.format("%s %s.objValue %s", joinType, fkAlias, alias));
-                joinedAssociation.put(parentAttribute.getPath(), alias);
+            if (modelConfig.isNonOwningField(parentAttribute.getParentType(), parentAttribute.getName())) {
+                String mappedName = ((Map<String, String>)modelConfig.getNonOwningRelationsForClass(parentAttribute.getParentType())).get(parentAttribute.getName());
 
-                if (pathAttribute.isHybrid()) {
-                    joinStrList.add(String.format("%s %s %s on %s.id = %s.objectStaticId", joinType, getEntityName(pathAttribute.getParentType()), pathAttribute.getParentAlias(),
-                            pathAttribute.getParentAlias(), fkAlias));
-                    joinedAssociation.put(pathAttribute.getParentPathWithType(), pathAttribute.getParentAlias());
+                if (!reverse) {
+                    joinStrList.add(String.format("%s DynamicObjectAttribute %s on %s = %s.objValue and %s.name = '%s'", joinType, fkAlias, parentAlias, fkAlias, fkAlias, mappedName));
+                    joinStrList.add(String.format("%s DynamicObject %s on %s.owner = %s and %s.objectType = '%s'", joinType, alias, fkAlias, alias,
+                            alias, ReflectionUtils.getClassName(pathAttribute.getParentType())));
+                    joinedAssociation.put(parentAttribute.getPath(), alias);
+
+                    if (pathAttribute.isHybrid()) {
+                        joinStrList.add(String.format("%s %s %s on %s.id = %s.staticObjectId", joinType, getEntityName(pathAttribute.getParentType(), false, pathAttribute.isHybrid()), pathAttribute.getParentAlias(),
+                                pathAttribute.getParentAlias(), alias));
+                        pathAttribute.setWhereCondition(String.format("%s.owner = %s", fkAlias, alias));
+                        joinedAssociation.put(pathAttribute.getParentPathWithType(), pathAttribute.getParentAlias());
+                    }
+                }
+                else {
+                    joinStrList.add(String.format("%s %s.attributes %s on %s.name = '%s'", joinType, alias, fkAlias, fkAlias, mappedName));
+                    if (parentAttribute.getParentPath().equals(parentAttribute.getRootPath())) {
+                        pathAttribute.setWhereCondition(String.format("%s = %s.objValue", parentAttribute.getParentAlias(), fkAlias));
+                    }
                 }
             } else {
-                String nameFk = parentAttribute.getParentAlias() + parentAttribute.getName() + "_fk";
-                joinStrList.add(String.format("%s DynamicObjectAttribute %s on %s.objValue = %s and %s.name='%s'", joinType, nameFk, nameFk, alias, nameFk, parentAttribute.getName()));
-                if (parentAttribute.getParentPath().equals(parentAttribute.getRootPath())) {
-                    pathAttribute.setWhereCondition(String.format("%s = %s.owner", parentAttribute.getParentAlias(), nameFk));
+                if (!reverse) {
+                    joinStrList.add(String.format("%s %s.attributes %s on %s.name = '%s'", joinType, parentAlias, fkAlias, fkAlias, parentAttribute.getName()));
+                    joinStrList.add(String.format("%s %s.objValue %s", joinType, fkAlias, alias));
+                    joinedAssociation.put(parentAttribute.getPath(), alias);
+
+                    if (pathAttribute.isHybrid() || !pathAttribute.isDynamic()) {
+                        joinStrList.add(String.format("%s %s %s on %s.id = %s.objectStaticId", joinType, getEntityName(pathAttribute.getParentType(), false, pathAttribute.isHybrid()), pathAttribute.getParentAlias(),
+                                pathAttribute.getParentAlias(), fkAlias));
+                        joinedAssociation.put(pathAttribute.getParentPathWithType(), pathAttribute.getParentAlias());
+                    }
+                }
+                else {
+                    String nameFk = parentAttribute.getParentAlias() + parentAttribute.getName() + "_fk";
+                    joinStrList.add(String.format("%s DynamicObjectAttribute %s on %s.objValue = %s and %s.name='%s'", joinType, nameFk, nameFk, alias, nameFk, parentAttribute.getName()));
+                    if (parentAttribute.getParentPath().equals(parentAttribute.getRootPath())) {
+                        pathAttribute.setWhereCondition(String.format("%s = %s.owner", parentAttribute.getParentAlias(), nameFk));
+                    }
                 }
             }
         }
@@ -361,21 +420,25 @@ public class StoreAccessServiceImpl implements StoreAccessService {
             }
             PathAttribute parentAttribute = extractPathAttribute(pathAttribute.getParentPath(), pathAttribute.getRootPath(), pathAttribute.getRootType());
 
-            joinedAssociation.put(rootChild.getParentPathWithType(), rootChild.getParentAlias());
-
-            String alias = iter;
-            if (pathAttribute.isHybrid()) {
-                alias = pathForStatic(iter);
-            }
-
-            appendAndCondition(where, CompareCondition.of(alias, CompareOperatorEnum.MemberOf,
-                    pathAttribute.getPath(), null, false, null));
-
-            attrsName.put(alias, extractPathAttribute(alias, alias, type));
+            joinWithExistsIn(pathAttribute, iter, type, joinStrList, joinedAssociation, attrsName, iterMap, where, rootChild, complexPath, parentAttribute);
 
             return;
         }
         throw new FhException("Incorrect exists in clause");
+    }
+
+    protected void joinWithExistsIn(PathAttribute pathAttribute, String iter, Class type, List<String> joinStrList, Map<String, String> joinedAssociation, Map<String, PathAttribute> attrsName, Map<String, Class> iterMap, Filter where, PathAttribute rootChild, boolean complexPath, PathAttribute parentAttribute) {
+        joinedAssociation.put(rootChild.getParentPathWithType(), rootChild.getParentAlias());
+
+        String alias = iter;
+        if (pathAttribute.isHybrid()) {
+            alias = pathForStatic(iter);
+        }
+
+        appendAndCondition(where, CompareCondition.of(alias, CompareOperatorEnum.MemberOf,
+                pathAttribute.getPath(), null, false, null));
+
+        attrsName.put(alias, extractPathAttribute(alias, alias, type));
     }
 
     protected void complexPathInExistsJoin(PathAttribute pathAttribute, PathAttribute parentAttribute, List<String> joinStrList, Map<String, String> joinedAssociation) {
@@ -728,6 +791,8 @@ public class StoreAccessServiceImpl implements StoreAccessService {
             return "localDateTimeValue";
         } else if (Enum.class.isAssignableFrom(fieldType)) {
             return "stringValue";
+        } else if (BaseEntity.class.isAssignableFrom(fieldType)) {
+            return "id";
         }
         throw new FhException(String.format("Uknown type of attribute on path: ", fieldType.getSimpleName()));
     }

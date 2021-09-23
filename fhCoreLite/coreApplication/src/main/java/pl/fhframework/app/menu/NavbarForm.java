@@ -32,12 +32,6 @@ public class NavbarForm extends Form<NavbarForm.Model> {
 
     @Override
     public String getContainer() {
-        if (getModel().getMenuService().isHidden()) {
-            getModel().getMenuService().hide();
-        } else {
-            getModel().getMenuService().show();
-        }
-
         return super.getContainer();
     }
 

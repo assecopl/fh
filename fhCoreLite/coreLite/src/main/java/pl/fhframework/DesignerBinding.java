@@ -6,7 +6,7 @@ import java.util.Optional;
 
 /**
  * Created by Adam Zareba on 21.03.2017. Binding class simulating fake binding for designer purpose
- * - especially for Tables. {@see pl.fhframework.binding.DesignerModelBinding}
+ * - especially for Tables
  */
 public class DesignerBinding<TYP> extends Binding {
 

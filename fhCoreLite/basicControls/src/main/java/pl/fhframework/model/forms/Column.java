@@ -37,6 +37,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
  * on server side to construct columns of Table components and has is not processed by javascript
  * directly.
  */
+@TemplateControl(tagName = "fh-table-column")
 @DesignerControl(defaultWidth = -1)
 @Control(parents = {Table.class, Column.class}, invalidParents = {TablePaged.class, ColumnPaged.class})
 @OverridenPropertyAnnotations(
@@ -47,7 +48,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
         designerXmlProperty = @DesignerXMLProperty(skip = true),
         property = "height"
 )
-@DocumentedComponent(value = "It is used to construct columns of Table components.", icon = "fa fa-columns")
+@DocumentedComponent(value = "It is used to construct columns of Table components.", documentationExample = true, icon = "fa fa-columns")
 public class Column extends GroupingComponent<FormElement> implements CompactLayout, IMultipleIteratorRepeatable<Table>, ICompilerAwareComponent, IHasBoundableLabel {
 
     public static final String ATTR_LABEL = "label";
@@ -283,6 +284,7 @@ public class Column extends GroupingComponent<FormElement> implements CompactLay
         TableCell tableCell = createEmptyCell();
 
         RowIteratorMetadata mainTableIteratorMetadata = lowLevelRowMetadata.getIteratorData().get(getTable().getIterator());
+        tableCell.setRowIndex(mainTableIteratorMetadata.getIndex());
         final int mainTableIteratorIndex = mainTableIteratorMetadata.getIndex();
 
         // call fatory to produce cell components
@@ -356,6 +358,7 @@ public class Column extends GroupingComponent<FormElement> implements CompactLay
         tableCell.setRowspan(1);
         tableCell.setProcessComponentStateChange(false);
         tableCell.setGroupingParentComponent(this);
+        tableCell.init();
 
         for (FormElement prototypeCellComponent : prototype.getSubcomponents()) {
             getForm().addToElementIdToFormElement(prototypeCellComponent);

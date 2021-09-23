@@ -1,22 +1,8 @@
-import {InputText} from "../InputText";
 import {HTMLFormComponent} from 'fh-forms-handler';
+import {SelectComboMenu} from '../SelectComboMenu';
+import * as _ from "lodash";
 
-class SelectComboMenuOptimized extends InputText {
-    protected values: any;
-    protected autocompleter: any;
-    protected selectedIndex: any;
-    private highlighted: any;
-    private blurEvent: any;
-    private blurEventWithoutChange: boolean = false;
-    private readonly onSpecialKey: any;
-    private readonly onDblSpecialKey: any;
-    private readonly freeTyping: boolean;
-    private openButton: HTMLDivElement;
-    private changeToFired: boolean;
-    private rawValueOnLatSpecialKey: any;
-    private autocompleteOpen: boolean;
-    private readonly emptyLabel: boolean;
-    private readonly emptyLabelText: string;
+class SelectComboMenuOptimized extends SelectComboMenu {
 
     constructor(componentObj: any, parent: HTMLFormComponent) {
         super(componentObj, parent);
@@ -70,7 +56,7 @@ class SelectComboMenuOptimized extends InputText {
         $(input).on('keydown', this.inputKeydownEvent.bind(this));
 
         if (this.onInput) {
-            input.addEventListener('input', this.inputInputEvent2.bind(this));
+            input.addEventListener('input', _.debounce(this.inputInputEvent2.bind(this), this.getInputDebounceTime()));
         }
         if (this.onSpecialKey || this.onDblSpecialKey) {
             input.addEventListener('keyup', this.specialKeyCapture.bind(this, true)); // firing event
@@ -91,6 +77,17 @@ class SelectComboMenuOptimized extends InputText {
         autocompleter.id = this.id + '_autocompleter';
 
         this.autocompleter = autocompleter;
+
+        /**
+         * Prevent clicking on autocompleter from bubbling.
+         * There is problem when component is placed inside focusable element(Table).
+         * Clicking on scroll bar makes input lose his focus and close autocompleter automaticly
+         */
+        this.autocompleter.addEventListener("mousedown", function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+        })
+
         this.component = this.input;
         this.focusableComponent = input;
 
@@ -113,440 +110,10 @@ class SelectComboMenuOptimized extends InputText {
 
     };
 
-    // noinspection JSUnusedGlobalSymbols
-    protected innerWrap() {
-        return this.input;
-    }
-
-    defineDefinitionSymbols(): void {
-        super.defineDefinitionSymbols();
-    }
-
-    createOpenButton() {
-        let button = document.createElement('div');
-        button.classList.add('input-group-append');
-        button.classList.add('openButton');
-
-        let buttonSpan = document.createElement('span');
-        buttonSpan.classList.add('input-group-text');
-
-        let icon = document.createElement('i');
-        icon.classList.add('fa');
-        icon.classList.add('fa-sort-down');
-
-        button.addEventListener('mousedown', function (e) {
-            e.preventDefault();
-            // noinspection JSPotentiallyInvalidUsageOfClassThis
-            if (this.autocompleteOpen) {
-                // noinspection JSPotentiallyInvalidUsageOfClassThis
-                this.closeAutocomplete();
-            } else {
-                // noinspection JSPotentiallyInvalidUsageOfClassThis
-                this.openAutocomplete();
-            }
-            this.input.select();
-            this.input.focus();
-        }.bind(this));
-
-        buttonSpan.appendChild(icon);
-        button.appendChild(buttonSpan);
-        this.openButton = button;
-        this.component.parentNode.appendChild(button);
-    }
-
-    inputPasteEvent(event) {
-        event.stopPropagation();
-        if (this.accessibility !== 'EDIT') {
-            return;
-        }
-        this.updateModel();
-        if (this.onChange && (this.rawValue !== this.oldValue)) {
-            this.fireEventWithLock('onChange', this.onChange);
-            this.changeToFired = false
-        }
-    }
-
-    inputInputEvent() {
-        this.selectedIndex = null;
-        this.updateModel();
-    }
-
-    inputKeydownEvent(event) {
-        if (this.accessibility !== 'EDIT') {
-            return;
-        }
-
-        let keyCode = event.which;
-        let options = this.autocompleter.querySelectorAll('li:not(.dropdown-header)');
-        // tab or enter
-        if (keyCode === 9 || keyCode === 13) {
-            let shouldBlur = true;
-            if (this.highlighted != null) {
-                let element = this.highlighted.element.firstChild;
-                this.selectedIndex = parseInt(element.dataset.index);
-                if (this.emptyLabel) {
-                    this.selectedIndex = this.selectedIndex - 1;
-                }
-
-                this.input.value = element.dataset.targetValue;
-            }
-            this.updateModel();
-            if (this.onChange && (this.rawValue !== this.oldValue || this.changeToFired)) {
-                this.fireEventWithLock('onChange', this.onChange);
-                this.changeToFired = false;
-            }
-            if (shouldBlur) {
-                this.blurEventWithoutChange = true;
-                this.input.blur(); // must be after onChange
-            }
-            this.input.focus();
-            // @ts-ignore
-            $(this.input).trigger({
-                type: 'keypress',
-                which: 9
-            });
-            this.closeAutocomplete();
-        } else if (keyCode == 32 && !this.autocompleteOpen) {
-            // spacja
-            if (!this.freeTyping) {
-                event.preventDefault();
-            }
-            this.openAutocomplete();
-        } else if (keyCode == 27) {
-            // escape
-            this.hightlightValue();
-            this.closeAutocomplete();
-        } else {
-            let move = 0;
-            switch (keyCode) {
-                case 40: // down arrow
-                    move = 1;
-                    break;
-                case 38: // up arrow
-                    move = -1;
-                    break;
-            }
-            if ((keyCode === 40 || keyCode === 38) && !this.autocompleter.classList.contains(
-                'isEmpty')) {
-                // top arrow , down arrow
-
-                let h = null;
-                if (this.highlighted) {
-                    h = parseInt(this.highlighted.element.firstChild.dataset.index);
-                }
-
-                if ((move < 0 && h === 0) || (h + move) >= options.length) return;
-
-                if (this.autocompleteOpen) {
-                    if (h === null && move === 1) {
-                        h = 1;
-                    } else {
-                        h = h + move;
-                    }
-
-                    let next = this.findValueByElement(options[h]);
-                    if (next) {
-                        this.highlighted = next;
-                        this.hightlightValue();
-                    }
-                } else {
-                    if (h === null && move === 1) {
-                        h = 1;
-                    } else {
-                        h = h + move;
-                    }
-
-                    let current = this.findValueByElement(options[h]);
-                    if (current) {
-                        this.input.value = current.targetValue;
-                        this.selectedIndex = h - (this.emptyLabel ? 1 : 0);
-                        this.highlighted = current;
-                        this.updateModel();
-                        if (this.onChange && (this.rawValue !== this.oldValue || this.changeToFired)) {
-                            this.fireEventWithLock('onChange', this.onChange);
-                            this.changeToFired = false;
-                        }
-                    }
-                }
-            } else if (keyCode == 37 || keyCode == 39) {
-                // left arrow , right arrow
-                return;
-            } else if (keyCode == 36 || keyCode == 33) {
-                event.preventDefault();
-                // home, pg up
-                if (options.length === 0) return;
-
-                if (this.highlighted) {
-                    this.highlighted.element.firstChild.classList.remove('selected');
-                }
-
-                this.highlighted = this.findValueByElement(options[0]);
-                this.highlighted.element.classList.add('selected');
-                this.autocompleter.scrollTop = this.highlighted.element.offsetTop;
-                return;
-            } else if (keyCode == 35 || keyCode == 34) {
-                event.preventDefault();
-
-                // end, pg down
-                if (options.length === 0) return;
-
-                if (this.highlighted) {
-                    this.highlighted.element.firstChild.classList.remove('selected');
-                }
-
-                this.highlighted = this.findValueByElement(options[options.length - 1]);
-                this.highlighted.element.classList.add('selected');
-                this.autocompleter.scrollTop = this.highlighted.element.offsetTop;
-                return;
-            } else {
-                this.openAutocomplete();
-            }
-        }
-    }
-
-    inputInputEvent2() {
-        if (this.accessibility === 'EDIT') {
-            this.fireEvent('onInput', this.onInput);
-        }
-    }
-
-    specialKeyCapture(fireEvent, event) {
-        if (event.ctrlKey && event.which === 32 && this.accessibility === 'EDIT') {
-            event.stopPropagation();
-            event.preventDefault();
-            let doubleSepcialKey = this.onDblSpecialKey && this.input && this.input.value == this.rawValueOnLatSpecialKey;
-            if (fireEvent) {
-                if (!doubleSepcialKey) {
-                    this.rawValueOnLatSpecialKey = this.input.value;
-                    if (this.onSpecialKey) {
-                        this.fireEventWithLock('onSpecialKey', this.onSpecialKey);
-                    }
-                } else if (doubleSepcialKey) {
-                    this.rawValueOnLatSpecialKey = null;
-                    if (this.onDblSpecialKey) {
-                        this.changeToFired = false;
-                        this.fireEventWithLock('onDblSpecialKey', this.onDblSpecialKey);
-                    }
-                }
-            }
-        }
-    }
-
-    inputBlurEvent() {
-        this.closeAutocomplete();
-
-        if (this.emptyLabel && this.rawValue == null) {
-            this.input.value = this.emptyLabelText;
-            this.selectedIndex = -1;
-            this.updateModel();
-            this.changeToFired = true;
-        }
-    }
-
-    inputBlurEvent2() {
-        if (this.accessibility === 'EDIT' && !this.blurEventWithoutChange && (this.changeToFired || this.rawValue !== this.oldValue)) {
-            this.blurEvent = true;
-            this.fireEventWithLock('onChange', this.onChange);
-            this.changeToFired = false;
-        }
-        this.blurEventWithoutChange = false;
-    }
-
-    update(change) {
-        super.update(change);
-
-        if (change.changedAttributes) {
-            $.each(change.changedAttributes, function (name, newValue) {
-                switch (name) {
-                    case 'rawValue':
-                        this.input.value = newValue;
-                        this.rawValue = newValue;
-                        this.oldValue = newValue;
-                        break;
-                    case 'filteredValues':
-                        this.highlighted = null;
-                        this.setValues(newValue);
-                        break;
-                    case 'highlightedValue':
-                        if (newValue == null) {
-                            this.highlighted = null;
-                        } else {
-                            this.highlighted = this.findByValue(newValue.targetValue);
-                        }
-                        this.hightlightValue();
-                        break;
-                }
-            }.bind(this));
-        }
-    }
-
-    updateModel() {
-        this.rawValue = this.input.value;
-        if (this.rawValue === "") {
-            this.rawValue = null;
-        }
-    }
-
-    hightlightValue() {
-        if (this.highlighted == null) {
-            return;
-        }
-        for (let value of this.values) {
-            value.element.classList.remove('selected');
-        }
-
-        this.highlighted.element.classList.add('selected');
-        this.autocompleter.scrollTop = this.highlighted.element.offsetTop;
-    }
-
-    findByValue(value) {
-        value = value || '';
-        for (let option of this.values) {
-            if (option.targetValue.trim() === value.trim()) {
-                return option;
-            }
-        }
-
-        return null;
-    }
-
-    findValueByElement(value) {
-        for (let option of this.values) {
-            if (option.element === value) {
-                return option;
-            }
-        }
-
-        return null;
-    }
-
-    openAutocomplete() {
-        if (this.autocompleteOpen || this.accessibility !== 'EDIT') return;
-        this.autocompleteOpen = true;
-        this.autocompleter.classList.add('show');
-
-        let formType = this.getFormType();
-        let targetWidth = this.component.clientWidth + this.openButton.clientWidth;
-        if ($(this.autocompleter).outerWidth() < targetWidth) {
-            $(this.autocompleter).css('width', targetWidth);
-        }
-
-        this.hightlightValue();
-
-        /**
-         * Check if component will overflow window
-         * and change direction of view if necessary.
-         */
-        let bounding = this.autocompleter.getBoundingClientRect();
-        let rightOverlap = bounding.right - (window.innerWidth || document.documentElement.clientWidth);
-
-        if (rightOverlap > -17) {
-            this.autocompleter.style.setProperty('right', '0px', "important");
-            this.autocompleter.style.setProperty('left', 'auto', "important");
-        }
-
-
-        let parent = null;
-
-        if (formType === 'STANDARD') {
-            parent = $(this.component).closest('.panel,.splitContainer,.hasHeight');
-
-            //If outocompleter is about to open in container wity fixed height we change it's open direction. Direction will be UP.
-            if(parent.hasClass('hasHeight')){
-                const parentBound = parent[0].getBoundingClientRect();
-                let completerYmaks = bounding.height + bounding.top;
-                let parentYmaks = parentBound.top + parentBound.height;
-                if(completerYmaks > parentYmaks){
-                    this.autocompleter.style.setProperty('top', "-"+(bounding.height+2)+"px" , "important");
-                }
-
-            }
-            if (!parent.hasClass('floating') && !parent.hasClass('splitContainer') ) {
-                return;
-            }
-        } else if (formType === 'MODAL' || formType === 'MODAL_OVERFLOW') {
-            parent = $(this.component).closest('.modal-content');
-        } else {
-            console.error('Parent not defined.');
-            return;
-        }
-
-
-        parent.append(this.autocompleter);
-        let _component = $(this.component);
-        let _autocompleter = $(this.autocompleter);
-        _autocompleter.css('top', _component.offset().top - parent.offset().top + this.component.offsetHeight);
-        _autocompleter.css('left', _component.offset().left - parent.offset().left);
-        _autocompleter.css('width', _component.width());
-    }
-
-    closeAutocomplete() {
-        if (!this.autocompleteOpen) return;
-        this.autocompleteOpen = false;
-
-        let formType = this.getFormType();
-
-        this.autocompleter.classList.remove('show');
-
-        /**
-         * Clear inline styles for right direction view.
-         */
-        this.autocompleter.style.setProperty('right', '', null);
-        this.autocompleter.style.setProperty('left', '', null);
-
-        let parent = null;
-        if (formType === 'STANDARD') {
-            parent = $(this.component).closest('.panel');
-
-            if (!parent.hasClass('floating')) {
-                return;
-            }
-        } else if (formType === 'MODAL' || formType === 'MODAL_OVERFLOW') {
-            parent = $(this.component).closest('.modal-content');
-        } else {
-            console.error('Parent not defined.');
-            return;
-        }
-
-        parent.find('.autocompleter').remove();
-        this.component.appendChild(this.autocompleter);
-        this.input.focus();
-
-
-    }
-
-    extractChangedAttributes() {
-        if (this.designMode === true) {
-            return this.changesQueue.extractChangedAttributes();
-        }
-        if (this.accessibility !== 'EDIT') {
-            return {};
-        }
-
-        if (this.rawValue !== this.oldValue) {
-            this.oldValue = this.rawValue;
-
-            if (this.selectedIndex != null) {
-                return {selectedIndex: this.selectedIndex};
-            } else {
-                return {text: this.rawValue};
-            }
-        }
-
-        return {};
-    }
 
     setValues(values) {
         while (this.autocompleter.firstChild) {
             this.autocompleter.removeChild(this.autocompleter.firstChild);
-        }
-
-        if (this.emptyLabel) {
-            values.unshift({
-                displayAsTarget: true,
-                targetId: -1,
-                targetValue: this.emptyLabelText
-            });
         }
 
         this.values = values;
@@ -566,7 +133,12 @@ class SelectComboMenuOptimized extends InputText {
 
             let a = document.createElement('a');
             a.classList.add('dropdown-item');
-            let displayValue = itemValue.displayAsTarget ? itemValue.targetValue : itemValue.displayedValue;
+
+            if(i==0){
+                a.classList.add( this.emptyLabel ? 'dropdown-empty' : 'd-none');
+            }
+
+            let displayValue = itemValue.displayAsTarget ? itemValue.targetValue : (itemValue.displayedValue ? itemValue.displayedValue : "");
 
             let disabled = false;
 
@@ -577,18 +149,18 @@ class SelectComboMenuOptimized extends InputText {
             // escape and parse FHML
             displayValue = this.resolveValue(displayValue);
             a.innerHTML = displayValue;
-            a.addEventListener('mousedown', function (index, targetValue, targetId, event) {
+            a.addEventListener('mousedown', function (index, targetItem) {
                 event.preventDefault();
 
                 if (this.accessibility !== 'EDIT' || disabled) {
                     return;
                 }
-                this.highlighted = this.findByValue(targetValue);
-                this.selectedIndex = index;
-                if (this.emptyLabel) {
-                    this.selectedIndex = this.selectedIndex - 1;
-                }
-                this.input.value = targetValue;
+                this.highlighted = this.findByValue(targetItem.targetValue);
+                this.selectedIndex = index ;
+                //if (this.emptyLabel) {
+                //    this.selectedIndex = this.selectedIndex - 1;
+                //}
+                this.input.value = itemValue.displayAsTarget ? itemValue.targetValue : (itemValue.displayedValue ? itemValue.displayedValue : "");
 
                 this.updateModel();
                 if (this.onChange && (this.rawValue !== this.oldValue)) {
@@ -598,7 +170,7 @@ class SelectComboMenuOptimized extends InputText {
 
                 this.closeAutocomplete();
                 this.input.select();
-            }.bind(this, i, itemValue.targetValue, itemValue.targetId));
+            }.bind(this, i, itemValue));
 
             li.appendChild(a);
             this.autocompleter.appendChild(li);
@@ -610,11 +182,6 @@ class SelectComboMenuOptimized extends InputText {
         this.container.onmousemove =  null;
         this.htmlElement.onmousemove =  null;
         this.input.onfocus = null;
-    }
-
-    resolveValue(value) {
-        value = this.fhml.resolveValueTextOrEmpty(value);
-        return value;
     }
 
     setAccessibility(accessibility) {
@@ -656,33 +223,6 @@ class SelectComboMenuOptimized extends InputText {
 
         this.accessibility = accessibility;
     }
-
-    destroy(removeFromParent) {
-        if (this.keySupportCallback) {
-            this.keySupportCallback();
-        }
-
-        this.input.removeEventListener('input', this.inputInputEvent.bind(this));
-        $(this.input).off('paste', this.inputPasteEvent.bind(this));
-        $(this.input).off('keydown', this.inputKeydownEvent.bind(this));
-
-        if (this.onInput) {
-            this.input.removeEventListener('input', this.inputInputEvent2.bind(this));
-        }
-        if (this.onSpecialKey || this.onDblSpecialKey) {
-            this.input.removeEventListener('keyup', this.specialKeyCapture.bind(this, true));
-            this.input.removeEventListener('keydown', this.specialKeyCapture.bind(this, false));
-            this.input.removeEventListener('input', this.specialKeyCapture.bind(this, false));
-        }
-
-        $(this.input).off('blur', this.inputBlurEvent.bind(this));
-        if (this.onChange) {
-            $(this.input).off('blur', this.inputBlurEvent2.bind(this));
-        }
-
-        super.destroy(removeFromParent);
-    }
-
 
     /**
      * @Override

@@ -4,8 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import pl.fhframework.BindingResult;
-import pl.fhframework.annotations.*;
-import pl.fhframework.binding.*;
+import pl.fhframework.annotations.DesignerXMLProperty;
+import pl.fhframework.annotations.DocumentedComponentAttribute;
+import pl.fhframework.annotations.XMLProperty;
+import pl.fhframework.binding.ModelBinding;
+import pl.fhframework.binding.StaticBinding;
 import pl.fhframework.model.dto.ElementChanges;
 import pl.fhframework.model.dto.ValueChange;
 
@@ -14,7 +17,8 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
 /**
  *  Base component with confirmation action support.
  */
-public abstract class FormElementWithConfirmationSupport extends FormElement implements IChangeableByClient, Boundable {
+public abstract class FormElementWithConfirmationSupport extends FormElementWithAriaSupport implements IChangeableByClient, Boundable {
+
     protected static final String CONFIRATION_MSG_ATTR = "confirmationMsg";
 
     @Getter

@@ -1,13 +1,14 @@
 package pl.fhframework.usecases.dynamic;
 
-import pl.fhframework.core.FhUseCaseException;
-import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.InicjujacyPrzypadekUzycia;
 import pl.fhframework.annotations.Action;
+import pl.fhframework.core.FhCL;
+import pl.fhframework.core.FhUseCaseException;
+import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.subsystems.Subsystem;
 import pl.fhframework.usecases.DynamicSubUseCase;
-import pl.fhframework.usecases.DynamicSubUseCaseWithTwoOutputs;
 import pl.fhframework.usecases.DynamicSubUseCaseWithOneOutput;
+import pl.fhframework.usecases.DynamicSubUseCaseWithTwoOutputs;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -229,7 +230,7 @@ class JavaCodeGeneratorForDynamicUseCase {
     private String getFormComponentDisplayJavaCode(DynamicActivityHandler.DisplayFormComponent activity) {
         Class<?> formComponentJavaClass;
         try {
-            formComponentJavaClass = Class.forName(activity.getRef());
+            formComponentJavaClass = FhCL.classLoader.loadClass(activity.getRef());
             if (formComponentJavaClass != null) {
                 return "showForm(" + activity.getRef() + ".class, null);";
             }

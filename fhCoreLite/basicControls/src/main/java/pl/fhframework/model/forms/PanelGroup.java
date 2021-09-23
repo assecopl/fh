@@ -1,36 +1,35 @@
 package pl.fhframework.model.forms;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import pl.fhframework.core.forms.IHasBoundableLabel;
-import pl.fhframework.BindingResult;
-import pl.fhframework.annotations.*;
-import pl.fhframework.annotations.Control;
-import pl.fhframework.binding.*;
-import pl.fhframework.model.dto.ElementChanges;
-import pl.fhframework.model.dto.ValueChange;
-import pl.fhframework.model.forms.designer.BindingExpressionDesignerPreviewProvider;
-import pl.fhframework.model.dto.InMessageEventData;
-import pl.fhframework.events.IEventSource;
-
 import lombok.Getter;
 import lombok.Setter;
+import pl.fhframework.BindingResult;
+import pl.fhframework.annotations.*;
+import pl.fhframework.binding.*;
+import pl.fhframework.core.forms.IHasBoundableLabel;
+import pl.fhframework.events.IEventSource;
+import pl.fhframework.model.dto.ElementChanges;
+import pl.fhframework.model.dto.InMessageEventData;
+import pl.fhframework.model.dto.ValueChange;
+import pl.fhframework.model.forms.designer.BindingExpressionDesignerPreviewProvider;
 import pl.fhframework.model.forms.designer.IDesignerEventListener;
 
 import java.util.Optional;
 
-import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.BEHAVIOR;
-import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.CONTENT;
-import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.LOOK_AND_STYLE;
+import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.*;
 
+@OverridenPropertyAnnotations(designerXmlProperty = @DesignerXMLProperty(readOnlyInDesigner = true), property = "hintType")
+@TemplateControl(tagName = "fh-panel-group")
 @Control(parents = {Accordion.class, PanelGroup.class, Group.class, SplitContainer.class, Repeater.class, Column.class, Tab.class, Row.class, Form.class}, invalidParents = {Table.class}, canBeDesigned = true)
-@DocumentedComponent(value = "PanelGroup component is responsible for the grouping of sub-elements with optional header and collapsing", icon = "fa fa-object-group")
-public class PanelGroup extends GroupingComponent<Component> implements Boundable, IChangeableByClient, IEventSource, IHasBoundableLabel, IDesignerEventListener {
+@DocumentedComponent(category = DocumentedComponent.Category.ARRANGEMENT, documentationExample = true, value = "PanelGroup component is responsible for the grouping of sub-elements with optional header and collapsing", icon = "fa fa-object-group")
+public class PanelGroup extends GroupingComponentWithHeadingHierarchy<Component> implements Boundable, IChangeableByClient, IEventSource, IHasBoundableLabel, IDesignerEventListener {
 
     private static final String COLLAPSED_ATTR = "collapsed";
     public static final String ON_TOGGLE = "onToggle";
     public static final String LABEL_ATTR = "label";
     public static final String BORDER_VISIBLE_ATTR = "borderVisible";
+    public static final String ICON_OPENED = "iconOpened";
+    public static final String ICON_CLOSED = "iconClosed";
 
     @Getter
     private String label;
@@ -74,9 +73,35 @@ public class PanelGroup extends GroupingComponent<Component> implements Boundabl
             " Depends on attribute: collapsible, if it's not set then binding will not be resolved. False by default.")
     private ModelBinding modelBindingForState = new StaticBinding<>(false);
 
+
+    @Getter
+    private String iconOpened;
+
+    @JsonIgnore
+    @Getter
+    @Setter
+    @XMLProperty(value = ICON_OPENED, defaultValue = "fa-arrow-down")
+    @DocumentedComponentAttribute(defaultValue = "fa-arrow-down", boundable = true, value = "Icon for panel that is open. Please refer to http://fontawesome.io/icons/ for all available icons.")
+    @DesignerXMLProperty(priority = 84, functionalArea = LOOK_AND_STYLE)
+    private ModelBinding<String> iconOpenedBinding;
+
+    @Getter
+    private String iconClosed;
+
+    @JsonIgnore
+    @Getter
+    @Setter
+    @XMLProperty(value = ICON_CLOSED,defaultValue = "fa-arrow-up")
+    @DocumentedComponentAttribute(defaultValue = "fa-arrow-up", boundable = true, value = "Icon for closed panel. Please refer to http://fontawesome.io/icons/ for all available icons.")
+    @DesignerXMLProperty(priority = 84, functionalArea = LOOK_AND_STYLE)
+    private ModelBinding<String> iconClosedBinding;
+
+
     public PanelGroup(Form form) {
         super(form);
     }
+
+
 
     @Override
     public ElementChanges updateView() {
@@ -85,6 +110,14 @@ public class PanelGroup extends GroupingComponent<Component> implements Boundabl
         if (isCollapsible()) {
             resolveBindingForCollapsed(elementChanges);
         }
+
+        if (iconOpenedBinding != null) {
+            iconOpened = iconOpenedBinding.resolveValueAndAddChanges(this, elementChanges, iconOpened, ICON_OPENED);
+        }
+        if (iconClosedBinding != null) {
+            iconClosed = iconClosedBinding.resolveValueAndAddChanges(this, elementChanges, iconClosed, ICON_CLOSED);
+        }
+
         return elementChanges;
     }
 
@@ -142,7 +175,7 @@ public class PanelGroup extends GroupingComponent<Component> implements Boundabl
         addSubcomponent(createNewRow());
     }
 
-    private Row createNewRow() {
+    public Row createNewRow() {
         Row row = new Row(getForm());
         row.setGroupingParentComponent(this);
         row.init();

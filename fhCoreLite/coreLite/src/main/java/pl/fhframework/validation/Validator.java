@@ -33,7 +33,7 @@ public interface Validator<T> {
 
     /**
      * @param value - value to validation
-     * @return list of violations. If size > 0, the validation does not successfully
+     * @return list of violations. If size &gt; 0, the validation does not successfully
      */
     List<ConstraintViolation<T>> validate(T value);
 

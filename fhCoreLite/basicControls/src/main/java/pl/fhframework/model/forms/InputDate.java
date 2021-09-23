@@ -1,14 +1,14 @@
 package pl.fhframework.model.forms;
 
-import pl.fhframework.core.FhBindingException;
+import lombok.Getter;
+import lombok.Setter;
 import pl.fhframework.annotations.*;
+import pl.fhframework.core.FhBindingException;
+import pl.fhframework.model.forms.designer.InputFieldDesignerPreviewProvider;
+import pl.fhframework.model.forms.optimized.ColumnOptimized;
 
 import java.time.LocalDate;
 import java.util.Map;
-
-import lombok.Getter;
-import lombok.Setter;
-import pl.fhframework.model.forms.designer.InputFieldDesignerPreviewProvider;
 
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.CONTENT;
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.SPECIFIC;
@@ -17,11 +17,13 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
  * Class represents input field for date. Receives every attribute of input field. This field can be
  * used inside PanelGroup, Column, Tab, Form.
  */
-@DocumentedComponent(value = "Component responsible for displaying field, where user can set only date.", icon = "fa fa-calendar")
-@Control(parents = {PanelGroup.class, Column.class, Tab.class, Row.class, Form.class, Group.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = true)
+@TemplateControl(tagName = "fh-input-date")
+@DesignerControl(defaultWidth = 3)
+@DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, documentationExample = true, value = "Component responsible for displaying field, where user can set only date.", icon = "fa fa-calendar")
+@Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Group.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = true)
 @OverridenPropertyAnnotations(
         property = "modelBinding",
-        designerXmlProperty = @DesignerXMLProperty(allowedTypes = LocalDate.class, commonUse = true, previewValueProvider = InputFieldDesignerPreviewProvider.class, priority = 80, functionalArea = CONTENT))
+        designerXmlProperty = @DesignerXMLProperty(allowedTypes = {LocalDate.class, String.class}, commonUse = true, previewValueProvider = InputFieldDesignerPreviewProvider.class, priority = 80, functionalArea = CONTENT))
 public class InputDate extends BaseInputFieldWithKeySupport {
 
     @Getter

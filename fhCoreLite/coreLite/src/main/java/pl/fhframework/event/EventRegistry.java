@@ -77,6 +77,14 @@ public class EventRegistry {
         getEvents().add(new RedirectEvent(uuid, url, newWindow, closeable));
     }
 
+    public void fireRedirectPostEvent(String url) {
+        getEvents().add(new RedirectPostEvent(url));
+    }
+
+    public void fireRedirectPostEvent(String url, Map<String, String> params) {
+        getEvents().add(new RedirectPostEvent(url, params));
+    }
+
     public void fireCloseTabEvent(String uuid) {
         getEvents().add(new CloseTabEvent(uuid));
     }
@@ -142,6 +150,15 @@ public class EventRegistry {
     private String addURLPreffix(String url) {
         String prefix = SessionManager.getUserSession().getResourcesUrlPrefix();
         return prefix != null ? prefix + url : url;
+    }
+
+
+    public void fireScrollEvent(String formElementId, Integer animateDuration) {
+        getEvents().add(new ScrollEvent(formElementId, true, animateDuration));
+    }
+
+    public void fireScrollEvent(String formElementId) {
+        getEvents().add(new ScrollEvent(formElementId, false, 0));
     }
 
 }

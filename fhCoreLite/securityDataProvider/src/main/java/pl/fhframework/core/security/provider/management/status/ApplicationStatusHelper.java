@@ -1,10 +1,5 @@
 package pl.fhframework.core.security.provider.management.status;
 
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.Logger;
-import ch.qos.logback.classic.spi.ILoggingEvent;
-import ch.qos.logback.core.AppenderBase;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import pl.fhframework.core.util.StringUtils;
@@ -14,17 +9,23 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.LogRecord;
 
 /**
  * Created by pawel.ruta on 2018-05-15.
  */
 @Component
-public class ApplicationStatusHelper extends AppenderBase<ILoggingEvent> {
+public class ApplicationStatusHelper extends Handler {
     @Value("${management.status.logs.count.period:5}")
     private int periodInMinutes;
 
@@ -46,9 +47,7 @@ public class ApplicationStatusHelper extends AppenderBase<ILoggingEvent> {
             excludePackagesList.addAll(Arrays.asList(excludePackages.split(",")));
         }
 
-        start();
-
-        ((Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME)).addAppender(this);
+        LogManager.getLogManager().getLogger("").addHandler(this);
     }
 
 
@@ -62,13 +61,23 @@ public class ApplicationStatusHelper extends AppenderBase<ILoggingEvent> {
 
 
     @Override
-    protected void append(ILoggingEvent iLoggingEvent) {
-        if (iLoggingEvent.getLevel().levelInt == Level.WARN_INT && accept(iLoggingEvent.getLoggerName())) {
-            countLog(warningsQueue, iLoggingEvent.getTimeStamp());
+    public void publish(LogRecord record) {
+        if (record.getLevel() == Level.WARNING && accept(record.getLoggerName())) {
+            countLog(warningsQueue, record.getMillis());
         }
-        else if (iLoggingEvent.getLevel().levelInt == Level.ERROR_INT && accept(iLoggingEvent.getLoggerName())) {
-            countLog(errorsQueue, iLoggingEvent.getTimeStamp());
+        else if (record.getLevel() == Level.SEVERE && accept(record.getLoggerName())) {
+            countLog(errorsQueue, record.getMillis());
         }
+    }
+
+    @Override
+    public void flush() {
+
+    }
+
+    @Override
+    public void close() throws SecurityException {
+
     }
 
     private boolean accept(String loggerName) {

@@ -45,7 +45,7 @@ public class DefaultDesignerFixedValuesProvider implements IDesignerFixedValuesP
         }
 
         // add empty binding
-        if (isBinding) {
+        if (!values.isEmpty() && isBinding) {
             values.add(EMPTY_BINDING_OPTION);
         }
         return values;

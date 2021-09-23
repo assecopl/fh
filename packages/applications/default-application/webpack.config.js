@@ -24,7 +24,6 @@ module.exports = function (cmdEnv) {
     let baseConfig = {
         entry: ['@babel/polyfill', './Module.ts'],
         mode: 'development',
-        devtool: 'source-map',
         output: {
             path: Path.resolve('./../../../fhCoreLite/defaultApplication/target/classes/static'),
             filename: 'fhApplication.bundle.js'
@@ -32,7 +31,7 @@ module.exports = function (cmdEnv) {
         module: {
             rules: [{
                 test: /\.css$/,
-                exclude: /node_modules/,
+//                exclude: [/node_modules/, /dist/, /build/],
                 use: [{
                     loader: MiniCssExtractPlugin.loader,
                     options: {}
@@ -40,8 +39,8 @@ module.exports = function (cmdEnv) {
                     loader: 'css-loader'
                 }]
             }, {
-                test: /\.tsx?$/,
-                exclude: /node_modules/,
+                test: /\.(d.)?tsx?$/,
+                exclude: [/node_modules/, /dist/, /build/],
                 use: [{
                     loader: 'babel-loader'
                 }, {
@@ -49,7 +48,7 @@ module.exports = function (cmdEnv) {
                 }]
             }, {
                 test: /\.js$/,
-                exclude: /node_modules/,
+                exclude: [/node_modules/, /dist/, /build/],
                 use: {
                     loader: 'babel-loader'
                 }

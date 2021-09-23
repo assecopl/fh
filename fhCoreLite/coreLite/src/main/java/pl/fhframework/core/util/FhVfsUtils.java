@@ -2,6 +2,7 @@ package pl.fhframework.core.util;
 
 import org.springframework.core.io.VfsUtils;
 import org.springframework.util.ReflectionUtils;
+import pl.fhframework.core.FhCL;
 import pl.fhframework.core.FhException;
 import pl.fhframework.core.io.FhResource;
 
@@ -39,8 +40,8 @@ public class FhVfsUtils extends VfsUtils {
 
     static {
         try {
-            vfsClass = FhVfsUtils.class.getClassLoader().loadClass(jboss_vfs_class);
-            virtualFileClass = FhVfsUtils.class.getClassLoader().loadClass(jboss_virtualFile_class);
+            vfsClass = FhCL.classLoader.loadClass(jboss_vfs_class);
+            virtualFileClass = FhCL.classLoader.loadClass(jboss_virtualFile_class);
 
             vfsMethods.put(GET_CHILDREN, ReflectionUtils.findMethod(vfsClass, GET_CHILDREN));
             virtualFileMethods.put(GET_CHILDREN, ReflectionUtils.findMethod(virtualFileClass, GET_CHILDREN));

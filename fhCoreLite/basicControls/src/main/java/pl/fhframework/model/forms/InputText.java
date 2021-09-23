@@ -3,16 +3,18 @@ package pl.fhframework.model.forms;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
-import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.BindingResult;
 import pl.fhframework.annotations.*;
 import pl.fhframework.binding.*;
+import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.model.TextAlignEnum;
 import pl.fhframework.model.dto.ElementChanges;
 import pl.fhframework.model.dto.InMessageEventData;
 import pl.fhframework.model.forms.config.BasicControlsConfiguration;
+import pl.fhframework.model.forms.designer.BindingExpressionDesignerPreviewProvider;
 import pl.fhframework.model.forms.designer.InputFieldDesignerPreviewProvider;
 import pl.fhframework.model.forms.designer.RegExAttributeDesignerSupport;
+import pl.fhframework.model.forms.optimized.ColumnOptimized;
 import pl.fhframework.model.forms.utils.LanguageResolver;
 import pl.fhframework.model.forms.validation.ValidationFactory;
 import pl.fhframework.tools.loading.IBodyXml;
@@ -25,9 +27,11 @@ import java.util.regex.PatternSyntaxException;
 
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.*;
 
-@DocumentedComponent(value = "InputText component is responsible for displaying simple field, where user can write some data" +
+@DesignerControl(defaultWidth = 3)
+@TemplateControl(tagName = "fh-input-text")
+@DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, documentationExample = true, value = "InputText component is responsible for displaying simple field, where user can write some data" +
         " plus label representing this field.", icon = "fa fa-edit")
-@Control(parents = {PanelGroup.class, Column.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
+@Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
 @OverridenPropertyAnnotations(
         property = "modelBinding",
         designerXmlProperty = @DesignerXMLProperty(allowedTypes = String.class, commonUse = true, previewValueProvider = InputFieldDesignerPreviewProvider.class, priority = 80, functionalArea = CONTENT))
@@ -38,15 +42,20 @@ public class InputText extends BaseInputFieldWithKeySupport implements IBodyXml 
     private static final String MASK = "mask";
     private static final String MAX_LENGTH_BINDING = "maxLengthBinding";
     private static final String FORMATTER_BINDING = "formatterBinding";
+    private static final String EMPTY_VALUE_ATTR = "emptyValue";
     private static final String REQUIRED_REGEX_BINDING = "requiredRegexBinding";
 
-    // basic attributes
+    @JsonIgnore
     @Getter
     @Setter
-    @XMLProperty
-    @DocumentedComponentAttribute(value = "If there is some value, then there will be visible placeholder for <input>.")
-    @DesignerXMLProperty(functionalArea = LOOK_AND_STYLE, priority = 82)
-    private String placeholder;
+    @XMLProperty(value = "placeholder")
+    @DocumentedComponentAttribute(boundable = true, value = "If there is some value, then there will be visible placeholder for <input>.")
+    @DesignerXMLProperty(functionalArea = LOOK_AND_STYLE, previewValueProvider = BindingExpressionDesignerPreviewProvider.class, priority = 82)
+    private ModelBinding<String> placeholderBinding;
+
+    @Getter
+    @Setter
+    private String placeholder = "";
 
     @Getter
     @Setter
@@ -55,6 +64,25 @@ public class InputText extends BaseInputFieldWithKeySupport implements IBodyXml 
             "as html tag: <textarea></textarea>. Otherwise, simple <input/>.")
     @DesignerXMLProperty(functionalArea = LOOK_AND_STYLE, priority = 93)
     private Integer rowsCount;
+
+    @Getter
+    private boolean emptyValue;
+
+    @JsonIgnore
+    @Getter
+    @Setter
+    @XMLProperty(EMPTY_VALUE_ATTR)
+    @DesignerXMLProperty(functionalArea = DesignerXMLProperty.PropertyFunctionalArea.CONTENT)
+    @DocumentedComponentAttribute(defaultValue = "false", value = "Defines if value passed can be empty", boundable = true)
+    private ModelBinding<Boolean> emptyValueBinding;
+
+    @Getter
+    @Setter
+    @XMLProperty
+    @DocumentedComponentAttribute(value = "If set to true, then InputText component will be represented " +
+            "as html tag: <textarea></textarea> and height will adjust automaticly to the content.")
+    @DesignerXMLProperty(functionalArea = LOOK_AND_STYLE, priority = 94)
+    private Boolean rowsCountAuto;
 
     @Getter
     @Setter
@@ -223,7 +251,6 @@ public class InputText extends BaseInputFieldWithKeySupport implements IBodyXml 
     public void doCopy(Table table, Map<String, String> iteratorReplacements, BaseInputField baseClone) {
         super.doCopy(table, iteratorReplacements, baseClone);
         InputText clone = (InputText) baseClone;
-        clone.setPlaceholder(getPlaceholder());
         clone.setRowsCount(getRowsCount());
         clone.setMaxLength(getMaxLength());
         clone.setMask(getMask());
@@ -234,6 +261,8 @@ public class InputText extends BaseInputFieldWithKeySupport implements IBodyXml 
         clone.setOnInput(table.getRowBinding(getOnInput(), clone, iteratorReplacements));
         clone.setFormatter(getFormatter());
         clone.setMaxLengthBinding(table.getRowBinding(getMaxLengthBinding(), clone, iteratorReplacements));
+        clone.setEmptyValueBinding(table.getRowBinding(getEmptyValueBinding(), clone, iteratorReplacements));
+        clone.setPlaceholderBinding(table.getRowBinding(getPlaceholderBinding(), clone, iteratorReplacements));
         clone.setFormatterBinding(table.getRowBinding(getFormatterBinding(), clone, iteratorReplacements));
         clone.setRequiredRegexBinding(table.getRowBinding(getRequiredRegexBinding(), clone, iteratorReplacements));
     }
@@ -261,6 +290,23 @@ public class InputText extends BaseInputFieldWithKeySupport implements IBodyXml 
                 this.refreshView();
                 this.mask = mask;
                 elementChanges.addChange(MASK, this.mask);
+            }
+        }
+    }
+
+    private void processPlaceholder(ElementChanges elementChanges) {
+        if (placeholderBinding == null) {
+            return;
+        }
+
+        BindingResult placeholderBindingResult = placeholderBinding.getBindingResult();
+        if (placeholderBindingResult != null) {
+            String placeholder = this.convertValueToString(placeholderBindingResult.getValue());
+
+            if (!areValuesTheSame(placeholder, this.placeholder)) {
+                this.refreshView();
+                this.placeholder = placeholder;
+                elementChanges.addChange("placeholder", this.placeholder);
             }
         }
     }
@@ -337,6 +383,10 @@ public class InputText extends BaseInputFieldWithKeySupport implements IBodyXml 
         processMask(elementChanges);
         processMaxLength(elementChanges);
         processRequiredRegex();
+        processPlaceholder(elementChanges);
+        if (emptyValueBinding != null) {
+            emptyValue = emptyValueBinding.resolveValueAndAddChanges(this, elementChanges, emptyValue, EMPTY_VALUE_ATTR);
+        }
         this.language = LanguageResolver.languageChanges(getForm().getAbstractUseCase().getUserSession(), this.language, elementChanges);
         return elementChanges;
     }

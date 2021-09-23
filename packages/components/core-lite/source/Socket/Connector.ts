@@ -1,4 +1,4 @@
-import {injectable, Container} from "inversify";
+import {injectable} from "inversify";
 import getDecorators from "inversify-inject-decorators";
 
 import {SocketOutputCommands} from "./SocketOutputCommands";
@@ -36,7 +36,7 @@ class Connector {
     private doNotReconnect: boolean = false;
     private retryCount: number = 0;
     private reconnectTimeoutMs: number = 3000;
-    private reconnectDecisionDialogMs: number = 60000;
+    private reconnectDecisionDialogMs: number = 30000;
     private reconnectStartTime: number = 0;
     private serverAlive: boolean = true;
     private headResponseRetry: number = 0;
@@ -79,9 +79,13 @@ class Connector {
             console.log(this.retryCount, Math.floor(new Date().getTime() / 1000),
                 'Trying to connect to "' + this.target + '"');
         }
-        var protocol = ('https:' === document.location.protocol ? 'wss://' : 'ws://');
-
-        this.ws = new WebSocket(protocol + location.host + this.target);
+        // in Liferay target has full path (socketUrl)
+        if (this.target.indexOf('wss://') == 0 || this.target.indexOf('ws://') == 0) {
+            this.ws = new WebSocket(this.target);
+        } else {
+            var protocol = ('https:' === document.location.protocol ? 'wss://' : 'ws://');
+            this.ws = new WebSocket(protocol + location.host + this.target);
+        }
 
         this.ws.onopen = this.onOpen.bind(this);
         this.ws.onclose = this.onClose.bind(this);
@@ -126,8 +130,6 @@ class Connector {
         }
 
         if (this.ws) {
-            // console.log('wysylanie');
-
             var stringData = JSON.stringify(jsonData);
 
             this.ws.send(requestId + ':' + stringData);
@@ -184,12 +186,14 @@ class Connector {
 
         if (connector.reconnectStartTime + connector.reconnectDecisionDialogMs < Date.now()) {
             connector.reconnecting = false;
+            window["FhContainer"] = FhContainer;
             connector.applicationLock.createInfoDialog(
                 this.i18n.__('connection_lost_message'),
                 this.i18n.__('connection_lost_button1'),
-                "window.FhContainer.get('Connector').reconnectTry()",
-                this.i18n.__('connection_lost_button2'),
-                "window.FhContainer.get('Connector').closeDialog()"
+                "window.FhContainer.get('Connector').closeDialog();window.FhContainer.get('Connector').onClose()",
+                null,//this.i18n.__('connection_lost_button2'),
+                null,//"window.FhContainer.get('Connector').closeDialog()"
+                false
             );
             return;
         }
@@ -197,27 +201,37 @@ class Connector {
         connector.reconnecting = true;
         connector.retryCount += 1;
 
-        let testRequest = new XMLHttpRequest();
-        testRequest.open('HEAD', connector.util.getPath('/'), true);
-
-        testRequest.onload = function () {
-            if (testRequest.readyState === 4) {
-                connector.serverAlive = testRequest.status === 200;
-
-                connector.connect(undefined);
+        fetch(connector.util.getPath(''), {
+            method: 'OPTIONS',
+            credentials: "include",
+            mode: "cors",
+            headers: {
+                'Origin': connector.util.getPath(''),
+                'Content-Type': 'application/x-www-form-urlencoded'
             }
-        };
+        }).then(result => {
+            if (result.status === 401) { // not authorized, probably http session is lost
+                this.applicationLock.createInfoDialog(
+                    this.i18n.__('session_expired_message'),
+                    this.i18n.__('session_expired_button'),
+                    'window.location.reload(true)',
+                    null,
+                    null,
+                    false
+                );
+                return;
+            }
+            connector.serverAlive = result.status === 200;
 
-        testRequest.onerror = function () {
+            connector.connect(undefined);
+        }).catch(error => {
             connector.serverAlive = false;
 
             if (ENV_IS_DEVELOPMENT) {
-                console.log(testRequest.statusText);
+                console.log(error);
             }
             connector.connect(undefined);
-        };
-
-        testRequest.send(null);
+        });
     }
 
     onOpen(event) {
@@ -243,7 +257,12 @@ class Connector {
             this.openCallback();
         }
 
-        if (!this.reconnecting) {
+        if (!this.reconnecting || !this.formsManager.isInitialized() || this.applicationLock.isActive()) {
+            if (this.applicationLock.isActive()) {
+                this.formsManager.clear();
+                this.applicationLock.disableAll();
+            }
+
             this.run(SocketOutputCommands.GET_SESSION_ID, null, this.runFunction);
         }
 
@@ -275,7 +294,7 @@ class Connector {
                 this.reconnectCallback();
             }
 
-            setTimeout(() => this.reconnectTry, this.reconnectTimeoutMs);
+            setTimeout(() => this.reconnectTry(), this.reconnectTimeoutMs);
         }
     }
 
@@ -288,7 +307,6 @@ class Connector {
             this._incomingMessageCallback.call(this, event);
         }
 
-        // console.log('odbieranie: ' + event);
         var i = event.data.indexOf(':');
         var requestId = event.data.slice(0, i);
         var stringData = event.data.slice(i + 1);

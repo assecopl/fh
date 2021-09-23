@@ -25,7 +25,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
  * Created by krzysztof.kobylarek on 2016-11-09.
  */
 @Control(canBeDesigned = true)
-@DocumentedComponent(ignoreFields = {"width"},
+@DocumentedComponent(ignoreFields = {"width"}, category = DocumentedComponent.Category.ARRANGEMENT, documentationExample = true,
         value = "Component that allows to arrange data like text, images, links, etc. into rows and columns of cells.",
         icon = "fa fa-sitemap")
 public class Repeater extends FormElement implements IEditableGroupingComponent<Component>, IRepeatable, IStateHolder, ISingleIteratorRepeatable<Repeater> {
@@ -169,6 +169,7 @@ public class Repeater extends FormElement implements IEditableGroupingComponent<
         modelRefSize = collectionData.size();
         if (oldModelRefSize != modelRefSize) {
             List<IterationContext> newBindedSubcomponents = new LinkedList<>();
+            List<?> collectionArray = new ArrayList<>(collectionData);
             for (int index = 0; index < modelRefSize; ++index) {
                 // already have theese rows
                 if (oldModelRefSize > index) {
@@ -176,6 +177,8 @@ public class Repeater extends FormElement implements IEditableGroupingComponent<
                     for (IterationContext existingComponent : bindedSubcomponents) { // not using lambda as index is not final...
                         if (existingComponent.getIndex().equals(index)) {
                             newBindedSubcomponents.add(existingComponent);
+                            existingComponent.getComponent().getBindingContext().getIteratorContext().put(iterator, collectionArray.get(index));
+                            existingComponent.getComponent().getBindingContext().setCachePrefix(this.getBindingContext().getCachePrefix() + "_" + getId() + "_" + index + "_");
                         }
                     }
                 } else {
@@ -183,6 +186,8 @@ public class Repeater extends FormElement implements IEditableGroupingComponent<
                     List<FormElement> newComponents = interatorComponentFactory.createComponentsForIterator(this, NO_OFFSET_ROW_NUMBER, index);
                     for (FormElement newComponent : newComponents) {
                         newBindedSubcomponents.add(new IterationContext(index, newComponent));
+                        newComponent.getBindingContext().getIteratorContext().put(iterator, collectionArray.get(index));
+                        newComponent.getBindingContext().setCachePrefix(this.getBindingContext().getCachePrefix() + "_" + getId() + "_" + index + "_");
                     }
                 }
             }

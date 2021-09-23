@@ -1,14 +1,16 @@
 .fc.row-dropdown {
-    border-radius: 50%;
-    text-align: center;
-    border: none;
-    background: transparent;
+    text-align: left;
 }
 
 .fc.row-dropdown i {
     display: inline-block;
     width: 100%;
     margin-left: 0;
+}
+
+.fc.row-dropdown span.caret,
+.fc.row-dropdown::before {
+    display: none!important;
 }
 
 .fc.row-dropdown.dropdown-toggle::after {

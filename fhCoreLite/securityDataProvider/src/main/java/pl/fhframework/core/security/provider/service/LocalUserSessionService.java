@@ -5,14 +5,16 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.WebSocketSession;
-import pl.fhframework.core.logging.FhLogger;
-import pl.fhframework.core.session.ForceLogoutService;
-import pl.fhframework.core.session.UserSessionRepository;
-import pl.fhframework.core.util.LogUtils;
-import pl.fhframework.core.security.provider.model.SessionInfo;
 import pl.fhframework.UserSession;
 import pl.fhframework.WebSocketContext;
 import pl.fhframework.WebSocketSessionRepository;
+import pl.fhframework.core.logging.FhLogger;
+import pl.fhframework.core.security.model.SessionInfo;
+import pl.fhframework.core.session.ForceLogoutService;
+import pl.fhframework.core.session.IUserSessionService;
+import pl.fhframework.core.session.UserSessionRepository;
+import pl.fhframework.core.util.ILogUtils;
+import pl.fhframework.core.util.StringUtils;
 import pl.fhframework.event.dto.ForcedLogoutEvent;
 
 import java.net.URL;
@@ -34,18 +36,12 @@ public class LocalUserSessionService implements IUserSessionService {
     @Autowired
     private ForceLogoutService forceLogoutService;
 
+    @Autowired(required = false)
+    private ILogUtils logUtils;
+
     @Override
     public List<SessionInfo> getUserSessions() {
-        List<SessionInfo> sessionInfoList = new ArrayList<>();
-        for (UserSession userSession : getActiveUserSessions()) {
-            SessionInfo sessionInfo = new SessionInfo();
-            sessionInfo.setSessionId(userSession.getConversationUniqueId());
-            sessionInfo.setLogonTime(new Date(userSession.getCreationTimestamp().toEpochMilli()));
-            sessionInfo.setUserName(userSession.getSystemUser().getLogin());
-            sessionInfo.setUsedFunctionality(userSession.getUseCaseContainer().logStatePretty());
-            sessionInfoList.add(sessionInfo);
-        }
-        return sessionInfoList;
+        return new ArrayList<>(userSessionRepository.getAllUserSessionsInfo().values());
     }
 
     @Override
@@ -55,13 +51,14 @@ public class LocalUserSessionService implements IUserSessionService {
 
     @Override
     public Resource donwloadUserLog(String userSessionConversationId) {
-        UserSession userSession = findUserSession(userSessionConversationId);
-        if (userSession != null) {
-            URL log = LogUtils.getUserLogFile(userSession);
-            return new UrlResource(log);
-        } else {
-            return null;
+        if (logUtils != null) {
+            UserSession userSession = findUserSession(userSessionConversationId);
+            if (userSession != null) {
+                URL log = logUtils.getUserLogFile(userSession);
+                return new UrlResource(log);
+            }
         }
+        return null;
     }
 
     @Override
@@ -82,8 +79,13 @@ public class LocalUserSessionService implements IUserSessionService {
         return successCount;
     }
 
-    private Collection<UserSession> getActiveUserSessions() {
-        return Collections.unmodifiableCollection(userSessionRepository.getUserSessions().values());
+    @Override
+    public String getUserActiveFunctionality(String sessionId) {
+        return userSessionRepository.getUserSessions().values().stream()
+                .filter(session -> StringUtils.equal(sessionId, session.getConversationUniqueId()))
+                .findAny()
+                .map(session -> session.getUseCaseContainer().logStatePretty())
+                .orElse(null);
     }
 
     private UserSession findUserSession(String sessionConversationUniqueId) {

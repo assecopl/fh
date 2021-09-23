@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html id="fhApplication" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+<html id="fhApplication"
+      th:with="lang=${#locale.language}" th:lang="${lang}"
+      xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <meta charset="UTF-8"/>
@@ -17,47 +19,45 @@
 </head>
 
 <body class="loginPage" onload="updateHashInAction()">
-    <div class="loginContainer">
-        <div class="loginLogo">
-            <img src="img/logo_s.png"/>
-        </div>
-        <form id="login" th:action="@{/login}" method="post">
-                <div class="innerContainer">
-
-                    <span class="h3">Logowanie</span>
-
-                    <div th:if="${param.error}" class="alert alert-danger">
-                        <p th:text="${message}"></p>
-                    </div>
-                    <div th:if="${param.logout}" class="alert alert-info alert-white rounded">
-                        <p th:text="${message}"></p>
-                    </div>
-
-
-                    <div class="row">
-                        <div class="col-12">
-                            <input type="text" id="iUsername" name="username" placeholder="nazwa użytkownika"
-                                   class="fc inputText form-control loginInput"/>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-12">
-                            <input type="password" id="iPassword" name="password" placeholder="hasło"
-                                   class="fc inputText form-control passInput"/>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-12">
-                        <input type="submit" id="bZaloguj" name="zaloguj"
-                               class="fc button btn btn-primary btn-block form-control loginButton"
-                               value="Zaloguj"/>
-                    </div>
-                </div>
-        </form>
+<div class="loginContainer">
+    <div class="loginLogo">
+        <img src="img/logo_s.png"/>
     </div>
+    <form id="login" th:action="@{/login}" method="post">
+        <div class="innerContainer">
+            <span class="h3" th:text="#{fh.infos.login}"></span>
+
+            <div th:if="${param.error}" class="alert alert-danger">
+                <p th:text="${message}"></p>
+            </div>
+            <div th:if="${param.logout}" class="alert alert-info alert-white rounded">
+                <p th:text="${message}"></p>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <input type="text" id="iUsername" name="username" th:placeholder="#{fh.user.placeholder}"
+                           class="fc inputText form-control loginInput"/>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <input type="password" id="iPassword" name="password" th:placeholder="#{fh.password.placeholder}"
+                           class="fc inputText form-control passInput"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <button type="submit" id="bZaloguj" name="zaloguj"
+                        class="fc button btn btn-primary btn-block form-control loginButton"
+                        th:text="#{fh.buttons.login}"></button>
+            </div>
+        </div>
+    </form>
+</div>
 </body>
 
 </html>

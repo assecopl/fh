@@ -5,7 +5,7 @@
 
     <groupId>pl.fhframework</groupId>
     <artifactId>fh-boot-bom</artifactId>
-    <version>4.5-SNAPSHOT</version>
+    <version>4.8.15-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>fh-boot</name>
@@ -28,12 +28,12 @@
         <version.infinispan.starter>2.0.0.Final</version.infinispan.starter>
         <version.roaster>2.20.0.Final</version.roaster>
 
-        <fh.version>4.5-SNAPSHOT</fh.version>
+        <fh.version>4.8.15-SNAPSHOT</fh.version>
         <fh.version.display>${fh.version}</fh.version.display>
         <springboot.version>2.1.0.RELEASE</springboot.version>
         <hibernate.version>5.4.1.Final</hibernate.version>
-
-        <bom.dir>${user.dir}/BOM</bom.dir>
+        <aspectj.version>1.9.4</aspectj.version>
+        <bom.dir>${user.dir}/bom-project-lite</bom.dir>
         <config.dir.name>config</config.dir.name>
         <config.dir>${project.build.sourceDirectory}/../resources/${config.dir.name}/</config.dir>
     </properties>
@@ -42,8 +42,10 @@
         <profile>
             <id>springboot</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
+        		<property>
+          			<name>!skip-springboot</name>
+        		</property>
+      		</activation>
             <properties>
                 <packaging.type>jar</packaging.type>
                 <application.properties.file>
@@ -55,7 +57,7 @@
                     <dependency>
                         <groupId>pl.fhframework</groupId>
                         <artifactId>fh-springboot-bom</artifactId>
-                        <version>4.5-SNAPSHOT</version>
+                        <version>4.8.15-SNAPSHOT</version>
                         <scope>import</scope>
                         <type>pom</type>
                     </dependency>
@@ -98,6 +100,10 @@
                 </dependency>
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-web</artifactId>
                 </dependency>
                 <dependency>
@@ -109,17 +115,89 @@
                     <artifactId>spring-boot-starter-security</artifactId>
                 </dependency>
                 <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-test</artifactId>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>fh-standalone</id>
+            <activation>
+                <property>
+                    <name>!skip-fh-standalone</name>
+                </property>
+            </activation>
+            <dependencyManagement>
+                <dependencies>
+                    <dependency>
+                        <groupId>pl.fhframework</groupId>
+                        <artifactId>fh-springboot-bom</artifactId>
+                        <version>4.8.15-SNAPSHOT</version>
+                        <scope>import</scope>
+                        <type>pom</type>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement>
+            <dependencies>
+                <dependency>
                     <groupId>pl.fhframework</groupId>
                     <artifactId>fhJpa-standalone</artifactId>
                 </dependency>
                 <dependency>
                     <groupId>pl.fhframework</groupId>
-                    <artifactId>fhTomcat-config</artifactId>
+                    <artifactId>cache-standalone</artifactId>
                 </dependency>
                 <dependency>
                     <groupId>pl.fhframework</groupId>
-                    <artifactId>cache-standalone</artifactId>
+                    <artifactId>pubsub-standalone</artifactId>
                 </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>fh-tomcat</id>
+            <activation>
+                <property>
+                    <name>!skip-fh-tomcat</name>
+                </property>
+            </activation>
+            <dependencyManagement>
+                <dependencies>
+                    <dependency>
+                        <groupId>pl.fhframework</groupId>
+                        <artifactId>fh-springboot-bom</artifactId>
+                        <version>4.8.15-SNAPSHOT</version>
+                        <scope>import</scope>
+                        <type>pom</type>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement>
+            <dependencies>
+                <dependency>
+                    <groupId>pl.fhframework</groupId>
+                    <artifactId>fhTomcat-config</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>fh-h2</id>
+            <activation>
+                <property>
+                    <name>!skip-fh-h2</name>
+                </property>
+            </activation>
+            <dependencyManagement>
+                <dependencies>
+                    <dependency>
+                        <groupId>pl.fhframework</groupId>
+                        <artifactId>fh-springboot-bom</artifactId>
+                        <version>4.8.15-SNAPSHOT</version>
+                        <scope>import</scope>
+                        <type>pom</type>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement>
+            <dependencies>
                 <dependency>
                     <groupId>com.h2database</groupId>
                     <artifactId>h2</artifactId>
@@ -130,8 +208,8 @@
                     <version>1.3.2</version>
                 </dependency>
                 <!--<dependency>-->
-                    <!--<groupId>org.postgresql</groupId>-->
-                    <!--<artifactId>postgresql</artifactId>-->
+                <!--<groupId>org.postgresql</groupId>-->
+                <!--<artifactId>postgresql</artifactId>-->
                 <!--</dependency>-->
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
@@ -154,7 +232,7 @@
                     <dependency>
                         <groupId>pl.fhframework</groupId>
                         <artifactId>fh-jboss-eap6.4-bom</artifactId>
-                        <version>4.5-SNAPSHOT</version>
+                        <version>4.8.15-SNAPSHOT</version>
                         <scope>import</scope>
                         <type>pom</type>
                     </dependency>
@@ -166,12 +244,7 @@
                     <artifactId>fhJpa-jee</artifactId>
                     <version>${fh.version}</version>
                 </dependency>
-                <dependency>
-                    <groupId>pl.asseco.luna.plugins</groupId>
-                    <artifactId>cache-jee-jboss</artifactId>
-                    <version>${fh.version}</version>
-                </dependency>
-                <dependency>
+				<dependency>
                     <groupId>org.springframework.security</groupId>
                     <artifactId>spring-security-config</artifactId>
                 </dependency>
@@ -191,7 +264,7 @@
                                 </goals>
                                 <configuration>
                                     <tasks>
-                                        <echoproperties />
+                                        <echoproperties/>
                                     </tasks>
                                 </configuration>
                             </execution>
@@ -237,11 +310,6 @@
                     <artifactId>fhJpa-jee</artifactId>
                     <version>${fh.version}</version>
                 </dependency>
-                <!--<dependency>-->
-                <!--<groupId>pl.fhframework</groupId>-->
-                <!--<artifactId>cache-jee-jboss</artifactId>-->
-                <!--<version>${fh.version}</version>-->
-                <!--</dependency>-->
                 <dependency>
                     <groupId>javax</groupId>
                     <artifactId>javaee-api</artifactId>
@@ -282,7 +350,7 @@
                                 </goals>
                                 <configuration>
                                     <tasks>
-                                        <echoproperties />
+                                        <echoproperties/>
                                     </tasks>
                                 </configuration>
                             </execution>
@@ -303,8 +371,12 @@
             <id>osgeo</id>
             <name>OSGeo Release Repository</name>
             <url>https://repo.osgeo.org/repository/release/</url>
-            <snapshots><enabled>false</enabled></snapshots>
-            <releases><enabled>true</enabled></releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
         </repository>
     </repositories>
 

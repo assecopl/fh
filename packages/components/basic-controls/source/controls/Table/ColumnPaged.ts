@@ -1,5 +1,6 @@
 import {HTMLFormComponent} from "fh-forms-handler";
 import {AdditionalButton} from "fh-forms-handler";
+import {fn} from "moment";
 
 declare const ENV_IS_DEVELOPMENT: boolean;
 
@@ -23,8 +24,10 @@ class ColumnPaged extends HTMLFormComponent {
     create() {
 
         let column = document.createElement('th');
-        if (this.width) {
-            column.style.width = this.width + '%';
+        column.id = this.id;
+        column.classList.add(this.id);
+        if (this.width && this.width.length > 0) {
+            column.style.width = this.width[0].includes("px")? this.width[0]: this.width[0]  + '%';
         }
         // HTMLComponent recognized and updated label
         this.labelElement = document.createElement('span');
@@ -65,10 +68,11 @@ class ColumnPaged extends HTMLFormComponent {
 
         parentObject.sorter = sorter;
 
-        this.component.classList.add('sortable');
-        this.component.addEventListener('click', function (event) {
+        columnElement.addClass('sortable');
+        columnElement.on('click', function () {
             let icon = (<any>sorter.firstChild);
             let sortDirection;
+
             if (icon.classList.contains('fa-sort')) {
                 icon.classList.remove('fa-sort');
                 icon.classList.add('fa-sort-amount-down');
@@ -129,6 +133,9 @@ class ColumnPaged extends HTMLFormComponent {
         if (change.changedAttributes) {
             $.each(change.changedAttributes, function (name) {
                 switch (name) {
+                    case 'sortable':
+                        this.isSortable = Boolean(change.changedAttributes['sortable']);
+                        break;
                     case 'accessibility':
                         // setting accessibility done in HTMLFormComponent.update()
                         // just redraw columns

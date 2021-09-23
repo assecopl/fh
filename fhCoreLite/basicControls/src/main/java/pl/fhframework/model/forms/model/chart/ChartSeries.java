@@ -18,6 +18,8 @@ import java.util.Map;
 public class ChartSeries {
 
     private String label;
+    private String type;
+    private boolean fill = true;
     private Map<Object, Number> data = new LinkedHashMap<>();
 
     public ChartSeries() {
@@ -31,6 +33,8 @@ public class ChartSeries {
     public String toString() {
         return "ChartSeries{" +
                 "label='" + label + '\'' +
+                ", type='" + type + '\'' +
+                ", fill=" + fill +
                 ", data=" + data +
                 '}';
     }

@@ -40,6 +40,9 @@
     margin-bottom: 20px;
     font-size: 12px;
 }
+.fc.wrapper .toolsRow .btn {
+    font-size: 12px;
+}
 .fc.wrapper .toolsRow .table-pagination .pagination {
     margin: 0;
 }
@@ -165,6 +168,9 @@ thead.tableFloatingHeaderOriginal > tr th {
     display: table-cell;
     vertical-align: top;
     border-top: 1px solid #dee2e6;
+}
+.fc.table.table-sm th, .table.table-sm td-a {
+    padding: 0.3rem;
 }
 .table-primary, .table-primary > th, .table-primary > td-a {
     background-color: #b8daff;

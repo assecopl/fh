@@ -1,27 +1,35 @@
 package pl.fhframework.model.forms;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.util.CollectionUtils;
-
-import pl.fhframework.core.forms.IValidatedComponent;
-import pl.fhframework.core.util.StringUtils;
 import pl.fhframework.BindingResult;
 import pl.fhframework.annotations.*;
 import pl.fhframework.binding.ModelBinding;
+import pl.fhframework.core.forms.IValidatedComponent;
+import pl.fhframework.core.util.StringUtils;
 import pl.fhframework.helper.AutowireHelper;
 import pl.fhframework.model.PresentationStyleEnum;
 import pl.fhframework.model.dto.ElementChanges;
 import pl.fhframework.model.forms.attribute.CommaSeparatedStringListAttrConverter;
+import pl.fhframework.model.forms.optimized.ColumnOptimized;
+import pl.fhframework.model.forms.optimized.TableCellOptimized;
+import pl.fhframework.model.forms.optimized.TableOptimized;
 import pl.fhframework.validation.FieldValidationResult;
 import pl.fhframework.validation.IValidationResults;
 
 import java.util.*;
 
-import lombok.Getter;
-import lombok.Setter;
+import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.SPECIFIC;
 
+@OverridenPropertyAnnotations(
+        property = "htmlAccessibilityRole",
+        designerXmlProperty = @DesignerXMLProperty(functionalArea = SPECIFIC, priority = 90),
+        xmlProperty = @XMLProperty(value = "htmlAccessibilityRole", defaultValue = "status")
+)
 @Control(parents = {}, canBeDesigned = true)
-@DocumentedComponent(value = "Component to aggregate validation messages", icon = "fa fa-exclamation")
+@DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, documentationExample = true, value = "Component to aggregate validation messages", icon = "fa fa-exclamation")
 public class ValidateMessages extends FormElement implements IComponentsReferrer {
 
     public static final String ANY_COMPONENT = "*";
@@ -67,6 +75,7 @@ public class ValidateMessages extends FormElement implements IComponentsReferrer
     @Override
     public void init() {
         super.init();
+        htmlAccessibilityRole = "status";
         showAttributeAsLabel = !"false".equals(AutowireHelper.getApplicationProperty("fhframework.validation.attributeAsLabel"));
 
     }
@@ -149,7 +158,31 @@ public class ValidateMessages extends FormElement implements IComponentsReferrer
                     if (StringUtils.isNullOrEmpty(label) && validationComponent instanceof BaseInputField && ((BaseInputField) validationComponent).getLabelModelBinding() != null) {
                         label = ((BaseInputField) validationComponent).convertBindingValueToString(((BaseInputField) validationComponent).getLabelModelBinding().getBindingResult());
                     }
-                    if (StringUtils.isNullOrEmpty(label) && showAttributeAsLabel) {
+                    if (validationComponent.getGroupingParentComponent() != null && validationComponent.getGroupingParentComponent() instanceof TableCell) {
+                        TableCell tableCell = ((TableCell) validationComponent.getGroupingParentComponent());
+                        String tableName;
+                        int colNumber;
+                        int rowNumber;
+                        if(validationComponent.getGroupingParentComponent() instanceof TableCellOptimized){
+                            ColumnOptimized tableColumn = (ColumnOptimized) tableCell.getGroupingParentComponent();
+                            TableOptimized table = tableColumn.getTable();
+                            tableName = table.getLabel();
+                            colNumber = table.getColumns().indexOf(tableColumn) + 1;
+                            rowNumber = tableCell.getRowIndex() + 1;
+                        } else {
+                            Column tableColumn = (Column) tableCell.getGroupingParentComponent();
+                            Table table = tableColumn.getTable();
+                            tableName = table.getLabel();
+                            colNumber = table.getColumns().indexOf(tableColumn) + 1;
+                            rowNumber = tableCell.getRowIndex() + 1;
+                        }
+
+                        if (tableName == null) {
+                            label = getForm().getAbstractUseCase().getUserSession().getValidationResults().getErrorMessage("fh.core.validation.field.table_field_error_no_id", rowNumber, colNumber);
+                        } else {
+                            label = getForm().getAbstractUseCase().getUserSession().getValidationResults().getErrorMessage("fh.core.validation.field.table_field_error", tableName, rowNumber, colNumber);
+                        }
+                    } else if (StringUtils.isNullOrEmpty(label) && showAttributeAsLabel) {
                         label = convertIdToLabel(validationComponent.getId());
                     }
                 }
@@ -165,7 +198,8 @@ public class ValidateMessages extends FormElement implements IComponentsReferrer
         return msg;
     }
 
-    private Optional<FormElement> findComponentBasedOnAttribute(Component basicFormElement, String attribute, Object parentObject) {
+    private Optional<FormElement> findComponentBasedOnAttribute(Component basicFormElement, String
+            attribute, Object parentObject) {
         // todo: optimize
         if (attribute == null || parentObject == null) {
             return Optional.empty();

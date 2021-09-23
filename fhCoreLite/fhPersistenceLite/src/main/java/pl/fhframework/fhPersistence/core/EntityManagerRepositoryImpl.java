@@ -1,6 +1,7 @@
 package pl.fhframework.fhPersistence.core;
 
 import org.eclipse.core.runtime.Assert;
+import org.springframework.context.annotation.Profile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -12,7 +13,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
 
-@Component
+@Component(EntityManagerRepository.beanName)
+@Profile("!withoutDataSource")
+//@ConditionalOnBean(name = "FhPU")
 public class EntityManagerRepositoryImpl implements EntityManagerRepository {
     private static final ThreadLocal<Integer> withoutConversation = ThreadLocal.withInitial(() -> 0);
 

@@ -3,20 +3,14 @@ package pl.fhframework.fhPersistence.core.model;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.aopalliance.aop.Advice;
-import org.aopalliance.intercept.MethodInterceptor;
-import org.aopalliance.intercept.MethodInvocation;
-import org.springframework.aop.Advisor;
-import org.springframework.aop.Pointcut;
-import org.springframework.aop.framework.ProxyFactory;
-import org.springframework.aop.support.DefaultPointcutAdvisor;
-import org.springframework.aop.support.StaticMethodMatcherPointcut;
 import org.springframework.beans.PropertyAccessor;
 import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
+import pl.fhframework.ReflectionUtils;
 import pl.fhframework.aspects.snapshots.SnapshotsModelAspect;
+import pl.fhframework.core.FhCL;
 import pl.fhframework.core.FhConversationException;
 import pl.fhframework.core.FhException;
 import pl.fhframework.core.datasource.StoreAccessService;
@@ -29,16 +23,12 @@ import pl.fhframework.core.rules.dynamic.model.predicates.ExistsInCondition;
 import pl.fhframework.fhPersistence.conversation.ConversationManager;
 import pl.fhframework.fhPersistence.conversation.ConversationManagerUtils;
 import pl.fhframework.fhPersistence.core.EntityManagerRepository;
-import pl.fhframework.ReflectionUtils;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 import java.util.*;
 
 /**
@@ -52,7 +42,7 @@ public class ModelProxyService {
     @Autowired
     protected ModelConfig modelConfig;
 
-    @Autowired
+    @Autowired(required = false)
     protected EntityManagerRepository emRepository;
 
     @Autowired
@@ -264,16 +254,25 @@ public class ModelProxyService {
             otherSideFieldName = modelConfig.getNonOwningField(ModelConfig.getEntityClass(owner), fieldName);
         }
         if (otherSideFieldName != null) {
-            ProxyFactory factory = new ProxyFactory();
-            factory.setTarget(collection);
-            factory.setProxyTargetClass(true);
-            Pointcut pc = new CollectionModificationPointcut();
-            Advice advice = new CollectionModificationInterceptor(owner, fieldName, otherSideFieldName);
-            Advisor advisor = new DefaultPointcutAdvisor(pc, advice);
+            CollectionModificationInterceptor advice = new CollectionModificationInterceptor(collection, owner, fieldName, otherSideFieldName);
 
-            factory.addAdvisor(advisor);
+            return (Collection<BaseEntity>) Proxy.newProxyInstance(FhCL.classLoader, collection.getClass().getInterfaces(), (proxy, method, args) -> {
+                    try {
+                        Object retVal = method.invoke(collection, args);
+                        if (CollectionModificationPointcut.matches(method, collection.getClass())) {
+                            advice.invoke(method, args, retVal);
+                        }
+                        return retVal;
+                    } catch (InvocationTargetException ex) {
+                        if (ex.getCause() instanceof RuntimeException) {
+                            throw ex.getCause();
+                        }
+                        else {
+                            throw new FhException(ex.getCause());
+                        }
+                    }
+            });
 
-            return (Collection<BaseEntity>) factory.getProxy();
         }
 
         return collection;
@@ -282,35 +281,32 @@ public class ModelProxyService {
     @Getter
     @Setter
     @AllArgsConstructor
-    protected class CollectionModificationInterceptor implements MethodInterceptor {
+    protected class CollectionModificationInterceptor {
+        private Collection elements;
+
         private BaseEntity owner;
 
         private String fieldName;
 
         private String otherSideFieldName;
 
-        public Object invoke(MethodInvocation invocation) throws Throwable {
-            Collection elements = new ArrayList((Collection) invocation.getThis());
-
-            Object retVal = invocation.proceed();
-
-            String methodName = invocation.getMethod().getName();
+        public void invoke(Method method, Object[] args, Object retVal) throws Throwable {
+            String methodName = method.getName();
             if ("add".equals(methodName) && Boolean.TRUE.equals(retVal)) {
-                addedElement((Collection) invocation.getThis(), invocation.getArguments()[0]);
+                addedElement(elements, args[0]);
             } else if ("remove".equals(methodName) && Boolean.TRUE.equals(retVal)) {
-                removedElement((Collection) invocation.getThis(), invocation.getArguments()[0]);
+                removedElement(elements, args[0]);
             } else if ("addAll".equals(methodName) && Boolean.TRUE.equals(retVal)) {
-                ((Collection) invocation.getArguments()[0]).forEach(element ->
-                        addedElement((Collection) invocation.getThis(), element));
+                ((Collection) args[0]).forEach(element ->
+                        addedElement(elements, element));
             } else if ("removeAll".equals(methodName) && Boolean.TRUE.equals(retVal)) {
-                ((Collection) invocation.getArguments()[0]).forEach(element ->
-                        removedElement((Collection) invocation.getThis(), element));
+                ((Collection) args[0]).forEach(element ->
+                        removedElement(elements, element));
             } else if ("clear".equals(methodName)) {
                 elements.forEach(element ->
-                        removedElement((Collection) invocation.getThis(), element));
+                        removedElement(elements, element));
             }
-            return retVal;
-        }
+       }
 
         private void addedElement(Collection collection, Object element) {
             Object valueOtherSide = getAttributeValue((BaseEntity) element, otherSideFieldName);
@@ -343,8 +339,8 @@ public class ModelProxyService {
         }
     }
 
-    protected class CollectionModificationPointcut extends StaticMethodMatcherPointcut {
-        public boolean matches(Method method, Class cls) {
+    protected static class CollectionModificationPointcut {
+        public static boolean matches(Method method, Class cls) {
             return ("add".equals(method.getName()) || "addAll".equals(method.getName()) ||
                     "remove".equals(method.getName()) || "removeAll".equals(method.getName()) ||
                     "clear".equals(method.getName()));
@@ -352,14 +348,14 @@ public class ModelProxyService {
     }
 
     public void refreshStaticCollection(BaseEntity baseEntity, EntityManager entityManager) {
-        if (entityManager.contains(baseEntity)) {
+        if (entityManager != null && entityManager.contains(baseEntity)) {
             getModelStore().clearStaticCollection(baseEntity, entityManager);
         }
     }
 
     protected Class getClassForName(String className) {
         try {
-            return Class.forName(className);
+            return FhCL.classLoader.loadClass(className);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Unknown class", e);
         }
@@ -407,7 +403,7 @@ public class ModelProxyService {
         });
     }
 
-    public void sychronizeCollections() {
+    public void synchronizeCollections() {
         getModelStore().getAllExtendedCollections().forEach(this::syncStaticOrHybridCollection);
 
         // process orphan removal

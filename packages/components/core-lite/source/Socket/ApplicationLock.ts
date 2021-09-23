@@ -74,13 +74,23 @@ class ApplicationLock {
         if (this.rids.indexOf(requestId) > -1) {
             this.rids.splice(this.rids.indexOf(requestId), 1);
             if (!this.rids.length) {
-                $(this.lockElement).hide();
-                if (this.opacityTimer != null) {
-                    clearTimeout(this.opacityTimer);
-                    this.opacityTimer = null;
-                }
+                this.hide();
             }
         }
+    }
+
+    private hide() {
+        $(this.lockElement).hide();
+        if (this.opacityTimer != null) {
+            clearTimeout(this.opacityTimer);
+            this.opacityTimer = null;
+        }
+    }
+
+
+    public disableAll() {
+        this.rids = [];
+        this.hide();
     }
 
     public isActive(): number {
@@ -88,7 +98,7 @@ class ApplicationLock {
     }
 
     // TODO: refactor
-    public createErrorDialog(data: Array<any>, callback: any = undefined): any {
+    public createErrorDialog(data: Array<any>, callback: any = undefined, withClose = true): any {
         let dialog = document.createElement('div');
         dialog.classList.add('fh-error-dialog');
 
@@ -156,13 +166,15 @@ class ApplicationLock {
             content.appendChild(wrapper);
         }
 
-        dialog.appendChild(close);
+        if (withClose) {
+            dialog.appendChild(close);
+        }
         dialog.appendChild(content);
 
         if (typeof callback === 'function') {
             callback(content, data);
         }
-        $(dialog).dialog({modal: true, width: 600}).siblings('.ui-dialog-titlebar').remove();
+        $(dialog).dialog({modal: true, width: 600, closeOnEscape: withClose}).siblings('.ui-dialog-titlebar').remove();
         $(dialog).dialog("moveToTop");
 
         return dialog;
@@ -184,14 +196,14 @@ class ApplicationLock {
         }
     }
 
-    public createInfoDialog(info, button1Name = undefined, button1OnClick = undefined, button2Name = undefined, button2OnClick = undefined): void {
+    public createInfoDialog(info, button1Name = undefined, button1OnClick = undefined, button2Name = undefined, button2OnClick = undefined, withClose = true): void {
         if (this.reconnectInfo) {
             ApplicationLock.closeErrorDialog(this.reconnectInfo);
             this.reconnectInfo = null;
         }
         this.reconnectInfo = this.createErrorDialog([], function (content) {
-            ApplicationLock.appendDialogElements(content, info, button1Name, button1OnClick, button2Name, button2OnClick);
-        });
+            this.appendDialogElements(content, info, button1Name, button1OnClick, button2Name, button2OnClick);
+        }.bind(this), withClose);
     }
 
     public closeInfoDialog(): void {
@@ -201,11 +213,11 @@ class ApplicationLock {
         }
     }
 
-    private static appendDialogElements(content, info, button1Name, button1OnClick, button2Name, button2OnClick) {
+    private appendDialogElements(content, info, button1Name, button1OnClick, button2Name, button2OnClick) {
         let wrapper = document.createElement('div');
         let htmlDialog =
             '<div class="modal-header">' +
-            '<h5 class="modal-title">Informacja</h5>' +
+            '<h5 class="modal-title">' + this.i18n.__("error.info") + '</h5>' +
             '</div>' +
             '<div class="modal-body">' +
             '<div class="row eq-row">' +

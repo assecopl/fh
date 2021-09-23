@@ -5,7 +5,7 @@ class RadioOption extends HTMLFormComponent {
     private readonly onChange: any;
     private readonly groupName: string;
     private readonly checked: boolean;
-    private input: any;
+    public input: any;
     private valueChanged: boolean = false;
 
     constructor(componentObj: any, parent: HTMLFormComponent) {
@@ -29,21 +29,20 @@ class RadioOption extends HTMLFormComponent {
             this.updateModel();
         }.bind(this));
 
-        if (this.onChange) {
-            input.addEventListener('click', function (event) {
-                this.fireEventWithLock('onChange', this.onChange, event);
-            }.bind(this));
-        }
+        input.addEventListener('click', function (event) {
+            this.fireEventWithLock('onChange', this.onChange, event);
+        }.bind(this));
+
 
         this.input = input;
         this.component = input;
         this.hintElement = this.component;
         this.wrap(false);
 
-        let label = this.htmlElement.getElementsByTagName('label')[0];
-        label.classList.remove('col-form-label');
-        label.classList.add('form-check-label');
-
+        if(this.labelElement) {
+            this.labelElement.classList.remove('col-form-label');
+            this.labelElement.classList.add('form-check-label');
+        }
 
         this.addStyles();
         this.display();
@@ -95,7 +94,7 @@ class RadioOption extends HTMLFormComponent {
     };
 
     setPresentationStyle(presentationStyle) {
-        if (this.labelElement.classList.contains('empty-label')) {
+        if (this.labelElement && this.labelElement.classList.contains('empty-label')) {
             ['border', 'border-success', 'border-info', 'border-warning', 'border-danger', 'is-invalid'].forEach(function (cssClass) {
                 this.htmlElement.classList.remove(cssClass);
             }.bind(this));

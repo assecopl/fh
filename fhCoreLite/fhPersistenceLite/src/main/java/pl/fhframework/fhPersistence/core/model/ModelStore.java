@@ -48,7 +48,7 @@ public class ModelStore {
         return System.identityHashCode(realObject);
     }
 
-    private static Object getRealObject(Object obj) {
+    public static Object getRealObject(Object obj) {
         if (HibernateProxy.class.isInstance(obj)) {
             //if (Hibernate.isInitialized(obj)) {
             return HibernateProxy.class.cast(obj).getHibernateLazyInitializer().getImplementation();

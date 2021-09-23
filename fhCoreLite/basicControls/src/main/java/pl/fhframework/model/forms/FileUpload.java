@@ -1,50 +1,42 @@
 package pl.fhframework.model.forms;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.util.ClassUtils;
-
-import pl.fhframework.core.FhException;
-import pl.fhframework.core.forms.IHasBoundableLabel;
-import pl.fhframework.core.forms.IValidatedComponent;
 import pl.fhframework.BindingResult;
 import pl.fhframework.SessionManager;
 import pl.fhframework.annotations.*;
 import pl.fhframework.binding.*;
+import pl.fhframework.core.FhException;
+import pl.fhframework.core.forms.IHasBoundableLabel;
+import pl.fhframework.core.forms.IValidatedComponent;
 import pl.fhframework.helper.AutowireHelper;
 import pl.fhframework.io.FileService;
 import pl.fhframework.io.IFileMaxSized;
 import pl.fhframework.io.IResourced;
 import pl.fhframework.model.PresentationStyleEnum;
 import pl.fhframework.model.dto.ElementChanges;
+import pl.fhframework.model.dto.InMessageEventData;
 import pl.fhframework.model.dto.ValueChange;
 import pl.fhframework.model.forms.designer.BindingExpressionDesignerPreviewProvider;
 import pl.fhframework.model.forms.designer.ButtonStyleFixedValuesProvider;
+import pl.fhframework.model.forms.optimized.ColumnOptimized;
 import pl.fhframework.model.forms.utils.LanguageResolver;
 import pl.fhframework.model.forms.validation.ValidationFactory;
-import pl.fhframework.validation.ConstraintViolation;
-import pl.fhframework.validation.FieldValidationResult;
-import pl.fhframework.validation.FormFieldHints;
-import pl.fhframework.validation.IValidationResults;
-import pl.fhframework.validation.ValidationManager;
-import pl.fhframework.model.dto.InMessageEventData;
+import pl.fhframework.validation.*;
 
 import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import lombok.Getter;
-import lombok.Setter;
-
-import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.BEHAVIOR;
-import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.CONTENT;
-import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.LOOK_AND_STYLE;
+import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.*;
 
 @DesignerControl(defaultWidth = 2)
-@DocumentedComponent(value = "Component responsible for file upload", icon = "fa fa-upload")
-@Control(parents = {PanelGroup.class, Column.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
+@DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, documentationExample = true, value = "Component responsible for file upload", icon = "fa fa-upload")
+@Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
 public class FileUpload extends FormElement implements TableComponent<FileUpload>, IChangeableByClient, Boundable, IValidatedComponent, IFileMaxSized, IResourced, IHasBoundableLabel, Styleable {
     private static final String REQUIRED_ATTR = "required";
     private static final String LABEL_ATTR = "label";

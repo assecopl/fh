@@ -7,12 +7,13 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.stereotype.Component;
+import pl.fhframework.ReflectionUtils;
 import pl.fhframework.core.FhUseCaseException;
 import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.core.util.StringUtils;
-import pl.fhframework.ReflectionUtils;
 
 import java.lang.reflect.Modifier;
+import java.util.Objects;
 
 @Component
 public class UseCaseBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
@@ -48,14 +49,18 @@ public class UseCaseBeanFactoryPostProcessor implements BeanFactoryPostProcessor
     public void registerBean(Class<?> clazz, String beanName, boolean lazyInit, boolean registerOld) {
         BeanDefinitionRegistry registry = ((BeanDefinitionRegistry ) beanFactory);
 
-        String oldBeanName = StringUtils.decapitalize(clazz.getName());
+        // @FeignClient is causing race condition on beans name, leave old bean name
+        /*String oldBeanName = StringUtils.decapitalize(clazz.getName());
         if (!oldBeanName.equals(beanName) && registry.isBeanNameInUse(oldBeanName)) {
             registry.removeBeanDefinition(oldBeanName);
-        }
-        if (registry.isBeanNameInUse(beanName)) {
+        }*/
+        boolean redefinition = registry.isBeanNameInUse(beanName);
+        if (redefinition) {
             if (registerOld) {
                 Class<?> oldBean = ReflectionUtils.getRealClass(beanFactory.getBean(beanName));
-                registerBean(oldBean, lazyInit);
+                if (!Objects.equals(oldBean, clazz)) {
+                    registerBean(oldBean, lazyInit);
+                }
             }
             registry.removeBeanDefinition(beanName);
             FhLogger.warn("Redefining bean '{}'", beanName);
@@ -67,10 +72,13 @@ public class UseCaseBeanFactoryPostProcessor implements BeanFactoryPostProcessor
         beanDefinition.setAbstract(false);
         beanDefinition.setAutowireCandidate(true);
         beanDefinition.setScope("prototype");
-        beanDefinition.setSynthetic(true); // SmartInstantiationAwareBeanPostProcessors predicts wrong type (previous)
 
-        //registry.registerBeanDefinition(StringUtils.decapitalize(clazz.getSimpleName()), beanDefinition);
         registry.registerBeanDefinition(beanName, beanDefinition);
+        if (redefinition) {
+            // because of cache in SmartInstantiationAwareBeanPostProcessor -> AbstractAutoProxyCreator.proxyTypes,
+            // first getBean by name, this will change cache in AbstractAutoProxyCreator and allow use of getBean by class
+            beanFactory.getBean(beanName); // populate cache with new type
+        }
     }
 
     public <T> T registerBean(T object) {

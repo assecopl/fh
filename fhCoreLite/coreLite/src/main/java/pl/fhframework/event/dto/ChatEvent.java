@@ -1,18 +1,12 @@
 package pl.fhframework.event.dto;
 
-import lombok.Getter;
+import lombok.AllArgsConstructor;
 
 /**
  * Chat refresh event
  * @author Tomasz Kozlowski (created on 03.10.2019)
  */
-@Getter
+@AllArgsConstructor
 public class ChatEvent extends EventDTO {
-
-    private Long chatId;
-
-    public ChatEvent(Long chatId) {
-        this.chatId = chatId;
-    }
 
 }

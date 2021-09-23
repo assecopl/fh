@@ -25,13 +25,7 @@ public class ComponentStateSaver implements Cloneable{
 
     public void processComponentChange(IGroupingComponent<FormElement> groupingComponent, ElementChanges elementChanges){
 
-        final List<Includeable> includeables = filter(groupingComponent.getSubcomponents(), Includeable.class);
-
-        final List<Component> componentsFromInclude = includeables.stream().flatMap(i -> i.getIncludedComponents().stream())
-                .collect(Collectors.toList());
-
         List<FormElement> subcomponents = filter(groupingComponent.getSubcomponents(), FormElement.class);
-        subcomponents.addAll(filter(componentsFromInclude, FormElement.class));
 
         Map<Integer, FormElement> subcomponentsHashes =
                 subcomponents.stream().collect(

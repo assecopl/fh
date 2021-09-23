@@ -4,6 +4,7 @@ package pl.fhframework.core.session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,7 +71,11 @@ public class FhSessionService implements IFhSessionService {
                 manageTransactionOnStart(operation, owner, params);
 
                 if (SecurityContextHolder.getContext().getAuthentication() != null) {
-                    session.setSystemUser(securityManager.buildSystemUser(SecurityContextHolder.getContext().getAuthentication()));
+                    if (SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken) {
+                        session.setSystemUser(securityManager.buildSystemUser(null));
+                    } else {
+                        session.setSystemUser(securityManager.buildSystemUser(SecurityContextHolder.getContext().getAuthentication()));
+                    }
                 }
 
                 return true;

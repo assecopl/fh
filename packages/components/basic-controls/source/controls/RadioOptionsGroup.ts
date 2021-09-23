@@ -2,7 +2,7 @@ import {HTMLFormComponent} from "fh-forms-handler";
 
 class RadioOptionsGroup extends HTMLFormComponent {
     private onChange: any;
-    private groupDiv : HTMLDivElement;
+    private groupDiv : HTMLFieldSetElement;
     private options : string[];
 
     constructor(componentObj: any, parent: HTMLFormComponent) {
@@ -15,7 +15,7 @@ class RadioOptionsGroup extends HTMLFormComponent {
     }
 
     create() {
-        this.groupDiv = document.createElement('div');
+        this.groupDiv = document.createElement('fieldset');
         this.groupDiv.id = this.id;
 
         this.options = this.componentObj.rawOptions;
@@ -99,6 +99,7 @@ class RadioOptionsGroup extends HTMLFormComponent {
                 if(this.invisible){
                     this.htmlElement.classList.add('invisible');
                 } else {
+                    this.hideHint();
                     this.htmlElement.classList.add('d-none');
                 }
                 break;
@@ -118,6 +119,10 @@ class RadioOptionsGroup extends HTMLFormComponent {
         return this.changesQueue.extractChangedAttributes();
     };
 
+    getDefaultWidth(): string {
+        return "md-3";
+    }
+
     refreshOptions() {
         this.groupDiv.innerHTML = '';
         if (this.options !== undefined) {
@@ -130,13 +135,13 @@ class RadioOptionsGroup extends HTMLFormComponent {
                 radio.classList.add('form-check');
                 let label = document.createElement('label');
                 label.classList.add('form-check-label');
-                label.setAttribute('for', this.id);
                 let input = document.createElement('input');
                 input.classList.add('form-check-input');
                 input.type = 'radio';
                 input.name = this.id;
-                input.id = this.id;
+                input.id = this.id+"_"+i;
                 input.dataset.value = i.toString();
+                label.setAttribute('for', input.id);
 
                 if (this.rawValue === i) {
                     input.checked = true;

@@ -3,6 +3,7 @@ package pl.fhframework.core.security.provider.jasypt;
 import org.jasypt.encryption.StringEncryptor;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.jasypt.encryption.pbe.config.SimpleStringPBEConfig;
+import pl.fhframework.core.FhCL;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,7 +31,7 @@ public class JasyptEncoderApp {
 
     private static void loadProperties() throws IOException {
         String filename = "jasypt.properties";
-        try (InputStream input = JasyptEncoderApp.class.getClassLoader().getResourceAsStream(filename)) {
+        try (InputStream input = FhCL.classLoader.getResourceAsStream(filename)) {
             if (input == null) {
                 throw new IllegalStateException("Cannot find " + filename + " file");
             }

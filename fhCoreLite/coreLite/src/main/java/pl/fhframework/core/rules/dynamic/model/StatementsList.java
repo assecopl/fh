@@ -1,6 +1,5 @@
 package pl.fhframework.core.rules.dynamic.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import pl.fhframework.core.rules.dynamic.blockly.BlocklyBlock;
 import pl.fhframework.core.rules.dynamic.blockly.BlocklyNext;
 import pl.fhframework.core.rules.dynamic.blockly.BlocklyStatement;
@@ -11,7 +10,6 @@ import java.util.List;
 import java.util.function.Function;
 
 public interface StatementsList extends Serializable {
-    @JsonIgnore
     List<Statement> getStatements();
 
     default BlocklyBlock convertStatementsToBlockly(Function<String, String> formatter) {

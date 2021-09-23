@@ -96,4 +96,11 @@ public interface IValidationResults extends IValidationMessages {
      */
     Map<Object, Map<String, List<FieldValidationResult>>> getValidationErrors();
 
+    /**
+     * Get translated error message text
+     * @param key Text key
+     * @param args Values to insert into text placeholders
+     * @return Translated error message text
+     */
+    String getErrorMessage(String key, Object... args);
 }

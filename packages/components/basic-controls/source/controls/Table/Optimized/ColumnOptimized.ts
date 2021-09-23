@@ -1,4 +1,4 @@
-import {HTMLFormComponent} from "fh-forms-handler";
+import {FhContainer, HTMLFormComponent} from "fh-forms-handler";
 import {AdditionalButton} from "fh-forms-handler";
 
 class ColumnOptimized extends HTMLFormComponent {
@@ -55,6 +55,22 @@ class ColumnOptimized extends HTMLFormComponent {
      * @param accessibility
      */
     public display(): void {
+        if (this.designMode) {
+            (<any>FhContainer.get('Designer')).addToolboxListeners(this);
+
+            if (this.toolbox) {
+                this.htmlElement.appendChild(this.toolbox);
+            }
+            this.htmlElement.addEventListener('click', function(e) {
+                e.stopImmediatePropagation();
+                e.preventDefault();
+                this.component.focus();
+                this.fireEvent('onformedit_elementedit', 'elementedit');
+                document.addEventListener('keyup', event => {
+                    this.handleDeleteBtnEvent(event);
+                });
+            }.bind(this));
+        }
         this.container.appendChild(this.htmlElement);
     }
 
@@ -95,7 +111,7 @@ class ColumnOptimized extends HTMLFormComponent {
                         // setting accessibility done in HTMLFormComponent.update()
                         // just redraw columns
                         let parentTable = this.parent;
-                        while (parentTable.componentObj.type !== 'Table') {
+                        while (parentTable.componentObj.type !== 'TableOptimized') {
                             parentTable = parentTable.parent;
                         }
                         parentTable.redrawColumns();

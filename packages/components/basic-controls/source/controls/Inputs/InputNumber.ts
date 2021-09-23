@@ -1,26 +1,31 @@
-import 'imports-loader?moment,define=>false,exports=>false!../../external/inputmask';
+import '../../external/inputmask.js';
 import {HTMLFormComponent, FormComponent} from "fh-forms-handler";
 import {FhContainer} from "fh-forms-handler";
 import {FormComponentKeySupport} from "fh-forms-handler";
 
 class InputNumber extends HTMLFormComponent {
-    private input: any;
+    public input: any;
     private keySupport: FormComponentKeySupport;
     protected keySupportCallback: any;
     private isTextarea: any;
     private placeholder: any;
     private maxLength: any;
     private onInput: any;
+    private textAlign: string;
     private onChange: any;
     private valueChanged: boolean;
+    private readonly radixPoint: string;
     protected inputmaskEnabled: boolean;
+    private maxFractionDigits:any;
+    private maxIntigerDigits:any;
 
     constructor(componentObj: any, parent: HTMLFormComponent) {
         if (componentObj.rawValue != undefined) {
-            componentObj.rawValue = componentObj.rawValue.replace(',', '.');
+            componentObj.rawValue = componentObj.rawValue.replace(',', componentObj.radixPoint);
         }
 
         super(componentObj, parent);
+        this.radixPoint = componentObj.radixPoint || '.';
 
         if (componentObj.rawValue == undefined && componentObj.value == undefined) {
             this.oldValue = '';
@@ -32,7 +37,11 @@ class InputNumber extends HTMLFormComponent {
         this.inputmaskEnabled = false;
 
         this.onInput = this.componentObj.onInput;
+        this.textAlign = this.componentObj.textAlign;
         this.onChange = this.componentObj.onChange;
+
+        this.maxFractionDigits = this.componentObj.maxFractionDigits != undefined ? this.componentObj.maxFractionDigits : null;
+        this.maxIntigerDigits = this.componentObj.maxIntigerDigits != undefined ? this.componentObj.maxIntigerDigits : null;
 
         this.input = null;
         this.valueChanged = false;
@@ -49,6 +58,12 @@ class InputNumber extends HTMLFormComponent {
         ['fc', 'InputNumber', 'form-control'].forEach(function (cssClass) {
             input.classList.add(cssClass);
         });
+
+        if (this.textAlign === 'RIGHT') {
+            input.classList.add('text-right');
+        } else if (this.textAlign === 'CENTER') {
+            input.classList.add('text-center');
+        }
 
         if (this.placeholder) {
             input.placeholder = this.placeholder;
@@ -86,10 +101,10 @@ class InputNumber extends HTMLFormComponent {
 
     applyMask() {
         if (!this.inputmaskEnabled) {
-            // @ts-ignore
+            //@ts-ignore
             Inputmask({
-                radixPoint: ".",
-                regex: "^([.\\d]+)$"
+                radixPoint: this.radixPoint,
+                regex: this.resolveRegex()
             }).mask(this.input);
             this.inputmaskEnabled = true;
         }
@@ -97,7 +112,7 @@ class InputNumber extends HTMLFormComponent {
 
     disableMask() {
         if (this.inputmaskEnabled) {
-            // @ts-ignore
+            //@ts-ignore
             Inputmask.remove(this.input);
             this.inputmaskEnabled = false;
         }
@@ -148,7 +163,7 @@ class InputNumber extends HTMLFormComponent {
             switch (name) {
                 case 'rawValue':
                     if (newValue != undefined) {
-                        newValue = newValue.replace(',', '.')
+                        newValue = newValue.replace(',', this.radixPoint);
                     }
                     this.input.value = newValue;
                     break;
@@ -222,6 +237,36 @@ class InputNumber extends HTMLFormComponent {
         this.disableMask();
 
         super.destroy(removeFromParent);
+    }
+
+
+    resolveRegex(){
+        let fractionMark = "[\\d]*)"; // Matches between one and unlimited times
+        let integerMark = "[\\d]*"; // Matches between one and unlimited times
+        let separatorMark = "([" + this.radixPoint + "]{0,1}" //Matches between zero and one times
+        if(this.maxFractionDigits != null) {
+            if (this.maxFractionDigits == 0) {
+                fractionMark = "";
+                separatorMark = "";
+            } else {
+                fractionMark = "[\\d]{0,"+this.maxFractionDigits+"})"
+            }
+        }
+
+        if(this.maxIntigerDigits != null) {
+            if (this.maxIntigerDigits == 0) {
+                integerMark = "[0]{1}"; // Only 0 can be put before separator
+            } else {
+                integerMark = "[\\d]{0,"+this.maxIntigerDigits+"}"
+            }
+        }
+
+        return "^([-]?"+integerMark+""+separatorMark+""+fractionMark+")$";
+
+    }
+
+    public getDefaultWidth(): string {
+        return 'md-3';
     }
 }
 

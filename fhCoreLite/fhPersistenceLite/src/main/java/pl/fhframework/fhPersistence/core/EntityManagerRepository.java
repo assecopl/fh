@@ -3,6 +3,7 @@ package pl.fhframework.fhPersistence.core;
 import javax.persistence.EntityManager;
 
 public interface EntityManagerRepository {
+   String beanName = "entityManagerRepository";
 
    EntityManager getEntityManager();
 

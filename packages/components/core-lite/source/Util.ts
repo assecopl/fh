@@ -104,6 +104,10 @@ class Util {
                 closeCallback();
             }
         });
+        $(modalDialog).on('shown.bs.modal', function () {
+            $(modalDialog).find('.modal-body-button').trigger('focus');
+        });
+
 
         $('#' + modalDialogId).modal({backdrop: 'static', keyboard: false});
     }
@@ -115,6 +119,77 @@ class Util {
     isUrlRelative(url:string):boolean {
         const r = new RegExp('^(?:[a-z]+:)?//', 'i');
         return !r.test(url);
+    }
+
+
+    public scrollToComponent(formElementId:string, animateDuration: number = null):void {
+        let component = $("#"+formElementId);
+
+        /**
+         * Check if we are inside scrolled container.
+         */
+        let parent = component.closest('.hasHeight');
+        let offset = 0;
+        let tempId = false;
+
+        if (parent.length > 0) {
+
+            /**
+             * Set temporary id for calculation
+             */
+            if(parent[0].id == ""){
+                parent[0].id = btoa("scrollToComponentTempId");
+                tempId = true
+            }
+            /**
+             * Scroll inside container
+             */
+
+            offset = this.getOffsetTop(component[0], parent[0].id);
+
+            if(tempId){
+                parent[0].id = "";
+                tempId = false
+            }
+
+        } else {
+            /**
+             * Scroll whole page
+             */
+            offset = component.offset().top;
+            parent = $('html, body');
+        }
+
+        if (offset >= 0) {
+            if(offset > 25) {
+                offset -= 25;
+            } else {
+                offset = 0;
+            }
+            if (animateDuration) {
+                parent.animate({
+                    scrollTop: offset
+                }, animateDuration);
+            } else {
+                parent.scrollTop(offset);
+            }
+        }
+    }
+
+    /**
+     * Count offsetTop if there are more containers with relative position inside parent container.
+     * @param element
+     * @param parentId
+     */
+    public getOffsetTop(element, parentId){
+        let offsetTop = 0;
+        while(element && element.id != parentId) {
+
+            offsetTop += element.offsetTop;
+            // console.log("getOfsetTop", element.id, element, offsetTop);
+            element = element.offsetParent;
+        }
+        return offsetTop;
     }
 
 }

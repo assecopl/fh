@@ -12,18 +12,19 @@ import pl.fhframework.annotations.CompilationTraversable;
 import pl.fhframework.annotations.Control;
 import pl.fhframework.annotations.DocumentedComponent;
 import pl.fhframework.annotations.XMLProperty;
+import pl.fhframework.core.FhCL;
 import pl.fhframework.core.FhException;
 import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.model.dto.ElementChanges;
 import pl.fhframework.model.forms.provider.IComboDataProvider;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 
-@DocumentedComponent(value = "Enables users to quickly find and select from a pre-populated list of values as they type, leveraging searching and filtering.",
+@DocumentedComponent(documentationExample = true, value = "Enables users to quickly find and select from a pre-populated list of values as they type, leveraging searching and filtering.",
         icon = "fa fa-outdent")
 @Control(parents = {PanelGroup.class, Group.class, Column.class, Tab.class, Row.class, Form.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = false)
 public class DictionaryCombo extends Combo implements IGroupingComponent<DictionaryComboParameter> {
@@ -35,14 +36,6 @@ public class DictionaryCombo extends Combo implements IGroupingComponent<Diction
 
     @JsonIgnore
     private IComboDataProvider dataProvider;
-    @JsonIgnore
-    private Method getValues;
-    @JsonIgnore
-    private Method getValue;
-    @JsonIgnore
-    private Method getDisplayValue;
-    @JsonIgnore
-    private List<Object> paramsList = new LinkedList<>();
 
     @JsonIgnore
     private List<DictionaryComboParameter> subcomponents = new LinkedList<>();
@@ -61,6 +54,16 @@ public class DictionaryCombo extends Combo implements IGroupingComponent<Diction
     private List<NonVisualFormElement> nonVisualSubcomponents = new ArrayList<>();
 
     protected boolean multiselect = false;
+
+    @JsonIgnore
+    private Method getValues;
+    @JsonIgnore
+    private Method getValue;
+    @JsonIgnore
+    private List<DictionaryComboParameter> getValuesParamsList = new LinkedList<>();
+    @JsonIgnore
+    private List<DictionaryComboParameter> getValueParamsList = new LinkedList<>();
+
 
     public DictionaryCombo(Form form) {
         super(form);
@@ -87,7 +90,7 @@ public class DictionaryCombo extends Combo implements IGroupingComponent<Diction
     private void resolveDataProvider() throws ClassNotFoundException {
 
         if (this.provider != null) {
-            Class<? extends IComboDataProvider> providerClass = (Class<? extends IComboDataProvider>) Class.forName(String.format(this.provider));
+            Class<? extends IComboDataProvider> providerClass = (Class<? extends IComboDataProvider>) FhCL.classLoader.loadClass(String.format(this.provider));
             this.dataProvider = pl.fhframework.helper.AutowireHelper.getBean(providerClass);
         }
     }
@@ -104,7 +107,7 @@ public class DictionaryCombo extends Combo implements IGroupingComponent<Diction
     protected boolean processValuesExternal(String text) {
         List<Object> allParamsList = new LinkedList<>();
         allParamsList.add(text);
-        allParamsList.addAll(this.paramsList);
+        allParamsList.addAll(this.getValuesFromDictionaryComboParameters(this.getValuesParamsList));
         List<Object> values = (List<Object>) ReflectionUtils.run(this.getValues, this.dataProvider, allParamsList.toArray());
         if (values != null) {
             List collection = (List) values;
@@ -130,33 +133,40 @@ public class DictionaryCombo extends Combo implements IGroupingComponent<Diction
 
     private void resolveMethods() {
         if (provider != null) {
-            Method method = ReflectionUtils.findMatchingPublicMethod(this.dataProvider.getClass(), "getValues").get();
+            this.getValues = ReflectionUtils.findMatchingPublicMethod(this.dataProvider.getClass(), "getValues").get();
             List<Object> paramsList = new LinkedList<>();
-            Integer paramsCount = method.getParameterCount();
+            Integer paramsCount = this.getValues.getParameterCount();
             for (int idx = 0; idx < paramsCount; idx++) {
-                Optional<pl.fhframework.core.uc.Parameter> p = ReflectionUtils.getMethodParamAnnotation(method, idx, pl.fhframework.core.uc.Parameter.class);
+                Optional<pl.fhframework.core.uc.Parameter> p = ReflectionUtils.getMethodParamAnnotation(this.getValues, idx, pl.fhframework.core.uc.Parameter.class);
                 if (p.isPresent()) {
                     String paramName = p.get().name();
                     Optional<DictionaryComboParameter> optionalDictComboParam = subcomponents.stream().filter(e -> Objects.equals(e.getName(), paramName)).findFirst();
                     if (optionalDictComboParam.isPresent()) {
                         DictionaryComboParameter dictComboParam = optionalDictComboParam.get();
-                        BindingResult br = dictComboParam.getModelBinding().getBindingResult();
-                        if (br != null) {
-                            paramsList.add(br.getValue());
-                        } else {
-                            throw new FhException("No attribute for " + DictionaryComboParameter.class.getSimpleName() + " : " + paramName);
-                        }
+                        this.getValuesParamsList.add(dictComboParam);
                     } else {
                         throw new FhException("No attribute for " + DictionaryComboParameter.class.getSimpleName() + " : " + paramName);
                     }
                 }
             }
 
-            this.getValues = method;
-            this.paramsList = paramsList;
-
             this.getValue = ReflectionUtils.findMatchingPublicMethod(this.dataProvider.getClass(), "getValue").get();
-            this.getDisplayValue = ReflectionUtils.findMatchingPublicMethod(this.dataProvider.getClass(), "getDisplayValue").get();
+            Integer paramsCount2 = this.getValue.getParameterCount();
+            for (int idx = 0; idx < paramsCount2; idx++) {
+                Optional<pl.fhframework.core.uc.Parameter> p = ReflectionUtils.getMethodParamAnnotation(this.getValue, idx, pl.fhframework.core.uc.Parameter.class);
+                if (p.isPresent()) {
+                    String paramName = p.get().name();
+                    Optional<DictionaryComboParameter> optionalDictComboParam = subcomponents.stream().filter(e -> Objects.equals(e.getName(), paramName)).findFirst();
+                    if (optionalDictComboParam.isPresent()) {
+                        DictionaryComboParameter dictComboParam = optionalDictComboParam.get();
+                        this.getValueParamsList.add(dictComboParam);
+                        BindingResult br = dictComboParam.getModelBinding().getBindingResult();
+                    } else {
+                        throw new FhException("No attribute for " + DictionaryComboParameter.class.getSimpleName() + " : " + paramName);
+                    }
+                }
+            }
+
 
         }
     }
@@ -181,6 +191,7 @@ public class DictionaryCombo extends Combo implements IGroupingComponent<Diction
     }
 
     protected String objectToString(Object s) {
+        if (s == null) return "";
 
         if (s.getClass().equals(String.class)) {
             return (String) s;
@@ -190,11 +201,11 @@ public class DictionaryCombo extends Combo implements IGroupingComponent<Diction
     }
 
     protected void changeSelectedItemBinding() {
-        if (getModelBinding() != null ) {
-            if(selectedItem == null){
+        if (getModelBinding() != null) {
+            if (selectedItem == null) {
                 getModelBinding().setValue(selectedItem);
             } else {
-                getModelBinding().setValue(this.dataProvider.getValue(selectedItem));
+                getModelBinding().setValue(this.dataProvider.getCode(selectedItem));
             }
 
         }
@@ -205,7 +216,7 @@ public class DictionaryCombo extends Combo implements IGroupingComponent<Diction
         AtomicReference<Long> idx = new AtomicReference<>(0L);
         valuesToConvert.forEach((key, values) -> values.forEach(value -> {
             ComboItemDTO item;
-            item = new ComboItemDTO(this.dataProvider.getValue(value), idx.get(), false, this.dataProvider.getDisplayValue(value));
+            item = new ComboItemDTO(this.dataProvider.getCode(value), idx.get(), false, this.dataProvider.getDisplayValue(value));
             idx.getAndSet(idx.get() + 1);
             filteredConvertedValues.add(key, item);
         }));
@@ -214,50 +225,57 @@ public class DictionaryCombo extends Combo implements IGroupingComponent<Diction
 
     @Override
     protected boolean processValueBinding(ElementChanges elementChanges) {
+
         if (getModelBinding() != null) {
             BindingResult selectedBindingResult = getModelBinding().getBindingResult();
             if (selectedBindingResult != null) {
                 Object value = selectedBindingResult.getValue();
-                if ( !Objects.equals(value, (selectedItem != null ? this.dataProvider.getValue(selectedItem) : null))) {
-                    if (this.filteredValues.isEmpty()) {
-                        if (this.filteredObjectValues.isEmpty()) {
-                            processFiltering(null);
-                        }
-                        this.filteredValues = collectValues(filteredObjectValues);
-                    }
-                    String key = null;
-                    Integer valueIndex = null;
-                    for (Map.Entry<String, List<ComboItemDTO>> entry : filteredValues.entrySet()) {
-                        key = entry.getKey();
-                        Integer idx = 0;
-                        List<ComboItemDTO> a = entry.getValue();
-                        for (ComboItemDTO b : a) {
-                            if (Objects.equals(b.getTargetValue(), value)) {
-                                valueIndex = idx;
-                                break;
-                            }
-                            idx++;
-                        }
-                        if (valueIndex != null) {
-                            break;
-                        }
-                    }
-                    this.selectedItem = (key != null && valueIndex != null) ? this.filteredObjectValues.get(key).get(valueIndex) : null;
-                    if (selectedItem != null) {
-                        this.rawValue = toRawValue(this.selectedItem);
-                        elementChanges.addChange(RAW_VALUE_ATTR, this.rawValue);
-                        this.filterText = rawValue != null ? rawValue : "";
-                        updateFilterTextBinding();
+                if (!this.dataProvider.areObjectsEquals(value, (selectedItem != null ? this.dataProvider.getCode(selectedItem) : null))) {
+                    List<Object> allParamsList = new LinkedList<>();
+                    allParamsList.add(value);
+                    allParamsList.addAll(this.getValuesFromDictionaryComboParameters(this.getValueParamsList));
+                    this.selectedItem = (Object) ReflectionUtils.run(this.getValue, this.dataProvider, allParamsList.toArray());
+                    this.rawValue = toRawValue(this.selectedItem);
+                    elementChanges.addChange(RAW_VALUE_ATTR, this.rawValue);
+                    this.filterText = rawValue != null ? rawValue : "";
+                    updateFilterTextBinding();
 
-                        return true;
-                    } else {
-                        return false;
-                    }
+                    return true;
                 }
             }
         }
         return false;
     }
+
+    /**
+     * Function for geting actual values from DictionaryComboParameter based on its model bindings.
+     *
+     * @param dcp
+     * @return List<Object>
+     */
+    List<Object> getValuesFromDictionaryComboParameters(List<DictionaryComboParameter> dcp) {
+        List<Object> l = new LinkedList<>();
+        dcp.forEach(dictionaryComboParameter -> {
+            BindingResult br = dictionaryComboParameter.getModelBinding().getBindingResult();
+            if (br != null) {
+                l.add(br.getValue());
+            } else {
+                throw new FhException("No attribute for " + DictionaryComboParameter.class.getSimpleName() + " : " + dictionaryComboParameter.getName());
+            }
+        });
+
+        return l;
+    }
+
+    public ElementChanges comboParameterModelRefreash() {
+        final ElementChanges elementChanges = super.updateView();
+        this.processFiltering("");
+        this.processFilterBinding(elementChanges, true);
+        this.refreshView();
+        return elementChanges;
+
+    }
+
 
 }
 

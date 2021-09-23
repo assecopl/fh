@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.Getter;
 import org.springframework.aop.framework.Advised;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
@@ -13,7 +14,16 @@ import org.springframework.core.ResolvableType;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
+import pl.fhframework.ISystemUseCase;
+import pl.fhframework.ReflectionUtils;
+import pl.fhframework.SessionManager;
+import pl.fhframework.UserSession;
+import pl.fhframework.annotations.Action;
 import pl.fhframework.aspects.conversation.IUseCaseConversation;
+import pl.fhframework.binding.ActionBinding;
+import pl.fhframework.binding.ActionSignature;
+import pl.fhframework.binding.CallbackActionBinding;
+import pl.fhframework.binding.IActionCallback;
 import pl.fhframework.core.*;
 import pl.fhframework.core.cloud.IExportedCloudServerRegistry;
 import pl.fhframework.core.cloud.config.CloudRegistryUseCaseInfo;
@@ -38,25 +48,16 @@ import pl.fhframework.core.uc.instance.UseCaseInitializer;
 import pl.fhframework.core.uc.meta.UseCaseActionInfo;
 import pl.fhframework.core.uc.meta.UseCaseInfo;
 import pl.fhframework.core.uc.meta.UseCaseMetadataRegistry;
+import pl.fhframework.core.uc.service.UseCaseLayoutService;
 import pl.fhframework.core.uc.url.*;
 import pl.fhframework.core.util.CollectionsUtils;
 import pl.fhframework.core.util.ComponentsUtils;
 import pl.fhframework.core.util.DebugUtils;
 import pl.fhframework.core.util.JsonUtil;
-import pl.fhframework.ISystemUseCase;
-import pl.fhframework.ReflectionUtils;
-import pl.fhframework.SessionManager;
-import pl.fhframework.UserSession;
-import pl.fhframework.annotations.Action;
-import pl.fhframework.binding.ActionBinding;
-import pl.fhframework.binding.ActionSignature;
-import pl.fhframework.binding.CallbackActionBinding;
-import pl.fhframework.binding.IActionCallback;
 import pl.fhframework.event.EventRegistry;
 import pl.fhframework.event.dto.NotificationEvent;
 import pl.fhframework.events.*;
 import pl.fhframework.forms.IFormsUtils;
-import pl.fhframework.core.uc.service.UseCaseLayoutService;
 import pl.fhframework.model.PresentationStyleEnum;
 import pl.fhframework.model.dto.AbstractMessage;
 import pl.fhframework.model.dto.InMessageEventData;
@@ -135,27 +136,30 @@ public class UseCaseContainer implements Serializable {
     private IMessages messages;
 
     @Autowired(required = false)
-    private List<IUseCaseListener> useCaseListeners = new ArrayList<>();
+    private final List<IUseCaseListener> useCaseListeners = new ArrayList<>();
 
     @Autowired
     protected ISessionLogger sessionLogger;
 
+    @Value("${fh.web.guests.authenticate.path:authenticateGuest}")
+    private String authenticateGuestPath;
+
     @Getter
-    private FormsContainer formsContainer = new FormsContainer();
+    private final FormsContainer formsContainer = new FormsContainer();
 
-    private Deque<UseCaseContext> runningUseCasesStack = new ArrayDeque<>();
+    private final Deque<UseCaseContext> runningUseCasesStack = new ArrayDeque<>();
 
-    private Set<String> postponedCloudStackCleaning = new TreeSet<>();
+    private final Set<String> postponedCloudStackCleaning = new TreeSet<>();
 
-    private Map<String, UseCaseContext> systemContainerForUseCase = new HashMap<>();
+    private final Map<String, UseCaseContext> systemContainerForUseCase = new HashMap<>();
 
     private UseCaseUrl currentUrl;
 
-    private UseCaseUrlParser useCaseUrlParser = new UseCaseUrlParser();
+    private final UseCaseUrlParser useCaseUrlParser = new UseCaseUrlParser();
 
-    private UserSession userSession;
+    private final UserSession userSession;
 
-    private Map<Integer, UseCaseInitializingContext> initializingContexts = new HashMap<>();
+    private final Map<Integer, UseCaseInitializingContext> initializingContexts = new HashMap<>();
 
     public UseCaseContainer(UserSession userSession) {
         this.userSession = userSession;
@@ -219,7 +223,7 @@ public class UseCaseContainer implements Serializable {
 
     @AllArgsConstructor
     private class CloudUseCase implements IUseCase, DebugUtils.DebugNameSupplier {
-        private CloudRegistryUseCaseInfo useCaseInfo;
+        private final CloudRegistryUseCaseInfo useCaseInfo;
 
         @Override
         public String getDebugName() {
@@ -286,7 +290,7 @@ public class UseCaseContainer implements Serializable {
                                 model == mForm.getModel() &&
                                 mForm.getState() == FormState.ACTIVE).findFirst();
                 if (formOpt.isPresent()) {
-                    ((F) formOpt.get()).preConfigureClear();
+                    formOpt.get().preConfigureClear();
                     ((F) formOpt.get()).configure(this, model, variantId);
 
                     formOpt.get().setResourcesUrlPrefix(userSession.getResourcesUrlPrefix());
@@ -323,12 +327,12 @@ public class UseCaseContainer implements Serializable {
             List<IPairableComponent> result = new ArrayList<>();
 
             for (Component component : components) {
-                if (IGroupingComponent.class.isInstance(component)) {
-                    IGroupingComponent a = IGroupingComponent.class.cast(component);
+                if (component instanceof IGroupingComponent) {
+                    IGroupingComponent a = (IGroupingComponent) component;
                     List<IPairableComponent> pairableComponents = getPairableComponents(a.getSubcomponents());
                     result.addAll(pairableComponents);
-                } else if (IPairableComponent.class.isInstance(component)) {
-                    result.add(IPairableComponent.class.cast(component));
+                } else if (component instanceof IPairableComponent) {
+                    result.add((IPairableComponent) component);
                 }
             }
 
@@ -508,10 +512,10 @@ public class UseCaseContainer implements Serializable {
             Class[] interfaces;
             ClassLoader classLoader;
             if (callback instanceof UniversalCallbackHandler) {
-                classLoader = useCaseMetadata.getClazz().getClassLoader();
-                interfaces = new Class[]{(Class<IUseCaseOutputCallback>) ReflectionUtils.getClassForName(useCaseMetadata.getCallbackClassStr(), classLoader)};
+                classLoader = FhCL.classLoader;
+                interfaces = new Class[]{ReflectionUtils.getClassForName(useCaseMetadata.getCallbackClassStr(), classLoader)};
             } else {
-                classLoader = callback.getClass().getClassLoader();
+                classLoader = FhCL.classLoader;
                 interfaces = callback.getClass().getInterfaces();
             }
 
@@ -526,7 +530,16 @@ public class UseCaseContainer implements Serializable {
                     ((UniversalCallbackHandler) callback).apply(method, args != null ? args : new Object[0]);
                     return null;
                 } else {
-                    return method.invoke(callback, args);
+                    try {
+                        return method.invoke(callback, args);
+                    } catch (InvocationTargetException ex) {
+                        if (ex.getCause() instanceof RuntimeException) {
+                            throw ex.getCause();
+                        }
+                        else {
+                            throw new FhException(ex.getCause());
+                        }
+                    }
                 }
             });
         }
@@ -546,15 +559,15 @@ public class UseCaseContainer implements Serializable {
             calculateUrl(this, params);
             if (useCase instanceof IUseCaseNoInput) {
                 assertParamCount(0);
-                IUseCaseNoInput.class.cast(useCase).start();
+                ((IUseCaseNoInput) useCase).start();
             } else if (useCase instanceof IUseCaseOneInput) {
                 assertParamCount(1);
-                IUseCaseOneInput.class.cast(useCase).start(params[0]);
+                ((IUseCaseOneInput) useCase).start(params[0]);
             } else if (useCase instanceof IUseCaseTwoInput) {
                 assertParamCount(2);
-                IUseCaseTwoInput.class.cast(useCase).start(params[0], params[1]);
+                ((IUseCaseTwoInput) useCase).start(params[0], params[1]);
             } else if (useCase instanceof ICustomUseCase) {
-                ICustomUseCase.class.cast(useCase).start();
+                ((ICustomUseCase) useCase).start();
             } else {
                 throw new FhUseCaseException("Unsupported use case input interface in " + useCase.getClass());
             }
@@ -773,11 +786,7 @@ public class UseCaseContainer implements Serializable {
 
         @Override
         protected boolean canProcessAction(Method action) {
-            if (authorizationManager != null && !hasPermission(action)) {
-                return false;
-            }
-
-            return true;
+            return authorizationManager == null || hasPermission(action);
         }
 
         @Override
@@ -941,11 +950,11 @@ public class UseCaseContainer implements Serializable {
     private class CloudUseCaseContext<C extends IUseCaseOutputCallback, U extends IUseCase<C>>
             extends UseCaseContext<C, U> {
 
-        private CloudRegistryUseCaseInfo cloudUseCaseInfo;
+        private final CloudRegistryUseCaseInfo cloudUseCaseInfo;
 
-        private String[] paramJsons;
+        private final String[] paramJsons;
 
-        private C callback;
+        private final C callback;
 
         public CloudUseCaseContext(CloudRegistryUseCaseInfo cloudUseCaseInfo, Object[] params, C callback) {
             super((U) new CloudUseCase(cloudUseCaseInfo));
@@ -1047,10 +1056,10 @@ public class UseCaseContainer implements Serializable {
 
     public class PopupMessageUseCaseContextMessage<C extends IUseCaseOutputCallback, U extends IUseCase<C>> extends UseCaseContext<C, U> {
 
-        private LocalUseCaseContext wrappedUseCaseContext;
+        private final LocalUseCaseContext wrappedUseCaseContext;
 
-        private Map<String, pl.fhframework.core.messages.Action> noParametersActions = new HashMap<>();
-        private Map<String, Consumer<? super ViewEvent>> viewEventsActions = new HashMap<>();
+        private final Map<String, pl.fhframework.core.messages.Action> noParametersActions = new HashMap<>();
+        private final Map<String, Consumer<? super ViewEvent>> viewEventsActions = new HashMap<>();
 
         public PopupMessageUseCaseContextMessage(UseCaseContext wrappedUseCaseContext) {
             super((U) wrappedUseCaseContext.getUseCase());
@@ -1226,6 +1235,19 @@ public class UseCaseContainer implements Serializable {
         systemContainerForUseCase.forEach((cont, uc) -> this.onSessionLanguageChange(uc));
     }
 
+    public void onSessionRefresh() {
+        if (!runningUseCasesStack.isEmpty()) {
+            onSessionRefresh(runningUseCasesStack.getFirst());
+        }
+        systemContainerForUseCase.forEach((cont, uc) -> this.onSessionRefresh(uc));
+    }
+
+    private void onSessionRefresh(UseCaseContext<?, ?> useCaseContext) {
+        if (useCaseContext.getUseCase() instanceof IUseCaseRefreshListener) {
+            ((IUseCaseRefreshListener) useCaseContext.getUseCase()).doAfterRefresh();
+        }
+    }
+
     private void onSessionLanguageChange(UseCaseContext<?, ?> useCaseContext) {
         if (useCaseContext.getUseCase() instanceof IUseCase18nListener) {
             ((IUseCase18nListener) useCaseContext.getUseCase()).onSessionLanguageChange();
@@ -1376,7 +1398,9 @@ public class UseCaseContainer implements Serializable {
         if (eventData.isEventPresent()) {
             // check if event source component is in proper state to send request
             if (eventUseCaseContext == null || !eventUseCaseContext.canProcessEvent(eventData)) {
-                throw new FhFormException("Request for given form component cannot be processed.");
+                String msg = String.format("Request for given form component cannot be processed - formId: '%s', eventType: '%s', sourceId: '%s', action: '%s', ", eventData.getFormId(), eventData.getEventType(), eventData.getEventSourceId(), eventData.getActionName());
+                FhLogger.errorSuppressed(msg);
+                return;
             }
 
             try {
@@ -1517,7 +1541,7 @@ public class UseCaseContainer implements Serializable {
             } else {
                 newUseCaseContext = new LocalUrlUseCaseContext(
                         useCaseInfo.get().getClazz(),
-                        prepareNoOpCallback((Class<IUseCaseOutputCallback>) ReflectionUtils.getClassForName(useCaseInfo.get().getCallbackClassStr(), useCaseInfo.get().getClazz().getClassLoader())));
+                        prepareNoOpCallback((Class<IUseCaseOutputCallback>) ReflectionUtils.getClassForName(useCaseInfo.get().getCallbackClassStr(), FhCL.classLoader)));
             }
 
             try {
@@ -1537,7 +1561,7 @@ public class UseCaseContainer implements Serializable {
             } catch (FhAuthorizationException pae) {
                 if (userSession.getSystemUser().isGuest()) {
                     clearUseCaseStack();
-                    eventRegistry.fireRedirectEvent("/login" + url.getUrl().substring(1), false);
+                    eventRegistry.fireRedirectEvent(authenticateGuestPath + url.getUrl().substring(url.getUrl().indexOf('#')), false);
                     return true;
                 } else {
                     throw pae;
@@ -1777,7 +1801,7 @@ public class UseCaseContainer implements Serializable {
     }
 
     protected <C> C prepareNoOpCallback(Class<C> callBackClass) {
-        return (C) Proxy.newProxyInstance(callBackClass.getClassLoader(), new Class[]{callBackClass}, (p, m, a) -> null);
+        return (C) Proxy.newProxyInstance(FhCL.classLoader, new Class[]{callBackClass}, (p, m, a) -> null);
     }
 
     private <C extends IUseCaseOutputCallback, U extends IUseCase<C>> UseCaseContext<C, U> createUseCaseContext(Class<U> knownUseCaseClass, Object[] params, C callback) {
@@ -1925,7 +1949,7 @@ public class UseCaseContainer implements Serializable {
         LocalUseCaseContext<C, U> useCaseContext = (LocalUseCaseContext<C, U>) getUseCaseContext(useCase);
 
         C callback = useCaseContext.callback.get(key);
-        C returnCallback = (C) useCaseContext.callbackProxy.get(key);
+        C returnCallback = useCaseContext.callbackProxy.get(key);
         if (returnCallback instanceof IUseCaseNoCallback) {
             terminateUseCase(useCaseContext, false);
             if (callback instanceof UniversalCallbackHandler) {

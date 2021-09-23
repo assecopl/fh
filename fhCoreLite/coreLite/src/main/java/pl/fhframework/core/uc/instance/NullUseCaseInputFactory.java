@@ -1,6 +1,7 @@
 package pl.fhframework.core.uc.instance;
 
 import org.springframework.stereotype.Component;
+import pl.fhframework.core.FhCL;
 import pl.fhframework.core.uc.IUseCaseOutputCallback;
 
 import java.lang.reflect.InvocationHandler;
@@ -39,7 +40,7 @@ public class NullUseCaseInputFactory implements IUseCaseParametersFactory {
 
     public  IUseCaseOutputCallback createCallback(Class clazz) {
         return (IUseCaseOutputCallback) java.lang.reflect.Proxy.newProxyInstance(
-                clazz.getClassLoader(),
+                FhCL.classLoader,
                 new Class[]{clazz},
                 createHandler(clazz));
     }

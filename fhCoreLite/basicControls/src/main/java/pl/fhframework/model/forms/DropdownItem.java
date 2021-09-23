@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import pl.fhframework.BindingResult;
-import pl.fhframework.annotations.Control;
-import pl.fhframework.annotations.DesignerXMLProperty;
-import pl.fhframework.annotations.DocumentedComponentAttribute;
-import pl.fhframework.annotations.XMLProperty;
+import pl.fhframework.annotations.*;
 import pl.fhframework.binding.*;
 import pl.fhframework.model.dto.ElementChanges;
 import pl.fhframework.model.dto.InMessageEventData;
@@ -20,6 +17,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
 /**
  * Created by k.czajkowski on 19.01.2017.
  */
+@TemplateControl(tagName = "fh-dropdown-item")
 @Control(parents = {Dropdown.class, Repeater.class}, canBeDesigned = true)
 public class DropdownItem extends FormElement implements Iconable {
 
@@ -53,8 +51,8 @@ public class DropdownItem extends FormElement implements Iconable {
 
     @Getter
     @Setter
-    @XMLProperty(defaultValue = "before")
-    @DocumentedComponentAttribute(defaultValue = "before", boundable = true, value = "Icon alignment - possible values are before or after. Final alignment depends of component where this attribute is used.")
+    @XMLProperty(defaultValue = "BEFORE")
+    @DocumentedComponentAttribute(defaultValue = "BEFORE", boundable = true, value = "Icon alignment - possible values are before or after. Final alignment depends of component where this attribute is used.")
     private IconAlignment iconAlignment;
 
     @Getter

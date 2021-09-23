@@ -6,6 +6,7 @@ import pl.fhframework.core.security.model.IBusinessRole;
 import pl.fhframework.subsystems.ModuleRegistry;
 import pl.fhframework.subsystems.Subsystem;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
@@ -141,7 +142,7 @@ public interface AuthorizationManager extends PermissionsProvider {
 
     @Getter
     @EqualsAndHashCode(of = {"name", "moduleUUID"})
-    class Function implements IFunction, Comparable<Function> {
+    class Function implements IFunction, Comparable<Function>, Serializable {
         private String name;
         private String moduleUUID;
         private String moduleLabel;
@@ -180,7 +181,7 @@ public interface AuthorizationManager extends PermissionsProvider {
 
     @Getter
     @EqualsAndHashCode(of = "uuid")
-    class Module implements IModule, Comparable<Module> {
+    class Module implements IModule, Comparable<Module>, Serializable {
         private String name;
         private String uuid;
 

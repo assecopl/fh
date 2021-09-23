@@ -19,7 +19,7 @@ import pl.fhframework.model.forms.attributes.widget.YPosAttribute;
 import lombok.Getter;
 
 @Control(parents = {Accordion.class, PanelGroup.class, Group.class, SplitContainer.class, Row.class, Form.class, Tab.class, Repeater.class}, invalidParents = {Table.class})
-@DocumentedComponent(value = "Widget component responsible for the grouping of sub-elements", icon = "fa fa-qrcode")
+@DocumentedComponent(documentationExample = true, value = "Widget component responsible for the grouping of sub-elements", icon = "fa fa-qrcode")
 public class Widget extends PanelGroup {
 
     private static final String DESCRIPTION_ATTR = "description";

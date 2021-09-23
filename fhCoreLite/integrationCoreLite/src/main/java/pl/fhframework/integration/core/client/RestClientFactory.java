@@ -5,10 +5,11 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
+import pl.fhframework.ReflectionUtils;
+import pl.fhframework.core.FhCL;
 import pl.fhframework.core.util.StringUtils;
 import pl.fhframework.modules.services.IDescribableService;
 import pl.fhframework.modules.services.ServiceHandle;
-import pl.fhframework.ReflectionUtils;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -40,7 +41,7 @@ public class RestClientFactory implements IRestClientFactory {
 
     protected <T> T getClient(ServiceHandle<? extends T, ?> serviceHandle, Class<? extends T> clazz, String endpointOrUrl) {
         return (T) servicesCache.computeIfAbsent(getInterfaceId(clazz, endpointOrUrl),
-                key -> Proxy.newProxyInstance(clazz.getClassLoader(), new Class[]{clazz},
+                key -> Proxy.newProxyInstance(FhCL.classLoader, new Class[]{clazz},
                         (proxy, method, args) -> restClientProxy.call(getRestDescriptor(serviceHandle, clazz, method, args, endpointOrUrl))));
     }
 

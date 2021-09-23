@@ -18,7 +18,7 @@ class DropdownItem extends OutputLabel {
 
     create() {
         let label = document.createElement('span');
-        label.id = this.id;
+        label.id = this.id + '_label';
         ['fc', 'outputLabel'].forEach(function (cssClass) {
             label.classList.add(cssClass);
         });
@@ -28,20 +28,20 @@ class DropdownItem extends OutputLabel {
         this.hintElement = this.component;
 
         this.labelComponent = this.component;
-        this.labelComponent.id = this.id + "___label"; // przeniesienie identyfikatora z utworzonej etykiety
+        this.labelComponent.id = label.id; // przeniesienie identyfikatora z utworzonej etykiety
 
-        let element = document.createElement('li');
+        let element = document.createElement('a');
         element.classList.add('dropdown-item');
         element.id = this.id;
 
-        let a = document.createElement('a');
-        if (this.url) {
-            a.href = this.url;
-        }
-        a['role'] = 'button';
-        a.appendChild(this.labelComponent);
+        this.labelComponent.setAttribute('for', this.id);
+        this.labelComponent.setAttribute('aria-label', this.fhml.resolveValueTextOrEmpty(this.componentObj.value));
+        element.setAttribute('aria-labeledby', this.labelComponent.id);
 
-        element.appendChild(a);
+        if (this.url) {
+            element.href = this.url;
+        }
+        element.appendChild(this.labelComponent);
 
         if (this.onClick) {
             element.addEventListener('click', this.onClickEvent.bind(this));
@@ -49,11 +49,19 @@ class DropdownItem extends OutputLabel {
 
         this.component = element;
         this.htmlElement = this.component;
-        this.wrap(true);
+        // this.wrap(true);
         this.display();
     };
 
-    onClickEvent() {
+    onClickEvent(event) {
+        event.stopPropagation();
+        // @ts-ignore
+        const parent = event.target.closest('.dropdown');
+        if (parent) {
+            $(parent).dropdown('toggle');
+        } else {
+            $((this.parent as any).component).dropdown('toggle');
+        }
         this.fireEventWithLock('onClick', this.onClick);
     }
 

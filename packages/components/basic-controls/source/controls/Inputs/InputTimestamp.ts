@@ -1,5 +1,5 @@
 import * as moment from 'moment';
-import 'pc-bootstrap4-datetimepicker/build/js/bootstrap-datetimepicker.min';
+import '../../external/bootstrap-datetimepicker.min.js';
 import {InputDate} from "./InputDate";
 import {InputTimestampPL} from './i18n/InputTimestamp.pl';
 import {InputTimestampEN} from './i18n/InputTimestamp.en';
@@ -18,24 +18,11 @@ class InputTimestamp extends InputDate implements LanguageChangeObserver {
         super(componentObj, parent);
 
         this.backendFormat = "YYYY-MM-DDTHH:mm:ss.SSS";
-        this.format = this.componentObj.format || 'YYYY-MM-DD HH:mm';
+        this.format = this.componentObj.format || 'YYYY-MM-DD HH:mm:ss';
         // @ts-ignore
         this.keySupport = FhContainer.get("FormComponentKeySupport")(this.componentObj, this);
 
-        (<any>$.fn).datetimepicker.defaults.tooltips = this.tooltipsI18n[this.i18n.selectedLanguage];
-        $.extend(true, (<any>$.fn).datetimepicker.defaults, {
-            icons: {
-                time: 'far fa-clock',
-                date: 'far fa-calendar',
-                up: 'fas fa-arrow-up',
-                down: 'fas fa-arrow-down',
-                previous: 'fas fa-chevron-left',
-                next: 'fas fa-chevron-right',
-                today: 'fas fa-calendar-check',
-                clear: 'far fa-trash-alt',
-                close: 'far fa-times-circle'
-            }
-        });
+       this.initTimestampDefaults();
     }
 
     create() {
@@ -43,8 +30,8 @@ class InputTimestamp extends InputDate implements LanguageChangeObserver {
         ['fc', 'inputTimestamp', 'form-control'].forEach(function (cssClass) {
             input.classList.add(cssClass);
         });
-
-        // input.type = 'datetime-local';
+        input.id = this.id;
+        input.type = 'text';
 
         input.placeholder = this.format;
 
@@ -67,6 +54,7 @@ class InputTimestamp extends InputDate implements LanguageChangeObserver {
             locale: this.i18n.selectedLanguage,
             useStrict: true,
             format: this.format,
+            // allowInputToggle: true,
             defaultDate: InputDate.isDateValid(this.rawValue, this.format)? this.rawValue : '',
             keepInvalid: true
         });
@@ -76,7 +64,37 @@ class InputTimestamp extends InputDate implements LanguageChangeObserver {
 
         $(this.input).on('blur', this.inputBlurEvent.bind(this));
         $(this.input).on('change', this.inputChangeEvent.bind(this));
+        // $(this.component).on('keydown', function (event){
+        //     console.log("DOWN");
+        //     let keyCode = event.key || event.keyCode;
+        //     if(keyCode == 40 || keyCode == "ArrowDown") {
+        //         console.log("DOWN", $(this.inputGroupElement).data("DateTimePicker"));
+        //         (<any>$(this.inputGroupElement)).data("DateTimePicker").show();
+        //         (<any>$(this.inputGroupElement)).data("DateTimePicker").attachDatePickerElementEvents();
+        //     }
+        // }.bind(this));
     };
+
+    inputBlurEvent() {
+        this.input.value = InputDate.toDateOrLeave(this.input.value, this.format, this.format);
+        this.updateModel();
+        //Reinitialize for keyboard support. Don;t know why but
+        let component = (<any>$(this.inputGroupElement));
+        let data = component.data("DateTimePicker");
+        if (data != null) data.destroy();
+        this.initTimestampDefaults();
+        (<any>$(this.inputGroupElement)).datetimepicker({
+            locale: this.i18n.selectedLanguage,
+            useStrict: true,
+            format: this.format,
+            // allowInputToggle: true,
+            defaultDate: InputDate.isDateValid(this.rawValue, this.format)? this.rawValue : '',
+            keepInvalid: true
+        });
+
+        $(this.inputGroupElement).data("DateTimePicker").date(
+            InputDate.toDateOrLeave(this.rawValue, this.backendFormat, this.format));
+    }
 
     applyDatepicker() {
         return;
@@ -116,6 +134,10 @@ class InputTimestamp extends InputDate implements LanguageChangeObserver {
         super.wrap(skipLabel, isInputElement);
     }
 
+    getDefaultWidth(): string {
+        return "md-3";
+    }
+
     destroy(removeFromParent: boolean) {
         $(this.input).off('blur', this.inputBlurEvent.bind(this));
         $(this.input).off('change', this.inputChangeEvent.bind(this));
@@ -127,6 +149,24 @@ class InputTimestamp extends InputDate implements LanguageChangeObserver {
         this.i18n.unsubscribe(this);
 
         super.destroy(removeFromParent);
+    }
+
+
+    initTimestampDefaults(){
+        (<any>$.fn).datetimepicker.defaults.tooltips = this.tooltipsI18n[this.i18n.selectedLanguage];
+        $.extend(true, (<any>$.fn).datetimepicker.defaults, {
+            icons: {
+                time: 'far fa-clock',
+                date: 'far fa-calendar',
+                up: 'fas fa-arrow-up',
+                down: 'fas fa-arrow-down',
+                previous: 'fas fa-chevron-left',
+                next: 'fas fa-chevron-right',
+                today: 'fas fa-calendar-check',
+                clear: 'far fa-trash-alt',
+                close: 'far fa-times-circle'
+            }
+        });
     }
 }
 

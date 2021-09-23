@@ -4,6 +4,7 @@ import * as $ from 'jquery';
 import {FhContainer} from "../FhContainer";
 import {LayoutHandler} from "../LayoutHandler";
 import getDecorators from "inversify-inject-decorators";
+import * as focusTrap  from 'focus-trap';
 
 let {lazyInject} = getDecorators(FhContainer);
 
@@ -22,11 +23,18 @@ class Form extends HTMLFormComponent {
     private onManualModalClose: any;
     private keyupEvent: any;
     private resourcesUrlPrefix: string;
+    private focusFirstElement: boolean;
     public state: string;
     public viewMode: string;
     private windowListenerMouseMove: any;
     private windowListenerMouseUp: any;
     private modalDeferred;
+    protected headingTypeValue: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" = null;
+    protected blockFocusForModal:boolean = false;
+
+    protected afterInitActions:Array<any> = [];
+
+    protected focusTrap:focusTrap.FocusTrap = null;
 
     constructor(formObj: any, parent: any = null) {
         super(formObj, parent);
@@ -35,8 +43,11 @@ class Form extends HTMLFormComponent {
         this.formId = this.id;
         this.formType = formObj.formType;
         this.viewMode = this.componentObj.viewMode;
+        this.focusFirstElement = this.componentObj.focusFirstElement;
         this.state = this.componentObj.state;
-
+        this.headingTypeValue = this.componentObj.headingTypeValue? this.componentObj.headingTypeValue : null;
+        this.blockFocusForModal = this.componentObj.blockFocusForModal? this.componentObj.blockFocusForModal : false;
+        // console.log("this.componentObj.blockFocusForModal", this.componentObj.blockFocusForModal)
 
         /* TODO: remove after changing Java */
         if (this.componentObj.modal) {
@@ -148,8 +159,41 @@ class Form extends HTMLFormComponent {
                 while (this.contentWrapper != null && this.contentWrapper.firstChild) this.contentWrapper.removeChild(this.contentWrapper.firstChild);
                 this.renderSubcomponents();
                 this.modalDeferred.resolve();
-                this.focusFirstActiveInputElement();
+                this.focusFirstActiveInputElement(true);
+
+                /**
+                 * WCAG(Srean Reader) Block focus on elements that are outside/under opened modal.
+                 * Used FocusTrap library : https://www.npmjs.com/package/focus-trap
+                 * We can't block key modal functionality so errors will be only log to console.
+                 */
+                if (this.blockFocusForModal) {
+                    try {
+                        if (this.htmlElement) {
+                            // @ts-ignore
+                            this.focusTrap = focusTrap(this.htmlElement, {});
+                            this.focusTrap.activate();
+                        }
+                    } catch (e) {
+                        console.log(focusTrap);
+                        console.info(e);
+                    }
+                }
             }.bind(this));
+
+            /**
+             * WCAG(Srean Reader) Deactivate focus trpa on modal close.
+             */
+            if(this.blockFocusForModal) {
+                $(this.htmlElement).on('hidden.bs.modal', function (e) {
+                    try {
+                        if (this.focusTrap) {
+                            this.focusTrap.deactivate();
+                        }
+                    } catch (e) {
+                        console.info(e);
+                    }
+                }.bind(this))
+            }
         } else {
             this.renderSubcomponents();
             this.focusFirstActiveInputElement();
@@ -169,6 +213,8 @@ class Form extends HTMLFormComponent {
         } else if (this.container.clientHeight === 0) {
             this.container.style.height = 'auto';
         }
+
+        this.fireAfterInitActions();
     };
 
     destroy(removeFromParent) {
@@ -259,6 +305,9 @@ class Form extends HTMLFormComponent {
             case 'STANDARD':
                 form = this.buildStandardForm();
                 break;
+            case 'MINIMAL':
+                form = this.buildMinimalForm();
+                break;
             case 'MODAL':
             case 'MODAL_OVERFLOW':
                 form = this.buildModalForm();
@@ -321,7 +370,7 @@ class Form extends HTMLFormComponent {
             var title = document.createElement('h5');
             title.classList.add('modal-title');
             this.addCloudIcon(title);
-            this.labelElement = document.createElement("span");
+            this.labelElement = document.createElement(this.headingTypeValue?this.headingTypeValue:"strong");
             title.appendChild(this.labelElement);
             this.labelElement.innerHTML = this.fhml.resolveValueTextOrEmpty(this.componentObj.label);
 
@@ -353,12 +402,19 @@ class Form extends HTMLFormComponent {
         return form;
     };
 
-    focusFirstActiveInputElement() {
-        if (this.designMode) {
+    focusFirstActiveInputElement(focusModalButton = false) {
+        if (this.designMode || !this.focusFirstElement) {
             return;
         }
 
-        $(this.component).find(':input:enabled:not([readonly]):not(button):first').trigger('focus');
+        const input = $(this.component).find(':input:enabled:not([readonly]):not(button):first')
+        if(input.length > 0) {
+            input.trigger('focus');
+        } else {
+            if(focusModalButton) {
+                $(this.component).find('button.button:first').trigger('focus');
+            }
+        }
     }
 
     buildFloatingForm() {
@@ -380,7 +436,7 @@ class Form extends HTMLFormComponent {
         title.id = this.id + '_label';
         title.classList.add('card-title');
         this.addCloudIcon(title);
-        this.labelElement = document.createElement("span");
+        this.labelElement = document.createElement(this.headingTypeValue?this.headingTypeValue:"span");
         title.appendChild(this.labelElement);
         this.labelElement.innerHTML = this.fhml.resolveValueTextOrEmpty(this.componentObj.label);
 
@@ -476,7 +532,7 @@ class Form extends HTMLFormComponent {
             var title = document.createElement('div');
             title.id = this.id + '_label';
             this.addCloudIcon(title);
-            this.labelElement = document.createElement("strong");
+            this.labelElement = document.createElement(this.headingTypeValue?this.headingTypeValue:"span");
             this.labelElement.classList.add('card-title');
             title.appendChild(this.labelElement);
             this.labelElement.innerHTML = this.fhml.resolveValueTextOrEmpty(this.componentObj.label);
@@ -495,6 +551,25 @@ class Form extends HTMLFormComponent {
 
         body.appendChild(row);
         form.appendChild(body);
+
+        return form;
+    };
+
+    buildMinimalForm() {
+        var form = document.createElement('div');
+
+        form.id = this.id;
+
+        ['fc', 'form'].forEach(function (cssClass) {
+            form.classList.add(cssClass);
+        });
+
+        var row = document.createElement('div');
+        row.classList.add('row');
+        row.classList.add('eq-row');
+        this.contentWrapper = row;
+
+        form.appendChild(row);
 
         return form;
     };
@@ -549,6 +624,20 @@ class Form extends HTMLFormComponent {
     setPresentationStyle(presentationStyle) {
         return;
     }
+
+    public addAfterInitActions(action: () => void){
+        this.afterInitActions.push(action);
+    }
+
+    private fireAfterInitActions(){
+        this.afterInitActions.forEach(function (action) {
+            if(action && {}.toString.call(action) === '[object Function]'){
+                action();
+            }
+        });
+        this.afterInitActions = [];
+    }
+
 }
 
 export {Form};

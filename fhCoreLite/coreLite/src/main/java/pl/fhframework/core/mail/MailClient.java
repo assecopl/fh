@@ -19,19 +19,23 @@ import pl.fhframework.core.FhException;
 @Getter
 @Setter
 public class MailClient implements IMailClient {
-    boolean ssl;
+    private boolean ssl;
 
-    String hostName;
+    private boolean startTlsEnabled;
 
-    String smtpPort;
+    private boolean startTlsRequired;
 
-    String from;
+    private String hostName;
 
-    String login;
+    private String smtpPort;
 
-    String passwd;
+    private String from;
 
-    String to;
+    private String login;
+
+    private String passwd;
+
+    private String to;
 
     @Override
     public void send(final String title, final String message) throws EmailException {
@@ -54,6 +58,8 @@ public class MailClient implements IMailClient {
                 email.setAuthenticator(new DefaultAuthenticator(login, passwd));
             }
             email.setSSLOnConnect(ssl);
+            email.setStartTLSEnabled(startTlsEnabled);
+            email.setStartTLSRequired(startTlsRequired);
             email.setFrom(from);
             email.setSubject(title);
             email.setMsg(message);

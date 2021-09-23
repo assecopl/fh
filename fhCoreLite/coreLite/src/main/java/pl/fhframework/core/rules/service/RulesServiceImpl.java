@@ -91,7 +91,7 @@ public class RulesServiceImpl implements RulesService {
                         }
                         // each argument's class matches
                         for (int i = 0; i < paramClasses.length; i++) {
-                            if (!ReflectionUtils.isAssignablFrom(foundParamClasses[i], paramClasses[i]) && paramClasses[i] != null) {
+                            if (paramClasses[i] != null && !ReflectionUtils.isAssignablFrom(foundParamClasses[i], paramClasses[i])) {
                                 return false;
                             }
                         }

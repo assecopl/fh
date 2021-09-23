@@ -1,5 +1,5 @@
 import * as moment from 'moment';
-import {HTMLFormComponent, FormComponent} from 'fh-forms-handler';
+import {HTMLFormComponent, FormComponent, FhContainer} from 'fh-forms-handler';
 import {LanguageChangeObserver} from "fh-forms-handler";
 import {InputText} from "../InputText";
 import {InputDatePL} from "../i18n/InputDate.pl";
@@ -27,7 +27,7 @@ class InputDateOptimized extends InputText implements LanguageChangeObserver {
         this.backendFormat = 'YYYY-MM-DD';
         this.format = this.componentObj.format || 'YYYY-MM-DD';
         // @ts-ignore
-        // this.keySupport = FhContainer.get("FormComponentKeySupport")(this.componentObj, this);
+        this.keySupport = FhContainer.get("FormComponentKeySupport")(this.componentObj, this);
         this.mask = this.format.replace(/[a-zA-Z]/g, '9');
         this.maskEnabled = this.componentObj.maskEnabled || false;
         this.maskDynamic = this.componentObj.maskDynamic || false;
@@ -93,10 +93,10 @@ class InputDateOptimized extends InputText implements LanguageChangeObserver {
         this.wrap(false, true);
         this.createAddon();
 
-        $(this.input).on('input', this.updateModel.bind(this));
+        $(this.input).on('input', this.onValueInput.bind(this));
         $(this.input).on('blur', this.inputBlurEvent.bind(this));
         $(this.input).on('change', this.inputChangeEvent.bind(this));
-
+        this.inputGroupElement.id = this.id + "_inputGroup"
         this.display();
     };
 
@@ -124,6 +124,14 @@ class InputDateOptimized extends InputText implements LanguageChangeObserver {
                 showOnFocus: 0,
                 inline: false
             };
+            const form = this.formsManager.findForm(this.formId);
+            /**
+             * If form has active focus trap option we need to place dynamic date element next to input element to prevent interaction blocking
+             */
+            if(form && form.blockFocusForModal){
+                options["container"] =  "#"+this.inputGroupElement.id;
+            }
+
             if (this.highlightToday) {
                 options.todayHighlight = true;
             }
@@ -205,8 +213,8 @@ class InputDateOptimized extends InputText implements LanguageChangeObserver {
                 this.container.addEventListener('mouseover', this.initActions.bind(this));
                 break;
             case 'VIEW':
-                this.input.addEventListener('focus', this.initActions.bind(this));
-                this.container.addEventListener('mouseover', this.initActions.bind(this));
+                this.input.removeEventListener('focus', this.initActions.bind(this));
+                this.container.removeEventListener('mouseover', this.initActions.bind(this));
                 break;
             case 'DEFECTED':
                 this.disableDatepicker();
@@ -242,6 +250,16 @@ class InputDateOptimized extends InputText implements LanguageChangeObserver {
         }.bind(this));
     };
 
+    onValueInput() {
+        if (this.maskEnabled) {
+            if (this.maskPlugin.isComplete(this.input)) {
+                this.updateModel();
+            }
+        } else {
+            this.updateModel();
+        }
+    }
+
     updateModel() {
         this.rawValue = InputDateOptimized.toDateOrLeave(this.input.value, this.format, this.backendFormat);
         if (this.onChange != null && this.oldValue !== this.rawValue) {
@@ -274,6 +292,33 @@ class InputDateOptimized extends InputText implements LanguageChangeObserver {
         return attrs;
     };
 
+    protected disableMask() {
+        if (this.maskEnabled && this.inputmaskEnabled) {
+            // @ts-ignore
+            Inputmask.remove(this.input);
+            this.inputmaskEnabled = false;
+        }
+    }
+
+
+    protected applyMask() {
+        if (this.maskEnabled && !this.inputmaskEnabled) {
+            // @ts-ignore
+            this.maskPlugin = Inputmask({
+                clearMaskOnLostFocus: false,
+                greedy: false,
+                jitMasking: this.maskDynamic,
+                placeholder: this.input.placeholder,
+                definitions: {},
+                insertMode: true,
+                shiftPositions:false,
+                alias: "date",
+                mask: this.mask
+            }).mask(this.input);
+            this.inputmaskEnabled = true;
+        }
+    };
+
     wrap(skipLabel, isInputElement) {
         super.wrap(skipLabel, isInputElement);
     }
@@ -282,7 +327,7 @@ class InputDateOptimized extends InputText implements LanguageChangeObserver {
         // noinspection JSIgnoredPromiseFromCall
         this.i18n.unsubscribe(this);
 
-        $(this.input).off('input', this.updateModel.bind(this));
+        $(this.input).off('input', this.onValueInput.bind(this));
         $(this.input).off('blur', this.inputBlurEvent.bind(this));
         $(this.input).off('change', this.inputChangeEvent.bind(this));
 
@@ -295,7 +340,6 @@ class InputDateOptimized extends InputText implements LanguageChangeObserver {
 
     /**
      * @Override
-     * @param accessibility
      */
     public display(): void {
         super.display();

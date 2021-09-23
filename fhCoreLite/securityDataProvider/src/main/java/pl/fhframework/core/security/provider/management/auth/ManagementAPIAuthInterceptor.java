@@ -10,6 +10,7 @@ import pl.fhframework.core.security.provider.management.api.ManagementAPIControl
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.security.Principal;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Optional;
@@ -54,8 +55,9 @@ public class ManagementAPIAuthInterceptor extends HandlerInterceptorAdapter {
                         x509Cert.get().getDn(), request.getRemoteAddr(), request.getRequestURI());
             }
             else {
+                Principal principal = request.getUserPrincipal();
                 FhLogger.info(this.getClass(), "User {} from {} is using {}",
-                        request.getUserPrincipal().getName(), request.getRemoteAddr(), request.getRequestURI());
+                    principal != null ? principal.getName() : "", request.getRemoteAddr(), request.getRequestURI());
             }
         }
         return true;

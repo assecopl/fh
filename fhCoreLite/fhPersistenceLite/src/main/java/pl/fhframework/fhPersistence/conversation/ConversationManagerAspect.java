@@ -4,6 +4,8 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import pl.fhframework.aop.services.FhAspectsOrder;
@@ -14,9 +16,11 @@ import pl.fhframework.fhPersistence.core.EntityManagerRepository;
  */
 @Aspect
 @Component
+@Profile("!withoutDataSource")
+//@ConditionalOnBean(name = "fhDataSource")
 @Order(FhAspectsOrder.CONVERSATION)
 public class ConversationManagerAspect {
-    @Autowired
+    @Autowired(required = false)
     EntityManagerRepository entityManagerRepository;
 
     public void startNewConversation(Object owner) {

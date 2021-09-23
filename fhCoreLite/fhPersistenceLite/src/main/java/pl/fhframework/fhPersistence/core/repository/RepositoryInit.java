@@ -12,6 +12,6 @@ import java.util.List;
  */
 @Configuration
 public class RepositoryInit {
-    @Autowired
+    @Autowired(required = false)
     private List<Repository> repositories;
 }

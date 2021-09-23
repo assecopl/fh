@@ -1,19 +1,22 @@
 import 'bootstrap/js/dist/tooltip';
-import {FormComponent} from "./FormComponent";
-import {FhContainer} from "../FhContainer";
-import getDecorators from "inversify-inject-decorators";
-import {I18n} from "../I18n/I18n";
-import {FHML} from "../FHML";
-import {AdditionalButton} from "./AdditionalButton";
+import 'bootstrap/js/dist/popover';
+import {FormComponent} from './FormComponent';
+import {FhContainer} from '../FhContainer';
+import getDecorators from 'inversify-inject-decorators';
+import {I18n} from '../I18n/I18n';
+import {FHML} from '../FHML';
+import {AdditionalButton} from './AdditionalButton';
 import * as $ from 'jquery';
+import {Placement, PopoverOption, TooltipOption, Trigger} from "bootstrap";
+import {ComponentExtender} from './ComponentExtender';
 
 let {lazyInject} = getDecorators(FhContainer);
 
 abstract class HTMLFormComponent extends FormComponent {
-    @lazyInject("FHML")
+    @lazyInject('FHML')
     protected fhml: FHML;
 
-    @lazyInject("I18n")
+    @lazyInject('I18n')
     protected i18n: I18n;
 
     protected container: HTMLElement;
@@ -37,7 +40,13 @@ abstract class HTMLFormComponent extends FormComponent {
     protected readonly wrapperStyle: string;
     private readonly language: any;
     protected hint: any;
-    protected hintPlacement: string;
+    public hintTitle: string = "";
+    public hintAriaLabel: string = null;
+    protected hintIcon: string = null;
+    protected hintPlacement: Placement;
+    protected hintTrigger: Trigger;
+    public hintType: 'STANDARD' | 'STANDARD_POPOVER' | 'STATIC' | 'STATIC_POPOVER' | 'STATIC_POPOVER_LEFT' | 'STATIC_LEFT' = 'STANDARD';
+    public hintInputGroup: boolean = false;
     protected hintInitialized: boolean = false;
     public rawValue: any;
     private areSubcomponentsRendered: boolean;
@@ -49,26 +58,35 @@ abstract class HTMLFormComponent extends FormComponent {
     private static bootstrapColSeparateCahrsRegexp: RegExp = /(,|;|\|\/|\|)/g;
     protected focusableComponent: HTMLElement;
     public type: string;
+    public input: any;
+
+    public autocomplete: string = null;
+    public ariaLabel: string = null;
+    public htmlAccessibilityRole: string = null;
+
 
     protected constructor(componentObj: any, parent: FormComponent) {
         super(componentObj, parent);
-
-
 
         if (this.parent != null) {
             this.container = this.parent.contentWrapper;
         } else { // FORM
             this.container = document.getElementById(this.parentId);
             if (this.container == null && this.parentId != 'MODAL_VIRTUAL_CONTAINER') {
-                throw "Container '" + this.parentId + "' not found";
+                throw 'Container \'' + this.parentId + '\' not found';
             }
         }
         this.combinedId = this.parentId + '_' + this.id;
 
+        this.hintType = this.componentObj.hintType;
+        this.hintInputGroup = this.componentObj.hintInputGroup ? this.componentObj.hintInputGroup : false;
         this.accessibility = this.componentObj.accessibility;
         this.invisible = this.componentObj.invisible;
         this.presentationStyle = this.componentObj.presentationStyle;
         this.requiredField = this.componentObj.required;
+        this.autocomplete = this.componentObj.autocomplete ? this.componentObj.autocomplete : null;
+        this.ariaLabel = this.componentObj.ariaLabel ? this.componentObj.ariaLabel : null;
+        this.htmlAccessibilityRole = this.componentObj.htmlAccessibilityRole ? this.componentObj.htmlAccessibilityRole : null;
         this.designMode = this.componentObj.designMode || (this.parent != null && this.parent.designMode);
         if (this.designMode) {
             this.buildDesingerToolbox();
@@ -94,6 +112,23 @@ abstract class HTMLFormComponent extends FormComponent {
 
         this.hint = this.componentObj.hint || null;
         this.hintPlacement = this.componentObj.hintPlacement || 'auto';
+        this.hintIcon = this.componentObj.hintIcon || null;
+        this.hintAriaLabel = this.componentObj.hintAriaLabel || null;
+        if (this.componentObj.hintTrigger) {
+            switch (this.componentObj.hintTrigger) {
+                case 'HOVER_FOCUS':
+                    this.hintTrigger = 'hover focus';
+                    break;
+                case 'HOVER':
+                    this.hintTrigger = 'hover';
+                    break;
+                case 'CLICK': 
+                    this.hintTrigger = 'click';
+                    break;
+            }
+        } else {
+            this.hintTrigger = 'hover focus';
+        }
         this.hintElement = null;
 
         if (this.formId === 'designerComponents' || this.formId === 'designerToolbox') {
@@ -114,6 +149,9 @@ abstract class HTMLFormComponent extends FormComponent {
         this.translationItems = [];
 
         this.labelElement = null;
+
+
+        this.hintTitle = this.componentObj.hintTitle ? this.fhml.parse(this.componentObj.hintTitle) : this.fhml.parse(this.componentObj.label)
     }
 
     /* Create component and assign it's HTML to this.htmlElement */
@@ -131,10 +169,10 @@ abstract class HTMLFormComponent extends FormComponent {
 
     /* Append component to container */
     display() {
+        this.processAutocomplete(this.autocomplete);
         this.setAccessibility(this.accessibility);
         this.setPresentationStyle(this.presentationStyle);
         this.enableStyleClasses();
-        this.setRequiredField(this.requiredField);
 
         if (this.designMode) {
             (<any>FhContainer.get('Designer')).addToolboxListeners(this);
@@ -186,7 +224,7 @@ abstract class HTMLFormComponent extends FormComponent {
                     this.handleDeleteBtnEvent(event);
                 });
             }.bind(this));
-            if (this.contentWrapper.classList.contains('button')) {
+            if (this.contentWrapper && this.contentWrapper.classList.contains('button')) {
                 this.component.addEventListener('click', function (e) {
                     this.component.focus();
                     e.stopImmediatePropagation();
@@ -197,7 +235,7 @@ abstract class HTMLFormComponent extends FormComponent {
                     });
                 }.bind(this));
             }
-            if (this.contentWrapper.classList.contains('selectOneMenu')) {
+            if (this.contentWrapper && this.contentWrapper.classList.contains('selectOneMenu')) {
                 this.component.addEventListener('click', function (e) {
                     this.component.focus();
                     e.stopImmediatePropagation();
@@ -207,7 +245,7 @@ abstract class HTMLFormComponent extends FormComponent {
                     });
                 }.bind(this));
             }
-            if (this.contentWrapper.classList.contains('fileUpload')) {
+            if (this.contentWrapper && this.contentWrapper.classList.contains('fileUpload')) {
                 this.component.addEventListener('click', function (e) {
                     this.component.focus();
                     e.stopImmediatePropagation();
@@ -221,9 +259,18 @@ abstract class HTMLFormComponent extends FormComponent {
         }
 
         this.container.appendChild(this.htmlElement);
+
+        this.setRequiredField(this.requiredField);
         if (this.hint !== null) {
             this.initHint();
         }
+
+        const createChain = ComponentExtender.getInstance().getStaticExtenders(this.constructor.name, 'create');
+        createChain.forEach((ext) => {
+            if (ext) {
+                ext(this.componentObj, this);
+            }
+        })
     }
 
     render() {
@@ -242,27 +289,203 @@ abstract class HTMLFormComponent extends FormComponent {
         });
     }
 
-    initHint() {
-        if (this.hintElement && !this.hintInitialized && this.hint) {
-            let tooltipOptions: any = {
-                placement: this.hintPlacement,
-                title: this.hint,
-                html: true,
-                boundary: 'window'
-            };
+    hideHint() {
+        if (this.hintElement) {
+            if (this.hintType == 'STANDARD_POPOVER') {
+                $(this.hintElement).popover('hide');
+            } else {
+                $(this.hintElement).tooltip('hide');
+            }
 
-            $(this.hintElement).tooltip(tooltipOptions);
+            if (this.hintType === 'STATIC' || this.hintType == 'STATIC_POPOVER' || this.hintType == 'STATIC_POPOVER_LEFT') {
+                let tip = $(this.hintElement).attr('aria-describedby');
+                let tipElement = $('#' + tip);
+                if (tipElement) {
+                    if(this.hintType == 'STATIC_POPOVER' || this.hintType == 'STATIC_POPOVER_LEFT') {
+                        tipElement.popover('hide');
+                    } else {
+                        tipElement.tooltip('hide');
+                    }
+                }
+            }
 
-            this.hintInitialized = true;
         }
     }
 
+    initHint() {
+        const fhml = FhContainer.get<FHML>('FHML');
+        let hintParsed = this.hint;
+        if (fhml.needParse(hintParsed)) {
+            hintParsed = fhml.parse(hintParsed);
+        }
+        if (this.hintElement && !this.hintInitialized && this.hint) {
+            let tooltipOptions: TooltipOption = {
+                placement: this.hintPlacement,
+                title: hintParsed,
+                trigger: this.hintTrigger,
+                html: true,
+                boundary: 'window'
+                // selector: '#'+this.id
+            };
+
+            if (this.hintType == 'STATIC' || this.hintType == 'STATIC_POPOVER' || this.hintType == 'STATIC_LEFT' || this.hintType == 'STATIC_POPOVER_LEFT') {
+
+                if (tooltipOptions.placement == 'auto') {
+                    tooltipOptions.placement = 'top';
+                }
+
+                //Change tooltip trigger to click
+                tooltipOptions.trigger = this.hintTrigger || 'click hover';
+                //Create tooltip element
+                const ttip = document.createElement('button');
+                ttip.className = 'btn hint-ico-help fa';
+
+                if(this.hintAriaLabel) {
+                    ttip.setAttribute('aria-label', this.hintAriaLabel);
+                } else {
+                    ttip.setAttribute('aria-haspopup', 'true');
+                }
+                this.hintElement = ttip;
+                if (this.inputGroupElement && this.hintInputGroup) {
+                    let ttipButton = document.createElement('div');
+                    ttipButton.onmouseenter = (ev: MouseEvent) => {
+                        (ev.target as any).click();
+                    };
+                    ttipButton.onmouseleave =(ev: MouseEvent) => {
+                        (ev.target as any).click();
+                    };
+                    this.inputGroupElement.classList.add('hint-static');
+
+                    if(this.hintIcon){
+                        this.hintIcon.toString().split(" ").forEach(value => {
+                            const c = value.trim();
+                             ttip.classList.add(c);
+                        })
+                    } else {
+                        ttip.classList.add('fa-question-circle');
+                    }
+                    ttip.classList.add("input-group-text");
+
+                    this.htmlElement.classList.add('hasInputHelpIcon');
+
+                    this.hintElement = ttip;
+                    ttip.classList.add('input-group-append');
+                    this.inputGroupElement.appendChild(ttip);
+                } else {
+                    // p-0 px-1 border-0
+                    ttip.classList.add("border-0");
+                    ttip.classList.add("px-0");
+                    ttip.classList.add("p-0");
+                    /**
+                     * Change typical behaviour by overwrite this function in component.
+                     */
+                    if(this.hintIcon){
+                        this.hintIcon.toString().split(" ").forEach(value => {
+                            const c = value.trim();
+                            ttip.classList.add(c);
+                        })
+                    } else {
+                        ttip.classList.add('fa-question-circle');
+                    }
+
+                    const element = this.processStaticHintElement(ttip);
+                    element ? element.classList.add('hint-static') : null;
+                }
+
+
+            }
+
+            if (this.hintType == 'STANDARD' || this.hintType == 'STATIC' || this.hintType == 'STATIC_LEFT') {
+                $(this.hintElement).tooltip(tooltipOptions);
+                this.hintElement.classList.add("fh-tooltip");
+                this.hintInitialized = true;
+            }
+            if (this.hintType == 'STANDARD_POPOVER' || this.hintType == 'STATIC_POPOVER' || this.hintType == 'STATIC_POPOVER_LEFT') {
+                const popOptions: PopoverOption = tooltipOptions;
+                popOptions.content = tooltipOptions.title;
+                popOptions.title = this.hintTitle ? this.hintTitle : "";
+
+                //Add close buuton to static popovers
+                if (this.hintType != "STANDARD_POPOVER") {
+                    popOptions.title += '<i class="close popoverer-close fa fa-times pull-right" />'
+                }
+
+                $(this.hintElement).popover(popOptions);
+                this.hintElement.classList.add("fh-popover");
+
+                //Add close buuton logic to static popovers
+                if (this.hintType != "STANDARD_POPOVER") {
+                    $(this.hintElement).on('shown.bs.popover', function () {
+                        // console.log("id", this.id );
+                        // console.log("poper", $(this.hintElement).data('bs.popover') );
+                        const popover = $(this.hintElement).data('bs.popover');
+                        if (typeof popover !== "undefined") {
+                            const tip = popover.tip;
+                            const close = $(tip).find('.close')
+                            close.css("cursor", "pointer");
+                            close.bind('click', function () {
+                                popover.hide();
+                            });
+
+                        }
+                    }.bind(this));
+                }
+                this.hintInitialized = true;
+            }
+
+
+        }
+    }
+
+    /**
+     *
+     * @param ttip
+     */
+    public processStaticHintElement(ttip: any): HTMLElement {
+        if (this.labelElement && !this.labelElement.classList.contains('sr-only')) {
+            if (this.hintType == "STATIC_LEFT" || this.hintType == 'STATIC_POPOVER_LEFT') {
+                ttip.classList.add('mr-1');
+                $(this.labelElement).prepend(ttip);
+            } else {
+                ttip.classList.add('ml-2');
+                this.labelElement.appendChild(ttip);
+            }
+            return this.labelElement;
+        } else {
+            return null;
+        }
+    }
+
+
     destroyHint() {
         if (this.hintElement && this.hintInitialized) {
-            $(this.hintElement).tooltip('hide');
-            $(this.hintElement).tooltip('disable');
-            $(this.hintElement).tooltip('dispose');
+            if (this.hintType === 'STATIC' || this.hintType === 'STATIC_LEFT' || this.hintType == 'STATIC_POPOVER' || this.hintType == 'STATIC_POPOVER_LEFT') {
+                let tip = $(this.hintElement).attr('aria-describedby');
+                let tipElement = $('#' + tip);
+                if (tipElement) {
+                    if(this.hintType == 'STATIC_POPOVER' || this.hintType == 'STATIC_POPOVER_LEFT') {
+                        tipElement.popover('hide');
+                        tipElement.popover('disable');
+                        tipElement.popover('dispose');
+                    } else {
+                        tipElement.tooltip('hide');
+                        tipElement.tooltip('disable');
+                        tipElement.tooltip('dispose');
+                    }
 
+                }
+            }
+            if (this.hintType == 'STANDARD_POPOVER' || this.hintType == 'STATIC_POPOVER' || this.hintType == 'STATIC_POPOVER_LEFT') {
+                $(this.hintElement).popover('hide');
+                $(this.hintElement).popover('disable');
+                $(this.hintElement).popover('dispose');
+            }else {
+                $(this.hintElement).tooltip('hide');
+                $(this.hintElement).tooltip('disable');
+                $(this.hintElement).tooltip('dispose');
+            }
+
+            $(this.hintElement).remove();
             this.hintInitialized = false;
         }
     }
@@ -310,6 +533,13 @@ abstract class HTMLFormComponent extends FormComponent {
             this.htmlElement = null;
         }
 
+        const createChain = ComponentExtender.getInstance().getStaticExtenders(this.constructor.name, 'destroy');
+        createChain.forEach((ext) => {
+            if (ext) {
+                ext(this.componentObj, this);
+            }
+        })
+
         super.destroy(removeFromParent);
 
         document.removeEventListener('keyup', this.handleDeleteBtnEvent);
@@ -327,6 +557,9 @@ abstract class HTMLFormComponent extends FormComponent {
                 switch (name) {
                     case 'accessibility':
                         this.setAccessibility(newValue);
+                        break;
+                    case 'autocomplete':
+                        this.processAutocomplete(newValue);
                         break;
                     case 'presentationStyle':
                         this.setPresentationStyle(newValue);
@@ -348,8 +581,19 @@ abstract class HTMLFormComponent extends FormComponent {
                         break;
                     case 'label':
                         if (this.labelElement != null) {
+                            this.destroyHint();
                             this.labelElement.innerHTML = this.fhml.resolveValueTextOrEmpty(newValue);
                             this.updateLabelClass(newValue);
+                            if (this.requiredField) {
+                                if (['RadioOption', 'RadioOptionsGroup','CheckBox'].indexOf(this.componentObj.type) === -1) {
+                                    this.labelElement.appendChild(this.requiredElement);
+                                } else {
+                                    this.setRequiredField(this.requiredField);
+                                }
+                            }
+                            if (this.hint) {
+                                this.initHint();
+                            }
                         }
                         break;
                     case 'hint':
@@ -362,6 +606,12 @@ abstract class HTMLFormComponent extends FormComponent {
                         break;
                 }
             }.bind(this));
+            const createChain = ComponentExtender.getInstance().getStaticExtenders(this.constructor.name, 'update');
+            createChain.forEach((ext) => {
+                if (ext) {
+                    ext(change.changedAttributes, this.componentObj, this);
+                }
+            })
         }
     }
 
@@ -470,6 +720,7 @@ abstract class HTMLFormComponent extends FormComponent {
                         this.htmlElement.classList.add('invisible');
                     } else {
                         this.htmlElement.classList.add('d-none');
+                        this.hideHint();
                     }
                 }
                 break;
@@ -531,7 +782,11 @@ abstract class HTMLFormComponent extends FormComponent {
         this.handlemarginAndPAddingStyles();
     }
 
-    handleHeight(){
+    public hasHeight(): boolean {
+        return this.componentObj.height != undefined && this.componentObj.height != '' && this.componentObj.height != null;
+    }
+
+    handleHeight() {
         if (this.componentObj.height != undefined) {
             let height = this.componentObj.height;
             if (height.indexOf('%') !== -1) {
@@ -596,6 +851,8 @@ abstract class HTMLFormComponent extends FormComponent {
             if (inputElement) {
                 inputElement.classList.add('stretched');
                 inputElement.style.width = 'calc(100% - ' + property + ')';
+                //Prevent oversized input-group elemtns.
+                inputElement.style.alignSelf = 'flex-start';
             }
         } else {
             let labelWidth = Math.max(0, Math.min(99, parseInt(property)));
@@ -650,7 +907,9 @@ abstract class HTMLFormComponent extends FormComponent {
     enableStyleClasses() {
         if (this.styleClasses.length && this.styleClasses[0] != '') {
             this.styleClasses.forEach(function (cssClass) {
-                this.component.classList.add(cssClass);
+                if (cssClass) {
+                    this.component.classList.add(cssClass);
+                }
             }.bind(this));
         }
     }
@@ -660,7 +919,7 @@ abstract class HTMLFormComponent extends FormComponent {
             oldWidth.forEach(function (width) {
                 if (HTMLFormComponent.bootstrapColRegexp.test(width)) {
                     //In bootstrap 4 "co-xs-12" was replaced with "col-12" so we need to delete it from string.
-                    wrapper.classList.remove('col-' + width.replace('xs-','-'));
+                    wrapper.classList.remove('col-' + width.replace('xs-', '-'));
                 } else if (HTMLFormComponent.bootstrapColWidthRegexp.test(width)) {
                     wrapper.classList.remove('exactWidth');
                     wrapper.style.width = undefined;
@@ -673,7 +932,7 @@ abstract class HTMLFormComponent extends FormComponent {
         newWidth.forEach(function (width) {
             if (HTMLFormComponent.bootstrapColRegexp.test(width)) {
                 //In bootstrap 4 "co-xs-12" was replaced with "col-12" so we need to delete it from string.
-                wrapper.classList.add('col-' + width.replace('xs-','-'));
+                wrapper.classList.add('col-' + width.replace('xs-', '-'));
             } else if (HTMLFormComponent.bootstrapColWidthRegexp.test(width)) {
                 wrapper.classList.add('exactWidth');
                 wrapper.style.width = width;
@@ -701,26 +960,51 @@ abstract class HTMLFormComponent extends FormComponent {
             wrapper.classList.add('inline');
         }
 
+        //if (!skipLabel) {
+        //    let label = document.createElement('label');
+        //    label.classList.add('col-form-label');
+        //    // label.classList.add('card-title');
+        //    label.htmlFor = this.id;
+        //    label.innerHTML = this.fhml.resolveValueTextOrEmpty(this.componentObj.label);
+        //    wrapper.appendChild(label);
+        //    this.labelElement = label;
+        //}
+
         if (!skipLabel) {
-            let label = document.createElement('label');
-            label.classList.add('col-form-label');
-            // label.classList.add('card-title');
-            label.htmlFor = this.id;
-            label.innerHTML = this.fhml.resolveValueTextOrEmpty(this.componentObj.label);
-            wrapper.appendChild(label);
-            this.labelElement = label;
+
+            const labelValue = this.fhml.resolveValueTextOrEmpty(this.componentObj.label);
+            if (labelValue.length > 0) {
+                let label = document.createElement('label');
+                label.classList.add('col-form-label');
+                label.classList.add('align-items-end');
+                // label.classList.add('card-title');
+                label.innerHTML = labelValue;
+                label.id = this.id + "_label";
+
+                label.setAttribute('for', this.componentObj.id);
+                //this.component.setAttribute('aria-describedby', label.id);
+
+                wrapper.appendChild(label);
+                this.labelElement = label;
+
+                if (!isInputElement) {
+                    this.component.setAttribute("aria-labelledby", label.id)
+                } else {
+                    label.htmlFor = this.id;
+                }
+
+            } else {
+                this.processAriaLabel();
+            }
+        } else {
+            this.processAriaLabel();
         }
 
         if (isInputElement) {
             let inputGroup = document.createElement('div');
-            // this.component.classList.add('input-group');
             inputGroup.classList.add('input-group');
             wrapper.appendChild(inputGroup);
             inputGroup.appendChild(wrappedComponent);
-
-            if (this.component.classList.contains('inputTimestamp')) {
-                inputGroup.id = this.componentObj.id;
-            }
 
             this.inputGroupElement = inputGroup;
         } else {
@@ -732,7 +1016,7 @@ abstract class HTMLFormComponent extends FormComponent {
         }
 
         if (this.wrapperStyle) {
-            let existingStyleClasses = wrapper.getAttribute('style') || "";
+            let existingStyleClasses = wrapper.getAttribute('style') || '';
             wrapper.setAttribute('style', existingStyleClasses + this.wrapperStyle);
         }
 
@@ -740,13 +1024,10 @@ abstract class HTMLFormComponent extends FormComponent {
             wrapper.classList.add('mr-auto');
         }
 
-
+        this.processHtmlAccessibilityRole();
         this.htmlElement = wrapper;
         this.contentWrapper = this.component;
 
-        if (!skipLabel) {
-            this.updateLabelClass(this.componentObj.label);
-        }
     }
 
     protected innerWrap() {
@@ -784,7 +1065,7 @@ abstract class HTMLFormComponent extends FormComponent {
             }
 
             if (!this.htmlElement.classList.contains('colorBorder') && options.isLast) {
-                if (this.componentObj.type === 'DropdownItem') {
+                if (this.componentObj.type === 'DropdownItem' || this.componentObj.type === 'ThreeDotsMenuItem') {
                     let dropdown = this.component.closest('.fc.dropdown').parentElement;
                     dropdown.classList.add('colorBorder');
                     dropdown.classList.add('designerFocusedElement');
@@ -852,6 +1133,10 @@ abstract class HTMLFormComponent extends FormComponent {
                 let spanRequired = document.createElement('span');
                 spanRequired.classList.add('input-group-text');
                 spanRequired.classList.add('input-required');
+                spanRequired.style.paddingLeft = '0.5rem';
+                spanRequired.style.paddingRight = '0';
+                spanRequired.style.background = 'transparent';
+                spanRequired.style.border = 'transparent';
                 spanRequired.appendChild(iconRequired);
 
                 let divRequired = document.createElement('div');
@@ -859,9 +1144,9 @@ abstract class HTMLFormComponent extends FormComponent {
                 divRequired.appendChild(spanRequired);
 
                 this.requiredElement = divRequired;
-
-                if (this.inputGroupElement != null) {
-                    this.inputGroupElement.appendChild(this.requiredElement);
+                
+                if (this.labelElement != null) {
+                    this.labelElement.appendChild(this.requiredElement);
                 } else if (this.component.classList.contains('field-required')) {
                     this.component.appendChild(this.requiredElement);
                 } else {
@@ -874,15 +1159,24 @@ abstract class HTMLFormComponent extends FormComponent {
                 return;
             }
 
-            if (this.component.classList.contains('field-required')) {
-                if (this.component.contains(this.requiredElement)) {
+            if (this.componentObj.type === 'RadioOption' || this.componentObj.type === 'RadioOptionsGroup' || this.componentObj.type === 'CheckBox') {
+                let label = this.htmlElement.firstChild;
+                let controlLabelWithText = label.innerText.length;
+                if (controlLabelWithText) {
+                    label.removeChild(this.requiredElement);
+                } else {
+                    this.htmlElement.removeChild(this.requiredElement);
+                }
+
+            } else {
+
+                if (this.labelElement != null) {
+                    this.labelElement.removeChild(this.requiredElement);
+                } else if (this.component.classList.contains('field-required')) {
                     this.component.removeChild(this.requiredElement);
+                } else {
+                    this.htmlElement.removeChild(this.requiredElement);
                 }
-                if (this.inputGroupElement.contains(this.requiredElement)) {
-                    this.inputGroupElement.removeChild(this.requiredElement);
-                }
-            } else if (this.htmlElement.requiredElement) {
-                this.htmlElement.removeChild(this.requiredElement);
             }
 
             this.requiredElement = null;
@@ -926,7 +1220,7 @@ abstract class HTMLFormComponent extends FormComponent {
         }
     }
 
-    public getDefaultWidth():string {
+    public getDefaultWidth(): string {
         return 'md-12';
     }
 
@@ -947,7 +1241,7 @@ abstract class HTMLFormComponent extends FormComponent {
             $(options.scrollableElement).animate({
                 scrollTop: $(row).offset().top - 160
             });
-        } else if (this.componentObj.type === 'DropdownItem') {
+        } else if (this.componentObj.type === 'DropdownItem' || this.componentObj.type === 'ThreeDotsMenuItem') {
             let dropdown = this.component.closest('.fc.dropdown');
             $(options.scrollableElement).animate({
                 scrollTop: $(dropdown).offset().top - 160
@@ -971,12 +1265,32 @@ abstract class HTMLFormComponent extends FormComponent {
 
         if (highlightedElements.length) {
             highlightedElements.forEach(element => {
-                element.classList.remove('toolboxElementHighlight')
-            })
+                element.classList.remove('toolboxElementHighlight');
+            });
+        }
+
+        // check if formToolboxTools accordion is expanded and if so, collapse its elements first
+        let toolboxElements = document.getElementById('toolboxFormTools');
+        let toolboxBtns = toolboxElements.querySelectorAll('.collapseBtn');
+
+        if (toolboxBtns) {
+            toolboxBtns.forEach(button => {
+                if (!button.classList.contains('collapsed')) {
+                    button.setAttribute('aria-expanded', 'false');
+                    button.classList.add('collapsed');
+                }
+            });
+        }
+
+        // check if designerElementTree is collapsed and if so, expand it first
+        let collapseBtn = designerElementTree.querySelector('.btn');
+        if (collapseBtn && collapseBtn.classList.contains('collapsed')) {
+            collapseBtn.setAttribute('aria-expanded', 'true');
+            collapseBtn.classList.remove('collapsed');
+            designerElementTree.querySelector('.collapse').classList.add('show');
         }
 
         // verify event source and set elementTreeEquivalent accordingly
-
         let focusEventData = this.formsManager.firedEventData;
         let sourceElement = focusEventData.eventSourceId;
         let elementTreeEquivalent;
@@ -997,29 +1311,41 @@ abstract class HTMLFormComponent extends FormComponent {
     }
 
     updateDesignerElementTree(focusEventData, elementTreeEquivalent) {
-        let subNodes = elementTreeEquivalent.querySelector('ul');
-        let elementTreeCaret = elementTreeEquivalent.querySelector('.treeNodeBody').firstChild;
+        let treeElementsList = Array.from(document.getElementById('designerElementTree').querySelector('.treeElementList').children);
+        let topLevelNode;
+        let hiddenNodes;
+        let nodeCarets;
 
-        if (subNodes.children.length) {
-            if (focusEventData.containerId === 'designedFormContainer') {
-                if (elementTreeCaret.classList.contains('fa-caret-down')) {
-                    return;
+        treeElementsList.forEach(node => {
+            if (node.contains(elementTreeEquivalent)) {
+                topLevelNode = node;
+            }
+        });
+
+        if (topLevelNode) {
+            hiddenNodes = topLevelNode.querySelectorAll('ul.d-none');
+            nodeCarets = topLevelNode.querySelectorAll('.treeNodeBody');
+
+            // expand only nodes that contain elementTreeEquivalent
+            hiddenNodes.forEach(node => {
+                if (node.children.length && node.contains(elementTreeEquivalent)) {
+                    node.classList.remove('d-none');
                 }
-                elementTreeCaret.click();
-            }
-        } else {
-            let ul = elementTreeEquivalent.parentElement;
-            if (ul.classList.contains('d-none')) {
+            });
 
-                // update caret icon:
-                let icon = ul.previousElementSibling.querySelector('.fa-caret-right');
-                icon.classList.remove('fa-caret-right');
-                icon.classList.add('fa-caret-down');
+            // update nodes carets that contain elementTreeEquivalent
+            nodeCarets.forEach(caret => {
+                if (caret.firstChild.classList.contains('fa-caret-right')) {
 
-                // show hidden list
-                ul.classList.remove('d-none');
-            }
+                    let nodeList = caret.parentElement;
+                    if (nodeList && !nodeList.nextElementSibling.classList.contains('d-none')) {
+                        caret.firstChild.classList.remove('fa-caret-right');
+                        caret.firstChild.classList.add('fa-caret-down');
+                    }
+                }
+            });
         }
+
     }
 
     /**
@@ -1032,13 +1358,13 @@ abstract class HTMLFormComponent extends FormComponent {
             this.htmlElement.style.marginLeft = this.componentObj.marginLeft;
         }
         if (this.componentObj.marginRight) {
-            this.htmlElement.style.marginRight = this.componentObj.marginRight
+            this.htmlElement.style.marginRight = this.componentObj.marginRight;
         }
         if (this.componentObj.marginTop) {
-            this.htmlElement.style.marginTop = this.componentObj.marginTop
+            this.htmlElement.style.marginTop = this.componentObj.marginTop;
         }
         if (this.componentObj.marginBottom) {
-            this.htmlElement.style.marginBottom = this.componentObj.marginBottom
+            this.htmlElement.style.marginBottom = this.componentObj.marginBottom;
         }
 
         if (this.componentObj.paddingLeft) {
@@ -1048,10 +1374,10 @@ abstract class HTMLFormComponent extends FormComponent {
             this.htmlElement.style.paddingRight = this.componentObj.paddingRight;
         }
         if (this.componentObj.paddingTop) {
-            this.htmlElement.style.paddingTop = this.componentObj.paddingTop
+            this.htmlElement.style.paddingTop = this.componentObj.paddingTop;
         }
         if (this.componentObj.paddingBottom) {
-            this.htmlElement.style.paddingBottom = this.componentObj.paddingBottom
+            this.htmlElement.style.paddingBottom = this.componentObj.paddingBottom;
         }
     }
 
@@ -1059,27 +1385,27 @@ abstract class HTMLFormComponent extends FormComponent {
      * Function process width string from backend serwer and creates proper bootstrap classes string array so they can be added to component.
      * @param width
      */
-    private handleWidth(width:string = this.componentObj.width){
-        if(!width){
-          width = this.getDefaultWidth()
+    private handleWidth(width: string = this.componentObj.width) {
+        if (!width) {
+            width = this.getDefaultWidth();
         }
 
-        if(width) {
+        if (width) {
             // Delete unwanted spaces
             width = width.trim();
             //Replace un wanted chars
-            width = width.replace(HTMLFormComponent.bootstrapColSeparateCahrsRegexp, " ");
+            width = width.replace(HTMLFormComponent.bootstrapColSeparateCahrsRegexp, ' ');
             //Replace multi spaces with one
             width = width.replace(/\s\s+/g, ' ');
 
-            this.width = width.split(" ");
+            this.width = width.split(' ');
         }
     }
 
     /**
      * Logic moved to function so it can be overrided by children classes.
      */
-    protected buildDesingerToolbox(){
+    protected buildDesingerToolbox() {
         (<any>FhContainer.get('Designer')).buildToolbox(this.getAdditionalButtons(), this);
 
     }
@@ -1101,14 +1427,64 @@ abstract class HTMLFormComponent extends FormComponent {
                  */
                 const activeElement = document.activeElement;
                 const activeElementTagName = activeElement.tagName.toLowerCase();
-                if(focusedElement.contains(activeElement) || (!focusedElement.contains(activeElement) &&
-                        (activeElementTagName !== 'input' &&
-                            activeElementTagName !== 'select' &&
-                            activeElementTagName !== 'textarea' &&
-                        !activeElement.classList.contains("form-control")))) {
+                if (focusedElement.contains(activeElement) || (!focusedElement.contains(activeElement) &&
+                    (activeElementTagName !== 'input' &&
+                        activeElementTagName !== 'select' &&
+                        activeElementTagName !== 'textarea' &&
+                        !activeElement.classList.contains('form-control')))) {
                     deleteBtn.click();
                 }
             }
+        }
+    }
+
+    /**
+     * Ads autocomplete attribiute to input element i both exists on element.
+     */
+    protected processAutocomplete(value: string = this.autocomplete) {
+        if (this.autocomplete && this.input) {
+            this.input.setAttribute('autocomplete', value);
+        }
+    }
+
+    /**
+     * Ads aria-label attribiute to element.
+     */
+    protected processAriaLabel(value: string = this.ariaLabel) {
+        //Add attribute only when there is no label on component.
+        if (this.ariaLabel && !this.labelElement) {
+            if (this.input) {
+                this.input.setAttribute('aria-label', value);
+            } else {
+                this.component.setAttribute('aria-label', value);
+            }
+        }
+    }
+
+    /**
+     * Ads role attribiute to element.
+     */
+    protected processHtmlAccessibilityRole(value: string = this.htmlAccessibilityRole) {
+        if (this.htmlAccessibilityRole) {
+            this.component.setAttribute('role', value);
+        }
+    }
+
+    /**
+     * Function that close all bootstrap hints inside component based on css class
+     */
+    public hideAllHints(){
+        if(this.component) {
+            $(this.component).find(".fh-tooltip").each(function( index ) {
+                try {
+                    $(this).tooltip('hide');
+                }catch (e) {}
+            });
+            $(this.component).find(".fh-popover").each(function( index ) {
+                try {
+                    $(this).popover('hide');
+                }catch (e) {}
+            })
         }
     }
 

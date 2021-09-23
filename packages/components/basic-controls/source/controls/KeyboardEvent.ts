@@ -14,8 +14,12 @@ class KeyboardEvent extends FormComponent {
             return true;
         };
         hotkeys(this.shortcut, function (event) {
-            event.preventDefault();
-            this.fireEventWithLock('onClick', this.event);
+            let activeForm = this.formsManager.getActiveForm();
+            if (activeForm.combinedId === this.formId) {
+                event.preventDefault();
+
+                this.fireEventWithLock('onClick', this.event);
+            }
         }.bind(this));
     }
 

@@ -19,7 +19,6 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Created by Adam Zareba on 16.03.2017. Binding class simulating fake binding for designer
  * purpose.
- * {@see pl.fhframework.DesignerBinding}
  */
 @RepeaterTraversable
 public class DesignerModelBinding<V> extends AdHocModelBinding<V> {

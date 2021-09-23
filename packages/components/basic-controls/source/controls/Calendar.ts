@@ -2,8 +2,7 @@ import {HTMLFormComponent} from "fh-forms-handler";
 import * as _ from "lodash";
 import * as moment from 'moment';
 import * as $ from 'jquery';
-import 'imports-loader?moment,define=>false,exports=>false!../external/bootstrap-datepicker';
-
+import '../external/bootstrap-datepicker.js';
 class Calendar extends HTMLFormComponent {
     private readonly blockedDates: any;
     private readonly values: any;
@@ -36,11 +35,6 @@ class Calendar extends HTMLFormComponent {
         container.classList.add('fc');
         container.classList.add('calendar');
 
-        let label = document.createElement('div');
-        label.classList.add('calendar-label');
-        label.appendChild(document.createTextNode(this.label));
-        container.appendChild(label);
-
         let calendar = document.createElement('div');
         calendar.id = this.id;
         calendar.classList.add('calendar-content');
@@ -48,7 +42,7 @@ class Calendar extends HTMLFormComponent {
 
         this.component = container;
         this.handlemarginAndPAddingStyles();
-        this.wrap(true);
+        this.wrap(false);
         this.display();
 
         let styleTypes = ['color', 'background-color', 'border-color'];

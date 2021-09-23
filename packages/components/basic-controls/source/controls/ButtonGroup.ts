@@ -22,6 +22,7 @@ class ButtonGroup extends HTMLFormComponent {
         group.classList.add('fc');
         group.classList.add('buttonGroup');
         group.classList.add('btn-group');
+        group.classList.add('mb-3');
         group.setAttribute('role','group');
 
         if (this.margin == true) {
@@ -30,7 +31,7 @@ class ButtonGroup extends HTMLFormComponent {
 
         this.component = group;
         this.htmlElement = this.component;
-        this.wrap();
+        this.wrap(true);
         this.handlemarginAndPAddingStyles();
         this.display();
 

@@ -5,12 +5,14 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
+import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.type.filter.AssignableTypeFilter;
 import pl.fhframework.ReflectionUtils;
 import pl.fhframework.app.config.FhApplication;
 import pl.fhframework.config.PackagesScanConfiguration;
+import pl.fhframework.core.FhCL;
 import pl.fhframework.core.FhFrameworkException;
 import pl.fhframework.core.io.FhResource;
 import pl.fhframework.core.logging.FhLogger;
@@ -32,17 +34,11 @@ public class DefaultApplication extends SpringBootServletInitializer {
 
     public static void main(String... args) {
         fhApplicationInit();
-        SpringApplication.run(DefaultApplication.class, args);
-    }
-
-    /** Method is used when application is deployed on an external application server, e.g. WildFly */
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-        fhApplicationInit();
-        return super.configure(builder);
+        new SpringApplication(new DefaultResourceLoader(FhCL.classLoader), DefaultApplication.class).run(args);
     }
 
     public static void fhApplicationInit() {
+        FhCL.init(Thread.currentThread().getContextClassLoader());
         registerModules();
         preConfigureSpring();
     }
@@ -88,15 +84,6 @@ public class DefaultApplication extends SpringBootServletInitializer {
         return Arrays.stream(packages).filter(Objects::nonNull).collect(Collectors.joining(","));
     }
 
-    @Data
-    protected static class PackagesScan {
-        List<String> componentPackages = new ArrayList<>();
-
-        List<String> repositoryPackages = new ArrayList<>();
-
-        List<String> entityPackages = new ArrayList<>();
-    }
-
     protected static PackagesScan readPackagesScan() {
         PackagesScan additionalPackagesScan = new PackagesScan();
 
@@ -117,5 +104,23 @@ public class DefaultApplication extends SpringBootServletInitializer {
         }
 
         return additionalPackagesScan;
+    }
+
+    /**
+     * Method is used when application is deployed on an external application server, e.g. WildFly
+     */
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+        fhApplicationInit();
+        return super.configure(builder);
+    }
+
+    @Data
+    protected static class PackagesScan {
+        List<String> componentPackages = new ArrayList<>();
+
+        List<String> repositoryPackages = new ArrayList<>();
+
+        List<String> entityPackages = new ArrayList<>();
     }
 }

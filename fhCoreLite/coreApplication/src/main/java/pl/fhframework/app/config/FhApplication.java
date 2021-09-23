@@ -27,7 +27,6 @@ import java.lang.annotation.*;
 @Inherited
 
 @SpringBootApplication
-@EnableAutoConfiguration
 @EnableWebSocket
 @EnableWebSecurity
 @EnableWebMvc

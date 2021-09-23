@@ -1,18 +1,22 @@
 package pl.fhframework.core.security.provider.management.api;
 
+import com.fasterxml.jackson.databind.util.RawValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
+import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.core.security.ISecurityDataProvider;
-import pl.fhframework.core.session.UserSessionRepository;
+import pl.fhframework.core.security.model.SessionInfo;
 import pl.fhframework.core.security.provider.management.status.ApplicationStatus;
 import pl.fhframework.core.security.provider.management.status.ApplicationStatusHelper;
-import pl.fhframework.core.security.provider.model.SessionInfo;
 import pl.fhframework.core.security.provider.service.LocalUserSessionService;
+import pl.fhframework.core.session.UserSessionRepository;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -38,6 +42,10 @@ public class ManagementAPIController {
     public static final String MANAGEMENT_API_MESSAGE_URI = MANAGEMENT_API_URI + "/sessions/message";
 
     public static final String MANAGEMENT_API_SESSIONS_LOG_OUT_URI = MANAGEMENT_API_URI + "/sessions/logout/{sessionId}";
+
+    public static final String MANAGEMENT_API_ACTIVE_FUNCTIONALITY_URI = MANAGEMENT_API_URI + "/sessions/activeFunctionality/{sessionId}";
+
+    public static final String MANAGEMENT_API_ECHO_URI = MANAGEMENT_API_URI + "/sessions/echo";
 
     public static final String MANAGEMENT_API_MESSAGE_IDS = "ids";
 
@@ -102,4 +110,23 @@ public class ManagementAPIController {
     public boolean forceLogout(@PathVariable("sessionId") String userSessionId) {
         return localUserSessionService.forceLogout(userSessionId);
     }
+
+    @GetMapping(path = MANAGEMENT_API_ACTIVE_FUNCTIONALITY_URI)
+    public ResponseEntity getUserActiveFunctionality(@PathVariable String sessionId) {
+        try {
+            String activeFunctionality = localUserSessionService.getUserActiveFunctionality(sessionId);
+            return ResponseEntity.ok(new RawValue(activeFunctionality));
+        } catch (Exception e) {
+            FhLogger.error(e);
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(e.getMessage());
+        }
+    }
+
+    @GetMapping(path = MANAGEMENT_API_ECHO_URI)
+    public ResponseEntity echo() {
+        return ResponseEntity.ok(new RawValue("OK"));
+    }
+
 }

@@ -10,6 +10,7 @@ import pl.fhframework.annotations.XMLProperty;
 
 import lombok.Getter;
 import lombok.Setter;
+import pl.fhframework.model.dto.ElementChanges;
 
 @Control(parents = {TablePaged.class, ColumnPaged.class})
 public class ColumnPaged extends Column {
@@ -33,5 +34,20 @@ public class ColumnPaged extends Column {
     public void init() {
         super.init();
         sortable = !StringUtils.isNullOrEmpty(sortBy) && !isSubColumnsExists();
+    }
+
+    @Override
+    public ElementChanges updateView() {
+        ElementChanges elementChanges = super.updateView();
+
+        boolean sortable = sortBy != null && !sortBy.isEmpty();
+
+        if (!areValuesTheSame(this.sortable, sortable)) {
+            this.refreshView();
+            this.sortable = sortable;
+            elementChanges.addChange("sortable", this.sortable);
+        }
+
+        return elementChanges;
     }
 }

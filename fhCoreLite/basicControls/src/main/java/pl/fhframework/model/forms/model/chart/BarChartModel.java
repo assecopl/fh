@@ -11,7 +11,7 @@ public class BarChartModel extends CartesianChartModel {
 
     @Override
     protected void createAxis() {
-        axes = new HashMap<AxisType, Axis>();
+        axes = new HashMap<>();
         axes.put(AxisType.X, new CategoryAxis());
         axes.put(AxisType.Y, new LinearAxis());
     }

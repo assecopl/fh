@@ -2,9 +2,9 @@ import {HTMLFormComponent} from "fh-forms-handler";
 import {AdditionalButton} from "fh-forms-handler";
 
 class PanelGroup extends HTMLFormComponent {
-    protected readonly isCollapsible: any;
+    protected isCollapsible: any;
     private readonly onToggle: any;
-    private collapsed: any;
+    public collapsed: any;
     private collapseToggler: any;
     private collapseChanged: any;
     protected groupToolbox: any;
@@ -13,6 +13,10 @@ class PanelGroup extends HTMLFormComponent {
     private collapsedOld: any;
     private headingElement: any;
     protected forceHeader: any;
+    protected headingTypeValue: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" = null;
+
+    public iconOpened: string;
+    public iconClosed: string;
 
     constructor(componentObj: any, parent: HTMLFormComponent) {
         super(componentObj, parent);
@@ -21,6 +25,7 @@ class PanelGroup extends HTMLFormComponent {
 
         this.isCollapsible = Boolean(this.componentObj.collapsible);
         this.onToggle = this.componentObj.onToggle;
+        this.headingTypeValue = this.componentObj.headingTypeValue? this.componentObj.headingTypeValue : "span";
         this.collapsed = Boolean(this.componentObj.collapsed);
         this.collapseToggler = null;
         this.collapseChanged = false;
@@ -29,33 +34,38 @@ class PanelGroup extends HTMLFormComponent {
         this.borderVisible = Boolean(this.componentObj.borderVisible);
         this.collapsedOld = this.collapsed;
         this.headingElement = null;
+
+        this.iconOpened = this.componentObj.iconOpened? this.componentObj.iconOpened : "fa-arrow-down";
+        this.iconClosed = this.componentObj.iconClosed? this.componentObj.iconClosed : "fa-arrow-up";
     }
 
     create() {
         let group = document.createElement('div');
-        ['fc', 'group', 'mb-3'].forEach(function (cssClass) {
+        ['fc', 'group', 'panelGroup', 'mb-3', 'card', 'card-default'].forEach(function (cssClass) {
             group.classList.add(cssClass);
         });
         if (!this.borderVisible) {
             group.classList.add('borderHidden');
         }
         group.id = this.id;
-        ['card', 'card-default'].forEach(function (cssClass) {
-            group.classList.add(cssClass);
-        });
 
         let heading = document.createElement('div');
         heading.classList.add('card-header');
         heading.classList.add('d-flex');
 
-        let titleElm = document.createElement('span');
+        let titleElm = document.createElement(this.componentObj.label != null ? this.headingTypeValue: "span"); //Default span
         titleElm.classList.add('mr-auto');
         titleElm.classList.add('card-title');
         titleElm.classList.add('mb-0');
+
+        let titleElmIn = document.createElement('span');
+        titleElmIn.id = this.id + '_label';
+        titleElm.appendChild(titleElmIn);
+
         if (this.componentObj.label != null) {
-            titleElm.innerHTML = this.resolveValue(this.componentObj.label);
+            titleElmIn.innerHTML = this.resolveValue(this.componentObj.label);
         } else {
-            titleElm.innerHTML = '&nbsp;';
+            titleElmIn.innerHTML = '&nbsp;';
         }
         heading.appendChild(titleElm);
 
@@ -73,10 +83,10 @@ class PanelGroup extends HTMLFormComponent {
             // let text = document.createElement('span');
             if (this.collapsed) {
                 group.classList.add('collapsed');
-                icon.classList.add('fa-arrow-down');
+                icon.classList.add(this.iconOpened);
                 // text.appendChild(document.createTextNode('rozwiń'));
             } else {
-                icon.classList.add('fa-arrow-up');
+                icon.classList.add(this.iconClosed);
                 // text.appendChild(document.createTextNode('zwiń'));
             }
 
@@ -129,6 +139,7 @@ class PanelGroup extends HTMLFormComponent {
         if (footer.length) {
             if (this.componentObj.height) {
                 body.style.height = 'calc(' + this.componentObj.height + ' - 49px - ' +  footer[0].clientHeight + 'px)';
+                body.classList.add('hasHeight');
             } else {
                 body.style.height = 'calc(100% - 49px - ' +  footer[0].clientHeight + 'px)';
             }
@@ -136,6 +147,7 @@ class PanelGroup extends HTMLFormComponent {
             if (this.componentObj.height) {
                 body.style['overflow-y'] = 'auto';
                 body.style.height = this.height;
+                body.classList.add('hasHeight');
             }
         }
 
@@ -143,7 +155,6 @@ class PanelGroup extends HTMLFormComponent {
 
     update(change) {
         super.update(change);
-
         $.each(change.changedAttributes, function (name, newValue) {
             switch (name) {
                 case 'collapsed':
@@ -168,6 +179,8 @@ class PanelGroup extends HTMLFormComponent {
                     break;
             }
         }.bind(this));
+        $(this.component).scrollTop(this.component.clientHeight);
+
     };
 
     updateHeaderVisibility(newTitle) {
@@ -187,28 +200,39 @@ class PanelGroup extends HTMLFormComponent {
         } else {
             this.collapse();
         }
-        this.collapsed = !this.collapsed;
-        this.collapseChanged = true;
+
+
+        /**
+         * Ads support for PanelGroupWrapper toggleAll value callculations.
+         */
+        if(this.parent["updateToggleAllStatus"] && this.parent.componentObj.type == "PanelGroupWrapper") {
+            (this.parent as any).updateToggleAllStatus()
+        }
+
     };
 
     collapse() {
         // let text = this.collapseToggler.firstChild;
         let icon = this.collapseToggler.firstChild; //childNodes[1];
-        icon.classList.remove('fa-arrow-up');
-        icon.classList.add('fa-arrow-down');
+        icon.classList.remove(this.iconClosed);
+        icon.classList.add(this.iconOpened);
         // text.removeChild(text.firstChild);
         // text.appendChild(document.createTextNode('rozwiń'));
         this.component.classList.add('collapsed');
+        this.collapsed = true;
+        this.collapseChanged = true;
     };
 
     uncollapse() {
         // let text = this.collapseToggler.firstChild;
         let icon = this.collapseToggler.firstChild; //childNodes[1];
-        icon.classList.remove('fa-arrow-down');
-        icon.classList.add('fa-arrow-up');
+        icon.classList.remove(this.iconOpened);
+        icon.classList.add(this.iconClosed);
         // text.removeChild(text.firstChild);
         // text.appendChild(document.createTextNode('zwiń'));
         this.component.classList.remove('collapsed');
+        this.collapsed = false;
+        this.collapseChanged = true;
     };
 
     extractChangedAttributes() {
@@ -238,10 +262,6 @@ class PanelGroup extends HTMLFormComponent {
             return [
                 new AdditionalButton('moveUp', 'arrow-up', 'Move up'),
                 new AdditionalButton('moveDown', 'arrow-down', 'Move down')
-            ];
-        } else {
-            return [
-                new AdditionalButton('addDefaultSubcomponent', 'plus', 'Add empty row')
             ];
         }
     }

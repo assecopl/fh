@@ -2,6 +2,7 @@ package pl.fhframework.model.forms;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
+import pl.fhframework.annotations.TemplateControl;
 import pl.fhframework.events.IEventSource;
 import pl.fhframework.model.dto.ElementChanges;
 import pl.fhframework.model.forms.table.LowLevelRowMetadata;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+@TemplateControl(tagName = "fh-table-row")
 public class TableRow {
 
     @JsonIgnore

@@ -4,6 +4,7 @@ package pl.fhframework.fhPersistence.conversation;
 import lombok.Getter;
 import org.hibernate.FlushMode;
 import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -21,6 +22,7 @@ import javax.persistence.PersistenceContextType;
 public class ConversationStatefullContext extends ConversationContext {
 
     @Getter
+    @Autowired(required = false)
     @PersistenceContext(unitName = "FhPU", type = PersistenceContextType.EXTENDED)
     private EntityManager entityManager;
 

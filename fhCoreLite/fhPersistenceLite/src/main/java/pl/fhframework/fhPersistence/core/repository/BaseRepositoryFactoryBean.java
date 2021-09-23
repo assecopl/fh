@@ -22,7 +22,7 @@ import java.io.Serializable;
 public class BaseRepositoryFactoryBean<R extends JpaRepository<T, I>, T,
         I extends Serializable> extends JpaRepositoryFactoryBean<R, T, I> {
 
-    @Autowired
+    @Autowired(required = false)
     EntityManagerRepository emRepository;
 
     public BaseRepositoryFactoryBean(Class<? extends R> repositoryInterface) {

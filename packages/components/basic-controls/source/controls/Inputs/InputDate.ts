@@ -1,6 +1,6 @@
 import * as moment from 'moment';
-import 'imports-loader?moment,define=>false,exports=>false!../../external/inputmask';
-import 'imports-loader?moment,define=>false,exports=>false!../../external/bootstrap-datepicker';
+import '../../external/inputmask.js';
+import '../../external/bootstrap-datepicker.js';
 import {InputText} from "./InputText";
 import {InputDatePL} from './i18n/InputDate.pl';
 import {InputDateEN} from './i18n/InputDate.en';
@@ -15,6 +15,7 @@ class InputDate extends InputText implements LanguageChangeObserver {
     protected datepickerEnabled: boolean;
     protected highlightToday: boolean;
     protected inputDateHeight: any;
+    protected maskPlugin: any;
 
     /**
      * Czy uzywac trybu scislego biblioteki momentjs
@@ -97,14 +98,17 @@ class InputDate extends InputText implements LanguageChangeObserver {
 
         this.createAddon();
 
-        $(this.input).on('input', this.updateModel.bind(this));
+        $(this.input).on('input', this.onValueInput.bind(this));
         $(this.input).on('blur', this.inputBlurEvent.bind(this));
         $(this.input).on('change', this.inputChangeEvent.bind(this));
 
+        this.inputGroupElement.id = this.id + "_inputGroup";
+        this.inputGroupElement.classList.add('designer-ignore');
         if (this.accessibility == 'EDIT') {
             this.applyMask();
             this.applyDatepicker();
         }
+
 
         this.display();
     };
@@ -123,9 +127,18 @@ class InputDate extends InputText implements LanguageChangeObserver {
                 showOnFocus: 0,
                 inline: false
             };
+            const form = this.formsManager.findForm(this.formId);
+            /**
+             * If form has active focus trap option we need to place dynamic date element next to input element to prevent interaction blocking
+             */
+            if(form && form.blockFocusForModal){
+                options["container"] =  "#"+this.inputGroupElement.id;
+            }
+
             if (this.highlightToday) {
                 options.todayHighlight = true;
             }
+
             try {
                 // @ts-ignore
                 $(this.inputGroupElement).datepicker(options);
@@ -183,13 +196,13 @@ class InputDate extends InputText implements LanguageChangeObserver {
 
         this.inputGroupElement.classList.add('date');
         if (this.componentObj.iconAlignment === 'BEFORE') {
-            this.inputGroupElement.insertBefore(addonDiv, this.inputGroupElement.firstChild);
+            this.inputGroupElement.insertBefore(addonDiv, this.component);
         } else if (this.componentObj.iconAlignment === 'AFTER') {
             addonDiv.classList.remove('input-group-prepend');
             addonDiv.classList.add('input-group-append');
             this.inputGroupElement.appendChild(addonDiv);
         } else {
-            this.inputGroupElement.insertBefore(addonDiv, this.inputGroupElement.firstChild);
+            this.inputGroupElement.insertBefore(addonDiv, this.component);
         }
 
         this.component.classList.add('datepickerInput');
@@ -239,6 +252,16 @@ class InputDate extends InputText implements LanguageChangeObserver {
         }.bind(this));
     };
 
+    onValueInput() {
+        if (this.maskEnabled) {
+            if (this.maskPlugin.isComplete(this.input)) {
+                this.updateModel();
+            }
+        } else {
+            this.updateModel();
+        }
+    }
+
     updateModel() {
         this.rawValue = InputDate.toDateOrLeave(this.input.value, this.format, this.backendFormat);
         if (this.onChange != null && this.oldValue !== this.rawValue) {
@@ -282,13 +305,14 @@ class InputDate extends InputText implements LanguageChangeObserver {
     protected applyMask() {
         if (this.maskEnabled && !this.inputmaskEnabled) {
             // @ts-ignore
-            Inputmask({
+            this.maskPlugin = Inputmask({
                 clearMaskOnLostFocus: false,
                 greedy: false,
                 jitMasking: this.maskDynamic,
                 placeholder: this.input.placeholder,
                 definitions: {},
-                insertMode: 0,
+                insertMode: true,
+                shiftPositions:false,
                 alias: "date",
                 mask: this.mask
             }).mask(this.input);
@@ -306,11 +330,17 @@ class InputDate extends InputText implements LanguageChangeObserver {
         super.wrap(skipLabel, isInputElement);
     }
 
+    getDefaultWidth(): string {
+        return "md-3";
+    }
+
     destroy(removeFromParent: boolean) {
         // noinspection JSIgnoredPromiseFromCall
         this.i18n.unsubscribe(this);
 
-        $(this.input).off('input', this.updateModel.bind(this));
+        this.maskPlugin = null;
+
+        $(this.input).off('input', this.onValueInput.bind(this));
         $(this.input).off('blur', this.inputBlurEvent.bind(this));
         $(this.input).off('change', this.inputChangeEvent.bind(this));
 

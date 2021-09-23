@@ -3,18 +3,21 @@ package pl.fhframework.app.menu;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.UrlResource;
+import pl.fhframework.ISystemUseCase;
+import pl.fhframework.annotations.Action;
 import pl.fhframework.app.config.DefaultApplicationConfigurer;
 import pl.fhframework.app.config.FhNavbarConfiguration;
-import pl.fhframework.core.logging.FlushableRollingFileAppender;
+import pl.fhframework.app.preferences.UserPreferencesUC;
 import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.core.rules.builtin.FhUserUtils;
 import pl.fhframework.core.security.model.IBusinessRole;
+import pl.fhframework.core.uc.IUseCaseNoCallback;
+import pl.fhframework.core.uc.IUseCaseRefreshListener;
 import pl.fhframework.core.uc.UseCase;
-import pl.fhframework.core.util.LogUtils;
+import pl.fhframework.core.util.ILogUtils;
 import pl.fhframework.core.util.StringUtils;
-import pl.fhframework.ISystemUseCase;
-import pl.fhframework.annotations.Action;
 import pl.fhframework.event.EventRegistry;
+import pl.fhframework.event.dto.NotificationEvent;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -24,7 +27,7 @@ import java.util.Objects;
 
 @UseCase
 //@SystemFunction(DemoSystemFunction.DEMO_PANEL_TOP)
-public class NavbarUC implements INavbar, ISystemUseCase {
+public class NavbarUC implements INavbar, ISystemUseCase, IUseCaseRefreshListener {
     public static final String NAVBAR_CONTAINER_ID = "navbarForm";
 
     private NavbarForm.Model model = new NavbarForm.Model();
@@ -35,6 +38,9 @@ public class NavbarUC implements INavbar, ISystemUseCase {
 
     @Autowired
     private EventRegistry eventRegistry;
+
+    @Autowired(required = false)
+    private ILogUtils logUtils;
 
     @Value("${server.servlet.context-path:/}")
     private String contextRoot;
@@ -105,9 +111,13 @@ public class NavbarUC implements INavbar, ISystemUseCase {
 
     @Action
     public void downloadUserLog() {
-        FhLogger.info(this.getClass(), FlushableRollingFileAppender.FLUSH_MESSAGE);
-        URL log = LogUtils.getUserLogFile(this.getUserSession());
-        eventRegistry.fireDownloadEvent(new UrlResource(log));
+        if (logUtils != null) {
+            FhLogger.info(this.getClass(), ILogUtils.FLUSH_MESSAGE);
+            URL log = logUtils.getUserLogFile(this.getUserSession());
+            eventRegistry.fireDownloadEvent(new UrlResource(log));
+        } else {
+            eventRegistry.fireNotificationEvent(NotificationEvent.Level.WARNING, "Log file per user is not supported. Provide ILogUtils implementation.");
+        }
     }
 
     @Override
@@ -118,6 +128,11 @@ public class NavbarUC implements INavbar, ISystemUseCase {
     @Action
     public void setLanguagePolish() {
         this.setLanguage(NavbarForm.Language.POLISH.getValue());
+    }
+
+    @Action
+    public void openPreferences() {
+        runUseCase(UserPreferencesUC.class, IUseCaseNoCallback.getCallback());
     }
 
     @Action
@@ -163,6 +178,15 @@ public class NavbarUC implements INavbar, ISystemUseCase {
             return Locale.forLanguageTag(languageTag);
         } else {
             return Locale.getDefault();
+        }
+    }
+
+    @Override
+    public void doAfterRefresh() {
+        if (menuService.isHidden()) {
+            menuService.hide();
+        } else {
+            menuService.show();
         }
     }
 

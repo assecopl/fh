@@ -16,7 +16,7 @@ class SocketHandler {
         if (connector) {
             this.activeConnector = this.connectors[index];
         } else {
-            console.log('There is no connector at selected index');
+            console.error('There is no connector at selected index');
         }
     };
 

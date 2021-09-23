@@ -3,7 +3,7 @@ import {Table} from "./Table";
 import {AdditionalButton} from "fh-forms-handler";
 
 class Column extends HTMLFormComponent {
-    private readonly isSortable: any;
+    private isSortable: any;
     private sorter: any;
     private readonly rowspan: any;
     private readonly subColumnsExists: boolean;
@@ -26,8 +26,9 @@ class Column extends HTMLFormComponent {
     create() {
         let column = document.createElement('th');
         column.id = this.id;
-        if (this.width) {
-            column.style.width = this.width + '%';
+        column.classList.add(this.id);
+        if (this.width && this.width.length > 0) {
+            column.style.width = this.width[0].includes("px")? this.width[0]: this.width[0]  + '%';
         }
         // HTMLComponent recognized and updated label
         this.labelElement = document.createElement('span');

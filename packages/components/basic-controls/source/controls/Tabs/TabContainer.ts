@@ -1,5 +1,6 @@
 import {HTMLFormComponent} from "fh-forms-handler";
 import {AdditionalButton} from "fh-forms-handler";
+import {Tab} from "./Tab";
 
 class TabContainer extends HTMLFormComponent {
     private static designerActiveTabs: any = {};
@@ -54,6 +55,11 @@ class TabContainer extends HTMLFormComponent {
         }
     };
 
+    display() {
+        super.display();
+        this.activateTab(this.activeTabIndex, false);
+    }
+
     findTab = function (tabId) {
         for (let i = this.components.length - 1; i >= 0; i--) {
             let tab = this.components[i];
@@ -70,10 +76,6 @@ class TabContainer extends HTMLFormComponent {
         if (!tabNav.parentNode.classList.contains('active')) {
             let tabId = tabNav.dataset.tabId;
             let tab = this.findTab(tabId);
-            this.changesQueue.queueValueChange(tab.tabIndex);
-            if (this.onTabChange) {
-                this.fireEvent('onTabChange', this.onTabChange);
-            }
             this.activateTab(tab.tabIndex);
         }
     };
@@ -118,6 +120,8 @@ class TabContainer extends HTMLFormComponent {
                 this.accessibilityResolve(this.component, 'EDIT');
                 break;
             case 'VIEW':
+                this.navElement.classList.remove('d-none');
+                this.navElement.classList.remove('invisible');
                 this.accessibilityResolve(this.component, 'VIEW');
                 break;
             case 'HIDDEN':
@@ -137,9 +141,23 @@ class TabContainer extends HTMLFormComponent {
         this.accessibility = accessibility;
     }
 
-
-    activateTab(tabIndex) {
+    activateTab(tabIndex, onchange = true) {
+        onchange = onchange != false;
+        this.components.forEach((component, index) => {
+            if(index != tabIndex) {
+                // component.update({acce})
+            }
+        })
         if (this.components[tabIndex]) {
+            this.components.forEach((c:HTMLFormComponent, index) => {
+                if(index != tabIndex){
+                    c.hideAllHints();
+                }
+            })
+            this.changesQueue.queueValueChange(tabIndex);
+            if (this.onTabChange  && onchange) {
+                this.fireEvent('onTabChange', this.onTabChange);
+            }
             (<any>this.components[tabIndex]).activate();
             this.activeTabIndex = tabIndex;
             if (this.designMode) {

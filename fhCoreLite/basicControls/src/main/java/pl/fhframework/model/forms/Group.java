@@ -1,15 +1,14 @@
 package pl.fhframework.model.forms;
 
+import lombok.Getter;
 import pl.fhframework.annotations.*;
-import pl.fhframework.annotations.Control;
 import pl.fhframework.binding.ActionBinding;
 import pl.fhframework.binding.CallbackActionBinding;
 import pl.fhframework.binding.IActionCallback;
 import pl.fhframework.binding.IActionCallbackContext;
 import pl.fhframework.model.dto.InMessageEventData;
-
-import lombok.Getter;
 import pl.fhframework.model.forms.designer.IDesignerEventListener;
+import pl.fhframework.model.forms.optimized.ColumnOptimized;
 
 import java.util.Optional;
 
@@ -19,10 +18,12 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
  * Group component is responsible for placing components in one group, that does not intersects with
  * other form components.
  *
- * Example: <Group></Group>
+ * Example: {@code <Group></Group>}
  */
-@Control(parents = {PanelGroup.class, Column.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class, SplitContainer.class}, invalidParents = {Table.class}, canBeDesigned = true)
-@DocumentedComponent(value = "Group component is responsible for placing components in one group, that does not intersects with other form components", icon = "fa fa-columns")
+@TemplateControl(tagName = "fh-group")
+@DesignerControl(defaultWidth = 12)
+@Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class, SplitContainer.class, Footer.class}, invalidParents = {Table.class}, canBeDesigned = true)
+@DocumentedComponent(category = DocumentedComponent.Category.ARRANGEMENT, documentationExample = true, value = "Group component is responsible for placing components in one group, that does not intersects with other form components", icon = "fa fa-columns")
 public class Group extends GroupingComponent<Component> implements IDesignerEventListener {
 
     private static final String ATTR_ON_CLICK = "onClick";

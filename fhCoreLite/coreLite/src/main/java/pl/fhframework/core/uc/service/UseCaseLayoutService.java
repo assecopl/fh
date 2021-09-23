@@ -16,7 +16,7 @@ public class UseCaseLayoutService {
     public static String mainLayout = "standard";
     public static String splitChar = ",";
 
-    @Value("${fhframework.layout.templates:full,panels}")
+    @Value("${fhframework.layout.templates:full,panels,designer}")
     private String templates;
 
     private UseCaseLayoutService() {

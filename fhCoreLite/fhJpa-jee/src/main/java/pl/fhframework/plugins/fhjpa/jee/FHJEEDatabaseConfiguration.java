@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -30,6 +31,7 @@ import java.util.Properties;
         },
         entityManagerFactoryRef = "fhEntityManagerFactory",
         transactionManagerRef = "fhTransactionManager")
+@Profile("!withoutDataSource")
 public class FHJEEDatabaseConfiguration {
 
     @Value("${fh.dataSource.jndi:java:/FHDS}")
@@ -90,7 +92,7 @@ public class FHJEEDatabaseConfiguration {
     @Bean
     @Primary
     @Qualifier("fhTransactionManager")
-    public PlatformTransactionManager pumaTransactionManager(@Qualifier("fhEntityManagerFactory") EntityManagerFactory emf) {
+    public PlatformTransactionManager fhTransactionManager(@Qualifier("fhEntityManagerFactory") EntityManagerFactory emf) {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(emf);
         return transactionManager;

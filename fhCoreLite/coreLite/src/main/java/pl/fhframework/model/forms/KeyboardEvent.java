@@ -12,7 +12,7 @@ import java.util.Optional;
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.CONTENT;
 
 @Control(parents = {Form.class}, canBeDesigned = true)
-@DocumentedComponent(value = "Keyboard shortcut trigger for a form event", icon = "fa fa-keyboard")
+@DocumentedComponent(documentationExample = true, value = "Keyboard shortcut trigger for a form event", icon = "fa fa-keyboard")
 @DesignerControl(defaultWidth = 1)
 public class KeyboardEvent extends NonVisualFormElement {
     private static final String ATTR_SHORTCUT = "shortcut";

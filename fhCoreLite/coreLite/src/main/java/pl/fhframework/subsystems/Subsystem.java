@@ -1,9 +1,13 @@
 package pl.fhframework.subsystems;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.util.StringUtils;
+import pl.fhframework.ReflectionUtils;
+import pl.fhframework.configuration.FHConfiguration;
+import pl.fhframework.core.FhCL;
 import pl.fhframework.core.FhSubsystemException;
 import pl.fhframework.core.FhUseCaseException;
 import pl.fhframework.core.events.ISubsystemLifecycleListener;
@@ -11,8 +15,6 @@ import pl.fhframework.core.io.FhResource;
 import pl.fhframework.core.security.ISystemFunctionsMapper;
 import pl.fhframework.core.uc.IInitialUseCase;
 import pl.fhframework.core.uc.IUseCase;
-import pl.fhframework.ReflectionUtils;
-import pl.fhframework.configuration.FHConfiguration;
 import pl.fhframework.subsystems.config.SubsystemConfig;
 import pl.fhframework.usecases.dynamic.UseCaseProcess;
 import pl.fhframework.usecases.dynamic.UseCaseProcessReader;
@@ -39,9 +41,11 @@ public abstract class Subsystem {
     private String name;
 
     private String productLabel;
+
     @Getter
     private String productUUID;
 
+    @JsonIgnore
     private String access = ACCESS_PRIVATE;
 
     /**
@@ -49,12 +53,14 @@ public abstract class Subsystem {
      * Potentially this will be an overriden path passed as system property.
      */
     @Getter
+    @JsonIgnore
     private FhResource basePath;
 
     /**
      * Base path to module's resources path. By default BASE_PATH/resources.
      */
     @Getter
+    @JsonIgnore
     private FhResource resourcesPath;
 
     /**
@@ -62,42 +68,54 @@ public abstract class Subsystem {
      * This is alway a real (not overriden) URL to class patch resources of this module.
      */
     @Getter
+    @JsonIgnore
     private FhResource baseClassPath;
 
     @Setter
     @Getter
+    @JsonIgnore
     private FhResource configUrl;
 
+    @JsonIgnore
     private List<String> _initiateUseCasesHoldersIds = new ArrayList<>();
+
     @Getter
+    @JsonIgnore
     private List<String> initiateUseCasesHoldersIds = Collections.unmodifiableList(_initiateUseCasesHoldersIds);
 
+    @JsonIgnore
     private Map<String, Object> idPU2SourcePU = new HashMap<>();
 
     @Getter
     @Setter
+    @JsonIgnore
     private ISystemFunctionsMapper systemFunctionsMapper;
 
     /**
      * Fully qualified names of use cases classes defined in a given module
      */
+    @JsonIgnore
     private Set<String> moduleUseCasesNames = new HashSet<>();
     /**
      * Module names this module depends on.
      */
+    @JsonIgnore
     private Set<String> dependentModulesNames = new HashSet<>();
 
     @Setter(AccessLevel.PACKAGE)
+    @JsonIgnore
     private SubsystemConfig config;
 
     @Getter(AccessLevel.PACKAGE)
     @Setter(AccessLevel.PACKAGE)
+    @JsonIgnore
     private Instant configTimestamp;
 
     /**
      * Lifecycle listeners
      */
     @Getter
+    @JsonIgnore
     private List<Class<? extends ISubsystemLifecycleListener>> lifecycleListeners = new ArrayList<>();
 
     protected Subsystem(String name) {
@@ -164,6 +182,7 @@ public abstract class Subsystem {
         return this.getClass().getPackage().getName();
     }
 
+    @JsonIgnore
     public boolean isStatic() {
         return true;
     }
@@ -174,7 +193,7 @@ public abstract class Subsystem {
 
     public UseCaseProcess getUseCaseProcess(String useCaseId) {
         try {
-            Class<?> clazz = Class.forName(useCaseId);
+            Class<?> clazz = FhCL.classLoader.loadClass(useCaseId);
             if (IUseCase.class.isAssignableFrom(clazz)) {
                 return getUseCaseProcess(clazz);
             }else{
@@ -232,7 +251,7 @@ public abstract class Subsystem {
     public void addUseCaseReference(String reference){
         _initiateUseCasesHoldersIds.add(reference);
         try{
-            Class<? extends IUseCase> staticClazz = (Class<? extends IUseCase>) Class.forName(reference);
+            Class<? extends IUseCase> staticClazz = (Class<? extends IUseCase>) FhCL.classLoader.loadClass(reference);
             idPU2SourcePU.put(reference, staticClazz);
         } catch (ClassNotFoundException e) {
             //Calculating path of described dynamic PU with given id.
@@ -247,6 +266,7 @@ public abstract class Subsystem {
 
     private Map<String, DynamicSubsystem.CachedClass> _classCache = new HashMap<>();
 
+    @JsonIgnore
     public List<Class<IInitialUseCase>> getStaticUseCaseInitializersList() {
         List<Class<IInitialUseCase>> result = new ArrayList<>();
         for (String idPU : _initiateUseCasesHoldersIds) {
@@ -281,6 +301,7 @@ public abstract class Subsystem {
      * Return unmodifiable view of module use cases
      * @return module use cases
      */
+    @JsonIgnore
     public Set<String> getModuleUseCasesNames() {
         return Collections.unmodifiableSet(moduleUseCasesNames);
     }
@@ -307,6 +328,7 @@ public abstract class Subsystem {
      * Returns subsystem's configuration that is kept in module.xml file and may change at runtime.
      * @return subsystem's configuration
      */
+    @JsonIgnore
     public SubsystemConfig getConfig() {
         if (config == null) {
             return EMPTY_CONFIG;
@@ -315,6 +337,7 @@ public abstract class Subsystem {
         }
     }
 
+    @JsonIgnore
     public boolean isPublic() {
         return ACCESS_PUBLIC.equals(access);
     }

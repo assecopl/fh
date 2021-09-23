@@ -12,6 +12,7 @@ import pl.fhframework.BindingResult;
 import pl.fhframework.SessionManager;
 import pl.fhframework.UserSession;
 import pl.fhframework.annotations.*;
+import pl.fhframework.aspects.snapshots.model.SkipSnapshot;
 import pl.fhframework.binding.*;
 import pl.fhframework.core.FhAuthorizationException;
 import pl.fhframework.core.FhFormException;
@@ -24,6 +25,7 @@ import pl.fhframework.core.security.AuthorizationManager;
 import pl.fhframework.core.uc.IFormUseCaseContext;
 import pl.fhframework.core.util.SpelUtils;
 import pl.fhframework.core.util.StringUtils;
+import pl.fhframework.events.I18nFormElement;
 import pl.fhframework.events.IEventSource;
 import pl.fhframework.events.IEventSourceContainer;
 import pl.fhframework.forms.FiledsHighlightingList;
@@ -50,14 +52,16 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
  * and wires data model. Usecase components inherits from the Form: layout, position and display
  * mode. Created by Gabriel on 2015-11-20.
  */
+@TemplateControl(tagName = "fh-form")
 @Control(parents = {})
 @ModelElement(type = ModelElementType.HIDDEN)
-public abstract class Form<T> extends GroupingComponent<Component> implements Boundable, IHasBoundableLabel {
+public abstract class Form<T> extends GroupingComponentWithHeadingHierarchy<Component> implements Boundable, IHasBoundableLabel {
 
     public static final String MODAL_VIRTUAL_CONTAINER = "MODAL_VIRTUAL_CONTAINER";
     public static final String ON_MANUAL_MODAL_CLOSE = "onManualModalClose";
     private static final String DEFAULT_LAYOUT = "vertical";
     private static final String STATE_ATTRIBUTE = "state";
+    private static final String BLOCK_FOCUS_FOR_MODAL_ATTR = "blockFocusForModal";
 
     public enum ViewMode {
         NORMAL,
@@ -154,6 +158,12 @@ public abstract class Form<T> extends GroupingComponent<Component> implements Bo
     @XMLProperty(defaultValue = "false")
     private boolean hideHeader;
 
+    @Getter
+    @Setter
+    @DocumentedComponentAttribute("Should first active form field be focused.")
+    @XMLProperty(defaultValue = "true")
+    private boolean focusFirstElement;
+
     /**
      * Form's content layout. Currently mapped to HTML display: block, inline or absolute
      */
@@ -176,7 +186,7 @@ public abstract class Form<T> extends GroupingComponent<Component> implements Bo
      */
     @Getter
     @Setter
-    @XMLProperty(defaultValue = "standard")
+    @XMLProperty(defaultValue = "STANDARD")
     @DesignerXMLProperty(functionalArea = LOOK_AND_STYLE, priority = 103)
     private FormType formType = FormType.STANDARD;
 
@@ -185,7 +195,7 @@ public abstract class Form<T> extends GroupingComponent<Component> implements Bo
      */
     @Getter
     @Setter
-    @XMLProperty(defaultValue = "regular")
+    @XMLProperty(defaultValue = "REGULAR")
     @DesignerXMLProperty(functionalArea = LOOK_AND_STYLE, priority = 102)
     private FormModalSize modalSize = FormModalSize.REGULAR;
 
@@ -320,6 +330,20 @@ public abstract class Form<T> extends GroupingComponent<Component> implements Bo
     @Getter
     @Setter
     private Supplier<Binding> bindingMethodsCreator = Binding::new;
+
+    @JsonIgnore
+    @Getter
+    @Setter
+    @SkipSnapshot
+    private IFormGenerationUtils generationUtils;
+
+    @Getter
+    @Setter
+    @XMLProperty(value = BLOCK_FOCUS_FOR_MODAL_ATTR)
+    @DesignerXMLProperty(functionalArea = BEHAVIOR, priority = 1)
+    @DocumentedComponentAttribute(value = "WCAG: You can block focus on elements that are outside modal by setting this option to\"true\". " +
+            "Be aware that such a modal must be large enough to show every element that pops up, such as InputDate, Combo, SelectComboMenu, InputTimestamp.")
+    private Boolean blockFocusForModal;
 
     public Form() {
         super(null);
@@ -493,10 +517,9 @@ public abstract class Form<T> extends GroupingComponent<Component> implements Bo
     }
 
     /**
-     * Returns >Event Source< object indicated by passed id
+     * Returns Event Source object indicated by passed id
      *
-     * @param eventSourceId event source id, in case of form component it is an id of form's
-     *                      element
+     * @param eventSourceId event source id, in case of form component it is an id of form's element
      * @return EventSource instance
      */
     public IEventSource getEventSource(String eventSourceId) {
@@ -529,10 +552,9 @@ public abstract class Form<T> extends GroupingComponent<Component> implements Bo
     }
 
     /**
-     * Returns >Event Source< object indicated by passed id
+     * Returns Event Source object indicated by passed id
      *
-     * @param idOfFormElement event source id, in case of form component it is an id of form's
-     *                        element
+     * @param idOfFormElement event source id, in case of form component it is an id of form's element
      * @return EventSource instance
      */
     public FormElement getFormElement(String idOfFormElement) {
@@ -910,6 +932,14 @@ public abstract class Form<T> extends GroupingComponent<Component> implements Bo
         return bindingMethods.convertValueToString(value, converter);
     }
 
+    public void onSessionLanguageChange(String lang) {
+        doActionForEverySubcomponent(c -> {
+            if (c instanceof I18nFormElement) {
+                ((I18nFormElement) c).onSessionLanguageChange(lang);
+            }
+        });
+    }
+
     @Override
     public <T> AdHocModelBinding<T> createAdHocModelBinding(String binding) {
         return new AdHocModelBinding<T>(this, this, binding);
@@ -1031,7 +1061,7 @@ public abstract class Form<T> extends GroupingComponent<Component> implements Bo
 
     /**
      * Checks if current user has role
-     * @param roleName role name
+     * @param roleNames role names
      * @return true, if user has given role
      */
     @ModelElement(type = ModelElementType.OTHER)
@@ -1056,5 +1086,9 @@ public abstract class Form<T> extends GroupingComponent<Component> implements Bo
             return getLabelModelBinding().getBindingExpression();
         }
         return getLabel();
+    }
+
+    public interface IFormGenerationUtils extends Component.IGenerationUtils {
+        Set<ActionSignature> getEvents();
     }
 }

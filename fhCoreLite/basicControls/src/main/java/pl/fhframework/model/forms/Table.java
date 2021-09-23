@@ -1,57 +1,45 @@
 package pl.fhframework.model.forms;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
+import pl.fhframework.BindingResult;
+import pl.fhframework.annotations.*;
+import pl.fhframework.binding.*;
 import pl.fhframework.core.FhBindingException;
 import pl.fhframework.core.FhException;
 import pl.fhframework.core.forms.IHasBoundableLabel;
 import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.core.util.CollectionsUtils;
-import pl.fhframework.BindingResult;
-import pl.fhframework.annotations.*;
-import pl.fhframework.annotations.Control;
-import pl.fhframework.binding.*;
+import pl.fhframework.events.IEventSource;
+import pl.fhframework.events.IEventSourceContainer;
+import pl.fhframework.helper.AutowireHelper;
 import pl.fhframework.model.dto.ElementChanges;
+import pl.fhframework.model.dto.InMessageEventData;
 import pl.fhframework.model.dto.ValueChange;
+import pl.fhframework.model.forms.attribute.HorizontalAlign;
+import pl.fhframework.model.forms.attribute.RowHeight;
+import pl.fhframework.model.forms.attribute.TableGrid;
+import pl.fhframework.model.forms.attribute.TableStripes;
+import pl.fhframework.model.forms.csv.CsvService;
 import pl.fhframework.model.forms.designer.BindingExpressionDesignerPreviewProvider;
 import pl.fhframework.model.forms.designer.IDesignerEventListener;
 import pl.fhframework.model.forms.table.LowLevelRowMetadata;
 import pl.fhframework.model.forms.table.RowIteratorMetadata;
-import pl.fhframework.model.dto.InMessageEventData;
-import pl.fhframework.events.IEventSource;
-import pl.fhframework.events.IEventSourceContainer;
-import pl.fhframework.model.forms.attribute.RowHeight;
-import pl.fhframework.model.forms.attribute.TableStripes;
-import pl.fhframework.model.forms.attribute.TableGrid;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import lombok.Getter;
-import lombok.Setter;
-
-import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.BEHAVIOR;
-import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.CONTENT;
-import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.LOOK_AND_STYLE;
-import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.SPECIFIC;
+import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.*;
 
 /**
  * Table is component which describes and operates on tabular data. Table consists of TableRow and
- * Column components, handles user actions as well as binds model data to its elements.<br/>
- * Attributes:<br/>
+ * Column components, handles user actions as well as binds model data to its elements.
+ * Attributes:
  * <pre>
  * <code>collection</code> - table model
  * <code>selected</code> - selected row
@@ -66,18 +54,29 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
  *  <Column label="Name" value="{item.name}"/>
  * </Table>}</pre>
  */
+@TemplateControl(tagName = "fh-table")
 @Control(parents = {Tab.class, GroupingComponent.class, Row.class, Form.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = true)
-@DocumentedComponent(value = "Table that allows to arrange data like text, images, links, other tables, etc. into rows and columns of cells.", icon = "fa fa-table")
+@DocumentedComponent(category = DocumentedComponent.Category.TABLE_AND_TREE, documentationExample = true,value = "Table that allows to arrange data like text, images, links, other tables, etc. into rows and columns of cells.", icon = "fa fa-table")
 public class Table extends Repeater implements ITabular, IChangeableByClient, IEventSourceContainer, IRowNumberOffsetSupplier, Boundable, CompactLayout, IDesignerEventListener, IHasBoundableLabel {
 
     protected static final String LABEL_ATTR = "label";
+    protected static final String MULTISELECT_ATTR = "multiselect";
+    protected static final String SELECTIONCHECKBOXES_ATTR = "selectionCheckboxes";
+
+    @Autowired
+    @JsonIgnore
+    private CsvService csvService;
 
     @Getter
+    private boolean multiselect = false;
+
+    @JsonIgnore
+    @Getter
     @Setter
-    @XMLProperty
-    @DocumentedComponentAttribute(defaultValue = "false", value = "Determines if multiselect is enabled in table. If multiselect is set to true, selectedElement has to be set to Collection.")
+    @XMLProperty(MULTISELECT_ATTR)
+    @DocumentedComponentAttribute(boundable = true,defaultValue = "false", value = "Determines if multiselect is enabled in table. If multiselect is set to true, selectedElement has to be set to Collection.")
     @DesignerXMLProperty(functionalArea = SPECIFIC, priority = 10)
-    private boolean multiselect;
+    private ModelBinding multiselectBinding;
 
     @Getter
     @Setter
@@ -87,11 +86,22 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
     private boolean horizontalScrolling;
 
     @Getter
+    private boolean selectionCheckboxes = false;
+
+    @JsonIgnore
+    @Getter
     @Setter
-    @XMLProperty
-    @DocumentedComponentAttribute(value = "Allows row selection using checkbox. Works only if multiselect is also enabled.")
+    @XMLProperty(SELECTIONCHECKBOXES_ATTR)
+    @DocumentedComponentAttribute(boundable = true, value = "Allows row selection using checkbox. Works only if multiselect is also enabled.")
     @DesignerXMLProperty(functionalArea = SPECIFIC, priority = 5)
-    private boolean selectionCheckboxes;
+    private ModelBinding selectionCheckboxesBinding;
+
+    @Getter
+    @Setter
+    @XMLProperty(defaultValue = "true")
+    @DocumentedComponentAttribute(defaultValue = "true", value = "Turns on/off table header checkbox to select/unselect all rows. Works only with 'selectionCheckboxes' option trun on.")
+    @DesignerXMLProperty(functionalArea = SPECIFIC, priority = 10)
+    private boolean selectAllChceckbox = true;
 
     @Getter
     @Setter
@@ -107,9 +117,17 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
     @DesignerXMLProperty(functionalArea = SPECIFIC, priority = 15)
     private boolean fixedHeader;
 
+    @Getter
+    @Setter
+    @XMLProperty
+    @DocumentedComponentAttribute(defaultValue = "false", value = "Enables export table data to CSV file feature.")
+    @DesignerXMLProperty(functionalArea = SPECIFIC, priority = 15)
+    private boolean csvExport;
+
     @JsonIgnore
     @Getter
     @Setter
+    @TwoWayBinding
     @XMLProperty(SELECTED)
     @DocumentedComponentAttribute(boundable = true, value = "Selected table row")
     @DesignerXMLProperty(functionalArea = CONTENT, priority = 11, bindingOnly = true)
@@ -174,6 +192,13 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
     @DocumentedComponentAttribute(defaultValue = "false", value = "Enables IE inline elements focus fix. Attribute is ignored in non-IE browsers. If this attribute is set to true, spanning columns doesn't work.")
     @DesignerXMLProperty(functionalArea = SPECIFIC, priority = 79)
     protected boolean ieFocusFixEnabled;
+
+    @Getter
+    @Setter
+    @XMLProperty
+    @DocumentedComponentAttribute(value = "Id of another which scroll should be synchronized with this table. This option works only if horizontalScrolling is enabled.")
+    @DesignerXMLProperty(functionalArea = SPECIFIC, priority = 79)
+    protected String synchronizeScrolling;
 
     @Getter
     @Setter
@@ -264,6 +289,26 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
     public void init() {
         super.init();
         setProcessComponentStateChange(false);
+        AutowireHelper.autowire(this, csvService);
+
+        // CSV export button
+        if (csvExport && !getForm().isDesignMode()) {
+            if (footer == null) {
+                footer = new Footer(getForm());
+                footer.setInvisible(false);
+                footer.setGroupingParentComponent(this);
+            }
+
+            Button csvButton = new Button(getForm());
+            csvButton.setWidth("md-1");
+            csvButton.setLabelModelBinding(new StaticBinding<>("[icon=\'fas fa-download\'] CSV"));
+            csvButton.setStyleModelBinding(new StaticBinding<>("link"));
+            csvButton.setHorizontalAlign(HorizontalAlign.RIGHT);
+            csvButton.setInvisible(false);
+            csvButton.setOnClick(() -> csvService.exportTableToCsv(this));
+            csvButton.setGroupingParentComponent(footer);
+            footer.addSubcomponent(csvButton);
+        }
     }
 
     @Override
@@ -306,7 +351,10 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
                         new int[0], // parent indices - no parents at this point
                         getAllIterators().get(0)); // main iterator
 
-                if (selectedElementBinding != null && !isMultiselect()) { // FH-4184
+                if (selectedElementBinding != null && (!isMultiselect()
+                        && !(selectedElementBinding instanceof CompiledBinding && ((CompiledBinding<?>) selectedElementBinding).getTargetType() == List.class)
+                )
+                ) { // FH-4184
                     BindingResult bindingResult = selectedElementBinding.getBindingResult();
                     if (bindingResult != null) {
                         Object value = bindingResult.getValue();
@@ -543,6 +591,16 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
 
         IGroupingComponent parent = getGroupingParentComponent();
         boolean stopProcessingUpdateView = isStopProcessingUpdateView();
+
+
+        if (multiselectBinding != null) {
+            multiselect = multiselectBinding.resolveValueAndAddChanges(this, elementChanges, multiselect, MULTISELECT_ATTR);
+        }
+
+        if (selectionCheckboxesBinding != null) {
+            selectionCheckboxes = selectionCheckboxesBinding.resolveValueAndAddChanges(this, elementChanges, selectionCheckboxes, SELECTIONCHECKBOXES_ATTR);
+        }
+
         while (parent != null) {
             stopProcessingUpdateView |= ((FormElement) parent).isStopProcessingUpdateView();
             parent = ((FormElement) parent).getGroupingParentComponent();
@@ -633,7 +691,7 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
         if (newSelectedValue == null || collection == null) {
             return new int[]{-1};
         }
-        if (multiselect) {
+        if (multiselect || (selectedElementBinding instanceof CompiledBinding && ((CompiledBinding<?>) selectedElementBinding).getTargetType() == List.class)) {
             if (newSelectedValue instanceof Collection) {
                 List<?> tempCollection = new LinkedList<>(collection);
                 List<?> newSelectedElementsList = new LinkedList<>((Collection) newSelectedValue);
@@ -661,7 +719,7 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
                 this.selectedRowsNumbers = Arrays.stream(newTextValue.split(","))
                         .map(String::trim).mapToInt(Integer::parseInt).toArray();
                 Object newSelectedElement;
-                if (multiselect) {
+                if (multiselect || (selectedElementBinding instanceof CompiledBinding && ((CompiledBinding<?>) selectedElementBinding).getTargetType() == List.class)) {
                     newSelectedElement = getSelectedElementsBasedOnRowsNumbers(getBindedObjectsList(), this.selectedRowsNumbers);
                 } else {
                     selectedRowsNumbers[0] = Integer.parseInt(newTextValue); // it is possible to be changed in future. We avoid sending changes that do nothing to the client, client won't lose incorrectly given value

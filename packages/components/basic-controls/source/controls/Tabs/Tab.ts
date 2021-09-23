@@ -1,6 +1,8 @@
 import 'bootstrap/js/dist/tab';
 import {HTMLFormComponent} from "fh-forms-handler";
 import {AdditionalButton} from "fh-forms-handler";
+import {TabContainer} from "./TabContainer";
+import {Repeater} from "../Repeater";
 
 class Tab extends HTMLFormComponent {
     private navElement: any;
@@ -22,6 +24,7 @@ class Tab extends HTMLFormComponent {
         ['fc', 'tab-pane', 'col-12'].forEach(function (cssClass) {
             tab.classList.add(cssClass);
         });
+        tab.setAttribute("role", "tabpanel");
 
         let nav = document.createElement('li');
         nav.classList.add('nav-item');
@@ -31,6 +34,7 @@ class Tab extends HTMLFormComponent {
         link.innerHTML = this.fhml.resolveValueTextOrEmpty(this.componentObj.label);
         link.dataset.tabId = this.id;
         link.setAttribute("data-toggle", "tab");
+        link.setAttribute("role", "tab");
 
 
         let row = document.createElement('div');
@@ -89,6 +93,16 @@ class Tab extends HTMLFormComponent {
             $(this.navElement).find('a').one('shown.bs.tab', function () {
                 while (this.contentWrapper.firstChild) this.contentWrapper.removeChild(this.contentWrapper.firstChild);
                 this.renderSubcomponents();
+                let renderSubcomponents = function (component) {
+                    if (!(component instanceof Repeater)) {
+                        component.display();
+                    }
+
+                    component.components.forEach(renderSubcomponents);
+                };
+
+                this.components.forEach(renderSubcomponents);
+
                 this.isRendered = true;
             }.bind(this));
         }
@@ -126,6 +140,11 @@ class Tab extends HTMLFormComponent {
 
         this.accessibility = accessibility;
     };
+
+    protected focusComponent(path, index, options) {
+        (<TabContainer>this.parent).activateTab(this.tabIndex);
+        return super.focusComponent(path, index, options);
+    }
 
     focusCurrentComponent(deferred, options) {
         let tabContainer = this.component.parentNode;
@@ -168,6 +187,10 @@ class Tab extends HTMLFormComponent {
 
     // noinspection JSUnusedGlobalSymbols
     setPresentationStyle(presentationStyle) {
+        if(presentationStyle === undefined){
+            return;
+        }
+
         let nestedTabs = this.parent.parent.componentObj.type === 'Tab' ? true : false;
         ['border', 'border-success', 'border-info', 'border-warning', 'border-danger', 'is-invalid'].forEach(function (cssClass) {
             this.navElement.classList.remove(cssClass);

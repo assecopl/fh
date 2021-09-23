@@ -1,19 +1,21 @@
 package pl.fhframework.core.rules.builtin;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import pl.fhframework.ReflectionUtils;
 import pl.fhframework.core.FhException;
 import pl.fhframework.core.rules.BusinessRule;
 import pl.fhframework.core.rules.Comment;
 import pl.fhframework.core.uc.Parameter;
 import pl.fhframework.core.util.StringUtils;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Created by pawel.ruta on 2017-09-21.
@@ -121,6 +123,52 @@ public class CastUtils {
             return new BigDecimal((String) from);
         }
         return BigDecimal.valueOf(toDouble(from));
+    }
+
+    @Comment("Map collection to map, where key is value of given attribute")
+    public <K, T> Map<K, T> toMap(@Parameter(name = "collection", comment = "collection to map") Collection<T> list, @Parameter(name = "attributeName", comment = "attribute key name ") String attrName) {
+        if (list == null || list.isEmpty()) {
+            return new HashMap<>();
+        }
+        Class<?> objectClass = list.iterator().next().getClass();
+        Optional<Field> filed = ReflectionUtils.getPrivateField(objectClass, attrName);
+        Optional<Method> getter = ReflectionUtils.findGetter(objectClass, filed.get());
+        filed.get().setAccessible(true);
+        return (Map<K, T>) list.stream().collect(Collectors.toMap(obj -> {
+            try {
+                return getter.get().invoke(obj);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                throw new FhException(e);
+            }
+        }, Function.identity()));
+    }
+
+    @Comment("Group collection by chosen key - attribute name")
+    public <K, T> Map<K, List<T>> groupBy(@Parameter(name = "collection", comment = "collection to group") Collection<T> list, @Parameter(name = "attributeName", comment = "attribute key name ") String attrName) {
+        if (list == null || list.isEmpty()) {
+            return new HashMap<>();
+        }
+        Class<?> objectClass = list.iterator().next().getClass();
+        Optional<Field> filed = ReflectionUtils.getPrivateField(objectClass, attrName);
+        Optional<Method> getter = ReflectionUtils.findGetter(objectClass, filed.get());
+        filed.get().setAccessible(true);
+        return (Map<K, List<T>>) list.stream().collect(Collectors.groupingBy(obj -> {
+            try {
+                return getter.get().invoke(obj);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                throw new FhException(e);
+            }
+        }));
+    }
+
+    @Comment("Cast object to left handside var type")
+    public <T> T toVarType(@Parameter(name = "object", comment = "object to cast") Object object) {
+        return (T) object;
+    }
+
+    @Comment("Cast object to chosen type")
+    public <T> T toType(@Parameter(name = "object", comment = "object to cast") Object object, Class<T> type) {
+        return (T) object;
     }
 
     public static String toStringStatic(Object from) {

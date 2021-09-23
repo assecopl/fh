@@ -1,42 +1,40 @@
 package pl.fhframework.model.forms;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import pl.fhframework.core.logging.FhLogger;
+import lombok.Getter;
+import lombok.Setter;
 import pl.fhframework.annotations.*;
 import pl.fhframework.binding.*;
+import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.model.dto.ElementChanges;
+import pl.fhframework.model.dto.InMessageEventData;
 import pl.fhframework.model.forms.designer.BindingExpressionDesignerPreviewProvider;
 import pl.fhframework.model.forms.model.LabelPosition;
+import pl.fhframework.model.forms.optimized.ColumnOptimized;
 import pl.fhframework.model.forms.widgets.Widget;
-import pl.fhframework.model.dto.InMessageEventData;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import lombok.Getter;
-import lombok.Setter;
-
-import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.BEHAVIOR;
-import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.CONTENT;
-import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.LOOK_AND_STYLE;
+import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.*;
 
 /**
  * Class representing xml component of Image. Every field represents xml attribute of image tag. <p>
- * Example <Image src="src_1" zr="bindSource_1"/>. <p> Every field is parsed as json for javascript.
+ * Example {@code <Image src="src_1" zr="bindSource_1"/>}. <p> Every field is parsed as json for javascript.
  * If field should be ingored by JSON, use <code>@JsonIgnore</code>. There can be used any
  * annotations for json generator.
  */
 @Getter
 @Setter
 @DesignerControl(defaultWidth = 6)
-@Control(parents = {PanelGroup.class, Column.class, Tab.class, Row.class, Form.class, Group.class, Widget.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = true)
-@DocumentedComponent(value = "Image component for displaying image and marking points on it (optionally)", icon = "fa fa-image")
+@Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Group.class, Widget.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = true)
+@DocumentedComponent(category = DocumentedComponent.Category.IMAGE_HTML_MD, documentationExample = true, value = "Image component for displaying image and marking points on it (optionally)", icon = "fa fa-image")
 public class Image extends FormElement implements TableComponent<Image> {
 
     public static final String ATTR_SRC = "src";
+    public static final String ATTR_ALT = "alt";
     public static final String ATTR_ON_AREA_CLICK = "onAreaClick";
     public static final String ATTR_ON_CLICK = "onClick";
     public static final String ATTR_IMAGE_AREAS = "imageAreas";
@@ -91,6 +89,18 @@ public class Image extends FormElement implements TableComponent<Image> {
     @DesignerXMLProperty(commonUse = true, previewValueProvider = BindingExpressionDesignerPreviewProvider.class, priority = 100, functionalArea = CONTENT)
     @DocumentedComponentAttribute(boundable = true, value = "Represents label for created component. Supports FHML - FH Markup Language.")
     private ModelBinding labelModelBinding;
+
+
+    @Getter
+    private String alt;
+
+    @JsonIgnore
+    @Getter
+    @Setter
+    @XMLProperty(required = true, value = ATTR_ALT)
+    @DesignerXMLProperty(commonUse = true, previewValueProvider = BindingExpressionDesignerPreviewProvider.class, functionalArea = CONTENT)
+    @DocumentedComponentAttribute(boundable = true, value = "Component alternative information/description.")
+    private ModelBinding<String> altModelBinding;
 
     public Image(Form form) {
         super(form);
@@ -152,6 +162,9 @@ public class Image extends FormElement implements TableComponent<Image> {
         if (srcModelBinding != null) {
             src = srcModelBinding.resolveValueAndAddChanges(this, elementChange, src, ATTR_SRC);
         }
+        if (altModelBinding != null) {
+            alt = altModelBinding.resolveValueAndAddChanges(this, elementChange, alt, ATTR_ALT);
+        }
         if(labelModelBinding != null) {
             label = labelModelBinding.resolveValueAndAddChanges(this, elementChange, label, ATTR_LABEL);
         }
@@ -168,6 +181,7 @@ public class Image extends FormElement implements TableComponent<Image> {
     public void doCopy(Table table, Map<String, String> iteratorReplacements, Image clone) {
         TableComponent.super.doCopy(table, iteratorReplacements, clone);
         clone.setSrc(this.getSrc());
+        clone.setAlt(this.getAlt());
         clone.setOnClick(table.getRowBinding(this.getOnClick(), clone, iteratorReplacements));
         clone.setOnAreaClick(table.getRowBinding(this.getOnAreaClick(), clone, iteratorReplacements));
         clone.setLabelModelBinding(table.getRowBinding(this.getLabelModelBinding(), clone, iteratorReplacements));

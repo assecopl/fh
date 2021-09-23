@@ -94,6 +94,16 @@ public class FhLogger {
         }
     }
 
+    public static String getCauseMessage(Throwable throwable) {
+        while (throwable.getCause() != null) {
+            if (throwable.getCause().getMessage() != null)
+                return throwable.getCause().getMessage();
+
+            throwable = throwable.getCause();
+        }
+        return throwable.getMessage();
+    }
+
     /**
      * Prefix of error IDS being sent to client
      */
@@ -147,40 +157,15 @@ public class FhLogger {
     }
 
     public static String resolveThrowableMessage(Throwable exception) {
+        return resolveThrowableMessage(exception, true);
+    }
+
+    public static String resolveThrowableMessage(Throwable exception, boolean withClassName) {
         if (exception instanceof FhDescribedException) {
             return exception.getMessage();
         }
 
-        Throwable current = exception;
-        Set<String> allMessages = new LinkedHashSet<>();
-        Set<String> fhMessages = new LinkedHashSet<>();
-        while (current != null) {
-            if (current instanceof FhException) {
-                fhMessages.add(current.getMessage());
-            }
-            else {
-                allMessages.add(current.getMessage());
-            }
-            if (current instanceof InvocationTargetException) {
-                current = ((InvocationTargetException) current).getTargetException();
-            }
-            else {
-                current = current.getCause();
-            }
-        }
-        Throwable rootCause = DebugUtils.getRootCause(exception);
-        String rootCasueStr = String.format("%s - %s", rootCause.getClass().getSimpleName(), rootCause.getMessage());
-        if (fhMessages.size() > 0) {
-            fhMessages.add(rootCasueStr);
-            clearDuplicates(fhMessages);
-            return fhMessages.stream().collect(Collectors.joining(", caused by: "));
-        }
-        else if (allMessages.size() > 0) {
-            allMessages.add(rootCasueStr);
-            clearDuplicates(allMessages);
-            return allMessages.stream().collect(Collectors.joining(", caused by: "));
-        }
-        return rootCasueStr;
+        return FhException.resolveThrowableMessage(exception);
     }
 
     private static void clearDuplicates(Set<String> messages) {
@@ -410,7 +395,7 @@ public class FhLogger {
     }
 
     protected static ErrorLogContext logImpl(String className, LogLevel level, String message, Object[] messageArgumentsWithOptionalException, Throwable exception) {
-        LocationAwareLogger logger = getNativeLogger(className);
+        Logger logger = getNativeLogger(className);
 
         // extract optional exception from message arguments
         // logback would do the same, but we need it now
@@ -431,23 +416,52 @@ public class FhLogger {
             }
             String originalMessage = message;
 
-            // log normally
-            logger.log(null, className, level.getSlf4jLogLevel(), message, messageArgumentsWithOptionalException, exception);
-
             message = message + " (" + errorEntryId + ")";
+            // log normally
+            if (logger instanceof LocationAwareLogger) {
+                ((LocationAwareLogger) logger).log(null, className, level.getSlf4jLogLevel(), message, messageArgumentsWithOptionalException, exception);
+            } else {
+                logInternal(logger, level, message, messageArgumentsWithOptionalException, exception);
+            }
+
             return new ErrorLogContext(logTimestamp, errorEntryId, originalMessage, messageArgumentsWithOptionalException, exception);
         } else {
-            logger.log(null, className, level.getSlf4jLogLevel(), message, messageArgumentsWithOptionalException, exception);
+            if (logger instanceof LocationAwareLogger) {
+                ((LocationAwareLogger) logger).log(null, className, level.getSlf4jLogLevel(), message, messageArgumentsWithOptionalException, exception);
+            } else {
+                logInternal(logger, level, message, messageArgumentsWithOptionalException, exception);
+            }
+
             return null;
         }
     }
 
-    private static LocationAwareLogger getNativeLogger(String className) {
+    private static void logInternal(Logger logger, LogLevel logLevel, String message, Object[] messageArgumentsWithOptionalException, Throwable exception) {
+        switch (logLevel) {
+            case TRACE:
+                logger.trace(String.format(message, messageArgumentsWithOptionalException), exception);
+                return;
+            case DEBUG:
+                logger.debug(String.format(message, messageArgumentsWithOptionalException), exception);
+                return;
+            case INFO:
+                logger.info(String.format(message, messageArgumentsWithOptionalException), exception);
+                return;
+            case WARN:
+                logger.warn(String.format(message, messageArgumentsWithOptionalException), exception);
+                return;
+            case ERROR:
+            default:
+                logger.error(String.format(message, messageArgumentsWithOptionalException), exception);
+        }
+    }
+
+    private static Logger getNativeLogger(String className) {
         Logger logger = LoggerFactory.getLogger(className);
         if (!(logger instanceof LocationAwareLogger)) {
-            throw new FhException(logger.getClass().getName() + " is not a " + LocationAwareLogger.class.getSimpleName());
+            logger.warn(logger.getClass().getName() + " is not a " + LocationAwareLogger.class.getSimpleName());
         }
-        return (LocationAwareLogger) logger;
+        return logger;
     }
 
     private static String resolveCallerClassName(Class clazz) {

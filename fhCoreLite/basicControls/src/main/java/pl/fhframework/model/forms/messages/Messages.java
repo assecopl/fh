@@ -1,43 +1,41 @@
 package pl.fhframework.model.forms.messages;
 
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
+import pl.fhframework.UserSession;
+import pl.fhframework.binding.AdHocActionBinding;
+import pl.fhframework.binding.AdHocModelBinding;
+import pl.fhframework.binding.ModelBinding;
+import pl.fhframework.binding.StaticBinding;
+import pl.fhframework.configuration.FHConfiguration;
 import pl.fhframework.core.i18n.MessageService;
 import pl.fhframework.core.messages.Action;
 import pl.fhframework.core.messages.IMessages;
 import pl.fhframework.core.messages.MessagePopup;
 import pl.fhframework.core.uc.UseCaseContainer;
 import pl.fhframework.core.util.StringUtils;
-import pl.fhframework.UserSession;
-import pl.fhframework.binding.*;
-import pl.fhframework.configuration.FHConfiguration;
+import pl.fhframework.events.ViewEvent;
 import pl.fhframework.helper.AutowireHelper;
 import pl.fhframework.model.forms.Button;
 import pl.fhframework.model.forms.Canvas;
 import pl.fhframework.model.forms.OutputLabel;
 import pl.fhframework.model.forms.Spacer;
-import pl.fhframework.events.ViewEvent;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
+import pl.fhframework.model.forms.attribute.FormType;
 
 import javax.annotation.PostConstruct;
-
-import lombok.Getter;
-import pl.fhframework.model.forms.attribute.FormType;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import static pl.fhframework.model.forms.attribute.FormType.MODAL;
 import static pl.fhframework.model.forms.attribute.FormType.MODAL_OVERFLOW;
 
 /**
- * Class containing helper methods which creates dialogs.<br/> Dialogs can be used as informative or
- * can be provided with actions.<br/> Examples:<br/>
+ * Class containing helper methods which creates dialogs.
+ * Dialogs can be used as informative or
+ * can be provided with actions.
+ * Examples:
  * <pre>
  * <code>
  * public class MagicPU extends IUseCase&lt;...&gt; {
@@ -51,7 +49,7 @@ import static pl.fhframework.model.forms.attribute.FormType.MODAL_OVERFLOW;
  * messages.showActionMessage(getUserSession(), "Title", "Message", Messages.Severity.INFO,
  * ActionButton.get(
  * "Info",
- * ()-> messages.showMessage(getUserSession(), "Success", "Info pressed", Messages.Severity.SUCCESS))
+ * ()-&gt; messages.showMessage(getUserSession(), "Success", "Info pressed", Messages.Severity.SUCCESS))
  * }
  * }
  * </code>
@@ -99,8 +97,9 @@ public class Messages implements IMessages {
     /**
      * Helper method
      * Shows simple message with default title
-     * @param session   user session
-     * @param message   actual message
+     *
+     * @param session user session
+     * @param message actual message
      */
     public static MessagePopup showInfoMessage(UserSession session, String message) {
         return showInfoMessage(session, message, false);
@@ -109,8 +108,9 @@ public class Messages implements IMessages {
     /**
      * Helper method
      * Shows simple message with default title
-     * @param session   user session
-     * @param message   actual message
+     *
+     * @param session user session
+     * @param message actual message
      */
     public static MessagePopup showInfoMessageNoOverflow(UserSession session, String message) {
         return showInfoMessage(session, message, true);
@@ -119,8 +119,9 @@ public class Messages implements IMessages {
     /**
      * Helper method
      * Shows simple message with default title
-     * @param session   user session
-     * @param message   actual message
+     *
+     * @param session user session
+     * @param message actual message
      */
     protected static MessagePopup showInfoMessage(UserSession session, String message, boolean noOverflow) {
         String messageTitle = messageService.getAllBundles().getMessage(CoreKeysMessages.DIALOG_INFO_TITLE, "Information");
@@ -211,7 +212,7 @@ public class Messages implements IMessages {
                 .withFormType(noOverflow ? MODAL : MODAL_OVERFLOW)
                 .build();
 
-        UseCaseContainer.PopupMessageUseCaseContextMessage<?, ?> usecaseWrapper = ( UseCaseContainer.PopupMessageUseCaseContextMessage) dialog.getAbstractUseCase();
+        UseCaseContainer.PopupMessageUseCaseContextMessage<?, ?> usecaseWrapper = (UseCaseContainer.PopupMessageUseCaseContextMessage) dialog.getAbstractUseCase();
 
         Button closeButton = new Button(dialog);
         closeButton.setWidth("md-3");
@@ -232,6 +233,7 @@ public class Messages implements IMessages {
 
     /**
      * Helper method
+     *
      * @param session
      * @param message
      * @param error
@@ -242,6 +244,7 @@ public class Messages implements IMessages {
 
     /**
      * Helper method
+     *
      * @param session
      * @param message
      * @param error
@@ -252,6 +255,7 @@ public class Messages implements IMessages {
 
     /**
      * Helper method
+     *
      * @param session
      * @param message
      * @param error
@@ -269,8 +273,9 @@ public class Messages implements IMessages {
     /**
      * Helper method
      * Shows simple message with default title
-     * @param session   user session
-     * @param message   actual message
+     *
+     * @param session user session
+     * @param message actual message
      */
     public MessagePopup showInfo(UserSession session, String message, Action action) {
         return showInfo(session, null, message, action);
@@ -279,8 +284,9 @@ public class Messages implements IMessages {
     /**
      * Helper method
      * Shows simple message with default title
-     * @param session   user session
-     * @param message   actual message
+     *
+     * @param session user session
+     * @param message actual message
      */
     public MessagePopup showInfo(UserSession session, String title, String message, Action action) {
         if (title == null) {
@@ -293,8 +299,9 @@ public class Messages implements IMessages {
     /**
      * Helper method
      * Shows simple message with default title
-     * @param session   user session
-     * @param message   actual message
+     *
+     * @param session user session
+     * @param message actual message
      */
     public MessagePopup showConfirmation(UserSession session, String message, Action action) {
         return showConfirmation(session, null, message, action);
@@ -303,8 +310,9 @@ public class Messages implements IMessages {
     /**
      * Helper method
      * Shows simple message with default title
-     * @param session   user session
-     * @param message   actual message
+     *
+     * @param session user session
+     * @param message actual message
      */
     public MessagePopup showConfirmation(UserSession session, String title, String message, Action action) {
         if (title == null) {
@@ -329,6 +337,7 @@ public class Messages implements IMessages {
 
     /**
      * Helper method
+     *
      * @param session
      * @param message
      */
@@ -338,6 +347,7 @@ public class Messages implements IMessages {
 
     /**
      * Helper method
+     *
      * @param session
      * @param message
      */
@@ -355,7 +365,7 @@ public class Messages implements IMessages {
                 .withSeverityLevel(severity)
                 .build();
 
-        UseCaseContainer.PopupMessageUseCaseContextMessage<?, ?> usecaseWrapper = ( UseCaseContainer.PopupMessageUseCaseContextMessage) dialog.getAbstractUseCase();
+        UseCaseContainer.PopupMessageUseCaseContextMessage<?, ?> usecaseWrapper = (UseCaseContainer.PopupMessageUseCaseContextMessage) dialog.getAbstractUseCase();
 
         Button closeButton = new Button(dialog);
         closeButton.setWidth("md-3");
@@ -381,19 +391,20 @@ public class Messages implements IMessages {
 
     /**
      * Shows message represented by message builder.
-     * @param builder   Message builder filled with message data and action.<br/>
-     *                  Created to provide more flexibility than helper methods
+     *
+     * @param builder Message builder filled with message data and action. Created to provide more flexibility than helper methods
      */
-    public static void showMessage(Builder builder){
+    public static void showMessage(Builder builder) {
         builder.build().showDialog();
     }
 
     /**
      * Action to close message dialog
+     *
      * @param viewEvent
      */
     public static void close(ViewEvent viewEvent) {
-        (( UseCaseContainer.PopupMessageUseCaseContextMessage) viewEvent.getSourceForm().getAbstractUseCase()).close(viewEvent);
+        ((UseCaseContainer.PopupMessageUseCaseContextMessage) viewEvent.getSourceForm().getAbstractUseCase()).close(viewEvent);
     }
 
     // private methods
@@ -441,49 +452,57 @@ public class Messages implements IMessages {
         private UserSession session;
         private boolean bindableText = false;
 
-        Builder(UserSession session){
-            this.session=session;
+        Builder(UserSession session) {
+            this.session = session;
         }
 
         @Deprecated
-        public Builder withMessageTitle(String messageTitle){
+        public Builder withMessageTitle(String messageTitle) {
             this.messageTitle = Optional.ofNullable(messageTitle);
             return this;
         }
-        public Builder withDialogId(String dialogId){
+
+        public Builder withDialogId(String dialogId) {
             this.dialogId = Optional.ofNullable(dialogId);
             return this;
         }
-        public Builder withDialogTitle(String dialogTitle){
+
+        public Builder withDialogTitle(String dialogTitle) {
             this.dialogTitle = Optional.ofNullable(dialogTitle);
             return this;
         }
-        public Builder withMessage(String messageData){
+
+        public Builder withMessage(String messageData) {
             this.messageData = Optional.ofNullable(messageData);
             return this;
         }
-        public Builder withButtonAction(ActionButton action){
+
+        public Builder withButtonAction(ActionButton action) {
             this.actions.add(action);
             return this;
         }
-        public Builder withButtonActions(Collection<ActionButton> actions){
+
+        public Builder withButtonActions(Collection<ActionButton> actions) {
             this.actions.addAll(actions);
             return this;
         }
-        public Builder withSeverityLevel(Severity severityLevel){
-            this.severity=Optional.ofNullable(severityLevel);
+
+        public Builder withSeverityLevel(Severity severityLevel) {
+            this.severity = Optional.ofNullable(severityLevel);
             return this;
         }
-        public Builder enableBindableText(){
+
+        public Builder enableBindableText() {
             this.bindableText = true;
             return this;
         }
-        public Builder withFormType(FormType formType){
+
+        public Builder withFormType(FormType formType) {
             this.formType = Optional.ofNullable(formType);
             return this;
         }
 
-        public MessagePopup build(){
+        public MessagePopup build() {
             MessagePopup dialog = createDialog(session, dialogId, dialogTitle, messageTitle, messageData, severity, formType);
 
             for (ActionButton actionButton : actions) {
@@ -491,9 +510,12 @@ public class Messages implements IMessages {
                 button.setWidth("sm-4");
                 String actionName = nextActionName();
                 button.setLabelModelBinding(binding(actionButton.getButtonLabel(), button));
+                if(actionButton.getButtonStyle() != null) {
+                    button.setStyleModelBinding(binding(actionButton.getButtonStyle(), button));
+                }
                 button.setOnClick(new AdHocActionBinding(actionName, dialog, dialog));
                 dialog.addSubcomponent(button);
-                UseCaseContainer.PopupMessageUseCaseContextMessage useCaseWrapper = ( UseCaseContainer.PopupMessageUseCaseContextMessage) dialog.getAbstractUseCase();
+                UseCaseContainer.PopupMessageUseCaseContextMessage useCaseWrapper = (UseCaseContainer.PopupMessageUseCaseContextMessage) dialog.getAbstractUseCase();
 
                 if (actionButton.getAction() != null)
                     useCaseWrapper.setAction(actionName, actionButton.getAction());
@@ -544,6 +566,7 @@ public class Messages implements IMessages {
             dialog.addSubcomponent(canvas);
 
             OutputLabel label = new OutputLabel(dialog);
+            label.setWidth("md-12");
             label.setValueBinding(binding(messageData.orElse(null), label));
             canvas.addSubcomponent(label);
 
@@ -569,7 +592,7 @@ public class Messages implements IMessages {
         }
     }
 
-    public static Builder builder(UserSession userSession){
+    public static Builder builder(UserSession userSession) {
         return new Builder(userSession);
     }
 }

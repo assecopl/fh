@@ -1,4 +1,4 @@
-import {HTMLFormComponent} from "fh-forms-handler";
+import {AdditionalButton, HTMLFormComponent} from "fh-forms-handler";
 import {Dropdown} from "./Dropdown";
 
 class ThreeDotsMenu extends Dropdown {
@@ -11,6 +11,16 @@ class ThreeDotsMenu extends Dropdown {
         this.button.classList.remove('dropdown');
         this.button.classList.add('row-dropdown');
         this.contentWrapper.classList.add('row-dropdown-menu');
+    }
+
+    getDefaultWidth(): string {
+        return "md-1";
+    }
+
+    getAdditionalButtons(): AdditionalButton[] {
+        return [
+            new AdditionalButton('addDefaultSubcomponent', 'plus', 'Add menu item')
+        ];
     }
 }
 

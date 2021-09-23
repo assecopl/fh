@@ -47,6 +47,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private Boolean corsAllowCredentials;
     @Value("${fh.web.guests.allowed:false}")
     private boolean guestsAllowed;
+    @Value("${fh.web.guests.authenticate.path:authenticateGuest}")
+    private String authenticateGuestPath;
     @Value("${server.logout.path:logout}")
     private String logoutPath;
 
@@ -92,6 +94,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         if (!guestsAllowed) {
             urlRegistry.antMatchers("/", "/index", "/socketForms").authenticated();
         }
+        urlRegistry.antMatchers("/" + authenticateGuestPath).authenticated();
 
         // register urls available without restriction
         Set<String> publicUrls = new HashSet<>();

@@ -3,6 +3,8 @@ package pl.fhframework.app;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AccountExpiredException;
@@ -14,12 +16,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import pl.fhframework.core.ResourceNotFoundException;
+import pl.fhframework.core.i18n.MessageService;
 import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.core.resource.ImageRepository;
 import pl.fhframework.core.resource.MarkdownRepository;
@@ -29,23 +30,26 @@ import pl.fhframework.event.dto.ForcedLogoutEvent;
 import pl.fhframework.subsystems.ModuleRegistry;
 import pl.fhframework.subsystems.Subsystem;
 
+import javax.annotation.Resource;
 import javax.jws.WebParam;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 
-/**
- * Created by krzysztof.kobylarek on 2017-05-17.
- */
 @Controller
 @EnableWebMvc
-public class HttpMappings extends WebMvcConfigurerAdapter {
+public class HttpMappings {
     @Autowired
     private ImageRepository imageRepository;
+
+    @Resource
+    private LocaleResolver localeResolver;
 
     @Autowired
     private MarkdownRepository markdownRepository;
@@ -56,22 +60,27 @@ public class HttpMappings extends WebMvcConfigurerAdapter {
     @Value("${server.logout.path:}")
     private String logoutPath;
 
-    @Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/").setViewName("index");
-        registry.addViewController("/login").setViewName("login");
+    @Autowired
+    private MessageService messageService;
+
+    @Bean
+    public ReloadableResourceBundleMessageSource messageSource() {
+        ReloadableResourceBundleMessageSource bundleMessageSource = new ReloadableResourceBundleMessageSource();
+        bundleMessageSource.setBasename("classpath:i18n/messages");
+        bundleMessageSource.setDefaultEncoding("UTF-8");
+        return bundleMessageSource;
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public ModelAndView login(
             @RequestParam(value = "error", required = false) String error,
             @RequestParam(value = "logout", required = false) String logout,
-            HttpServletRequest request) {
+            HttpServletRequest request, HttpServletResponse response) {
 
         ModelAndView model = new ModelAndView();
         if (error != null) {
             model.addObject("message",
-                    getErrorMessage(request, "SPRING_SECURITY_LAST_EXCEPTION"));
+                    getErrorMessage(request, response, "SPRING_SECURITY_LAST_EXCEPTION"));
         }
 
         if (logout != null) {
@@ -79,12 +88,14 @@ public class HttpMappings extends WebMvcConfigurerAdapter {
                 model.setViewName("redirect:/");
                 return model;
             } else {
+                Locale locale = getLocale(request, response);
+
                 if (logout.equals(ForcedLogoutEvent.Reason.LOGOUT_TIMEOUT.getCode())) {
-                    model.addObject("message", "Nastąpiło automatyczne wylogowanie.");
+                    model.addObject("message", $("fh.infos.successfully_logged_out", locale));
                 } else if (logout.equals(ForcedLogoutEvent.Reason.LOGOUT_FORCE.getCode())) {
-                    model.addObject("message", "Nastąpiło wylogowanie z polecenia administratora.");
+                    model.addObject("message", $("fh.infos.successfully_logged_out_by_admin", locale));
                 } else {
-                    model.addObject("message", "Nastąpiło poprawne wylogowanie.");
+                    model.addObject("message", $("fh.infos.successfully_logged_out", locale));
                 }
             }
         }
@@ -93,6 +104,13 @@ public class HttpMappings extends WebMvcConfigurerAdapter {
 
         return model;
 
+    }
+
+    @RequestMapping(value = "/${fh.web.guests.authenticate.path:authenticateGuest}", method = RequestMethod.GET)
+    public ModelAndView authenticateGuest() {
+        ModelAndView model = new ModelAndView();
+        model.setViewName("redirect:/");
+        return model;
     }
 
     @RequestMapping(value = "/image", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
@@ -154,44 +172,35 @@ public class HttpMappings extends WebMvcConfigurerAdapter {
         return model;
     }
 
-    private static final String[] CLASSPATH_RESOURCE_LOCATIONS = {
-            "classpath:/META-INF/resources/", "classpath:/resources/",
-            "classpath:/static/", "classpath:/public/"};
-
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        if (!registry.hasMappingForPattern("/webjars/**")) {
-            registry.addResourceHandler("/webjars/**").addResourceLocations(
-                    "classpath:/META-INF/resources/webjars/");
-        }
-        if (!registry.hasMappingForPattern("/**")) {
-            registry.addResourceHandler("/**").addResourceLocations(
-                    CLASSPATH_RESOURCE_LOCATIONS);
-        }
-    }
 
     //customize the error message
-    private String getErrorMessage(HttpServletRequest request, String key) {
+    private String getErrorMessage(HttpServletRequest request, HttpServletResponse response, String key) {
 
         Exception exception =
                 (Exception) request.getSession().getAttribute(key);
 
         String error = "";
+        Locale locale = getLocale(request, response);
+
         if (exception instanceof BadCredentialsException) {
-            error = "Błędna nazwa użytkownika lub hasło.";
+            error = $("fh.errors.invalid_username_or_password", locale);
         } else if (exception instanceof LockedException) {
-            error = "Konto jest zablokowane, skontaktuj się z administratorem.";
+            error = $("fh.errors.account_is_blocked", locale);
         } else if (exception instanceof DisabledException) {
-            error = "Konto jest zablokowane, skontaktuj się z administratorem.";
+            error = $("fh.errors.account_is_blocked", locale);
         } else if (exception instanceof AccountExpiredException) {
-            error = "Konto wygasło.";
+            error = $("fh.errors.account_expired", locale);
         } else if (exception instanceof SessionAuthenticationException) {
             error = exception.getMessage();
         } else {
-            error = "Błędna nazwa użytkownika lub hasło.";
+            error = $("fh.errors.invalid_username_or_password", locale);
         }
 
         return error;
+    }
+
+    private Locale getLocale(HttpServletRequest request, HttpServletResponse response) {
+        return localeResolver.resolveLocale(request);
     }
 
     private ResponseEntity getFile(File file) throws ResourceNotFoundException {
@@ -217,5 +226,9 @@ public class HttpMappings extends WebMvcConfigurerAdapter {
         } else {
             return MediaType.IMAGE_JPEG;
         }
+    }
+
+    private String $(String key, Locale locale) {
+        return messageService.getAllBundles().getMessage(key, null, locale, key);
     }
 }

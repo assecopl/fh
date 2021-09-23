@@ -5,10 +5,10 @@ import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.WebSocketSession;
-import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.UserSession;
 import pl.fhframework.WebSocketContext;
 import pl.fhframework.WebSocketSessionRepository;
+import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.event.dto.ForcedLogoutEvent;
 
 import javax.servlet.http.HttpSession;
@@ -70,7 +70,12 @@ public class ForceLogoutService {
             if (si != null) {
                 si.expireNow();
             }
-            httpSession.invalidate();
+            try {
+                httpSession.invalidate();
+            } catch (IllegalStateException ise) {
+                // it can be simultanously invalidated from browser with logout timer
+                FhLogger.warn("Session " + httpSessionId + " was already invalidated");
+            }
             return true;
         } catch (Exception e) {
             FhLogger.error(e);

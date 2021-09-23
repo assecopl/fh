@@ -7,17 +7,21 @@ import lombok.Setter;
 import pl.fhframework.annotations.*;
 import pl.fhframework.binding.*;
 import pl.fhframework.model.dto.ElementChanges;
-import pl.fhframework.model.dto.ValueChange;
-import pl.fhframework.model.forms.attributes.*;
-import pl.fhframework.model.forms.model.FloatingPinMode;
 import pl.fhframework.model.dto.InMessageEventData;
+import pl.fhframework.model.dto.ValueChange;
+import pl.fhframework.model.forms.attributes.AttributeHolder;
+import pl.fhframework.model.forms.attributes.AttributeHolderBuilder;
+import pl.fhframework.model.forms.attributes.FloatingGroupStateAttribute;
+import pl.fhframework.model.forms.attributes.FloatingOnlyAttribute;
+import pl.fhframework.model.forms.model.FloatingPinMode;
+import pl.fhframework.model.forms.optimized.ColumnOptimized;
 
 import java.util.Optional;
 
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.BEHAVIOR;
 
-@Control(parents = {PanelGroup.class, Column.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
-@DocumentedComponent(value = "PanelGroup component responsible for the grouping of sub-elements and can be pinned out from document.", icon = "fa fa-object-group")
+@Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
+@DocumentedComponent(category = DocumentedComponent.Category.ARRANGEMENT, documentationExample = true, value = "PanelGroup component responsible for the grouping of sub-elements and can be pinned out from document.", icon = "fa fa-object-group")
 public class FloatingGroup extends PanelGroup {
 
     public static final String ON_PIN_ATTR = "onTogglePin";

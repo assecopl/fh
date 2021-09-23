@@ -145,6 +145,10 @@ public class ValidationResults implements IValidationResults {
         });
     }
 
+    public String getErrorMessage(String key, Object... args) {
+        return messageService.getAllBundles().getMessage(key, args);
+    }
+
     void addFieldValidationResult(Optional<IValidatedComponent> component, Object parent, String attributeName, String message, PresentationStyleEnum presentationStyleEnum) {
         FieldValidationResult fieldValidationResult = createFieldValidationResult(component, message, presentationStyleEnum);
         addFieldValidationResult(parent, attributeName, fieldValidationResult);

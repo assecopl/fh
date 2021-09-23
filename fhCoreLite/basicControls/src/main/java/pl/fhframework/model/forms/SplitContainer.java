@@ -1,20 +1,19 @@
 package pl.fhframework.model.forms;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import pl.fhframework.core.FhException;
-import pl.fhframework.core.logging.FhLogger;
+import lombok.Getter;
+import lombok.Setter;
 import pl.fhframework.annotations.*;
 import pl.fhframework.binding.ModelBinding;
+import pl.fhframework.core.FhException;
+import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.model.dto.ElementChanges;
 import pl.fhframework.model.forms.designer.IDesignerEventListener;
 import pl.fhframework.model.forms.designer.SizePxDesignerPreviewProvider;
+import pl.fhframework.model.forms.optimized.ColumnOptimized;
 
-import lombok.Getter;
-import lombok.Setter;
-
-@Control(parents = {PanelGroup.class, Column.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
-@DocumentedComponent(value = "Container component responsible for placing components on a single line with movable column", icon = "fa fa-columns")
+@Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
+@DocumentedComponent(category = DocumentedComponent.Category.ARRANGEMENT, documentationExample = true, value = "Container component responsible for placing components on a single line with movable column", icon = "fa fa-columns")
 public class SplitContainer extends GroupingComponent<FormElement> implements IDesignerEventListener, CompactLayout {
 
     public static final String SIZE_LEFT_ATTR = "sizeLeft";

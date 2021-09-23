@@ -1,23 +1,22 @@
-import {AdditionalButton, HTMLFormComponent, FhContainer} from "fh-forms-handler";
-import {TableFixedHeaderAndHorizontalScroll} from "./Abstract/TableFixedHeaderAndHorizontalScroll";
+import {AdditionalButton, HTMLFormComponent, FhContainer, FormComponent} from "fh-forms-handler";
+import {TableWithKeyboardEvents} from "./Abstract/TableWithKeyboardEvents";
 
-class Table extends TableFixedHeaderAndHorizontalScroll {
-    protected readonly visibleRows: any;
-    protected readonly tableData: any;
+class Table extends TableWithKeyboardEvents {
+    protected visibleRows: any;
+    protected tableData: any;
     protected rows: Array<any> = [];
-    protected readonly rowIndexMappings: any;
-    private readonly rowStylesMapping: any;
+    protected rowIndexMappings: any;
+    private rowStylesMapping: any;
     private readonly minRows: any;
     private readonly rowHeight: any;
     private readonly tableGrid: any;
     private readonly tableStripes: any;
     protected readonly onRowClick: any;
     private readonly onRowDoubleClick: any;
-    private readonly multiselect: any;
-    private readonly selectionCheckboxes: any;
+    private selectionCheckboxes: any;
+    private readonly selectAllChceckbox: boolean;
+    private readonly synchronizeScrolling: string;
     private selectionChanged: any;
-    private readonly selectable: boolean;
-    private ctrlIsPressed: any;
     public totalColumns: number;
     protected ieFocusFixEnabled: boolean;
     protected table: HTMLTableElement;
@@ -25,12 +24,15 @@ class Table extends TableFixedHeaderAndHorizontalScroll {
     protected footer: HTMLTableSectionElement = null;
     private _dataWrapper: HTMLTableSectionElement;
 
-    private keyEventTimer: any;                //timer identifier
-    private doneEventInterval: number = 500;   //event delay in miliseconds
+    private selectAllChceckboxElement: HTMLElement = null;
+    private selectAllChceckboxThElement: HTMLTableCellElement = null;
+
+    public lastRowClicked: number = null;
+
+    private checkAllArray: Array<any> = []
 
     constructor(componentObj: any, parent: HTMLFormComponent) {
         super(componentObj, parent);
-        this.selectable = this.componentObj.selectable || true;
         this.visibleRows = this.componentObj.displayedRowsCount || 0;
         this.tableData = this.componentObj.tableRows;
         this.rows = [];
@@ -41,15 +43,12 @@ class Table extends TableFixedHeaderAndHorizontalScroll {
         this.tableGrid = this.componentObj.tableGrid || 'hide';
         this.tableStripes = this.componentObj.tableStripes || 'hide';
         this.ieFocusFixEnabled = this.componentObj.ieFocusFixEnabled || false;
-        this.rawValue = this.componentObj.rawValue || this.componentObj.selectedRowsNumbers || [];
-
+        this.synchronizeScrolling = this.componentObj.synchronizeScrolling || null;
         this._dataWrapper = null;
-        this.onRowClick = this.componentObj.onRowClick;
         this.onRowDoubleClick = this.componentObj.onRowDoubleClick;
-        this.multiselect = this.componentObj.multiselect || false;
         this.selectionCheckboxes = this.componentObj.selectionCheckboxes || false;
+        this.selectAllChceckbox = this.componentObj.selectAllChceckbox == false ? this.componentObj.selectAllChceckbox : true;
         this.selectionChanged = false;
-        this.ctrlIsPressed = false;
 
         this.componentObj.verticalAlign = this.componentObj.verticalAlign || 'top';
         this.totalColumns = 0;
@@ -62,10 +61,6 @@ class Table extends TableFixedHeaderAndHorizontalScroll {
         table.id = this.id;
         table.tabIndex = 0;
 
-        if (this.selectable && this.onRowClick) {
-            $(table).on('keydown', this.tableKeydownEvent.bind(this));
-            $(table).on('keyup', this.tableKeyupEvent.bind(this));
-        }
 
         ['fc', 'table', 'table-hover', 'table-bordered'].forEach(function (cssClass) {
             table.classList.add(cssClass);
@@ -94,11 +89,6 @@ class Table extends TableFixedHeaderAndHorizontalScroll {
         heading.appendChild(headingRow);
         this.header = heading;
 
-        if (this.selectionCheckboxes) {
-            let cell = document.createElement('th');
-            cell.classList.add('selectionColumn');
-            headingRow.appendChild(cell);
-        }
 
         let body = document.createElement('tbody');
 
@@ -107,7 +97,6 @@ class Table extends TableFixedHeaderAndHorizontalScroll {
 
 
         this.table = table;
-        this.bindKeyboardEvents();
 
         let div = document.createElement('div');
         if (this.componentObj.horizontalScrolling) {
@@ -116,8 +105,15 @@ class Table extends TableFixedHeaderAndHorizontalScroll {
             } else {
                 table.style.tableLayout = 'initial';
             }
-
             div.classList.add('table-responsive');
+
+            if (this.synchronizeScrolling) {
+                div.addEventListener('scroll', function (e) {
+                    $('#' + this.synchronizeScrolling).parent('.table-responsive')
+                        .scrollTop($(div).scrollTop())
+                        .scrollLeft($(div).scrollLeft());
+                }.bind(this));
+            }
         }
 
         div.appendChild(table);
@@ -128,7 +124,10 @@ class Table extends TableFixedHeaderAndHorizontalScroll {
         this.contentWrapper = headingRow;
         this._dataWrapper = body;
 
+       this.processCheckAllCell();
+
         this.addStyles();
+        //FIXME https://jira.asseco.pl/browse/PUSLUNA-510
         this.display();
 
         if (this.componentObj.columns) {
@@ -140,7 +139,7 @@ class Table extends TableFixedHeaderAndHorizontalScroll {
             let footer = document.createElement('tfoot');
             let row = document.createElement('tr');
             let footCell = document.createElement('td');
-            footCell.colSpan = this.componentObj.columns.length;
+            footCell.colSpan = this.componentObj.columns ? this.componentObj.columns.length : 0;
             row.appendChild(footCell);
             footer.appendChild(row);
             this.table.appendChild(footer);
@@ -152,10 +151,13 @@ class Table extends TableFixedHeaderAndHorizontalScroll {
         }
 
         this.refreshData();
-        $(this.table).on('mousedown', this.tableMousedownEvent);
-        this.calculateColumnWidths();
-        this.initFixedHeaderAndScrolling();
+    }
 
+    display() {
+        super.display();
+        this.updateFixedHeaderWidth();
+        //FIXME https://jira.asseco.pl/browse/PUSLUNA-510
+        // this.highlightSelectedRows(true);
     }
 
     update(change) {
@@ -163,18 +165,40 @@ class Table extends TableFixedHeaderAndHorizontalScroll {
         if (change.changedAttributes) {
             $.each(change.changedAttributes, function (name, newValue) {
                 switch (name) {
+                    case 'multiselect':
+                        this.multiselect = newValue;
+                        this.processCheckAllCell();
+                        this.refreshData(true);
+                        this.updateFixedHeaderWidth();
+                        // this.scrollTopInside();
+                        break;
+                    case 'selectionCheckboxes':
+                        this.selectionCheckboxes = newValue;
+                        this.processCheckAllCell();
+                        this.refreshData(true);
+                        this.updateFixedHeaderWidth();
+                        // this.scrollTopInside();
+                        break;
                     case 'rowIndexMappings':
                         this.rowIndexMappings = newValue;
                         this.refreshData(true);
+                        this.updateFixedHeaderWidth();
+                        this.scrollTopInside();
                         break;
                     case 'displayedRowsCount':
                         this.visibleRows = change.changedAttributes['displayedRowsCount'];
                         this.tableData = change.changedAttributes['tableRows'];
                         this.refreshData(true);
+                        this.updateFixedHeaderWidth();
+                        this.scrollTopInside();
                         break;
                     case 'selectedRowNumber':
+                        //Chcek if values are same and set no selection. We don't need to fire higlight logic again.
+                        const noSelected = (this.rawValue[0] == -1 && newValue[0] == -1)
                         this.rawValue = change.changedAttributes['selectedRowNumber'];
-                        this.highlightSelectedRows();
+                        if (!noSelected) {
+                            this.highlightSelectedRows();
+                        }
                         break;
                     case 'rowStylesMapping':
                         this.rowStylesMapping = newValue;
@@ -193,32 +217,8 @@ class Table extends TableFixedHeaderAndHorizontalScroll {
         }
     };
 
-    tableMousedownEvent(event) {
-        if (event.ctrlKey) {
-            event.preventDefault();
-        }
-    }
-
-    tableKeydownEvent(event) {
-        if (event.which == "17") {
-            this.ctrlIsPressed = true;
-        }
-    }
-
-    // fixedHeaderEvent(e) {
-    //     const el = e.target;
-    //     $(this.header)
-    //         .find('th')
-    //         .css('transform', 'translateY(' + el.scrollTop + 'px)');
-    // }
-
-    onRowClickEvent(event) {
+    onRowClickEvent(event, mainId, silent = false) {
         if (this.accessibility != 'EDIT') return;
-        let element = event.target;
-        while (element.tagName !== 'TR' && (element = element.parentElement)) {
-        }
-
-        let mainId = parseInt(element.dataset.mainId);
 
         if (this.multiselect == false) {
             if (event.ctrlKey) {
@@ -233,6 +233,9 @@ class Table extends TableFixedHeaderAndHorizontalScroll {
         } else {
             if (event.ctrlKey) {
                 this.selectRow(mainId);
+
+            } else if (event.shiftKey) {
+                this.selectRows(mainId);
             } else {
                 this.rawValue = [];
                 this.rawValue.push(mainId);
@@ -244,11 +247,16 @@ class Table extends TableFixedHeaderAndHorizontalScroll {
             this.highlightSelectedRows();
         }
 
-        if (this._formId === 'FormPreview') {
-            this.fireEvent('onRowClick', this.onRowClick);
-        } else {
-            this.fireEventWithLock('onRowClick', this.onRowClick);
+        if (!silent) {
+            if (this._formId === 'FormPreview') {
+                this.fireEvent('onRowClick', this.onRowClick);
+            } else {
+                this.fireEventWithLock('onRowClick', this.onRowClick);
+            }
         }
+
+        this.lastRowClicked = mainId;
+
     }
 
     addRow(rowObj) {
@@ -263,31 +271,15 @@ class Table extends TableFixedHeaderAndHorizontalScroll {
         if (this.selectable && this.onRowClick) {
             // @ts-ignore
             row.component.style.cursor = 'pointer';
-            row.htmlElement.addEventListener('click', this.onRowClickEvent.bind(this));
+            row.htmlElement.addEventListener('click', function (e) {
+                this.onRowClickEvent(e, row.mainId)
+            }.bind(this));
         }
         if (this.onRowDoubleClick) {
             // @ts-ignore
             row.component.style.cursor = 'pointer';
-            row.htmlElement.addEventListener('dblclick', function (event) {
-                if (this.accessibility != 'EDIT') return;
-                let element = event.target;
-                while (element.tagName !== 'TR' && (element = element.parentElement)) {
-                }
-
-                let mainId = parseInt(element.dataset.mainId);
-                this.rawValue = [];
-                this.rawValue.push(mainId);
-
-                this.changesQueue.queueValueChange(this.rawValue);
-                if (!this.onRowDoubleClick || this.onRowDoubleClick === '-') {
-                    this.highlightSelectedRows();
-                }
-
-                if (this._formId === 'FormPreview') {
-                    this.fireEvent('onRowDoubleClick', this.onRowDoubleClick);
-                } else {
-                    this.fireEventWithLock('onRowDoubleClick', this.onRowDoubleClick, event);
-                }
+            row.htmlElement.addEventListener('dblclick', function (e) {
+                this.onRowDblClick(e, null);
             }.bind(this));
         }
         if (this.selectable && this.selectionCheckboxes) {
@@ -313,8 +305,12 @@ class Table extends TableFixedHeaderAndHorizontalScroll {
                 }
                 element.firstChild.checked = !element.firstChild.checked;
 
-                this.selectRow(element.parentElement.dataset.mainId);
+                if (event.shiftKey) {
+                    this.selectRows(element.parentElement.dataset.mainId);
+                } else {
+                    this.selectRow(element.parentElement.dataset.mainId);
 
+                }
                 this.changesQueue.queueValueChange(this.rawValue);
                 if (!this.onRowClick || this.onRowClick === '-') {
                     this.highlightSelectedRows();
@@ -329,6 +325,28 @@ class Table extends TableFixedHeaderAndHorizontalScroll {
             row.contentWrapper.insertBefore(cell, row.contentWrapper.firstChild);
         }
     };
+
+    onRowDblClick(event, target) {
+        if (this.accessibility != 'EDIT') return;
+        let element = target || event.target;
+        while (element.tagName !== 'TR' && (element = element.parentElement)) {
+        }
+
+        let mainId = parseInt(element.dataset.mainId);
+        this.rawValue = [];
+        this.rawValue.push(mainId);
+
+        this.changesQueue.queueValueChange(this.rawValue);
+        if (!this.onRowDoubleClick || this.onRowDoubleClick === '-') {
+            this.highlightSelectedRows();
+        }
+
+        if (this._formId === 'FormPreview') {
+            this.fireEvent('onRowDoubleClick', this.onRowDoubleClick);
+        } else {
+            this.fireEventWithLock('onRowDoubleClick', this.onRowDoubleClick);
+        }
+    }
 
     deleteRow(row) {
         row.components.forEach(column => {
@@ -346,7 +364,9 @@ class Table extends TableFixedHeaderAndHorizontalScroll {
         row._parent = null;
         row.contentWrapper = null;
         row.container = null;
-        row.htmlElement.removeEventListener('click', this.onRowClickEvent.bind(this));
+        row.htmlElement.removeEventListener('click', function (e) {
+            this.onRowClickEvent(e, row.mainId)
+        }.bind(this));
 
         $(row.htmlElement).unbind().remove();
         row.htmlElement = null;
@@ -361,7 +381,6 @@ class Table extends TableFixedHeaderAndHorizontalScroll {
     };
 
     redrawColumns() {
-        this.calculateColumnWidths();
         this.components.forEach(function (column: any) {
             if (column.componentObj.type === 'Column') {
                 column.calculateColspan();
@@ -372,6 +391,7 @@ class Table extends TableFixedHeaderAndHorizontalScroll {
             this.removeMinRowRows();
             this.addMinRowRows();
         }
+        this.recalculateColumnWidths();
     };
 
     addComponent(componentObj) {
@@ -388,6 +408,7 @@ class Table extends TableFixedHeaderAndHorizontalScroll {
         }
 
         this.clearRows();
+        this.checkAllArray = [];
         for (let i = 0; i < this.visibleRows; i++) {
             let row = this.tableData[i];
             let rowData = {
@@ -396,6 +417,7 @@ class Table extends TableFixedHeaderAndHorizontalScroll {
                 empty: row.empty,
                 data: row.tableCells
             };
+            this.checkAllArray.push(i);
             if (this.rowIndexMappings) {
                 rowData.mainId = this.rowIndexMappings[i];
             }
@@ -405,9 +427,8 @@ class Table extends TableFixedHeaderAndHorizontalScroll {
         this.addMinRowRows();
 
         if (this.onRowClick === '-' || !clearSelection) {
-            this.highlightSelectedRows();
+            this.highlightSelectedRows(false);
         }
-
     };
 
     addMinRowRows() {
@@ -458,42 +479,6 @@ class Table extends TableFixedHeaderAndHorizontalScroll {
     };
 
 
-    highlightSelectedRows() {
-        let oldSelected = this.table.querySelectorAll('.table-primary');
-        if (oldSelected && oldSelected.length) {
-            [].forEach.call(oldSelected, function (row) {
-                row.classList.remove('table-primary');
-
-                if (this.selectionCheckboxes) {
-                    row.firstChild.querySelector('input[type="checkbox"]').checked = false;
-                }
-            }.bind(this));
-        }
-        (this.rawValue || []).forEach(function (value) {
-            if (value != -1) {
-                let row = this.table.querySelector(('[data-main-id="' + value + '"]'));
-                row.classList.add('table-primary');
-                let container = $(this.component);
-                let scrollTo = $(row);
-                if (this.rawValue.length < 2) {
-                    let containerHeight = container.height();
-                    let containerScrollTop = container.scrollTop();
-                    let realPositionElement = containerScrollTop + scrollTo.position().top;
-                    if (realPositionElement < containerScrollTop || realPositionElement
-                        > containerScrollTop
-                        + containerHeight) {
-                        $(this.component).animate({
-                            scrollTop: realPositionElement - scrollTo.outerHeight()
-                        });
-                    }
-                }
-                if (this.selectionCheckboxes) {
-                    row.firstChild.querySelector('input[type="checkbox"]').checked = true;
-                }
-            }
-        }.bind(this));
-    };
-
     collectAllChanges() {
         let allChanges = [];
 
@@ -522,6 +507,7 @@ class Table extends TableFixedHeaderAndHorizontalScroll {
         let index = this.rawValue.indexOf(parseInt(mainId));
         if (index == -1) {
             this.rawValue.push(mainId);
+            this.rawValue.sort();
         } else if (index != -1) {
             this.rawValue.splice(index, 1);
             this.rawValue.filter(idx => idx > -1);
@@ -531,97 +517,72 @@ class Table extends TableFixedHeaderAndHorizontalScroll {
         }
     };
 
-    tableKeyupEvent(e) {
-        this.ctrlIsPressed = false;
-        if (e.which == 9 && $(document.activeElement).is(":input")) {
-            let parent = $(document.activeElement).parents('tbody tr:not(.emptyRow)');
+    selectRows(mainId) {
+        mainId = parseInt(mainId);
+        let index = this.rawValue.indexOf(mainId);
+        let lastRowCLicked = this.lastRowClicked ? this.lastRowClicked : 0;
+        if (index == -1) {
+            //Select Rows
 
-            if (parent && parent.length > 0) {
-                parent.trigger('click');
-            }
-        }
-    }
-
-    bindKeyboardEvents() {
-        this.table.addEventListener('keydown', function (e) {
-            if (document.activeElement == this.table) {
-                if (e.which == 40) { // strzalka w dol
-                    clearTimeout(this.keyEventTimer);
-                    e.preventDefault();
-                    let current = $(this.htmlElement).find('tbody tr.table-primary');
-                    let next = null;
-
-                    if (current.length == 0) {
-                        next = $(this.htmlElement).find('tbody tr:not(.emptyRow)').first();
-                    } else {
-                        next = current.next('tr:not(.emptyRow)');
-                    }
-                    //If there isn't next element we go back to first one.
-                    if (next && next.length == 0) {
-                        next = $(this.htmlElement).find('tbody tr:not(.emptyRow)').first();
-                    }
-
-                    if (next && next.length > 0) {
-                        current.removeClass('table-primary');
-                        next.addClass('table-primary');
-                        let offset = $(next).position().top;
-                        if (this.fixedHeader) {
-                            offset -= this.header.clientHeight;
-                        }
-                        $(this.component).scrollTop(offset - (this.component.clientHeight / 2));
-                        this.keyEventTimer = setTimeout(function (elem) {
-                            elem.trigger('click');
-                        }, this.doneEventInterval, next);
-                    }
-                } else if (e.which == 38) { // strzalka w gore
-                    e.preventDefault();
-                    clearTimeout(this.keyEventTimer);
-                    let current = $(this.htmlElement).find('tbody tr.table-primary');
-                    let prev = null;
-
-                    if (current.length == 0) {
-                        prev = $(this.htmlElement).find('tbody tr:not(.emptyRow)').first();
-                    } else {
-                        prev = current.prev('tr:not(.emptyRow)');
-                    }
-
-                    if (prev && prev.length == 0) {
-                        $(this.component).scrollTop(0);
-                    } else if (prev && prev.length > 0) {
-                        current.removeClass('table-primary');
-                        prev.addClass('table-primary');
-                        let offset = $(prev).position().top;
-                        if (this.fixedHeader) {
-                            offset -= this.header.clientHeight;
-                        }
-                        $(this.component).scrollTop(offset - (this.component.clientHeight / 2));
-                        this.keyEventTimer = setTimeout(function (elem) {
-                            elem.trigger('click');
-                        }, this.doneEventInterval, prev);
-
-                    }
-                }else if (e.which == 33 || e.which == 36) { // pgup i home
-                    e.preventDefault();
-
-                    let first = $(this.htmlElement).find('tbody tr:not(.emptyRow)').first();
-
-                    if (first && first.length > 0) {
-                        $(this.component).scrollTop(0);
-                        first.trigger('click');
-                    }
-                } else if (e.which == 34 || e.which == 35) { // pgdown i end
-                    e.preventDefault();
-
-                    let last = $(this.htmlElement).find('tbody tr:not(.emptyRow)').last();
-
-                    if (last && last.length > 0) {
-                        $(this.component).scrollTop($(last).position().top);
-                        last.trigger('click');
+            //select all rows before first selected row
+            if (mainId < lastRowCLicked) {
+                while (mainId < lastRowCLicked) {
+                    lastRowCLicked--;
+                    let x = this.rawValue.indexOf(lastRowCLicked);
+                    if (x == -1) {
+                        this.rawValue.push(lastRowCLicked);
                     }
                 }
             }
-        }.bind(this));
-    }
+            //select all rows after last selected row
+            if (mainId > lastRowCLicked) {
+                while (mainId > lastRowCLicked) {
+                    lastRowCLicked++;
+                    let x = this.rawValue.indexOf(lastRowCLicked);
+                    if (x == -1) {
+                        this.rawValue.push(lastRowCLicked);
+                    }
+                }
+            }
+        } else if (index != -1) {
+            //deselect rows
+            // this.rawValue.filter(idx => idx > -1);
+            //deselect all rows before first selected row
+            if (mainId < lastRowCLicked) {
+                while (mainId <= lastRowCLicked) {
+                    let x = this.rawValue.indexOf(lastRowCLicked);
+                    if (x != -1) {
+                        this.rawValue.splice(x, 1);
+                    }
+                    lastRowCLicked--;
+                }
+            }
+            //deselect all rows after last selected row
+            else if (mainId > lastRowCLicked) {
+                while (mainId >= lastRowCLicked) {
+
+                    let x = this.rawValue.indexOf(lastRowCLicked);
+                    if (x != -1) {
+                        this.rawValue.splice(x, 1);
+                    }
+                    lastRowCLicked++;
+                }
+            }
+            // this.rawValue.filter(idx => idx > -1);
+            if (this.rawValue.length == 0) {
+                this.rawValue.push(-1);
+            }
+        }
+    };
+
+
+    selectAllRows(selectOrClear) {
+        if (selectOrClear) {
+            this.rawValue = this.checkAllArray;
+        } else {
+            this.rawValue = [-1];
+        }
+    };
 
     extractChangedAttributes() {
         return this.changesQueue.extractChangedAttributes();
@@ -646,13 +607,6 @@ class Table extends TableFixedHeaderAndHorizontalScroll {
     }
 
     destroy(removeFromParent) {
-        $(this.table).off('mousedown', this.tableMousedownEvent);
-
-        if (this.selectable && this.onRowClick) {
-            $(this.table).off('keydown', this.tableKeydownEvent.bind(this));
-            $(this.table).off('keyup', this.tableKeyupEvent.bind(this));
-        }
-
         this.clearRows();
         super.destroy(removeFromParent);
     }
@@ -664,7 +618,87 @@ class Table extends TableFixedHeaderAndHorizontalScroll {
     render() {
         super.render();
         if (!this.onRowClick || this.onRowClick === '-') {
-            this.highlightSelectedRows();
+            //Show highlighted record after showing table again , Works only with animate set to true.
+            this.highlightSelectedRows(true);
+        }
+        this.initExtends();
+    }
+
+    protected getAllComponents() {
+        let result: FormComponent[] = this.components;
+
+        this.rows.forEach((value) => {
+            result = result.concat(value.components);
+        });
+
+        return result;
+    }
+
+    /**
+     * Ads Cell to header with checkbox for selecting all records on current page.
+     */
+    protected addCheckAllCell() {
+        let cell = document.createElement('th');
+        cell.classList.add('selectionColumn');
+        cell.style.width = "40px"
+
+        this.selectAllChceckboxThElement = cell;
+        if (this.selectAllChceckbox) {
+            let checkbox = document.createElement('input');
+            checkbox.id = "header_check_all_" + this.id;
+            checkbox.type = 'checkbox';
+            checkbox.style.pointerEvents = 'none';
+            checkbox.classList.add('selectionCheckbox');
+            checkbox.classList.add('selectionCheckboxAll');
+            cell.appendChild(checkbox);
+
+
+            let checkboxLabel = document.createElement('label');
+            checkboxLabel.setAttribute('for', checkbox.id);
+            cell.appendChild(checkboxLabel);
+
+            this.selectAllChceckboxElement = checkbox;
+            cell.addEventListener('click', function (event) {
+                event.stopPropagation();
+                if (this.accessibility != 'EDIT') return;
+
+                let element = event.target;
+                if (event.currentTarget != null) {
+                    element = event.currentTarget;
+                }
+                element.firstChild.checked = !element.firstChild.checked;
+
+                this.selectAllRows(element.firstChild.checked);
+
+                this.changesQueue.queueValueChange(this.rawValue);
+                if (!this.onRowClick || this.onRowClick === '-') {
+                    this.highlightSelectedRows();
+                }
+
+                if (this._formId === 'FormPreview') {
+                    this.fireEvent('onRowClick', this.onRowClick);
+                } else {
+                    this.fireEventWithLock('onRowClick', this.onRowClick, event);
+                }
+            }.bind(this));
+        }
+
+        this.contentWrapper.appendChild(cell);
+    }
+
+    protected processCheckAllCell(){
+
+
+        if (this.selectionCheckboxes && this.multiselect) {
+            this.addCheckAllCell();
+        } else {
+            if (this.selectAllChceckboxElement) {
+                this.selectAllChceckboxElement.remove();
+            }
+            if (this.selectAllChceckboxThElement) {
+
+                this.selectAllChceckboxThElement.remove();
+            }
         }
     }
 

@@ -1,22 +1,20 @@
 package pl.fhframework;
 
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.socket.WebSocketSession;
-
-import java.io.Serializable;
-import java.util.Locale;
+import pl.fhframework.aspects.ApplicationContextHolder;
+import pl.fhframework.core.logging.FhLogger;
+import pl.fhframework.core.logging.LogLevel;
+import pl.fhframework.core.session.UserSessionRepository;
 
 import javax.servlet.http.HttpSession;
-
-import lombok.Getter;
-import lombok.Setter;
-import pl.fhframework.aspects.ApplicationContextHolder;
-import pl.fhframework.core.logging.LogLevel;
-import pl.fhframework.core.logging.FhLogger;
-import pl.fhframework.core.session.UserSessionRepository;
+import java.io.Serializable;
+import java.util.Locale;
 
 /**
  * Manager of user context in terms of interrelated web socket session , http session and user session
@@ -31,6 +29,8 @@ public class WebSocketSessionManager implements ISessionManagerImpl {
 
         @Setter
         private EventProcessState eventProcessState;
+
+        private String requestId;
     }
 
     enum EventProcessState {
@@ -99,8 +99,8 @@ public class WebSocketSessionManager implements ISessionManagerImpl {
             // include current inactive time - FH-7448
             int currentInactiveTime = (int) ((System.currentTimeMillis() - sessionHttp.getLastAccessedTime()) / 1000);
             sessionHttp.setMaxInactiveInterval(currentInactiveTime + SUSTAIN_TIMEOUT);
-        }
-        catch (IllegalStateException ise) {
+            FhLogger.info( "HttpSession marked for sustain timeout");
+        } catch (IllegalStateException ise) {
             // session allready invalidated
             FhLogger.log(LogLevel.DEBUG, "HttpSession for web socket '{}' is already invalid", webSocketSession.getId());
         }
@@ -126,7 +126,7 @@ public class WebSocketSessionManager implements ISessionManagerImpl {
         return getUserSessionRepository().getUserSession(getHttpSession().getId()) != null;
     }
 
-    public static void prepareSessionScope(){
+    public static void prepareSessionScope() {
         final HttpSession httpSession = getHttpSession();
         WebSocketSessionRequestAttribute attributes = new WebSocketSessionRequestAttribute(httpSession);
 
@@ -144,7 +144,7 @@ public class WebSocketSessionManager implements ISessionManagerImpl {
      *
      * @param webSocketSession
      */
-    public static void setWebSocketSession(WebSocketSession webSocketSession) {
+    public static WebSocketSession setWebSocketSession(WebSocketSession webSocketSession) {
         if (webSocketSession != null) {
             SessionManager.registerThreadSessionManager(INSTANCE);
             threadLocalRequestContext.set(new WebSocketRequestContext());
@@ -152,7 +152,9 @@ public class WebSocketSessionManager implements ISessionManagerImpl {
             threadLocalRequestContext.remove();
             SessionManager.unregisterThreadSessionManager();
         }
+        WebSocketSession prev = threadLocalSession.get();
         threadLocalSession.set(webSocketSession);
+        return prev;
     }
 
     public static WebSocketRequestContext getRequestContext() {
@@ -176,7 +178,7 @@ public class WebSocketSessionManager implements ISessionManagerImpl {
     }
 
     public static HttpSession getHttpSession(WebSocketSession session) {
-        return ((HttpSession)session.getAttributes().get(HTTP_SESSION_KEY));
+        return ((HttpSession) session.getAttributes().get(HTTP_SESSION_KEY));
     }
 
     public static HttpSession getHttpSession() {

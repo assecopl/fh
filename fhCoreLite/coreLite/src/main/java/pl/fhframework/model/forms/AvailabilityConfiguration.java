@@ -163,6 +163,10 @@ public class AvailabilityConfiguration extends Component {
         }
 
         public String toXml() {
+            return toXml(false);
+        }
+
+        public String toXml(boolean splitAvailabilityConfiguration) {
             StringBuilder sb = new StringBuilder();
             sb.append("<").append(tag.getTagName());
             appendXmlAttributes(sb);
@@ -170,7 +174,7 @@ public class AvailabilityConfiguration extends Component {
                 sb.append("/>");
             } else {
                 sb.append(">");
-                appendXmlBody(sb);
+                appendXmlBody(sb, splitAvailabilityConfiguration);
                 sb.append("</").append(tag.getTagName()).append(">");
             }
             return sb.toString();
@@ -197,15 +201,37 @@ public class AvailabilityConfiguration extends Component {
             return formComponentsIds != null && !formComponentsIds.isEmpty();
         }
 
-        protected void appendXmlBody(StringBuilder sb) {
-            sb.append(StringUtils.collectionToCommaDelimitedString(formComponentsIds));
+        protected void appendXmlBody(StringBuilder sb, boolean splitAvailabilityConfiguration) {
+            if (!splitAvailabilityConfiguration) {
+                sb.append(StringUtils.collectionToCommaDelimitedString(formComponentsIds));
+            } else {
+                for (int i = 0; i < formComponentsIds.size(); i++) {
+                    if (i == 0) {
+                        sb.append(formComponentsIds.get(i));
+                        if (formComponentsIds.size() > 1) {
+                            sb.append("</").append(tag.getTagName()).append(">");
+                        }
+                    } else if (i == formComponentsIds.size() - 1) {
+                        sb.append("<").append(tag.getTagName());
+                        appendXmlAttributes(sb);
+                        sb.append(">");
+                        sb.append(formComponentsIds.get(i));
+                    } else if (i > 0) {
+                        sb.append("<").append(tag.getTagName());
+                        appendXmlAttributes(sb);
+                        sb.append(">");
+                        sb.append(formComponentsIds.get(i));
+                        sb.append("</").append(tag.getTagName()).append(">");
+                    }
+                }
+            }
         }
 
         protected void appendXmlAttributes(StringBuilder sb) {
-            if (id!=null && !id.isEmpty()) {
+            if (id != null && !id.isEmpty()) {
                 sb.append(" id=\"").append(XmlUtils.encodeAttribute(id)).append("\"");
             }
-            if (when!=null && !when.isEmpty()){
+            if (when != null && !when.isEmpty()) {
                 sb.append(" when=\"").append(XmlUtils.encodeAttribute(when)).append("\"");
             }
         }
@@ -351,11 +377,12 @@ public class AvailabilityConfiguration extends Component {
         }
 
         @Override
-        protected void appendXmlBody(StringBuilder sb) {
+        protected void appendXmlBody(StringBuilder sb, boolean splitAvailabilityConfiguration) {
             for (FormSetting setting : subordinateSettings) {
-                sb.append(setting.toXml());
+                sb.append(setting.toXml(splitAvailabilityConfiguration));
             }
         }
+
 
         @Override
         protected void appendXmlAttributes(StringBuilder sb) {

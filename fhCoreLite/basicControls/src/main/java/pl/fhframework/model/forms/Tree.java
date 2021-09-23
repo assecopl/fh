@@ -1,31 +1,25 @@
 package pl.fhframework.model.forms;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import pl.fhframework.core.util.StringUtils;
+import lombok.Getter;
+import lombok.Setter;
 import pl.fhframework.BindingResult;
 import pl.fhframework.annotations.*;
 import pl.fhframework.binding.AdHocActionBinding;
 import pl.fhframework.binding.AdHocModelBinding;
 import pl.fhframework.binding.ModelBinding;
+import pl.fhframework.core.util.StringUtils;
 import pl.fhframework.model.dto.ElementChanges;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * This component can be used in XML Form. Most logic is based on component - Repeater, for dynamic
  * binding resolving and cloning components.
  */
-@DocumentedComponent(ignoreFields = {"width"},
+@DocumentedComponent(category = DocumentedComponent.Category.TABLE_AND_TREE, documentationExample = true, ignoreFields = {"width"},
         value = "Tree component is responsible for display certain relation between parent and childs. "
                 + "This component is similar too Repeater, but relation is visible.", icon = "fa fa-tree")
 @Control(parents = {PanelGroup.class, Group.class, Column.class, Tab.class, Row.class, Form.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = true)
@@ -202,6 +196,8 @@ public class Tree extends GroupingComponent<TreeElement> implements Boundable, C
 
                     groupingComponent.getSubcomponents().add(clonedTreeElement);
                     clonedTreeElement.setGroupingParentComponent(groupingComponent);
+                    clonedTreeElement.getBindingContext().getIteratorContext().putAll(((Component) groupingComponent).getBindingContext().getIteratorContext());
+                    clonedTreeElement.getBindingContext().setCachePrefix(((Component) groupingComponent).getBindingContext().getCachePrefix());
                     getForm().addToElementIdToFormElement(clonedTreeElement);
                 }
             } else if (bindedCollection.size() < groupingComponent.getSubcomponents().size()) {

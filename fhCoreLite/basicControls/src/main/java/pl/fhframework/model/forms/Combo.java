@@ -14,11 +14,13 @@ import pl.fhframework.core.util.StringUtils;
 import pl.fhframework.BindingResult;
 import pl.fhframework.annotations.*;
 import pl.fhframework.binding.*;
+import pl.fhframework.events.I18nFormElement;
 import pl.fhframework.model.PresentationStyleEnum;
 import pl.fhframework.model.dto.ElementChanges;
 import pl.fhframework.model.dto.InMessageEventData;
 import pl.fhframework.model.dto.ValueChange;
 import pl.fhframework.model.forms.designer.InputFieldDesignerPreviewProvider;
+import pl.fhframework.model.forms.optimized.ColumnOptimized;
 import pl.fhframework.model.forms.validation.ValidationFactory;
 import pl.fhframework.validation.*;
 
@@ -28,12 +30,14 @@ import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.SPECIFIC;
+import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.*;
 
-@DocumentedComponent(value = "Enables users to quickly find and select from a pre-populated list of values as they type, leveraging searching and filtering.",
+@TemplateControl(tagName = "fh-combo")
+@DesignerControl(defaultWidth = 3)
+@DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, documentationExample = true, value = "Enables users to quickly find and select from a pre-populated list of values as they type, leveraging searching and filtering.",
         icon = "fa fa-outdent")
-@Control(parents = {PanelGroup.class, Group.class, Column.class, Tab.class, Row.class, Form.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = true)
-public class Combo extends BaseInputFieldWithKeySupport {
+@Control(parents = {PanelGroup.class, Group.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class}, invalidParents = {Table.class}, canBeDesigned = true)
+public class Combo extends BaseInputFieldWithKeySupport implements I18nFormElement {
 
     /**
      * Old name of value property used by Combo
@@ -47,7 +51,7 @@ public class Combo extends BaseInputFieldWithKeySupport {
     private static final String VALUES_ATTR = "values";
     protected static final String TEXT = "text";
     protected static final String ADDED_TAG = "addedTag";
-    private static final String FILTERED_VALUES = "filteredValues";
+    protected static final String FILTERED_VALUES = "filteredValues";
     private static final String FILTER_FUNCTION_ATTR = "filterFunction";
     private static final String FILTER_TEXT = "filterText";
     protected static final String SELECTED_INDEX_ATTR = "selectedIndex";
@@ -56,10 +60,17 @@ public class Combo extends BaseInputFieldWithKeySupport {
     protected static final String CLEARED = "cleared";
     private static final String FORMATTER_ATTR = "formatter";
     protected static final String CURSOR = "cursor";
-    private static final String FREE_TYPING = "freeTyping";
-    private static final String EMPTY_VALUE_ATTR = "emptyValue";
-    private static final String DISPLAY_FUNCTION_ATTR = "displayFunction";
-    private static final String DISPLAY_RULE_ATTR = "displayExpression";
+    protected static final String FREE_TYPING = "freeTyping";
+    protected static final String EMPTY_VALUE_ATTR = "emptyValue";
+    protected static final String DISPLAY_FUNCTION_ATTR = "displayFunction";
+    protected static final String DISPLAY_RULE_ATTR = "displayExpression";
+    protected static final String ATTR_OPEN_ON_FOCUS = "openOnFocus";
+
+    @Override
+    public void onSessionLanguageChange(String lang) {
+        languageChanged = true;
+        refreshView();
+    }
 
     @Getter
     protected static class ComboItemDTO {
@@ -73,6 +84,8 @@ public class Combo extends BaseInputFieldWithKeySupport {
         private Integer targetCursorPosition;
 
         private Long targetId;
+
+        private String displayedValueWithoutExtras;
 
         public ComboItemDTO(String targetValue, Long targetId) {
             this.displayAsTarget = true;
@@ -93,8 +106,23 @@ public class Combo extends BaseInputFieldWithKeySupport {
             this.targetId = comboItem.getTargetId();
             this.displayedValue = comboItem.getDisplayedValue();
             this.targetCursorPosition = comboItem.getTargetCursorPosition();
+            this.displayedValueWithoutExtras = comboItem.getFullHintWithoutExtras();
         }
     }
+
+    @Getter
+    @Setter
+    @XMLProperty(value = ATTR_OPEN_ON_FOCUS, defaultValue = "true")
+    @DesignerXMLProperty(functionalArea = BEHAVIOR, priority = 86)
+    @DocumentedComponentAttribute(defaultValue = "true", value = "Should prompt window be opened when field gains focus.")
+    private Boolean openOnFocus;
+
+    @Setter
+    @Getter
+    @XMLProperty(defaultValue = "0")
+    @DesignerXMLProperty(functionalArea = DesignerXMLProperty.PropertyFunctionalArea.BEHAVIOR)
+    @DocumentedComponentAttribute(value = "Delay onInput action for specific miliseconds. Value must be between 0 and 10000.", defaultValue = "0")
+    private Integer onInputTimeout;
 
     @Getter
     @XMLProperty(defaultValue = "-")
@@ -140,7 +168,7 @@ public class Combo extends BaseInputFieldWithKeySupport {
     @Getter
     @Setter
     @XMLProperty(value = FILTER_TEXT)
-    @DesignerXMLProperty(commonUse = true, previewValueProvider = InputFieldDesignerPreviewProvider.class, priority = 120, functionalArea = SPECIFIC)
+    @DesignerXMLProperty(previewValueProvider = InputFieldDesignerPreviewProvider.class, priority = 120, functionalArea = SPECIFIC)
     @DocumentedComponentAttribute(boundable = true, value = "Binding represents value of filter text")
     private ModelBinding filterTextBinding;
 
@@ -164,6 +192,10 @@ public class Combo extends BaseInputFieldWithKeySupport {
     @Setter
     protected boolean cleared = false;
 
+    @Getter
+    @Setter
+    protected boolean languageChanged = false;
+
     @JsonIgnore
     protected BiPredicate<Object, String> filterFunction;
 
@@ -173,13 +205,13 @@ public class Combo extends BaseInputFieldWithKeySupport {
     @XMLProperty(value = FILTER_FUNCTION_ATTR)
     @DesignerXMLProperty(allowedTypes = BiPredicate.class)
     @DocumentedComponentAttribute(defaultValue = "Default function: (model, value) -> ((String) model).toLowerCase().contains(value.toLowerCase())", boundable = true, value = "Name of model object (java.util.function.BiPredicate) which will be used to filter items by text.")
-    private ModelBinding filterFunctionBinding;
+    protected ModelBinding filterFunctionBinding;
 
     @JsonIgnore
     protected boolean filterInvoked;
 
     @Getter
-    private boolean emptyValue;
+    protected boolean emptyValue;
 
     @JsonIgnore
     @Getter
@@ -187,7 +219,7 @@ public class Combo extends BaseInputFieldWithKeySupport {
     @XMLProperty(EMPTY_VALUE_ATTR)
     @DesignerXMLProperty(functionalArea = DesignerXMLProperty.PropertyFunctionalArea.CONTENT)
     @DocumentedComponentAttribute(defaultValue = "false", value = "Defines if value passed can be empty", boundable = true)
-    private ModelBinding<Boolean> emptyValueBinding;
+    protected ModelBinding<Boolean> emptyValueBinding;
 
     @Getter
     @Setter
@@ -216,6 +248,13 @@ public class Combo extends BaseInputFieldWithKeySupport {
     protected boolean multiselect;
 
     @Getter
+    @Setter
+    @XMLProperty
+    @DocumentedComponentAttribute(value = "Set autocompleter width based on field's width.")
+    @DesignerXMLProperty(functionalArea = SPECIFIC, priority = 10)
+    protected Integer widthRatio;
+
+    @Getter
     protected String multiselectRawValue;
 
     @JsonIgnore
@@ -223,7 +262,7 @@ public class Combo extends BaseInputFieldWithKeySupport {
     @Setter
     @XMLProperty(value = FREE_TYPING)
     @DocumentedComponentAttribute(boundable = true, defaultValue = "false", value = "Defines if new values could be typed be user.  Binding changes may not be respected after initially showing this control.")
-    private ModelBinding<Boolean> freeTypingBinding;
+    protected ModelBinding<Boolean> freeTypingBinding;
 
     protected Class<?> modelType = String.class;
 
@@ -499,12 +538,13 @@ public class Combo extends BaseInputFieldWithKeySupport {
         if (this.cleared) {
             this.filterText = "";
             updateFilterTextBinding();
+            processFiltering(this.filterText);
         }
         processFilterTextBinding(elementChanges);
         setFilterFunction();
         refreshAvailability(elementChanges);
-        boolean valuesChanged = processValuesBinding();
-        if (selectedBindingChanged || valuesChanged) {
+        boolean valuesChanged = (this.multiselect && languageChanged) || processValuesBinding();
+        if (selectedBindingChanged || valuesChanged ) {
             processFiltering(this.filterText);
         }
         processFilterBinding(elementChanges, valuesChanged);
@@ -517,11 +557,12 @@ public class Combo extends BaseInputFieldWithKeySupport {
             refreshView();
         }
         this.cleared = false;
+        this.languageChanged = false;
 
         return elementChanges;
     }
 
-    private void processFilterTextBinding(ElementChanges elementChanges) {
+    protected void processFilterTextBinding(ElementChanges elementChanges) {
         if (getModelBinding() == null || getModelBinding().getBindingResult() == null || getModelBinding().getBindingResult().getValue() == null) {
             if (getFilterTextBinding() != null) {
                 BindingResult filterTextResult = getFilterTextBinding().getBindingResult();
@@ -542,7 +583,7 @@ public class Combo extends BaseInputFieldWithKeySupport {
 
     }
 
-    private void setFilterFunction() {
+    protected void setFilterFunction() {
         BindingResult filterBindingResult = getFilterFunctionBinding() != null ? getFilterFunctionBinding().getBindingResult() : null;
         if (filterBindingResult != null) {
             this.filterFunction = (BiPredicate<Object, String>) filterBindingResult.getValue();
@@ -561,16 +602,26 @@ public class Combo extends BaseInputFieldWithKeySupport {
                     String valuesAsString = (String) value;
                     String[] allValues = valuesAsString.split("\\|");
                     if (allValues.length > 0) {
-                        this.values.put("", Arrays.stream(allValues).collect(Collectors.toList()));
-                        return true;
+                        MultiValueMap<String, Object> newValues = new LinkedMultiValueMap();
+                        newValues.put("", Arrays.stream(allValues).collect(Collectors.toList()));
+                        if (!Objects.equals(newValues, values)) {
+                            values.clear();
+                            values.putAll(newValues);
+                            return true;
+                        }
                     }
                 } else if (value instanceof List) {
                     List collection = (List) value;
                     if (!CollectionUtils.isEmpty(collection)) {
                         this.modelType = collection.stream().findFirst().get().getClass();
                     }
-                    this.values.put("", new LinkedList<>(collection));
-                    return true;
+                    MultiValueMap<String, Object> newValues = new LinkedMultiValueMap();
+                    newValues.put("", new LinkedList<>(collection));
+                    if (!Objects.equals(newValues, values)) {
+                        values.clear();
+                        values.putAll(newValues);
+                        return true;
+                    }
                 } else if (value instanceof MultiValueMap && !Objects.equals(value, values)) {
                     MultiValueMap<String, Object> mapFromBinding = (MultiValueMap<String, Object>) value;
                     resolveModelType(mapFromBinding);
@@ -594,7 +645,7 @@ public class Combo extends BaseInputFieldWithKeySupport {
     }
 
     protected boolean processFilterBinding(ElementChanges elementChanges, boolean valuesChanged) {
-        if (!preload && firstLoad && StringUtils.isNullOrEmpty(this.filterText) && !valuesChanged) {
+        if (!preload && firstLoad && StringUtils.isNullOrEmpty(this.filterText) && !valuesChanged && !this.cleared) {
             return false;
         }
         if (filterInvoked || valuesChanged) {
@@ -612,7 +663,7 @@ public class Combo extends BaseInputFieldWithKeySupport {
             BindingResult selectedBindingResult = getModelBinding().getBindingResult();
             if (selectedBindingResult != null) {
                 Object value = selectedBindingResult.getValue();
-                if (!Objects.equals(value, selectedItem)) {
+                if (!Objects.equals(value, selectedItem) || (this.multiselect && this.languageChanged)) {
                     this.selectedItem = value;
                     if (isMultiselect()) {
                         this.selectedItem = new ArrayList<>((List) value);
@@ -670,11 +721,11 @@ public class Combo extends BaseInputFieldWithKeySupport {
             return this.convertValueToString(s, formatter.get());
         }
 
-        if (displayFunctionBinding != null) {
+        if (displayFunctionBinding != null && s != null) {
             return objectToStringAsDisplayFunction(s);
         }
 
-        if (displayExpression != null) {
+        if (displayExpression != null && s != null) {
             return objectToStringAsDisplayExpresssion(s);
         }
 
@@ -731,7 +782,7 @@ public class Combo extends BaseInputFieldWithKeySupport {
         this.formatter = formatter;
     }
 
-    private boolean processCursorBinding(FormElement formElement, ElementChanges elementChanges) {
+    protected boolean processCursorBinding(FormElement formElement, ElementChanges elementChanges) {
         if (getCursorBinding() != null) {
             Integer oldValue = getCursor();
             if (getCursorBinding() != null) {

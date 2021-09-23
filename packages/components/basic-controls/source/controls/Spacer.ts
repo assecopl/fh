@@ -8,7 +8,7 @@ class Spacer extends HTMLFormComponent {
     create() {
         this.component = document.createElement('div');
         this.component.id = this.id;
-        this.wrap(true);
+        this.wrap();
 
         // spacer.classList.add('spacer');
         this.component.parentNode.classList.add('spacer');
@@ -16,6 +16,29 @@ class Spacer extends HTMLFormComponent {
         this.addStyles();
         this.display();
     };
+
+    getDefaultWidth(): string {
+        return 'md-2';
+    }
+
+    wrap() {
+        let wrapper = document.createElement('div');
+        ['fc', 'wrapper'].forEach(function (cssClass) {
+            wrapper.classList.add(cssClass);
+        });
+
+        if (this.width) {
+            // @ts-ignore
+            this.setWrapperWidth(wrapper, undefined, this.width);
+        } else {
+            wrapper.classList.add('inline');
+        }
+
+        wrapper.appendChild(this.component);
+        this.htmlElement = wrapper;
+        this.contentWrapper = this.component;
+
+    }
 }
 
 export {Spacer};

@@ -13,7 +13,7 @@ import pl.fhframework.helper.AutowireHelper;
  *  Previous contexts are suspended and can be resumed when current conversation is completed
  */
 public class ConversationStatelessManagerImpl extends ConversationManagerImpl {
-    @Autowired
+    @Autowired(required = false)
     private EntityManagerRepository emRepository;
 
     public ConversationStatelessManagerImpl() {

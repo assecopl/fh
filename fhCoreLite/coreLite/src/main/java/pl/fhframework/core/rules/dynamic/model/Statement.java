@@ -2,6 +2,8 @@ package pl.fhframework.core.rules.dynamic.model;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.Getter;
 import lombok.Setter;
 import pl.fhframework.aspects.snapshots.model.ISnapshotEnabled;
@@ -34,6 +36,39 @@ import java.util.function.Function;
         From.class, Join.class, Filter.class, SortBy.class, SortField.class,  Offset.class, Limit.class, Count.class,
         AndCondition.class, OrCondition.class, NotCondition.class, CompareCondition.class})
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE)
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "statementType")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Expression.class, name = "expression"),
+        @JsonSubTypes.Type(value = BooleanExpression.class, name = "booleanExpression"),
+        @JsonSubTypes.Type(value = If.class, name = "if"),
+        @JsonSubTypes.Type(value = Else.class, name = "else"),
+        @JsonSubTypes.Type(value = Then.class, name = "then"),
+        @JsonSubTypes.Type(value = For.class, name = "for"),
+        @JsonSubTypes.Type(value = ForEach.class, name = "forEach"),
+        @JsonSubTypes.Type(value = While.class, name = "while"),
+        @JsonSubTypes.Type(value = DoWhile.class, name = "doWhile"),
+        @JsonSubTypes.Type(value = Var.class, name = "var"),
+        @JsonSubTypes.Type(value = Const.class, name = "const"),
+        @JsonSubTypes.Type(value = Init.class, name = "init"),
+        @JsonSubTypes.Type(value = ValidationMessage.class, name = "validationMessage"),
+        @JsonSubTypes.Type(value = EmptyStatement.class, name = "emptyStatement"),
+        @JsonSubTypes.Type(value = Break.class, name = "break"),
+        @JsonSubTypes.Type(value = Return.class, name = "return"),
+        @JsonSubTypes.Type(value = From.class, name = "from"),
+        @JsonSubTypes.Type(value = Join.class, name = "join"),
+        @JsonSubTypes.Type(value = SortBy.class, name = "sortBy"),
+        @JsonSubTypes.Type(value = SortField.class, name = "sortField"),
+        @JsonSubTypes.Type(value = Offset.class, name = "offset"),
+        @JsonSubTypes.Type(value = Limit.class, name = "limit"),
+        @JsonSubTypes.Type(value = Count.class, name = "count"),
+        @JsonSubTypes.Type(value = AndCondition.class, name = "andCondition"),
+        @JsonSubTypes.Type(value = OrCondition.class, name = "orCondition"),
+        @JsonSubTypes.Type(value = NotCondition.class, name = "notCondition"),
+        @JsonSubTypes.Type(value = CompareCondition.class, name = "compareCondition"),
+})
 public abstract class Statement implements RuleElement, ISnapshotEnabled, Cloneable, Serializable {
     @SkipSnapshot
     @XmlTransient
@@ -41,9 +76,11 @@ public abstract class Statement implements RuleElement, ISnapshotEnabled, Clonea
     private String id;
 
     @XmlAttribute
+    @JsonIgnore
     private Double x;
 
     @XmlAttribute
+    @JsonIgnore
     private Double y;
 
     @SkipSnapshot

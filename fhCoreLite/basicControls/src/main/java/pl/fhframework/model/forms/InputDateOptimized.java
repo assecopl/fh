@@ -15,8 +15,8 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
  * Class represents input field for date. Receives every attribute of input field. This field can be
  * used inside PanelGroup, Column, Tab, Form.
  */
-@DocumentedComponent(value = "Component responsible for displaying field, where user can set only date. Optimized for IE", icon = "fa fa-calendar")
-@Control(parents = {PanelGroup.class, Column.class, Tab.class, Row.class, Form.class, Group.class, Repeater.class, ColumnOptimized.class}, invalidParents = {Table.class}, canBeDesigned = false)
+@DocumentedComponent(documentationExample = true, value = "Component responsible for displaying field, where user can set only date. Optimized for IE", icon = "fa fa-calendar")
+@Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Group.class, Repeater.class, ColumnOptimized.class}, invalidParents = {Table.class}, canBeDesigned = false)
 @OverridenPropertyAnnotations(
         property = "modelBinding",
         designerXmlProperty = @DesignerXMLProperty(allowedTypes = LocalDate.class, commonUse = true, previewValueProvider = InputFieldDesignerPreviewProvider.class, priority = 80, functionalArea = CONTENT))

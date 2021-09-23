@@ -6,9 +6,11 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import pl.fhframework.core.security.*;
 import pl.fhframework.core.security.model.*;
 import pl.fhframework.core.security.provider.service.AbstractSecurityProviderInitializer;
+import pl.fhframework.core.util.StringUtils;
 
 import javax.sql.DataSource;
 import java.time.LocalDate;
@@ -51,21 +53,27 @@ public class JDBCSecurityProviderInitializer extends AbstractSecurityProviderIni
             .passwordEncoder(passwordEncoder);
 
         if (generateDefaultData) {
-            if (defaultUsers == null || defaultUsers.isEmpty()) {
+            if (CollectionUtils.isEmpty(defaultUsers)) {
                 defaultUsers = generateDefaultUsers();
             }
-            generateDefaultRoles(defaultUsers);
-            generateDefaultUsers(defaultUsers);
+            if (!CollectionUtils.isEmpty(defaultUsers)) {
+                generateDefaultRoles(defaultUsers);
+                generateDefaultUsers(defaultUsers);
+            }
         }
 
         createGuestRole();
     }
 
     private List<IDefaultUser> generateDefaultUsers() {
-        DefaultRole adminRole = new DefaultRole(defaultAdminRole, getDefaultAdminFunctions(defaultAdminRole));
-        return Collections.singletonList(
-                new DefaultUser(defaultAdminLogin, defaultAdminPass, adminRole)
-        );
+        if (!StringUtils.isNullOrEmpty(defaultAdminRole)) {
+            DefaultRole adminRole = new DefaultRole(defaultAdminRole, getDefaultAdminFunctions(defaultAdminRole));
+            return Collections.singletonList(
+                    new DefaultUser(defaultAdminLogin, defaultAdminPass, adminRole)
+            );
+        } else {
+            return Collections.emptyList();
+        }
     }
 
     private IFunction[] getDefaultAdminFunctions(String adminRoleName) {
@@ -117,6 +125,8 @@ public class JDBCSecurityProviderInitializer extends AbstractSecurityProviderIni
                 IUserAccount user =
                         createUser(
                             defaultUser.getLogin(),
+                            defaultUser.getFirstName(),
+                            defaultUser.getLastName(),
                             passwordEncoder.encode(defaultUser.getPassword()),
                             createRoleInstances(defaultUser.getRoles())
                         );
@@ -126,9 +136,11 @@ public class JDBCSecurityProviderInitializer extends AbstractSecurityProviderIni
         }
     }
 
-    private IUserAccount createUser(String login, String password, List<IRoleInstance> roles) {
+    private IUserAccount createUser(String login, String firstName, String lastName, String password, List<IRoleInstance> roles) {
         IUserAccount userAccount = securityDataProvider.createSimpleUserAccountInstance();
         userAccount.setLogin(login);
+        userAccount.setFirstName(firstName);
+        userAccount.setLastName(lastName);
         userAccount.setPassword(password);
         userAccount.setEmail(login.toLowerCase() + "@mail.com");
         userAccount.setBlocked(false);

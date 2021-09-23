@@ -18,4 +18,14 @@ public class BindingResult<T> {
         this.attributeName = attributeName;
         this.value = value;
     }
+
+    public Class<?> getTargetType() {
+        if (value != null) {
+            return value.getClass();
+        }
+        if (parent != null && attributeName != null) {
+            return ReflectionUtils.getFieldType(parent.getClass(), attributeName);
+        }
+        return null;
+    }
 }

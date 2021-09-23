@@ -20,8 +20,9 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
 /**
  * Created by k.czajkowski on 03.01.2017.
  */
+@TemplateControl(tagName = "fh-button-group")
 @Control(parents = {PanelGroup.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
-@DocumentedComponent(value = "PanelGroup component responsible for the grouping of buttons.", icon = "fa fa-square")
+@DocumentedComponent(category = DocumentedComponent.Category.BUTTONS_AND_OTHER, documentationExample = true, value = "PanelGroup component responsible for the grouping of buttons.", icon = "fa fa-square")
 public class ButtonGroup extends GroupingComponent<FormElement> implements Boundable, IChangeableByClient, CompactLayout, IDesignerEventListener {
 
     private static final String ATTR_ACTIVE_BUTTON = "activeButton";

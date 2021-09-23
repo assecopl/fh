@@ -8,3 +8,7 @@
 .fc.footer.card-footer {
     width: 100%;
 }
+
+.fc.panelGroup.disabled .card-header {
+    pointer-events: all;
+}

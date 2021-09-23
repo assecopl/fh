@@ -76,7 +76,9 @@ class SelectOneMenu extends HTMLFormComponent {
             componetParent.appendChild(wrapperDiv);
         }
 
-        this.htmlElement.querySelector('.col-form-label').classList.add('selectOneMenuLabel');
+        if(this.labelElement) {
+            this.htmlElement.querySelector('.col-form-label').classList.add('selectOneMenuLabel');
+        }
 
         if (this.component.classList.contains('servicesListControl')) {
             this.htmlElement.classList.add('servicesListControlWrapper');
@@ -203,15 +205,19 @@ class SelectOneMenu extends HTMLFormComponent {
         this.htmlElement.classList.add('fc-editable');
     }
 
+    getDefaultWidth(): string {
+        return "md-3";
+    }
+
     destroy(removeFromParent: boolean) {
         this.component.removeEventListener('click', this.selectOnClickEvent.bind(this));
         this.component.removeEventListener('change', this.selectChangeEvent.bind(this));
 
         if (this.emptyValue && this.emptyValue == true) {
             this.clearButton.removeEventListener('click', this.buttonClickEvent.bind(this));
-
-            super.destroy(removeFromParent);
         }
+
+        super.destroy(removeFromParent);
     }
 }
 

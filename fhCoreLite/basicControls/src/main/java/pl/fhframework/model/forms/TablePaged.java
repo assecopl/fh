@@ -1,43 +1,47 @@
 package pl.fhframework.model.forms;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import pl.fhframework.BindingResult;
+import pl.fhframework.annotations.*;
+import pl.fhframework.binding.*;
 import pl.fhframework.core.FhBindingException;
 import pl.fhframework.core.FhException;
 import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.core.util.CollectionsUtils;
-import pl.fhframework.annotations.*;
-import pl.fhframework.binding.*;
 import pl.fhframework.model.dto.ElementChanges;
-import pl.fhframework.model.dto.ValueChange;
-import pl.fhframework.model.forms.utils.LanguageResolver;
 import pl.fhframework.model.dto.InMessageEventData;
+import pl.fhframework.model.dto.ValueChange;
+import pl.fhframework.model.forms.attribute.CommaSeparatedStringListAttrConverter;
+import pl.fhframework.model.forms.config.BasicControlsConfiguration;
+import pl.fhframework.model.forms.utils.LanguageResolver;
 
-import java.util.*;
 import java.util.Iterator;
-
-import lombok.Getter;
-import lombok.Setter;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.springframework.data.domain.Sort.Direction;
 import static org.springframework.data.domain.Sort.Order;
-import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.BEHAVIOR;
-import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.CONTENT;
+import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.*;
 
 @Control(parents = {GroupingComponent.class}, invalidParents = {Table.class}, canBeDesigned = true)
 @OverridenPropertyAnnotations(
         property = "collection",
         designerXmlProperty = @DesignerXMLProperty(allowedTypes = {Page.class, PageModel.class}, commonUse = true, bindingOnly = true, functionalArea = CONTENT, priority = 15))
-@DocumentedComponent(value = "Table that allows to arrange data like text, images, links, other tables, etc. into rows and columns of cells inside of page.", icon = "fa fa-table")
+@DocumentedComponent(category = DocumentedComponent.Category.TABLE_AND_TREE, documentationExample = true, value = "Table that allows to arrange data like text, images, links, other tables, etc. into rows and columns of cells inside of page.", icon = "fa fa-table")
 public class TablePaged extends Table {
 
     private static final String SORT_BY_ATTRIBUTE = "sortBy";
     private static final String DIRECTION_ATTRIBUTE = "direction";
     private static final String CURRENT_PAGE_ATTRIBUTE = "currentPage";
     private static final String PAGE_SIZE_ATTRIBUTE = "pageSize";
+    private static final String PAGE_SIZES_ATTRIBUTE = "pageSizes";
 
     @Getter
     @Setter
@@ -62,6 +66,7 @@ public class TablePaged extends Table {
     private Page currentPage;
 
     @JsonIgnore
+    @Getter
     private PageModel pageModel;
 
     @Getter
@@ -97,6 +102,31 @@ public class TablePaged extends Table {
     private boolean defaultSortByAsc = true;
 
     @Getter
+    @Setter
+    @XMLProperty(defaultValue = "false")
+    @DocumentedComponentAttribute(value = "Add additional pagination and page size select above the table")
+    @DesignerXMLProperty(functionalArea = SPECIFIC, priority = 16)
+    private boolean paginationAboveTable = false;
+
+    @Getter
+    @Setter
+    @XMLProperty(required = false)
+    @DocumentedComponentAttribute(value = "Change page size select into button group.")
+    @DesignerXMLProperty(functionalArea = SPECIFIC, priority = 17)
+    private Boolean pageSizeAsButtons = null;
+
+    @Getter
+    private List<String> pageSizes = null;
+
+    @JsonIgnore
+    @Getter
+    @Setter
+    @XMLProperty(value = PAGE_SIZES_ATTRIBUTE, required = false)
+    @DocumentedComponentAttribute(value = "Define possible page sizes. Coma separated. Default value is 5,10,15,25")
+    @DesignerXMLProperty(allowedTypes = {Collection.class, String.class}, functionalArea = SPECIFIC, priority = 17)
+    private ModelBinding pageSizesModelBinding;
+
+    @Getter
     private String language;
 
     private static final int PAGE_START = 0;
@@ -126,6 +156,10 @@ public class TablePaged extends Table {
         }
         pageNumber = PAGE_START;
         changePageOrSize(pageNumber, pageSize);
+        if (this.pageSizeAsButtons == null) {
+            this.setPageSizeAsButtons(BasicControlsConfiguration.getInstance().getTablePagedPageSizeAsButtons());
+        }
+        this.pageSizes = new CommaSeparatedStringListAttrConverter().fromXML(this, BasicControlsConfiguration.getInstance().getTablePagedPageSizes());
     }
 
     @Override
@@ -193,12 +227,10 @@ public class TablePaged extends Table {
                             if (muliselectCol != null) {
                                 muliselectCol.removeAll(bindedObjectsList);
                                 muliselectCol.addAll((Collection) newSelectedElement);
-                            }
-                            else {
+                            } else {
                                 getSelectedElementBinding().setValue(newSelectedElement);
                             }
-                        }
-                        else {
+                        } else {
                             getSelectedElementBinding().setValue(newSelectedElement);
                         }
                     } else {
@@ -286,6 +318,32 @@ public class TablePaged extends Table {
             pageNumber = pageable.getPageNumber();
             elementChange.addChange(DISPLAYED_PAGE_NUMBER, pageNumber);
         }
+
+        if (pageSizesModelBinding != null) {
+            BindingResult pageSizesModelBindingResult = pageSizesModelBinding.getBindingResult();
+            if (pageSizesModelBindingResult != null) {
+                Object value = pageSizesModelBindingResult.getValue();
+                if (value instanceof String) {
+                    String valuesAsString = (String) value;
+                    List<String> allValues = new CommaSeparatedStringListAttrConverter().fromXML(this, valuesAsString);
+                    if (allValues.size() > 0) {
+                        if (!Objects.equals(pageSizes, allValues)) {
+                            pageSizes = allValues;
+                            elementChange.addChange(PAGE_SIZES_ATTRIBUTE, pageSizes);
+                        }
+                    }
+                } else if (value instanceof List) {
+                    List<String> valuesAsList = (List<String>) value;
+                    if (valuesAsList.size() > 0) {
+                        if (!Objects.equals(pageSizes, valuesAsList)) {
+                            pageSizes = valuesAsList;
+                            elementChange.addChange(PAGE_SIZES_ATTRIBUTE, pageSizes);
+                        }
+                    }
+                }
+            }
+        }
+
 
         this.language = LanguageResolver.languageChanges(getForm().getAbstractUseCase().getUserSession(), this.language, elementChange);
 

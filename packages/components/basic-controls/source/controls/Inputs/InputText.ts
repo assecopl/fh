@@ -1,13 +1,16 @@
-import 'imports-loader?moment,define=>false,exports=>false!../../external/inputmask';
 import {InputTextPL} from './i18n/InputText.pl';
 import {InputTextEN} from './i18n/InputText.en';
 import {HTMLFormComponent, FormComponent, FormComponentKeySupport} from "fh-forms-handler";
 import {FhContainer} from "fh-forms-handler";
+import * as autosize from '../../external/autosize.min.js';
+import '../../external/inputmask.js';
+
+declare const ENV_IS_DEVELOPMENT: boolean;
 
 class InputText extends HTMLFormComponent {
-    protected input: any;
     protected keySupport: FormComponentKeySupport;
     private readonly isTextarea: boolean;
+    private readonly textareaAutosize: boolean;
     private readonly inputType: any;
     protected keySupportCallback: any;
     private valueChanged: any;
@@ -22,10 +25,14 @@ class InputText extends HTMLFormComponent {
     protected readonly textAlign: string;
     private readonly height: any;
     protected format: string;
+    protected emptyValue: any;
+    protected onEmptyValue: any;
     private timeoutFunction: any;
     private readonly inputTimeout: number;
     protected inputmaskEnabled: boolean;
+    protected maskPlugin: any;
     protected maskInsertMode: boolean;
+    public input: any;
 
     constructor(componentObj: any, parent: HTMLFormComponent) {
         if (componentObj.rawValue == undefined) {
@@ -42,13 +49,15 @@ class InputText extends HTMLFormComponent {
         this.i18n.registerStrings('pl', InputTextPL);
         this.i18n.registerStrings('en', InputTextEN);
 
-        this.isTextarea = this.componentObj.rowsCount && this.componentObj.rowsCount > 0;
+        this.isTextarea = (this.componentObj.rowsCount && this.componentObj.rowsCount > 0) || this.componentObj.rowsCountAuto;
+        this.textareaAutosize = this.componentObj.rowsCountAuto || false;
         this.inputType = this.componentObj.inputType || null;
         this.placeholder = this.componentObj.placeholder || null;
         this.maxLength = this.componentObj.maxLength || null;
 
         this.onInput = this.componentObj.onInput;
         this.onChange = this.componentObj.onChange;
+        this.emptyValue = this.componentObj.emptyValue;
 
         this.input = null;
         this.valueChanged = false;
@@ -118,6 +127,7 @@ class InputText extends HTMLFormComponent {
 
         let skipLabel = this.styleClasses.indexOf('hideLabel') !== -1;
         this.wrap(skipLabel, true);
+        this.createClearButton();
         this.createIcon();
         this.display();
         this.addStyles();
@@ -128,6 +138,61 @@ class InputText extends HTMLFormComponent {
 
         if (this.component.classList.contains('servicesListControl')) {
             this.htmlElement.classList.add('servicesListControlWrapper');
+        }
+
+        if (this.isTextarea && this.textareaAutosize) {
+            // @ts-ignore
+            input.classList.add("input-autosize");
+            autosize(this.input);
+            //Additional logic to update height after display
+            setTimeout(function () {
+                autosize.update(this.input);
+            }.bind(this), 0)
+        }
+
+        if (this.fh.isIE()) {
+            /**
+             * For IE only - prevent of content delete by ESC key press (27)
+             */
+            this.input.addEventListener('keydown', e => {
+                var keyCode = (window.event) ? e.which : e.keyCode;
+                if (keyCode == 27) { //Escape keycode
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                }
+            });
+
+        }
+    }
+
+    createClearButton() {
+        if (this.emptyValue && this.emptyValue === true) {
+            let button = document.createElement('div');
+            button.classList.add('input-group-append');
+            button.classList.add('clearButton');
+
+            let buttonSpan = document.createElement('span');
+            buttonSpan.classList.add('input-group-text');
+
+            let icon = document.createElement('i');
+            icon.classList.add('fa');
+            icon.classList.add('fa-times');
+
+            button.addEventListener('click', function (event) {
+                if (this.accessibility === 'EDIT') {
+                    this.input.value = '';
+                    this.updateModel();
+                    if (this.onChange) {
+                        this.fireEventWithLock('onChange', this.onChange, event);
+                    }
+                    this.input.focus();
+                }
+            }.bind(this));
+
+            buttonSpan.appendChild(icon);
+            button.appendChild(buttonSpan);
+            this.component.parentNode.appendChild(button);
         }
     }
 
@@ -150,15 +215,19 @@ class InputText extends HTMLFormComponent {
             groupSpan.appendChild(icon);
 
             if (this.componentObj.iconAlignment === 'BEFORE') {
-                this.inputGroupElement.insertBefore(group, this.inputGroupElement.firstChild);
+                this.inputGroupElement.insertBefore(group, this.getMainComponent());
             } else if (this.componentObj.iconAlignment === 'AFTER') {
                 group.classList.remove('input-group-prepend');
                 group.classList.add('input-group-append');
                 this.inputGroupElement.appendChild(group);
             } else {
-                this.inputGroupElement.insertBefore(group, this.inputGroupElement.firstChild);
+                this.inputGroupElement.insertBefore(group, this.getMainComponent());
             }
         }
+    }
+
+    protected getMainComponent() {
+        return this.component;
     }
 
     onInputEvent() {
@@ -284,7 +353,7 @@ class InputText extends HTMLFormComponent {
 
             try {
                 // @ts-ignore
-                Inputmask(options).mask(this.input);
+                this.maskPlugin = Inputmask(options).mask(this.input);
                 this.inputmaskEnabled = true;
             } catch (e) {
                 console.error('Invalidmask library error:');
@@ -295,6 +364,17 @@ class InputText extends HTMLFormComponent {
                 this.removeInputPlaceholder(event);
             })
         }
+    }
+
+    handleContainerOverflow(parent: JQuery<any>, autocompleter, up: boolean = false) {
+        parent.append(autocompleter);
+        if (up) {
+            $(autocompleter).css('top', $(this.component).offset().top - parent.offset().top - autocompleter.offsetHeight - 3);
+        } else {
+            $(autocompleter).css('top', $(this.component).offset().top - parent.offset().top + this.component.offsetHeight);
+        }
+        $(autocompleter).css('left', $(this.component).offset().left - parent.offset().left);
+        $(autocompleter).css('width', this.component.offsetParent.offsetWidth);
     }
 
     removeInputPlaceholder(event) {
@@ -353,12 +433,16 @@ class InputText extends HTMLFormComponent {
         if (change.changedAttributes) {
             $.each(change.changedAttributes, function (name, newValue) {
                 switch (name) {
+                    case 'placeholder':
+                        this.input.placeholder = newValue;
+                        break;
                     case 'rawValue':
-                        if (!newValue && newValue !== 0) {
-                            this.input.placeholder = "";
-                        }
                         this.input.value = newValue;
                         this.lastValidMaskedValue = newValue;
+                        if (this.isTextarea && this.textareaAutosize) {
+                            // @ts-ignore
+                            autosize.update(this.input);
+                        }
                         break;
                     case 'maxLengthBinding':
                         this.maxLength = newValue;
@@ -447,6 +531,26 @@ class InputText extends HTMLFormComponent {
         this.disableMask();
 
         super.destroy(removeFromParent);
+    }
+
+    public getDefaultWidth(): string {
+        return 'md-3';
+    }
+
+    public render() {
+        if (ENV_IS_DEVELOPMENT) {
+            // console.log("InputTextRender", this.id);
+            // if (this.isTextarea && this.textareaAutosize) {
+            //     // @ts-ignore
+            //     setTimeout(function () {
+            //         console.log("InputTextRender", this.id)
+            //         autosize.update(this.input);
+            //     }.bind(this), 0)
+            //
+            // }
+        }
+
+        super.render();
     }
 }
 

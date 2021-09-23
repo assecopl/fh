@@ -61,6 +61,7 @@ public class ExternalUseCaseRegistry {
     /** Finishes a registered external use case */
     public void finishUseCase(String uuid, boolean success) {
         ExternalUseCase useCase = null;
+        WebSocketSession prev = WebSocketSessionManager.getWebSocketSession();
         try {
             WeakReference<UserSession> userSessionRef = USER_SESSION_CACHE.get(uuid);
             if (userSessionRef != null) {
@@ -97,7 +98,7 @@ public class ExternalUseCaseRegistry {
             }
         } finally {
             SessionManager.unregisterThreadSessionManager();
-            WebSocketSessionManager.setWebSocketSession(null);
+            WebSocketSessionManager.setWebSocketSession(prev);
             if (useCase != null) {
                 useCase.setAuthorizedThread(null);
             }

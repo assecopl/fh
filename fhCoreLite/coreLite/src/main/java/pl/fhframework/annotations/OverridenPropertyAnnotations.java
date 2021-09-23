@@ -20,4 +20,7 @@ public @interface OverridenPropertyAnnotations {
      * One or none overriden @DesignerXMLProperty
      */
     DesignerXMLProperty[] designerXmlProperty();
+
+
+    XMLProperty[] xmlProperty() default {};
 }

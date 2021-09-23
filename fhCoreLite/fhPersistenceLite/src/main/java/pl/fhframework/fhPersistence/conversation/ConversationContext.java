@@ -62,8 +62,10 @@ public abstract class ConversationContext {
 
     public void terminate() {
         checkIfCurrent();
-        getEntityManager().clear();
-        ((Session) getEntityManager().getDelegate()).close();
+        if (getEntityManager() != null) {
+            getEntityManager().clear();
+            ((Session) getEntityManager().getDelegate()).close();
+        }
     }
 
     @Transactional
@@ -73,7 +75,9 @@ public abstract class ConversationContext {
             throw new FhStaleConversationException();
         }
         try {
-            getEntityManager().flush();
+            if (getEntityManager() != null) {
+                getEntityManager().flush();
+            }
         }
         catch (Exception e) {
             invalidate();
@@ -85,12 +89,16 @@ public abstract class ConversationContext {
     @Transactional
     public void approveAndTerminate() {
         approve();
-        ((Session) getEntityManager().getDelegate()).close();
+        if (getEntityManager() != null) {
+            ((Session) getEntityManager().getDelegate()).close();
+        }
     }
 
     public void clear() {
         checkIfCurrent();
-        getEntityManager().clear();
+        if (getEntityManager() != null) {
+            getEntityManager().clear();
+        }
         snapshotsStack.forEach(Snapshot::clear);
         dynamicModelStore = applicationContext.getBean(ModelStore.class);
         //dynamicModelStore.clearPersistentContext();

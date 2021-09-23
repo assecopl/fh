@@ -19,9 +19,9 @@ public class RestSecurityDataRepository implements RemoteSecurityDataRepository 
     private static final String ALL_USERS = "users";
     private static final String ALL_ROLES = "roles";
 
-    @Value("${luna.security.provider.rest.idpUri:}")
+    @Value("${fhframework.security.provider.rest.idpUri:}")
     private String idpUri;
-    @Value("${luna.security.provider.rest.order:1}")
+    @Value("${fhframework.security.provider.rest.order:1}")
     private int order;
 
     // U S E R S
@@ -36,7 +36,7 @@ public class RestSecurityDataRepository implements RemoteSecurityDataRepository 
                     {
                         put("username", username);
                     }
-                }).encode().toUriString(),
+                }).toUriString(),
                 UserInfo.class);
     }
 
@@ -44,7 +44,7 @@ public class RestSecurityDataRepository implements RemoteSecurityDataRepository 
     @Override
     public List<UserInfo> findAllUsers() {
         return CollectionsUtils.asNewList(RestTemplateConfig.restTemplate.getForObject(
-                UriComponentsBuilder.fromUriString(idpUri).pathSegment(ALL_USERS).build().encode().toUriString(),
+                UriComponentsBuilder.fromUriString(idpUri).pathSegment(ALL_USERS).build().toUriString(),
                 UserInfo[].class, new HashMap<String, String>()));
     }
 
@@ -55,7 +55,7 @@ public class RestSecurityDataRepository implements RemoteSecurityDataRepository 
     @Override
     public List<String> findAllBusinessRoles() {
         return CollectionsUtils.asNewList(RestTemplateConfig.restTemplate.getForObject(
-                UriComponentsBuilder.fromUriString(idpUri).pathSegment(ALL_ROLES).build().encode().toUriString(),
+                UriComponentsBuilder.fromUriString(idpUri).pathSegment(ALL_ROLES).build().toUriString(),
                 String[].class, new HashMap<String, String>()));
     }
 

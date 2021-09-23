@@ -5,12 +5,18 @@ import 'bootstrap/js/dist/collapse';
 class Accordion extends HTMLFormComponent {
     private onGroupChange: any;
     private activeGroup: any;
+    private iconOpened: string;
+    private iconClosed: string;
 
     constructor(componentObj: any, parent: HTMLFormComponent) {
         super(componentObj, parent);
 
         this.activeGroup = componentObj.activeGroup;
         this.onGroupChange = this.componentObj.onGroupChange;
+
+
+        this.iconOpened = this.componentObj.iconOpened? this.componentObj.iconOpened : "";
+        this.iconClosed = this.componentObj.iconClosed? this.componentObj.iconClosed : "";
     }
 
     create() {
@@ -25,8 +31,13 @@ class Accordion extends HTMLFormComponent {
         this.wrap(true);
 
         this.display();
+
         if (this.componentObj.subelements) {
-            this.addComponents(this.componentObj.subelements);
+                (this.componentObj.subelements || []).forEach(function (componentObj) {
+                    componentObj['iconClosed'] = this.iconClosed ? this.iconClosed : null;
+                    componentObj['iconOpened'] = this.iconOpened ? this.iconOpened : null;
+                    this.addComponent(componentObj);
+                }.bind(this));
         }
     };
 
@@ -54,6 +65,7 @@ class Accordion extends HTMLFormComponent {
         button.classList.add('btn');
         button.attributes['type'] = 'button';
         button.classList.add('btn-block');
+        button.classList.add('collapseBtn');
 
         let active = this.activeGroup === parseInt(button.dataset.index);
         if (!active) {
@@ -105,13 +117,34 @@ class Accordion extends HTMLFormComponent {
         button.setAttribute('aria-controls', collapsibleBtn);
         this.setButtonAccessibility(button, component.accessibility);
 
+        if(this.iconClosed && this.iconOpened){
+            const icon = document.createElement('i');
+            icon.classList.add('fa');
+            icon.classList.add('mx-2');
+            icon.classList.add('collapsibleIcon');
+
+            const iconClosed:any = icon.cloneNode(true);
+
+            iconClosed.classList.add(this.iconClosed);
+            iconClosed.classList.add("collapsibleIconClosed");
+
+            icon.classList.add(this.iconOpened);
+            icon.classList.add("collapsibleIconOpened");
+
+            button.classList.add("d-flex")
+            button.classList.add("align-items-center")
+            button.appendChild(icon);
+            button.appendChild(iconClosed);
+        }
+
+
+
         collapseWrapper.appendChild(body);
         component.component.appendChild(collapseWrapper);
     };
 
     update(change) {
         super.update(change);
-        // console.log('%c update ', 'background: #FFF; color: #0F0', change);
         $.each(change.changedAttributes || [], function (name, newValue) {
             switch (name) {
                 case 'activeGroup':
@@ -157,7 +190,7 @@ class Accordion extends HTMLFormComponent {
 
     collapse(groupIdx) {
         // @ts-ignore
-        let button = this.components[groupIdx].component.querySelector('button');
+        let button = this.acomponents[groupIdx].component.querySelector('button');
         button.setAttribute('aria-expanded', 'false');
         button.classList.add("collapsed");
         // @ts-ignore

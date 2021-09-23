@@ -43,10 +43,10 @@ import java.util.function.Supplier;
 
 @Control(canBeDesigned = true)
 @DesignerControl
-@DocumentedComponent(value = "Component used to include xml templates into main form view", icon = "fa fa-cubes")
+@DocumentedComponent(category = DocumentedComponent.Category.ARRANGEMENT, documentationExample = true, value = "Component used to include xml templates into main form view", icon = "fa fa-cubes")
 @JsonIgnoreType
 @JsonSerialize(using = Include.Serializer.class)
-public class Include extends FormElement implements IGroupingComponent<Component>, Includeable {
+public class Include extends GroupingComponent<Component> implements Includeable {
 
     private static final String ATTR_REF = "ref";
     private static final String ATTR_MODEL = "model";
@@ -331,6 +331,7 @@ public class Include extends FormElement implements IGroupingComponent<Component
         public void serialize(Include tag, JsonGenerator gen, SerializerProvider serializers) throws IOException {
             if (tag != null && tag.getSubcomponents() != null) {
                 Group group = new Group(tag.getForm());
+                group.setStyleClasses(tag.getClass().getSimpleName());
                 group.setId(tag.getId());
                 group.getSubcomponents().addAll(tag.getSubcomponents());
                 gen.writeObject(group);

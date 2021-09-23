@@ -25,7 +25,7 @@ import lombok.Setter;
  */
 
 @Control(parents = {Form.class, PanelGroup.class, Repeater.class, Group.class}, invalidParents = {Table.class})
-@DocumentedComponent(value = "One column list of options to be selected. ", icon = "fa fa-list-ul")
+@DocumentedComponent(documentationExample = true, value = "One column list of options to be selected. ", icon = "fa fa-list-ul")
 public class OptionsList extends GroupingComponent<OptionsListElement> implements IChangeableByClient, CompactLayout {
 
     private static final String ON_ICON_CLICK_ATTR = "onIconClick";

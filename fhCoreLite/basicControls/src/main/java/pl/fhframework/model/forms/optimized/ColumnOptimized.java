@@ -44,7 +44,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
         designerXmlProperty = @DesignerXMLProperty(skip = true),
         property = "height"
 )
-@DocumentedComponent(value = "It is used to construct columns of TableOptimized components.", icon = "fa fa-columns")
+@DocumentedComponent(documentationExample = true, value = "It is used to construct columns of TableOptimized components.", icon = "fa fa-columns")
 public class ColumnOptimized extends GroupingComponent<FormElement> implements CompactLayout, IMultipleIteratorRepeatable<TableOptimized>, ICompilerAwareComponent, IHasBoundableLabel {
 
     public static final String ATTR_LABEL = "label";
@@ -285,6 +285,7 @@ public class ColumnOptimized extends GroupingComponent<FormElement> implements C
         TableCellOptimized tableCell = createEmptyCell();
 
         RowIteratorMetadata mainTableIteratorMetadata = lowLevelRowMetadata.getIteratorData().get(getTable().getIterator());
+        tableCell.setRowIndex(mainTableIteratorMetadata.getIndex());
         final int mainTableIteratorIndex = mainTableIteratorMetadata.getIndex();
 
         // call fatory to produce cell components

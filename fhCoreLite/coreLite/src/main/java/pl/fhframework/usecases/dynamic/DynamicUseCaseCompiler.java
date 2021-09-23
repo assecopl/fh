@@ -1,5 +1,6 @@
 package pl.fhframework.usecases.dynamic;
 
+import pl.fhframework.core.FhCL;
 import pl.fhframework.core.FhException;
 import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.core.uc.IUseCase;
@@ -44,7 +45,7 @@ public class DynamicUseCaseCompiler {
     public synchronized Class<?> loadClass(String name, boolean throwException) {
         URLClassLoader classLoader = null;
         try {
-            classLoader = URLClassLoader.newInstance(new URL[]{baseDir.toURI().toURL()}, IUseCase.class.getClassLoader());
+            classLoader = URLClassLoader.newInstance(new URL[]{baseDir.toURI().toURL()}, FhCL.classLoader);
 
             Class<?> cls = Class.forName(name, true, classLoader);
             return cls;

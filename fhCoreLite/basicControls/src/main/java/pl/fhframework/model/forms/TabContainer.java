@@ -1,29 +1,32 @@
 package pl.fhframework.model.forms;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import lombok.Getter;
+import lombok.Setter;
 import pl.fhframework.BindingResult;
 import pl.fhframework.annotations.*;
 import pl.fhframework.binding.*;
 import pl.fhframework.model.dto.ElementChanges;
+import pl.fhframework.model.dto.InMessageEventData;
 import pl.fhframework.model.dto.ValueChange;
 import pl.fhframework.model.forms.designer.IDesignerEventListener;
-import pl.fhframework.model.dto.InMessageEventData;
+import pl.fhframework.model.forms.optimized.ColumnOptimized;
 
-import lombok.Getter;
-import lombok.Setter;
-
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Class represents container for tabs and extends <code>GroupingComponent</code> class. It does not
  * contains attributes in xml. Additionally it contains information about currently active tab
  * index. This field can be used inside Group, Column, Tab, Form.
  * <p>
- * Example: <TabContainer></TabContainer>
+ * Example: {@code <TabContainer></TabContainer>}
  */
-@Control(parents = {PanelGroup.class, Column.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
-@DocumentedComponent(value = "TabContainer component which represents a containrt containing a single tabs", icon = "fas fa-window-maximize")
+@OverridenPropertyAnnotations(designerXmlProperty = @DesignerXMLProperty(readOnlyInDesigner = true), property = "hintType")
+@TemplateControl(tagName = "fh-tab-container")
+@Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
+@DocumentedComponent(category = DocumentedComponent.Category.ARRANGEMENT, documentationExample = true, value = "TabContainer component which represents a containrt containing a single tabs", icon = "fas fa-window-maximize")
 public class TabContainer extends GroupingComponent<Tab> implements IChangeableByClient, Boundable, CompactLayout, IDesignerEventListener {
 
     public static final String TYPE_NAME = "TabContainer";
@@ -46,7 +49,7 @@ public class TabContainer extends GroupingComponent<Tab> implements IChangeableB
     @JsonIgnore
     @XMLProperty(value = ATTR_ACTIVE_TAB_INDEX)
     @DesignerXMLProperty(allowedTypes = Integer.class)
-    @DocumentedComponentAttribute(defaultValue = "0", boundable = true, value = "Represents the index of the active tab")
+    @DocumentedComponentAttribute(defaultValue = "0", boundable = true, value = "Represents the index of the active tab. If '" + ATTR_ACTIVE_TAB_ID + "' binding is also used, then this attribute is read-only")
     private ModelBinding modelBinding;
 
     @Getter
@@ -54,7 +57,7 @@ public class TabContainer extends GroupingComponent<Tab> implements IChangeableB
     @JsonIgnore
     @XMLProperty(value = ATTR_ACTIVE_TAB_ID)
     @DesignerXMLProperty(allowedTypes = String.class)
-    @DocumentedComponentAttribute(boundable = true, value = "Represents the identification of the active tab")
+    @DocumentedComponentAttribute(boundable = true, value = "Represents the identification of the active tab. The attribute has precedence over '" + ATTR_ACTIVE_TAB_INDEX + "' if both are used")
     private ModelBinding tabIdBinding;
 
     public TabContainer(Form form) {

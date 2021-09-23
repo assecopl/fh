@@ -7,9 +7,10 @@ import pl.fhframework.BindingResult;
 import pl.fhframework.annotations.*;
 import pl.fhframework.binding.*;
 import pl.fhframework.model.dto.ElementChanges;
+import pl.fhframework.model.dto.InMessageEventData;
 import pl.fhframework.model.dto.ValueChange;
 import pl.fhframework.model.forms.designer.IDesignerEventListener;
-import pl.fhframework.model.dto.InMessageEventData;
+import pl.fhframework.model.forms.optimized.ColumnOptimized;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -18,12 +19,12 @@ import java.util.function.Consumer;
 /**
  * Class represents container for tabs and extends <code>GroupingComponent</code> class.
  * <p>
- * Example: <TabContainer></TabContainer>
+ * Example: {@code <TabContainer></TabContainer>}
  * <p>
  * mateusz.zaremba
  */
-@Control(parents = {PanelGroup.class, Column.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
-@DocumentedComponent(value = "Wizard component which represents container with tabs", icon = "fa fa-window-maximize")
+@Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
+@DocumentedComponent(category = DocumentedComponent.Category.ARRANGEMENT, documentationExample = true, value = "Wizard component which represents container with tabs", icon = "fa fa-window-maximize")
 public class Wizard extends GroupingComponent<Tab> implements IChangeableByClient, Boundable, CompactLayout, IDesignerEventListener {
 
     public static final String TYPE_NAME = "Wizard";

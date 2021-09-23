@@ -37,6 +37,7 @@ class FH {
 
             var requestId = this.socketHandler.activeConnector.getSubsystemMetadata(
                 function (requestId, data) {
+                    this.formsManager.setInitialized();
                     this.formsManager.handleEvent(requestId, data);
 
                     for (let deviceManager of this.serviceManagers) {
@@ -67,6 +68,7 @@ class FH {
 
             var requestId = this.socketHandler.activeConnector.getSubsystemMetadata(
                 function (requestId, data) {
+                    this.formsManager.setInitialized();
                     this.formsManager.handleEvent(requestId, data);
 
                     for (let deviceManager of this.serviceManagers) {

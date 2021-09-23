@@ -2,7 +2,7 @@ import {InputText} from "./InputText";
 import {FhContainer, FormsManager, HTMLFormComponent} from 'fh-forms-handler';
 import getDecorators from "inversify-inject-decorators";
 
-let { lazyInject } = getDecorators(FhContainer);
+let {lazyInject} = getDecorators(FhContainer);
 
 class Combo extends InputText {
     @lazyInject("FormsManager")
@@ -10,36 +10,43 @@ class Combo extends InputText {
 
     protected values: any;
     protected autocompleter: any;
-    private selectedIndexGroup: any;
-    private selectedIndex: any;
-    private removedIndex: any;
-    private highlighted: any;
-    private forceSendSelectedIndex: any;
-    private cleared: any;
-    private addedTag: boolean;
-    private lastCursorPosition: any;
-    private blurEvent: any;
-    private blurEventWithoutChange: boolean;
-    private readonly emptyValue: any;
-    private readonly onSpecialKey: any;
-    private readonly onDblSpecialKey: any;
-    private onEmptyValue: any;
-    private readonly multiselect: boolean;
-    private readonly freeTyping: boolean;
-    private tagslist: Array<string> = [];
-    private tagsInputData: any;
-    private multiselectRawValue: any;
-    private multiselectOldValue: any;
-    private changeToFired: boolean;
-    private firedEventData: any;
+    protected selectedIndexGroup: any;
+    protected selectedIndex: any;
+    protected removedIndex: any;
+    protected highlighted: any;
+    protected forceSendSelectedIndex: any;
+    protected cleared: any;
+    protected addedTag: boolean;
+    protected lastCursorPosition: any;
+    protected blurEvent: any;
+    protected blurEventWithoutChange: boolean;
+    protected readonly onSpecialKey: any;
+    protected readonly onDblSpecialKey: any;
+    protected readonly multiselect: boolean;
+    protected readonly freeTyping: boolean;
+    protected tagslist: Array<string> = [];
+    protected tagsInputData: any;
+    protected multiselectRawValue: any;
+    protected widthRatio: number;
+    protected multiselectOldValue: any;
+    protected changeToFired: boolean;
+
+    protected onInputTimer: any;
+    protected openOnFocus: boolean = true;
+    protected readonly onInputTimeout: number;
 
     private cursorPositionOnLastSpecialKey: any;
-    private rawValueOnLastSpecialKey: any;
+
+    private revertToOldValue:boolean = false;
+
+    //Is focus on dropdown element. For IE11 click on srcoll problem.
+    private autocompleterFocus:boolean = false;
 
     constructor(componentObj: any, parent: HTMLFormComponent) {
         super(componentObj, parent);
 
         this.values = this.componentObj.filteredValues;
+        this.onInputTimeout = this.componentObj.onInputTimeout ? this.componentObj.onInputTimeout : null;
         this.input = null;
         this.autocompleter = null;
         this.selectedIndexGroup = null;
@@ -49,7 +56,8 @@ class Combo extends InputText {
         this.cleared = false;
         this.lastCursorPosition = this.componentObj.cursor;
         this.blurEvent = false;
-
+        this.widthRatio = this.componentObj.widthRatio;
+        this.openOnFocus = typeof this.componentObj.openOnFocus === 'undefined' ? true : this.componentObj.openOnFocus;
         this.emptyValue = this.componentObj.emptyValue;
         this.onSpecialKey = this.componentObj.onSpecialKey;
         this.onDblSpecialKey = this.componentObj.onDblSpecialKey;
@@ -102,14 +110,21 @@ class Combo extends InputText {
             let keyCode = event.which;
             let options = this.autocompleter.querySelectorAll('li:not(.dropdown-header)');
             if (keyCode === 9 || keyCode === 13) {
+                // tab or enter
                 let shouldBlur = true;
+                this.revertToOldValue = false;
+                this.input.title = "";
                 if (this.highlighted != null) {
                     let element = options[this.highlighted].firstChild;
                     this.selectedIndexGroup = element.dataset.group;
                     this.selectedIndex = parseInt(element.dataset.index);
                     this.forceSendSelectedIndex = true;
-
-                    this.input.value = element.dataset.targetValue;
+                    const val = this.values[this.selectedIndexGroup][this.selectedIndex];
+                    if (val) {
+                        this.input.value = this.getInputValue(val);
+                        //WCAG Screen reader - Set title for input to makes it will be read after select.
+                        this.input.title = this.input.value;
+                    }
                     if (element.dataset.targetCursorPosition !== undefined) {
                         this.setCursorPositionToInput(parseInt(element.dataset.targetCursorPosition));
                         shouldBlur = false;
@@ -130,6 +145,8 @@ class Combo extends InputText {
                     type: 'keypress',
                     which: 9
                 });
+            }else if (keyCode == 27) {
+
             } else {
                 let move = 0;
                 switch (keyCode) {
@@ -142,6 +159,7 @@ class Combo extends InputText {
                 }
                 if ((keyCode === 40 || keyCode === 38) && !this.autocompleter.classList.contains('isEmpty')) {
                     let current = options[this.highlighted];
+                   this.revertToOldValue = true;
                     if (current) {
                         current.classList.remove('selected');
                     }
@@ -160,6 +178,11 @@ class Combo extends InputText {
                     this.highlighted = this.highlighted % options.length;
                     options[this.highlighted].classList.add('selected');
                     this.autocompleter.scrollTop = options[this.highlighted].offsetTop;
+                    let element = options[this.highlighted].firstChild;
+                    const val = this.values[element.dataset.group][element.dataset.index];
+                    if (val) {
+                        this.input.value = this.getInputValue(val);
+                    }
                 }
                 if (this.multiselect && keyCode == 8 && $(this.input).val() === '' && this.tagslist.length > 0) {
                     event.preventDefault();
@@ -173,7 +196,10 @@ class Combo extends InputText {
         if (this.onInput) {
             input.addEventListener('input', function () {
                 if (this.accessibility === 'EDIT') {
-                    this.fireEvent('onInput', this.onInput);
+                    if (!this.openOnFocus) {
+                        this.openAutocomplete();
+                    }
+                    this.onInputEvent();
                 }
             }.bind(this));
         }
@@ -181,9 +207,11 @@ class Combo extends InputText {
             if (event.ctrlKey && event.which === 32 && this.accessibility === 'EDIT') {
                 event.stopPropagation();
                 event.preventDefault();
+
                 let doubleSepcialKey = this.onDblSpecialKey && this.input && this.input.value == this.rawValueOnLatSpecialKey && this.input.selectionStart == this.cursorPositionOnLastSpecialKey;
                 if (fireEvent) {
                     if (!doubleSepcialKey) {
+                        this.openAutocomplete();
                         this.rawValueOnLatSpecialKey = this.input.value;
                         this.cursorPositionOnLastSpecialKey = this.input.selectionStart;
                         if (this.onSpecialKey) {
@@ -208,17 +236,34 @@ class Combo extends InputText {
 
         input.addEventListener('focus', function () {
             if (this.accessibility === 'EDIT') {
-                if (this.onInput) {
-                    this.fireEvent('onInput', this.onInput);
+                this.onInputEvent();
+                if (this.openOnFocus) {
+                    this.openAutocomplete();
                 }
-                this.openAutocomplete();
+                this.autocompleterFocus = false;
+
             }
         }.bind(this));
-        input.addEventListener('blur', function () {
-            this.closeAutocomplete();
-            if (this.multiselect) {
-                this.addTag(this.input.value);
+        input.addEventListener('blur', function (event) {
+            //For IE11. Check if event was fired by action on dropdown element.
+
+            if(!this.autocompleterFocus) {
+                this.closeAutocomplete();
+
+                if (this.multiselect) {
+                    this.addTag(this.input.value);
+                }
+            } else {
+                //IE11 Put back focus on input.
+                this.input.focus();
+                this.autocompleterFocus = false;
+                return false;
             }
+            if(!this.multiselectOldValue && this.input.value !== this.rawValue){
+                input.value = this.rawValue;
+            }
+
+
         }.bind(this));
         if (this.onChange) {
             $(input).on('blur', function (event) {
@@ -238,12 +283,15 @@ class Combo extends InputText {
         });
         autocompleter.id = this.id + '_autocompleter';
 
+
         this.autocompleter = autocompleter;
+
         this.component = this.input;
         this.focusableComponent = input;
         this.hintElement = this.component;
 
         this.wrap(false, true);
+        this.createIcon();
 
         if (this.multiselect) {
             this.inputGroupElement.classList.add('tagsinput');
@@ -324,45 +372,80 @@ class Combo extends InputText {
 
     openAutocomplete() {
         let formType = this.getFormType();
-        let componentsContainer = this.component.closest('.card-body');
+        let componentsContainer = $(this.component).closest('.card-body');
         let containerHeightAfterListDisplay;
         let containerHeightBeforeListDisplay;
-
-        if (componentsContainer) {
-            containerHeightBeforeListDisplay = componentsContainer.scrollHeight;
+        if (componentsContainer.length > 0) {
+            containerHeightBeforeListDisplay = componentsContainer[0].scrollHeight;
         }
+
 
         this.autocompleter.classList.add('show');
 
         if (this.formId === 'designerProperties') {
-            containerHeightAfterListDisplay = componentsContainer.scrollHeight;
+            containerHeightAfterListDisplay = componentsContainer[0].scrollHeight;
         }
 
-        if (containerHeightAfterListDisplay > containerHeightBeforeListDisplay ) {
+        if (this.widthRatio) {
+            this.autocompleter.style.width = (this.autocompleter.offsetWidth * (this.widthRatio/100) ) + "px";
+        }
+
+        if (containerHeightAfterListDisplay > containerHeightBeforeListDisplay) {
             this.autocompleter.scrollIntoView({
                 behavior: "smooth",
                 block: "nearest"
             });
         }
 
+        /**
+         * Check if component will overflow window
+         * and change direction of view if necessary.
+         */
+        let bounding = this.autocompleter.getBoundingClientRect();
+        let rightOverlap = bounding.right - (window.innerWidth || document.documentElement.clientWidth);
+        let bottomOverlap = bounding.bottom - (window.innerHeight || document.documentElement.clientHeight);
+
+        if (rightOverlap > -17) {
+            this.autocompleter.style.setProperty('right', '0px', "important");
+            this.autocompleter.style.setProperty('left', 'auto', "important");
+        }
+
+        //IE11 Set true for autocompleter actions. We need to prevent focusout on input then.
+        this.autocompleter.addEventListener('mousedown', function (event) {
+            this.autocompleterFocus = true;
+        }.bind(this));
+
         let parent = null;
 
         if (formType === 'STANDARD') {
-            parent = $(this.component).closest('.panel,.splitContainer');
-            if (!parent.hasClass('floating') && !parent.hasClass('splitContainer')) {
+            parent = $(this.component).closest('.panel,.splitContainer,.hasHeight');
+
+            //If autocompleter is about to open in container with fixed height we change it's open direction. Direction will be UP.
+            if(parent.hasClass('hasHeight')){
+                const parentBound = parent[0].getBoundingClientRect();
+                let completerYmaks = bounding.height + bounding.top;
+                let parentYmaks = parentBound.top + parentBound.height;
+                //Put it as sibling of parent becouse parent has height and elements inside it wont overflow it. Close it when parent begins to scroll.
+                if(completerYmaks > parentYmaks){
+                    this.handleContainerOverflow(parent.parent(),  this.autocompleter, true);
+                } else {
+                    this.handleContainerOverflow(parent.parent(),  this.autocompleter);
+                }
+
+                parent.on("scroll", this.closeAutocomplete.bind(this));
+            } else if(bottomOverlap > 20){
+                this.inputGroupElement.classList.add("dropup");
+            }
+            if (!parent.hasClass('floating') && !parent.hasClass('splitContainer') ) {
                 return;
             }
         } else if (formType === 'MODAL' || formType === 'MODAL_OVERFLOW') {
             parent = $(this.component).closest('.modal-content');
+            this.handleContainerOverflow(parent, this.autocompleter);
+        } else {
+            console.error('Parent not defined.');
+            return;
         }
-
-        parent.append(this.autocompleter);
-        let _component = $(this.component);
-        let _autocompleter = $(this.autocompleter);
-
-        _autocompleter.css('top', _component.offset().top - parent.offset().top + this.component.offsetHeight);
-        _autocompleter.css('left', _component.offset().left - parent.offset().left);
-        _autocompleter.css('width', this.component.offsetParent.offsetWidth);
     };
 
     createClearButton() {
@@ -422,21 +505,37 @@ class Combo extends InputText {
     closeAutocomplete() {
         let formType = this.getFormType();
 
+        if (this.widthRatio) {
+            this.autocompleter.style.width = "";
+        }
+
+
         this.autocompleter.classList.remove('show');
+        this.autocompleter.classList.remove('dropup');
+
+        /**
+         * Clear inline styles for right direction view.
+         */
+        this.autocompleter.style.setProperty('right', '', null);
+        this.autocompleter.style.setProperty('left', '', null);
+        this.autocompleter.style.setProperty('top', '', null);
 
         let parent = null;
         if (formType === 'STANDARD') {
             parent = $(this.component).closest('.panel');
 
+            if (!this.inputGroupElement.contains(this.autocompleter)) {
+                this.inputGroupElement.appendChild(this.autocompleter);
+            }
+
             if (!parent.hasClass('floating')) {
                 return;
             }
         } else if (formType === 'MODAL' || formType === 'MODAL_OVERFLOW') {
-            parent = $(this.component).closest('.modal-content');
+            if (!this.inputGroupElement.contains(this.autocompleter)) {
+                this.inputGroupElement.appendChild(this.autocompleter);
+            }
         }
-
-        parent.find('.autocompleter').remove();
-        this.component.appendChild(this.autocompleter);
     };
 
     extractChangedAttributes() {
@@ -518,8 +617,12 @@ class Combo extends InputText {
 
                 let a = document.createElement('a');
                 a.classList.add('dropdown-item');
-                let displayValue = itemValue.displayAsTarget ? itemValue.targetValue : itemValue.displayedValue;
-
+                let displayValue;
+                if (this.formId === 'designerProperties') {
+                    displayValue = itemValue.displayAsTarget ? itemValue.targetValue : itemValue.displayedValueWithoutExtras;
+                } else {
+                    displayValue = itemValue.displayAsTarget ? itemValue.targetValue : itemValue.displayedValue;
+                }
                 let disabled = false;
                 if (this.multiselect && this.tagslist.indexOf(displayValue) >= 0) {
                     a.classList.add('disabled');
@@ -677,21 +780,19 @@ class Combo extends InputText {
 
                 tagslist.push(value);
 
-                $('#' + id + '_tag').val('');
-                if (options.focus) {
-                    $('#' + id + '_tag').focus();
-                } else {
-                    $('#' + id + '_tag').blur();
-                }
-            }
-            if (options.focus) {
-                $(this.input).trigger('focus');
+                $('#' + id + '_tagsinput').val('');
+                $('#' + id + '_tagsinput').blur();
             }
         }
 
-        if (options.callback && this.tagsInputData.onAddTag) {
-            // todo: change
-            this.tagsInputData.onAddTag.call(this, this, value);
+        if (options.callback) {
+            this.selectedIndex = null;
+            this.input.value = '';
+            this.setValues(this.values);
+            this.closeAutocomplete();
+            this.addedTag = true;
+            this.updateModel();
+            this.changeToFired = false
         }
     }
 
@@ -712,8 +813,14 @@ class Combo extends InputText {
         this.tagslist = [];
         this.importTags(reAddTags);
 
-        if (options.callback && this.tagsInputData.onRemoveTag) {
-            this.tagsInputData.onRemoveTag.call(this, this, value);
+        if (options.callback) {
+            this.selectedIndex = null;
+            this.input.value = '';
+            this.closeAutocomplete();
+            this.setValues(this.values);
+            this.updateModel();
+            this.fireEventWithLock('onChange', this.onChange);
+            this.changeToFired = false
         }
     }
 
@@ -770,9 +877,10 @@ class Combo extends InputText {
                 }
                 break;
             case 'HIDDEN':
-                if(this.invisible){
+                if (this.invisible) {
                     this.htmlElement.classList.add('invisible');
                 } else {
+                    this.hideHint();
                     this.htmlElement.classList.add('d-none');
                 }
                 break;
@@ -796,6 +904,29 @@ class Combo extends InputText {
             }
         }
         return false;
+    }
+
+    onInputEvent() {
+        if (this.onInput) {
+            if (this.onInputTimeout) {
+                clearTimeout(this.onInputTimer);
+                this.onInputTimer = setTimeout(function () {
+                    this.fireEvent('onInput', this.onInput);
+                }.bind(this), this.onInputTimeout);
+            } else {
+                this.fireEvent('onInput', this.onInput);
+            }
+        }
+    }
+
+    getDefaultWidth(): string {
+        return super.getDefaultWidth();
+    }
+
+    //Added function to override it on DictionaryCombo
+    //Retrun to classic behaviour as it was before March 2020 changes for DictioanryCombo.
+    public getInputValue(val){
+            return  val.targetValue;
     }
 }
 

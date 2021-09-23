@@ -32,7 +32,7 @@ public class MessageService {
     @Autowired
     private ApplicationContext applicationContext;
 
-    @Value("${fhframework.language.default:en-GB}")
+    @Value("${fhframework.language.default:pl}")
     private String defaultLanguage;
 
     /**
@@ -171,7 +171,7 @@ public class MessageService {
             }
             MessageService.MessageBundle allBundles = getAllBundles();
             String fullClassKey = ENUM_KEY_PREFIX + enumValue.getClass().getCanonicalName() + "." + enumValue.name();
-            String value = allBundles.getMessage(fullClassKey, (String) null);
+            String value = allBundles.getMessage(fullClassKey, null, getUserLanguage(), null);
             if (value != null) {
                 return value;
             }

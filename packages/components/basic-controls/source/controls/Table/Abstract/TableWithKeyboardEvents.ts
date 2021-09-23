@@ -1,5 +1,4 @@
-
-import {FhContainer, HTMLFormComponent} from "fh-forms-handler";
+import {HTMLFormComponent} from "fh-forms-handler";
 import {TableFixedHeaderAndHorizontalScroll} from "./TableFixedHeaderAndHorizontalScroll";
 import {TableRowOptimized} from "./../Optimized/TableRowOptimized";
 
@@ -12,11 +11,14 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
     protected readonly selectable: boolean = true;
     protected readonly onRowClick: any = null;
     protected ctrlIsPressed: any = false;
+    protected shiftIsPressed: any = false;
     protected rows: Array<TableRowOptimized> = [];
-    protected multiselect:boolean = false;
+    protected multiselect: boolean = false;
 
-    private keyEventTimer: any;                //timer identifier
-    private doneEventInterval: number = 500;   //event delay in miliseconds
+    protected keyEventTimer: any;                //timer identifier
+    protected doneEventInterval: number = 500;   //event delay in miliseconds
+
+    private loopDown: boolean = false; //key event loop turn on/off
 
     constructor(componentObj: any, parent: HTMLFormComponent) {
         super(componentObj, parent);
@@ -28,7 +30,7 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
 
     }
 
-    protected initExtends(){
+    protected initExtends() {
         super.initExtends();
         if (this.selectable && this.onRowClick) {
             this.table.addEventListener('keydown', this.tableKeydownEvent.bind(this));
@@ -43,22 +45,31 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
         if (event.which == "17") {
             this.ctrlIsPressed = true;
         }
+        if (event.which == "16") {
+            this.shiftIsPressed = true;
+        }
     }
 
+    abstract onRowClickEvent(e, mainId, silent);
 
     //Realese ctrl click for keyboard events
-    private  tableKeyupEvent(e) {
+    public tableKeyupEvent(e) {
         this.ctrlIsPressed = false;
+        this.shiftIsPressed = false;
         if (e.which == 9 && $(document.activeElement).is(":input")) {
             let parent = $(document.activeElement).parents('tbody tr:not(.emptyRow)');
             if (parent && parent.length > 0) {
-                parent.trigger('click');
+                // @ts-ignore
+                this.onRowClickEvent({ ctrlKey: false, shiftKey: false }, parent[0].dataset.mainId, true);
             }
         }
     }
 
     tableMousedownEvent(event) {
         if (event.ctrlKey) {
+            event.preventDefault();
+        }
+        if (event.shiftKey) {
             event.preventDefault();
         }
     }
@@ -78,21 +89,21 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
                         next = current.next('tr:not(.emptyRow)');
                     }
                     //If there isn't next element we go back to first one.
-                    if (next && next.length == 0) {
+                    if (next && next.length == 0 && this.loopDown) {
                         next = $(this.htmlElement).find('tbody tr:not(.emptyRow)').first();
                     }
-
                     if (next && next.length > 0) {
                         current.removeClass('table-primary');
                         next.addClass('table-primary');
-                        let offset = $(next).position().top;
-                        if (this.fixedHeader) {
-                            offset -= this.header.clientHeight;
-                        }
-                        $(this.component).scrollTop(offset - (this.component.clientHeight / 2));
+                        this.scrolToRow(next);
+                        this.scrolIntoView(next);
                         this.keyEventTimer = setTimeout(function (elem) {
-                            elem.trigger('click');
+                            elem ? elem.trigger('click') : false;
                         }, this.doneEventInterval, next);
+                    } else {
+                        this.keyEventTimer = setTimeout(function (elem) {
+                            elem ? elem.trigger('click') : false;
+                        }, this.doneEventInterval, current);
                     }
                 } else if (e.which == 38) { // strzalka w gore
                     e.preventDefault();
@@ -105,22 +116,22 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
                     } else {
                         prev = current.prev('tr:not(.emptyRow)');
                     }
-
                     if (prev && prev.length == 0) {
                         $(this.component).scrollTop(0);
+                        this.keyEventTimer = setTimeout(function (elem) {
+                            elem ? elem.trigger('click') : false;
+                        }, this.doneEventInterval, current);
                     } else if (prev && prev.length > 0) {
                         current.removeClass('table-primary');
                         prev.addClass('table-primary');
-                        let offset = $(prev).position().top;
-                        if (this.fixedHeader) {
-                            offset -= this.header.clientHeight;
-                        }
-                        $(this.component).scrollTop(offset - (this.component.clientHeight / 2));
+                        this.scrolToRow(prev);
+                        this.scrolIntoView(prev);
                         this.keyEventTimer = setTimeout(function (elem) {
-                            elem.trigger('click');
+                            elem ? elem.trigger('click') : false;
                         }, this.doneEventInterval, prev);
-
                     }
+
+
                 } else if (e.which == 33 || e.which == 36) { // pgup i home
                     e.preventDefault();
 
@@ -129,6 +140,7 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
                     if (first && first.length > 0) {
                         $(this.component).scrollTop(0);
                         first.trigger('click');
+                        this.scrolIntoView(first);
                     }
                 } else if (e.which == 34 || e.which == 35) { // pgdown i end
                     e.preventDefault();
@@ -138,43 +150,67 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
                     if (last && last.length > 0) {
                         $(this.component).scrollTop($(last).position().top);
                         last.trigger('click');
+                        this.scrolIntoView(last);
+
+                    }
+                } else if (e.which == 13) {
+                    e.preventDefault();
+
+                    let current = $(this.htmlElement).find('tbody tr.table-primary');
+                    if (current.length) {
+                        this.onRowDblClick(e, current[0]);
                     }
                 }
             }
         }.bind(this));
     }
 
-
-    protected highlightSelectedRows() {
+    /**
+     * Used For Optimized Tables
+     * @param scrollAnimate
+     */
+    protected highlightSelectedRows(scrollAnimate: boolean = false) {
         let oldSelected = this.table.querySelectorAll('.table-primary');
         if (oldSelected && oldSelected.length) {
             [].forEach.call(oldSelected, function (row) {
                 row.classList.remove('table-primary');
+                if (this.selectionCheckboxes) {
+                    row.firstChild.querySelector('input[type="checkbox"]').checked = false;
+                }
             }.bind(this));
         }
         (this.rawValue || []).forEach(function (value) {
             if (value != -1) {
                 const row: TableRowOptimized = this.rows[parseInt(value)];
-                row.highlightRow();
-
+                row.highlightRow(scrollAnimate);
+                if (this.selectionCheckboxes) {
+                    row.component.querySelector('input[type="checkbox"]').checked = true;
+                }
+            } else {
+                this.scrollTopInside();
             }
+
+
         }.bind(this));
     };
 
     update(change) {
         super.update(change);
-        if (change.changedAttributes) {
-            $.each(change.changedAttributes, function (name, newValue) {
-                switch (name) {
-                    case 'selectedRowNumber':
-                        this.rawValue = change.changedAttributes['selectedRowNumber'];
-                        this.highlightSelectedRows();
-
-                        break;
-                }
-            }.bind(this));
-        }
     };
+
+
+    destroy(removeFromParent) {
+        this.table.removeEventListener('mousedown', this.tableMousedownEvent);
+        if (this.selectable && this.onRowClick) {
+            this.table.removeEventListener('keydown', this.tableKeydownEvent.bind(this));
+            this.table.removeEventListener('keyup', this.tableKeyupEvent.bind(this));
+        }
+        super.destroy(removeFromParent);
+    }
+
+    public keyEventLoopDownTurnOff() {
+        this.loopDown = false;
+    }
 
 }
 

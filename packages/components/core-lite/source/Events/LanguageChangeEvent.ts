@@ -1,6 +1,7 @@
 import {injectable} from "inversify";
 import {BaseEvent} from "./BaseEvent";
 import {I18n} from "../I18n/I18n";
+import * as Cookies from "js-cookie";
 import getDecorators from "inversify-inject-decorators";
 import {FhContainer} from "../FhContainer";
 
@@ -15,6 +16,7 @@ class LanguageChangeEvent extends BaseEvent {
         let head = $('html');
         head.attr('lang', data.code);
 
+        Cookies.set('USERLANG', data.code);
         this.i18n.selectLanguage(data.code);
     }
 }

@@ -30,6 +30,10 @@ public class ActionButton {
         return actionButtonProperties.action;
     }
 
+    public String getButtonStyle() {
+        return actionButtonProperties.buttonStyle;
+    }
+
     public Consumer<? super ViewEvent> getViewEventAction(){
         return actionButtonProperties.viewEventAction;
     }
@@ -42,8 +46,23 @@ public class ActionButton {
         return builder().withAction(action).withButtonLabel(buttonLabel).build();
     }
 
+    public static ActionButton get(String buttonLabel, String btnStyle, Action action){
+        return builder().withAction(action)
+                .withButtonLabel(buttonLabel)
+                .withButtonStyle(btnStyle)
+                .build();
+    }
+
     public static ActionButton get(String buttonLabel, Consumer<?super ViewEvent> viewEventAction){
         return builder().withViewEventAction(viewEventAction).withButtonLabel(buttonLabel).build();
+    }
+
+    public static ActionButton get(String buttonLabel, String btnStyle, Consumer<?super ViewEvent> viewEventAction){
+        return builder()
+                .withViewEventAction(viewEventAction)
+                .withButtonLabel(buttonLabel)
+                .withButtonStyle(btnStyle)
+                .build();
     }
 
     public static ActionButton getClose(String buttonLabel){
@@ -54,6 +73,7 @@ public class ActionButton {
         private String buttonLabel;
         private String buttonId;
         private Action action;
+        private String buttonStyle;
         private Consumer<? super ViewEvent> viewEventAction;
     }
 
@@ -74,6 +94,10 @@ public class ActionButton {
         }
         public Builder withViewEventAction(Consumer<? super ViewEvent> viewEventAction){
             this.properties.viewEventAction=viewEventAction;
+            return this;
+        }
+        public Builder withButtonStyle(String buttonStyle){
+            this.properties.buttonStyle = buttonStyle;
             return this;
         }
 

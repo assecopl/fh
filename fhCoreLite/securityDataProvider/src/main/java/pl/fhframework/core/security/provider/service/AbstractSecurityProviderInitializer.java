@@ -24,7 +24,7 @@ public abstract class AbstractSecurityProviderInitializer implements SecurityPro
     protected String defaultAdminLogin;
     @Value("${fhframework.security.provider.default-admin-pass:admin}")
     protected String defaultAdminPass;
-    @Value("${fhframework.security.provider.default-admin-role:Administrator}")
+    @Value("${fhframework.security.provider.default-admin-role:#{null}}")
     protected String defaultAdminRole;
     @Value("${fhframework.security.provider.default-admin-all-permissions:false}")
     protected boolean defaultAdminAllPermissions;
@@ -101,6 +101,8 @@ public abstract class AbstractSecurityProviderInitializer implements SecurityPro
                 adminRoleName, "sam/security", "6a01406b-62a8-49fd-af55-a79df19c8950"));
         permissions.add(securityDataProvider.createSimplePermissionInstance(
                 adminRoleName, "designer", "06e72cae-5d0c-45de-a4e1-24c2825515d9"));
+        permissions.add(securityDataProvider.createSimplePermissionInstance(
+                adminRoleName, "fh/documentation", "0d4e165b-16e0-4da3-b6e3-7ef42987da1a"));
         return permissions;
     }
 

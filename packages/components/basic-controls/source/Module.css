@@ -1,9 +1,7 @@
-@import '~pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.min.css';
 @import "css/Accordion.css";
 @import "css/ApplicationLock.css";
 @import "css/Button.css";
 @import "css/Calendar.css";
-@import "css/Clock.css";
 @import "css/Combo.css";
 @import "css/Checkbox.css";
 @import "css/Dropdown.css";
@@ -14,6 +12,7 @@
 @import "css/Image.css";
 @import "css/InputDate.css";
 @import "css/InputText.css";
+@import "css/InputTimestamp.css";
 @import "css/Link.css";
 @import "css/Modal.css";
 @import "css/MdFileViewer.css";
@@ -37,4 +36,7 @@
 @import "css/ThreeDotsMenu.css";
 @import "~highlightjs/styles/github.css";
 @import "~summernote/dist/summernote-bs4.css";
+@import "~select2/dist/css/select2.min.css";
+@import "~select2-theme-bootstrap4/dist/select2-bootstrap.min.css";
+@import "css/Select2Combo.css";
 

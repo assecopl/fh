@@ -13,7 +13,7 @@ public interface IDesignerFixedValuesProvider {
 
     /**
      * Returns preview value
-     * @param component component
+     * @param componentClass component
      * @param field field with XMLProperty annotation
      * @return list of fixed values
      */
@@ -21,7 +21,7 @@ public interface IDesignerFixedValuesProvider {
 
     /**
      * Checks if free typing is allowed. If not only fixed values are allowed. It is only used if fixed values are present.
-     * @param component component
+     * @param componentClass component
      * @param field field with XMLProperty annotation
      * @return true if free typing is allowed
      */
@@ -29,7 +29,7 @@ public interface IDesignerFixedValuesProvider {
 
     /**
      * Checks if filtering is allowed. Filtering is always allowed if free typing is allowed. If true a Combo instead of SelectOneMenu control will be used. It is only used if fixed values are present.
-     * @param component component
+     * @param componentClass component
      * @param field field with XMLProperty annotation
      * @return true if free typing is allowed
      */
@@ -37,7 +37,7 @@ public interface IDesignerFixedValuesProvider {
 
     /**
      * Checks if empty value is allowed. It is only used if fixed values are present.
-     * @param component component
+     * @param componentClass component
      * @param field field with XMLProperty annotation
      * @return true if empty value is allowed
      */

@@ -1,35 +1,37 @@
 package pl.fhframework.model.forms;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.util.StringUtils;
-
 import pl.fhframework.BindingResult;
 import pl.fhframework.annotations.*;
-import pl.fhframework.annotations.Control;
 import pl.fhframework.binding.*;
 import pl.fhframework.model.dto.ElementChanges;
 import pl.fhframework.model.dto.InMessageEventData;
 import pl.fhframework.model.forms.attribute.IconAlignment;
 import pl.fhframework.model.forms.designer.BindingExpressionDesignerPreviewProvider;
+import pl.fhframework.model.forms.optimized.ColumnOptimized;
 import pl.fhframework.tools.loading.IBodyXml;
 
-import java.util.*;
-
-import lombok.Getter;
-import lombok.Setter;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.*;
 
 /**
  * Class representing xml component of OutputLabel. Every field represents xml attribute of
- * outputLabel tag. Example <OutputLabel value="{value_1}"/>. Every field is parsed as json for
+ * outputLabel tag. Example {@code <OutputLabel value="{value_1}"/>}. Every field is parsed as json for
  * javascript. If field should be ingored by JSON, use <code>@JsonIgnore</code>. There can be used
  * any annotations for json generator.
  */
-@Control(parents = {PanelGroup.class, Column.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
-@DocumentedComponent(value = "Label component is responsible for displaying value.", icon = "fa fa-font")
+@TemplateControl(tagName = "fh-output-label")
+@Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
+@DocumentedComponent(category = DocumentedComponent.Category.INPUTS_AND_VALIDATION, documentationExample = true, value = "Label component is responsible for displaying value.", icon = "fa fa-font")
 @DesignerControl(defaultWidth = 2)
+@OverridenPropertyAnnotations(designerXmlProperty = @DesignerXMLProperty(readOnlyInDesigner = true), property = "hintType")
 public class OutputLabel extends FormElement implements TableComponent<OutputLabel>, Iconable, IBodyXml {
 
     public static final String ATTR_VALUE = "value";
@@ -51,9 +53,9 @@ public class OutputLabel extends FormElement implements TableComponent<OutputLab
 
     @Getter
     @Setter
-    @XMLProperty(defaultValue = "before")
+    @XMLProperty(defaultValue = "BEFORE")
     @DesignerXMLProperty(priority = 84, functionalArea = LOOK_AND_STYLE)
-    @DocumentedComponentAttribute(defaultValue = "before", boundable = true, value = "Icon alignment - possible values are before or after. Final alignment depends of component where this attribute is used.")
+    @DocumentedComponentAttribute(defaultValue = "BEFORE", boundable = true, value = "Icon alignment - possible values are before or after. Final alignment depends of component where this attribute is used.")
     private IconAlignment iconAlignment;
 
     @Getter
@@ -63,7 +65,7 @@ public class OutputLabel extends FormElement implements TableComponent<OutputLab
     @Getter
     @Setter
     @XMLProperty(required = true, value = ATTR_VALUE)
-    @DesignerXMLProperty(functionalArea = CONTENT, previewValueProvider = BindingExpressionDesignerPreviewProvider.class, priority = 15)
+    @DesignerXMLProperty(functionalArea = CONTENT, previewValueProvider = BindingExpressionDesignerPreviewProvider.class, priority = 95)
     @DocumentedComponentAttribute(boundable = true, value = "Represents text value for created component.")
     private ModelBinding valueBinding;
 

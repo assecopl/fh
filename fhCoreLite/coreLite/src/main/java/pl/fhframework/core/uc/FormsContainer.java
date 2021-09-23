@@ -1,7 +1,6 @@
 package pl.fhframework.core.uc;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import pl.fhframework.core.FhFormException;
 import pl.fhframework.core.util.StringUtils;
 import pl.fhframework.events.UseCaseRequestContext;
@@ -35,8 +34,7 @@ public class FormsContainer {
     private Map<String, HistoricalFormState> clientState = new LinkedHashMap<>();
 
     // list of all managed forms
-    @Getter
-    private List<Form<?>> managedForms = new ArrayList<Form<?>>() {
+    private List<Form<?>> managedForms = Collections.synchronizedList(new ArrayList<Form<?>>() {
         @Override
         public boolean add(Form<?> form) {
             if (this.contains(form)) {
@@ -44,7 +42,7 @@ public class FormsContainer {
             }
             return super.add(form);
         }
-    }; // there can only be one form with the same id
+    }); // there can only be one form with the same id
 
     public void showForm(Form form) {
         form.setShowingTimestamp(Instant.now());
@@ -61,7 +59,7 @@ public class FormsContainer {
 
     public String logState() {
         StringBuilder msg = new StringBuilder("FORMS: [\n");
-        for (Form<?> form : managedForms) {
+        for (Form<?> form : new ArrayList<>(managedForms)) {
             msg.append("\t\t")
                     .append(form.getClass().getSimpleName())
                     .append(" [").append(form.getState())
@@ -76,8 +74,9 @@ public class FormsContainer {
     }
 
     public void recalculateStates() {
+        List<Form<?>> forms = new ArrayList<>(managedForms);
         // reset states to active / inactive
-        for (Form<?> form : managedForms) {
+        for (Form<?> form : forms) {
             if (isFullyManaged(form)) {
                 boolean isUseCaseActive = isSystemUseCase(form.getAbstractUseCase()) || isTopStackUseCase(form.getAbstractUseCase());
                 form.setState(isUseCaseActive ? FormState.ACTIVE : FormState.INACTIVE_PENDING);
@@ -86,8 +85,8 @@ public class FormsContainer {
 
         // calculate state of a form based on forms above this form
         processedForms:
-        for (int procIndex = 0; procIndex < managedForms.size(); procIndex++) {
-            Form procForm = managedForms.get(procIndex);
+        for (int procIndex = 0; procIndex < forms.size(); procIndex++) {
+            Form procForm = forms.get(procIndex);
             if (!isFullyManaged(procForm)) {
                 continue;
             }
@@ -96,8 +95,8 @@ public class FormsContainer {
             // is processed form from system use case
             boolean isProcSystem = isSystemUseCase(procForm.getAbstractUseCase());
 
-            for (int aboveIndex = 0; aboveIndex < managedForms.size() && aboveIndex < procIndex; aboveIndex++) {
-                Form aboveForm = managedForms.get(aboveIndex);
+            for (int aboveIndex = 0; aboveIndex < forms.size() && aboveIndex < procIndex; aboveIndex++) {
+                Form aboveForm = forms.get(aboveIndex);
                 FormType aboveType = aboveForm.getEffectiveFormType();
                 boolean isSameUseCase = procForm.getAbstractUseCase() == aboveForm.getAbstractUseCase();
                 boolean isSameContainer = procForm.getContainer().equals(aboveForm.getContainer());
@@ -171,7 +170,13 @@ public class FormsContainer {
 
                 // if state is CLOSED, this form is no longer managed
                 if (targetState == FormState.CLOSED) {
-                    managedForms.remove(procIndex);
+                    // remove like that is not atomic operation, but should be
+                    // remove from managedForms only if form is still at the same position from bottom (end)
+                    int managedFormsIdx = managedForms.size() - (forms.size() - procIndex);
+                    if (managedFormsIdx < managedForms.size() && managedForms.get(managedFormsIdx) == procForm) {
+                        managedForms.remove(managedFormsIdx);
+                    }
+                    forms.remove(procIndex);
                     procIndex--; // when removing the form must shift the index back not to skip the form after the removed form
                     continue processedForms;
                 }
@@ -181,12 +186,12 @@ public class FormsContainer {
             }
         }
 
-        boolean anyModalVisible = managedForms.stream().anyMatch(form -> form.getEffectiveFormType().isModal() && form.getState().isDisplayed());
+        boolean anyModalVisible = forms.stream().anyMatch(form -> form.getEffectiveFormType().isModal() && form.getState().isDisplayed());
 
         if (anyModalVisible) {
             // Nn client side modals is always over standard forms, even is they are shown later than this modal.
             // Any visible modal puts shadow on any visible non-modal.
-            for (Form<?> form : managedForms) {
+            for (Form<?> form : forms) {
                 if (!form.getEffectiveFormType().isModal()) {
                     form.setState(FormState.selectMoreRestrictive(form.getState(), FormState.SHADOWED));
                 }
@@ -283,6 +288,10 @@ public class FormsContainer {
 
         sortFormsByShowingTimestamp();
         recalculateStates();
+    }
+
+    public List<Form<?>> getManagedForms() {
+        return new ArrayList<>(managedForms);
     }
 
     protected boolean isTopStackUseCase(IFormUseCaseContext uc) {
