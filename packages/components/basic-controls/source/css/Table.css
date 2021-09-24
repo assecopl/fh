@@ -1,0 +1,208 @@
+.fc.table {
+    width: 100%;
+    table-layout: fixed;
+}
+.fc.table thead th {
+    vertical-align: middle;
+}
+.fc.table thead th .sorter {
+    display: inline-block;
+    margin-left: 7px;
+}
+.fc.table thead th.sortable {
+    cursor: pointer;
+}
+.fc.table thead th.selectionColumn {
+    width: 30px;
+}
+.fc.table tfoot td {
+    padding: 0;
+}
+.fc.table .fc.footer {
+    padding: 0;
+}
+.fc.table th, .fc.table td .fc {
+    word-wrap: break-word;
+}
+.fc.table td .fc.outputLabel {
+    min-height: 17px;
+}
+.fc.table tbody .fc.button.btn-link {
+    padding: 0 4px;
+}
+.fc.table .form-group {
+    margin-bottom: 0;
+}
+.rc-handle-container {
+    width: 100% !important;
+}
+.fc.wrapper .toolsRow {
+    margin-bottom: 20px;
+    font-size: 12px;
+}
+.fc.wrapper .toolsRow .btn {
+    font-size: 12px;
+}
+.fc.wrapper .toolsRow .table-pagination .pagination {
+    margin: 0;
+}
+.fc.wrapper .toolsRow .table-pagination nav {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.fc.wrapper .toolsRow .table-pagination span:last-of-type {
+    padding-right: 15px;
+}
+.fc.wrapper .table-responsive {
+    margin-bottom: 20px;
+}
+.fc.wrapper .table-responsive .row {
+    display: block;
+}
+.fc.wrapper .table-responsive table {
+    margin-bottom: 0;
+}
+.fc.table .emptyRow input.selectionCheckbox {
+    display: none;
+}
+/* jQuery.resizableColumns */
+.rc-handle-container {
+    position: relative;
+}
+
+.fc.table td.col-halign-left {
+    text-align: left;
+}
+
+.fc.table td.col-halign-right {
+    text-align: right;
+}
+
+.fc.table td.col-halign-center {
+    text-align: center;
+}
+
+.fc.table td.col-valign-top {
+    vertical-align: top;
+}
+
+.fc.table td.col-valign-middle {
+    vertical-align: middle;
+}
+
+.fc.table td.col-valign-bottom {
+    vertical-align: bottom;
+}
+
+.rc-handle {
+    position: absolute;
+    width: 7px;
+    cursor: ew-resize;
+    margin-left: -3px;
+    z-index: 2;
+}
+
+table.fc.rc-table-resizing {
+    cursor: ew-resize;
+}
+
+table.fc.rc-table-resizing thead,
+table.fc.rc-table-resizing thead > th,
+table.fc.rc-table-resizing thead > th > a {
+    cursor: ew-resize;
+}
+
+/* END: jQuery.resizableColumns */
+
+thead.tableFloatingHeaderOriginal > tr th {
+    max-width: none !important;
+}
+
+.fc.table td .fc.wrapper.col-md-12 {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+.fc.table .fc.outputLabel {
+    padding: 0;
+}
+.fc.table .fc label.empty-label {
+    position: relative;
+}
+.fc.wrapper .rowsCountSelector span.table-page-info {
+    padding-left: 25px;
+}
+.fc.table .fc label.empty-label {
+    position: relative;
+    display: none;
+}
+
+.hasHeight.containerTable, .hasHeight.containerTablePaged {
+    pointer-events: all;
+}
+.hasHeight .fc.table {
+    overflow: hidden;
+}
+
+.hasHeight .splitPanel .fc.table {
+    overflow: visible;
+}
+
+.fc.table thead .table-heading th {
+    text-align: left;
+}
+
+.fc-table-disabled td * {
+    pointer-events: none;
+}
+
+.fc-table-editable td * {
+    pointer-events: all;
+}
+
+.fc.table-bordered th, .table-bordered td-a {
+    border: 1px solid #dee2e6;
+}
+.fc.table th, .table td-a {
+    padding: 0.75rem;
+    display: table-cell;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+.fc.table.table-sm th, .table.table-sm td-a {
+    padding: 0.3rem;
+}
+.table-primary, .table-primary > th, .table-primary > td-a {
+    background-color: #b8daff;
+}
+.hasHeight.containerTable,
+.hasHeight.containerTablePaged  {
+    margin-bottom: 1em;
+}
+.hasHeight .fc.table {
+    margin-bottom: 0;
+}
+
+.tableFixedHeader.hasHeight thead tr th {
+    position: relative;
+    background-color: white;
+    opacity: 0.99;
+}
+.tableFixedHeader.hasHeight thead tr th:after {
+    content: "";
+    display: block;
+    background-color: transparent;
+    position: absolute;
+    top:-1px;
+    left:-1px;
+    bottom: -1px;
+    right: -1px;
+    z-index: 1;
+    border: 1px solid #dee2e6;
+}
+
+.hasHeight.tableFixedHeader .fc.table th {
+    background-color: white;
+    position: relative;
+    z-index: 1001;
+}

@@ -1,0 +1,39 @@
+- Dodanie Kerberos Security Data Provider, pozwalającego na uwierzytelnianie użytkownika na podstawie konta domenowego w oparciu o serwer kerberos
+
+4.8.3
+- w przypadku niemożności zaaplikowania komunikatu z frontu, wyjątek (wyskakujący na ekranie użytkownika) został zastąpiony wpisem do loga.
+- wpisy komponentu SessionLogger zostały przeniesione na poziom DEBUG, bo na poziomie INFO zaśmiecały log.
+
+4.8.2
+-  wydzielona została zależność od "logback" do osobnego modułu "fhLogback". W nowym module jest konfiguracja "logback.xml" oraz wszystkie dependencies do logback, slf4j, xxx-over-slf4j. Aby zachować stare działanie aplikacji (np.: pobieranie logów użytkownia) trzeba ręcznie dodać zależność w swojej aplikacji do "fhLogback"
+
+4.6.15
+- Wyciek pamięci w obszarze Metaspace - proxy tworzone przez Spring (ProxyFacotyr/cglib) powodowało wyciek pamieci Metaspace - przejście na natywny Proxy.newProxyInstance
+- Dodanie możliwości wywołania przekierowania na zewnętrzny URL z wykorzystaniem metody HTTP POST (EventRegistry#fireRedirectPostEvent)
+- Dodanie parametru 'fh.cache.jgroups.configurationFile' - umożliwia wskazanie pliku xml z konfiguracją jgroups
+- Dodanie profili: fh-standalone (domyślnie włączony, dodaje zależności xxx-standalone), fh-tomcat (domyślnie włączony, dodaje zależność fh-tomcat), fh-h2 (domyślnie włączony dodaje zależności do H2). Profile można wyłączyć parametrem: skip-fh-standalone, skip-fh-tomcat, skip-fh-h2
+- Dodanie obsługi TLS w MailClient, nowe properties'y fh.mail.server.startTlsEnabled, fh.mail.server.startTlsRequired. Włączając TLS należy zaimportować certyfikat serwera pocztowego do truststore (np. openssl s_client -connect localhost:587 -servername localhost -showcerts -starttls smtp -prexit 2>&1 </dev/null | sed -n '/-----BEGIN/,/-----END/p' > ~/smptcert.pem | sudo keytool -importcert -file ~/smptcert.pem -alias smptcert -keystore ~/cacerts) i ustawić properties'y javax.net.ssl.trustStore=./cacerts i javax.net.ssl.trustStorePassword=
+
+4.5.0
+- Dodanie implementacji wzorca publikacji-subskrypcji dla rozgłaszania komunikatów w klastrze serwerów
+- Dodanie REST Permission Provider pozwalającego na zarządzanie uprawnieniami za pośrednictwem usług REST
+- Dodanie Permission Provider-ów dla pobierania uprawnień z tabelli (JDBC) oraz pobierania z pliku XML (STANDALONE)
+- Dodanie abstrakcji Permission Provider, pozwalającej na dostarczanie źródła danych o uprawnieniach
+- Dodanie wyszukiwania wszystkich użytkowników w ramach LDAP Security Data Provider
+
+4.4.0
+- Możliwość nadania uprawnienia "sessionNeverExpires", które wyłącza automatyczne kończenie sesji (użytkownik nie zostanie automatycznie wylogowany w przypadku braku aktywności)
+- Dodanie możliwości dostarczenia jednocześnie kilku implementacji repozytoriów danych bezpieczeństwa (Remot Security Data Provider) i określania kolejności ich przeszukiwania
+
+4.3.0
+- Dodanie możliwości przekazywania dodatkowych atrybutów użytkownika z Remote Security Data Provider do sesji użytkownika
+- Dodanie nowego typu dostawcy danych o użytkownikach i rolach (Rest Security Data Provider), pozwalającego na pozyskiwanie danych z usługi REST
+- Dodanie nowego typu dostawcy danych o użytkownikach i rolach (Cached Security Data Provider), pozwalającego na przetrzymywanie danych w skonfigurowanych cache'ach
+- Dodanie nowego typu dostawcy danych o użytkownikach i rolach (Remote Security Data Provider), pozwalającego na pozyskiwanie danych np. z usługi REST
+- Poprawa odczytu plików z zasobów podczas uruchamiania na serwerze aplikacyjnym
+- Poprawa funkcjonwania cache'y wykorzystywanych w ramach bezpieczeństwa
+- Poprawa obsługi ról użytkowników systemu dla LDAP Security Data Provider
+- Ustawienie domyślnych wersji zapytań użytkownika i ról w ramach JDBC Security Data Provider
+- Dodanie możliwości konfiguracji zapytań o użytkownika i jego role, podawane do Spring Security w ramach JDBC Security Data Provider
+- Dodanie obsługi zdarzenia onClick dla kontrolki OutputLabel
+- Dodanie możliwości szyfrowania wartości przekazywanych do aplikacji jako właściwości (properties)

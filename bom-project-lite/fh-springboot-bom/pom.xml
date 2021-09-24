@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>pl.fhframework</groupId>
+    <artifactId>fh-springboot-bom</artifactId>
+  <version>4.8.15-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>fh-springboot-bom</name>
+    <description>Springboot dependencies information set</description>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.1.0.RELEASE</version>
+    </parent>
+
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <cxf.version>3.1.6</cxf.version>
+        <version.infinispan.starter>2.0.0.Final</version.infinispan.starter>
+        <version.roaster>2.20.0.Final</version.roaster>
+    <fh.version>4.8.15-SNAPSHOT</fh.version>
+        <springboot.version>2.1.0.RELEASE</springboot.version>
+        <hibernate.version>5.4.1.Final</hibernate.version>
+    </properties>
+
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>pl.fhframework</groupId>
+                <artifactId>commons-bom</artifactId>
+        <version>4.8.15-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>pl.fhframework</groupId>
+                <artifactId>fhJpa-standalone</artifactId>
+                <version>${fh.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>pl.fhframework</groupId>
+                <artifactId>fhTomcat-config</artifactId>
+                <version>${fh.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>pl.fhframework</groupId>
+                <artifactId>cache-standalone</artifactId>
+        <version>${fh.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>pl.fhframework</groupId>
+        <artifactId>pubsub-standalone</artifactId>
+                <version>${fh.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+
+</project>

@@ -1,0 +1,25 @@
+{
+  "name": "fh-charts-controls",
+  "version": "4.8.15-SNAPSHOT",
+  "main": "dist/Module.js",
+  "types": "dist/Module.d.ts",
+  "scripts": {
+    "prepublish": "node prepublish",
+    "postpublish": "node postpublish",
+    "build": "tsc && copyfiles ./source/styles/*.css source/Module.css ./dist",
+    "prepare": "npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@types/bootstrap": "4.3.1",
+    "@types/jquery": "3.3.31",
+    "@types/jqueryui": "1.12.10",
+    "less": "3.9.0",
+    "typescript": "3.5.1"
+  },
+  "dependencies": {
+    "chart.js": "2.8.0",
+    "fh-forms-handler": "4.8.15-SNAPSHOT",
+    "copyfiles": "2.1.1"
+  }
+}

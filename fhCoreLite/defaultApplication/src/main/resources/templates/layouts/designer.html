@@ -1,0 +1,45 @@
+<!--
+LAYOUT : fhframework.layout.templates=designer
+-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+</head>
+<body>
+<div th:fragment="layout">
+<!--    <p th:text="${#strings.toLowerCase(pl.fhframework.model.UseCaseLayoutEnum.STANDARD.name())}"></p>-->
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <div class="row">
+            <div class="navbar-logo">
+                <a class="navbar-brand" href="#" target="_self">
+                    <img th:src="${@environment.getProperty('fh.application.logo.url')}"
+                         th:alt="${@environment.getProperty('fh.application.title')}"/>
+                </a>
+            </div>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
+                    aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse navbar-controls" id="navbarTogglerDemo03">
+                <div id="chatForm"></div>
+                <div id="navbarForm" class="navbar-nav"></div>
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid">
+        <div class="row">
+            <div id="mainForm" class="d-none"></div>
+            <div id="formDesigner" class="col">
+                <div class="row">
+                    <div id="menuForm" class="col-md-2 d-none"></div>
+                    <div id="formDesignerToolbox" class="col-md-2"></div>
+                    <div id="formDesignerComponents" class="col"></div>
+                    <div id="formDesignerProperties" class="col-md-2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

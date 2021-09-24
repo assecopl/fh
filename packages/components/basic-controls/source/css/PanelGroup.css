@@ -1,0 +1,14 @@
+/* tylko dla IE11 */
+@media all and (-ms-high-contrast:none) {
+    .fc.panel .fc.wrapper.valign-top {
+        display: block;
+    }
+}
+
+.fc.footer.card-footer {
+    width: 100%;
+}
+
+.fc.panelGroup.disabled .card-header {
+    pointer-events: all;
+}

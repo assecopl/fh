@@ -1,0 +1,43 @@
+{
+  "name": "fh-application",
+  "version": "4.8.15-SNAPSHOT",
+  "main": "Module.ts",
+  "private": true,
+  "scripts": {
+    "build": "webpack --env.env=production --env.wrapped=false --progress --display-error-details",
+    "dev": "webpack --env.env=development --env.wrapped=false --progress --watch --display-error-details",
+    "build-css-wrapped": "webpack --env.env=production --env.wrapped --progress",
+    "dev-css-wrapped": "webpack --env.env=development --env.wrapped --progress --watch --display-error-details"
+  },
+  "devDependencies": {
+    "@types/bootstrap": "4.3.1",
+    "@types/jquery": "3.3.31",
+    "@types/jqueryui": "1.12.10",
+    "@babel/core": "7.4.5",
+    "@babel/polyfill": "7.4.4",
+    "@babel/preset-env": "7.4.5",
+    "@types/select2": "4.0.53",
+    "babel-loader": "8.0.6",
+    "css-loader": "1.0.1",
+    "file-loader": "2.0.0",
+    "ts-loader": "6.0.4",
+    "babel-plugin-transform-es2015-template-literals": "6.22.0",
+    "less": "3.9.0",
+    "less-loader": "4.1.0",
+    "url-loader": "1.1.2",
+    "imports-loader": "0.8.0",
+    "webpack": "4.18.0",
+    "tslint": "5.17.0",
+    "typescript": "3.5.1",
+    "mini-css-extract-plugin": "0.12.0",
+    "optimize-css-assets-webpack-plugin": "5.0.1",
+    "webpack-cli": "3.1.0",
+    "webpack-merge": "4.2.1",
+    "postcss-wrapper-loader": "1.0.1"
+  },
+  "dependencies": {
+    "fh-forms-handler": "4.8.15-SNAPSHOT",
+    "fh-basic-controls": "4.8.15-SNAPSHOT",
+    "fh-charts-controls": "4.8.15-SNAPSHOT"
+  }
+}
