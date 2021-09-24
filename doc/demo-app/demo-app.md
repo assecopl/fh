@@ -18,7 +18,7 @@ The following instruction describe how to create and run a simple application ba
 <parent>
     <groupId>pl.fhframework</groupId>
     <artifactId>fh-compile-bom</artifactId>
-    <version>4.5.6</version>
+    <version>4.8.11</version>
 </parent>
 ~~~~
 
@@ -42,13 +42,19 @@ Full **pom.xml** file content:
     <parent>
         <groupId>pl.fhframework</groupId>
         <artifactId>fh-compile-bom</artifactId>
-        <version>4.5.6</version>
+        <version>4.8.11</version>
     </parent>
 
     <groupId>com.example.fhdemo</groupId>
     <artifactId>fh-demo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>fh-demo</name>
+    
+    <properties>
+        <fh.version>4.8.11</fh.version>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
 
     <dependencies>
         <dependency>
