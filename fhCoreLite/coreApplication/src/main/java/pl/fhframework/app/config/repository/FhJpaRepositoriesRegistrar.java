@@ -1,6 +1,7 @@
 package pl.fhframework.app.config.repository;
 
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.beans.factory.support.BeanNameGenerator;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.type.AnnotationMetadata;
@@ -46,20 +47,19 @@ class FhJpaRepositoriesRegistrar extends RepositoryBeanDefinitionRegistrarSuppor
         this.environment = environment;
     }
 
-
     @Override
-    public void registerBeanDefinitions(AnnotationMetadata annotationMetadata, BeanDefinitionRegistry registry) {
+    public void registerBeanDefinitions(AnnotationMetadata metadata, BeanDefinitionRegistry registry, BeanNameGenerator generator) {
         Assert.notNull(resourceLoader, "ResourceLoader must not be null!");
-        Assert.notNull(annotationMetadata, "AnnotationMetadata must not be null!");
+        Assert.notNull(metadata, "AnnotationMetadata must not be null!");
         Assert.notNull(registry, "BeanDefinitionRegistry must not be null!");
 
         // Guard against calls for sub-classes
-        if (annotationMetadata.getAnnotationAttributes(getAnnotation().getName()) == null) {
+        if (metadata.getAnnotationAttributes(getAnnotation().getName()) == null) {
             return;
         }
 
         AnnotationRepositoryConfigurationSource configurationSource = new FhAnnotationRepositoryConfigurationSource(
-                annotationMetadata, getAnnotation(), resourceLoader, environment, registry);
+                metadata, getAnnotation(), resourceLoader, environment, registry, generator);
 
         RepositoryConfigurationExtension extension = getExtension();
         RepositoryConfigurationUtils.exposeRegistration(extension, registry, configurationSource);
@@ -69,4 +69,27 @@ class FhJpaRepositoriesRegistrar extends RepositoryBeanDefinitionRegistrarSuppor
 
         delegate.registerRepositoriesIn(registry, extension);
     }
+
+//    @Override
+//    public void registerBeanDefinitions(AnnotationMetadata annotationMetadata, BeanDefinitionRegistry registry) {
+//        Assert.notNull(resourceLoader, "ResourceLoader must not be null!");
+//        Assert.notNull(annotationMetadata, "AnnotationMetadata must not be null!");
+//        Assert.notNull(registry, "BeanDefinitionRegistry must not be null!");
+//
+//        // Guard against calls for sub-classes
+//        if (annotationMetadata.getAnnotationAttributes(getAnnotation().getName()) == null) {
+//            return;
+//        }
+//
+//        AnnotationRepositoryConfigurationSource configurationSource = new FhAnnotationRepositoryConfigurationSource(
+//                annotationMetadata, getAnnotation(), resourceLoader, environment, registry);
+//
+//        RepositoryConfigurationExtension extension = getExtension();
+//        RepositoryConfigurationUtils.exposeRegistration(extension, registry, configurationSource);
+//
+//        RepositoryConfigurationDelegate delegate = new RepositoryConfigurationDelegate(configurationSource, resourceLoader,
+//                environment);
+//
+//        delegate.registerRepositoriesIn(registry, extension);
+//    }
 }

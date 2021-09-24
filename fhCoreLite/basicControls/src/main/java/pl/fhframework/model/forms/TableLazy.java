@@ -232,7 +232,7 @@ public class TableLazy extends Table {
             Direction direction = directionString != null ? Direction.valueOf(directionString) : null;
             ColumnLazy column = (ColumnLazy) getSortingColumn(sortBy, getColumns());
             // change sort direction or property
-            this.loadable = new PageRequest(pageNumber, this.loadable.getPageSize(), direction, column.getSortBy());
+            this.loadable = PageRequest.of(pageNumber, this.loadable.getPageSize(), direction, column.getSortBy());
             refreshNeeded = true;
         }
         if (refreshNeeded && pageModel != null) {

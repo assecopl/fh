@@ -1,10 +1,12 @@
 package pl.fhframework.app.config.repository;
 
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.beans.factory.support.BeanNameGenerator;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.type.AnnotationMetadata;
+import org.springframework.data.jpa.repository.query.EscapeCharacter;
 import org.springframework.data.repository.config.AnnotationRepositoryConfigurationSource;
 import org.springframework.data.util.Streamable;
 import org.springframework.util.ClassUtils;
@@ -21,20 +23,28 @@ public class FhAnnotationRepositoryConfigurationSource extends AnnotationReposit
     private AnnotationMetadata metadata;
 
     private Environment environment;
-    /**
-     * Creates a new {@link AnnotationRepositoryConfigurationSource} from the given {@link AnnotationMetadata} and
-     * annotation.
-     *
-     * @param metadata       must not be {@literal null}.
-     * @param annotation     must not be {@literal null}.
-     * @param resourceLoader must not be {@literal null}.
-     * @param environment
-     */
-    public FhAnnotationRepositoryConfigurationSource(AnnotationMetadata metadata, Class<? extends Annotation> annotation, ResourceLoader resourceLoader, Environment environment, BeanDefinitionRegistry registry) {
-        super(metadata, annotation, resourceLoader, environment, registry);
+
+    public FhAnnotationRepositoryConfigurationSource(AnnotationMetadata metadata, Class<? extends Annotation> annotation, ResourceLoader resourceLoader, Environment environment, BeanDefinitionRegistry registry, BeanNameGenerator generator) {
+        super(metadata, annotation, resourceLoader, environment, registry, generator);
         this.metadata = metadata;
         this.environment = environment;
+        getAttributes().put("escapeCharacter", '\\');
     }
+
+//    /**
+//     * Creates a new {@link AnnotationRepositoryConfigurationSource} from the given {@link AnnotationMetadata} and
+//     * annotation.
+//     *
+//     * @param metadata       must not be {@literal null}.
+//     * @param annotation     must not be {@literal null}.
+//     * @param resourceLoader must not be {@literal null}.
+//     * @param environment
+//     */
+//    public FhAnnotationRepositoryConfigurationSource(AnnotationMetadata metadata, Class<? extends Annotation> annotation, ResourceLoader resourceLoader, Environment environment, BeanDefinitionRegistry registry) {
+//        super(metadata, annotation, resourceLoader, environment, registry);
+//        this.metadata = metadata;
+//        this.environment = environment;
+//    }
 
     @Override
     public Streamable<String> getBasePackages() {

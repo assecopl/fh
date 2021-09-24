@@ -1,7 +1,6 @@
 package pl.fhframework.fhPersistence.conversation;
 
 
-import org.infinispan.commons.util.concurrent.ConcurrentHashSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
@@ -9,7 +8,6 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
 import org.springframework.stereotype.Component;
-
 import pl.fhframework.aspects.snapshots.model.ISnapshotEnabled;
 import pl.fhframework.core.FhConversationException;
 import pl.fhframework.core.session.scope.SessionScope;
@@ -17,9 +15,11 @@ import pl.fhframework.fhPersistence.snapshots.ModelObjectManager;
 import pl.fhframework.fhPersistence.snapshots.model.Snapshot;
 import pl.fhframework.fhPersistence.transaction.ConversationStatelessContext;
 
+import java.util.Collections;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  *  Class responsible for managing conversation contexts
@@ -40,7 +40,7 @@ public class ConversationManagerImpl implements BusinessContext, ConversationMan
     @Autowired
     protected ModelObjectManager modelObjectManager;
 
-    private Set<Integer> initializingSnapshotObjects = new ConcurrentHashSet<>();
+    private Set<Integer> initializingSnapshotObjects = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
     //-----------------BUSINESS INTERFACES METHODS------------------------------------------------------------------
 

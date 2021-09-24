@@ -30,6 +30,7 @@ The following instruction describe how to create and run a simple application ba
     <version>${fh.version}</version>
 </dependency>
 ~~~~
+and some additional dependencies.
 
 Full **pom.xml** file content:
 ~~~~
@@ -53,6 +54,16 @@ Full **pom.xml** file content:
         <dependency>
             <groupId>pl.fhframework</groupId>
             <artifactId>defaultApplication</artifactId>
+            <version>${fh.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>pl.fhframework.core.security.permission</groupId>
+            <artifactId>permissionProvider-jdbc</artifactId>
+            <version>${fh.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>pl.fhframework</groupId>
+            <artifactId>fhLogback</artifactId>
             <version>${fh.version}</version>
         </dependency>
     </dependencies>

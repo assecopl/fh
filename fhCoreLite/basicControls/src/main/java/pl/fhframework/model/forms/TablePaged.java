@@ -258,7 +258,8 @@ public class TablePaged extends Table {
             Direction direction = directionString != null ? Direction.valueOf(directionString) : null;
             ColumnPaged column = (ColumnPaged) getSortingColumn(sortBy, getColumns());
             // change sort direction or property
-            this.pageable = new PageRequest(pageNumber, this.pageable.getPageSize(), direction, column.getSortBy());
+            this.pageable = PageRequest.of(pageNumber, this.pageable.getPageSize(), direction, column.getSortBy());
+//            this.pageable = new PageRequest(pageNumber, this.pageable.getPageSize(), direction, column.getSortBy());
             refreshNeeded = true;
         }
         if (valueChange.hasAttributeChanged(PAGE_SIZE_ATTRIBUTE)) {
@@ -422,9 +423,9 @@ public class TablePaged extends Table {
     private void changePageOrSize(int newPageNumber, int newPageSize) {
         Order order = getSortingOrder();
         if (order != null) {
-            this.pageable = new PageRequest(newPageNumber, newPageSize, order.getDirection(), order.getProperty());
+            this.pageable = PageRequest.of(newPageNumber, newPageSize, order.getDirection(), order.getProperty());
         } else {
-            this.pageable = new PageRequest(newPageNumber, newPageSize);
+            this.pageable = PageRequest.of(newPageNumber, newPageSize);
         }
     }
 

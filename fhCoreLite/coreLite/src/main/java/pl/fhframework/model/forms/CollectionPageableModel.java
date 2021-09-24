@@ -86,7 +86,8 @@ public class CollectionPageableModel<T> extends PageModel<T>{
         // constraint page number to max page number
         int numerOfAvailablePages = Math.max(1, BigDecimal.valueOf(count).divide(BigDecimal.valueOf(pageable.getPageSize()), BigDecimal.ROUND_UP).intValue());
         if (pageable.getPageNumber() > 0 && pageable.getPageNumber() >= numerOfAvailablePages) {
-            return new PageRequest(numerOfAvailablePages - 1, pageable.getPageSize(), pageable.getSort());
+            return PageRequest.of(numerOfAvailablePages - 1, pageable.getPageSize(), pageable.getSort());
+//            return new PageRequest(numerOfAvailablePages - 1, pageable.getPageSize(), pageable.getSort());
         }
 
         return pageable;

@@ -33,8 +33,11 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
     private Set<Consumer<UserSession>> userSessionDestroyedListeners = new HashSet<>();
     private Set<Consumer<UserSession>> userSessionKeepAliveListeners = new HashSet<>();
 
-    private final ApplicationContext applicationContext;
+    @Autowired
+    private ApplicationContext applicationContext;
+    @Autowired
     private final SessionInfoCache sessionInfoCache;
+    @Autowired
     private SessionInfoService sessionInfoService;
 
     @Value("${server.port}")
@@ -43,6 +46,8 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
     private String sessionInfoProtocol;
 
     private String nodeUrl;
+
+
 
     @PostConstruct
     public void init() {

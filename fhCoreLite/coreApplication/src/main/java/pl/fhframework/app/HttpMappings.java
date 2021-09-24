@@ -4,6 +4,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +50,7 @@ public class HttpMappings {
     private ImageRepository imageRepository;
 
     @Resource
+    @Lazy
     private LocaleResolver localeResolver;
 
     @Autowired
@@ -61,12 +63,13 @@ public class HttpMappings {
     private String logoutPath;
 
     @Autowired
+    @Lazy
     private MessageService messageService;
 
     @Bean
     public ReloadableResourceBundleMessageSource messageSource() {
         ReloadableResourceBundleMessageSource bundleMessageSource = new ReloadableResourceBundleMessageSource();
-        bundleMessageSource.setBasename("classpath:i18n/messages");
+        bundleMessageSource.setBasenames("classpath:i18n/messages", "classpath:i18n/app_messages");
         bundleMessageSource.setDefaultEncoding("UTF-8");
         return bundleMessageSource;
     }

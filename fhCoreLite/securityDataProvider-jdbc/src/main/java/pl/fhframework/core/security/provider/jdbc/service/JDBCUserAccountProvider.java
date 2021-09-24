@@ -135,7 +135,7 @@ public class JDBCUserAccountProvider implements UserAccountProvider {
     }
 
     private Pageable preparePageRequest(Pageable pageable) {
-        return new PageRequest(pageable.getPageNumber(), pageable.getPageSize(), Sort.Direction.ASC, "login");
+        return PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.Direction.ASC, "login");
     }
 
     private Page<IUserAccount> preparePageInstance(Pageable pageable, Page<UserAccount> entityPage) {

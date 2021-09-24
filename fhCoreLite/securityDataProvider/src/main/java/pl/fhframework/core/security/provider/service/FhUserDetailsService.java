@@ -1,6 +1,8 @@
 package pl.fhframework.core.security.provider.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AccountExpiredException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -31,7 +33,13 @@ public class FhUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         IUserAccount userAccount = userAccountProvider.findUserAccountByLogin(username);
         if (userAccount == null) {
-            throw new UsernameNotFoundException("user " + username + " not found");
+            throw new UsernameNotFoundException("User " + username + " not found");
+        }
+        if (userAccount.getBlocked()) {
+            throw new LockedException("User " + username + " is blocked");
+        }
+        if (userAccount.getDeleted()) {
+            throw new AccountExpiredException("Account for user " + username + " is deleted");
         }
 
         Set<String> allRoles = new HashSet<>();

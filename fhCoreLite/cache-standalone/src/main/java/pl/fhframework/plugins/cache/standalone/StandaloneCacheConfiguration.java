@@ -42,7 +42,9 @@ public class StandaloneCacheConfiguration {
         if (!StringUtils.isNullOrEmpty(jgroupsConfigurationFile)) {
             transportConfigurationBuilder.addProperty("configurationFile", jgroupsConfigurationFile);
         }
-        GlobalConfiguration conf = transportConfigurationBuilder.build();
+        GlobalConfiguration conf = transportConfigurationBuilder
+                .defaultCacheName("default")
+                .build();
 
         
 
@@ -56,7 +58,8 @@ public class StandaloneCacheConfiguration {
         return new ConfigurationBuilder()
                 .clustering()
                 .cacheMode(CacheMode.REPL_ASYNC)
-                .eviction().type(EvictionType.COUNT).size(10000)
+                .memory().evictionType(EvictionType.COUNT).size(10000)
+//                .eviction().type(EvictionType.COUNT).size(10000)
                 .expiration().lifespan(10, TimeUnit.SECONDS)
                 .build();
     }

@@ -1,7 +1,6 @@
 package pl.fhframework.app;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,21 +13,20 @@ import org.springframework.security.config.annotation.web.configurers.Expression
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.LdapShaPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import pl.fhframework.accounts.SecurityFilter;
+import pl.fhframework.accounts.SingleLoginLockManager;
 import pl.fhframework.config.FhWebConfiguration;
 import pl.fhframework.core.security.IDefaultUser;
 import pl.fhframework.core.security.SecurityProviderInitializer;
-import pl.fhframework.accounts.SecurityFilter;
-import pl.fhframework.accounts.SingleLoginLockManager;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by krzysztof.kobylarek on 2017-05-22.
@@ -37,14 +35,14 @@ import java.util.*;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    @Value("${fh.web.cors.origins:}")
-    private List<String> corsOrigins;
-    @Value("${fh.web.cors.methods:}")
-    private List<String> corsMethods;
-    @Value("${fh.web.cors.headers:}")
-    private List<String> corsHeaders;
-    @Value("${fh.web.cors.allowCredentials:false}")
-    private Boolean corsAllowCredentials;
+//    @Value("${fh.web.cors.origins:}")
+//    private List<String> corsOrigins;
+//    @Value("${fh.web.cors.methods:}")
+//    private List<String> corsMethods;
+//    @Value("${fh.web.cors.headers:}")
+//    private List<String> corsHeaders;
+//    @Value("${fh.web.cors.allowCredentials:false}")
+//    private Boolean corsAllowCredentials;
     @Value("${fh.web.guests.allowed:false}")
     private boolean guestsAllowed;
     @Value("${fh.web.guests.authenticate.path:authenticateGuest}")
@@ -140,23 +138,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return sf;
     }
 
-    @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        if (!corsOrigins.isEmpty()) {
-            configuration.setAllowedOrigins(corsOrigins);
-        }
-        if (!corsMethods.isEmpty()) {
-            configuration.setAllowedMethods(corsMethods);
-        }
-        if (!corsHeaders.isEmpty()) {
-            configuration.setAllowedHeaders(corsHeaders);
-        }
-        configuration.setAllowCredentials(corsAllowCredentials);
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+//    @Bean
+//    CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration configuration = new CorsConfiguration();
+//        if (!corsOrigins.isEmpty()) {
+//            configuration.setAllowedOrigins(corsOrigins);
+//        }
+//        if (!corsMethods.isEmpty()) {
+//            configuration.setAllowedMethods(corsMethods);
+//        }
+//        if (!corsHeaders.isEmpty()) {
+//            configuration.setAllowedHeaders(corsHeaders);
+//        }
+//        configuration.setAllowCredentials(corsAllowCredentials);
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration);
+//        return source;
+//    }
 
     @Bean
     @Override

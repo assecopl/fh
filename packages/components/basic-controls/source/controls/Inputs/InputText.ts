@@ -1,4 +1,4 @@
-import {InputTextPL} from './i18n/InputText.pl';
+﻿import {InputTextPL} from './i18n/InputText.pl';
 import {InputTextEN} from './i18n/InputText.en';
 import {HTMLFormComponent, FormComponent, FormComponentKeySupport} from "fh-forms-handler";
 import {FhContainer} from "fh-forms-handler";
@@ -437,6 +437,9 @@ class InputText extends HTMLFormComponent {
                         this.input.placeholder = newValue;
                         break;
                     case 'rawValue':
+                        if (!newValue && newValue !== 0) {
+                            this.input.placeholder = "";
+                        }
                         this.input.value = newValue;
                         this.lastValidMaskedValue = newValue;
                         if (this.isTextarea && this.textareaAutosize) {
