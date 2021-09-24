@@ -26,8 +26,8 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 ## Documentation
 
-[List of controls attributes](fh/ListControls.md)
+[List of controls attributes](doc/ListControls.md)
 
 ##  Demo Application 
 
-[Creating a sample application](fh/demo-app/demo-app.md)
+[Creating a sample application](doc/demo-app/demo-app.md)
