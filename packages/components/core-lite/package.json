@@ -3,6 +3,9 @@
   "version": "4.9.15-SNAPSHOT",
   "main": "dist/Module.js",
   "types": "dist/Module.d.ts",
+  "description": "fh framework core for frontend",
+  "author": "AssecoPL",
+  "license": "Apache License 2.0",
   "scripts": {
     "prepublish": "node prepublish",
     "postpublish": "node postpublish",
