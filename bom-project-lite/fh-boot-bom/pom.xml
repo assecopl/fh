@@ -434,10 +434,18 @@
     </build>
 
     <scm>
-        <connection>scm:svn:http://127.0.0.1/dummy</connection>
-        <developerConnection>scm:svn:https://127.0.0.1/dummy</developerConnection>
-        <tag>HEAD</tag>
-        <url>http://127.0.0.1/dummy</url>
+        <connection>scm:git:https://github.com/assecopl/fh</connection>
+        <developerConnection>scm:git:https://github.com/assecopl/fh</developerConnection>
+        <tag>develop</tag>
+        <url>https://github.com/assecopl/fh</url>
     </scm>
+
+    <distributionManagement>
+        <repository>
+            <id>ossrh</id>
+            <name>Central Repository OSSRH</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
 
 </project>
