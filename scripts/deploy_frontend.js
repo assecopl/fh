@@ -117,9 +117,9 @@ const publishProcess = (path) => {
     if (isDev && !isSnapshot) {
       tag = 'dev';
     } else if (isSnapshot) {
-      tag = 'latest';
+      tag = 'next';
     } else if (isProd) {
-      tag = 'release';
+      tag = 'latest';
     }
 
     runProcess(`npm run build`);
