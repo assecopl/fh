@@ -40,6 +40,6 @@ jobs:
       with:
         node-version: '12'
 
-      run: node scripts/deploy_frontend.js --snap --verbose
+    - run: node scripts/deploy_frontend.js --snap --verbose
       env:
         NODE_AUTH_TOKEN: ${{ secrets.FH_NPM_TOKEN }}
