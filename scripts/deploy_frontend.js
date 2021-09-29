@@ -121,7 +121,7 @@ const publishProcess = (path) => {
     runProcess(`npm install --registry ${address}`);
     
     try {
-      runProcess(`npm unpublish ${pack.name}@${pack.version} --registry ${address}`);
+      runProcess(`npm unpublish ${pack.name}@${pack.version}`);
     } catch {}
     
     let tag;
@@ -134,7 +134,7 @@ const publishProcess = (path) => {
     }
 
     runProcess(`npm run build`);
-    runProcess(`npm publish --force --tag ${tag} --registry ${address}`);
+    runProcess(`npm publish --force --tag ${tag}`);
     runProcess('rm -fr node_modules package-lock.json');
   }
 }
