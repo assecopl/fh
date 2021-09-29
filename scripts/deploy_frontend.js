@@ -28,10 +28,10 @@ for (const arg of process.argv) {
   }
 }
 
-if (!Object.keys(store).includes('--fhVer')) {
-  console.error('Arguments --fhVer are obligatory!');
-  return;
-}
+// if (!Object.keys(store).includes('--fhVer')) {
+//   console.error('Arguments --fhVer are obligatory!');
+//   return;
+// }
 
 if (Object.keys(store).includes('--address')) {
   if (validURL(store['--address'])) {
@@ -41,6 +41,17 @@ if (Object.keys(store).includes('--address')) {
     return;
   }
 }
+
+let FH_PACKAGES = ["fh-basic-controls", "fh-charts-controls", "fh-designer",
+                       "fh-forms-handler", "fh-maps-controls", "fh-printer-agent", 
+                       "fh-sensors"];
+
+
+let FH_DIRS = [
+  '../packages/components/core-lite/',
+  '../packages/components/basic-controls/', 
+  '../packages/components/charts-controls/'
+];
 
 let fhVer = store['--fhVer'];
 
@@ -54,6 +65,11 @@ if (isProd) {
   isDev = false;
 }
 if (isDev && !isSnapshot) {
+  if (!fhVer) {
+    const cPack = JSON.parse(fs.readFileSync(`${FH_DIRS[0]}package.json`));
+    fhVer = cPack.version.split('-')[0];
+  }
+
   fhVer = `${fhVer}-${require("os").userInfo().username}`;
 } else if (isDev && isSnapshot) {
   fhVer = `${fhVer}-SNAPSHOT`;
@@ -62,18 +78,6 @@ let shouldPublish = true;
 if (!isDev && Object.keys(store).includes('--dryRun')) {
   shouldPublish = false;
 }
-
-
-let FH_PACKAGES = ["fh-basic-controls", "fh-charts-controls", "fh-designer",
-                       "fh-forms-handler", "fh-maps-controls", "fh-printer-agent", 
-                       "fh-sensors"];
-
-
-let FH_DIRS = [
-  '../packages/components/core-lite/',
-  '../packages/components/basic-controls/', 
-  '../packages/components/charts-controls/'
-];
 
 const runProcess = (command, needEnter) => {
   console.log(command)
