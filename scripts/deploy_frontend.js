@@ -28,10 +28,10 @@ for (const arg of process.argv) {
   }
 }
 
-if (!Object.keys(store).includes('--fhVer')) {
-  console.error('Arguments --fhVer are obligatory!');
-  return;
-}
+// if (!Object.keys(store).includes('--fhVer')) {
+//   console.error('Arguments --fhVer are obligatory!');
+//   return;
+// }
 
 if (Object.keys(store).includes('--address')) {
   if (validURL(store['--address'])) {
