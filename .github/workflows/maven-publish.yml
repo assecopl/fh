@@ -39,9 +39,9 @@ jobs:
       with:
         node-version: '12'
 
-    - run: node scripts/deploy_frontend.js --snap --verbose
+    - run: NPM_CONFIG_TOKEN=${{ secrets.FH_NPM_PUBLISH_TOKEN }} node scripts/deploy_frontend.js --snap --verbose
       env:
-        NODE_AUTH_TOKEN: ${{ secrets.FH_NPM_PUBLISH_TOKEN }}
-        NPM_TOKEN: ${{ secrets.FH_NPM_PUBLISH_TOKEN }}
-        NPM_CONFIG_TOKEN: ${{ secrets.FH_NPM_PUBLISH_TOKEN }}
-        token: ${{ secrets.FH_NPM_PUBLISH_TOKEN }}
+        NODE_AUTH_TOKEN: ${{ secrets.FH_NPM_TOKEN }}
+        NPM_TOKEN: ${{ secrets.FH_NPM_TOKEN }}
+        NPM_CONFIG_TOKEN: ${{ secrets.FH_NPM_TOKEN }}
+        token: ${{ secrets.FH_NPM_TOKEN }}
