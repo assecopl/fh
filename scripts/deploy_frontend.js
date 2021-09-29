@@ -63,11 +63,16 @@ const isSnapshot = Object.keys(store).includes('--snap');
 
 if (isProd) {
   isDev = false;
+  if (!fhVer) {
+    console.log(__dirname)
+    const cPack = JSON.parse(fs.readFileSync(`${__dirname}/${FH_DIRS[0]}package.json`));
+    fhVer = cPack.version.split('-')[0];
+  }
 }
 if (isDev && !isSnapshot) {
   if (!fhVer) {
     console.log(__dirname)
-    const cPack = JSON.parse(fs.readFileSync(`${FH_DIRS[0]}package.json`));
+    const cPack = JSON.parse(fs.readFileSync(`${__dirname}/${FH_DIRS[0]}package.json`));
     fhVer = cPack.version.split('-')[0];
   }
 
@@ -121,7 +126,7 @@ const publishProcess = (path) => {
     runProcess(`npm install --registry ${address}`);
     
     try {
-      runProcess(`npm unpublish ${pack.name}@${pack.version}`);
+      runProcess(`npm unpublish ${pack.name}@${pack.version} --registry ${address}`);
     } catch {}
     
     let tag;
@@ -134,7 +139,7 @@ const publishProcess = (path) => {
     }
 
     runProcess(`npm run build`);
-    runProcess(`npm publish --force --tag ${tag} --access public`);
+    runProcess(`npm publish --force --tag ${tag} --registry ${address}`);
     runProcess('rm -fr node_modules package-lock.json');
   }
 }
