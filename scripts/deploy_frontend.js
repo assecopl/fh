@@ -66,12 +66,19 @@ if (isProd) {
 }
 if (isDev && !isSnapshot) {
   if (!fhVer) {
+    console.log(__dirname)
     const cPack = JSON.parse(fs.readFileSync(`${FH_DIRS[0]}package.json`));
     fhVer = cPack.version.split('-')[0];
   }
 
   fhVer = `${fhVer}-${require("os").userInfo().username}`;
 } else if (isDev && isSnapshot) {
+  if (!fhVer) {
+    console.log(__dirname)
+    const cPack = JSON.parse(fs.readFileSync(`${__dirname}/${FH_DIRS[0]}package.json`));
+    console.log(cPack);
+    fhVer = cPack.version.split('-')[0];
+  }
   fhVer = `${fhVer}-SNAPSHOT`;
 }
 let shouldPublish = true;
