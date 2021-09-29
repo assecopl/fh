@@ -34,3 +34,12 @@ jobs:
       env:
         MAVEN_USERNAME: ${{ secrets.FH_MAVEN_USER }}
         MAVEN_PASSWORD: ${{ secrets.FH_MAVEN_PASS }}
+
+    - name: Publish to NPM
+      uses: actions/setup-node@v2
+      with:
+        node-version: '12'
+
+      run: node scripts/deploy_frontend.js --snap --verbose
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.FH_NPM_TOKEN }}
