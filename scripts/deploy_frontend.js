@@ -134,7 +134,7 @@ const publishProcess = (path) => {
     }
 
     runProcess(`npm run build`);
-    runProcess(`npm publish --force --tag ${tag}`);
+    runProcess(`npm publish --force --tag ${tag} --access public`);
     runProcess('rm -fr node_modules package-lock.json');
   }
 }
