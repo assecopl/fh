@@ -4,10 +4,10 @@
 name: Maven Package
 
 on:
-#  push:
-  #  branches: [ develop ]
-  release:
-    types: [created]
+ push:
+   branches: [ develop ]
+  # release:
+    # types: [created]
 
 jobs:
   build:
