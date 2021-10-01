@@ -28,6 +28,8 @@ for (const arg of process.argv) {
   }
 }
 
+const snapId = +new Date();
+
 // if (!Object.keys(store).includes('--fhVer')) {
 //   console.error('Arguments --fhVer are obligatory!');
 //   return;
@@ -76,7 +78,7 @@ if (isDev && !isSnapshot) {
     fhVer = cPack.version.split('-')[0];
   }
 
-  fhVer = `${fhVer}-${require("os").userInfo().username}-${+new Date()}`;
+  fhVer = `${fhVer}-${require("os").userInfo().username}-${snapId}`;
 } else if (isDev && isSnapshot) {
   if (!fhVer) {
     console.log(__dirname)
@@ -84,7 +86,7 @@ if (isDev && !isSnapshot) {
     console.log(cPack);
     fhVer = cPack.version.split('-')[0];
   }
-  fhVer = `${fhVer}-SNAPSHOT-${+new Date()}`;
+  fhVer = `${fhVer}-SNAPSHOT-${snapId}`;
 }
 let shouldPublish = true;
 if (!isDev && Object.keys(store).includes('--dryRun')) {
