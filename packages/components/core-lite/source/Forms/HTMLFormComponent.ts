@@ -479,13 +479,12 @@ abstract class HTMLFormComponent extends FormComponent {
                 $(this.hintElement).popover('hide');
                 $(this.hintElement).popover('disable');
                 $(this.hintElement).popover('dispose');
-            }else {
+                $(this.hintElement).remove();
+            } else {
                 $(this.hintElement).tooltip('hide');
                 $(this.hintElement).tooltip('disable');
                 $(this.hintElement).tooltip('dispose');
             }
-
-            $(this.hintElement).remove();
             this.hintInitialized = false;
         }
     }
