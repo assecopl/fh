@@ -5,11 +5,16 @@
 
     <groupId>pl.fhframework</groupId>
     <artifactId>bom-project-lite</artifactId>
-    <version>4.9.16</version>
     <packaging>pom</packaging>
     <url>https://github.com/assecopl/fh</url>
     <name>bom-projects-lite</name>
     <description>Configurable dependencies information set</description>
+    <parent>
+        <groupId>pl.fhframework</groupId>
+        <artifactId>fhFramework</artifactId>
+        <version>4.9.16</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
 
     <modules>
         <module>fh-boot-bom</module>
