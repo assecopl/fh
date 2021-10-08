@@ -65,9 +65,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        // CSRF vulnerability due to protection being disabled.
-        //CodeQL
-//        http.csrf().disable();
+        http.csrf().disable();
 
         http.formLogin()
                 .loginPage("/login")
