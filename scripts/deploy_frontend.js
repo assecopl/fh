@@ -132,9 +132,9 @@ const publishProcess = (path, onlyUpdate) => {
   if (shouldPublish && !onlyUpdate) {
     runProcess(`npm install --registry ${address}`);
     
-    try {
-      runProcess(`npm unpublish ${pack.name}@${pack.version} --registry ${address}`);
-    } catch {}
+    // try {
+    //   runProcess(`npm unpublish ${pack.name}@${pack.version} --registry ${address}`);
+    // } catch {}
     
     let tag;
     if (isDev && !isSnapshot) {
