@@ -11,7 +11,7 @@
     <parent>
         <groupId>pl.fhframework</groupId>
         <artifactId>fhCoreLite</artifactId>
-        <version>4.9.19</version>
+        <version>4.9.20-SNAPSHOT</version>
     </parent>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
