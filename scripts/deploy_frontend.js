@@ -52,8 +52,13 @@ let FH_PACKAGES = ["fh-basic-controls", "fh-charts-controls", "fh-designer",
 let FH_DIRS = [
   '../packages/components/core-lite/',
   '../packages/components/basic-controls/', 
-  '../packages/components/charts-controls/'
+  '../packages/components/charts-controls/',
+  '../packages/applications/default-application/'
 ];
+
+const SKIP_PUBLISH_FH_DIRS = [
+  '../packages/applications/default-application/'
+]
 
 let fhVer = store['--fhVer'];
 
@@ -103,7 +108,7 @@ const runProcess = (command, needEnter) => {
   }
 }
 
-const publishProcess = (path) => {
+const publishProcess = (path, onlyUpdate) => {
   process.chdir(pth.join(__dirname, path));
   const name = path.split(pth.sep).splice(-2, 1);
   console.log('\n\n-----------------------------------------------')
@@ -124,7 +129,7 @@ const publishProcess = (path) => {
     fs.writeFileSync('package.json', JSON.stringify(pack, null, 2));
   }
   runProcess('rm -fr node_modules package-lock.json');
-  if (shouldPublish) {
+  if (shouldPublish && !onlyUpdate) {
     runProcess(`npm install --registry ${address}`);
     
     // try {
@@ -170,7 +175,7 @@ runProcess('rm -fr /home/teamcity/.npm/cache');
 runProcess('rm -fr /home/teamcity/.npm/.cache');
 // publish fh
 for (const path of FH_DIRS) {
-  publishProcess(path, true);
+  publishProcess(path, SKIP_PUBLISH_FH_DIRS.includes(path));
 }
 
 console.log(`NEW FH VERSION: ${fhVer}`);
