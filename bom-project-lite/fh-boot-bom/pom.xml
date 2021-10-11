@@ -5,7 +5,7 @@
 
     <groupId>pl.fhframework</groupId>
     <artifactId>fh-boot-bom</artifactId>
-    <version>4.9.17-SNAPSHOT</version>
+    <version>4.9.19</version>
     <packaging>pom</packaging>
 
     <name>fh-boot</name>
@@ -57,7 +57,7 @@
                     <dependency>
                         <groupId>pl.fhframework</groupId>
                         <artifactId>fh-springboot-bom</artifactId>
-                        <version>4.9.17-SNAPSHOT</version>
+                        <version>4.9.19</version>
                         <scope>import</scope>
                         <type>pom</type>
                     </dependency>
@@ -150,7 +150,7 @@
                     <dependency>
                         <groupId>pl.fhframework</groupId>
                         <artifactId>fh-springboot-bom</artifactId>
-                        <version>4.9.17-SNAPSHOT</version>
+                        <version>4.9.19</version>
                         <scope>import</scope>
                         <type>pom</type>
                     </dependency>
@@ -183,7 +183,7 @@
                     <dependency>
                         <groupId>pl.fhframework</groupId>
                         <artifactId>fh-springboot-bom</artifactId>
-                        <version>4.9.17-SNAPSHOT</version>
+                        <version>4.9.19</version>
                         <scope>import</scope>
                         <type>pom</type>
                     </dependency>
@@ -208,7 +208,7 @@
                     <dependency>
                         <groupId>pl.fhframework</groupId>
                         <artifactId>fh-springboot-bom</artifactId>
-                        <version>4.9.17-SNAPSHOT</version>
+                        <version>4.9.19</version>
                         <scope>import</scope>
                         <type>pom</type>
                     </dependency>
@@ -241,7 +241,7 @@
                     <dependency>
                         <groupId>pl.fhframework</groupId>
                         <artifactId>fh-jboss-eap6.4-bom</artifactId>
-                        <version>4.9.16</version>
+                        <version>4.9.19</version>
                         <scope>import</scope>
                         <type>pom</type>
                     </dependency>
