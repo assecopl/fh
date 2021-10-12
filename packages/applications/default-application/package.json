@@ -1,6 +1,6 @@
 {
   "name": "fh-application",
-  "version": "4.9.19-1633970187798",
+  "version": "4.9.19",
   "main": "Module.ts",
   "private": true,
   "scripts": {
@@ -36,8 +36,8 @@
     "postcss-wrapper-loader": "1.0.1"
   },
   "dependencies": {
-    "fh-forms-handler": "4.9.19-1633970187798",
-    "fh-basic-controls": "4.9.19-1633970187798",
-    "fh-charts-controls": "4.9.19-1633970187798"
+    "fh-forms-handler": "4.9.19",
+    "fh-basic-controls": "4.9.19",
+    "fh-charts-controls": "4.9.19"
   }
 }
