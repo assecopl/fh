@@ -28,7 +28,6 @@ import java.lang.annotation.*;
 @SpringBootApplication
 @EnableWebSocket
 @EnableWebSecurity
-@EnableWebMvc
 @EnableAsync
 @EnableCaching
 @ComponentScan(
