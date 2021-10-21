@@ -27,7 +27,8 @@
 	<modules>
 		<module>bom-project-lite</module>
 		<module>fhCoreLite</module>
-	</modules>
+        <module>example</module>
+    </modules>
 	
 	<licenses>
 		<license>
