@@ -5,8 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>pl.fhframework</groupId>
-        <artifactId>fh-compile-bom</artifactId>
+        <artifactId>fh-boot-bom</artifactId>
         <version>4.9.20-SNAPSHOT</version>
+        <relativePath>../bom-project-lite/fh-boot-bom</relativePath>
     </parent>
 
     <groupId>pl.fhframework.example</groupId>
