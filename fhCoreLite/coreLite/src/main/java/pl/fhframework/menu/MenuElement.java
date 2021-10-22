@@ -18,6 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class MenuElement {
 
     private String name;
+    private String key;
     private String ref;
     private boolean groupingElement;
     private String icon;
@@ -25,8 +26,9 @@ public class MenuElement {
     private AtomicBoolean activityToken;
     private String inputFactory;
 
-    public MenuElement(String name, String ref, String icon, boolean isGroupingElement, AtomicBoolean activityToken, String inputFactory) {
+    public MenuElement(String name, String key, String ref, String icon, boolean isGroupingElement, AtomicBoolean activityToken, String inputFactory) {
         this.name = name;
+        this.key = key;
         this.ref = ref;
         this.icon = icon;
         this.groupingElement = isGroupingElement;
