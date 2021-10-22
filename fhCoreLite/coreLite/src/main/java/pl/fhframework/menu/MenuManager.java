@@ -45,10 +45,10 @@ public class MenuManager {
         for (ITreeElement element : elements) {
             MenuElement newElement;
             if (element instanceof UseCasesGroup) {
-                newElement = new MenuElement(translateLabel(element.getLabel()), element.getRef(), element.getIcon(), true, element.getActivityToken(), null);
+                newElement = new MenuElement(translateLabel(element.getLabel()), element.getLabel(), element.getRef(), element.getIcon(), true, element.getActivityToken(), null);
                 newElement.setChildren(createSubMenuElementsList(element.getSubelements()));
             } else {
-                newElement = new MenuElement(translateLabel(element.getLabel()), element.getRef(), element.getIcon(), false, element.getActivityToken(), ((UseCaseInformation) element).getInputFactory());
+                newElement = new MenuElement(translateLabel(element.getLabel()), element.getLabel(), element.getRef(), element.getIcon(), false, element.getActivityToken(), ((UseCaseInformation) element).getInputFactory());
             }
             menuElements.add(newElement);
         }
@@ -65,7 +65,7 @@ public class MenuManager {
 
 
 
-    protected String translateLabel(String label) {
+    public String translateLabel(String label) {
         if (label != null && label.length() > 2 && label.startsWith("$.")) {
             return messageService.getAllBundles().getMessage(label.substring(2));
         } else {
