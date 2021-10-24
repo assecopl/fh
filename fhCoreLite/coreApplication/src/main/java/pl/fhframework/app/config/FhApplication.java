@@ -8,7 +8,6 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import pl.fhframework.app.config.repository.EnableFhJpaRepositories;
 import pl.fhframework.fhPersistence.core.repository.BaseRepositoryFactoryBean;

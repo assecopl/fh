@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import pl.fhframework.core.ResourceNotFoundException;
 import pl.fhframework.core.i18n.MessageService;
 import pl.fhframework.core.logging.FhLogger;
