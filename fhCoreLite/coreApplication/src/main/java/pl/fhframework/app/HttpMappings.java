@@ -44,6 +44,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Controller
+//@EnableWebMvc
 public class HttpMappings {
     @Autowired
     private ImageRepository imageRepository;
@@ -79,6 +80,9 @@ public class HttpMappings {
             @RequestParam(value = "logout", required = false) String logout,
             HttpServletRequest request, HttpServletResponse response) {
 
+        Locale locale = getLocale(request, response);
+        response.setLocale(locale);
+
         ModelAndView model = new ModelAndView();
         if (error != null) {
             model.addObject("message",
@@ -90,7 +94,7 @@ public class HttpMappings {
                 model.setViewName("redirect:/");
                 return model;
             } else {
-                Locale locale = getLocale(request, response);
+//                Locale locale = getLocale(request, response);
 
                 if (logout.equals(ForcedLogoutEvent.Reason.LOGOUT_TIMEOUT.getCode())) {
                     model.addObject("message", $("fh.infos.successfully_logged_out", locale));
