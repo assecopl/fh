@@ -1,5 +1,5 @@
 package pl.fhframework.model.forms.attribute;
 
 public enum HintTrigger {
-    HOVER_FOCUS, HOVER
+    HOVER_FOCUS, HOVER, CLICK;
 }

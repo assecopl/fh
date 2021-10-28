@@ -25,7 +25,8 @@ class InputNumber extends HTMLFormComponent {
         }
 
         super(componentObj, parent);
-        this.radixPoint = componentObj.radixPoint || '.';
+        const DEFAULT_RADIX_POINT = (Intl.NumberFormat() as any).formatToParts(1.1).find(part => part.type === 'decimal').value;
+        this.radixPoint = componentObj.radixPoint || DEFAULT_RADIX_POINT || '.';
 
         if (componentObj.rawValue == undefined && componentObj.value == undefined) {
             this.oldValue = '';

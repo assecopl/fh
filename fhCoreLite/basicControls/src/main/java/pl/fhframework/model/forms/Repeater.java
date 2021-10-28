@@ -14,6 +14,7 @@ import pl.fhframework.core.forms.iterators.IRepeatableIteratorInfo;
 import pl.fhframework.core.forms.iterators.ISingleIteratorComponentFactory;
 import pl.fhframework.core.forms.iterators.ISingleIteratorRepeatable;
 import pl.fhframework.core.forms.iterators.RepeatableIteratorInfo;
+import pl.fhframework.events.I18nFormElement;
 import pl.fhframework.model.dto.ElementChanges;
 
 import java.util.*;
@@ -28,7 +29,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
 @DocumentedComponent(ignoreFields = {"width"}, category = DocumentedComponent.Category.ARRANGEMENT, documentationExample = true,
         value = "Component that allows to arrange data like text, images, links, etc. into rows and columns of cells.",
         icon = "fa fa-sitemap")
-public class Repeater extends FormElement implements IEditableGroupingComponent<Component>, IRepeatable, IStateHolder, ISingleIteratorRepeatable<Repeater> {
+public class Repeater extends FormElement implements IEditableGroupingComponent<Component>, IRepeatable, IStateHolder, ISingleIteratorRepeatable<Repeater>, I18nFormElement {
 
     protected static final IRowNumberOffsetSupplier NO_OFFSET_ROW_NUMBER = () -> 0;
 
@@ -266,5 +267,10 @@ public class Repeater extends FormElement implements IEditableGroupingComponent<
         return (iterationContext != null ? " --- [iterationBinding: " + iterationContext.getIterationBinding() + "]" : " [iterationContext=null]")
                 + (iterationContext != null ? " --- [iterationIterator: " + iterationContext.getIterationIterator() + "]" : "")
                 + (iterationContext != null ? " --- [iterationIndex: " + iterationContext.getIterationIndex() + "]" : "");
+    }
+
+    @Override
+    public void onSessionLanguageChange(String lang) {
+        refreshView();
     }
 }

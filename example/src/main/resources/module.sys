@@ -1,0 +1,5 @@
+<subsystem
+name="fh-demo"
+label="FH Demo"
+basePackage="pl.fhframework.example"
+productUUID="73f1ebe0-0dc9-4b6e-be99-3df8241e0ac2"/>

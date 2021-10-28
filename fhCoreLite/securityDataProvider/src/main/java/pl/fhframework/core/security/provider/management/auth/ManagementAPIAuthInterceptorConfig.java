@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import pl.fhframework.core.security.provider.management.api.ManagementAPIController;
 import pl.fhframework.core.security.provider.management.api.SecurityManagementAPIController;
@@ -15,7 +16,7 @@ import pl.fhframework.core.security.provider.management.api.SecurityManagementAP
 @Configuration
 @Order(1000)
 @ConditionalOnProperty(name = "fhframework.managementApi.enabled", havingValue = "true")
-public class ManagementAPIAuthInterceptorConfig extends WebMvcConfigurerAdapter{
+public class ManagementAPIAuthInterceptorConfig implements WebMvcConfigurer {
 
     @Autowired
     private ManagementAPIAuthInterceptor managementAPIAuthInterceptor;
