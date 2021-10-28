@@ -11,11 +11,6 @@ import pl.fhframework.model.forms.attribute.IconAlignment;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-/**
- * @author <a href="mailto:jacek_borowiec@skg.pl">Jacek Borowiec</a>
- * @version :  $, :  $
- * @created 23/09/2021
- */
 public class FhDemoForm extends Form<String> {
     public static final Set<ActionSignature> ____actions = new LinkedHashSet<>();
     static {
