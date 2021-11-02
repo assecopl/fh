@@ -10,6 +10,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 import pl.fhframework.UserSession;
+import pl.fhframework.WebSocketSessionManager;
 import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.core.security.model.SessionInfo;
 
@@ -44,6 +45,8 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
     private int serverPort;
     @Value("${fh.session.info.protocol:http}")
     private String sessionInfoProtocol;
+    @Value("${fh.ws.closed.inactive_session_max_time:5}")
+    private int sustainTimeOutMinutes;
 
     private String nodeUrl;
 
@@ -61,6 +64,8 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
 
     @Override
     public synchronized void onApplicationEvent(ContextRefreshedEvent event) {
+        WebSocketSessionManager.setSustainTimeout(sustainTimeOutMinutes * 60);
+
         // register node in cache
         nodeUrl = generateNodeUrl();
         int iter = 0;

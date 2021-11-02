@@ -92,6 +92,8 @@ public class UserSession extends Session {
 
     private RuntimeException exception;
 
+    private Integer sustainTimeOutMinutesOverride;
+
     public UserSession(SystemUser systemUser, UserSessionDescription description) {
         super(description);
         setSystemUser(systemUser);
