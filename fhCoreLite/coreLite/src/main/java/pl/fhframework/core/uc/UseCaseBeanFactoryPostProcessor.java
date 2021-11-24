@@ -25,7 +25,7 @@ public class UseCaseBeanFactoryPostProcessor implements BeanFactoryPostProcessor
 
         for (String beanName : configurableListableBeanFactory.getBeanDefinitionNames()) {
             Class<?> beanClazz = configurableListableBeanFactory.getType(beanName);
-            if (!Modifier.isAbstract(beanClazz.getModifiers()) && IUseCase.class.isAssignableFrom(beanClazz)) {
+            if (beanClazz != null && !Modifier.isAbstract(beanClazz.getModifiers()) && IUseCase.class.isAssignableFrom(beanClazz)) {
                 UseCase useCaseAnnotation = beanClazz.getAnnotation(UseCase.class);
                 if (useCaseAnnotation == null) {
                     throw new FhUseCaseException("Use case class [" + beanClazz.getName() + "] must be annotated with @UseCase.");
