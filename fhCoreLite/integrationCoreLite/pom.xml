@@ -11,7 +11,7 @@
     <parent>
         <groupId>pl.fhframework</groupId>
         <artifactId>fhCoreLite</artifactId>
-        <version>4.9.21-SNAPSHOT</version>
+        <version>4.9.21</version>
     </parent>
     <dependencies>
         <dependency>
