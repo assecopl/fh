@@ -59,7 +59,9 @@ public class WebSocketSessionManager implements ISessionManagerImpl {
      * Timeout of http session when WS session is interrupted
      * This time should allow user to reconnect (to the same server or other node in cluster)
      */
-    public static final int SUSTAIN_TIMEOUT = 5 * 60;
+    @Getter
+    @Setter
+    private static int sustainTimeout = 5 * 60;
 
     /**
      * Infinitive HttpSesion timeout
@@ -97,8 +99,13 @@ public class WebSocketSessionManager implements ISessionManagerImpl {
         HttpSession sessionHttp = getHttpSession();
         try {
             // include current inactive time - FH-7448
+            int sustainTimeout = WebSocketSessionManager.getSustainTimeout();
+            Integer sustainTimeoutOverride = getInstance().getSession().getSustainTimeOutMinutesOverride();
+            if (sustainTimeoutOverride != null) {
+                sustainTimeout = sustainTimeoutOverride * 60;
+            }
             int currentInactiveTime = (int) ((System.currentTimeMillis() - sessionHttp.getLastAccessedTime()) / 1000);
-            sessionHttp.setMaxInactiveInterval(currentInactiveTime + SUSTAIN_TIMEOUT);
+            sessionHttp.setMaxInactiveInterval(currentInactiveTime + sustainTimeout);
             FhLogger.info( "HttpSession marked for sustain timeout");
         } catch (IllegalStateException ise) {
             // session allready invalidated

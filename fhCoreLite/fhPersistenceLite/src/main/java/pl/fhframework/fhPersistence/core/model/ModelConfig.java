@@ -2,8 +2,6 @@ package pl.fhframework.fhPersistence.core.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import org.hibernate.proxy.HibernateProxyHelper;
 import org.springframework.stereotype.Component;
 import pl.fhframework.core.logging.FhLogger;
@@ -16,29 +14,30 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by pawel.ruta on 2017-02-27.
  */
 @Component
 public class ModelConfig {
-    protected final Map<Class, Map<String, FieldAnnotation>> classFieldsAnnotations = new HashMap<>();
+    protected final Map<Class, Map<String, FieldAnnotation>> classFieldsAnnotations = new ConcurrentHashMap<>();
 
 
     // <Class A, <name of field in A, name of field in X class>>
-    protected final Map<Class, Map<String, String>> biDirectRelations = new HashMap<>();
+    protected final Map<Class, Map<String, String>> biDirectRelations = new ConcurrentHashMap<>();
 
     // <Class A, <name of field in A, name of field in owner X class>>
-    protected final Map<Class, Map<String, String>> nonOwningRelations = new HashMap<>();
+    protected final Map<Class, Map<String, String>> nonOwningRelations = new ConcurrentHashMap<>();
 
     // <Class A, <Class related to A, set of attributes that relate>>
-    protected final Map<Class, Map<Class, Set<String>>> otherSideRelations = new HashMap<>();
+    protected final Map<Class, Map<Class, Set<String>>> otherSideRelations = new ConcurrentHashMap<>();
 
-    protected final Map<Class, Set<String>> cascadeRemoveMap = new HashMap<>();
+    protected final Map<Class, Set<String>> cascadeRemoveMap = new ConcurrentHashMap<>();
 
-    protected final Map<Class, Set<String>> orphanRemovalMap = new HashMap<>();
+    protected final Map<Class, Set<String>> orphanRemovalMap = new ConcurrentHashMap<>();
 
-    protected final Map<Class, Map<String, String>> biDirectRelationsFullNames = new HashMap<>();
+    protected final Map<Class, Map<String, String>> biDirectRelationsFullNames = new ConcurrentHashMap<>();
 
     public Set<String> getCascadeRemoveFields(Class<? extends BaseEntity> entityClass) {
         return cascadeRemoveMap.computeIfAbsent(entityClass, key -> {
@@ -313,13 +312,13 @@ public class ModelConfig {
 
     protected Map<String, String> getBiDirectRelations(Class clazz) {
         if (!biDirectRelations.containsKey(clazz)) {
-            clacClass(clazz);
+            calcClass(clazz);
         }
 
         return biDirectRelations.get(clazz);
     }
 
-    protected void clacClass(Class clazz) {
+    synchronized protected void calcClass(Class clazz) {
         getMappedByRelations(clazz);
         fillOtherSideRelations(clazz);
         getOrphanRemovalFields(clazz);
@@ -329,7 +328,7 @@ public class ModelConfig {
 
     protected Map<Class, Set<String>> getOtherSideRelations(Class<? extends BaseEntity> entityClass) {
         if (!otherSideRelations.containsKey(entityClass)) {
-            clacClass(entityClass);
+            calcClass(entityClass);
         }
 
         return otherSideRelations.get(entityClass);
@@ -337,7 +336,7 @@ public class ModelConfig {
 
     public Map<String, FieldAnnotation> getClassFieldsAnnotationsForClass(Class<? extends BaseEntity> entityClass) {
         if (!classFieldsAnnotations.containsKey(entityClass)) {
-            clacClass(entityClass);
+            calcClass(entityClass);
         }
 
         return classFieldsAnnotations.get(entityClass);
@@ -345,7 +344,7 @@ public class ModelConfig {
 
     public Map<String, String> getNonOwningRelationsForClass(Class<? extends BaseEntity> entityClass) {
         if (!nonOwningRelations.containsKey(entityClass)) {
-            clacClass(entityClass);
+            calcClass(entityClass);
         }
 
         return nonOwningRelations.get(entityClass);

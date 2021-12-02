@@ -5,7 +5,7 @@
 
     <groupId>pl.fhframework</groupId>
     <artifactId>fh-compile-bom</artifactId>
-    <version>4.9.20</version>
+    <version>4.9.21</version>
     <packaging>pom</packaging>
 
     <name>fh-compile-bom</name>
@@ -15,6 +15,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.4.2</version>
+        <relativePath/>
     </parent>
 
     <properties>
@@ -105,7 +106,7 @@
             <dependency>
                 <groupId>pl.fhframework</groupId>
                 <artifactId>commons-bom</artifactId>
-                <version>4.9.20</version>
+                <version>4.9.21</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -166,7 +167,7 @@
                         <configuration>
                             <serverId>ossrh</serverId>
                             <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                            <autoReleaseAfterClose>false</autoReleaseAfterClose>
                         </configuration>
                     </plugin>
                     <plugin>
