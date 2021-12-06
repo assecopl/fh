@@ -185,7 +185,8 @@ public class MavenDynamicClassCompiler {
     private void initPluginableCodeGenerator() {
         // TODO: LATER make it discover class at runtime
         Arrays.asList(
-                ReflectionUtils.tryGetClassForName("pl.fhframework.compiler.core.services.dynamic.generator.CoreElementsRegister")
+                ReflectionUtils.tryGetClassForName("pl.fhframework.compiler.core.services.dynamic.generator.CoreElementsRegister"),
+                ReflectionUtils.tryGetClassForName("pl.fhframework.compiler.core.integration.IntegrationElementsRegister")
                 ).forEach(codeGeneratorRegister -> {
             if (codeGeneratorRegister != null) {
                 execRegister(codeGeneratorRegister);
