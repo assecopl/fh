@@ -36,8 +36,8 @@ import java.util.stream.Collectors;
 @Service
 public class FhSessionService implements IFhSessionService {
     /**
-     * Timeout of no user session when WS session is interrupted
-     * This time should allow to reconnect (to the same server or other node in cluster)
+     * Timeout of http session when WS session is interrupted
+     * This time should allow user to reconnect (to the same server or other node in cluster)
      */
     public static final int SUSTAIN_TIMEOUT = 5 * 60; // minutes
 
@@ -81,11 +81,12 @@ public class FhSessionService implements IFhSessionService {
                 return true;
             }
             catch (Exception e) {
+                FhLogger.errorSuppressed(e);
                 sessions.remove(description.getConversationUniqueId());
                 SessionManager.unregisterThreadSessionManager();
             }
         }
-        if (isNoUserSession()) {
+        else if (isNoUserSession()) {
             manageTransactionOnStart(operation, owner, params);
         }
 
