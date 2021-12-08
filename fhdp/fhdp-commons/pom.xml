@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>fhdp</artifactId>
+        <groupId>pl.fhframework.dp</groupId>
+        <version>4.9.22-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>fhdp-commons</artifactId>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>fhdp-commons-base</module>
+        <module>fhdp-commons-utils</module>
+		<module>fhdp-commons-jaxb</module>
+        <module>fhdp-commons-transport</module>
+        <module>fhdp-commons-fh-lite</module>
+        <module>fhdp-commons-fh</module>
+        <module>fhdp-commons-mongo</module>
+        <module>fhdp-commons-services</module>
+        <module>fhdp-commons-model</module>
+        <module>fhdp-commons-rest</module>
+        <module>fhdp-camunda</module>
+        <module>fhdp-commons-ad</module>
+        <module>fhdp-commons-ws</module>
+        <module>fhdp-commons-fh-starter</module>
+        <module>fhdp-commons-validation</module>
+        <module>fhdp-commons-fh-adm</module>
+        <module>fhdp-commons-ds-service</module>
+        <module>fhdp-commons-poi</module>
+    </modules>
+
+
+</project>

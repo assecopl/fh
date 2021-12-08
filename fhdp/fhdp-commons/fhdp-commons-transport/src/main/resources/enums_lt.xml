@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <comment/>
+    <entry key="pl.fhframework.dp.transport.dto.parameters.SubstantiveParametersUnit.SECOND">antra</entry>
+    <entry key="enum.pl.fhframework.dp.transport.dto.commons.VerificationListItemStatusEnum.NotServiced">Neaptarnaujamas</entry>
+    <entry key="enum.pl.fhframework.dp.transport.dto.commons.VerificationListItemStatusEnum.ToBeAddressed">Reikia kreiptis</entry>
+    <entry key="enum.pl.fhframework.dp.transport.dto.commons.VerificationListItemOriginEnum.Draw">Lygu</entry>
+    <entry key="enum.pl.fhframework.dp.transport.dto.commons.CommunicationLanguageEnum.en">Anglų kalba</entry>
+    <entry key="enum.pl.fhframework.dp.transport.dto.commons.VerificationListItemStatusEnum.Read">Peskaityta</entry>
+    <entry key="enum.pl.fhframework.dp.transport.enums.DeclarationStateEnum.Released">Išleista</entry>
+    <entry key="enum.pl.fhframework.dp.transport.enums.PerformerEnum.MY">Mano</entry>
+    <entry key="enum.pl.fhframework.dp.transport.enums.DeclarationStateEnum.Waiting">Laukia</entry>
+    <entry key="enum.pl.fhframework.dp.transport.enums.PerformerEnum.USER">Naudotojas</entry>
+    <entry key="enum.pl.fhframework.dp.transport.enums.DeclarationStateEnum.Accepted">Priimta</entry>
+    <entry key="enum.pl.fhframework.dp.transport.enums.DeclarationStateEnum.NotReleased">Neišleista</entry>
+    <entry key="enum.pl.fhframework.dp.transport.enums.DeclarationStateEnum.Incorrect">Neteisinga</entry>
+    <entry key="pl.fhframework.dp.transport.dto.commons.VerificationListItemOperationEnum.RegisterDirective">Registrų direktyva</entry>
+    <entry key="enum.pl.fhframework.dp.transport.enums.DeclarationStateEnum.DraftDecisionLocked">Ruošinys užrakintas</entry>
+    <entry key="enum.pl.fhframework.dp.transport.enums.DeclarationStateEnum.Cancelled">Atšaukta</entry>
+    <entry key="pl.fhframework.dp.transport.dto.commons.VerificationListItemOperationEnum.CalculationIsCorrect">Skaičiavimai teisingi</entry>
+    <entry key="enum.pl.fhframework.dp.transport.enums.DeclarationStateEnum.ReadyToRelease">Parengta išleisti</entry>
+    <entry key="enum.pl.fhframework.dp.transport.dto.commons.DirectiveOriginEnum.RANDOM">Atsitiktinis dokumentų pasirinkimo metodas</entry>
+    <entry key="enum.pl.fhframework.dp.transport.dto.commons.PodStatus.WAITING_FOR_FAMILIARIZE_DEBT_DATE">Laukiama pristatymo</entry>
+    <entry key="enum.pl.fhframework.dp.transport.enums.DeclarationStateEnum.WaitingForExit">Laukiama išvežimo</entry>
+    <entry key="enum.pl.fhframework.dp.transport.dto.commons.PodStatus.END">Baigta</entry>
+    <entry key="pl.fhframework.dp.transport.dto.commons.VerificationListItemOperationEnum.NoRisk">Jokios rizikos</entry>
+    <entry key="enum.pl.fhframework.dp.transport.enums.DeclarationStateEnum.Final">Galutinis</entry>
+    <entry key="enum.pl.fhframework.dp.transport.enums.DeclarationStateEnum.Control">Prekių patikra</entry>
+    <entry key="enum.pl.fhframework.dp.transport.enums.DeclarationStateEnum.Draft">Ruošinys</entry>
+    <entry key="enum.pl.fhframework.dp.transport.enums.DeclarationStateEnum.DeletedInFallback">Ištrinta grįžtamojoje procedūroje</entry>
+    <entry key="enum.pl.fhframework.dp.transport.enums.DeclarationStateEnum.NewAmendmentDraft">Naujas pakeitimų ruošinys</entry>
+    <entry key="pl.fhframework.dp.transport.dto.parameters.SubstantiveParametersUnit.DAY">diena</entry>
+    <entry key="pl.fhframework.dp.transport.dto.parameters.SubstantiveParametersUnit.MINUTE">minutė</entry>
+    <entry key="enum.pl.fhframework.dp.transport.enums.NullableBooleanEnum.TRUE">Taip</entry>
+    <entry key="enum.pl.fhframework.dp.transport.dto.commons.PodStatus.CANCELLED">Atšaukta</entry>
+    <entry key="enum.pl.fhframework.dp.transport.dto.commons.CommunicationLanguageEnum.lt">Lietuvių kalba</entry>
+    <entry key="enum.pl.fhframework.dp.transport.enums.DeclarationStateEnum.New">Nauja</entry>
+    <entry key="enum.pl.fhframework.dp.transport.enums.NullableBooleanEnum.FALSE">Ne</entry>
+    <entry key="enum.pl.fhframework.dp.transport.enums.DeliveryMethodEnum.ManualRegistration">Registracija rankiniu būdu</entry>
+    <entry key="enum.pl.fhframework.dp.transport.enums.DeclarationStateEnum.Rejected">Atmesta</entry>
+    <entry key="enum.pl.fhframework.dp.transport.enums.DeclarationStateEnum.AmendmentDraft">Deklaracijos papildymas</entry>
+    <entry key="enum.pl.fhframework.dp.transport.enums.NullableBooleanEnum.NONE">Nei vienas</entry>
+    <entry key="enum.pl.fhframework.dp.transport.enums.DeclarationStateEnum.DraftDecision">Sprendimo ruošinys</entry>
+    <entry key="enum.pl.fhframework.dp.transport.enums.PerformerEnum.SYSTEM">Sistema</entry>
+    <entry key="enum.pl.fhframework.dp.transport.enums.DeliveryMethodEnum.MessageReception">Pranešimo priėmimas</entry>
+    <entry key="enum.pl.fhframework.dp.transport.enums.PerformerEnum.ANY">Bet kuris</entry>
+    <entry key="enum.pl.fhframework.dp.transport.enums.DeclarationStateEnum.Deleted">Ištrinta</entry>
+    <entry key="pl.fhframework.dp.transport.dto.parameters.SubstantiveParametersUnit.HOUR">valanda</entry>
+    <entry key="enum.pl.fhframework.dp.transport.dto.commons.VerificationListItemStatusEnum.AfterControl">Po patikros</entry>
+    <entry key="pl.fhframework.dp.transport.dto.parameters.SubstantiveParametersUnit.PERCENT">%</entry>
+    <entry key="enum.pl.fhframework.dp.transport.enums.DeclarationStateEnum.DocumentaryControl">Dokumentų patikra</entry>
+    <entry key="enum.pl.fhframework.dp.transport.dto.commons.VerificationListItemStatusEnum.NotReadYet">Neperskaityta</entry>
+</properties>

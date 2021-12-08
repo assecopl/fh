@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>pl.fhframework.dp</groupId>
+    <artifactId>fhdp</artifactId>
+    <packaging>pom</packaging>
+    <version>4.9.22-SNAPSHOT</version>
+
+    <description>FHDP common modules</description>
+
+    <url>https://github.com/assecopl/fh</url>
+
+    <properties>
+        <fh.version>4.9.22-SNAPSHOT</fh.version>
+
+        <sfl4j.version>1.7.30</sfl4j.version>
+        <infinispan.version>11.0.9.Final</infinispan.version>
+        <spring.version>5.3.3</spring.version>
+        <springboot.version>2.4.2</springboot.version>
+        <hibernate.version>5.3.20.Final</hibernate.version>
+        <geotools.version>20.2</geotools.version>
+        <camunda.version>7.14.0</camunda.version>
+        <spring.data.elasticsearch.version>4.1.15</spring.data.elasticsearch.version>
+<!--        <spring.data.elasticsearch.version>4.1.5</spring.data.elasticsearch.version>-->
+        <spring.data.jpa.version>2.4.3</spring.data.jpa.version>
+        <elasticsearch.version>7.12.1</elasticsearch.version>
+        <fasterxml.version>2.11.4</fasterxml.version>
+
+        <spring.security.version>5.4.2</spring.security.version>
+        <jackson.version>2.11.4</jackson.version>
+        <jaxb.version>2.2.11</jaxb.version>
+        <cxf.version>3.4.2</cxf.version>
+        <httpclient.version>4.5.13</httpclient.version>
+        <java.cas.client.version>3.6.2</java.cas.client.version>
+
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Gabriel Kurzac</name>
+            <email>gabriel.kurzac@asseco.pl</email>
+            <organization>Asseco Poland S.A.</organization>
+            <organizationUrl>https://pl.asseco.com</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/assecopl/fh.git</connection>
+        <developerConnection>scm:git:ssh://github.com:assecopl/fh.git</developerConnection>
+        <url>http://github.com/assecopl/fh/tree/master</url>
+    </scm>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${sfl4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.20</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.3</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>2.2.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.9.1</version>
+                        <configuration/>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.7</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>false</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.5</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <modules>
+        <module>bom</module>
+        <module>fhdp-commons</module>
+        <module>fhdp-components</module>
+        <module>fhdp-security</module>
+    </modules>
+
+</project>

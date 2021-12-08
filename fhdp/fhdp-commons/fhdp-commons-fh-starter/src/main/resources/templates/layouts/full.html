@@ -1,0 +1,89 @@
+<!--
+LAYOUT : UseCaseLayoutService.mainLayout
+Default FH layout with backward compatibility
+-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+</head>
+<body>
+<div th:fragment="layout">
+    <!--    <p th:text="${#strings.toLowerCase(pl.fhframework.model.UseCaseLayoutEnum.STANDARD.name())}"></p>-->
+    <div class="app sidebar-closed advanced-sidebar-closed menu-closed" id="appLayout">
+        <div class="app-header app-header d-none">
+            <div class="app-header-logo">
+                <img th:alt="${@environment.getProperty('fh.application.title')}"
+                     th:src="${@environment.getProperty('fh.application.logo.url')}" />
+                <div id="appTitle"></div>
+            </div>
+            <div class="app-header-buttons" id="appHeaderButtons">
+            </div>
+            <div class="app-header-tray tray" id="navbarForm">
+            </div>
+            <div id="chatForm"></div>
+            <div class="app-header-user">
+                <div class="user user--reversed">
+                    <div class="user-avatar">
+                        <div id="userInitial"></div>
+                    </div>
+                    <div class="user-info pr-0">
+                        <div id="systemInfo">
+                            <!--                            <span id="sessionCounter">&#45;&#45;:&#45;&#45;</span>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="app-menu d-none" id="menuForm">
+        </div>
+        <div class="app-body">
+            <div class="panels">
+                <div class="panel panel--search">
+                    <div class="panel-body" id="searchForm">
+                    </div>
+                    <div class="panel-footer d-none" id="searchButtonsForm">
+                    </div>
+                </div>
+                <div class="panel panel--advanced-search">
+                    <div class="panel-body" id="advancedSearchForm">
+                    </div>
+                </div>
+                <div class="panel panel--main">
+                    <div class="panel-body" id="mainForm">
+                    </div>
+                    <div class="panel-footer d-none" id="buttonsForm">
+                    </div>
+                </div>
+                <div class="app-sider app-sider--from-top app-sider--help" id="appSiderHelp">
+                    <div class="panels">
+                        <div class="panel panel--main">
+                            <div class="panel-body" id="appSider">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="app-sider app-sider--details" id="appSiderDetails">
+                    <div class="panels">
+                        <div class="panel panel--main">
+                            <div class="panel-body" id="appSiderDetailsContent">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel--main d-none">
+                    <div class="panel-body" id="formDesigner">
+                        <div class="row">
+                            <div class="col-md-2" id="formDesignerToolbox"></div>
+                            <div class="col" id="formDesignerComponents"></div>
+                            <div class="col d-none" id="formDesignerModelProperties"></div>
+                            <div class="col-md-2" id="formDesignerProperties"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,1130 @@
+{
+  "_class": "pl.fhframework.dp.transport.dto.declaration.DeclarationCTDto",
+  "id": 17252,
+  "processId": "a17d57dc-1f7a-11ec-b8f9-005056a698f8",
+  "repositoryId": "3614aadd-eb4f-42a8-9390-7bf598f60200",
+  "version": 19,
+  "lastStatusChangeTime": "2021-09-27T12:07:02.318Z",
+  "declaration": {
+    "kindOfDeclaration": "H7",
+    "state": "RELEASED",
+    "creationTime": "2021-09-27T12:06:27.990Z",
+    "validationDate": "2021-09-27",
+    "priority": "High",
+    "isFallback": false,
+    "isDigitallySigned": true,
+    "signedBy":"1234567890123456789012345678901234567890123456789012345678901234567890",
+    "senderId": "12345678901234567890123456789012345",
+    "messageSender": "/IEH715/Declaration/Representative/identificationNumber",
+    "sourceMessageName": "12345678901234567890123456789012345",
+    "sourceMessageRepositoryId":"1234567890123456789012345678901234567890123456789012345678901234567890",
+    "deliveryMethod": "1234567890123456789012345678901234567890",
+    "deliveryProvider": "1234567890123456789012345678901234567890",
+    "ulrn": "1234567890123456789012345678901234567890123456789012345678901234567890",
+    "lrn": "12345678901234567890123456789012345",
+    "mrn": "21LTKA10000001E4R7",
+    "additionalDeclarationType": "A",
+    "deferredPayment":"12345678901234567890123456789012345",
+    "totalDutiesAndTaxesAmount": 12345678901234.12,
+    "maximumCustomsDebt":12345678901234.12,    
+    "maximumDuty":12345678901234.12,    
+    "maximumExcise":12345678901234.12,    
+    "maximumVAT":12345678901234.12,    
+    "goodsPresentationTimeLimit":"2021-09-27T12:06:58.867Z",
+    "dateAndTimeOfPresentationOfGoods":"2021-09-27T12:06:58.867Z",
+    
+    "communicationLanguage": "EN",
+    "declarationAcceptanceDate": "2021-09-27T12:06:58.867Z",
+    "customsDebtDate": "2021-09-27",
+    "amendmentAcceptanceDate": "2021-09-27T18:07:02.225Z",
+    "goodsReleaseTimeLimit": "2021-09-27T18:07:02.225Z",
+    "releaseDate": "2021-09-27T18:07:14.782Z",
+    "operation": [
+      {
+        "sequenceNumber": 0,
+        "code": "FinalizeDraft",
+        "performer": "jacekb",
+        "startTime": "2021-09-27T12:06:49.457Z",
+        "finishTime": "2021-09-27T12:07:02.640Z",
+        "annotation": "test JB",
+        "guid": "bdfb5100-937c-4b8c-8730-8a6284ee3277",
+        "change": []
+      },
+      {
+        "code": "Release",
+        "performer": "System",
+        "startTime": "2021-09-27T18:07:11.996Z",
+        "finishTime": "2021-09-27T18:07:15.948Z",
+        "formalTime": "2021-09-27T18:07:11.996Z",
+        "guid": "f957cf14-1fac-11ec-b8f9-005056a698f8",
+        "change": []
+      }
+    ],
+    "validationResult": [],
+    "setOfAttachments": [],
+    "invalidation": [],
+    "clearanceControl": {
+      "riskAssessmentId": "RAAH21092705#LT302453803#IEH715",
+      "notifyTrader": true,
+      "channel": "GREEN"
+    },
+    "controlNotification": [],
+    "typeOfControl": [],
+    "requestedDocument": [],
+    "controlResult": {
+      "code": "A2",
+      "date": "2021-09-27"
+    },
+    "quotaAllocationResult": [],
+    "invalidGuarantee": [
+    	{
+    		"sequenceNumber":12345,
+    		"grn":"123456789012345678901234",
+    		"goodsItemNumber":12345,
+    		"reasonCode":"12345",
+    		"reasonText":"123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 "
+    	},
+    	{
+    		"sequenceNumber":12345,
+    		"grn":"123456789012345678901234",
+    		"goodsItemNumber":12345,
+    		"reasonCode":"12345",
+    		"reasonText":"123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 "    	
+    	}
+    
+    ],
+    "paymentControl": {
+      "controlTime": "2021-09-27T18:07:14.666Z",
+      "declarationVersion": "99",
+      "resultCode": "000S",
+      "resultDescription": "123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 ",
+      "numberOfTries": 12345
+    },
+    "postClearance": [],
+    "authorisation": [],
+    "importer": {
+      "name": "UAB Širmulis",
+      "identificationNumber": "LT159912028",
+      "address": {
+        "streetAndNumber": "Topolių g. 2",
+        "postcode": "-",
+        "city": "Raudondvario k.",
+        "country": "LT"
+      }
+    },
+    "declarant": {
+      "name": "UAB Širmulis",
+      "identificationNumber": "LT159912028",
+      "customsBroker": false,
+      "address": {
+        "streetAndNumber": "Topolių g. 2",
+        "postcode": "-",
+        "city": "Raudondvario k.",
+        "country": "LT"
+      },
+      "communication": [],
+      "contactPerson": []
+    },
+    "representative": {
+      "name": "UAB TRANSEKSPEDICIJA",
+      "identificationNumber": "LT302453803",
+      "status": "2",
+      "aeoStatus": "AEOC",
+      "customsBroker": true,
+      "address": {
+        "streetAndNumber": "Vytenio g. 7",
+        "postcode": "LT-03113",
+        "city": "Vilnius",
+        "country": "LT"
+      },
+      
+      "communication": [
+      	      {
+	      	"sequenceNumber":12345,
+	      	"name":"sdsdsdqd",
+	      	"phoneNumber":"124356645",
+	      	"eMailAddress":"test@test.lt"
+	      },
+	      {
+	      	"sequenceNumber":"2",
+	      	"name":"gdsfghsdbad",
+	      	"phoneNumber":"22222222222",
+	      	"eMailAddress":"test@test.lt"
+	      }
+      ],
+      "contactPerson": [
+	      {
+	      	"sequenceNumber":12345,
+	      	"name":"sdsdsdqd",
+	      	"phoneNumber":"124356645",
+	      	"eMailAddress":"test@test.lt"
+	      },
+	      {
+	      	"sequenceNumber":"2",
+	      	"name":"gdsfghsdbad",
+	      	"phoneNumber":"22222222222",
+	      	"eMailAddress":"test@test.lt"
+	      }
+      ]
+    },
+    "personProvidingGuarantee": {
+      "name": "UAB TRANSEKSPEDICIJA",
+      "identificationNumber": "LT302453803",
+      "address": {
+        "streetAndNumber": "Vytenio g. 7",
+        "postcode": "LT-03113",
+        "city": "Vilnius",
+        "country": "LT"
+      }
+    },
+    "personPayingCustomsDuty": {
+      "name": "UAB TRANSEKSPEDICIJA",
+      "identificationNumber": "LT302453803",
+      "address": {
+        "streetAndNumber": "Vytenio g. 7",
+        "postcode": "LT-03113",
+        "city": "Vilnius",
+        "country": "LT"
+      }
+    },       
+    "postalCharges":{
+        "currency": "EUR",
+        "amount": 3.09
+    },
+    "customsOfficeOfImport": {
+      "referenceNumber": "LTKA1000"
+    },
+    "guarantee": [
+      {
+        "sequenceNumber": 1,
+        "guaranteeType": "1",
+        "guaranteeReference": [
+          {
+            "sequenceNumber": 1,
+            "grn": "GRN-1234",
+            "accessCode": "1234",
+            "currency":"EUR",
+            "amountToBeCovered":"12345678901234.56",
+            "otherGuaranteeReference":"otherGuaranteeReference"
+          },
+          {
+            "sequenceNumber": 2,
+            "grn": "GRN-1234",
+            "accessCode": "1234",
+            "currency":"EUR",
+            "amountToBeCovered":"12345678901234.56",
+            "otherGuaranteeReference":"12345678901234567890123456789012345",
+            "customsOfficeOfGuarantee":{
+            	"referenceNumber":"LT123456"
+            }
+          }
+        ]
+      },
+      {
+        "sequenceNumber": 2,
+        "guaranteeType": "2",
+        "guaranteeReference": [
+          {
+            "sequenceNumber": 21,
+            "grn": "GRN2-1234",
+            "accessCode": "11234"
+          },
+          {
+            "sequenceNumber": 22,
+            "grn": "GRN-12345",
+            "accessCode": "21234"
+          }
+        ]
+      }
+
+    ],
+    "goodsShipment": {
+      "referenceNumberUCR": "12345678901234567890123456789012345",
+      "invoiceCurrency":"EUR",
+      "totalAmountInvoiced":"12345678901234.12",
+      "dateOfAcceptance":"2021-09-27T18:07:11.996Z",
+      "countryOfDestination":"LT",
+      "regionOfDestination":"12345678901234567890123456789012345",
+      "countryOfDispatch":"LT",
+      "countryOfExport":"LT",
+      "grossMass": 12345678901234.22,
+      "containerIndicator":"1",
+      "modeOfTransportAtBorder":"1",
+      "inlandModeOfTransport":"2",
+      "natureOfTransaction":"12",
+      "previousDocument": [],
+      "additionalInformation": [],
+      "supportingDocument": [],
+      "additionalReference": [],
+      "transportDocument": [],
+      "exporter": {
+        "name": "Asseco Восточная Европа",
+        "identificationNumber":"LT123456789012345",
+        "vatNumber":"LT123456789012345",
+        "aeoStatus":"1234",
+      	"customsBroker": true,
+        "status": "2",
+        "address": {
+          "streetAndNumber": "Новый Арбат 777",
+          "postcode": "22-345",
+          "city": "Москва",
+          "country": "RU"
+        }
+      },
+      "consignor": {
+        "name": "1234567890123456789012345678901234567890123456789012345678901234567890",
+        "identificationNumber":"LT123456789012345",
+        "vatNumber":"LT123456789012345",
+        "aeoStatus":"1234",
+      	"customsBroker": true,
+        "status": "2",
+        "address": {
+          "streetAndNumber": "1234567890123456789012345678901234567890123456789012345678901234567890",
+          "postcode": "22-345",
+          "city": "12345678901234567890123456789012345",
+          "country": "RU"
+        }
+      },      
+      "additionalSupplyChainActor": [{
+	"sequenceNumber": 1,
+        "name": "1234567890123456789012345678901234567890123456789012345678901234567890",
+        "identificationNumber":"LT123456789012345",
+        "role":"321",
+        "address": {
+          "streetAndNumber": "1234567890123456789012345678901234567890123456789012345678901234567890",
+          "postcode": "22-345",
+          "city": "12345678901234567890123456789012345",
+          "country": "RU"
+        }
+      },
+      {
+	"sequenceNumber": 2,
+        "name": "1234567890123456789012345678901234567890123456789012345678901234567890",
+        "identificationNumber":"LT123456789012345",
+        "role":"123",
+        "address": {
+          "streetAndNumber": "1234567890123456789012345678901234567890123456789012345678901234567890",
+          "postcode": "22-345",
+          "city": "12345678901234567890123456789012345",
+          "country": "RU"
+        }
+      }      
+      ],
+      "additionalFiscalReference": [{
+	"sequenceNumber": 1,
+        "vatIdentificationNumber":"LT123456789012345",
+        "role":"321"
+      },
+      {
+	"sequenceNumber": 2,
+        "vatIdentificationNumber":"LT123456789012345",
+        "role":"123"
+      }  
+      ],
+      "additionsAndDeductions": [],
+      "transportCostsToDestination": {
+        "currency": "EUR",
+        "amount": 3.09
+      },
+      "locationOfGoods": {
+        "typeOfLocation": "A",
+        "qualifierOfIdentification": "X",
+        "additionalIdentifier": "0001",
+        "economicOperator": {
+          "name": "UAB Mardentas",
+          "identificationNumber": "LT225863550",
+          "address": {
+            "streetAndNumber": "Some street 1/2a",
+            "postcode": "01100",
+            "city": "Vilnius",
+            "country": "LT"
+          }
+        },
+        "contactPerson": []
+      },
+      "transportEquipment": [],
+      "goodsItem": [
+        {
+          "goodsItemNumber": 12345,
+          "referenceNumberUCR":"12345678901234567890123456789012345",
+          "totalDutiesAndTaxesAmount": 12345678901234.84,
+          "valuationIndicators":"1234",
+          "itemAmountInvoiced":12345678901234.84,
+          "valuationMethod":"1",
+          "preference":"123",
+          "dateOfAcceptance":"2021-09-27T18:07:11.996Z",
+          "countryOfDestination":"LT",
+          "regionOfDestination":"12345678901234567890123456789012345",
+          "countryOfDispatch":"LT",
+          "countryOfExport":"LT",
+          "countryOfOrigin":"LT",
+          "countryOfPreferentialOrigin":"1234",
+          "regionOfOrigin":"123456789",
+          "netMass":1234567890.123456,
+          "supplementaryUnits":1234567890.123456,
+          "grossMass": 1234567890.123456,
+          "descriptionOfGoods": "1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 ",
+          "typeOfGoods":"1",
+          "procedure": {
+            "requestedProcedure": "40",
+            "previousProcedure": "00"
+          },
+          "additionalProcedure": [
+            {
+              "sequenceNumber": 1,
+              "additionalProcedure": "C08"
+            },
+            {
+              "sequenceNumber": 2,
+              "additionalProcedure": "C08"
+            },
+            {
+              "sequenceNumber": 3,
+              "additionalProcedure": "C08"
+            },
+            {
+              "sequenceNumber": 4,
+              "additionalProcedure": "C08"
+            }
+          ],
+	      "exporter": {
+		"name": "Asseco Восточная Европа",
+		"identificationNumber":"LT123456789012345",
+		"vatNumber":"LT123456789012345",
+		"aeoStatus":"1234",
+	      	"customsBroker": true,
+		"status": "2",
+		"address": {
+		  "streetAndNumber": "Новый Арбат 777",
+		  "postcode": "22-345",
+		  "city": "Москва",
+		  "country": "RU"
+		}
+	      },          
+          "previousDocument": [
+          	{
+          		"sequenceNumber":12345,
+          		"referenceNumber":"1234567890123456789012345678901234567890123456789012345678901234567890",
+          		"type":"1234",
+          		"typeOfPackages":"12",
+          		"numberOfPackages":"12345678",
+          		"measurementUnitAndQualifier":"1234",
+          		"quantity":"1234567890.123456",
+          		"complementOfInformation":"12345678901234567890123456789012345",
+          		"goodsItemIdentifier":"12345"
+          	},
+          	{
+          		"sequenceNumber":12345,
+          		"referenceNumber":"1234567890123456789012345678901234567890123456789012345678901234567890",
+          		"type":"1234",
+          		"typeOfPackages":"12",
+          		"numberOfPackages":"12345678",
+          		"measurementUnitAndQualifier":"1234",
+          		"quantity":"1234567890.123456",
+          		"complementOfInformation":"12345678901234567890123456789012345",
+          		"goodsItemIdentifier":"12345"
+          	}
+          ],
+          "additionalInformation": [
+          	{
+          		"sequenceNumber":12345,
+          		"code":"12345",
+          		"text":"1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 "
+          	},
+          	{
+          		"sequenceNumber":12345,
+          		"code":"12345",
+          		"text":"1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 "
+          	}
+          
+          ],
+          "supportingDocument": [
+          	{
+          		"sequenceNumber":12345,
+          		"referenceNumber":"1234567890123456789012345678901234567890123456789012345678901234567890",
+          		"type":"1234",
+          		"measurementUnitAndQualifier":"1234",
+          		"quantity":"1234567890.123456",
+          		"dateOfValidity":"2021-01-01",
+          		"currency":"EUR",
+          		"amount":12345678901234.12,
+          		"documentLineItemNumber":12345,
+          		"complementOfInformation":"12345678901234567890123456789012345",
+          		"source":"12345678901234567890123456789012345"
+           	},
+          	{
+          		"sequenceNumber":12345,
+          		"referenceNumber":"1234567890123456789012345678901234567890123456789012345678901234567890",
+          		"type":"1234",
+          		"measurementUnitAndQualifier":"1234",
+          		"quantity":"1234567890.123456",
+          		"dateOfValidity":"2021-01-01",
+          		"currency":"EUR",
+          		"amount":12345678901234.12,
+          		"documentLineItemNumber":12345,
+          		"complementOfInformation":"12345678901234567890123456789012345",
+          		"source":"12345678901234567890123456789012345"
+          	}          
+          ],
+          "additionalReference": [
+          
+          	{
+          		"sequenceNumber":12345,
+          		"referenceNumber":"1234567890123456789012345678901234567890123456789012345678901234567890",
+          		"type":"1234"
+          	},
+          	{
+          		"sequenceNumber":12345,
+          		"referenceNumber":"1234567890123456789012345678901234567890123456789012345678901234567890",
+          		"type":"1234"
+          	}          
+          
+          ],
+          "transportDocument": [
+          	{
+          		"sequenceNumber":12345,
+          		"referenceNumber":"1234567890123456789012345678901234567890123456789012345678901234567890",
+          		"type":"1234"
+          	},
+          	{
+          		"sequenceNumber":12345,
+          		"referenceNumber":"1234567890123456789012345678901234567890123456789012345678901234567890",
+          		"type":"1234"
+          	}                       
+          ],
+          "authorisation": [
+          	{
+          		"sequenceNumber":12345,
+          		"referenceNumber":"12345678901234567890123456789012345",
+          		"type":"1234",
+          		"holderOfAuthorisation":"12345678901234567"
+          	},
+          	{
+          		"sequenceNumber":12345,
+          		"referenceNumber":"12345678901234567890123456789012345",
+          		"type":"1234",
+          		"holderOfAuthorisation":"12345678901234567"
+          	}            
+          ],
+          "additionalSupplyChainActor": [
+          
+	      {
+		"sequenceNumber": 1,
+		"name": "1234567890123456789012345678901234567890123456789012345678901234567890",
+		"identificationNumber":"LT123456789012345",
+		"role":"321",
+		"address": {
+		  "streetAndNumber": "1234567890123456789012345678901234567890123456789012345678901234567890",
+		  "postcode": "22-345",
+		  "city": "12345678901234567890123456789012345",
+		  "country": "RU"
+		}
+	      },
+	      {
+		"sequenceNumber": 2,
+		"name": "1234567890123456789012345678901234567890123456789012345678901234567890",
+		"identificationNumber":"LT123456789012345",
+		"role":"123",
+		"address": {
+		  "streetAndNumber": "1234567890123456789012345678901234567890123456789012345678901234567890",
+		  "postcode": "22-345",
+		  "city": "12345678901234567890123456789012345",
+		  "country": "RU"
+		}
+	      }               
+          
+          ],
+          "additionalFiscalReference": [],
+          "dutiesAndTaxesInfo": {
+            "taxBaseInfo": [
+              {
+                "sequenceNumber": 1,
+                "measurementUnitAndQualifier": "LTR",
+                "quantity": 1234567890.123456
+              },
+              {
+                "sequenceNumber": 1,
+                "measurementUnitAndQualifier": "LTR",
+                "quantity": 0.1
+              },
+              {
+                "sequenceNumber": 1,
+                "measurementUnitAndQualifier": "LTR",
+                "quantity": 0.1
+              }
+            ]
+          },
+          "dutiesAndTaxes": [
+            {
+              "sequenceNumber": 1,
+              "taxType": "A00",
+              "methodOfPayment": "E",
+              "payableTaxAmount": 18.6,
+              "taxBase": [
+                {
+                  "sequenceNumber": 1,
+                  "taxRate": 9.3,
+                  "amount": 200.0,
+                  "taxAmount": 18.6
+                },
+                {
+                  "sequenceNumber": 12345,
+                  "measurementUnitAndQualifier":"1234",
+                  "taxRate": 12345678901234.123,
+                  "quantity": 1234567890.123456,
+                  "amount": 12345678901234.12,
+                  "taxAmount": 12345678901234.12
+                }
+              ]
+            },
+            {
+              "sequenceNumber": 2,
+              "taxType": "100",
+              "methodOfPayment": "E",
+              "payableTaxAmount": 9.13,
+              "taxBase": [
+                {
+                  "sequenceNumber": 12345,
+                  "taxRate": 2.0,
+                  "measurementUnitAndQualifier": "ASV",
+                  "quantity": 1234567890123.456,
+                  "taxAmount": 9.12
+                },
+                {
+                  "sequenceNumber": 12346,
+                  "taxRate": 12345678901234.123,
+                  "measurementUnitAndQualifier": "GRM",
+                  "amount": 12345678901234.12,
+                  "taxAmount": 12345678901234.12
+                }
+              ]
+            },
+            {
+              "sequenceNumber": 3,
+              "taxType": "B00",
+              "methodOfPayment": "E",
+              "payableTaxAmount": 0.11,
+              "taxBase": [
+                {
+                  "sequenceNumber": 1,
+                  "taxRate": 1.0,
+                  "amount": 11.1,
+                  "taxAmount": 0.11
+                }
+              ]
+            }
+          ],
+          "postalValue":{
+          	"currency":"EUR",
+          	"amount":12345678901234.12
+          },
+          "additionsAndDeductions": [],
+          "intrinsicValue": {
+            "currency": "EUR",
+            "amount": 12.0
+          },
+          "packaging": [
+            {
+              "sequenceNumber": 1,
+              "numberOfPackages": 1
+            },
+            {
+              "sequenceNumber": 12344,
+              "numberOfPackages": 1
+            },
+            {
+              "sequenceNumber": 12345,
+              "numberOfPackages": 12345678
+            }
+            
+          ],
+          "commodityCode": {
+            "harmonisedSystemSubheadingCode": "330300",
+            "combinedNomenclatureCode": "10",
+            "taricCode":"12",
+            "taricAdditonalCode": [],
+            "nationalAdditionalCode": []
+          },
+          "footnote": [
+            {
+              "sequenceNumber": 1,
+              "footnoteIdentifier": "CD400"
+            },
+            {
+              "sequenceNumber": 2,
+              "footnoteIdentifier": "CD572"
+            },
+            {
+              "sequenceNumber": 3,
+              "footnoteIdentifier": "CD577"
+            }
+          ]
+        },
+        {
+          "goodsItemNumber": 2,
+          "totalDutiesAndTaxesAmount": 27.84,
+          "grossMass": 100.0,
+          "descriptionOfGoods": "Toilet waters Dior Fahrenheit",
+          "procedure": {
+            "requestedProcedure": "40",
+            "previousProcedure": "00"
+          },
+          "additionalProcedure": [
+            {
+              "sequenceNumber": 1,
+              "additionalProcedure": "C08"
+            }
+          ],
+          "previousDocument": [],
+          "additionalInformation": [],
+          "supportingDocument": [],
+          "additionalReference": [],
+          "transportDocument": [],
+          "authorisation": [],
+          "additionalSupplyChainActor": [],
+          "additionalFiscalReference": [],
+          "dutiesAndTaxesInfo": {
+            "taxBaseInfo": [
+              {
+                "sequenceNumber": 1,
+                "measurementUnitAndQualifier": "LTR",
+                "quantity": 2.0
+              },
+              {
+                "sequenceNumber": 2,
+                "measurementUnitAndQualifier": "ASV",
+                "quantity": 14.0
+              }
+            ]
+          },
+          "dutiesAndTaxes": [
+            {
+              "sequenceNumber": 1,
+              "taxType": "A00",
+              "methodOfPayment": "E",
+              "payableTaxAmount": 18.6,
+              "taxBase": [
+                {
+                  "sequenceNumber": 1,
+                  "taxRate": 9.3,
+                  "amount": 200.0,
+                  "taxAmount": 18.6
+                }
+              ]
+            },
+            {
+              "sequenceNumber": 2,
+              "taxType": "100",
+              "methodOfPayment": "E",
+              "payableTaxAmount": 9.13,
+              "taxBase": [
+                {
+                  "sequenceNumber": 1,
+                  "taxRate": 2.0,
+                  "measurementUnitAndQualifier": "ASV",
+                  "quantity": 4.6,
+                  "taxAmount": 9.12
+                },
+                {
+                  "sequenceNumber": 2,
+                  "taxRate": 0.001,
+                  "measurementUnitAndQualifier": "GRM",
+                  "amount": 100.0,
+                  "taxAmount": 0.01
+                }
+              ]
+            },
+            {
+              "sequenceNumber": 3,
+              "taxType": "B00",
+              "methodOfPayment": "E",
+              "payableTaxAmount": 0.11,
+              "taxBase": [
+                {
+                  "sequenceNumber": 1,
+                  "taxRate": 1.0,
+                  "amount": 11.1,
+                  "taxAmount": 0.11
+                }
+              ]
+            }
+          ],
+          "additionsAndDeductions": [],
+          "intrinsicValue": {
+            "currency": "EUR",
+            "amount": 15.0
+          },
+          "packaging": [
+            {
+              "sequenceNumber": 1,
+              "numberOfPackages": 1
+            }
+          ],
+          "commodityCode": {
+            "harmonisedSystemSubheadingCode": "330300",
+            "combinedNomenclatureCode": "90",
+            "taricCode": "00",
+            "taricAdditonalCode": [],
+            "nationalAdditionalCode": []
+          },
+          "footnote": [
+            {
+              "sequenceNumber": 1,
+              "footnoteIdentifier": "CD400"
+            },
+            {
+              "sequenceNumber": 2,
+              "footnoteIdentifier": "CD572"
+            },
+            {
+              "sequenceNumber": 3,
+              "footnoteIdentifier": "CD577"
+            }
+          ]
+        },
+        {
+          "goodsItemNumber": 12345,
+          "referenceNumberUCR":"12345678901234567890123456789012345",
+          "totalDutiesAndTaxesAmount": 12345678901234.84,
+          "valuationIndicators":"1234",
+          "itemAmountInvoiced":12345678901234.84,
+          "valuationMethod":"1",
+          "preference":"123",
+          "dateOfAcceptance":"2021-09-27T18:07:11.996Z",
+          "countryOfDestination":"LT",
+          "regionOfDestination":"12345678901234567890123456789012345",
+          "countryOfDispatch":"LT",
+          "countryOfExport":"LT",
+          "countryOfOrigin":"LT",
+          "countryOfPreferentialOrigin":"1234",
+          "regionOfOrigin":"123456789",
+          "netMass":1234567890.123456,
+          "supplementaryUnits":1234567890.123456,
+          "grossMass": 1234567890.123456,
+          "descriptionOfGoods": "1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 ",
+          "typeOfGoods":"1",
+          "procedure": {
+            "requestedProcedure": "40",
+            "previousProcedure": "00"
+          },
+          "additionalProcedure": [
+            {
+              "sequenceNumber": 1,
+              "additionalProcedure": "C08"
+            },
+            {
+              "sequenceNumber": 2,
+              "additionalProcedure": "C08"
+            },
+            {
+              "sequenceNumber": 3,
+              "additionalProcedure": "C08"
+            },
+            {
+              "sequenceNumber": 4,
+              "additionalProcedure": "C08"
+            }
+          ],
+	      "exporter": {
+		"name": "Asseco Восточная Европа",
+		"identificationNumber":"LT123456789012345",
+		"vatNumber":"LT123456789012345",
+		"aeoStatus":"1234",
+	      	"customsBroker": true,
+		"status": "2",
+		"address": {
+		  "streetAndNumber": "Новый Арбат 777",
+		  "postcode": "22-345",
+		  "city": "Москва",
+		  "country": "RU"
+		}
+	      },          
+          "previousDocument": [],
+          "additionalInformation": [],
+          "supportingDocument": [],
+          "additionalReference": [],
+          "transportDocument": [],
+          "authorisation": [],
+          "additionalSupplyChainActor": [],
+          "additionalFiscalReference": [],
+          "dutiesAndTaxesInfo": {
+            "taxBaseInfo": [
+              {
+                "sequenceNumber": 1,
+                "measurementUnitAndQualifier": "LTR",
+                "quantity": 0.1
+              }
+            ]
+          },
+          "dutiesAndTaxes": [
+            {
+              "sequenceNumber": 1,
+              "taxType": "A00",
+              "methodOfPayment": "E",
+              "payableTaxAmount": 18.6,
+              "taxBase": [
+                {
+                  "sequenceNumber": 1,
+                  "taxRate": 9.3,
+                  "amount": 200.0,
+                  "taxAmount": 18.6
+                }
+              ]
+            },
+            {
+              "sequenceNumber": 2,
+              "taxType": "100",
+              "methodOfPayment": "E",
+              "payableTaxAmount": 9.13,
+              "taxBase": [
+                {
+                  "sequenceNumber": 1,
+                  "taxRate": 2.0,
+                  "measurementUnitAndQualifier": "ASV",
+                  "quantity": 4.6,
+                  "taxAmount": 9.12
+                },
+                {
+                  "sequenceNumber": 2,
+                  "taxRate": 0.001,
+                  "measurementUnitAndQualifier": "GRM",
+                  "amount": 100.0,
+                  "taxAmount": 0.01
+                }
+              ]
+            },
+            {
+              "sequenceNumber": 3,
+              "taxType": "B00",
+              "methodOfPayment": "E",
+              "payableTaxAmount": 0.11,
+              "taxBase": [
+                {
+                  "sequenceNumber": 1,
+                  "taxRate": 1.0,
+                  "amount": 11.1,
+                  "taxAmount": 0.11
+                }
+              ]
+            }
+          ],
+          "additionsAndDeductions": [],
+          "intrinsicValue": {
+            "currency": "EUR",
+            "amount": 12.0
+          },
+          "packaging": [
+            {
+              "sequenceNumber": 1,
+              "numberOfPackages": 1
+            }
+          ],
+          "commodityCode": {
+            "harmonisedSystemSubheadingCode": "330300",
+            "combinedNomenclatureCode": "10",
+            "taricAdditonalCode": [],
+            "nationalAdditionalCode": []
+          },
+          "footnote": [
+            {
+              "sequenceNumber": 1,
+              "footnoteIdentifier": "CD400"
+            },
+            {
+              "sequenceNumber": 2,
+              "footnoteIdentifier": "CD572"
+            },
+            {
+              "sequenceNumber": 3,
+              "footnoteIdentifier": "CD577"
+            }
+          ]
+        },
+        {
+          "goodsItemNumber": 12345,
+          "referenceNumberUCR":"12345678901234567890123456789012345",
+          "totalDutiesAndTaxesAmount": 12345678901234.84,
+          "valuationIndicators":"1234",
+          "itemAmountInvoiced":12345678901234.84,
+          "valuationMethod":"1",
+          "preference":"123",
+          "dateOfAcceptance":"2021-09-27T18:07:11.996Z",
+          "countryOfDestination":"LT",
+          "regionOfDestination":"12345678901234567890123456789012345",
+          "countryOfDispatch":"LT",
+          "countryOfExport":"LT",
+          "countryOfOrigin":"LT",
+          "countryOfPreferentialOrigin":"1234",
+          "regionOfOrigin":"123456789",
+          "netMass":1234567890.123456,
+          "supplementaryUnits":1234567890.123456,
+          "grossMass": 1234567890.123456,
+          "descriptionOfGoods": "1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 ",
+          "typeOfGoods":"1",
+          "procedure": {
+            "requestedProcedure": "40",
+            "previousProcedure": "00"
+          },
+          "additionalProcedure": [
+            {
+              "sequenceNumber": 1,
+              "additionalProcedure": "C08"
+            },
+            {
+              "sequenceNumber": 2,
+              "additionalProcedure": "C08"
+            },
+            {
+              "sequenceNumber": 3,
+              "additionalProcedure": "C08"
+            },
+            {
+              "sequenceNumber": 4,
+              "additionalProcedure": "C08"
+            }
+          ],
+	      "exporter": {
+		"name": "Asseco Восточная Европа",
+		"identificationNumber":"LT123456789012345",
+		"vatNumber":"LT123456789012345",
+		"aeoStatus":"1234",
+	      	"customsBroker": true,
+		"status": "2",
+		"address": {
+		  "streetAndNumber": "Новый Арбат 777",
+		  "postcode": "22-345",
+		  "city": "Москва",
+		  "country": "RU"
+		}
+	      },          
+          "previousDocument": [],
+          "additionalInformation": [],
+          "supportingDocument": [],
+          "additionalReference": [],
+          "transportDocument": [],
+          "authorisation": [],
+          "additionalSupplyChainActor": [],
+          "additionalFiscalReference": [],
+          "dutiesAndTaxesInfo": {
+            "taxBaseInfo": [
+              {
+                "sequenceNumber": 1,
+                "measurementUnitAndQualifier": "LTR",
+                "quantity": 0.1
+              }
+            ]
+          },
+          "dutiesAndTaxes": [
+            {
+              "sequenceNumber": 1,
+              "taxType": "A00",
+              "methodOfPayment": "E",
+              "payableTaxAmount": 18.6,
+              "taxBase": [
+                {
+                  "sequenceNumber": 1,
+                  "taxRate": 9.3,
+                  "amount": 200.0,
+                  "taxAmount": 18.6
+                }
+              ]
+            },
+            {
+              "sequenceNumber": 2,
+              "taxType": "100",
+              "methodOfPayment": "E",
+              "payableTaxAmount": 9.13,
+              "taxBase": [
+                {
+                  "sequenceNumber": 1,
+                  "taxRate": 2.0,
+                  "measurementUnitAndQualifier": "ASV",
+                  "quantity": 4.6,
+                  "taxAmount": 9.12
+                },
+                {
+                  "sequenceNumber": 2,
+                  "taxRate": 0.001,
+                  "measurementUnitAndQualifier": "GRM",
+                  "amount": 100.0,
+                  "taxAmount": 0.01
+                }
+              ]
+            },
+            {
+              "sequenceNumber": 3,
+              "taxType": "B00",
+              "methodOfPayment": "E",
+              "payableTaxAmount": 0.11,
+              "taxBase": [
+                {
+                  "sequenceNumber": 1,
+                  "taxRate": 1.0,
+                  "amount": 11.1,
+                  "taxAmount": 0.11
+                }
+              ]
+            }
+          ],
+          "additionsAndDeductions": [],
+          "intrinsicValue": {
+            "currency": "EUR",
+            "amount": 12.0
+          },
+          "packaging": [
+            {
+              "sequenceNumber": 1,
+              "numberOfPackages": 1
+            }
+          ],
+          "commodityCode": {
+            "harmonisedSystemSubheadingCode": "330300",
+            "combinedNomenclatureCode": "10",
+            "taricAdditonalCode": [],
+            "nationalAdditionalCode": []
+          },
+          "footnote": [
+            {
+              "sequenceNumber": 1,
+              "footnoteIdentifier": "CD400"
+            },
+            {
+              "sequenceNumber": 2,
+              "footnoteIdentifier": "CD572"
+            },
+            {
+              "sequenceNumber": 3,
+              "footnoteIdentifier": "CD577"
+            }
+          ]
+        }        
+        
+      ]
+    }
+  },
+  "controlNotifications": [],
+  "requestedDocuments": [],
+  "admDecisions": [],
+  "pods": [],
+  "wdzList": [],
+  "podzList": [],
+  "invalidateMessageList": [],
+  "goodsItemDataDtoList": [],
+  "processingFlags": {
+    "goodsPresented": false,
+    "zc263sent": false,
+    "manualProcessing": false,
+    "rejectDeclarationButtonVisible": false,
+    "directivesReadOnly": true,
+    "fromEcipSeap": false,
+    "whileRectification": false,
+    "whileCorrection": false,
+    "noControlDone": false,
+    "invalidationDone": false,
+    "isWaitingForAdditionalData": false,
+    "atLeastOneGoodsItemReleased": false,
+    "osozHandleGuarantSingle": false,
+    "tqsSendVersion": 0
+  },
+  "corrections": []
+}

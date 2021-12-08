@@ -1,0 +1,6 @@
+.dropdown-menu { border: 0; box-shadow: $sh-default; padding: 0; min-width: 266px; }
+.dropdown-item { border-color: $c-border-light;
+    &:hover,
+    &:active { background: $c-bg-light; }
+    &:last-child { border: 0; }    
+}

@@ -27,6 +27,7 @@
 	<modules>
 		<module>bom-project-lite</module>
 		<module>fhCoreLite</module>
+		<module>fhdp</module>
         <module>example</module>
     </modules>
 	

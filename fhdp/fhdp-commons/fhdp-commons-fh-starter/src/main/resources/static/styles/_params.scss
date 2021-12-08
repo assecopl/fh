@@ -1,0 +1,11 @@
+.params {
+    &--columns,
+    &--two-columns { column-count: 2; }
+    > .param {margin-bottom: 10px; 
+        &:last-child { margin-bottom: 0; }
+    }
+}
+.param {
+    &-name { font-size: 0.8rem; text-transform: uppercase; }
+    &-value { font-weight: 600; }
+}

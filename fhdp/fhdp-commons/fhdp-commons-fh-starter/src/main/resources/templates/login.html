@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html id="fhApplication" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+    <title th:text="${@environment.getProperty('fh.application.title') + '- Logowanie'}">Aplikacja - Logowanie</title>
+    <link rel="stylesheet" type="text/css" href="fhApplication.bundle.css?version=24450"/>
+    <script>
+        function updateHashInAction() {
+            if (window.location.hash != undefined) {
+                document.getElementById("login").action = document.getElementById("login").action + window.location.hash;
+            }
+        }
+    </script>
+</head>
+
+<body onload="updateHashInAction()" th:classappend="${@environment.getProperty('dp.theme')}">
+<div class="login-board"
+     >
+    <div class="login-logo">
+        <img th:src="${@environment.getProperty('fh.application.logo.url')}"
+             th:alt="${@environment.getProperty('fh.application.title')}"/>
+    </div>
+    <form id="login" th:action="@{/login}" method="post">
+        <div class="login-box">
+            <div class="login-box-header" th:text="#{fh.infos.login}">
+                Login
+            </div>
+            <div th:if="${param.error}" class="alert alert-danger">
+                <p th:text="${message}"></p>
+            </div>
+            <div th:if="${param.logout}" class="alert alert-info alert-white rounded">
+                <p th:text="${message}"></p>
+            </div>
+            <div class="login-box-body">
+                <div class="login-box-group">
+                    <label class="login-box-label" th:text="#{fh.user.placeholder}">Username</label>
+                    <input class="login-box-input" id="iUsername" name="username" type="text"
+                           th:placeholder="#{fh.user.placeholder}"/>
+                </div>
+                <div class="login-box-group login-box-group--last">
+                    <label class="login-box-label"  th:text="#{fh.password.placeholder}">Password</label>
+                    <input class="login-box-input" type="password" id="iPassword" name="password"
+                           th:placeholder="#{fh.password.placeholder}"/>
+                </div>
+            </div>
+            <div class="login-box-footer">
+                <input type="submit" id="bZaloguj" name="zaloguj"
+                       class="login-box-button"
+                       th:value="#{fh.buttons.login}"/>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+
+</html>

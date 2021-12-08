@@ -1,0 +1,41 @@
+.app-header {
+    .btn { @include btn-reset; color: $c-text; }
+    &-logo { display: flex;
+        > img { padding: 5px; height: $h-header; width: initial; }
+        > div { display: flex; align-items: center; font-weight: 900; line-height: 1.4; font-size: 1rem; white-space: pre;}
+        .card { @include card-reset; }
+    }
+    &-buttons {
+        .card { background-color: initial; border: initial; border-radius: initial;}
+        .card-body { padding: 0; }
+        .row { margin: 0; padding: 0; align-items: stretch; flex-wrap: nowrap;}
+        .col-md-6 { padding: 0; margin: 0;
+            &:first-child { 
+                .btn { background: $c-main; color: $c-white; }
+            }
+            &:last-child { 
+                .btn { background: transparent; color: $c-text; }
+            }
+        }
+        .btn { height: $h-header; border-radius: 0; border: 0; width: 60px; outline: 0; }
+    }
+    &-tray { 
+        .dropdown-menu { left: initial !important; right: 0 !important; top: 5px !important;  }
+        .tray-button { display: inline-block;
+            &.dropdown { min-width: initial; padding: 0; min-width: initial; }
+        }
+        .dropdown { min-width: initial; padding: 0; }
+        .dropdown-toggle { text-transform: uppercase;
+            &:after { display: none;}
+            .caret { display: none; }
+        }
+        .fc.wrapper.col-md-2 { display: initial; max-width: initial; padding: initial; display: flex; margin: 0; }
+        .btn { @include btn-reset; height: $h-header; border-radius: 0; border: 0; width: 40px; outline: 0; text-align: center;
+            &:focus,
+            &:active:focus,
+            &:hover { color: $c-text; }
+             
+        }
+        .show > .btn-primary.dropdown-toggle { color: $c-text;background-color: $c-bg-light; border-color: transparent; }
+    }
+}

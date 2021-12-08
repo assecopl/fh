@@ -1,0 +1,49 @@
+<!doctype html>
+<html id="fhApplication" lang="en-US" translate="no">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="robots" content="noindex"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+    <title th:text="${@environment.getProperty('fh.application.title')}">FH Application</title>
+
+    <script th:inline="javascript">
+        var contextRoot = [[@{
+            /}]]; </script>
+    <!-- bundles -->
+
+    <link type="text/css" rel="stylesheet" href="fhApplication.bundle.css?version=24450"/>
+
+    <link type="text/css" rel="stylesheet"
+          th:attrappend="href=${@environment.getProperty('fh.application.css.url') != null}?@{__${@environment.getProperty('fh.application.css.url')}__?version=24450}"/>
+
+    <script type="text/javascript" src="fhApplication.bundle.js?version=24450"></script>
+
+    <script type="text/javascript"
+            th:attrappend="src=${@environment.getProperty('fh.application.js.url') != null}?@{__${@environment.getProperty('fh.application.js.url')}__?version=24450}"></script>
+</head>
+
+<body id="mainBody" th:classappend="${@environment.getProperty('dp.theme')}">
+<div  id="fh-layout-standard" class="fh-layout-div">
+    <!--        <div id="${state}" th:insert="@{'fragments/' + ${state}} :: layout">-->
+    <div  th:replace="@{'layouts/standard'} :: layout">
+        <!-- Here goes templates for layouts -->
+        <p>This section should disapear as it will be replaced by Thymeleaf</p>
+    </div>
+</div>
+<div th:each='state : ${(@environment.getProperty("fhframework.layout.templates")).split(",")}' th:id="${'fh-layout-' + state}" class="fh-layout-div d-none">
+<!--        <div id="${state}" th:insert="@{'fragments/' + ${state}} :: layout">-->
+        <div  th:replace="@{'layouts/' + ${#strings.toLowerCase(state)}} :: layout">
+            <!-- Here goes templates for layouts -->
+            <p>This section should disapear as it will be replace by Thymeleaf</p>
+        </div>
+</div>
+
+<footer id="fhFooter">
+    <div class="row">
+        <form class="col-sm-12" action="fileUpload">
+            <input type="hidden" name="_csrf" value=""/>
+        </form>
+    </div>
+</footer>
+</body>
+</html>

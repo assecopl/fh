@@ -1,0 +1,45 @@
+{
+  "name": "sample-application",
+  "version": "1.23",
+  "main": "Module.ts",
+  "private": true,
+  "scripts": {
+    "build": "webpack --env.env=production --env.wrapped=false --progress --display-error-details --max_old_space_size=8000",
+    "build-css-wrapped": "webpack --env.env=production --env.wrapped --progress --max_old_space_size=8000",
+    "dev": "webpack --env.env=development --env.wrapped=false --progress --watch --display-error-details --max_old_space_size=8000",
+    "dev-css-wrapped": "webpack --env.env=development --env.wrapped --progress --watch --display-error-details --max_old_space_size=8000"
+  },
+  "devDependencies": {
+    "@babel/core": "7.0.0",
+    "@babel/polyfill": "7.0.0",
+    "@babel/preset-env": "7.0.0",
+    "@types/bootstrap": "^4.1.2",
+    "@types/jquery": "^3.3.11",
+    "@types/jqueryui": "^1.12.4",
+    "babel-loader": "8.0.2",
+    "babel-plugin-transform-es2015-template-literals": "6.22.0",
+    "css-loader": "^1.0.0",
+    "element-closest-polyfill": "1.0.0",
+    "file-loader": "^2.0.0",
+    "imports-loader": "^0.8.0",
+    "less": "^3.8.1",
+    "less-loader": "^4.1.0",
+    "mini-css-extract-plugin": "^0.4.2",
+    "node-sass": "4.12.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.1",
+    "postcss-wrapper-loader": "^1.0.1",
+    "sass-loader": "^7.1.0",
+    "ts-loader": "6.0.4",
+    "tslint": "5.11.0",
+    "typescript": "3.0.3",
+    "uglifyjs-webpack-plugin": "^1.3.0",
+    "url-loader": "^1.1.1",
+    "webpack": "4.18.0",
+    "webpack-cli": "3.1.0",
+    "webpack-merge": "4.1.4"
+  },
+  "dependencies": {
+    "fhdp-charts": "1.5.0-SNAPSHOT",
+    "fhdp-fh-starter": "1.5.0-SNAPSHOT"
+  }
+}

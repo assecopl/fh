@@ -1,0 +1,23 @@
+$side-padding: 45px;
+.login-board { min-height: 100vh; background: $c-white; background: $c-white; display: flex; justify-content: center; align-items: center; position: relative; 
+    &::before { width: 33vw; height: 100vh; content: ''; background-color: $c-main; background-blend-mode: multiply; display: block; position: fixed; top: 0px; left: 0px; background-image: url('./img/customs05.jpg'); background-size: cover; background-position: center center;}
+    &::after { position: fixed; top: 0px; left: 0px; width: 33vw; height: 100vh; content: ''; background-color: $c-main; opacity: 0.6; }
+}
+.login-box { z-index: 10; background: $c-white; position: relative; box-shadow: $sh-default; border-radius: 10px; margin: 15px;
+    @media (min-width: 600px) { left: (-100vw / 6); width: 460px; }
+    &-header { padding: 15px; padding-top: 45px; font-weight: 900; font-size: 1.4rem; text-align: center; color: $c-main;  } 
+    &-body { padding: 15px $side-padding;}
+    &-footer { padding: 15px $side-padding $side-padding; }
+    &-group { padding-bottom: 30px;
+        &--last { padding: 0; }
+    }
+    &-label { font-weight: 600; }
+    &-input { width: 100%; padding: 15px 10px; background: $c-bg; border: 0; box-shadow: inset $sh-light; border-radius: 5px; font-family: inherit; font-size: 1.1rem;; }
+    &-button { padding: 15px 10px; color: $c-white; background-image: linear-gradient(to right, $c-main, $c-main); border: 0; border-radius: 5px; font-weight: 900; font-size: 1.2rem;  width: 100%; font-family: inherit; }
+}
+.login-logo { display: flex; position: absolute; top: 60px; right: 60px;  
+    @media (max-width: 600px) { width: 150px;
+        img { width: 100%; }
+    }
+}
+.ue-box{  width: 67vw; height: auto; position: absolute; bottom: 15px; right: 0px; height: 80px;  background-size: contain; background-repeat: no-repeat; background-position: center center;}

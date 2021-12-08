@@ -1,0 +1,85 @@
+.nested-table-paged .toolsRow {
+  display: none;
+}
+
+.nested-table-paged ~ .toolsRow,
+.tools-row-pos-relative ~ .toolsRow{
+  position: relative;
+}
+
+.nested-table-paged td .row {
+  margin: 0;
+  padding-left: 0px !important;
+}
+
+.nested-table-paged table tbody tr:first-of-type table thead {
+  display: table-row-group;
+  position: relative;
+  margin-top: 0px;
+  transform: translateY(-135%);
+  visibility: collapse;
+}
+
+.nested-table-paged table tbody tr table thead {
+  visibility: collapse;
+}
+
+.nested-table-paged tbody {
+  height: max-content !important;
+}
+
+.nested-table-paged table table td {
+  border: none !important;
+}
+.nested-table-paged table table {
+  margin: 0;
+}
+
+.nested-table-paged td {
+  z-index: 2 !important;
+}
+
+.nested-table-paged table table th::after {
+  display: none;
+}
+
+.nested-disable-shadow table table th::after {
+  display: none;
+}
+
+.nested-disable-shadow table table th {
+  background: transparent !important;
+}
+
+.combo-in-table-head {
+	position: absolute;
+	top: -1rem;
+	width: 100%;
+	right: 5px;
+}
+
+.sortComboPositions {
+	height: 25px;
+	top: 0px;
+	margin-bottom: -10px;
+}
+
+.sortComboPositions .input-group {
+	width: 150px
+}
+
+.sortComboPositions input {
+	height: 20px;
+}
+
+.nested-table-paged ~ .toolsRow select {
+  display: none;
+}
+
+.nested-table-paged ~ .toolsRow .rowsCountSelector {
+  opacity: 0;
+}
+
+.table-thead-border-bottom > table > thead {
+    border-bottom: 1px solid var(--color-border-light) !important;
+}

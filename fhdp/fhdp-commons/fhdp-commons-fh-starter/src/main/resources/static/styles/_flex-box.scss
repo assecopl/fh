@@ -1,0 +1,7 @@
+.flex-box { display: flex; 
+    &-section { flex-basis: 0; flex-grow: 1;
+        @for $i from 1 through 12 {
+            &--#{$i} { flex-basis: 0;  flex-grow: $i}
+        }
+    }
+}

@@ -1,0 +1,23 @@
+
+$types: ('m': 'margin', 'p': 'padding');
+$positions: ('t': 'top', 'l': 'left', 'b': 'bottom', 'r': 'right');
+$spaces: (5, 10, 15, 30, 45, 60);
+@each $short-type, $type in $types {
+    .#{$short-type} { 
+        @each $space in $spaces {
+            &-#{$space} { #{$type}: #{$space}px; }
+            @each $short-position, $position in $positions {
+                &#{$short-position}-#{$space} { #{$type}-#{$position}: #{$space}px; }
+            }
+        }
+    }
+}
+@each $color-name, $color in $colors {
+    .c-#{$color-name} { color: $color; }
+    .c-bg-#{$color-name} { color: $color; }
+}
+
+.s-15 { margin-top: 15px; margin-bottom: 15px; border-top: 1px solid $c-border; 
+    &-da { border-style: dashed; }
+    &-do { border-style: dotted; }
+}
