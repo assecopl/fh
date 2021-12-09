@@ -2,7 +2,6 @@ package pl.fhframework.dp.commons.fh.parameters.details;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.fhframework.dp.commons.fh.services.SubstantiveParametersTagService;
-import pl.fhframework.dp.transport.cdm.types.ValidationResultTypeST;
 import pl.fhframework.dp.transport.dto.parameters.SubstantiveParametersParameterItem;
 import pl.fhframework.dp.transport.dto.parameters.SubstantiveParametersTagDto;
 import pl.fhframework.dp.transport.dto.parameters.SubstantiveParametersTagDtoQuery;

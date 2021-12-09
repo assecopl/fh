@@ -40,12 +40,6 @@
 <!--            <artifactId>fhdp-commons-jaxb-cdm</artifactId>-->
 <!--            <version>${project.version}</version>-->
 <!--        </dependency>-->
-		<dependency>
-            <groupId>pl.fhframework.dp</groupId>
-            <artifactId>fhdp-commons-jaxb-ct</artifactId>
-            <version>${project.version}</version>
-            <optional>true</optional>
-        </dependency>
         <dependency>
             <groupId>org.glassfish.jaxb</groupId>
             <artifactId>jaxb-xjc</artifactId>

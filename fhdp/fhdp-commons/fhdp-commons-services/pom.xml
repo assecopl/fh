@@ -37,12 +37,6 @@
             <artifactId>fhdp-commons-model</artifactId>
             <version>${project.version}</version>
         </dependency>
-		<dependency>
-			<groupId>pl.fhframework.dp</groupId>
-			<artifactId>fhdp-commons-jaxb-ct</artifactId>
-			<version>${project.version}</version>
-			<optional>true</optional>
-		</dependency>
         <dependency>
             <groupId>pl.fhframework.dp</groupId>
             <artifactId>fhdp-commons-utils</artifactId>
