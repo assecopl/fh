@@ -101,7 +101,7 @@ public abstract class GenericDetailUC<MODEL extends GenericFormModel, PARAMS> ex
     public void delete()
     {
         //TODO: switch to MessageService
-        ResourceBundle messages = ResourceBundle.getBundle("SkgLunaBase", getUserSession().getLanguage());
+        ResourceBundle messages = ResourceBundle.getBundle("translations", getUserSession().getLanguage());
         FhUtils.showConfirmDialogYesNo(messages.getString("button.delete.confirm.title"),
                 messages.getString("button.delete.confirm.message"),
                 messages.getString("button.yes"),
