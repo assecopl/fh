@@ -29,6 +29,7 @@
 		<module>fhCoreLite</module>
 		<module>fhdp</module>
         <module>example</module>
+        <module>fh-compiler</module>
     </modules>
 	
 	<licenses>

@@ -1,0 +1,2377 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:cs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://fh.asseco.com/form/1.0"
+           xmlns="http://fh.asseco.com/form/1.0"
+           elementFormDefault="qualified">
+    <xs:annotation>
+        <xs:documentation>
+            <![CDATA[
+              <p>The XML Schema for the FH Form configuration file</p>
+
+              <p>All FH Forms configuration files must indicate
+              the FH Form schema by indicating the FH namespace:</p>
+
+              <p>http://fh.asseco.com/form/1.0</p>
+        ]]>
+        </xs:documentation>
+    </xs:annotation>
+
+    <!-- =====================================================================================================
+    Form configuration
+    ===================================================================================================== -->
+    <xs:element name="Form" type="FormType"/>
+
+    <xs:complexType name="FormType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="AvailabilityConfigurationType" name="AvailabilityConfiguration">
+                <xs:unique name="uniqueVariantID">
+                    <xs:selector xpath=".//*"/>
+                    <xs:field xpath="@id"/>
+                </xs:unique>
+            </xs:element>
+            <xs:element type="ModelType" name="Model"/>
+            <xs:element type="AccordionType" name="Accordion"/>
+            <xs:element type="ButtonType" name="Button"/>
+            <xs:element type="ButtonGroupType" name="ButtonGroup"/>
+            <xs:element type="CalendarType" name="Calendar"/>
+            <xs:element type="CheckBoxType" name="CheckBox"/>
+            <xs:element type="ComboType" name="Combo"/>
+            <xs:element type="DictionaryComboType" name="DictionaryCombo"/>
+            <xs:element type="PanelGroupType" name="PanelGroup"/>
+            <xs:element type="FloatingGroupType" name="FloatingGroup"/>
+            <xs:element type="ImageType" name="Image"/>
+            <xs:element type="MdFileViewerType" name="MdFileViewer"/>
+            <xs:element type="IncludeType" name="Include"/>
+            <xs:element type="InputDateType" name="InputDate"/>
+            <xs:element type="InputDateOptimizedType" name="InputDateOptimized"/>
+            <xs:element type="InputNumberType" name="InputNumber"/>
+            <xs:element type="InputTextType" name="InputText"/>
+            <xs:element type="InputTimestampType" name="InputTimestamp"/>
+            <xs:element type="LinkType" name="Link"/>
+            <xs:element type="LocaleBundleType" name="LocaleBundle"/>
+            <xs:element type="OutputLabelType" name="OutputLabel"/>
+            <xs:element type="OptionsListType" name="OptionsList"/>
+            <xs:element type="RadioOptionType" name="RadioOption"/>
+            <xs:element type="RadioOptionsGroupType" name="RadioOptionsGroup"/>
+            <xs:element type="RepeaterType" name="Repeater"/>
+            <xs:element type="TimerType" name="Timer"/>
+            <xs:element type="KeyboardEventType" name="KeyboardEvent"/>
+            <xs:element type="GroupType" name="Group"/>
+            <xs:element type="HtmlEditorType" name="HtmlEditor"/>
+            <xs:element type="HtmlViewType" name="HtmlView"/>
+            <xs:element type="EmbedPageType" name="EmbedPage"/>
+            <xs:element type="SelectOneMenuType" name="SelectOneMenu"/>
+            <xs:element type="SelectComboMenuType" name="SelectComboMenu"/>
+            <xs:element type="SelectComboMenuType" name="SelectComboMenuOptimized"/>
+            <xs:element type="SpacerType" name="Spacer"/>
+            <xs:element type="SplitContainerType" name="SplitContainer"/>
+            <xs:element type="TabContainerType" name="TabContainer"/>
+            <xs:element type="TablePagedType" name="TablePaged"/>
+            <xs:element type="TableLazyType" name="TableLazy"/>
+            <xs:element type="TableOptimizedType" name="TableOptimized"/>
+            <xs:element type="TableType" name="Table"/>
+            <xs:element type="TreeType" name="Tree"/>
+            <xs:element type="ImageGridType" name="ImageGrid"/>
+            <xs:element type="MarkdownGridType" name="MarkdownGrid"/>
+            <xs:element type="ValidateMessagesType" name="ValidateMessages"/>
+            <xs:element type="FileUploadType" name="FileUpload"/>
+            <xs:element type="WidgetType" name="Widget"/>
+            <xs:element type="WizardType" name="Wizard"/>
+            <xs:element type="DashboardType" name="Dashboard"/>
+            <xs:element name="Comment"/>
+            <xs:element type="IMapLiteType" name="IMapLite"/>
+            <xs:element type="OpenLayersType" name="OpenLayers"/>
+            <xs:element type="DropdownType" name="Dropdown"/>
+            <xs:element type="RowType" name="Row"/>
+            <xs:element type="AnchorType" name="Anchor"/>
+            <xs:element type="UmlDiagramType" name="UmlDiagram"/>
+
+        </xs:choice>
+        <xs:attribute type="xs:string" name="container"/>
+        <xs:attribute type="xs:string" name="id"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="FormPossibleTypes" name="formType" default="STANDARD"/>
+        <xs:attribute type="FormModalPossibleSizes" name="modalSize" default="REGULAR"/>
+        <xs:attribute type="xs:boolean" name="hideHeader"/>
+        <xs:attribute type="HeadingMode" name="headingType"/>
+        <xs:attribute type="xs:integer" name="modalMaxHeight"/>
+        <xs:attribute type="xs:boolean" name="focusFirstElement" default="true"/>
+        <xs:attribute type="xs:string" name="onManualModalClose"/>
+    </xs:complexType>
+
+    <xs:simpleType name="AvailabilityConfigurationElementType">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="AvailabilityConfigurationElementTagType">
+        <xs:simpleContent>
+            <xs:extension base="AvailabilityConfigurationElementType">
+                <xs:attribute name="when" type="xs:string"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="VariantType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="AvailabilityValueType" name="AvailabilityValue"/>
+            <xs:element type="AvailabilityType" name="Availability"/>
+            <xs:element type="AvailabilityConfigurationElementTagType" name="Invisible"/>
+            <xs:element type="AvailabilityConfigurationElementTagType" name="Preview"/>
+            <xs:element type="AvailabilityConfigurationElementTagType" name="Edit"/>
+            <xs:element type="AvailabilityConfigurationElementTagType" name="ReadOnly"/>
+            <xs:element type="AvailabilityConfigurationElementTagType" name="SetByProgrammer"/>
+        </xs:choice>
+        <xs:attribute name="id" use="required">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:minLength value="1"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute type="DefaultAvailabilityType" name="defaultAvailability" default="EDIT"/>
+    </xs:complexType>
+
+    <xs:complexType name="AvailabilityValueType">
+        <xs:simpleContent>
+            <xs:extension base="AvailabilityConfigurationElementType">
+                <xs:attribute name="value" type="xs:string" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="AvailabilityType">
+        <xs:simpleContent>
+            <xs:extension base="AvailabilityConfigurationElementType">
+                <xs:attribute name="editPermissions" type="xs:string"/>
+                <xs:attribute name="previewPermissions" type="xs:string"/>
+                <xs:attribute name="invisiblePermissions" type="xs:string"/>
+                <xs:attribute name="editRoles" type="xs:string"/>
+                <xs:attribute name="previewRoles" type="xs:string"/>
+                <xs:attribute name="invisibleRoles" type="xs:string"/>
+                <xs:attribute name="default" type="xs:string"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="AvailabilityConfigurationType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="VariantType" name="Variant"/>
+            <xs:element type="AvailabilityValueType" name="AvailabilityValue"/>
+            <xs:element type="AvailabilityType" name="Availability"/>
+            <xs:element type="AvailabilityConfigurationElementTagType" name="Invisible"/>
+            <xs:element type="AvailabilityConfigurationElementTagType" name="Preview"/>
+            <xs:element type="AvailabilityConfigurationElementTagType" name="Edit"/>
+            <xs:element type="AvailabilityConfigurationElementTagType" name="ReadOnly"/>
+            <xs:element type="AvailabilityConfigurationElementTagType" name="SetByProgrammer"/>
+        </xs:choice>
+    </xs:complexType>
+
+    <xs:complexType name="ModelType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="ModelPropertyType" name="Property"/>
+        </xs:choice>
+        <xs:attribute type="xs:string" name="externalClass"/>
+    </xs:complexType>
+
+    <xs:complexType name="DictionaryComboParameterType">
+        <xs:attribute type="xs:string" name="name"/>
+        <xs:attribute type="xs:string" name="value"/>
+    </xs:complexType>
+
+    <xs:complexType name="ParametersType">
+        <xs:attribute type="xs:string" name="name"/>
+        <xs:attribute type="xs:string" name="value"/>
+    </xs:complexType>
+
+    <xs:complexType name="ModelPropertyType">
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="type" type="xs:string" use="required"/>
+        <xs:attribute name="multiplicity" type="PropertyMultiplicityType" default="single"/>
+        <xs:attribute name="private" type="xs:boolean" default="false"/>
+    </xs:complexType>
+
+    <!-- =====================================================================================================
+    Form components - reusable types
+    ===================================================================================================== -->
+    <xs:attributeGroup name="FormElementTypeGroup">
+        <xs:attribute type="pixelOrPercentageType" name="height"/>
+        <xs:attribute type="pixelType" name="marginLeft"/>
+        <xs:attribute type="pixelType" name="marginRight"/>
+        <xs:attribute type="pixelType" name="marginTop"/>
+        <xs:attribute type="pixelType" name="marginBottom"/>
+        <xs:attribute type="pixelType" name="paddingLeft"/>
+        <xs:attribute type="pixelType" name="paddingRight"/>
+        <xs:attribute type="pixelType" name="paddingTop"/>
+        <xs:attribute type="pixelType" name="paddingBottom"/>
+        <xs:attribute type="xs:ID" name="id"/>
+        <xs:attribute type="xs:string" name="width" default="md-12"/>
+        <xs:attribute type="xs:string" name="styleClasses" default=""/>
+        <xs:attribute type="verticalAlignType" name="verticalAlign" default="bottom"/>
+        <xs:attribute type="horizontalAlignType" name="horizontalAlign" default="left"/>
+        <xs:attribute type="xs:string" name="hint"/>
+        <xs:attribute type="xs:string" name="hintTitle"/>
+        <xs:attribute type="xs:string" name="hintAriaLabel"/>
+        <xs:attribute type="xs:string" name="hintIcon"/>
+        <xs:attribute type="hintPlacementType" name="hintPlacement"/>
+        <xs:attribute type="hintTriggerType" name="hintTrigger"/>
+        <xs:attribute type="hintTypeType" name="hintType"/>
+        <xs:attribute type="xs:string" name="availability"/>
+        <xs:attribute type="xs:string" name="htmlAccessibilityRole"/>
+    </xs:attributeGroup>
+
+    <xs:attributeGroup name="RepeatableTypeGroup">
+        <xs:attribute type="xs:string" name="collection" use="required"/>
+        <xs:attribute type="xs:string" name="iterator" use="required"/>
+    </xs:attributeGroup>
+
+    <xs:attributeGroup name="PanelGroupTypeGroup">
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="collapsible" default="false"/>
+        <xs:attribute type="xs:string" name="borderVisible" default="false"/>
+        <xs:attribute type="xs:string" name="collapsed" default="false"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="HeadingMode" name="headingType"/>
+        <xs:attribute type="xs:string" name="onToggle"/>
+        <xs:attribute type="xs:string" name="iconOpened" default="fa-arrow-down"/>
+        <xs:attribute type="xs:string" name="iconClosed" default="fa-arrow-up"/>
+    </xs:attributeGroup>
+
+    <xs:attributeGroup name="FloatingGroupTypeGroup">
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="collapsible" default="false"/>
+        <xs:attribute type="xs:string" name="collapsed" default="false"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="xs:string" name="onToggle"/>
+        <xs:attribute type="xs:string" name="onTogglePin"/>
+        <xs:attribute type="xs:string" name="left"/>
+        <xs:attribute type="xs:string" name="top"/>
+        <xs:attribute type="xs:string" name="onToggleFullScreen"/>
+        <xs:attribute type="PinningMode" name="pinningMode" default="normal"/>
+        <xs:attribute type="xs:string" name="floatingState"/>
+        <xs:attribute type="xs:string" name="floatingOnly"/>
+        <xs:attribute type="xs:int" name="floatingHeight"/>
+        <xs:attribute type="xs:int" name="floatingWidth"/>
+        <xs:attribute type="xs:boolean" name="hideHeader" default="false"/>
+        <xs:attribute type="xs:boolean" name="hideButtons" default="false"/>
+        <xs:attribute type="xs:boolean" name="isDraggable" default="true"/>
+
+    </xs:attributeGroup>
+
+    <!-- =====================================================================================================
+    Form components
+    ===================================================================================================== -->
+
+    <xs:complexType name="AccordionType" mixed="true">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="PanelGroupType" name="PanelGroup"/>
+            <xs:element type="WidgetType" name="Widget"/>
+            <xs:element type="FloatingGroupType" name="FloatingGroup"/>
+            <xs:element type="GroupType" name="Group"/>
+        </xs:choice>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="activeGroup" default="0"/>
+        <xs:attribute type="xs:string" name="iconOpened" default="fa-chevron-down"/>
+        <xs:attribute type="xs:string" name="iconClosed" default="fa-chevron-up"/>
+        <xs:attribute type="xs:string" name="onGroupChange"/>
+    </xs:complexType>
+
+    <xs:complexType name="BarChartType">
+        <xs:attribute type="xs:string" name="values" use="required"/>
+        <xs:attribute type="xs:string" name="id"/>
+        <xs:attribute type="xs:string" name="width"/>
+        <xs:attribute type="xs:string" name="title"/>
+        <xs:attribute type="xs:string" name="xAxisLabel"/>
+        <xs:attribute type="xs:anyURI" name="yAxisLabel"/>
+        <xs:attribute type="xs:anyURI" name="yAxisMin"/>
+        <xs:attribute type="xs:anyURI" name="yAxisMax"/>
+        <xs:attribute type="xs:string" name="stacked"/>
+        <xs:attribute type="xs:string" name="colors"/>
+        <xs:attribute type="pixelOrPercentageType" name="height"/>
+    </xs:complexType>
+
+    <xs:complexType name="ButtonType" mixed="true">
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attributeGroup ref="ButtonTypeAttributeGroup"/>
+        <xs:attributeGroup ref="ConfirmationDialogSupport"/>
+        <xs:attribute type="xs:string" name="ariaLabel"/>
+    </xs:complexType>
+
+    <xs:attributeGroup name="ButtonTypeAttributeGroup">
+        <xs:attribute type="xs:string" name="label" use="required"/>
+        <xs:attribute type="xs:string" name="leftPadding"/>
+        <xs:attribute type="xs:string" name="onClick"/>
+        <xs:attribute type="xs:string" name="style"/>
+    </xs:attributeGroup>
+
+    <xs:attributeGroup name="ConfirmationDialogSupport">
+        <xs:attribute type="xs:string" name="confirmationMsg"/>
+        <xs:attribute type="xs:string" name="confirmOnEvent"/>
+    </xs:attributeGroup>
+
+    <xs:complexType name="ButtonGroupType" mixed="true">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="ButtonType" name="Button"/>
+            <xs:element type="DropdownType" name="Dropdown"/>
+        </xs:choice>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="activeButton"/>
+        <xs:attribute type="xs:boolean" name="margin" default="false"/>
+        <xs:attribute type="xs:string" name="onButtonChange"/>
+    </xs:complexType>
+
+    <xs:complexType name="CalendarType">
+        <xs:attributeGroup ref="ConfirmationDialogSupport"/>
+        <xs:attribute type="xs:string" name="ariaLabel"/>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="blockedDates"/>
+        <xs:attribute type="xs:string" name="changeMonth" default="false"/>
+        <xs:attribute type="xs:string" name="changeYear" default="false"/>
+        <xs:attribute type="xs:string" name="icon"/>
+        <xs:attribute type="xs:string" name="iconAlignment"/>
+        <xs:attribute type="InputSizeType" name="inputSize"/>
+        <xs:attribute type="LabelSizeType" name="labelSize"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="xs:string" name="validationLabel"/>
+        <xs:attribute type="xs:boolean" name="hintInputGroup"/>
+        <xs:attribute type="LabelPositionType" name="labelPosition"/>
+        <xs:attribute type="xs:string" name="maxDate"/>
+        <xs:attribute type="xs:string" name="minDate"/>
+        <xs:attribute type="xs:string" name="onChange"/>
+        <xs:attribute type="xs:string" name="required" default="false"/>
+        <xs:attribute type="xs:string" name="value"/>
+        <xs:attribute type="xs:string" name="values"/>
+    </xs:complexType>
+
+    <xs:complexType name="CheckBoxType">
+        <xs:attributeGroup ref="ConfirmationDialogSupport"/>
+        <xs:attribute type="xs:string" name="ariaLabel"/>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="icon"/>
+        <xs:attribute type="InputSizeType" name="inputSize"/>
+        <xs:attribute type="LabelSizeType" name="labelSize"/>
+        <xs:attribute type="xs:string" name="iconAlignment"/>
+        <xs:attribute type="xs:string" name="label" use="required"/>
+        <xs:attribute type="xs:string" name="autocomplete"/>
+        <xs:attribute type="xs:string" name="validationLabel"/>
+        <xs:attribute type="xs:boolean" name="hintInputGroup"/>
+        <xs:attribute type="LabelPositionType" name="labelPosition"/>
+        <xs:attribute type="xs:string" name="onChange"/>
+        <xs:attribute type="xs:string" name="required" default="false"/>
+        <xs:attribute type="xs:string" name="value"/>
+        <xs:attribute type="xs:string" name="width" default="md-2"/>
+        <xs:attribute type="xs:string" name="labelId"/>
+    </xs:complexType>
+
+    <xs:complexType name="ColumnType" mixed="true">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="ColumnType" name="Column"/>
+            <xs:element type="ButtonType" name="Button"/>
+            <xs:element type="CalendarType" name="Calendar"/>
+            <xs:element type="CheckBoxType" name="CheckBox"/>
+            <xs:element type="ComboType" name="Combo"/>
+            <xs:element type="DictionaryComboType" name="DictionaryCombo"/>
+            <xs:element type="GroupType" name="Group"/>
+            <xs:element type="ImageType" name="Image"/>
+            <xs:element type="InputDateType" name="InputDate"/>
+            <xs:element type="InputDateOptimizedType" name="InputDateOptimized"/>
+            <xs:element type="InputNumberType" name="InputNumber"/>
+            <xs:element type="InputTextType" name="InputText"/>
+            <xs:element type="InputTimestampType" name="InputTimestamp"/>
+            <xs:element type="LinkType" name="Link"/>
+            <xs:element type="MeterGaugeChartType" name="MeterGaugeChart"/>
+            <xs:element type="OutputLabelType" name="OutputLabel"/>
+            <xs:element type="RadioOptionType" name="RadioOption"/>
+            <xs:element type="RadioOptionsGroupType" name="RadioOptionsGroup"/>
+            <xs:element type="SelectOneMenuType" name="SelectOneMenu"/>
+            <xs:element type="SelectComboMenuType" name="SelectComboMenu"/>
+            <xs:element type="SelectComboMenuType" name="SelectComboMenuOptimized"/>
+            <xs:element type="ThreeDotsMenuType" name="ThreeDotsMenu"/>
+        </xs:choice>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute name="height" use="prohibited"/>
+        <xs:attribute type="xs:string" name="iterationRef"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="xs:string" name="value"/>
+    </xs:complexType>
+
+    <xs:complexType name="ColumnPagedType" mixed="true">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="ColumnPagedType" name="ColumnPaged"/>
+            <xs:element type="ColumnType" name="Column"/>
+            <xs:element type="ButtonType" name="Button"/>
+            <xs:element type="CalendarType" name="Calendar"/>
+            <xs:element type="CheckBoxType" name="CheckBox"/>
+            <xs:element type="ComboType" name="Combo"/>
+            <xs:element type="DictionaryComboType" name="DictionaryCombo"/>
+            <xs:element type="MdFileViewerType" name="MdFileViewer"/>
+            <xs:element type="ImageType" name="Image"/>
+            <xs:element type="InputDateType" name="InputDate"/>
+            <xs:element type="InputDateOptimizedType" name="InputDateOptimized"/>
+            <xs:element type="InputNumberType" name="InputNumber"/>
+            <xs:element type="InputTextType" name="InputText"/>
+            <xs:element type="InputTimestampType" name="InputTimestamp"/>
+            <xs:element type="LinkType" name="Link"/>
+            <xs:element type="MeterGaugeChartType" name="MeterGaugeChart"/>
+            <xs:element type="OutputLabelType" name="OutputLabel"/>
+            <xs:element type="RadioOptionType" name="RadioOption"/>
+            <xs:element type="RadioOptionsGroupType" name="RadioOptionsGroup"/>
+            <xs:element type="SelectOneMenuType" name="SelectOneMenu"/>
+            <xs:element type="SelectComboMenuType" name="SelectComboMenu"/>
+            <xs:element type="SelectComboMenuType" name="SelectComboMenuOptimized"/>
+            <xs:element type="ThreeDotsMenuType" name="ThreeDotsMenu"/>
+        </xs:choice>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute name="height" use="prohibited"/>
+        <xs:attribute type="xs:string" name="sortBy"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="xs:string" name="value"/>
+    </xs:complexType>
+
+    <xs:complexType name="ColumnLazyType" mixed="true">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="ColumnPagedType" name="ColumnPaged"/>
+            <xs:element type="ColumnType" name="Column"/>
+            <xs:element type="ButtonType" name="Button"/>
+            <xs:element type="CalendarType" name="Calendar"/>
+            <xs:element type="CheckBoxType" name="CheckBox"/>
+            <xs:element type="ComboType" name="Combo"/>
+            <xs:element type="DictionaryComboType" name="DictionaryCombo"/>
+            <xs:element type="MdFileViewerType" name="MdFileViewer"/>
+            <xs:element type="ImageType" name="Image"/>
+            <xs:element type="InputDateType" name="InputDate"/>
+            <xs:element type="InputDateOptimizedType" name="InputDateOptimized"/>
+            <xs:element type="InputNumberType" name="InputNumber"/>
+            <xs:element type="InputTextType" name="InputText"/>
+            <xs:element type="InputTimestampType" name="InputTimestamp"/>
+            <xs:element type="LinkType" name="Link"/>
+            <xs:element type="MeterGaugeChartType" name="MeterGaugeChart"/>
+            <xs:element type="OutputLabelType" name="OutputLabel"/>
+            <xs:element type="RadioOptionType" name="RadioOption"/>
+            <xs:element type="RadioOptionsGroupType" name="RadioOptionsGroup"/>
+            <xs:element type="SelectOneMenuType" name="SelectOneMenu"/>
+            <xs:element type="SelectComboMenuType" name="SelectComboMenu"/>
+            <xs:element type="SelectComboMenuType" name="SelectComboMenuOptimized"/>
+        </xs:choice>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute name="height" use="prohibited"/>
+        <xs:attribute type="xs:string" name="sortBy"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="xs:string" name="value"/>
+    </xs:complexType>
+
+    <xs:complexType name="ColumnOptimizedType" mixed="true">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="ColumnPagedType" name="ColumnPaged"/>
+            <xs:element type="ColumnType" name="Column"/>
+            <xs:element type="ButtonType" name="Button"/>
+            <xs:element type="CalendarType" name="Calendar"/>
+            <xs:element type="CheckBoxType" name="CheckBox"/>
+            <xs:element type="ComboType" name="Combo"/>
+            <xs:element type="DictionaryComboType" name="DictionaryCombo"/>
+            <xs:element type="MdFileViewerType" name="MdFileViewer"/>
+            <xs:element type="ImageType" name="Image"/>
+            <xs:element type="InputDateType" name="InputDate"/>
+            <xs:element type="InputDateOptimizedType" name="InputDateOptimized"/>
+            <xs:element type="InputNumberType" name="InputNumber"/>
+            <xs:element type="InputTextType" name="InputText"/>
+            <xs:element type="InputTimestampType" name="InputTimestamp"/>
+            <xs:element type="LinkType" name="Link"/>
+            <xs:element type="MeterGaugeChartType" name="MeterGaugeChart"/>
+            <xs:element type="OutputLabelType" name="OutputLabel"/>
+            <xs:element type="RadioOptionType" name="RadioOption"/>
+            <xs:element type="RadioOptionsGroupType" name="RadioOptionsGroup"/>
+            <xs:element type="SelectOneMenuType" name="SelectOneMenu"/>
+            <xs:element type="SelectComboMenuType" name="SelectComboMenu"/>
+            <xs:element type="SelectComboMenuType" name="SelectComboMenuOptimized"/>
+        </xs:choice>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute name="height" use="prohibited"/>
+        <xs:attribute type="xs:string" name="sortBy"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="xs:string" name="value"/>
+    </xs:complexType>
+
+    <xs:complexType name="OnKeyEventType">
+        <xs:attribute type="xs:string" name="onKeyEvent" use="required"/>
+        <xs:attribute type="xs:string" name="keyEvent" use="required"/>
+    </xs:complexType>
+
+    <xs:attributeGroup name="ComboTypeGroup">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="OnKeyEventType" name="OnKeyEvent"/>
+        </xs:choice>
+        <xs:attributeGroup ref="ConfirmationDialogSupport"/>
+        <xs:attribute type="xs:string" name="ariaLabel"/>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="cursor"/>
+        <xs:attribute type="xs:string" name="icon"/>
+        <xs:attribute type="xs:string" name="iconAlignment" default="BEFORE"/>
+        <xs:attribute type="InputSizeType" name="inputSize"/>
+        <xs:attribute type="LabelSizeType" name="labelSize"/>
+        <xs:attribute type="xs:string" name="freeTyping"/>
+        <xs:attribute type="xs:string" name="filterFunction"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="xs:string" name="validationLabel"/>
+        <xs:attribute type="xs:boolean" name="hintInputGroup"/>
+        <xs:attribute type="LabelPositionType" name="labelPosition"/>
+        <xs:attribute type="xs:string" name="onChange"/>
+        <xs:attribute type="xs:string" name="onInput"/>
+        <xs:attribute type="xs:string" name="onSpecialKey"/>
+        <xs:attribute type="xs:string" name="onDblSpecialKey"/>
+        <xs:attribute type="xs:string" name="onEmptyValue"/>
+        <xs:attribute type="xs:string" name="required" default="false"/>
+        <xs:attribute type="xs:string" name="values"/>
+        <xs:attribute type="xs:string" name="value"/>
+        <xs:attribute type="xs:string" name="emptyValue" default="false"/>
+        <xs:attribute type="xs:string" name="formatter"/>
+        <xs:attribute type="xs:boolean" name="preload"/>
+        <xs:attribute type="xs:string" name="onKeyEvent"/>
+        <xs:attribute type="xs:string" name="keyEvent"/>
+        <xs:attribute type="xs:string" name="labelId"/>
+        <xs:attribute type="xs:string" name="width" default="md-2"/>
+        <xs:attribute type="xs:string" name="displayFunction">
+            <xs:annotation>
+                <xs:documentation>Name of model object (java.util.function.BiPredicate) which will be used to format
+                    items as text.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute type="xs:string" name="displayExpression"/>
+        <xs:attribute type="xs:boolean" name="multiselect"/>
+        <xs:attribute type="xs:string" name="filterText"/>
+        <xs:attribute type="TimeoutType" name="onInputTimeout"/>
+    </xs:attributeGroup>
+
+    <xs:complexType name="ComboType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="OnKeyEventType" name="OnKeyEvent"/>
+        </xs:choice>
+        <xs:attributeGroup ref="ConfirmationDialogSupport"/>
+        <xs:attribute type="xs:string" name="ariaLabel"/>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="cursor"/>
+        <xs:attribute type="xs:string" name="icon"/>
+        <xs:attribute type="xs:string" name="iconAlignment" default="BEFORE"/>
+        <xs:attribute type="InputSizeType" name="inputSize"/>
+        <xs:attribute type="LabelSizeType" name="labelSize"/>
+        <xs:attribute type="xs:string" name="freeTyping"/>
+        <xs:attribute type="xs:string" name="filterFunction"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="xs:string" name="autocomplete"/>
+        <xs:attribute type="xs:string" name="validationLabel"/>
+        <xs:attribute type="xs:boolean" name="hintInputGroup"/>
+        <xs:attribute type="LabelPositionType" name="labelPosition"/>
+        <xs:attribute type="xs:string" name="onChange"/>
+        <xs:attribute type="xs:string" name="onInput"/>
+        <xs:attribute type="xs:string" name="onSpecialKey"/>
+        <xs:attribute type="xs:string" name="onDblSpecialKey"/>
+        <xs:attribute type="xs:string" name="onEmptyValue"/>
+        <xs:attribute type="xs:string" name="required" default="false"/>
+        <xs:attribute type="xs:string" name="values"/>
+        <xs:attribute type="xs:string" name="value"/>
+        <xs:attribute type="xs:string" name="emptyValue" default="false"/>
+        <xs:attribute type="xs:boolean" name="openOnFocus" default="true"/>
+        <xs:attribute type="xs:string" name="formatter"/>
+        <xs:attribute type="xs:boolean" name="preload"/>
+        <xs:attribute type="xs:string" name="onKeyEvent"/>
+        <xs:attribute type="xs:string" name="keyEvent"/>
+        <xs:attribute type="xs:string" name="displayExpression"/>
+        <xs:attribute type="xs:string" name="filterText"/>
+        <xs:attribute type="xs:boolean" name="multiselect"/>
+        <xs:attribute type="xs:int" name="widthRatio"/>
+        <xs:attribute type="xs:string" name="displayRule"/>
+        <xs:attribute type="xs:string" name="labelId"/>
+        <xs:attribute type="hintPlacementType" name="hintPlacement"/>
+        <xs:attribute type="hintTriggerType" name="hintTrigger"/>
+        <xs:attribute type="hintTypeType" name="hintType"/>
+        <xs:attribute type="xs:string" name="width" default="md-2"/>
+        <xs:attribute type="xs:string" name="displayFunction">
+            <xs:annotation>
+                <xs:documentation>Name of model object (java.util.function.BiPredicate) which will be used to format
+                    items as text.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+
+    <xs:complexType name="DictionaryComboType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="OnKeyEventType" name="OnKeyEvent"/>
+            <xs:element type="DictionaryComboParameterType" name="DictionaryComboParameter"/>
+        </xs:choice>
+        <xs:attributeGroup ref="ConfirmationDialogSupport"/>
+        <xs:attribute type="xs:string" name="ariaLabel"/>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="cursor"/>
+        <xs:attribute type="xs:string" name="icon"/>
+        <xs:attribute type="xs:string" name="iconAlignment" default="BEFORE"/>
+        <xs:attribute type="InputSizeType" name="inputSize"/>
+        <xs:attribute type="LabelSizeType" name="labelSize"/>
+        <xs:attribute type="xs:string" name="freeTyping"/>
+        <xs:attribute type="xs:string" name="filterFunction"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="xs:string" name="autocomplete"/>
+        <xs:attribute type="xs:string" name="validationLabel"/>
+        <xs:attribute type="xs:boolean" name="hintInputGroup"/>
+        <xs:attribute type="LabelPositionType" name="labelPosition"/>
+        <xs:attribute type="xs:string" name="onChange"/>
+        <xs:attribute type="xs:string" name="onInput"/>
+        <xs:attribute type="xs:string" name="onSpecialKey"/>
+        <xs:attribute type="xs:string" name="onDblSpecialKey"/>
+        <xs:attribute type="xs:string" name="onEmptyValue"/>
+        <xs:attribute type="xs:string" name="required" default="false"/>
+        <xs:attribute type="xs:string" name="values"/>
+        <xs:attribute type="xs:string" name="value"/>
+        <xs:attribute type="xs:string" name="emptyValue" default="false"/>
+        <xs:attribute type="xs:string" name="formatter"/>
+        <xs:attribute type="xs:boolean" name="preload"/>
+        <xs:attribute type="xs:string" name="onKeyEvent"/>
+        <xs:attribute type="xs:string" name="keyEvent"/>
+        <xs:attribute type="xs:string" name="labelId"/>
+        <xs:attribute type="xs:string" name="width" default="md-2"/>
+        <xs:attribute type="xs:string" name="displayFunction">
+            <xs:annotation>
+                <xs:documentation>Name of model object (java.util.function.BiPredicate) which will be used to format
+                    items as text.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute type="xs:string" name="displayExpression"/>
+        <xs:attribute type="xs:boolean" name="multiselect"/>
+        <xs:attribute type="xs:string" name="filterText"/>
+        <xs:attribute type="xs:string" name="provider"/>
+        <xs:attribute type="TimeoutType" name="onInputTimeout"/>
+    </xs:complexType>
+
+    <xs:complexType name="ClockType" mixed="true">
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="dayNames"/>
+    </xs:complexType>
+
+    <xs:complexType name="HtmlEditorType" mixed="true">
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="text"/>
+        <xs:attribute type="xs:string" name="onChange"/>
+        <xs:attribute type="xs:string" name="formatter"/>
+    </xs:complexType>
+
+    <xs:complexType name="HtmlViewType" mixed="true">
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="text"/>
+        <xs:attribute type="xs:string" name="formatter"/>
+    </xs:complexType>
+
+    <xs:complexType name="EmbedPageType" mixed="true">
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="src"/>
+        <xs:attribute type="xs:string" name="label"/>
+    </xs:complexType>
+
+    <xs:complexType name="DashboardType" mixed="true">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="DefaultWidgetsType" name="DefaultWidgets"/>
+            <xs:element type="AvailableWidgetsType" name="AvailableWidgets"/>
+        </xs:choice>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="editMode"/>
+        <xs:attribute type="xs:string" name="onToggleEdit"/>
+        <xs:attribute type="xs:string" name="onToggleAdd"/>
+    </xs:complexType>
+
+    <xs:complexType name="DefaultWidgetsType" mixed="true">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="ButtonType" name="Button"/>
+            <xs:element type="InputTextType" name="InputText"/>
+            <xs:element type="OutputLabelType" name="OutputLabel"/>
+            <xs:element type="PanelGroupType" name="PanelGroup"/>
+            <xs:element type="FloatingGroupType" name="FloatingGroup"/>
+            <xs:element type="CheckBoxType" name="CheckBox"/>
+            <xs:element type="TableType" name="Table"/>
+            <xs:element type="CalendarType" name="Calendar"/>
+            <xs:element type="ComboType" name="Combo"/>
+            <xs:element type="DictionaryComboType" name="DictionaryCombo"/>
+            <xs:element type="ImageType" name="Image"/>
+            <xs:element type="IncludeType" name="Include"/>
+            <xs:element type="SpacerType" name="Spacer"/>
+            <xs:element type="InputDateType" name="InputDate"/>
+            <xs:element type="InputDateOptimizedType" name="InputDateOptimized"/>
+            <xs:element type="InputNumberType" name="InputNumber"/>
+            <xs:element type="InputTimestampType" name="InputTimestamp"/>
+            <xs:element type="RadioOptionType" name="RadioOption"/>
+            <xs:element type="RadioOptionsGroupType" name="RadioOptionsGroup"/>
+            <xs:element type="RepeaterType" name="Repeater"/>
+            <xs:element type="OptionsListType" name="OptionsList"/>
+            <xs:element type="GroupType" name="Group"/>
+            <xs:element type="TabContainerType" name="TabContainer"/>
+            <xs:element type="WizardType" name="Wizard"/>
+            <xs:element type="SelectOneMenuType" name="SelectOneMenu"/>
+            <xs:element type="SelectComboMenuType" name="SelectComboMenu"/>
+            <xs:element type="SelectComboMenuType" name="SelectComboMenuOptimized"/>
+            <xs:element type="ValidateMessagesType" name="ValidateMessages"/>
+            <xs:element type="TablePagedType" name="TablePaged"/>
+            <xs:element type="TableLazyType" name="TableLazy"/>
+            <xs:element type="TableOptimizedType" name="TableOptimized"/>
+            <xs:element type="TreeType" name="Tree"/>
+            <xs:element type="ImageGridType" name="ImageGrid"/>
+            <xs:element type="MarkdownGridType" name="MarkdownGrid"/>
+            <xs:element type="FileUploadType" name="FileUpload"/>
+            <xs:element type="WidgetType" name="Widget"/>
+            <xs:element type="SplitContainerType" name="SplitContainer"/>
+        </xs:choice>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="dayNames"/>
+    </xs:complexType>
+
+    <xs:complexType name="AvailableWidgetsType" mixed="true">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="ButtonType" name="Button"/>
+            <xs:element type="InputTextType" name="InputText"/>
+            <xs:element type="OutputLabelType" name="OutputLabel"/>
+            <xs:element type="PanelGroupType" name="PanelGroup"/>
+            <xs:element type="FloatingGroupType" name="FloatingGroup"/>
+            <xs:element type="CheckBoxType" name="CheckBox"/>
+            <xs:element type="TableType" name="Table"/>
+            <xs:element type="CalendarType" name="Calendar"/>
+            <xs:element type="ComboType" name="Combo"/>
+            <xs:element type="DictionaryComboType" name="DictionaryCombo"/>
+            <xs:element type="ImageType" name="Image"/>
+            <xs:element type="IncludeType" name="Include"/>
+            <xs:element type="SpacerType" name="Spacer"/>
+            <xs:element type="InputDateType" name="InputDate"/>
+            <xs:element type="InputDateOptimizedType" name="InputDateOptimized"/>
+            <xs:element type="InputNumberType" name="InputNumber"/>
+            <xs:element type="InputTimestampType" name="InputTimestamp"/>
+            <xs:element type="RadioOptionType" name="RadioOption"/>
+            <xs:element type="RadioOptionsGroupType" name="RadioOptionsGroup"/>
+            <xs:element type="RepeaterType" name="Repeater"/>
+            <xs:element type="OptionsListType" name="OptionsList"/>
+            <xs:element type="GroupType" name="Group"/>
+            <xs:element type="TabContainerType" name="TabContainer"/>
+            <xs:element type="WizardType" name="Wizard"/>
+            <xs:element type="SelectOneMenuType" name="SelectOneMenu"/>
+            <xs:element type="SelectComboMenuType" name="SelectComboMenu"/>
+            <xs:element type="SelectComboMenuType" name="SelectComboMenuOptimized"/>
+            <xs:element type="ValidateMessagesType" name="ValidateMessages"/>
+            <xs:element type="TablePagedType" name="TablePaged"/>
+            <xs:element type="TableLazyType" name="TableLazy"/>
+            <xs:element type="TableOptimizedType" name="TableOptimized"/>
+            <xs:element type="TreeType" name="Tree"/>
+            <xs:element type="ImageGridType" name="ImageGrid"/>
+            <xs:element type="MarkdownGridType" name="MarkdownGrid"/>
+            <xs:element type="FileUploadType" name="FileUpload"/>
+            <xs:element type="WidgetType" name="Widget"/>
+            <xs:element type="SplitContainerType" name="SplitContainer"/>
+        </xs:choice>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="dayNames"/>
+    </xs:complexType>
+
+    <xs:complexType name="DropdownType" mixed="true">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="DropdownItemType" name="DropdownItem"/>
+            <xs:element type="RepeaterType" name="Repeater"/>
+        </xs:choice>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="xs:string" name="style"/>
+        <xs:attribute type="xs:string" name="width" default="md-2"/>
+    </xs:complexType>
+
+    <xs:complexType name="ThreeDotsMenuType" mixed="true">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="ThreeDotsMenuItemType" name="ThreeDotsMenuItem"/>
+        </xs:choice>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="style"/>
+        <xs:attribute type="xs:string" name="width" default="md-1"/>
+    </xs:complexType>
+
+    <xs:complexType name="DropdownItemType" mixed="true">
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="icon"/>
+        <xs:attribute type="xs:string" name="iconAlignment"/>
+        <xs:attribute type="xs:string" name="url"/>
+        <xs:attribute type="xs:string" name="value"/>
+        <xs:attribute type="xs:string" name="onClick"/>
+    </xs:complexType>
+
+    <xs:complexType name="ThreeDotsMenuItemType" mixed="true">
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="icon"/>
+        <xs:attribute type="xs:string" name="iconAlignment"/>
+        <xs:attribute type="xs:string" name="url"/>
+        <xs:attribute type="xs:string" name="value"/>
+        <xs:attribute type="xs:string" name="onClick"/>
+    </xs:complexType>
+
+    <xs:complexType name="FileUploadType">
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="file"/>
+        <xs:attribute type="xs:string" name="files"/>
+        <xs:attribute type="xs:long" name="maxSize" use="required"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="xs:string" name="validationLabel"/>
+        <xs:attribute type="xs:boolean" name="hintInputGroup"/>
+        <xs:attribute type="xs:string" name="onUpload" use="required"/>
+        <xs:attribute type="xs:string" name="width" default="md-2" />
+        <xs:attribute type="xs:string" name="extensions"/>
+        <xs:attribute type="xs:boolean" name="multiple" default="false"/>
+        <xs:attribute type="xs:boolean" name="labelHidden" default="false"/>
+        <xs:attribute type="xs:boolean" name="required" default="false"/>
+    </xs:complexType>
+
+    <xs:complexType name="PanelGroupType" mixed="true">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="MdFileViewerType" name="MdFileViewer"/>
+            <xs:element type="AccordionType" name="Accordion"/>
+            <xs:element type="BarChartType" name="BarChart"/>
+            <xs:element type="ButtonType" name="Button"/>
+            <xs:element type="ButtonGroupType" name="ButtonGroup"/>
+            <xs:element type="InputTextType" name="InputText"/>
+            <xs:element type="OutputLabelType" name="OutputLabel"/>
+            <xs:element type="PanelGroupType" name="PanelGroup"/>
+            <xs:element type="FloatingGroupType" name="FloatingGroup"/>
+            <xs:element type="CalendarType" name="Calendar"/>
+            <xs:element type="CheckBoxType" name="CheckBox"/>
+            <xs:element type="DropdownType" name="Dropdown"/>
+            <xs:element type="TableType" name="Table"/>
+            <xs:element type="ComboType" name="Combo"/>
+            <xs:element type="DictionaryComboType" name="DictionaryCombo"/>
+            <xs:element type="ImageType" name="Image"/>
+            <xs:element type="IncludeType" name="Include"/>
+            <xs:element type="IMapLiteType" name="IMapLite"/>
+            <xs:element type="OpenLayersType" name="OpenLayers"/>
+            <xs:element type="MeterGaugeChartType" name="MeterGaugeChart"/>
+            <xs:element type="SpacerType" name="Spacer"/>
+            <xs:element type="InputDateType" name="InputDate"/>
+            <xs:element type="InputDateOptimizedType" name="InputDateOptimized"/>
+            <xs:element type="InputNumberType" name="InputNumber"/>
+            <xs:element type="InputTimestampType" name="InputTimestamp"/>
+            <xs:element type="LinkType" name="Link"/>
+            <xs:element type="RadioOptionType" name="RadioOption"/>
+            <xs:element type="RadioOptionsGroupType" name="RadioOptionsGroup"/>
+            <xs:element type="RepeaterType" name="Repeater"/>
+            <xs:element type="OptionsListType" name="OptionsList"/>
+            <xs:element type="GroupType" name="Group"/>
+            <xs:element type="TabContainerType" name="TabContainer"/>
+            <xs:element type="WizardType" name="Wizard"/>
+            <xs:element type="SelectOneMenuType" name="SelectOneMenu"/>
+            <xs:element type="SelectComboMenuType" name="SelectComboMenu"/>
+            <xs:element type="SelectComboMenuType" name="SelectComboMenuOptimized"/>
+            <xs:element type="ValidateMessagesType" name="ValidateMessages"/>
+            <xs:element type="TablePagedType" name="TablePaged"/>
+            <xs:element type="TableLazyType" name="TableLazy"/>
+            <xs:element type="TableOptimizedType" name="TableOptimized"/>
+            <xs:element type="TreeType" name="Tree"/>
+            <xs:element type="ImageGridType" name="ImageGrid"/>
+            <xs:element type="MarkdownGridType" name="MarkdownGrid"/>
+            <xs:element type="FileUploadType" name="FileUpload"/>
+            <xs:element type="FooterType" name="Footer"/>
+            <xs:element type="WidgetType" name="Widget"/>
+            <xs:element type="SplitContainerType" name="SplitContainer"/>
+            <xs:element type="RowType" name="Row"/>
+            <xs:element type="AnchorType" name="Anchor"/>
+            <xs:element type="UmlDiagramType" name="UmlDiagram"/>
+        </xs:choice>
+        <xs:attributeGroup ref="PanelGroupTypeGroup"/>
+    </xs:complexType>
+
+    <xs:complexType name="FloatingGroupType" mixed="true">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="AccordionType" name="Accordion"/>
+            <xs:element type="BarChartType" name="BarChart"/>
+            <xs:element type="ButtonType" name="Button"/>
+            <xs:element type="ButtonGroupType" name="ButtonGroup"/>
+            <xs:element type="InputTextType" name="InputText"/>
+            <xs:element type="OutputLabelType" name="OutputLabel"/>
+            <xs:element type="PanelGroupType" name="PanelGroup"/>
+            <xs:element type="FloatingGroupType" name="FloatingGroup"/>
+            <xs:element type="CalendarType" name="Calendar"/>
+            <xs:element type="CheckBoxType" name="CheckBox"/>
+            <xs:element type="DropdownType" name="Dropdown"/>
+            <xs:element type="TableType" name="Table"/>
+            <xs:element type="ComboType" name="Combo"/>
+            <xs:element type="DictionaryComboType" name="DictionaryCombo"/>
+            <xs:element type="ImageType" name="Image"/>
+            <xs:element type="IncludeType" name="Include"/>
+            <xs:element type="IMapLiteType" name="IMapLite"/>
+            <xs:element type="OpenLayersType" name="OpenLayers"/>
+            <xs:element type="MeterGaugeChartType" name="MeterGaugeChart"/>
+            <xs:element type="SpacerType" name="Spacer"/>
+            <xs:element type="InputDateType" name="InputDate"/>
+            <xs:element type="InputDateOptimizedType" name="InputDateOptimized"/>
+            <xs:element type="InputNumberType" name="InputNumber"/>
+            <xs:element type="InputTimestampType" name="InputTimestamp"/>
+            <xs:element type="LinkType" name="Link"/>
+            <xs:element type="RadioOptionType" name="RadioOption"/>
+            <xs:element type="RadioOptionsGroupType" name="RadioOptionsGroup"/>
+            <xs:element type="RepeaterType" name="Repeater"/>
+            <xs:element type="OptionsListType" name="OptionsList"/>
+            <xs:element type="GroupType" name="Group"/>
+            <xs:element type="TabContainerType" name="TabContainer"/>
+            <xs:element type="WizardType" name="Wizard"/>
+            <xs:element type="SelectOneMenuType" name="SelectOneMenu"/>
+            <xs:element type="ValidateMessagesType" name="ValidateMessages"/>
+            <xs:element type="SelectComboMenuType" name="SelectComboMenu"/>
+            <xs:element type="SelectComboMenuType" name="SelectComboMenuOptimized"/>
+            <xs:element type="TablePagedType" name="TablePaged"/>
+            <xs:element type="TableLazyType" name="TableLazy"/>
+            <xs:element type="TableOptimizedType" name="TableOptimized"/>
+            <xs:element type="TreeType" name="Tree"/>
+            <xs:element type="ImageGridType" name="ImageGrid"/>
+            <xs:element type="MarkdownGridType" name="MarkdownGrid"/>
+            <xs:element type="FileUploadType" name="FileUpload"/>
+            <xs:element type="FooterType" name="Footer"/>
+            <xs:element type="WidgetType" name="Widget"/>
+            <xs:element type="RowType" name="Row"/>
+            <xs:element type="SplitContainerType" name="SplitContainer"/>
+        </xs:choice>
+        <xs:attributeGroup ref="FloatingGroupTypeGroup"/>
+    </xs:complexType>
+
+    <xs:complexType name="FooterType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="AccordionType" name="Accordion"/>
+            <xs:element type="ButtonType" name="Button"/>
+            <xs:element type="ButtonGroupType" name="ButtonGroup"/>
+            <xs:element type="InputTextType" name="InputText"/>
+            <xs:element type="OutputLabelType" name="OutputLabel"/>
+            <xs:element type="PanelGroupType" name="PanelGroup"/>
+            <xs:element type="FloatingGroupType" name="FloatingGroup"/>
+            <xs:element type="CalendarType" name="Calendar"/>
+            <xs:element type="CheckBoxType" name="CheckBox"/>
+            <xs:element type="TableType" name="Table"/>
+            <xs:element type="ComboType" name="Combo"/>
+            <xs:element type="DictionaryComboType" name="DictionaryCombo"/>
+            <xs:element type="ImageType" name="Image"/>
+            <xs:element type="IncludeType" name="Include"/>
+            <xs:element type="IMapLiteType" name="IMapLite"/>
+            <xs:element type="OpenLayersType" name="OpenLayers"/>
+            <xs:element type="MeterGaugeChartType" name="MeterGaugeChart"/>
+            <xs:element type="SpacerType" name="Spacer"/>
+            <xs:element type="InputDateType" name="InputDate"/>
+            <xs:element type="InputDateOptimizedType" name="InputDateOptimized"/>
+            <xs:element type="InputNumberType" name="InputNumber"/>
+            <xs:element type="InputTimestampType" name="InputTimestamp"/>
+            <xs:element type="LinkType" name="Link"/>
+            <xs:element type="RadioOptionType" name="RadioOption"/>
+            <xs:element type="RadioOptionsGroupType" name="RadioOptionsGroup"/>
+            <xs:element type="RepeaterType" name="Repeater"/>
+            <xs:element type="OptionsListType" name="OptionsList"/>
+            <xs:element type="GroupType" name="Group"/>
+            <xs:element type="TabContainerType" name="TabContainer"/>
+            <xs:element type="WizardType" name="Wizard"/>
+            <xs:element type="SelectOneMenuType" name="SelectOneMenu"/>
+            <xs:element type="ValidateMessagesType" name="ValidateMessages"/>
+            <xs:element type="TablePagedType" name="TablePaged"/>
+            <xs:element type="TableLazyType" name="TableLazy"/>
+            <xs:element type="TableOptimizedType" name="TableOptimized"/>
+            <xs:element type="TreeType" name="Tree"/>
+            <xs:element type="SelectComboMenuType" name="SelectComboMenu"/>
+            <xs:element type="SelectComboMenuType" name="SelectComboMenuOptimized"/>
+            <xs:element type="ImageGridType" name="ImageGrid"/>
+            <xs:element type="MarkdownGridType" name="MarkdownGrid"/>
+            <xs:element type="FileUploadType" name="FileUpload"/>
+            <xs:element type="WidgetType" name="Widget"/>
+            <xs:element type="SplitContainerType" name="SplitContainer"/>
+        </xs:choice>
+        <xs:attribute type="xs:string" name="id"/>
+        <xs:attribute type="xs:string" name="styleClasses"/>
+        <xs:attribute type="xs:string" name="style"/>
+        <xs:attribute type="xs:string" name="horizontalAlign"/>
+        <xs:attribute type="xs:string" name="verticalAlign"/>
+    </xs:complexType>
+
+    <xs:complexType name="ImageType">
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="imageAreas"/>
+        <xs:attribute type="xs:string" name="onAreaClick"/>
+        <xs:attribute type="xs:string" name="onClick"/>
+        <xs:attribute type="xs:string" name="src"/>
+        <xs:attribute type="xs:string" name="alt"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="xs:string" name="width" default="md-6" />
+        <xs:attribute type="LabelPositionType" name="labelPosition"/>
+    </xs:complexType>
+
+    <xs:complexType name="MdFileViewerType">
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="xs:string" name="resourceBasePath"/>
+        <xs:attribute type="xs:string" name="src"/>
+    </xs:complexType>
+
+    <xs:complexType name="IncludeType" mixed="true">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="OnEventType" name="OnEvent"/>
+        </xs:choice>
+        <xs:attribute type="xs:string" name="id"/>
+        <xs:attribute type="xs:string" name="model"/>
+        <xs:attribute type="xs:string" name="modelValue"/>
+        <xs:attribute type="xs:string" name="ref" use="required"/>
+        <xs:attribute type="xs:string" name="variant"/>
+    </xs:complexType>
+
+    <xs:complexType name="InputDateType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="OnKeyEventType" name="OnKeyEvent"/>
+        </xs:choice>
+        <xs:attributeGroup ref="ConfirmationDialogSupport"/>
+        <xs:attribute type="xs:string" name="ariaLabel"/>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="format"/>
+        <xs:attribute type="xs:boolean" name="maskEnabled"/>
+        <xs:attribute type="xs:string" name="icon"/>
+        <xs:attribute type="xs:string" name="iconAlignment"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="xs:string" name="autocomplete"/>
+        <xs:attribute type="xs:string" name="validationLabel"/>
+        <xs:attribute type="xs:boolean" name="hintInputGroup"/>
+        <xs:attribute type="xs:string" name="onChange"/>
+        <xs:attribute type="xs:string" name="required" default="false"/>
+        <xs:attribute type="xs:string" name="value"/>
+        <xs:attribute type="xs:string" name="validationRule"/>
+        <xs:attribute type="xs:string" name="onKeyEvent"/>
+        <xs:attribute type="xs:string" name="keyEvent"/>
+        <xs:attribute type="xs:boolean" name="maskDynamic"/>
+        <xs:attribute type="xs:boolean" name="highlightToday"/>
+        <xs:attribute type="xs:string" name="width" default="md-3"/>
+        <xs:attribute type="LabelPositionType" name="labelPosition"/>
+        <xs:attribute type="InputSizeType" name="inputSize"/>
+        <xs:attribute type="LabelSizeType" name="labelSize"/>
+    </xs:complexType>
+
+    <xs:complexType name="InputDateOptimizedType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="OnKeyEventType" name="OnKeyEvent"/>
+        </xs:choice>
+        <xs:attributeGroup ref="ConfirmationDialogSupport"/>
+        <xs:attribute type="xs:string" name="ariaLabel"/>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="format"/>
+        <xs:attribute type="xs:boolean" name="maskEnabled"/>
+        <xs:attribute type="xs:string" name="icon"/>
+        <xs:attribute type="xs:string" name="iconAlignment"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="xs:string" name="autocomplete"/>
+        <xs:attribute type="xs:string" name="validationLabel"/>
+        <xs:attribute type="xs:boolean" name="hintInputGroup"/>
+        <xs:attribute type="xs:string" name="onChange"/>
+        <xs:attribute type="xs:string" name="required" default="false"/>
+        <xs:attribute type="xs:string" name="value"/>
+        <xs:attribute type="xs:string" name="validationRule"/>
+        <xs:attribute type="xs:string" name="onKeyEvent"/>
+        <xs:attribute type="xs:string" name="keyEvent"/>
+        <xs:attribute type="xs:boolean" name="maskDynamic"/>
+        <xs:attribute type="xs:boolean" name="highlightToday"/>
+        <xs:attribute type="LabelPositionType" name="labelPosition"/>
+        <xs:attribute type="InputSizeType" name="inputSize"/>
+        <xs:attribute type="xs:string" name="width" default="md-3"/>
+        <xs:attribute type="LabelSizeType" name="labelSize"/>
+    </xs:complexType>
+
+
+    <xs:complexType name="InputNumberType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="OnKeyEventType" name="OnKeyEvent"/>
+        </xs:choice>
+        <xs:attributeGroup ref="ConfirmationDialogSupport"/>
+        <xs:attribute type="xs:string" name="ariaLabel"/>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="format"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="xs:string" name="autocomplete"/>
+        <xs:attribute type="xs:string" name="validationLabel"/>
+        <xs:attribute type="xs:boolean" name="hintInputGroup"/>
+        <xs:attribute type="xs:string" name="onChange"/>
+        <xs:attribute type="xs:string" name="required" default="false"/>
+        <xs:attribute type="xs:string" name="value"/>
+        <xs:attribute type="horizontalAlignType" name="textAlign" default="left"/>
+        <xs:attribute type="xs:string" name="validationRule"/>
+        <xs:attribute type="xs:string" name="onKeyEvent"/>
+        <xs:attribute type="xs:string" name="radixPoint"/>
+        <xs:attribute type="xs:string" name="formatter"/>
+        <xs:attribute type="xs:string" name="keyEvent"/>
+        <xs:attribute type="LabelPositionType" name="labelPosition"/>
+        <xs:attribute type="InputSizeType" name="inputSize"/>
+        <xs:attribute type="LabelSizeType" name="labelSize"/>
+        <xs:attribute type="xs:string" name="maxFractionDigits"/>
+        <xs:attribute type="xs:string" name="width" default="md-3"/>
+        <xs:attribute type="xs:string" name="maxIntigerDigits"/>
+    </xs:complexType>
+
+    <xs:simpleType name="inputTextType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="textArea"/>
+            <xs:enumeration value="text"/>
+            <xs:enumeration value="password"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="InputTextType" mixed="true">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="OnKeyEventType" name="OnKeyEvent"/>
+        </xs:choice>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attributeGroup ref="ConfirmationDialogSupport"/>
+        <xs:attribute type="xs:string" name="ariaLabel"/>
+        <xs:attribute type="xs:string" name="icon"/>
+        <xs:attribute type="xs:string" name="iconAlignment"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="xs:string" name="autocomplete"/>
+        <xs:attribute type="xs:string" name="validationLabel"/>
+        <xs:attribute type="xs:boolean" name="hintInputGroup"/>
+        <xs:attribute type="xs:string" name="mask"/>
+        <xs:attribute type="xs:string" name="maskBinding"/>
+        <xs:attribute type="xs:positiveInteger" name="maxLength"/>
+        <xs:attribute type="xs:string" name="maxLengthBinding"/>
+        <xs:attribute type="xs:string" name="onChange"/>
+        <xs:attribute type="xs:string" name="onInput"/>
+        <xs:attribute type="xs:string" name="placeholder"/>
+        <xs:attribute type="xs:boolean" name="maskInsertMode"/>
+        <xs:attribute type="xs:string" name="required" default="false"/>
+        <xs:attribute type="TextAlignType" name="textAlign"/>
+        <xs:attribute type="xs:string" name="validationRule"/>
+        <xs:attribute type="xs:positiveInteger" name="rowsCount"/>
+        <xs:attribute type="xs:boolean" name="rowsCountAuto"/>
+        <xs:attribute type="xs:string" name="value"/>
+        <xs:attribute type="xs:string" name="emptyValue" default="false"/>
+        <xs:attribute type="inputTextType" name="inputType"/>
+        <xs:attribute type="xs:string" name="onKeyEvent"/>
+        <xs:attribute type="xs:string" name="keyEvent"/>
+        <xs:attribute type="xs:string" name="formatter"/>
+        <xs:attribute type="xs:string" name="formatterBinding"/>
+        <xs:attribute type="LabelPositionType" name="labelPosition"/>
+        <xs:attribute type="InputSizeType" name="inputSize"/>
+        <xs:attribute type="LabelSizeType" name="labelSize"/>
+        <xs:attribute type="xs:string" name="maskDefinition"/>
+        <xs:attribute type="xs:boolean" name="maskDynamic"/>
+        <xs:attribute type="xs:string" name="requiredRegex"/>
+        <xs:attribute type="xs:string" name="requiredRegexBinding"/>
+        <xs:attribute type="xs:string" name="requiredRegexMessage"/>
+        <xs:attribute type="xs:string" name="labelId"/>
+        <xs:attribute type="xs:string" name="width" default="md-3"/>
+    </xs:complexType>
+
+    <xs:complexType name="InputTimestampType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="OnKeyEventType" name="OnKeyEvent"/>
+        </xs:choice>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="format"/>
+        <xs:attribute type="xs:string" name="icon"/>
+        <xs:attribute type="xs:string" name="iconAlignment"/>
+        <xs:attribute type="InputSizeType" name="inputSize"/>
+        <xs:attribute type="LabelSizeType" name="labelSize"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="xs:string" name="autocomplete"/>
+        <xs:attribute type="xs:string" name="validationLabel"/>
+        <xs:attribute type="xs:boolean" name="hintInputGroup"/>
+        <xs:attribute type="LabelPositionType" name="labelPosition"/>
+        <xs:attribute type="xs:string" name="onChange"/>
+        <xs:attribute type="xs:string" name="required" default="false"/>
+        <xs:attribute type="xs:string" name="validationRule"/>
+        <xs:attribute type="xs:string" name="value"/>
+        <xs:attribute type="xs:string" name="onKeyEvent"/>
+        <xs:attribute type="xs:string" name="keyEvent"/>
+        <xs:attribute type="xs:string" name="width" default="md-3"/>
+    </xs:complexType>
+
+    <xs:complexType name="IteratorType">
+        <xs:attribute type="xs:string" name="id" use="required"/>
+        <xs:attribute type="xs:string" name="collection" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="LinkType">
+        <xs:attribute type="xs:string" name="icon"/>
+        <xs:attribute type="xs:anyURI" name="url"/>
+        <xs:attribute type="xs:string" name="value"/>
+        <xs:attribute type="xs:boolean" name="newWindow"/>
+        <xs:attribute type="xs:string" name="width" default="md-2"/>
+    </xs:complexType>
+
+    <xs:complexType name="LocaleBundleType">
+        <xs:attribute type="xs:string" name="basename" use="required"/>
+        <xs:attribute type="xs:string" name="var" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="MeterGaugeChartType">
+        <xs:attribute type="xs:string" name="id"/>
+        <xs:attribute type="xs:string" name="width"/>
+        <xs:attribute type="xs:string" name="minValue"/>
+        <xs:attribute type="xs:anyURI" name="maxValue"/>
+        <xs:attribute type="xs:string" name="value"/>
+        <xs:attribute type="xs:string" name="unit"/>
+        <xs:attribute type="xs:string" name="title"/>
+        <xs:attribute type="xs:string" name="color"/>
+        <xs:attribute type="xs:string" name="fillColor"/>
+        <xs:attribute type="pixelOrPercentageType" name="height"/>
+    </xs:complexType>
+
+    <xs:complexType name="OptionsListType">
+        <xs:attribute type="xs:string" name="values" use="required"/>
+        <xs:attribute type="xs:string" name="value"/>
+        <xs:attribute type="xs:string" name="title"/>
+        <xs:attribute type="xs:boolean" name="displayCheckbox" default="true"/>
+        <xs:attribute type="xs:string" name="emptyValue"/>
+        <xs:attribute type="xs:string" name="emptyValueLabel"/>
+        <xs:attribute type="xs:string" name="onIconClick"/>
+        <xs:attribute type="xs:string" name="onChange"/>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+    </xs:complexType>
+
+    <xs:complexType name="OutputLabelType" mixed="true">
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="formatter"/>
+        <xs:attribute type="xs:string" name="icon"/>
+        <xs:attribute type="xs:string" name="iconAlignment"/>
+        <xs:attribute type="xs:string" name="value"/>
+        <xs:attribute type="xs:string" name="onClick"/>
+        <xs:attribute type="xs:string" name="width" default="md-2"/>
+    </xs:complexType>
+
+    <xs:complexType name="RadioOptionType">
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="xs:string" name="autocomplete"/>
+        <xs:attribute type="xs:string" name="onChange"/>
+        <xs:attribute type="xs:string" name="required" default="false"/>
+        <xs:attribute type="xs:string" name="value" use="required"/>
+        <xs:attribute type="xs:string" name="targetValue" use="required"/>
+        <xs:attribute type="xs:string" name="validationLabel"/>
+        <xs:attribute type="xs:boolean" name="hintInputGroup"/>
+        <xs:attribute type="xs:string" name="labelId"/>
+    </xs:complexType>
+
+    <xs:complexType name="RadioOptionsGroupType">
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="formatter"/>
+        <xs:attribute type="xs:string" name="icon"/>
+        <xs:attribute type="xs:string" name="iconAlignment"/>
+        <xs:attribute type="InputSizeType" name="inputSize"/>
+        <xs:attribute type="LabelSizeType" name="labelSize"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="xs:string" name="validationLabel"/>
+        <xs:attribute type="xs:boolean" name="hintInputGroup"/>
+        <xs:attribute type="LabelPositionType" name="labelPosition"/>
+        <xs:attribute type="xs:string" name="onChange"/>
+        <xs:attribute type="xs:string" name="required" default="false"/>
+        <xs:attribute type="xs:string" name="width" default="md-3"/>
+        <xs:attribute type="xs:string" name="value"/>
+        <xs:attribute type="xs:string" name="values"/>
+        <xs:attribute type="xs:string" name="labelId"/>
+    </xs:complexType>
+
+    <xs:complexType name="RepeaterType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="ButtonType" name="Button"/>
+            <xs:element type="InputTextType" name="InputText"/>
+            <xs:element type="OutputLabelType" name="OutputLabel"/>
+            <xs:element type="PanelGroupType" name="PanelGroup"/>
+            <xs:element type="FloatingGroupType" name="FloatingGroup"/>
+            <xs:element type="CheckBoxType" name="CheckBox"/>
+            <xs:element type="TableType" name="Table"/>
+            <xs:element type="CalendarType" name="Calendar"/>
+            <xs:element type="ComboType" name="Combo"/>
+            <xs:element type="DictionaryComboType" name="DictionaryCombo"/>
+            <xs:element type="ImageType" name="Image"/>
+            <xs:element type="MdFileViewerType" name="MdFileViewer"/>
+            <xs:element type="IncludeType" name="Include"/>
+            <xs:element type="SpacerType" name="Spacer"/>
+            <xs:element type="InputDateType" name="InputDate"/>
+            <xs:element type="InputDateOptimizedType" name="InputDateOptimized"/>
+            <xs:element type="InputNumberType" name="InputNumber"/>
+            <xs:element type="InputTimestampType" name="InputTimestamp"/>
+            <xs:element type="RadioOptionType" name="RadioOption"/>
+            <xs:element type="RadioOptionsGroupType" name="RadioOptionsGroup"/>
+            <xs:element type="RepeaterType" name="Repeater"/>
+            <xs:element type="OptionsListType" name="OptionsList"/>
+            <xs:element type="GroupType" name="Group"/>
+            <xs:element type="TabContainerType" name="TabContainer"/>
+            <xs:element type="WizardType" name="Wizard"/>
+            <xs:element type="SelectOneMenuType" name="SelectOneMenu"/>
+            <xs:element type="ValidateMessagesType" name="ValidateMessages"/>
+            <xs:element type="TablePagedType" name="TablePaged"/>
+            <xs:element type="TableLazyType" name="TableLazy"/>
+            <xs:element type="TableOptimizedType" name="TableOptimized"/>
+            <xs:element type="TreeType" name="Tree"/>
+            <xs:element type="SelectComboMenuType" name="SelectComboMenu"/>
+            <xs:element type="SelectComboMenuType" name="SelectComboMenuOptimized"/>
+            <xs:element type="ImageGridType" name="ImageGrid"/>
+            <xs:element type="MarkdownGridType" name="MarkdownGrid"/>
+            <xs:element type="FileUploadType" name="FileUpload"/>
+            <xs:element type="WidgetType" name="Widget"/>
+            <xs:element type="SplitContainerType" name="SplitContainer"/>
+            <xs:element type="DropdownItemType" name="DropdownItem"/>
+        </xs:choice>
+        <xs:attributeGroup ref="RepeatableTypeGroup"/>
+        <xs:attribute type="horizontalAlignType" name="horizontalAlign" default="left"/>
+        <xs:attribute type="pixelOrPercentageType" name="height"/>
+        <xs:attribute type="xs:string" name="id"/>
+        <xs:attribute type="xs:string" name="width"/>
+    </xs:complexType>
+
+    <xs:complexType name="AnchorType">
+        <xs:attribute type="xs:string" name="id"/>
+        <xs:attribute type="xs:boolean" name="scrollOnStart"/>
+        <xs:attribute type="xs:string" name="scroll"/>
+        <xs:attribute type="xs:string" name="animateDuration"/>
+    </xs:complexType>
+
+    <xs:complexType name="KeyboardEventType" mixed="true">
+        <xs:attribute type="xs:string" name="event" use="required"/>
+        <xs:attribute type="KeyboardEventTypes" name="shortcut" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="TimerType" mixed="true">
+        <xs:attribute type="xs:string" name="onTimer"/>
+        <xs:attribute type="xs:string" name="interval"/>
+        <xs:attribute type="xs:string" name="active" default="true"/>
+    </xs:complexType>
+
+    <xs:complexType name="RowType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="AccordionType" name="Accordion"/>
+            <xs:element type="MdFileViewerType" name="MdFileViewer"/>
+            <xs:element type="ButtonType" name="Button"/>
+            <xs:element type="ButtonGroupType" name="ButtonGroup"/>
+            <xs:element type="DropdownType" name="Dropdown"/>
+            <xs:element type="InputTextType" name="InputText"/>
+            <xs:element type="OutputLabelType" name="OutputLabel"/>
+            <xs:element type="PanelGroupType" name="PanelGroup"/>
+            <xs:element type="FloatingGroupType" name="FloatingGroup"/>
+            <xs:element type="CheckBoxType" name="CheckBox"/>
+            <xs:element type="TableType" name="Table"/>
+            <xs:element type="ComboType" name="Combo"/>
+            <xs:element type="DictionaryComboType" name="DictionaryCombo"/>
+            <xs:element type="ImageType" name="Image"/>
+            <xs:element type="IncludeType" name="Include"/>
+            <xs:element type="SpacerType" name="Spacer"/>
+            <xs:element type="InputDateType" name="InputDate"/>
+            <xs:element type="InputDateOptimizedType" name="InputDateOptimized"/>
+            <xs:element type="InputNumberType" name="InputNumber"/>
+            <xs:element type="InputTimestampType" name="InputTimestamp"/>
+            <xs:element type="IMapLiteType" name="IMapLite"/>
+            <xs:element type="OpenLayersType" name="OpenLayers"/>
+            <xs:element type="RadioOptionType" name="RadioOption"/>
+            <xs:element type="RadioOptionsGroupType" name="RadioOptionsGroup"/>
+            <xs:element type="RepeaterType" name="Repeater"/>
+            <xs:element type="OptionsListType" name="OptionsList"/>
+            <xs:element type="GroupType" name="Group"/>
+            <xs:element type="TabContainerType" name="TabContainer"/>
+            <xs:element type="WizardType" name="Wizard"/>
+            <xs:element type="SelectOneMenuType" name="SelectOneMenu"/>
+            <xs:element type="SelectComboMenuType" name="SelectComboMenu"/>
+            <xs:element type="SelectComboMenuType" name="SelectComboMenuOptimized"/>
+            <xs:element type="ValidateMessagesType" name="ValidateMessages"/>
+            <xs:element type="TablePagedType" name="TablePaged"/>
+            <xs:element type="TableLazyType" name="TableLazy"/>
+            <xs:element type="TableOptimizedType" name="TableOptimized"/>
+            <xs:element type="TreeType" name="Tree"/>
+            <xs:element type="ImageGridType" name="ImageGrid"/>
+            <xs:element type="MarkdownGridType" name="MarkdownGrid"/>
+            <xs:element type="FileUploadType" name="FileUpload"/>
+            <xs:element type="LinkType" name="Link"/>
+            <xs:element type="WidgetType" name="Widget"/>
+            <xs:element type="SplitContainerType" name="SplitContainer"/>
+        </xs:choice>
+        <xs:attribute type="pixelOrPercentageType" name="height"/>
+        <xs:attribute type="xs:ID" name="id"/>
+        <xs:attribute type="xs:string" name="styleClasses" default=""/>
+        <xs:attribute type="xs:string" name="availability"/>
+        <xs:attribute type="xs:string" name="width"/>
+        <xs:attribute type="xs:boolean" name="hiddenElementsTakeUpSpace"/>
+        <xs:attribute type="elementsVerticalAlignType" name="elementsVerticalAlign"/>
+        <xs:attribute type="elementsHorizontalAlignType" name="elementsHorizontalAlign"/>
+    </xs:complexType>
+
+    <xs:complexType name="GroupType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="ButtonType" name="Button"/>
+            <xs:element type="ButtonGroupType" name="ButtonGroup"/>
+            <xs:element type="DropdownType" name="Dropdown"/>
+            <xs:element type="InputTextType" name="InputText"/>
+            <xs:element type="OutputLabelType" name="OutputLabel"/>
+            <xs:element type="PanelGroupType" name="PanelGroup"/>
+            <xs:element type="FloatingGroupType" name="FloatingGroup"/>
+            <xs:element type="CheckBoxType" name="CheckBox"/>
+            <xs:element type="TableType" name="Table"/>
+            <xs:element type="ComboType" name="Combo"/>
+            <xs:element type="DictionaryComboType" name="DictionaryCombo"/>
+            <xs:element type="ImageType" name="Image"/>
+            <xs:element type="IncludeType" name="Include"/>
+            <xs:element type="SpacerType" name="Spacer"/>
+            <xs:element type="InputDateType" name="InputDate"/>
+            <xs:element type="InputDateOptimizedType" name="InputDateOptimized"/>
+            <xs:element type="InputNumberType" name="InputNumber"/>
+            <xs:element type="InputTimestampType" name="InputTimestamp"/>
+            <xs:element type="IMapLiteType" name="IMapLite"/>
+            <xs:element type="OpenLayersType" name="OpenLayers"/>
+            <xs:element type="RadioOptionType" name="RadioOption"/>
+            <xs:element type="RadioOptionsGroupType" name="RadioOptionsGroup"/>
+            <xs:element type="RepeaterType" name="Repeater"/>
+            <xs:element type="OptionsListType" name="OptionsList"/>
+            <xs:element type="MdFileViewerType" name="MdFileViewer"/>
+            <xs:element type="GroupType" name="Group"/>
+            <xs:element type="TabContainerType" name="TabContainer"/>
+            <xs:element type="WizardType" name="Wizard"/>
+            <xs:element type="SelectOneMenuType" name="SelectOneMenu"/>
+            <xs:element type="ValidateMessagesType" name="ValidateMessages"/>
+            <xs:element type="TablePagedType" name="TablePaged"/>
+            <xs:element type="TableLazyType" name="TableLazy"/>
+            <xs:element type="TableOptimizedType" name="TableOptimized"/>
+            <xs:element type="TreeType" name="Tree"/>
+            <xs:element type="SelectComboMenuType" name="SelectComboMenu"/>
+            <xs:element type="SelectComboMenuType" name="SelectComboMenuOptimized"/>
+            <xs:element type="ImageGridType" name="ImageGrid"/>
+            <xs:element type="MarkdownGridType" name="MarkdownGrid"/>
+            <xs:element type="FileUploadType" name="FileUpload"/>
+            <xs:element type="ThreeDotsMenuType" name="ThreeDotsMenu"/>
+            <xs:element type="LinkType" name="Link"/>
+            <xs:element type="RowType" name="Row"/>
+            <xs:element type="AnchorType" name="Anchor"/>
+            <xs:element type="WidgetType" name="Widget"/>
+            <xs:element type="SplitContainerType" name="SplitContainer"/>
+            <xs:element type="UmlDiagramType" name="UmlDiagram"/>
+        </xs:choice>
+        <xs:attribute type="xs:string" name="availability"/>
+        <xs:attribute type="horizontalAlignType" name="horizontalAlign" default="left"/>
+        <xs:attribute type="xs:string" name="id"/>
+        <xs:attribute type="xs:string" name="width" default="md-12"/>
+        <xs:attribute type="xs:string" name="styleClasses" default=""/>
+        <xs:attribute type="verticalAlignType" name="verticalAlign" default="bottom"/>
+        <xs:attribute type="xs:string" name="onClick"/>
+        <xs:attribute type="pixelOrPercentageType" name="height"/>
+        <xs:attribute type="xs:string" name="hint"/>
+        <xs:attribute type="hintPlacementType" name="hintPlacement"/>
+        <xs:attribute type="hintTriggerType" name="hintTrigger"/>
+        <xs:attribute type="hintTypeType" name="hintType"/>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+    </xs:complexType>
+
+    <xs:complexType name="SelectOneMenuType">
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="formatter"/>
+        <xs:attribute type="xs:string" name="icon"/>
+        <xs:attribute type="xs:string" name="iconAlignment"/>
+        <xs:attribute type="InputSizeType" name="inputSize"/>
+        <xs:attribute type="LabelSizeType" name="labelSize"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="xs:string" name="autocomplete"/>
+        <xs:attribute type="xs:string" name="validationLabel"/>
+        <xs:attribute type="xs:boolean" name="hintInputGroup"/>
+        <xs:attribute type="LabelPositionType" name="labelPosition"/>
+        <xs:attribute type="xs:string" name="onChange"/>
+        <xs:attribute type="xs:string" name="required" default="false"/>
+        <xs:attribute type="xs:string" name="value"/>
+        <xs:attribute type="xs:string" name="values"/>
+        <xs:attribute type="xs:string" name="emptyValue" default="false"/>
+        <xs:attribute type="xs:boolean" name="emptyLabel" default="false"/>
+        <xs:attribute type="xs:string" name="emptyLabelText" default="false"/>
+        <xs:attribute type="xs:string" name="displayExpression"/>
+        <xs:attribute type="xs:string" name="width" default="md-3"/>
+        <xs:attribute type="xs:string" name="labelId"/>
+        <xs:attribute type="xs:boolean" name="keepRemovedValue" default="false"/>
+    </xs:complexType>
+
+    <xs:complexType name="SelectComboMenuType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="OnKeyEventType" name="OnKeyEvent"/>
+        </xs:choice>
+        <xs:attributeGroup ref="ConfirmationDialogSupport"/>
+        <xs:attribute type="xs:string" name="ariaLabel"/>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="icon"/>
+        <xs:attribute type="xs:string" name="iconAlignment" default="BEFORE"/>
+        <xs:attribute type="InputSizeType" name="inputSize"/>
+        <xs:attribute type="LabelSizeType" name="labelSize"/>
+        <xs:attribute type="xs:string" name="freeTyping"/>
+        <xs:attribute type="xs:string" name="filterFunction"/>
+        <xs:attribute type="xs:string" name="onEmptyValue"/>
+        <xs:attribute type="xs:string" name="displayExpression"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="xs:string" name="autocomplete"/>
+        <xs:attribute type="xs:string" name="validationLabel"/>
+        <xs:attribute type="xs:boolean" name="hintInputGroup"/>
+        <xs:attribute type="LabelPositionType" name="labelPosition"/>
+        <xs:attribute type="xs:string" name="onChange"/>
+        <xs:attribute type="xs:string" name="onInput"/>
+        <xs:attribute type="xs:string" name="onSpecialKey"/>
+        <xs:attribute type="xs:string" name="onDblSpecialKey"/>
+        <xs:attribute type="xs:string" name="required" default="false"/>
+        <xs:attribute type="xs:string" name="values"/>
+        <xs:attribute type="xs:string" name="value"/>
+        <xs:attribute type="xs:string" name="formatter"/>
+        <xs:attribute type="xs:string" name="hoverStyle" default="background: #0069D9; color: #FFFFFF"/>
+        <xs:attribute type="xs:string" name="initialStyle" default="background: #FFFFFF; color: #000000"/>
+        <xs:attribute type="xs:boolean" name="preload"/>
+        <xs:attribute type="xs:string" name="onKeyEvent"/>
+        <xs:attribute type="xs:string" name="keyEvent"/>
+        <xs:attribute type="xs:string" name="width" default="md-3"/>
+        <xs:attribute type="xs:boolean" name="emptyLabel" default="false"/>
+        <xs:attribute type="xs:string" name="emptyLabelText" default="false"/>
+        <xs:attribute type="xs:string" name="labelId"/>
+        <xs:attribute type="xs:string" name="displayFunction">
+            <xs:annotation>
+                <xs:documentation>Name of model object (java.util.function.BiPredicate) which will be used to format
+                    items as text.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+
+    <xs:complexType name="SpacerType" mixed="true">
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="width" default="md-2"/>
+    </xs:complexType>
+
+    <xs:complexType name="SplitContainerType" mixed="true">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="MdFileViewerType" name="MdFileViewer"/>
+            <xs:element type="ButtonType" name="Button"/>
+            <xs:element type="InputTextType" name="InputText"/>
+            <xs:element type="OutputLabelType" name="OutputLabel"/>
+            <xs:element type="PanelGroupType" name="PanelGroup"/>
+            <xs:element type="FloatingGroupType" name="FloatingGroup"/>
+            <xs:element type="CheckBoxType" name="CheckBox"/>
+            <xs:element type="TableType" name="Table"/>
+            <xs:element type="CalendarType" name="Calendar"/>
+            <xs:element type="ComboType" name="Combo"/>
+            <xs:element type="DictionaryComboType" name="DictionaryCombo"/>
+            <xs:element type="ImageType" name="Image"/>
+            <xs:element type="IncludeType" name="Include"/>
+            <xs:element type="SpacerType" name="Spacer"/>
+            <xs:element type="InputDateType" name="InputDate"/>
+            <xs:element type="InputDateOptimizedType" name="InputDateOptimized"/>
+            <xs:element type="InputNumberType" name="InputNumber"/>
+            <xs:element type="InputTimestampType" name="InputTimestamp"/>
+            <xs:element type="RadioOptionType" name="RadioOption"/>
+            <xs:element type="RadioOptionsGroupType" name="RadioOptionsGroup"/>
+            <xs:element type="RepeaterType" name="Repeater"/>
+            <xs:element type="OptionsListType" name="OptionsList"/>
+            <xs:element type="GroupType" name="Group"/>
+            <xs:element type="TabContainerType" name="TabContainer"/>
+            <xs:element type="WizardType" name="Wizard"/>
+            <xs:element type="SelectOneMenuType" name="SelectOneMenu"/>
+            <xs:element type="SelectComboMenuType" name="SelectComboMenu"/>
+            <xs:element type="SelectComboMenuType" name="SelectComboMenuOptimized"/>
+            <xs:element type="ValidateMessagesType" name="ValidateMessages"/>
+            <xs:element type="TablePagedType" name="TablePaged"/>
+            <xs:element type="TableLazyType" name="TableLazy"/>
+            <xs:element type="TableOptimizedType" name="TableOptimized"/>
+            <xs:element type="TreeType" name="Tree"/>
+            <xs:element type="ImageGridType" name="ImageGrid"/>
+            <xs:element type="MarkdownGridType" name="MarkdownGrid"/>
+            <xs:element type="FileUploadType" name="FileUpload"/>
+            <xs:element type="WidgetType" name="Widget"/>
+            <xs:element type="SplitContainerType" name="SplitContainer"/>
+            <xs:element type="UmlDiagramType" name="UmlDiagram"/>
+        </xs:choice>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="sizeLeft"/>
+        <xs:attribute type="xs:string" name="sizeRight"/>
+    </xs:complexType>
+
+    <xs:complexType name="TabType" mixed="true">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="MdFileViewerType" name="MdFileViewer"/>
+            <xs:element type="AccordionType" name="Accordion"/>
+            <xs:element type="ButtonType" name="Button"/>
+            <xs:element type="ButtonGroupType" name="ButtonGroup"/>
+            <xs:element type="InputTextType" name="InputText"/>
+            <xs:element type="OutputLabelType" name="OutputLabel"/>
+            <xs:element type="PanelGroupType" name="PanelGroup"/>
+            <xs:element type="FloatingGroupType" name="FloatingGroup"/>
+            <xs:element type="CalendarType" name="Calendar"/>
+            <xs:element type="CheckBoxType" name="CheckBox"/>
+            <xs:element type="TableType" name="Table"/>
+            <xs:element type="ComboType" name="Combo"/>
+            <xs:element type="DictionaryComboType" name="DictionaryCombo"/>
+            <xs:element type="ImageType" name="Image"/>
+            <xs:element type="IncludeType" name="Include"/>
+            <xs:element type="SpacerType" name="Spacer"/>
+            <xs:element type="InputDateType" name="InputDate"/>
+            <xs:element type="InputDateOptimizedType" name="InputDateOptimized"/>
+            <xs:element type="InputNumberType" name="InputNumber"/>
+            <xs:element type="InputTimestampType" name="InputTimestamp"/>
+            <xs:element type="LinkType" name="Link"/>
+            <xs:element type="MeterGaugeChartType" name="MeterGaugeChart"/>
+            <xs:element type="RadioOptionType" name="RadioOption"/>
+            <xs:element type="RadioOptionsGroupType" name="RadioOptionsGroup"/>
+            <xs:element type="RepeaterType" name="Repeater"/>
+            <xs:element type="OptionsListType" name="OptionsList"/>
+            <xs:element type="GroupType" name="Group"/>
+            <xs:element type="TabContainerType" name="TabContainer"/>
+            <xs:element type="WizardType" name="Wizard"/>
+            <xs:element type="SelectOneMenuType" name="SelectOneMenu"/>
+            <xs:element type="SelectComboMenuType" name="SelectComboMenu"/>
+            <xs:element type="SelectComboMenuType" name="SelectComboMenuOptimized"/>
+            <xs:element type="ValidateMessagesType" name="ValidateMessages"/>
+            <xs:element type="TablePagedType" name="TablePaged"/>
+            <xs:element type="TableLazyType" name="TableLazy"/>
+            <xs:element type="TableOptimizedType" name="TableOptimized"/>
+            <xs:element type="TreeType" name="Tree"/>
+            <xs:element type="ImageGridType" name="ImageGrid"/>
+            <xs:element type="MarkdownGridType" name="MarkdownGrid"/>
+            <xs:element type="FileUploadType" name="FileUpload"/>
+            <xs:element type="WidgetType" name="Widget"/>
+            <xs:element type="SplitContainerType" name="SplitContainer"/>
+            <xs:element type="RowType" name="Row"/>
+            <xs:element type="AnchorType" name="Anchor"/>
+            <xs:element type="UmlDiagramType" name="UmlDiagram"/>
+        </xs:choice>
+        <xs:attribute type="horizontalAlignType" name="horizontalAlign" default="left"/>
+        <xs:attribute type="pixelOrPercentageType" name="height"/>
+        <xs:attribute type="xs:string" name="availability"/>
+        <xs:attribute type="xs:string" name="id"/>
+        <xs:attribute type="xs:string" name="label"/>
+    </xs:complexType>
+
+    <xs:complexType name="TabContainerType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="TabType" name="Tab"/>
+        </xs:choice>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="activeTabIndex"/>
+        <xs:attribute type="xs:string" name="activeTabId"/>
+        <xs:attribute type="xs:string" name="onTabChange"/>
+    </xs:complexType>
+
+    <xs:complexType name="WizardType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="TabType" name="Tab"/>
+        </xs:choice>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="activeTabIndex"/>
+        <xs:attribute type="xs:string" name="activeTabId"/>
+        <xs:attribute type="xs:string" name="onTabChange"/>
+    </xs:complexType>
+
+    <xs:complexType name="TableType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="ColumnType" name="Column"/>
+            <xs:element type="IteratorType" name="Iterator"/>
+            <xs:element type="FooterType" name="Footer"/>
+        </xs:choice>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attributeGroup ref="RepeatableTypeGroup"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="xs:integer" name="minRows"/>
+        <xs:attribute type="xs:string" name="onRowClick"/>
+        <xs:attribute type="xs:string" name="onRowDoubleClick"/>
+        <xs:attribute type="xs:string" name="rowStylesMap"/>
+        <xs:attribute type="xs:string" name="selected"/>
+        <xs:attribute type="xs:boolean" name="multiselect"/>
+        <xs:attribute type="xs:boolean" name="ieFocusFixEnabled"/>
+        <xs:attribute type="xs:string" name="synchronizeScrolling"/>
+        <xs:attribute type="xs:boolean" name="selectable" default="true"/>
+        <xs:attribute type="xs:boolean" name="horizontalScrolling" default="false"/>
+        <xs:attribute type="xs:boolean" name="fixedHeader" default="false"/>
+        <xs:attribute type="xs:boolean" name="selectionCheckboxes"/>
+        <xs:attribute type="xs:boolean" name="selectAllChceckbox"/>
+        <xs:attribute type="rowHeightType" name="rowHeight" default="normal"/>
+        <xs:attribute type="tableGridType" name="tableGrid" default="show"/>
+        <xs:attribute type="tableStripesType" name="tableStripes" default="hide"/>
+        <xs:attribute type="xs:boolean" name="csvExport" default="false"/>
+    </xs:complexType>
+
+    <xs:complexType name="TablePagedType">
+        <xs:sequence>
+            <xs:element type="ColumnPagedType" name="ColumnPaged" maxOccurs="unbounded"
+                        minOccurs="0"/>
+            <xs:element type="FooterType" name="Footer" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attributeGroup ref="RepeatableTypeGroup"/>
+        <xs:attribute type="xs:integer" name="minRows"/>
+        <xs:attribute type="xs:string" name="defaultSortBy"/>
+        <xs:attribute type="xs:boolean" name="defaultSortByAsc" default="true"/>
+        <xs:attribute type="xs:string" name="onPageChange"/>
+        <xs:attribute type="xs:string" name="onSortChange"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="xs:string" name="onPageSizeChange"/>
+        <xs:attribute type="xs:string" name="onRowClick"/>
+        <xs:attribute type="xs:string" name="onRowDoubleClick"/>
+        <xs:attribute type="xs:string" name="pageSize"/>
+        <xs:attribute type="xs:string" name="rowStylesMap"/>
+        <xs:attribute type="xs:string" name="selected"/>
+        <xs:attribute type="xs:boolean" name="ieFocusFixEnabled"/>
+        <xs:attribute type="xs:string" name="synchronizeScrolling"/>
+        <xs:attribute type="xs:boolean" name="fixedHeader" default="false"/>
+        <xs:attribute type="xs:string" name="pageSizes" default="5,10,15,25"/>
+        <xs:attribute type="xs:boolean" name="horizontalScrolling" default="false"/>
+        <xs:attribute type="xs:boolean" name="multiselect"/>
+        <xs:attribute type="xs:boolean" name="pageSizeAsButtons"/>
+        <xs:attribute type="xs:boolean" name="paginationAboveTable"/>
+        <xs:attribute type="xs:boolean" name="selectable" default="true"/>
+        <xs:attribute type="xs:boolean" name="selectionCheckboxes"/>
+        <xs:attribute type="xs:boolean" name="selectAllChceckbox"/>
+        <xs:attribute type="rowHeightType" name="rowHeight" default="normal"/>
+        <xs:attribute type="tableGridType" name="tableGrid" default="show"/>
+        <xs:attribute type="tableStripesType" name="tableStripes" default="show"/>
+        <xs:attribute type="xs:boolean" name="csvExport" default="false"/>
+    </xs:complexType>
+
+    <xs:complexType name="TableLazyType">
+        <xs:sequence>
+            <xs:element type="ColumnLazyType" name="ColumnLazy" maxOccurs="unbounded"
+                        minOccurs="0"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attributeGroup ref="RepeatableTypeGroup"/>
+        <xs:attribute type="xs:integer" name="minRows"/>
+        <xs:attribute type="xs:string" name="defaultSortBy"/>
+        <xs:attribute type="xs:boolean" name="defaultSortByAsc" default="true"/>
+        <xs:attribute type="xs:string" name="onLoadMore"/>
+        <xs:attribute type="xs:string" name="onSortChange"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="xs:integer" name="startSize"/>
+        <xs:attribute type="xs:boolean" name="ieFocusFixEnabled"/>
+        <xs:attribute type="xs:string" name="synchronizeScrolling"/>
+        <xs:attribute type="xs:boolean" name="fixedHeader" default="false"/>
+        <xs:attribute type="xs:boolean" name="loadAllPages"/>
+        <xs:attribute type="tableStripesType" name="tableStripes" default="hide"/>
+        <xs:attribute type="xs:boolean" name="csvExport" default="false"/>
+    </xs:complexType>
+
+
+    <xs:complexType name="TableOptimizedType">
+        <xs:sequence>
+            <xs:element type="ColumnOptimizedType" name="ColumnOptimized" maxOccurs="unbounded"
+                        minOccurs="0"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attributeGroup ref="RepeatableTypeGroup"/>
+        <xs:attribute type="xs:integer" name="minRows"/>
+        <xs:attribute type="xs:string" name="defaultSortBy"/>
+        <xs:attribute type="xs:boolean" name="defaultSortByAsc" default="true"/>
+        <xs:attribute type="xs:string" name="onSortChange"/>
+        <xs:attribute type="xs:integer" name="startSize"/>
+        <xs:attribute type="xs:boolean" name="horizontalScrolling" default="false"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="xs:boolean" name="fixedHeader" default="false"/>
+        <xs:attribute type="tableStripesType" name="tableStripes" default="hide"/>
+        <xs:attribute type="xs:string" name="onRowClick"/>
+        <xs:attribute type="xs:string" name="onRowDoubleClick"/>
+        <xs:attribute type="xs:boolean" name="selectable" default="true"/>
+        <xs:attribute type="xs:boolean" name="multiselect"/>
+        <xs:attribute type="xs:string" name="selected"/>
+        <xs:attribute type="xs:boolean" name="ieFocusFixEnabled"/>
+        <xs:attribute type="xs:string" name="synchronizeScrolling"/>
+    </xs:complexType>
+
+    <xs:complexType name="ImageGridType">
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="onChange"/>
+        <xs:attribute type="xs:string" name="selectedItem"/>
+        <xs:attribute type="xs:string" name="values"/>
+        <xs:attribute type="xs:boolean" name="uploadHidden" default="false"/>
+        <xs:attribute type="xs:boolean" name="deleteHidden" default="true"/>
+        <xs:attribute type="xs:string" name="subsystem" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="MarkdownGridType">
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="onChange"/>
+        <xs:attribute type="xs:string" name="onFolderDoubleClick"/>
+        <xs:attribute type="xs:string" name="selectedItem"/>
+        <xs:attribute type="xs:string" name="values"/>
+        <xs:attribute type="xs:boolean" name="uploadHidden" default="false"/>
+        <xs:attribute type="xs:boolean" name="deleteHidden" default="true"/>
+        <xs:attribute type="xs:string" name="subsystem" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="TreeType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="TreeElementType" name="TreeElement"/>
+        </xs:choice>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attributeGroup ref="RepeatableTypeGroup"/>
+        <xs:attribute type="xs:string" name="relation" use="required"/>
+        <xs:attribute type="xs:string" name="nodeIcon"/>
+        <xs:attribute type="xs:string" name="collapsedNodeIcon"/>
+        <xs:attribute type="xs:string" name="leafIcon"/>
+        <xs:attribute type="xs:boolean" name="lines" default="true"/>
+        <xs:attribute type="xs:boolean" name="lazy" default="false"/>
+        <xs:attribute type="xs:boolean" name="expanded" default="false"/>
+        <xs:attribute type="xs:string" name="selected"/>
+        <xs:attribute type="xs:string" name="nextLevelExpandableExpression"/>
+        <xs:attribute type="xs:boolean" name="dynamic" default="true"/>
+    </xs:complexType>
+
+    <xs:complexType name="TreeElementType">
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="xs:string" name="icon"/>
+        <xs:attribute type="xs:string" name="url"/>
+        <xs:attribute type="xs:string" name="onLabelClick"/>
+        <xs:attribute type="xs:string" name="onIconClick"/>
+    </xs:complexType>
+
+    <xs:complexType name="OnEventType">
+        <xs:attribute type="xs:string" name="name" use="required"/>
+        <xs:attribute type="xs:string" name="handler"/>
+    </xs:complexType>
+
+    <xs:complexType name="ValidateMessagesType">
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string"  name="componentIds" use="required"/>
+        <xs:attribute type="ValidationMessages_Levels" name="level" use="required"/>
+        <xs:attribute type="xs:string" name="navigation" default="true"/>
+        <xs:attribute type="xs:string" name="strictLevel" default="false"/>
+    </xs:complexType>
+
+    <xs:complexType name="WidgetType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="MdFileViewerType" name="MdFileViewer"/>
+            <xs:element type="AccordionType" name="Accordion"/>
+            <xs:element type="BarChartType" name="BarChart"/>
+            <xs:element type="ButtonType" name="Button"/>
+            <xs:element type="ButtonGroupType" name="ButtonGroup"/>
+            <xs:element type="InputTextType" name="InputText"/>
+            <xs:element type="OutputLabelType" name="OutputLabel"/>
+            <xs:element type="PanelGroupType" name="PanelGroup"/>
+            <xs:element type="CalendarType" name="Calendar"/>
+            <xs:element type="ClockType" name="Clock"/>
+            <xs:element type="CheckBoxType" name="CheckBox"/>
+            <xs:element type="DropdownType" name="Dropdown"/>
+            <xs:element type="TableType" name="Table"/>
+            <xs:element type="ComboType" name="Combo"/>
+            <xs:element type="DictionaryComboType" name="DictionaryCombo"/>
+            <xs:element type="ImageType" name="Image"/>
+            <xs:element type="IncludeType" name="Include"/>
+            <xs:element type="IMapLiteType" name="IMapLite"/>
+            <xs:element type="OpenLayersType" name="OpenLayers"/>
+            <xs:element type="MeterGaugeChartType" name="MeterGaugeChart"/>
+            <xs:element type="HtmlEditorType" name="HtmlEditor"/>
+            <xs:element type="HtmlViewType" name="HtmlView"/>
+            <xs:element type="EmbedPageType" name="EmbedPage"/>
+            <xs:element type="SpacerType" name="Spacer"/>
+            <xs:element type="InputDateType" name="InputDate"/>
+            <xs:element type="InputDateOptimizedType" name="InputDateOptimized"/>
+            <xs:element type="InputNumberType" name="InputNumber"/>
+            <xs:element type="InputTimestampType" name="InputTimestamp"/>
+            <xs:element type="LinkType" name="Link"/>
+            <xs:element type="RadioOptionType" name="RadioOption"/>
+            <xs:element type="RadioOptionsGroupType" name="RadioOptionsGroup"/>
+            <xs:element type="RepeaterType" name="Repeater"/>
+            <xs:element type="OptionsListType" name="OptionsList"/>
+            <xs:element type="GroupType" name="Group"/>
+            <xs:element type="TabContainerType" name="TabContainer"/>
+            <xs:element type="WizardType" name="Wizard"/>
+            <xs:element type="SelectOneMenuType" name="SelectOneMenu"/>
+            <xs:element type="SelectComboMenuType" name="SelectComboMenu"/>
+            <xs:element type="SelectComboMenuType" name="SelectComboMenuOptimized"/>
+            <xs:element type="ValidateMessagesType" name="ValidateMessages"/>
+            <xs:element type="TablePagedType" name="TablePaged"/>
+            <xs:element type="TableLazyType" name="TableLazy"/>
+            <xs:element type="TableOptimizedType" name="TableOptimized"/>
+            <xs:element type="TreeType" name="Tree"/>
+            <xs:element type="ImageGridType" name="ImageGrid"/>
+            <xs:element type="MarkdownGridType" name="MarkdownGrid"/>
+            <xs:element type="FileUploadType" name="FileUpload"/>
+            <xs:element type="FooterType" name="Footer"/>
+            <xs:element type="WidgetType" name="Widget"/>
+            <xs:element type="SplitContainerType" name="SplitContainer"/>
+        </xs:choice>
+        <xs:attributeGroup ref="PanelGroupTypeGroup"/>
+        <xs:attribute type="xs:string" name="posX"/>
+        <xs:attribute type="xs:string" name="posY"/>
+        <xs:attribute type="xs:string" name="sizeX"/>
+        <xs:attribute type="xs:string" name="sizeY"/>
+        <xs:attribute type="xs:string" name="description" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="UmlDiagramType">
+        <xs:attribute type="xs:string" name="model"/>
+        <xs:attribute type="xs:string" name="selectedId"/>
+        <xs:attribute type="xs:string" name="onDoubleClick"/>
+    </xs:complexType>
+
+    <!-- =====================================================================================================
+    Simple types
+    ===================================================================================================== -->
+    <xs:simpleType name="ValidationMessages_Levels">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="ok"/>
+            <xs:enumeration value="info"/>
+            <xs:enumeration value="warning"/>
+            <xs:enumeration value="error"/>
+            <xs:enumeration value="blocker"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="KeyboardEventTypes">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="CTRL_A"/>
+            <xs:enumeration value="CTRL_B"/>
+            <xs:enumeration value="CTRL_C"/>
+            <xs:enumeration value="CTRL_D"/>
+            <xs:enumeration value="CTRL_E"/>
+            <xs:enumeration value="CTRL_F"/>
+            <xs:enumeration value="CTRL_G"/>
+            <xs:enumeration value="CTRL_H"/>
+            <xs:enumeration value="CTRL_I"/>
+            <xs:enumeration value="CTRL_J"/>
+            <xs:enumeration value="CTRL_K"/>
+            <xs:enumeration value="CTRL_L"/>
+            <xs:enumeration value="CTRL_M"/>
+            <xs:enumeration value="CTRL_N"/>
+            <xs:enumeration value="CTRL_O"/>
+            <xs:enumeration value="CTRL_P"/>
+            <xs:enumeration value="CTRL_Q"/>
+            <xs:enumeration value="CTRL_R"/>
+            <xs:enumeration value="CTRL_S"/>
+            <xs:enumeration value="CTRL_T"/>
+            <xs:enumeration value="CTRL_U"/>
+            <xs:enumeration value="CTRL_V"/>
+            <xs:enumeration value="CTRL_W"/>
+            <xs:enumeration value="CTRL_X"/>
+            <xs:enumeration value="CTRL_Y"/>
+            <xs:enumeration value="CTRL_Z"/>
+            <xs:enumeration value="F1"/>
+            <xs:enumeration value="F2"/>
+            <xs:enumeration value="F3"/>
+            <xs:enumeration value="F4"/>
+            <xs:enumeration value="F5"/>
+            <xs:enumeration value="F6"/>
+            <xs:enumeration value="F7"/>
+            <xs:enumeration value="F8"/>
+            <xs:enumeration value="F9"/>
+            <xs:enumeration value="F10"/>
+            <xs:enumeration value="F11"/>
+            <xs:enumeration value="F12"/>
+            <xs:enumeration value="ENTER"/>
+            <xs:enumeration value="ESC"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="FormPossibleTypes">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="STANDARD"/>
+            <xs:enumeration value="MODAL"/>
+            <xs:enumeration value="MODAL_OVERFLOW"/>
+            <xs:enumeration value="FLOATING"/>
+            <xs:enumeration value="HEADER"/>
+            <xs:enumeration value="MINIMAL"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="FormModalPossibleSizes">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="SMALL"/>
+            <xs:enumeration value="REGULAR"/>
+            <xs:enumeration value="LARGE"/>
+            <xs:enumeration value="XLARGE"/>
+            <xs:enumeration value="XXLARGE"/>
+            <xs:enumeration value="FULL"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="DefaultAvailabilityType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="EDIT"/>
+            <xs:enumeration value="VIEW"/>
+            <xs:enumeration value="HIDDEN"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+
+    <xs:simpleType name="pixelOrPercentageType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[0-9]*"/>
+            <xs:pattern value="[0-9]+px"/>
+            <xs:pattern value="[0-9][0-9]%"/>
+            <xs:pattern value="[1][0][0]%"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="pixelType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="(-?)([0-9]+)((px)?)"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="pixelPositiveType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="([0-9]+)((px)?)"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="hintPlacementType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="TOP"/>
+            <xs:enumeration value="LEFT"/>
+            <xs:enumeration value="RIGHT"/>
+            <xs:enumeration value="BOTTOM"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="hintTriggerType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="HOVER_FOCUS"/>
+            <xs:enumeration value="HOVER"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="hintTypeType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="STANDARD"/>
+            <xs:enumeration value="STATIC"/>
+            <xs:enumeration value="STATIC_LEFT"/>
+            <xs:enumeration value="STATIC_POPOVER"/>
+            <xs:enumeration value="STATIC_POPOVER_LEFT"/>
+            <xs:enumeration value="STANDARD_POPOVER"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="rowHeightType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="normal"/>
+            <xs:enumeration value="small"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="tableGridType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="show"/>
+            <xs:enumeration value="hide"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="tableStripesType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="show"/>
+            <xs:enumeration value="hide"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="verticalAlignType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="top"/>
+            <xs:enumeration value="middle"/>
+            <xs:enumeration value="bottom"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="elementsVerticalAlignType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="TOP"/>
+            <xs:enumeration value="MIDDLE"/>
+            <xs:enumeration value="BOTTOM"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="horizontalAlignType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="left"/>
+            <xs:enumeration value="center"/>
+            <xs:enumeration value="right"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="elementsHorizontalAlignType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="LEFT"/>
+            <xs:enumeration value="CENTER"/>
+            <xs:enumeration value="RIGHT"/>
+            <xs:enumeration value="AROUND"/>
+            <xs:enumeration value="BETWEEN"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="PinningMode">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="normal"/>
+            <xs:enumeration value="button"/>
+            <xs:enumeration value="invisible"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="HeadingMode">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Default"/>
+            <xs:enumeration value="Auto"/>
+            <xs:enumeration value="H1"/>
+            <xs:enumeration value="H2"/>
+            <xs:enumeration value="H3"/>
+            <xs:enumeration value="H4"/>
+            <xs:enumeration value="H5"/>
+            <xs:enumeration value="H6"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="PropertyMultiplicityType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="single"/>
+            <xs:enumeration value="multiple"/>
+            <xs:enumeration value="multiple-pageable"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="LabelPositionType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="up"/>
+            <xs:enumeration value="down"/>
+            <xs:enumeration value="left"/>
+            <xs:enumeration value="right"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="InputSizeType">
+        <xs:restriction base="xs:double">
+            <xs:minInclusive value="0"/>
+            <xs:maxInclusive value="100"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="TimeoutType">
+        <xs:restriction base="xs:double">
+            <xs:minInclusive value="0"/>
+            <xs:maxInclusive value="10000"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="AnimateDurationType">
+        <xs:restriction base="xs:double">
+            <xs:minInclusive value="0"/>
+            <xs:maxInclusive value="10000"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="TextAlignType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="LEFT"/>
+            <xs:enumeration value="RIGHT"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="LabelSizeType">
+        <xs:restriction base="xs:string">
+            <xs:minInclusive value="0"/>
+            <xs:maxInclusive value="9999"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="IMapLiteType">
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element type="GeoJSONLayerType" name="GeoJSONLayer"/>
+            <xs:element type="OpenStreetMapLayerType" name="OpenStreetMapLayer"/>
+            <xs:element type="ObjectLayerType" name="ObjectLayer"/>
+            <xs:element type="WMSLayerType" name="WMSLayer"/>
+            <xs:element type="WMTSLayerType" name="WMTSLayer"/>
+        </xs:choice>
+        <xs:choice minOccurs="0" maxOccurs="1">
+            <xs:element type="DrawLayerType" name="DrawLayer"/>
+        </xs:choice>
+        <xs:attribute type="pixelOrPercentageType" name="height" default="350px"/>
+        <xs:attribute type="xs:ID" name="id"/>
+        <xs:attribute type="xs:string" name="availability"/>
+        <xs:attribute type="xs:string" name="zoom" default="5"/>
+        <xs:attribute type="xs:string" name="width" default="md-12"/>
+        <xs:attribute type="xs:string" name="projection" default="EPSG:3857"/>
+        <xs:attribute type="xs:string" name="centerLongitude" default="0"/>
+        <xs:attribute type="xs:string" name="centerLatitude" default="0"/>
+        <xs:attribute type="xs:string" name="address"/>
+    </xs:complexType>
+
+    <xs:complexType name="OpenStreetMapLayerType">
+        <xs:attribute type="xs:ID" name="id"/>
+        <xs:attribute type="xs:string" name="name"/>
+        <xs:attribute type="xs:double" name="opacity" default="1.0"/>
+        <xs:attribute type="xs:string" name="projection" default="EPSG:3857"/>
+        <xs:attribute type="xs:string" name="availability"/>
+    </xs:complexType>
+
+    <xs:complexType name="BingLayerType">
+        <xs:attribute type="xs:ID" name="id"/>
+        <xs:attribute type="xs:string" name="key" use="required"/>
+        <xs:attribute type="xs:string" name="name"/>
+        <xs:attribute type="xs:string" name="projection" default="EPSG:3857"/>
+        <xs:attribute type="xs:string" name="availability"/>
+        <xs:attribute type="xs:double" name="opacity" default="1.0"/>
+        <xs:attribute type="BingLayerImagerySetType" name="imagerySet" default="CanvasLight"/>
+    </xs:complexType>
+
+    <xs:complexType name="ImageWMSLayerType">
+        <xs:attribute type="xs:ID" name="id"/>
+        <xs:attribute type="xs:string" name="name"/>
+        <xs:attribute type="xs:string" name="url" use="required"/>
+        <xs:attribute type="xs:string" name="layers" use="required"/>
+        <xs:attribute type="xs:string" name="version" default="1.1.1"/>
+        <xs:attribute type="xs:double" name="opacity" default="1.0"/>
+        <xs:attribute type="xs:string" name="projection" default="EPSG:4326"/>
+        <xs:attribute type="xs:string" name="availability"/>
+    </xs:complexType>
+
+    <xs:complexType name="WMSLayerType">
+        <xs:attribute type="xs:ID" name="id"/>
+        <xs:attribute type="xs:string" name="name"/>
+        <xs:attribute type="xs:string" name="url" use="required"/>
+        <xs:attribute type="xs:string" name="layers" use="required"/>
+        <xs:attribute type="xs:string" name="version" default="1.1.1"/>
+        <xs:attribute type="xs:double" name="opacity" default="1.0"/>
+        <xs:attribute type="xs:string" name="projection" default="EPSG:4326"/>
+        <xs:attribute type="xs:string" name="availability"/>
+    </xs:complexType>
+
+    <xs:complexType name="ImageLayerType">
+        <xs:attribute type="xs:ID" name="id"/>
+        <xs:attribute type="xs:string" name="name"/>
+        <xs:attribute type="xs:string" name="url" use="required"/>
+        <xs:attribute type="xs:string" name="extent" use="required"/>
+        <xs:attribute type="xs:double" name="opacity" default="1.0"/>
+        <xs:attribute type="xs:string" name="projection" default="EPSG:4326"/>
+        <xs:attribute type="xs:string" name="availability"/>
+    </xs:complexType>
+
+    <xs:complexType name="WMTSLayerType">
+        <xs:attribute type="xs:ID" name="id"/>
+        <xs:attribute type="xs:string" name="name"/>
+        <xs:attribute type="xs:string" name="layer" use="required"/>
+        <xs:attribute type="xs:string" name="url" use="required"/>
+        <xs:attribute type="xs:string" name="matrixSet" use="required"/>
+        <xs:attribute type="xs:string" name="origin"/>
+        <xs:attribute type="xs:double" name="opacity" default="1.0"/>
+        <xs:attribute type="xs:string" name="version" default="1.1.1"/>
+        <xs:attribute type="xs:string" name="projection" default="EPSG:4326"/>
+        <xs:attribute type="xs:string" name="availability"/>
+        <xs:attribute type="xs:string" name="style"/>
+    </xs:complexType>
+
+    <xs:complexType name="ObjectLayerType">
+        <xs:attribute type="xs:ID" name="id"/>
+        <xs:attribute type="xs:string" name="onSelect"/>
+        <xs:attribute type="xs:string" name="features"/>
+        <xs:attribute type="xs:string" name="draggable" default="false"/>
+        <xs:attribute type="xs:double" name="opacity" default="1.0"/>
+        <xs:attribute type="xs:string" name="projection" default="EPSG:4326"/>
+        <xs:attribute type="xs:string" name="availability"/>
+        <xs:attribute type="xs:unsignedInt" name="hitTolerance" default="0"/>
+        <xs:attribute type="xs:string" name="selected"/>
+        <xs:attribute type="xs:string" name="onDrawEnd"/>
+        <xs:attribute type="xs:string" name="onDelete"/>
+        <xs:attribute type="xs:string" name="drawn"/>
+        <xs:attribute type="xs:string" name="name"/>
+        <xs:attribute type="xs:boolean" name="drawMode" default="false"/>
+        <xs:attribute type="xs:boolean" name="editMode" default="false"/>
+        <xs:attribute type="xs:boolean" name="selectDrawn" default="false"/>
+    </xs:complexType>
+
+    <xs:complexType name="GeoJSONLayerType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="source"/>
+                <xs:attribute type="xs:ID" name="id"/>
+                <xs:attribute type="xs:double" name="opacity" default="1.0"/>
+                <xs:attribute type="xs:string" name="projection" default="EPSG:4326"/>
+                <xs:attribute type="xs:string" name="availability"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="DrawLayerType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:ID" name="id"/>
+                <xs:attribute type="xs:string" name="name"/>
+                <xs:attribute type="xs:string" name="onDrawEnd"/>
+                <xs:attribute type="xs:string" name="drawn" use="required"/>
+                <xs:attribute type="xs:double" name="opacity" default="1.0"/>
+                <xs:attribute type="xs:string" name="projection" default="EPSG:4326"/>
+                <xs:attribute type="xs:string" name="availability"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="GeoPortalLayerType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="source"/>
+                <xs:attribute type="xs:ID" name="id"/>
+                <xs:attribute type="xs:string" name="availability"/>
+                <xs:attribute type="xs:double" name="opacity" default="1.0"/>
+                <xs:attribute type="GeoPortalLayerName" name="layerName" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:simpleType name="GeoPortalLayerName">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Administracyjna"/>
+            <xs:enumeration value="Ewidencja Gruntów - powiaty"/>
+            <xs:enumeration value="Ewidencja Gruntów - obręby"/>
+            <xs:enumeration value="Ewidencja Gruntów - działki"/>
+            <xs:enumeration value="Ewidencja Gruntów - numery działek"/>
+            <xs:enumeration value="Ewidencja Gruntów - budynki"/>
+            <xs:enumeration value="Ortofotomapa"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="BingLayerImagerySetType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Aerial"/>
+            <xs:enumeration value="AerialWithLabels"/>
+            <xs:enumeration value="AerialWithLabelsOnDemand"/>
+            <xs:enumeration value="CanvasDark"/>
+            <xs:enumeration value="CanvasLight"/>
+            <xs:enumeration value="CanvasGray"/>
+            <xs:enumeration value="Road"/>
+            <xs:enumeration value="RoadOnDemand"/>
+            <xs:enumeration value="OrdnanceSurvey"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="MeasureType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Line"/>
+            <xs:enumeration value="Area"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="MeasureLayerType">
+        <xs:attribute type="xs:ID" name="id"/>
+        <xs:attribute type="xs:string" name="name"/>
+        <xs:attribute type="xs:string" name="availability"/>
+        <xs:attribute type="xs:string" name="onMeasureEnd"/>
+        <xs:attribute type="xs:string" name="value"/>
+        <xs:attribute type="xs:double" name="opacity" default="1.0"/>
+        <xs:attribute type="MeasureType" name="measureType" use="required" default="Line"/>
+    </xs:complexType>
+
+    <xs:complexType name="Geocoding">
+        <xs:attribute type="xs:ID" name="id"/>
+        <xs:attribute type="xs:string" name="name"/>
+        <xs:attribute type="xs:namespaceList" name="leftBottomBBox"/>
+        <xs:attribute type="xs:namespaceList" name="rightTopBBox"/>
+    </xs:complexType>
+
+    <xs:complexType name="OpenLayersType">
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element type="GeoJSONLayerType" name="GeoJSONLayer"/>
+            <xs:element type="OpenStreetMapLayerType" name="OpenStreetMapLayer"/>
+            <xs:element type="BingLayerType" name="BingLayer"/>
+            <xs:element type="ObjectLayerType" name="ObjectLayer"/>
+            <xs:element type="WMSLayerType" name="WMSLayer"/>
+            <xs:element type="ImageWMSLayerType" name="ImageWMSLayer"/>
+            <xs:element type="ImageLayerType" name="ImageLayer"/>
+            <xs:element type="WMTSLayerType" name="WMTSLayer"/>
+            <xs:element type="GeoPortalLayerType" name="GeoPortalLayer"/>
+            <xs:element type="MeasureLayerType" name="MeasureLayer"/>
+            <xs:element type="Geocoding" name="Geocoding"/>
+        </xs:choice>
+        <xs:choice minOccurs="0" maxOccurs="1">
+            <xs:element type="DrawLayerType" name="DrawLayer"/>
+        </xs:choice>
+        <xs:attribute type="pixelOrPercentageType" name="height" default="350px"/>
+        <xs:attribute type="xs:ID" name="id"/>
+        <xs:attribute type="xs:string" name="availability"/>
+        <xs:attribute type="xs:string" name="zoom" default="5"/>
+        <xs:attribute type="xs:string" name="width" default="md-12"/>
+        <xs:attribute type="xs:string" name="projection" default="EPSG:3857"/>
+        <xs:attribute type="xs:string" name="centerLongitude" default="0"/>
+        <xs:attribute type="xs:string" name="centerLatitude" default="0"/>
+        <xs:attribute type="xs:string" name="zoomToTarget" default="false"/>
+        <xs:attribute type="xs:string" name="zoomToTargetMargin" default="0px, 0px, 0px, 0px"/>
+    </xs:complexType>
+</xs:schema>
