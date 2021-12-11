@@ -21,6 +21,7 @@ import pl.fhframework.dp.commons.ds.repository.springdata.HistoryDocumentDAO;
 import pl.fhframework.dp.commons.ds.repository.springdata.HistoryDokumentContentDAO;
 import pl.fhframework.dp.transport.drs.Result;
 import pl.fhframework.dp.transport.drs.repository.*;
+import pl.fhframework.dp.transport.service.IRepositoryService;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.io.IOException;
@@ -33,7 +34,7 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 @ApplicationScoped
 @Component
-public class FhdpRepositoryService {
+public class FhdpRepositoryService implements IRepositoryService {
 	
 	private static final Logger log = LoggerFactory.getLogger(FhdpRepositoryService.class);
 	
@@ -49,6 +50,7 @@ public class FhdpRepositoryService {
 	@Autowired
 	protected HistoryDocumentDAO hDocumentDAO;
 	
+	@Override
 	public StoreDocumentResponse storeDocument(StoreDocumentRequest request) {
 		StoreDocumentResponse response = new StoreDocumentResponse();
 		Result result = new Result();
@@ -159,6 +161,7 @@ public class FhdpRepositoryService {
 		return response;
 	}
 
+	@Override
 	public GetDocumentResponse getDocument(GetDocumentRequest request) {
 		GetDocumentResponse response = new GetDocumentResponse();
 		Result result = new Result();
@@ -226,6 +229,7 @@ public class FhdpRepositoryService {
 		return response;
 	}
 
+	@Override
 	public UpdateDocumentResponse updateDocument(UpdateDocumentRequest request) {
 		UpdateDocumentResponse response = new UpdateDocumentResponse();
 		Result result = new Result();
@@ -337,6 +341,7 @@ public class FhdpRepositoryService {
 		return response;
 	}
 	
+	@Override
 	public DeleteDocumentResponse deleteDocument(DeleteDocumentRequest request) {
 		DeleteDocumentResponse response = new DeleteDocumentResponse();
 		Result result = new Result();
@@ -413,6 +418,7 @@ public class FhdpRepositoryService {
 		return response;
 	}
 
+	@Override
 	public FindDocumentResponse findDocument(FindDocumentRequest request) {
 		FindDocumentResponse response = new FindDocumentResponse();
 		Result result = new Result();
@@ -476,6 +482,7 @@ public class FhdpRepositoryService {
 		return response;
 	}
 
+	@Override
 	public GetDocumentHistoryResponse getDocumentHistory(GetDocumentHistoryRequest request) {
 		GetDocumentHistoryResponse response = new GetDocumentHistoryResponse();
 		Result result = new Result();
@@ -562,6 +569,7 @@ public class FhdpRepositoryService {
 		log.error(ExceptionUtils.getStackTrace(e));
 	}
 
+	@Override
 	public GetDocumentVersionResponse getDocumentVersion(GetDocumentVersionRequest request) {
 		GetDocumentVersionResponse response = new GetDocumentVersionResponse();
 		Result result = new Result();
