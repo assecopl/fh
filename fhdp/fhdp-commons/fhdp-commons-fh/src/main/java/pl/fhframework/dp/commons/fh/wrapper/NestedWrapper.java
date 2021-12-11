@@ -12,12 +12,12 @@ public class NestedWrapper<T, N> extends Wrapper<T> {
 
     private List<Wrapper<N>> nested;
 
-    // fixes luna getter problem
+    // fixes fh getter problem
     public List<Wrapper> getNested() {
         return new ArrayList<>(nested);
     }
 
-    // fixes luna setter problem
+    // fixes fh setter problem
     public void setNested(List<Wrapper> nested) {
         ArrayList<Wrapper<N>> wrappers = new ArrayList<>();
         for (Wrapper wrapper : nested) {

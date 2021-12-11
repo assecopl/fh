@@ -163,11 +163,6 @@
                     <includePluginDependencies>true</includePluginDependencies>
                 </configuration>
                 <dependencies>
-<!--                    <dependency>-->
-<!--                        <groupId>pl.asseco.luna.integration</groupId>-->
-<!--                        <artifactId>integrationCore</artifactId>-->
-<!--                        <version>${fh.version}</version>-->
-<!--                    </dependency>-->
                     <dependency>
                         <groupId>pl.fhframework</groupId>
                         <artifactId>fh-compiler</artifactId>

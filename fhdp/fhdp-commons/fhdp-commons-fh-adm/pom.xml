@@ -101,7 +101,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass> pl.fhframework.compiler.core.dynamic.MavenDynamicClassCompiler</mainClass>
+                    <mainClass>pl.fhframework.compiler.core.dynamic.MavenDynamicClassCompiler</mainClass>
                     <arguments>
                         <argument>--sources=${project.build.directory}/dynamics</argument>
                         <argument>--output=${project.build.directory}/generated-form-sources</argument>
@@ -114,11 +114,6 @@
                     <includePluginDependencies>true</includePluginDependencies>
                 </configuration>
                 <dependencies>
-<!--                    <dependency>-->
-<!--                        <groupId>pl.asseco.luna.integration</groupId>-->
-<!--                        <artifactId>integrationCore</artifactId>-->
-<!--                        <version>${fh.version}</version>-->
-<!--                    </dependency>-->
                     <dependency>
                         <groupId>pl.fhframework</groupId>
                         <artifactId>fh-compiler</artifactId>
