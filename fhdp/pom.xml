@@ -21,7 +21,6 @@
         <geotools.version>20.2</geotools.version>
         <camunda.version>7.14.0</camunda.version>
         <spring.data.elasticsearch.version>4.1.15</spring.data.elasticsearch.version>
-<!--        <spring.data.elasticsearch.version>4.1.5</spring.data.elasticsearch.version>-->
         <spring.data.jpa.version>2.4.3</spring.data.jpa.version>
         <elasticsearch.version>7.12.1</elasticsearch.version>
         <fasterxml.version>2.11.4</fasterxml.version>
@@ -169,7 +168,6 @@
         <module>bom</module>
         <module>fhdp-commons</module>
         <module>fhdp-components</module>
-        <module>fhdp-security</module>
     </modules>
 
 </project>

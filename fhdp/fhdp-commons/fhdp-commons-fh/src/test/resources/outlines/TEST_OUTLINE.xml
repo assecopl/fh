@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Outline [
+		<!ENTITY pckg "pl.asseco.imdas.app.h6.view.">
+		]>
+<Outline xmlns="http://fh.asseco.com/outline/1.0">
+	<Element id="TEST" label="Root element of the message" form="">
+		<Element id="TEST_Document" label="$.pl.fhframework.dp.module.doc.TEST.Document.label" form="&pckg;TEST_Document_PANEL_GROUP">
+			<mappings>
+				<pointer>Document</pointer>
+			</mappings>
+			<Element id="TEST_Document_Customers" label="$.pl.fhframework.dp.module.doc.TEST.Document.Customers.outline.label" form="&pckg;Customers.TEST_Document_Customers_PANEL_GROUP">
+				<mappings>
+					<pointer>Document.Customers</pointer>
+				</mappings>
+			</Element>
+			<Element id="TEST_Document_Offices" label="$.pl.fhframework.dp.module.doc.TEST.Document.offices.outline.label" form="&pckg;offices.TEST_Document_Offices_PANEL_GROUP">
+				<mappings>
+					<pointer>Document.Offices</pointer>
+					<pointer>entity.Document.customer.name</pointer>
+				</mappings>
+			</Element>
+			<Element id="TEST_Document_FinancialData" label="$.pl.fhframework.dp.module.doc.TEST.Document.financialdata.outline.label" form="&pckg;financialdata.TEST_Document_FinancialData_PANEL_GROUP"/>
+			<Element id="TEST_Document_Goods" label="$.pl.fhframework.dp.module.doc.TEST.Document.Goods.outline.label" form="&pckg;Goods.TEST_Document_Goods_PANEL_GROUP">
+				<Element id="TEST_Document_Goods_GoodsItems" label="$.pl.fhframework.dp.module.doc.TEST.Document.Goods.goodsitems.outline.label" form="&pckg;Goods.goodsitems.TEST_Document_Goods_GoodsItem_TABLE"/>
+			</Element>
+		</Element>
+	</Element>
+</Outline>

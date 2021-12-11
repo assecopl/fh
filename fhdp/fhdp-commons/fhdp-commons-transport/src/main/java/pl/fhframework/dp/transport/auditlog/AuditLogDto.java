@@ -6,7 +6,7 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.*;
 import pl.fhframework.dp.commons.base.model.IPersistentObject;
-import pl.fhframework.dp.transport.dto.declaration.SeverityEnum;
+import pl.fhframework.dp.transport.dto.document.SeverityEnum;
 
 import java.time.LocalDateTime;
 
@@ -36,7 +36,7 @@ public class AuditLogDto implements IPersistentObject<String> {
     private String processID;
     private String operationGUID;
     private String userLogin;
-    private Long declarationId;
+    private Long docId;
 
     public AuditLogDto(AuditLogTypeEnum type,
                        SeverityEnum severity,

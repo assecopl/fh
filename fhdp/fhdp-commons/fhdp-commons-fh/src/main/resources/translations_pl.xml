@@ -176,7 +176,7 @@
     <entry key="declaration.ct.operations.history.table.colum.time">Czas</entry>
     <entry key="javax.validation.constraints.Null.message">musi mieć wartość null</entry>
     <entry key="org.hibernate.validator.constraints.SafeHtml.message">może zawierać niebezpieczną treść HTML</entry>
-    <entry key="declaration.ct.btn.search.label">Szukaj</entry>
+    <entry key="btn.search.label">Szukaj</entry>
     <entry key="declaration.ct.tabs.pendingOperation">Przebieg bieżącej operacji</entry>
     <entry key="declaration.ct.validationResult.validateOn">Data walidacji</entry>
     <entry key="declaration.ct.declaration.statuses">Statusy</entry>
@@ -262,7 +262,7 @@
     <entry key="declaration.ct.declaration.additionalDeclarationType">Dodatkowy typ zgłoszenia</entry>
     <entry key="common.cancel">Anuluj</entry>
     <entry key="javax.validation.constraints.Future.message">musi być datą w przyszłości</entry>
-    <entry key="declaration.ct.btn.clear.label">Wyczyść</entry>
+    <entry key="btn.clear.label">Wyczyść</entry>
     <entry key="declaration.ct.validationResult.reason">Powód</entry>
     <entry key="declaration.ct.searchCriteria.tab.template.confirmDialog.deleteFilter">Czy na pewno chcesz usunąć filtr: {0}?</entry>
     <entry key="message.value">Wartość</entry>

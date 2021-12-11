@@ -5,7 +5,6 @@ import lombok.Setter;
 import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
-import pl.fhframework.dp.transport.dto.declaration.SeverityEnum;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,7 +16,6 @@ import java.util.List;
  */
 @Getter @Setter
 public class OperationStepDto  implements Comparable<OperationStepDto>{
-    private SeverityEnum type = SeverityEnum.error.info;
     private String description;
     private List<String> descriptionParams;
     @Field(type = FieldType.Date, format = DateFormat.custom, pattern = "uuuu-MM-dd'T'HH:mm:ss.SSSX")

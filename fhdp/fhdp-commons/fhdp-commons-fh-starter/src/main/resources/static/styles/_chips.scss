@@ -1,5 +1,0 @@
-.chipses { display: flex; }
-.chips { padding: 5px; background: $c-white; box-shadow: $sh-default; font-weight: 600; border-radius: 20px; display: flex; justify-content: center; align-items: center;
-    &-name { padding: 5px;}
-    &-close{ width: 15px; height: 15px; line-height: 15px; text-align: center; display: block; background: $c-danger; color: $c-white; border-radius: 100%; cursor: pointer; font-size: 1.3rem; }
-}

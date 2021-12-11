@@ -6,8 +6,8 @@ import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
-import pl.fhframework.dp.commons.fh.declaration.list.searchtemplate.ISearchTemplateCriteriaProvider;
-import pl.fhframework.dp.commons.fh.declaration.list.searchtemplate.SearchTemplateBuilderModel;
+import pl.fhframework.dp.commons.fh.document.list.searchtemplate.ISearchTemplateCriteriaProvider;
+import pl.fhframework.dp.commons.fh.document.list.searchtemplate.SearchTemplateBuilderModel;
 import pl.fhframework.dp.commons.fh.parameters.details.SubstantiveParametersDetailEditForm;
 import pl.fhframework.dp.commons.fh.parameters.details.SubstantiveParametersDetailEditFormUC;
 import pl.fhframework.dp.commons.fh.parameters.details.SubstantiveParametersDetailForm;
@@ -51,7 +51,7 @@ public class SubstantiveParametersListUC extends GenericListUC<SubstantiveParame
 
     @Override
     public void start() {
-        super.declarationBars(false);
+        super.documentBars(false);
         super.start();
 
         showForm(getSearchFormId(), getListData());
@@ -83,12 +83,11 @@ public class SubstantiveParametersListUC extends GenericListUC<SubstantiveParame
     }
 
     protected String getSearchButtonsFormId() {
-        return "pl.fhframework.dp.commons.fh.declaration.list.DeclarationCTListSearchButtons";
+        return "pl.fhframework.dp.commons.fh.common.SearchButtons";
     }
 
     @Override
-    protected SubstantiveParametersListModel initInternalListData(/*DeclarationListConfig config*/) {
-        //FIXME: wprowadzić config - analogicznie do "initInternalListData" dla deklaracji o ile to niezbędne
+    protected SubstantiveParametersListModel initInternalListData() {
         substantiveParametersListModel = new SubstantiveParametersListModel(appContext);
         SubstantiveParametersDtoQuery query = new SubstantiveParametersDtoQuery();
         query.setSortProperty("id");

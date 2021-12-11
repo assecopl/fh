@@ -1,4 +1,4 @@
-<Form xmlns="http://fh.asseco.com/form/1.0" id="declarationCTSearch" container="searchForm" formType="STANDARD"
+<Form xmlns="http://fh.asseco.com/form/1.0" id="parametersSearch" container="searchForm" formType="STANDARD"
       modalSize="REGULAR">
 
     <AvailabilityConfiguration>

@@ -42,7 +42,7 @@ public class FhdpBaseUC implements IUseCaseRefreshListener {
                 true);
     }
 
-    public void declarationBars(boolean headerSearchButton) {
+    public void documentBars(boolean headerSearchButton) {
         hiddenBars(false, true, true, true, true, false,
                 headerSearchButton);
     }

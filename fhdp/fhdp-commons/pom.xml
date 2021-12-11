@@ -24,7 +24,6 @@
         <module>fhdp-camunda</module>
         <module>fhdp-commons-ad</module>
         <module>fhdp-commons-ws</module>
-        <module>fhdp-commons-fh-starter</module>
         <module>fhdp-commons-validation</module>
         <module>fhdp-commons-fh-adm</module>
         <module>fhdp-commons-ds-service</module>

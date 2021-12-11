@@ -83,15 +83,8 @@ public class DocumentDAO extends BaseDAO<RepositoryDocument> {
 	}
 
 	public void updateDocument(UpdateDocumentRequest request) {
-			
 		Query query = new Query();
 		query.addCriteria(where("_id").is(request.getId()));
-		
-		
-    	
-    	
-    	
-    	
     	if(request.getOtherMetadata()!=null) {
 	    	for(OtherMetadata omd : request.getOtherMetadata()) {
 	    		//updateOtherMetadata(collection, request.getId(), omd.getName(), omd.getValue());
@@ -101,84 +94,26 @@ public class DocumentDAO extends BaseDAO<RepositoryDocument> {
 	    		Update updatePush = new Update();
 	    		updatePush = updatePush.push("metadata.otherMetadata", omd);
 	    		mongoTemplate.updateFirst(query, updatePush, getCollectionName());
-	    		
-	    		   		
-	    		
 	    	}
     	}
-    	
 		Update update = new Update();
-
-
-        
-    	if(request.getAttachmentTo()!=null) {
-			update = update.set("metadata.attachmentTo", request.getAttachmentTo());
-    	}
     	if(request.getContentType()!=null) {
     		update = update.set("metadata.contentType", request.getContentType());
-    	}
-    	if(request.getCustomsReferenceNumber()!=null) {
-    		update = update.set("metadata.customsReferenceNumber", request.getCustomsReferenceNumber());
     	}
     	if(request.getLocalReferenceNumber()!=null) {
     		update = update.set("metadata.localReferenceNumber", request.getLocalReferenceNumber());
     	}
-    	if(request.getMessageIdentification()!=null) {
-    		update = update.set("metadata.messageIdentification", request.getMessageIdentification());
-    	}
-    	if(request.getName()!=null) {
-    		update = update.set("metadata.name", request.getName());
-    	}
-    	if(request.getRecipients()!=null) {
-    		update = update.set("metadata.recipients", request.getRecipients());
-//    		try {
-//				List<BasicDBObject> rList = new ArrayList<BasicDBObject>();
-//				for(Correspondent r : request.getRecipients()) {
-//					ObjectMapper objectMapper = getObjectMapper();
-//					BasicDBObject dbo = BasicDBObject.parse(objectMapper.writeValueAsString(r));   
-//					rList.add(dbo);
-//				}
-//				updateValues.put("metadata.recipients", rList);
-//			} catch (JsonProcessingException e) {
-//				e.printStackTrace();
-//				throw new RuntimeException(e);
-//			}
-    	}
-    	if(request.getResponseTo()!=null) {
-    		update = update.set("metadata.responseTo", request.getResponseTo());
-    	}
-    	if(request.getSender()!=null) {
-    		update = update.set("metadata.sender", request.getSender());
-
-//			try {
-//				ObjectMapper objectMapper = getObjectMapper();
-//				BasicDBObject dbo = BasicDBObject.parse(objectMapper.writeValueAsString(request.getSender()));   
-//				updateValues.put("metadata.sender", dbo);
-//			} catch (JsonProcessingException e) {
-//				e.printStackTrace();
-//				throw new RuntimeException(e);
-//			}
-    	}
-
-        
-        
     	update = update.set("modified", new Date());
         if(request.getOperation()!=null) {
         	update = update.set("operation.name", request.getOperation().getName());
         	update = update.set("operation.description", request.getOperation().getDescription());
         }
-//        update.put("$set",  new BasicDBObject("modified", new Date()));
-//        update.put("$set", updateValues);
-//        collection.findOneAndUpdate(filter, update);
-        
 		RepositoryDocument result = mongoTemplate.update(RepositoryDocument.class)
 				.inCollection(getCollectionName())
                 .matching(query)
                 .apply(update)
                 .withOptions(FindAndModifyOptions.options().returnNew(true)) // Now return the newly updated document when updating
                 .findAndModifyValue();
-        
-        
 	}
 
 	public List<RepositoryDocument> find(FindDocumentRequest request) {
@@ -192,12 +127,6 @@ public class DocumentDAO extends BaseDAO<RepositoryDocument> {
 			}
 			if(md.getLocalReferenceNumber()!=null) {
 				query.addCriteria(where("metadata.localReferenceNumber").is(md.getLocalReferenceNumber()));
-			}
-			if(md.getCustomsReferenceNumber()!=null) {
-				query.addCriteria(where("metadata.customsReferenceNumber").is(md.getCustomsReferenceNumber()));
-			}
-			if(md.getDate()!=null) {
-				query.addCriteria(where("metadata.date").is(md.getDate()));
 			}
 		}
 		

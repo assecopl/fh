@@ -3,9 +3,6 @@ package pl.fhframework.dp.commons.fh.outline;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import pl.fhframework.dp.commons.fh.declaration.message.DeclarationMessageHelper;
-import pl.fhframework.dp.transport.enums.MessageDirectionEnum;
-import pl.fhframework.dp.transport.msg.DeclarationMessageDto;
 import pl.fhframework.core.i18n.MessageService;
 import pl.fhframework.core.services.FhService;
 
@@ -234,113 +231,114 @@ public class OutlineService {
         }
     }
 
-    public List<TreeElement<DeclarationMessageDto>> buildMessagesLeftMenu(List<DeclarationMessageDto> messageDtoList) {
-        List<TreeElement<DeclarationMessageDto>> leftMenuElements = new ArrayList<>();
-
-        // find tree main nodes (roots)
-        List<TreeElement<DeclarationMessageDto>> mainNodes = new ArrayList<>();
-
-        for (DeclarationMessageDto message : messageDtoList) {
-            if(message.getMetadata().getResponseTo() == null) {
-                mainNodes.add(new TreeElement<>(generateMessageTreeElementName(message), generateMessageTreeElementIcon(message), message));
-            }
-        }
-
-        // find tree sub-nodes
-        for(TreeElement<DeclarationMessageDto> mainNode: mainNodes) {
-            leftMenuElements.add(buildMessageTree(mainNode, messageDtoList));
-        }
-
-        return leftMenuElements;
-    }
-
-    TreeElement<DeclarationMessageDto> buildMessageTree(TreeElement<DeclarationMessageDto> root, List<DeclarationMessageDto> fullList) {
-
-        List<DeclarationMessageDto> currentNodeChildren = new ArrayList<>();
-
-        for (DeclarationMessageDto message : fullList) {
-            if(root.getObj().getId().equals(message.getMetadata().getResponseTo())) {
-                currentNodeChildren.add(message);
-            }
-        }
-
-        if(currentNodeChildren.size() == 0) {
-            return root;
-        } else {
-            for (DeclarationMessageDto currentChild : currentNodeChildren) {
-                root.addChild(buildMessageTree(new TreeElement<>(
-                    generateMessageTreeElementName(currentChild),
-                    generateMessageTreeElementIcon(currentChild), currentChild), fullList));
-            }
-        }
-        return root;
-    }
-
-    private String generateMessageTreeElementName(DeclarationMessageDto message) {
-
-        if(message == null) {
-            return null;
-        }
-
-        MessageDirectionEnum direction = DeclarationMessageHelper.getDirectionFromDto(message);
-        String treeElementName = message.getName();
-
-        if(message.getDirection() != null) {
-            if(message.getDirection() != null && MessageDirectionEnum.OUT.equals(message.getDirection())) {
-                treeElementName = String.format("%s  %s", treeElementName, "[className='ml-1'][icon='fas fa-sign-out-alt'][/className]");
-            } else {
-                treeElementName = String.format("%s %s", "[icon='fas fa-sign-in-alt']", treeElementName);
-            }
-        }
-
-        if(direction != null) {
-            if(isDirection) {
-                treeElementName += " (";
-                treeElementName += messageService.getAllBundles().getMessage(
-                    "enum.pl.fhframework.dp.transport.enums.MessageDirectionEnum." + direction.name());
-                treeElementName += ")";
-            }
-            return treeElementName;
-        } else {
-            log.debug("Message with id: " + message.getId() + "and repositoryId: " + message.getRepositoryId() + "do not have specified direction in otherMetadata - generating label without direction");
-        }
-
-        return treeElementName;
-    }
-
-    private String generateMessageTreeElementIcon(DeclarationMessageDto message) {
-
-        if(message == null) {
-            return null;
-        }
-
-        switch (DeclarationMessageHelper.getDirectionFromDto(message)) {
-            case OUT: {
-                return "fas fa-sign-out-alt";
-            }
-            case IN: {
-                return "fas fa-sign-in-alt";
-            }
-            default:
-                return "fas fa-sign-in-alt";
-        }
-    }
-
-    private String generateMessageTreeElementIcon(MessageDirectionEnum messageDirectionEnum) {
-
-        if(messageDirectionEnum == null) {
-            return null;
-        }
-
-        switch (messageDirectionEnum) {
-            case OUT: {
-                return "[icon='fas fa-sign-out-alt']";
-            }
-            case IN: {
-                return "[icon='fas fa-sign-in-alt']";
-            }
-            default:
-                return "[icon='fas fa-sign-in-alt']";
-        }
-    }
+    //TODO: move to descendants
+//    public List<TreeElement<DocMessageDto>> buildMessagesLeftMenu(List<DocMessageDto> messageDtoList) {
+//        List<TreeElement<DocMessageDto>> leftMenuElements = new ArrayList<>();
+//
+//        // find tree main nodes (roots)
+//        List<TreeElement<DocMessageDto>> mainNodes = new ArrayList<>();
+//
+//        for (DocMessageDto message : messageDtoList) {
+//            if(message.getMetadata().getResponseTo() == null) {
+//                mainNodes.add(new TreeElement<>(generateMessageTreeElementName(message), generateMessageTreeElementIcon(message), message));
+//            }
+//        }
+//
+//        // find tree sub-nodes
+//        for(TreeElement<DocMessageDto> mainNode: mainNodes) {
+//            leftMenuElements.add(buildMessageTree(mainNode, messageDtoList));
+//        }
+//
+//        return leftMenuElements;
+//    }
+//
+//    TreeElement<DocMessageDto> buildMessageTree(TreeElement<DocMessageDto> root, List<DocMessageDto> fullList) {
+//
+//        List<DocMessageDto> currentNodeChildren = new ArrayList<>();
+//
+//        for (DocMessageDto message : fullList) {
+//            if(root.getObj().getId().equals(message.getMetadata().getResponseTo())) {
+//                currentNodeChildren.add(message);
+//            }
+//        }
+//
+//        if(currentNodeChildren.size() == 0) {
+//            return root;
+//        } else {
+//            for (DocMessageDto currentChild : currentNodeChildren) {
+//                root.addChild(buildMessageTree(new TreeElement<>(
+//                    generateMessageTreeElementName(currentChild),
+//                    generateMessageTreeElementIcon(currentChild), currentChild), fullList));
+//            }
+//        }
+//        return root;
+//    }
+//
+//    private String generateMessageTreeElementName(DocMessageDto message) {
+//
+//        if(message == null) {
+//            return null;
+//        }
+//
+//        MessageDirectionEnum direction = DeclarationMessageHelper.getDirectionFromDto(message);
+//        String treeElementName = message.getName();
+//
+//        if(message.getDirection() != null) {
+//            if(message.getDirection() != null && MessageDirectionEnum.OUT.equals(message.getDirection())) {
+//                treeElementName = String.format("%s  %s", treeElementName, "[className='ml-1'][icon='fas fa-sign-out-alt'][/className]");
+//            } else {
+//                treeElementName = String.format("%s %s", "[icon='fas fa-sign-in-alt']", treeElementName);
+//            }
+//        }
+//
+//        if(direction != null) {
+//            if(isDirection) {
+//                treeElementName += " (";
+//                treeElementName += messageService.getAllBundles().getMessage(
+//                    "enum.pl.fhframework.dp.transport.enums.MessageDirectionEnum." + direction.name());
+//                treeElementName += ")";
+//            }
+//            return treeElementName;
+//        } else {
+//            log.debug("Message with id: " + message.getId() + "and repositoryId: " + message.getRepositoryId() + "do not have specified direction in otherMetadata - generating label without direction");
+//        }
+//
+//        return treeElementName;
+//    }
+//
+//    private String generateMessageTreeElementIcon(DocMessageDto message) {
+//
+//        if(message == null) {
+//            return null;
+//        }
+//
+//        switch (DeclarationMessageHelper.getDirectionFromDto(message)) {
+//            case OUT: {
+//                return "fas fa-sign-out-alt";
+//            }
+//            case IN: {
+//                return "fas fa-sign-in-alt";
+//            }
+//            default:
+//                return "fas fa-sign-in-alt";
+//        }
+//    }
+//
+//    private String generateMessageTreeElementIcon(MessageDirectionEnum messageDirectionEnum) {
+//
+//        if(messageDirectionEnum == null) {
+//            return null;
+//        }
+//
+//        switch (messageDirectionEnum) {
+//            case OUT: {
+//                return "[icon='fas fa-sign-out-alt']";
+//            }
+//            case IN: {
+//                return "[icon='fas fa-sign-in-alt']";
+//            }
+//            default:
+//                return "[icon='fas fa-sign-in-alt']";
+//        }
+//    }
 }

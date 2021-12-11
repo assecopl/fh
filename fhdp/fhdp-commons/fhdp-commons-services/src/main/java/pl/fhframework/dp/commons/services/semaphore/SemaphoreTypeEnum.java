@@ -6,6 +6,6 @@ package pl.fhframework.dp.commons.services.semaphore;
  * @created 28/08/2020
  */
 public enum SemaphoreTypeEnum {
-    declaration,
+    document,
     process
 }

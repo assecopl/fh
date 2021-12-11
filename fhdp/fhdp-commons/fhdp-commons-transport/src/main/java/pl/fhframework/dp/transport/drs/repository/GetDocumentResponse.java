@@ -1,11 +1,12 @@
 package pl.fhframework.dp.transport.drs.repository;
 
 import pl.fhframework.dp.transport.drs.BaseResponse;
+import pl.fhframework.dp.transport.drs.repository.Document;
 
 public class GetDocumentResponse extends BaseResponse {
-	protected Document document;
+	protected pl.fhframework.dp.transport.drs.repository.Document document;
 
-	public Document getDocument() {
+	public pl.fhframework.dp.transport.drs.repository.Document getDocument() {
 		return document;
 	}
 

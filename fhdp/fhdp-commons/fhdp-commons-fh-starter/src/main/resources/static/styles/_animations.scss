@@ -1,8 +1,0 @@
-
-@keyframes hover-content-bounce {
-    0%,
-    100% { transform: scale(1); }
-    50% {  transform: scale(1.3); }
-}
-
-.animate-hover-content-bounce:hover > * { display: inline-block; animation: hover-content-bounce .4s linear; }

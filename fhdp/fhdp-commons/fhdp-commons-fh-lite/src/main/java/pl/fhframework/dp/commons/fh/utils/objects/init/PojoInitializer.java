@@ -6,7 +6,7 @@ import java.lang.reflect.Field;
 import java.util.Set;
 
 /**
- * Performs automatic initialization of non-null fields of simple POJO class, ex. Declaration
+ * Performs automatic initialization of non-null fields of simple POJO class, ex. Document
  */
 public class PojoInitializer {
 

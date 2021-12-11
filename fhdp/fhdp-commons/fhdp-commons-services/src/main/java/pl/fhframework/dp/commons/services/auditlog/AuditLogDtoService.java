@@ -10,7 +10,7 @@ import pl.fhframework.dp.commons.services.facade.GenericDtoService;
 import pl.fhframework.dp.transport.auditlog.AuditLogDto;
 import pl.fhframework.dp.transport.auditlog.AuditLogDtoQuery;
 import pl.fhframework.dp.transport.auditlog.AuditLogTypeEnum;
-import pl.fhframework.dp.transport.dto.declaration.SeverityEnum;
+import pl.fhframework.dp.transport.dto.document.SeverityEnum;
 import pl.fhframework.dp.transport.service.IAuditLogDtoService;
 
 import java.time.LocalDateTime;
@@ -179,7 +179,7 @@ public class AuditLogDtoService extends GenericDtoService<String, AuditLogDto, A
             String category,
             String messageKey,
             String comment,
-            Long declarationId,
+            Long docId,
             String userLogin){
         AuditLogDto dto = new AuditLogDto(AuditLogTypeEnum.business,
                 SeverityEnum.info,
@@ -191,7 +191,7 @@ public class AuditLogDtoService extends GenericDtoService<String, AuditLogDto, A
                 null,
                 null,
                 userLogin);
-        dto.setDeclarationId(declarationId);
+        dto.setDocId(docId);
         persistDto(dto);
 
     }
@@ -221,7 +221,7 @@ public class AuditLogDtoService extends GenericDtoService<String, AuditLogDto, A
             String category,
             String messageKey,
             String comment,
-            Long declarationId,
+            Long docId,
             String userLogin){
         AuditLogDto dto = new AuditLogDto(AuditLogTypeEnum.business,
                 SeverityEnum.error,
@@ -233,7 +233,7 @@ public class AuditLogDtoService extends GenericDtoService<String, AuditLogDto, A
                 null,
                 null,
                 userLogin);
-        dto.setDeclarationId(declarationId);
+        dto.setDocId(docId);
         persistDto(dto);
 
     }
@@ -263,7 +263,7 @@ public class AuditLogDtoService extends GenericDtoService<String, AuditLogDto, A
             String category,
             String messageKey,
             String comment,
-            Long declarationId,
+            Long docId,
             String userLogin){
         AuditLogDto dto = new AuditLogDto(AuditLogTypeEnum.technical,
                 SeverityEnum.info,
@@ -275,7 +275,7 @@ public class AuditLogDtoService extends GenericDtoService<String, AuditLogDto, A
                 null,
                 null,
                 userLogin);
-        dto.setDeclarationId(declarationId);
+        dto.setDocId(docId);
         persistDto(dto);
     }
 
@@ -304,7 +304,7 @@ public class AuditLogDtoService extends GenericDtoService<String, AuditLogDto, A
             String category,
             String messageKey,
             String comment,
-            Long declarationId,
+            Long docId,
             String userLogin){
         AuditLogDto dto = new AuditLogDto(AuditLogTypeEnum.technical,
                 SeverityEnum.error,
@@ -316,7 +316,7 @@ public class AuditLogDtoService extends GenericDtoService<String, AuditLogDto, A
                 null,
                 null,
                 userLogin);
-        dto.setDeclarationId(declarationId);
+        dto.setDocId(docId);
         persistDto(dto);
     }
 }

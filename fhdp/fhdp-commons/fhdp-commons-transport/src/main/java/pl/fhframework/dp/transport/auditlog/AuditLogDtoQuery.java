@@ -3,7 +3,7 @@ package pl.fhframework.dp.transport.auditlog;
 import lombok.Getter;
 import lombok.Setter;
 import pl.fhframework.dp.transport.dto.commons.BaseDtoQuery;
-import pl.fhframework.dp.transport.dto.declaration.SeverityEnum;
+import pl.fhframework.dp.transport.dto.document.SeverityEnum;
 
 import java.time.LocalDateTime;
 

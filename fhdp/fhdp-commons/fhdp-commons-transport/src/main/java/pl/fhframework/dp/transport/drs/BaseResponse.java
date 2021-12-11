@@ -1,9 +1,11 @@
 package pl.fhframework.dp.transport.drs;
 
-public class BaseResponse {
-	protected Result result = new Result();
+import pl.fhframework.dp.transport.drs.Result;
 
-	public Result getResult() {
+public class BaseResponse {
+	protected pl.fhframework.dp.transport.drs.Result result = new pl.fhframework.dp.transport.drs.Result();
+
+	public pl.fhframework.dp.transport.drs.Result getResult() {
 		return result;
 	}
 

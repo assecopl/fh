@@ -16,19 +16,11 @@ public class UpdateDocumentRequest extends BaseRequest {
 	protected byte[] content;
 	protected Operation operation;
 	
-	
-	protected String name;
+
 	protected String localReferenceNumber;
-	protected String customsReferenceNumber;
-	protected String messageIdentification;
 	protected String contentType;
 	@Field(type = FieldType.Nested)
 	protected List<OtherMetadata> otherMetadata;
-	protected Correspondent sender;
-	@Field(type = FieldType.Nested)
-	protected List<Correspondent> recipients;
-	protected String responseTo;
-	protected String attachmentTo;	
 	
 	
 	protected boolean overwrite = false;

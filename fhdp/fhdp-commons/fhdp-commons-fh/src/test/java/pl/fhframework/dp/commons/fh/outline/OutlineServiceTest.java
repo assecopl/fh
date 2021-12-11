@@ -27,9 +27,9 @@ public class OutlineServiceTest {
 
     @Test
     public void generateOutline() throws JAXBException {
-        List<ElementCT> result = outlineService.generateOutline("H6");
+        List<ElementCT> result = outlineService.generateOutline("TEST");
         log.info("Returned {} items", result.size());
-        String pointer = "declaration.traders.something.else";
+        String pointer = "document.customers";
         ElementCT el = outlineService.findElementFromPointer(pointer);
         if(el != null) {
             log.info("Found {}", el.getId());

@@ -5,9 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import pl.fhframework.dp.commons.fh.declaration.handling.BaseDeclParams;
-import pl.fhframework.dp.commons.fh.declaration.handling.BaseDeclarationHandlingUC;
-import pl.fhframework.dp.commons.fh.declaration.handling.IDeclarationHandler;
+import pl.fhframework.dp.commons.fh.document.handling.BaseDocumentParams;
+import pl.fhframework.dp.commons.fh.document.handling.BaseDocumentHandlingUC;
+import pl.fhframework.dp.commons.fh.document.handling.IDocumentHandler;
 import pl.fhframework.dp.commons.fh.uc.FhdpBaseUC;
 import pl.fhframework.dp.commons.fh.uc.IGenericListOutputCallback;
 import pl.fhframework.dp.transport.dto.commons.OperationResultBaseDto;
@@ -17,7 +17,7 @@ import pl.fhframework.core.uc.UseCase;
 @UseCase
 @Getter
 @Setter
-public abstract class FileUploaderBaseUC<PARAMS extends BaseDeclParams> extends FhdpBaseUC implements IInitialUseCase {
+public abstract class FileUploaderBaseUC<PARAMS extends BaseDocumentParams> extends FhdpBaseUC implements IInitialUseCase {
 
     @Autowired
     public ApplicationContext context;
@@ -36,9 +36,9 @@ public abstract class FileUploaderBaseUC<PARAMS extends BaseDeclParams> extends 
 
         @Override
         public void save(OperationResultBaseDto operationResultBaseDto) {
-            String declarationType = operationResultBaseDto.getOperationID();
-            if(declarationType != null) {
-                IDeclarationHandler declarationHandler = context.getBean(BaseDeclarationHandlingUC.HANDLER_BEAN_PREFIX + declarationType, IDeclarationHandler.class);
+            String documentType = operationResultBaseDto.getOperationID();
+            if(documentType != null) {
+                IDocumentHandler declarationHandler = context.getBean(getDocumentHandlerBeanPrefix() + documentType, IDocumentHandler.class);
                 String useCase = declarationHandler.getListLoaderClassName();
                 if(useCase != null) {
                     getUserSession().runUseCase(useCase);
@@ -46,5 +46,7 @@ public abstract class FileUploaderBaseUC<PARAMS extends BaseDeclParams> extends 
             }
         }
     }
+
+    protected abstract String getDocumentHandlerBeanPrefix();
 
 }

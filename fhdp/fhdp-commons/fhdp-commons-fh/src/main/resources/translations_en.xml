@@ -195,7 +195,7 @@
     <entry key="declaration.ct.operations.history.table.colum.time">Time</entry>
     <entry key="javax.validation.constraints.Null.message">must be null</entry>
     <entry key="org.hibernate.validator.constraints.SafeHtml.message">may have unsafe html content</entry>
-    <entry key="declaration.ct.btn.search.label">Search</entry>
+    <entry key="btn.search.label">Search</entry>
     <entry key="enum.pl.fhframework.dp.transport.enums.DeclarationStateEnum.Accepted">Accepted</entry>
     <entry key="declaration.ct.tabs.pendingOperation">Current operation progress</entry>
     <entry key="declaration.ct.validationResult.validateOn">Validated on</entry>
@@ -293,7 +293,7 @@
     <entry key="enum.pl.fhframework.dp.transport.enums.DeclarationStateEnum.Draft">Draft</entry>
     <entry key="javax.validation.constraints.Future.message">must be a future date</entry>
     <entry key="common.cancel">Cancel</entry>
-    <entry key="declaration.ct.btn.clear.label">Clear</entry>
+    <entry key="btn.clear.label">Clear</entry>
     <entry key="declaration.ct.validationResult.reason">Reason</entry>
     <entry key="enum.pl.fhframework.dp.transport.enums.DeclarationStateEnum.DocumentaryControl">Documentary control</entry>
     <entry key="declaration.ct.searchCriteria.tab.template.confirmDialog.deleteFilter">Are you sure you want to delete filter: {0}?</entry>
