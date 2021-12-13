@@ -84,7 +84,11 @@ class Connector {
             this.ws = new WebSocket(this.target);
         } else {
             var protocol = ('https:' === document.location.protocol ? 'wss://' : 'ws://');
-            this.ws = new WebSocket(protocol + location.host + this.target);
+            let path = protocol + location.host + this.target;
+            if (!this.target.startsWith('/')) {
+                path = protocol + location.host + '/' + this.target;
+            }
+            this.ws = new WebSocket(path);
         }
 
         this.ws.onopen = this.onOpen.bind(this);
