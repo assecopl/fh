@@ -48,25 +48,10 @@ import java.util.*;
 public  abstract class BaseDocumentHandlingUC<MODEL extends BaseDocumentHandlingFormModel, C extends IGenericListOutputCallback<OperationResultBaseDto>, OUTLINE extends BaseDocumentHandlingOutlineForm<MODEL>> extends FhdpBaseUC
         implements IUseCase<C>, IUseCase18nListener {
 
-//TODO: move to successors
-//    @Value("${fhdp.validationResult:false}")
-//    protected boolean validationResult;
-//
-//    @Value("${fhdp.declarationAlert:false}")
-//    protected boolean declarationAlert;
-
     @Value("${fhdp.timerTimeout:1000}")
     protected int timerTimeout;
 
-    //TODO: move to descendants
-//    public static final String HANDLER_BEAN_PREFIX = "declarationHandler";
     protected static final String PENDING_OPERATION_TAB_ID = "pendingOperation";
-    //TODO: move to successors
-//    protected static final String VALIDATION_RESULT_TAB_ID = "validationResult";
-//    protected static final String DECLARATION_ALERT_TAB_ID = "declarationAlert";
-    //TODO: move to successors
-//    protected ValidationResultForm.Model validationResultFormModel;
-//    protected DeclarationAlertForm.Model declarationAlertFormModel;
     protected MODEL model;
     protected IDocumentHandlingForm form;
     protected OUTLINE outlineForm;
@@ -88,11 +73,9 @@ public  abstract class BaseDocumentHandlingUC<MODEL extends BaseDocumentHandling
     protected final EventRegistry eventRegistry;
     protected final SideBarService sideBarService;
     protected final AppSiderService appSiderService;
-    //TODO: move to successors
-//    protected final DeclarationAlertService alertDtoService;
+
     protected final ButtonsBarService buttonsBarService;
-    //TODO: move to successors
-//    protected final DeclarationMessageService declarationMessageService;
+
     protected final MessageService messageService;
     protected final ValidationPhase validationPhase;
     protected final ValidatorProviderFhdp validatorProviderFhdp;
@@ -101,11 +84,9 @@ public  abstract class BaseDocumentHandlingUC<MODEL extends BaseDocumentHandling
                                   OutlineService outlineService,
                                   ApplicationContext context,
                                   EventRegistry eventRegistry,
-//                                     DeclarationAlertService alertDtoService,
                                   SideBarService sideBarService,
                                   AppSiderService appSiderService,
                                   ButtonsBarService buttonsBarService,
-//                                     DeclarationMessageService declarationMessageService,
                                   MessageService messageService,
                                   ValidationPhase validationPhase,
                                   ValidatorProviderFhdp validatorProviderFhdp) {
@@ -116,11 +97,9 @@ public  abstract class BaseDocumentHandlingUC<MODEL extends BaseDocumentHandling
         this.sideBarService = sideBarService;
         this.appSiderService = appSiderService;
         this.buttonsBarService = buttonsBarService;
-//        this.declarationMessageService = declarationMessageService;
         this.messageService = messageService;
         this.validationPhase = validationPhase;
         this.validatorProviderFhdp = validatorProviderFhdp;
-//        this.alertDtoService = alertDtoService;
     }
 
     protected void commonStart() {
@@ -139,14 +118,9 @@ public  abstract class BaseDocumentHandlingUC<MODEL extends BaseDocumentHandling
 
             form = showMainForm();
             outlineForm = showOutlineForm();
-            //TODO: move to successors
-//            initDeclarationMessages();
             initLeftMenu();
             initDocumentHandlingForm();
             initOperationPendingState();
-            //TODO: move to successors
-//            initValidationResult();
-//            initDeclarationAlert();
         } catch (BeansException e) {
             FhLogger.error("{}{}", e.getMessage(), e);
         }
@@ -177,88 +151,6 @@ public  abstract class BaseDocumentHandlingUC<MODEL extends BaseDocumentHandling
 
     protected abstract boolean isOperationPending();
 
-//TODO: move to successors!!
-//    protected void initDeclarationAlert() {
-//        if(declarationAlert) {
-//            int index = -1;
-//            DynamicTab tab = form.getDynamicTab(DECLARATION_ALERT_TAB_ID);
-//            if(tab != null) {
-//                index = form.indexOfTab(tab);
-//            }
-//
-//            AlertDtoQuery query = new AlertDtoQuery();
-//            List<AlertDto> list = new ArrayList<>();
-//            if (model.getDocId() != null) {
-//                query.setDeclarationId(model.getDocId());
-//                list = alertDtoService.listDto(query);
-//            }
-//
-//            if(list.size() > 0) {
-//                if(index < 0) {
-//                    tab = new DynamicTab();
-//                    tab.setTabId(DECLARATION_ALERT_TAB_ID);
-//                    String label = "[className='tab-badge']" + list.size() + "[/className]";
-//                    tab.setLabel(messageService.getAllBundles().getMessage("declaration.ct.tabs.declarationAlert") + label);
-//                    tab.setFormReference("pl.fhframework.dp.commons.fh.declaration.handling.DeclarationAlertForm");
-//                    declarationAlertFormModel = new DeclarationAlertForm.Model();
-//                    declarationAlertFormModel.setDeclarationAlertResult(new DeclarationAlertPagedTableSource(list).createPagedModel());
-//                    tab.setModel(declarationAlertFormModel);
-//                    form.addDynamicTab(tab);
-//                    model.setActiveTabIndex(form.indexOfTab(tab));
-//                } else {
-//                    tab.getTab().setAvailability(AccessibilityEnum.EDIT);
-//                    declarationAlertFormModel.setDeclarationAlertResult(new DeclarationAlertPagedTableSource(list).createPagedModel());
-//                }
-//            } else if(index > 0) {
-//                tab.getTab().setAvailability(AccessibilityEnum.HIDDEN);
-//            }
-//        }
-//    }
-
-//TODO: move to successors!!
-
-//    protected void initValidationResult() {
-//        if(validationResult) {
-//            int index = -1;
-//            DeclarationHandlingForm.DynamicTab tab = form.getDynamicTab(VALIDATION_RESULT_TAB_ID);
-//            if(tab != null) {
-//                index = form.indexOfTab(tab);
-//            }
-//            List<ValidationResultCT> validationResultCTS = getValidationResults();
-//            if(validationResultCTS != null && !validationResultCTS.isEmpty()) {
-//                if(index < 0) {
-//                    tab = new DeclarationHandlingForm.DynamicTab();
-//                    tab.setTabId(VALIDATION_RESULT_TAB_ID);
-//                    String label = "[className='tab-badge']" + getValidationResults().size() + "[/className]";
-//                    tab.setLabel(messageService.getAllBundles().getMessage("declaration.ct.tabs.validationResult") + label);
-//                    tab.setFormReference("pl.fhframework.dp.commons.fh.declaration.handling.ValidationResultForm");
-//                    validationResultFormModel = new ValidationResultForm.Model();
-////                    validationResultFormModel.setValidationResults(new ValidationResultPagedTableSource(model.getDeclarationCTDto()).createPagedModel());
-////                    validationResultFormModel.setSelectedValidationResult(new ValidationResultPagedTableSource(model.getDeclarationCTDto()).createSelectValidationResult());
-//                    validationResultFormModel.setValidationResults(createValidationResultPagedTableSource().createPagedModel());
-//                    validationResultFormModel.setSelectedValidationResult(createValidationResultPagedTableSource().createSelectValidationResult());
-//                    tab.setModel(validationResultFormModel);
-//                    form.addDynamicTab(tab);
-//                    model.setActiveTabIndex(form.indexOfTab(tab));
-//                } else {
-//                    tab.getTab().setAvailability(AccessibilityEnum.EDIT);
-//                    validationResultFormModel.setValidationResults(createValidationResultPagedTableSource().createPagedModel());
-//                    validationResultFormModel.setSelectedValidationResult(createValidationResultPagedTableSource().createSelectValidationResult());
-////                    validationResultFormModel.getValidationResults().clear();
-////                    validationResultFormModel.getValidationResults()
-////                            .addAll(model.getDeclarationCTDto().getValidationResults());
-//                }
-//
-//            } else if(index > 0) {
-//                tab.getTab().setAvailability(AccessibilityEnum.HIDDEN);
-////                form.removeDynamicTab(tab);
-//            }
-//        }
-//    }
-
-//    protected abstract ValidationResultPagedTableSource createValidationResultPagedTableSource();
-//
-//    protected abstract List<ValidationResultCT> getValidationResults();
 
     protected void waitForOperationFinish() {
         documentHandler.initOperationPendingToolbar();
@@ -318,15 +210,7 @@ public  abstract class BaseDocumentHandlingUC<MODEL extends BaseDocumentHandling
         try {
             List<ElementCT> elementCTS = outlineService.generateOutline(getDocumentType().getTypeName());
             List<TreeElement<ElementCT>> leftMenu = outlineService.buildLeftMenu(elementCTS);
-            //TODO: move to successors
-//            List<TreeElement<DocMessageDto>> declarationMessagesLeftMenu = outlineService.buildMessagesLeftMenu(model.getMessages());
-
             model.setDocLeftMenu(leftMenu);
-            //TODO: move to successors
-//            model.setDeclarationMessagesLeftMenu(declarationMessagesLeftMenu);
-
-//            selectFirstMessage();
-
             documentHandler.initLeftMenu(leftMenu);
         } catch (JAXBException e) {
             FhLogger.error("{}{}", e.getMessage(), e);
@@ -346,21 +230,6 @@ public  abstract class BaseDocumentHandlingUC<MODEL extends BaseDocumentHandling
         super.buttonsFormManagement(messagesTabIndex != 0);
     }
 
-    //TODO: move to successors
-//    protected void initDeclarationMessages() {
-//
-//        List<DocMessageDto> messageDtos = new ArrayList<>();
-//
-//        if(model.getDocId() != null) {
-//            DocMessageDtoQuery messageDtoQuery = new DocMessageDtoQuery();
-//            messageDtoQuery.setDocId(model.getDocId());
-//            messageDtoQuery.setSortProperty("stored");
-//            messageDtoQuery.setWithContent(true);
-//            messageDtoQuery.setSize(600);
-//            messageDtos = declarationMessageService.listDto(messageDtoQuery);
-//        }
-//        model.setMessages(messageDtos);
-//    }
 
     public String getLeftMenuId() {
         return "leftMenuTreeRoot";

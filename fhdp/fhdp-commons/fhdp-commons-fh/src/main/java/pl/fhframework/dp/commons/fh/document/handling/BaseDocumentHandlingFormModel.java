@@ -31,9 +31,6 @@ public abstract class BaseDocumentHandlingFormModel<DTO, DOC, SUBMODEL extends B
         AutowireHelper.autowire(this, messageService);
     }
 
-//    private PageModel<OperationCT> operationPageModel;
-//    private OperationCT selectedOperation;
-//    private OperationCT currentOperation;
     private List<TreeElement<ElementCT>> docLeftMenu;
     private String searchParam;
     private Map<String, String> searchMap;
@@ -50,25 +47,11 @@ public abstract class BaseDocumentHandlingFormModel<DTO, DOC, SUBMODEL extends B
     private int messagesTabIndex=0;
     private int timerTimeout=0;
 
-    //TODO: move to successors
-//    private List<DocMessageDto> messages;
-//    private List<TreeElement<DocMessageDto>> declarationMessagesLeftMenu;
-
     OperationDtoQuery operationQuery = new OperationDtoQuery();
     private String spacer = "<hr>";
     private List<NullableBooleanEnum> booleanEnum = Arrays.asList(NullableBooleanEnum.values());
     private List<PerformerEnum> performerEnum = Arrays.asList(PerformerEnum.values());
 
-    //TODO: move to descendants
-//    public String getSubPageName() {
-//        String point = " [unescape='8226'] ";
-//        if("History".equals(this.getSpecificDocFormModel().getVariant())) {
-//            return point.concat(messageService.getAllBundles().getMessage("declaration.ct.operations.history.table.label"));
-//        } else if("Messages".equals(this.getSpecificDocFormModel().getVariant())){
-//            return point.concat(messageService.getAllBundles().getMessage("message.content.title"));
-//        }
-//        return "";
-//    }
 
     @Setter
     private IDocumentHandler documentHandler;
@@ -80,38 +63,6 @@ public abstract class BaseDocumentHandlingFormModel<DTO, DOC, SUBMODEL extends B
             return AccessibilityEnum.EDIT;
         }
     }
-
-    //TODO: move to successors!!!
-//    public String translateOperationCodeEnum() {
-//        if(this.getSelectedOperation() == null) return "";
-//        String value = this.getSelectedOperation().getCode();
-//        if(enumsPackage.isEmpty()){
-//            return value;
-//        }
-//        return translateOperationCodeEnum(value);
-//    }
-
-//    public String translateOperationCodeEnum(String value) {
-//        if(enumsPackage.isEmpty()){
-//            return value;
-//        }
-//        String operationProp = String.format("enum.%s.OperationCodeEnum.%s", enumsPackage, value);
-//        return messageService.getAllBundles().getMessage(operationProp);
-//    }
-//
-//    public Boolean isOperationLabels() {
-//        boolean isOperationsPending = Boolean.parseBoolean(FhUtils.getCookieByKey("operationPending"));
-//        if(!isOperationsPending)
-//            return Boolean.parseBoolean(FhUtils.getCookieByKey("operationLabels"));
-//
-//        return false;
-//    }
-
-    //TODO: move to successors!!!
-//    public DTO getDeclarationCTDto() {
-//        if(specificDeclarationFormModel == null) return null;
-//        return specificDeclarationFormModel.getEntity();
-//    }
 
     public abstract Long getDocId();
 
