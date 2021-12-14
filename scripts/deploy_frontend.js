@@ -46,14 +46,19 @@ if (Object.keys(store).includes('--address')) {
 
 let FH_PACKAGES = ["fh-basic-controls", "fh-charts-controls", "fh-designer",
                        "fh-forms-handler", "fh-maps-controls", "fh-printer-agent", 
-                       "fh-sensors"];
+                       "fh-sensors", 'fhdp-charts', 'fhdp-controls', 'fhdp-extenders',
+                       'fhdp-fh-starter'];
 
 
 let FH_DIRS = [
   '../packages/components/core-lite/',
   '../packages/components/basic-controls/', 
   '../packages/components/charts-controls/',
-  '../packages/applications/default-application/'
+  '../packages/applications/default-application/',
+  '../packages/components/fhdp-charts/',
+  '../packages/components/fhdp-controls/',
+  '../packages/components/fhdp-extenders/',
+  '../packages/components/fhdp-fh-starter/'
 ];
 
 const SKIP_PUBLISH_FH_DIRS = [
@@ -97,6 +102,16 @@ let shouldPublish = true;
 if (!isDev && Object.keys(store).includes('--dryRun')) {
   shouldPublish = false;
 }
+
+
+console.log( {
+  fhVer,
+  address,
+  isSnapshot,
+  isProd,
+  isDev
+});
+// return;
 
 const runProcess = (command, needEnter) => {
   console.log(command)
