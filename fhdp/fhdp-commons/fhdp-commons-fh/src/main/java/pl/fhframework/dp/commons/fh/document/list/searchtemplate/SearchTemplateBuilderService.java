@@ -66,7 +66,7 @@ public class SearchTemplateBuilderService {
                         }
                         break;
                     case DICTIONARY:
-                            fd.getValues().add(cr.getPozycjaSlownikaType()== null ? null : cr.getPozycjaSlownikaType().getKod());
+                            fd.getValues().add(cr.getDictionaryItemType()== null ? null : cr.getDictionaryItemType().getCode());
 
                 }
                 result.add(fd);
@@ -137,7 +137,7 @@ public class SearchTemplateBuilderService {
                     }
                     break;
                 case DICTIONARY:
-                    if(row.getPozycjaSlownikaType() == null) {
+                    if(row.getDictionaryItemType() == null) {
                         reportValidationError(row, "pozycjaSlownikaType", " - pole nie może być puste", useCaseContext);
                     }
 

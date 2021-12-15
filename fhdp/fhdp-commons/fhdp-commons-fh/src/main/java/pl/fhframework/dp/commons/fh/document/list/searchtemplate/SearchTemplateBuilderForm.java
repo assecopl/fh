@@ -110,7 +110,7 @@ public class SearchTemplateBuilderForm extends CompositeForm<SearchTemplateBuild
         }
         if (ColumnType.DICTIONARY.equals(row.getColumn().getColumnType())) {
             row.setDictParameters(row.getColumn().getDictParameters());
-            row.setPozycjaSlownikaType(null);
+            row.setDictionaryItemType(null);
         }
     }
 
@@ -315,11 +315,11 @@ public class SearchTemplateBuilderForm extends CompositeForm<SearchTemplateBuild
                     }
                     break;
                 case DICTIONARY:
-                    if (cr.getPozycjaSlownikaType() == null || cr.getPozycjaSlownikaType().getKod() == null)
+                    if (cr.getDictionaryItemType() == null || cr.getDictionaryItemType().getCode() == null)
                         value = null;
                     else{
-                        value = cr.getPozycjaSlownikaType().getKod();
-                        fd.setPozycjaSlownikaType(cr.getPozycjaSlownikaType());
+                        value = cr.getDictionaryItemType().getCode();
+                        fd.setPozycjaSlownikaType(cr.getDictionaryItemType());
                     }
                     break;
                 default:
@@ -454,7 +454,7 @@ public class SearchTemplateBuilderForm extends CompositeForm<SearchTemplateBuild
             case DICTIONARY:
                 if (firstValue != null) {
                     cr.setDictParameters(cr.getColumn().getDictParameters());
-                    cr.setPozycjaSlownikaType(fd.getPozycjaSlownikaType());
+                    cr.setDictionaryItemType(fd.getPozycjaSlownikaType());
                 }
         }
     }

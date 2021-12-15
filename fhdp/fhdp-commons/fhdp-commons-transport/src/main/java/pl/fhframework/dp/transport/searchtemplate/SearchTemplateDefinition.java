@@ -19,7 +19,7 @@ public class SearchTemplateDefinition implements Cloneable {
     //RHS value
     private List<String> values = new ArrayList<>();
 
-    private PozycjaSlownikaType pozycjaSlownikaType;
+    private DictionaryItemType dictionaryItemType;
 
     public Type getType() {
         return type;
@@ -57,12 +57,12 @@ public class SearchTemplateDefinition implements Cloneable {
         return values;
     }
 
-    public PozycjaSlownikaType getPozycjaSlownikaType() {
-        return pozycjaSlownikaType;
+    public DictionaryItemType getPozycjaSlownikaType() {
+        return dictionaryItemType;
     }
 
-    public void setPozycjaSlownikaType(PozycjaSlownikaType pozycjaSlownikaType) {
-        this.pozycjaSlownikaType = pozycjaSlownikaType;
+    public void setPozycjaSlownikaType(DictionaryItemType dictionaryItemType) {
+        this.dictionaryItemType = dictionaryItemType;
     }
 
     public void setValues(List<String> values) {

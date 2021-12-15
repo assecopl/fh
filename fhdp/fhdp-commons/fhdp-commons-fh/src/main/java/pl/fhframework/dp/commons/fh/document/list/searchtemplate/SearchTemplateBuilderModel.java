@@ -7,7 +7,7 @@ import lombok.Setter;
 import pl.fhframework.dp.commons.fh.dataProviders.NameValueItem;
 import pl.fhframework.dp.transport.searchtemplate.LogicalCondition;
 import pl.fhframework.dp.transport.searchtemplate.OperatorType;
-import pl.fhframework.dp.transport.searchtemplate.PozycjaSlownikaType;
+import pl.fhframework.dp.transport.searchtemplate.DictionaryItemType;
 import pl.fhframework.dp.transport.searchtemplate.SearchTemplateDto;
 import pl.fhframework.model.forms.AccessibilityEnum;
 
@@ -113,7 +113,7 @@ public class SearchTemplateBuilderModel {
         private List<NameValueItem> conditionComboValues = new ArrayList<>();
         private LocalDate conditionDateValue;
         private LocalDateTime conditionDateTimeValue;
-        private PozycjaSlownikaType pozycjaSlownikaType = new PozycjaSlownikaType();
+        private DictionaryItemType dictionaryItemType = new DictionaryItemType();
         private Map<String, Object> dictParameters;
         private LocalDate referenceDate = LocalDate.now();
 

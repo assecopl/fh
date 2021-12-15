@@ -25,7 +25,7 @@
             <InputNumber id="inputNumber" availability="{row.getAvailabilityInputNumber()}" value="{row.conditionIntegerValue}" onChange="-" width="300"/>
             <InputNumber id="inputDecimal" availability="{row.getAvailabilityInputNumberDecimal()}" value="{row.conditionDecimalValue}" onChange="-" width="300"/>
 
-            <DictionaryCombo id="dictionaryCombo" width="300" availability="{row.getAvailabilityDictionary()}" value="{row.pozycjaSlownikaType}"
+            <DictionaryCombo id="dictionaryCombo" width="300" availability="{row.getAvailabilityDictionary()}" value="{row.dictionaryItemType}"
                              hintPlacement="TOP" provider="pl.fhframework.dp.commons.fh.dataProviders.RefDataComboDataProvider" onInput="-" onChange="-"
                              displayExpression="displayedValue" icon="fas fa-search">
                 <DictionaryComboParameter name="codeListId" value="{row.dictParameters.get('codeListId')}"/>

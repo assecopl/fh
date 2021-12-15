@@ -45,7 +45,7 @@ import java.util.*;
 
 @UseCase
 @Getter @Setter
-public  abstract class BaseDocumentHandlingUC<MODEL extends BaseDocumentHandlingFormModel, C extends IGenericListOutputCallback<OperationResultBaseDto>, OUTLINE extends BaseDocumentHandlingOutlineForm<MODEL>> extends FhdpBaseUC
+public  abstract class BaseDocumentHandlingUC<MODEL extends BaseDocumentHandlingFormModel, C extends IGenericListOutputCallback, OUTLINE extends BaseDocumentHandlingOutlineForm<MODEL>> extends FhdpBaseUC
         implements IUseCase<C>, IUseCase18nListener {
 
     @Value("${fhdp.timerTimeout:1000}")
@@ -218,11 +218,6 @@ public  abstract class BaseDocumentHandlingUC<MODEL extends BaseDocumentHandling
     }
 
     protected void selectFirstMessage() {
-        //TODO: move to descendants
-//        if (!model.getDeclarationMessagesLeftMenu().isEmpty()) {
-//            String elementId = String.format("%s[0]", getLeftMenuMessageGroupId());
-//            this.openTreeBranch(this.getLeftMenuMessageId(), elementId);
-//        }
     }
 
     @Action(value = "onTabChangeMessages", validate = false)
@@ -255,12 +250,7 @@ public  abstract class BaseDocumentHandlingUC<MODEL extends BaseDocumentHandling
 
         initDocumentHandlingForm();
         initOperationPendingState();
-        //TODO: move to successors
-//        initDeclarationMessages();
         initLeftMenu();
-        //TODO: move to successors
-//        initValidationResult();
-//        initDeclarationAlert();
         setOperationPagedModel();
         eventRegistry.fireNotificationEvent(NotificationEvent.Level.INFO, info);
     }
@@ -305,10 +295,6 @@ public  abstract class BaseDocumentHandlingUC<MODEL extends BaseDocumentHandling
     protected void initDocumentHandlingForm() {
         form.initMainTabContainer();
         if (!model.getDocLeftMenu().isEmpty()) {
-            //TODO: move to successors
-//            form.initDeclRightPanel(model.getSpecificDeclarationFormModel(),
-//                model.getDeclarationLeftMenu().get(0).getObj().getForm(),
-//                declarationHandler.resolveVariant(model.getSpecificDeclarationFormModel()));
             initRightPanel();
         }
     }
@@ -347,24 +333,6 @@ public  abstract class BaseDocumentHandlingUC<MODEL extends BaseDocumentHandling
         form.initDeclRightPanel(model.getSpecificDocFormModel(), element.getObj().getForm(), documentHandler.resolveVariant(model.getSpecificDocFormModel()));
     }
 
-    //TODO: move to successors
-//    @Action(value = "onDeclarationMessageFormLeftPanelClick", validate = false)
-//    public void onDeclarationMessageFormLeftPanelClick(TreeElement<DocMessageDto> element) {
-//        //TODO: lazy load!!!
-////        if(element.getObj().getMessageContent() == null) {
-////            // load message content
-////            String msgId = element.getObj().getDoc().getId();
-////            element.getObj().setMessageContent(messageRepositoryService.getMessageContent(msgId));
-////        }
-//        DeclarationMessageFormModel messageFormModel = new DeclarationMessageFormModel(element.getObj());
-//        form.initDeclRightPanel(
-//            messageFormModel,
-//            declarationHandler.getMessagesForm(),
-//            declarationHandler.resolveVariant(model.getSpecificDeclarationFormModel()),
-//            "messagesGroup"
-//        );
-//        showForm(this.getDeclarationMessageButtonsForm(), messageFormModel);
-//    }
 
     @Action(value = "cancel", validate = false)
     public void onCancel() {
@@ -426,40 +394,13 @@ public  abstract class BaseDocumentHandlingUC<MODEL extends BaseDocumentHandling
             FhLogger.info("ValidationResults: {}", results.getValidationErrors().size());
         }
         validateExt(mode);
-        //TODO: move to successors
-//        if(mode.equals(LocalValidationModeEnum.all) || mode.equals(LocalValidationModeEnum.declaration)) {
-//            clearLocalValidationResult();
-//            Object declForValidation = declarationHandler.getIEx15Declaration(model.getDeclaration());
-//            BeanClearUtil.clearObject(declForValidation);
-//            Set<ConstraintViolation<Object>> resultSet = validatorProviderFhdp.getValidator(null)
-//                .validate(declForValidation);
-//            for(ConstraintViolation<Object> v: resultSet ) {
-//                ValidationResultCT vr = new ValidationResultCT();
-//                vr.setType(ValidationResultTypeST.ERROR);
-//                vr.setCode("33");
-//                vr.setSource(ValidationSourceFhdpEnum.JSR303.name());
-//                vr.setPointer("Declaration." + v.getPropertyPath().toString());
-//                vr.setDescription(v.getMessage());
-//                getValidationResults().add(vr);
-//            }
-//            getValidationResults().sort(Comparator.comparing(ValidationResultCT::getPointer));
-//        }
-//        initValidationResult();
         return !(getUserSession().getValidationResults().hasAtLeastErrors() || documentHasErrors());
     }
 
     protected abstract void validateExt(LocalValidationModeEnum mode);
-    //TODO: move to successors
-//    protected void clearLocalValidationResult() {
-//        getValidationResults()
-//            .removeIf(validationResultDto -> validationResultDto.getSource().equals(ValidationSourceFhdpEnum.JSR303.name()));
-//    }
+
 
     protected boolean documentHasErrors() {
-        //TODO: move to successors
-//        getValidationResults()
-//            .stream()
-//            .anyMatch(validationResultDto -> validationResultDto.getType().equals(ValidationResultTypeST.ERROR));
         return false;
     }
 
@@ -540,10 +481,7 @@ public  abstract class BaseDocumentHandlingUC<MODEL extends BaseDocumentHandling
         selectFirstMessage();
     }
 
-    //TODO: move to descendants
-//    public String getDeclarationMessageButtonsForm() {
-//        return "pl.fhframework.dp.commons.fh.declaration.message.DeclarationMessageButtonsForm";
-//    }
+
 
     @Action (validate = false)
     public void showOperationDetails() {
@@ -554,12 +492,6 @@ public  abstract class BaseDocumentHandlingUC<MODEL extends BaseDocumentHandling
 
     protected abstract void performShowOperationDetails();
 
-    //TODO: move to successors
-//    @Action(validate = false)
-//    public void showValidationResultDetails() {
-//        showForm(ValidationResultDetailsForm.class, validationResultFormModel);
-//        super.appSiderDetailsManagement(false);
-//    }
 
     @Action(validate = false)
     public void closeOperationDetails() {
@@ -602,11 +534,6 @@ public  abstract class BaseDocumentHandlingUC<MODEL extends BaseDocumentHandling
         }
     }
 
-    //TODO: move to successors
-//    @Action
-//    public void downloadDeclarationMessage(DocMessageDto messageDto) {
-//        declarationMessageService.downloadDeclarationMessageFile(messageDto, eventRegistry);
-//    }
 
 
     @Action(validate = false)

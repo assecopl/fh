@@ -7,7 +7,7 @@ import java.io.Serializable;
 //TODO: DELETE WHEN FRONT DEPENDENCIES ARE FIXED
 @Getter
 @Setter
-public class PozycjaSlownikaType implements Serializable {
-    protected String kod;
-    protected String opis;
+public class DictionaryItemType implements Serializable {
+    protected String code;
+    protected String description;
 }

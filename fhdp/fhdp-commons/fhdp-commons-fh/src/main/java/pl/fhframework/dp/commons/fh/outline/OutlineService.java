@@ -1,5 +1,6 @@
 package pl.fhframework.dp.commons.fh.outline;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,11 +27,11 @@ public class OutlineService {
     @Value("${fhdp.direction:true}")
     public boolean isDirection;
 
-    private Map<String, ElementCT> elements = new HashMap<>();
-    private Map<String, String> mappings = new HashMap<>();
+    protected Map<String, ElementCT> elements = new HashMap<>();
+    protected Map<String, String> mappings = new HashMap<>();
 
     @Autowired
-    private MessageService messageService;
+    protected MessageService messageService;
 
     public List<ElementCT> generateOutline(String docType) throws JAXBException {
         JAXBContext jc = JAXBContext.newInstance(Outline.class);

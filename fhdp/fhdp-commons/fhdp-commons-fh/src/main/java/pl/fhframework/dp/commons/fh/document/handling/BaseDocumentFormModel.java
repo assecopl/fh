@@ -30,44 +30,4 @@ public class BaseDocumentFormModel<DTO, DOC> extends GenericFormModel<DTO> {
     private String currentLocalAction;
     private DOC prevDoc;
 
-    //TODO: move to descendants
-//    public static String setSequenceNumberInInput(Collection<?> collection) {
-//        return String.valueOf(collection.size()+1);
-//    }
-//
-//    public Long setSequenceNumber(Object object, String sequenceNumberStr) {
-//
-//        if(object instanceof Wrapper) {
-//            object = ((Wrapper) object).getElement();
-//        }
-//        if(object instanceof NestedWrapper) {
-//            object = ((NestedWrapper) object).getElement();
-//        }
-//
-//        Long sequenceNumber = new Long(sequenceNumberStr);
-//        if(object!= null) {
-//            for (Field field : object.getClass().getDeclaredFields()) {
-//                field.setAccessible(true);
-//
-//                if(field.getName().equals("sequenceNumber")) {
-//                    try {
-//                        field.set(object, sequenceNumber);
-//                        return sequenceNumber;
-//                    } catch (IllegalAccessException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//                else if(field.getName().equals("goodsItemNumber")) {
-//                    try {
-//                        field.set(object, sequenceNumber);
-//                        return sequenceNumber;
-//                    } catch (IllegalAccessException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//                field.setAccessible(false);
-//            }
-//        }
-//        return null;
-//    }
 }
