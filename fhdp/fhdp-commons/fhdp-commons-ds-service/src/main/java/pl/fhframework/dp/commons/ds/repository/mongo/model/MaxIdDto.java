@@ -1,4 +1,4 @@
-package pl.fhframework.dp.commons.services.doc;
+package pl.fhframework.dp.commons.ds.repository.mongo.model;
 
 import lombok.Getter;
 import lombok.Setter;

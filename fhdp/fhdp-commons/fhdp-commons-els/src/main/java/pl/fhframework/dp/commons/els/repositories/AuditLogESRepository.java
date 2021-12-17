@@ -1,4 +1,4 @@
-package pl.fhframework.dp.commons.camunda.repositories;
+package pl.fhframework.dp.commons.els.repositories;
 
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import pl.fhframework.dp.transport.auditlog.AuditLogDto;

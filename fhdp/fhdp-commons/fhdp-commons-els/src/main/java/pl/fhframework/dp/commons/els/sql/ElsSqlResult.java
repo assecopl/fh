@@ -1,4 +1,4 @@
-package pl.fhframework.dp.commons.camunda.els.sql;
+package pl.fhframework.dp.commons.els.sql;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.Getter;

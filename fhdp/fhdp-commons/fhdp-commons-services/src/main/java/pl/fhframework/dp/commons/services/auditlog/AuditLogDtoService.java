@@ -5,7 +5,7 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.fhframework.dp.commons.camunda.repositories.AuditLogESRepository;
+import pl.fhframework.dp.commons.els.repositories.AuditLogESRepository;
 import pl.fhframework.dp.commons.services.facade.GenericDtoService;
 import pl.fhframework.dp.transport.auditlog.AuditLogDto;
 import pl.fhframework.dp.transport.auditlog.AuditLogDtoQuery;

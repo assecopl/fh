@@ -29,6 +29,11 @@
         </dependency>
         <dependency>
             <groupId>pl.fhframework.dp</groupId>
+            <artifactId>fhdp-commons-mongo</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>pl.fhframework.dp</groupId>
             <artifactId>fhdp-commons-utils</artifactId>
             <version>${project.version}</version>
         </dependency>

@@ -2,7 +2,7 @@ package pl.fhframework.dp.commons.services.operations;
 
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import pl.fhframework.dp.commons.camunda.repositories.OperationStepESRepository;
+import pl.fhframework.dp.commons.els.repositories.OperationStepESRepository;
 import pl.fhframework.dp.commons.services.facade.GenericDtoService;
 import pl.fhframework.dp.transport.dto.operations.OperationStepDto;
 import pl.fhframework.dp.transport.dto.operations.OperationStepDtoQuery;

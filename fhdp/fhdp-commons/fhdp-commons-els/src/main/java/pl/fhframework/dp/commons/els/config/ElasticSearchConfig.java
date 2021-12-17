@@ -1,4 +1,4 @@
-package pl.fhframework.dp.commons.camunda;
+package pl.fhframework.dp.commons.els.config;
 
 import lombok.Getter;
 import org.apache.http.HttpHost;

@@ -4,7 +4,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.fhframework.dp.commons.base.model.IEndpointCfgDefinition;
-import pl.fhframework.dp.commons.camunda.repositories.EndpointCfgESRepository;
+import pl.fhframework.dp.commons.els.repositories.EndpointCfgESRepository;
 import pl.fhframework.dp.transport.endpoints.EndpointCfgDto;
 import pl.fhframework.dp.transport.endpoints.IEndpointCfgService;
 

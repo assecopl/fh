@@ -1,4 +1,4 @@
-package pl.fhframework.dp.commons.ds.repository.utils;
+package pl.fhframework.dp.commons.mongo.utils;
 
 import java.io.*;
 

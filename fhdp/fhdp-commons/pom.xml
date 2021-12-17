@@ -28,6 +28,7 @@
         <module>fhdp-commons-fh-adm</module>
         <module>fhdp-commons-ds-service</module>
         <module>fhdp-commons-poi</module>
+        <module>fhdp-commons-els</module>
     </modules>
 
 

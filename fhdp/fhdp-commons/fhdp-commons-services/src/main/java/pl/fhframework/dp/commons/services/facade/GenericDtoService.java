@@ -21,7 +21,7 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import pl.fhframework.dp.commons.base.model.IPersistentObject;
-import pl.fhframework.dp.commons.camunda.ElasticSearchConfig;
+import pl.fhframework.dp.commons.els.config.ElasticSearchConfig;
 import pl.fhframework.dp.commons.utils.conversion.BeanConversionUtil;
 import pl.fhframework.dp.transport.dto.commons.BaseDtoQuery;
 import pl.fhframework.dp.transport.service.IDtoService;
