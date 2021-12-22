@@ -22,6 +22,7 @@ public class BigDecimalFormatter extends AutoRegisteredFormatter<BigDecimal> {
         setParseBigDecimal(true);
         setMinimumFractionDigits(0);
         setMaximumFractionDigits(2);
+        setRoundingMode(RoundingMode.DOWN);
     }});
 
     @Override
