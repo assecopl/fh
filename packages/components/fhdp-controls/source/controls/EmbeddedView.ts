@@ -134,16 +134,17 @@ class EmbeddedView extends HTMLFormComponent {
 
     /**
      * @override
-     * Funkcja odpowiedzialan za tworzenie komponentu
+     * Component creator
      */
     create() {
-        const mimeType = this.src.toString().match(/[^:]\w+\/[\w-+\d.]+(?=;|,)/)[0];
+        const matches = this.src.toString().match(/[^:]\w+\/[\w-+\d.]+(?=;|,)/);
+        const mimeType = matches ? matches[0] : null;
         const isBase64 = (this.src.toString().includes(";base64") && this.src.toString().includes("data:"));
         let url = this.src;
         let isBlob = false;
 
         /**
-         * In case of base64 string data we need to trnasform it to blob to properly show it in iframe.
+         * In case of base64 string data we need to transform it to blob to properly show it in iframe.
          */
         if(isBase64 && mimeType){
             try {
