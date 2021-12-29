@@ -8,7 +8,9 @@ import pl.fhframework.core.i18n.MessageService;
 import pl.fhframework.format.FhFormatter;
 
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 /**
  * @author <a href="mailto:jacek_borowiec@skg.pl">Jacek Borowiec</a>
@@ -26,12 +28,20 @@ public class StringPropertyFormatter implements Formatter<String> {
     }
 
     @Override
-    public String print(String s, Locale locale) {
-        if(s.startsWith("$.")) {
-            String msg = messageService.getAllBundles().getMessage(s.replace("$.", ""));
+    public String print(String key, Locale locale) {
+        if(key.startsWith("$.")) {
+            String msg;
+            String[] elements = key.split(Pattern.quote("\b"));
+            if(elements.length == 1) {
+                msg = messageService.getAllBundles().getMessage(key.replace("$.", ""));
+            } else {
+                String[] params = Arrays.copyOfRange(elements, 1, elements.length);
+                msg = messageService.getAllBundles().getMessage(elements[0].replace("$.", ""),
+                        params, locale, "key");
+            }
             return msg;
         } else {
-            return LngDescriptionUtil.getDescription(s, SessionManager.getUserSession().getLanguage().toLanguageTag());
+            return LngDescriptionUtil.getDescription(key, SessionManager.getUserSession().getLanguage().toLanguageTag());
         }
     }
 }

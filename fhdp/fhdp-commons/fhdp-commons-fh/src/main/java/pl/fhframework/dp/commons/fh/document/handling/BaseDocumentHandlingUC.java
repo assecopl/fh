@@ -265,7 +265,6 @@ public  abstract class BaseDocumentHandlingUC<MODEL extends BaseDocumentHandling
         // the below key should be used
         // message.operation.result
         refreshView(messageService.getAllBundles().getMessage("declaration.ct.actions.refresh.manual"));
-        //"declaration.ct.actions.refresh.operation"));
     }
 
     @Action(validate = false)
@@ -280,17 +279,6 @@ public  abstract class BaseDocumentHandlingUC<MODEL extends BaseDocumentHandling
             + "&lng=" + getUserSession().getLanguage().toLanguageTag();
         eventRegistry.fireCustomActionEvent("openPinup", url);
     }
-
-//    private void showErrors(OperationResultBaseDto result) {
-//        ValidationMessagesForm.Model model = new ValidationMessagesForm.Model();
-//        model.setMessages(result.getValidationResults());
-//        runUseCase(ValidationMessagesUC.class, model, new IUseCaseCloseCallback() {
-//            @Override
-//            public void close() {
-//                refreshView();
-//            }
-//        });
-//    }
 
     protected void initDocumentHandlingForm() {
         form.initMainTabContainer();
