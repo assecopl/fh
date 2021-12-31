@@ -62,7 +62,7 @@ public class SearchTemplateBuilderForm extends CompositeForm<SearchTemplateBuild
             List<SearchTemplateBuilderModel.ConditionRow> rowsInside = getModel().getConditionRowsInsideBrackets(row);
             if (rowsInside.size() > 3) {
                 FhUtils.showConfirmDialogYesNo(commonsMessageHelper.getMessage("common.confirm"),
-                        commonsMessageHelper.getMessage("declaration.ct.searchCriteria.tab.template.confirmDialog.deleteParentBrackets"),
+                        commonsMessageHelper.getMessage("document.ct.searchCriteria.tab.template.confirmDialog.deleteParentBrackets"),
                         () -> getModel().getConditionRows().removeAll(rowsInside));
             } else {
                 getModel().getConditionRows().removeAll(rowsInside);
@@ -157,7 +157,7 @@ public class SearchTemplateBuilderForm extends CompositeForm<SearchTemplateBuild
         if (selectedFilter != null) {
             if (getModel().containsUserChanges()) {
                 FhUtils.showConfirmDialogYesNo(commonsMessageHelper.getMessage("common.confirm"),
-                        commonsMessageHelper.getMessage("declaration.ct.searchCriteria.tab.template.confirmDialog.loadFilter"),
+                        commonsMessageHelper.getMessage("document.ct.searchCriteria.tab.template.confirmDialog.loadFilter"),
                         () -> doLoadFilterWithNotification(selectedFilter));
             } else {
                 doLoadFilterWithNotification(selectedFilter);
@@ -170,7 +170,7 @@ public class SearchTemplateBuilderForm extends CompositeForm<SearchTemplateBuild
         getModel().setSourceFilter(filter);
         getModel().setConditionRows(prepareRowsForFilterDefinition(filter.getSearchTemplateDefinitions()));
         eventRegistry.fireNotificationEvent(NotificationEvent.Level.INFO,
-                commonsMessageHelper.getMessage("declaration.ct.searchCriteria.tab.template.notification.filterLoaded", filter.getTemplateName()));
+                commonsMessageHelper.getMessage("document.ct.searchCriteria.tab.template.notification.filterLoaded", filter.getTemplateName()));
     }
     @Action
     public void onSaveFilter() {
@@ -185,7 +185,7 @@ public class SearchTemplateBuilderForm extends CompositeForm<SearchTemplateBuild
         } else {
             persistAndRefresh(sourceFilter);
             eventRegistry.fireNotificationEvent(NotificationEvent.Level.INFO,
-                    commonsMessageHelper.getMessage("declaration.ct.searchCriteria.tab.template.notification.filterSaved", sourceFilter.getTemplateName()));
+                    commonsMessageHelper.getMessage("document.ct.searchCriteria.tab.template.notification.filterSaved", sourceFilter.getTemplateName()));
         }
     }
 
@@ -474,9 +474,9 @@ public class SearchTemplateBuilderForm extends CompositeForm<SearchTemplateBuild
     public void onRemoveFilter() {
         SearchTemplateDto filter = getModel().getSourceFilter();
         if (filter != null) {
-            FhUtils.showConfirmDialogYesNo(commonsMessageHelper.getMessage("common.confirm"), commonsMessageHelper.getMessage("declaration.ct.searchCriteria.tab.template.confirmDialog.deleteFilter", filter.getTemplateName()), () -> {
+            FhUtils.showConfirmDialogYesNo(commonsMessageHelper.getMessage("common.confirm"), commonsMessageHelper.getMessage("document.ct.searchCriteria.tab.template.confirmDialog.deleteFilter", filter.getTemplateName()), () -> {
                 searchCriteriaDtoService.deleteDto(filter.getId());
-                eventRegistry.fireNotificationEvent(NotificationEvent.Level.INFO, commonsMessageHelper.getMessage("declaration.ct.searchCriteria.tab.template.notification.filterDeleted", filter.getTemplateName()));
+                eventRegistry.fireNotificationEvent(NotificationEvent.Level.INFO, commonsMessageHelper.getMessage("document.ct.searchCriteria.tab.template.notification.filterDeleted", filter.getTemplateName()));
                 getModel().setUserDefinedFilters(findTemplatesByNameAndUser());
                 onClearFilter();
             });

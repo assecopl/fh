@@ -82,4 +82,9 @@
     <entry key="enum.pl.fhframework.dp.transport.dto.commons.VerificationListItemStatusEnum.Accepted">Zaakceptowano</entry>
     <entry key="pl.fhframework.dp.transport.dto.commons.VerificationListItemOperationEnum.NoRisk">Brak ryzyka</entry>
     <entry key="enum.pl.fhframework.dp.transport.dto.commons.VerificationListItemStatusEnum.ToBeAddressed">Do zaadresowania</entry>
+    <entry key="enum.pl.fhframework.dp.commons.base.model.StyleEnum.Default">domyślny</entry>
+    <entry key="enum.pl.fhframework.dp.commons.base.model.StyleEnum.Alternate">alternatywny</entry>
+    <entry key="enum.pl.fhframework.dp.commons.base.model.StyleEnum.Contrast">kontrastowy</entry>
+    <entry key="enum.pl.fhframework.dp.transport.cdm.types.ValidationResultTypeST.ERROR">Błąd</entry>
+    <entry key="enum.pl.fhframework.dp.transport.cdm.types.ValidationResultTypeST.WARNING">Ostrzeżenie</entry>
 </properties>

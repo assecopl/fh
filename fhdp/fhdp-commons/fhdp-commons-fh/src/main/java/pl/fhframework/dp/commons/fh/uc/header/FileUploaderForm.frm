@@ -6,7 +6,7 @@
 
         <FileUpload id="fileUploadButton"
                     width="md-3" file="{fileResource}"
-                    label="{$.declaration.ct.btn.importFromFile.label}"
+                    label="{$.document.ct.btn.importFromFile.label}"
                     onUpload="fileUploadMenu" maxSize="15728640" labelHidden="true" extensions=".xml" />
     </Row>
 </Form>

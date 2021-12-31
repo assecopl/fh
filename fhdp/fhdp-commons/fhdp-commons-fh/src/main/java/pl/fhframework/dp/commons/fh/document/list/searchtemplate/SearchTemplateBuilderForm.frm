@@ -7,20 +7,20 @@
         <ReadOnly when="!containsUserChanges()">btnSaveFilter</ReadOnly>
         <ReadOnly when="sourceFilter == null">btnSaveAsFilter</ReadOnly>
     </AvailabilityConfiguration>
-    <OutputLabel id="sourceFilterInfo" value="{$.declaration.ct.searchCriteria.tab.template.outputLabel.loadedFilter.value}: [b]{sourceFilter.getTemplateName()}[/b]"/>
+    <OutputLabel id="sourceFilterInfo" value="{$.document.ct.searchCriteria.tab.template.outputLabel.loadedFilter.value}: [b]{sourceFilter.getTemplateName()}[/b]"/>
 
     <Table id="conditionsTable" collection="{conditionRows}" iterator="row">
-        <Column label="{$.declaration.ct.searchCriteria.tab.template.table.col.logicalOperator.label}" width="200">
+        <Column label="{$.document.ct.searchCriteria.tab.template.table.col.logicalOperator.label}" width="200">
             <SelectOneMenu availability="{row.getAvailabilityOperator()}" values="{logicalConditions}" value="{row.logicalCondition}" onChange="operatorChanged({row})" width="200"/>
         </Column>
-        <Column label="{$.declaration.ct.searchCriteria.tab.template.table.col.columnName.label}" width="300">
+        <Column label="{$.document.ct.searchCriteria.tab.template.table.col.columnName.label}" width="300">
             <SelectOneMenu availability="{row.getAvailabilityColumnName()}" values="{columns}" value="{row.column}" onChange="columnChanged({row})" displayExpression="i18N" width="300"/>
         </Column>
-        <Column label="{$.declaration.ct.searchCriteria.tab.template.table.col.condition.label}" width="300">
+        <Column label="{$.document.ct.searchCriteria.tab.template.table.col.condition.label}" width="300">
             <!--specjalny fromatter bo nie działa poprawnie: displayExpression="displayValue"-->
             <SelectOneMenu availability="{row.getAvailabilityColumnCondition()}" values="{row.operators}" value="{row.operator}" displayExpression="displayedValue" width="300"/>
         </Column>
-        <Column label="{$.declaration.ct.searchCriteria.tab.template.table.col.value.label}" width="300">
+        <Column label="{$.document.ct.searchCriteria.tab.template.table.col.value.label}" width="300">
             <InputText id="inputText" availability="{row.getAvailabilityInputText()}" value="{row.conditionTextValue}" onChange="-" width="300"/>
             <InputNumber id="inputNumber" availability="{row.getAvailabilityInputNumber()}" value="{row.conditionIntegerValue}" onChange="-" width="300"/>
             <InputNumber id="inputDecimal" availability="{row.getAvailabilityInputNumberDecimal()}" value="{row.conditionDecimalValue}" onChange="-" width="300"/>
@@ -42,8 +42,8 @@
         </Column>
         <Column label="{$.common.options}" width="300">
             <Button availability="{row.getActionAvailabilityDeleteCondition()}" onClick="deleteContition({row})" label="[icon='fa fa-trash']" hint="{$.common.delete}" hintTrigger="HOVER" width="80px"/>
-            <Button availability="{row.getActionAvailabilityAddCondition()}" hintTrigger="HOVER" onClick="addContition({row})" label="[icon='fa fa-plus']" hint="{$.declaration.ct.searchCriteria.tab.template.table.col.options.row.btn.addCondition.label}" horizontalAlign="right" width="80px"/>
-            <Button availability="{row.getActionAvailabilityAddBracket()}" hintTrigger="HOVER" onClick="addBracket({row})" label="[icon='fa fa-chevron-left']" hint="{$.declaration.ct.searchCriteria.tab.template.table.col.options.row.btn.addBracket.label}" horizontalAlign="right" width="80px"/>
+            <Button availability="{row.getActionAvailabilityAddCondition()}" hintTrigger="HOVER" onClick="addContition({row})" label="[icon='fa fa-plus']" hint="{$.document.ct.searchCriteria.tab.template.table.col.options.row.btn.addCondition.label}" horizontalAlign="right" width="80px"/>
+            <Button availability="{row.getActionAvailabilityAddBracket()}" hintTrigger="HOVER" onClick="addBracket({row})" label="[icon='fa fa-chevron-left']" hint="{$.document.ct.searchCriteria.tab.template.table.col.options.row.btn.addBracket.label}" horizontalAlign="right" width="80px"/>
         </Column>
     </Table>
     <Group>
