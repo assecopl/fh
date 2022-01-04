@@ -20,7 +20,7 @@ public class FunctionsSelectForm extends Form<FunctionsSelectForm.Model> {
         private final FunctionsTreeBuilder functionsTreeBuilder;
         private Set<Node> allSystemFunctions;
         private Node selectedFunctionLeft;
-        private Set<AuthorizationManager.Function> addedFunctions = new TreeSet<>();
+        private Set<AuthorizationManager.Function> addedFunctions = new HashSet<>();
         private Set<AuthorizationManager.Function> selectedFunctionsRight = new HashSet<>();
 
         public Model(FunctionsTreeBuilder functionsTreeBuilder) {
