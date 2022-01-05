@@ -1,5 +1,7 @@
 package pl.fhframework.dp.commons.fh.parameters.details;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.fhframework.dp.commons.fh.services.SubstantiveParametersTagService;
 import pl.fhframework.dp.transport.dto.parameters.SubstantiveParametersParameterItem;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @UseCase
+@Getter @Setter
 public class SubstantiveParametersDetailEditFormUC implements IUseCaseOneInput<SubstantiveParametersDetailEditForm.Model, IUseCaseSaveCancelCallback<SubstantiveParametersDetailEditForm.Model>> {
 
     @Autowired

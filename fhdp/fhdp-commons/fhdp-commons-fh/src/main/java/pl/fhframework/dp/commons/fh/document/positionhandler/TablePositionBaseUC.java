@@ -7,7 +7,7 @@ import pl.fhframework.core.uc.IUseCaseOneInput;
 import pl.fhframework.core.uc.IUseCaseSaveCancelCallback;
 
 /**
- * Base for specific usecases that are responsible for add, edit, delete of table elements on  generated forms
+ * Base for specific use cases that are responsible for add, edit, delete of table elements on  generated forms
  * @param <MODEL>  is the model that holds table
  */
 

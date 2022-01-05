@@ -1,6 +1,8 @@
 
 package pl.fhframework.dp.commons.fh.uc.header;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import pl.fhframework.dp.commons.fh.uc.FhdpBaseUC;
@@ -10,6 +12,7 @@ import pl.fhframework.core.i18n.MessageService;
 import pl.fhframework.core.uc.UseCase;
 
 @UseCase
+@Getter @Setter
 public class AppTitleUC extends FhdpBaseUC implements ISystemUseCase {
     @Autowired
     private IApplicationInformation applicationInfo;

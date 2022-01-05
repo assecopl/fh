@@ -1,6 +1,7 @@
 package pl.fhframework.dp.commons.fh.uc.header;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import pl.fhframework.dp.commons.fh.uc.FhdpBaseUC;
@@ -12,7 +13,7 @@ import pl.fhframework.event.EventRegistry;
 import pl.fhframework.model.security.SystemUser;
 
 @UseCase
-@Getter
+@Getter @Setter
 public class SystemInfoUC extends FhdpBaseUC implements ISystemUseCase {
     private static final String MENU_CONTAINER_ID = "systemInfo";
 

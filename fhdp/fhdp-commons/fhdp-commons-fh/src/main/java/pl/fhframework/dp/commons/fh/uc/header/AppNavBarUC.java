@@ -1,6 +1,7 @@
 package pl.fhframework.dp.commons.fh.uc.header;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import pl.fhframework.dp.commons.base.model.StyleEnum;
@@ -25,7 +26,7 @@ import java.util.Map;
  * @created 2019-07-19
  */
 @UseCase
-@Getter
+@Getter @Setter
 public class AppNavBarUC extends FhdpBaseUC implements INavbar, ISystemUseCase {
     public static final String NAVBAR_CONTAINER_ID = "navbarForm";
     private AppNavBarForm.Model model = new  AppNavBarForm.Model();

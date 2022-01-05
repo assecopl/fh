@@ -1,5 +1,7 @@
 package pl.fhframework.dp.commons.fh.uc.header;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.fhframework.dp.commons.fh.uc.FhdpBaseUC;
 import pl.fhframework.ISystemUseCase;
@@ -9,6 +11,7 @@ import pl.fhframework.core.uc.UseCase;
 import pl.fhframework.model.security.SystemUser;
 
 @UseCase
+@Getter @Setter
 public class UserInitialUC extends FhdpBaseUC implements ISystemUseCase {
     private static final String MENU_CONTAINER_ID = "userInitial";
 

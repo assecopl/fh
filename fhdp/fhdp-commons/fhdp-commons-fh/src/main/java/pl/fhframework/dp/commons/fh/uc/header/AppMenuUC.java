@@ -1,5 +1,6 @@
 package pl.fhframework.dp.commons.fh.uc.header;
 
+import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -21,7 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @UseCase
-@Setter
+@Getter @Setter
 public class AppMenuUC extends FhdpBaseUC implements ISystemUseCase, IUseCase18nListener {
     public static final String MENU_CONTAINER_ID = "menuForm";
 

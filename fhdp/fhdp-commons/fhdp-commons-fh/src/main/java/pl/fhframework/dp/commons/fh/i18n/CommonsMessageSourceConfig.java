@@ -12,7 +12,7 @@ public class CommonsMessageSourceConfig {
     public MessageSource messageSource () {
         ReloadableResourceBundleMessageSource messageSource = new
                 ReloadableResourceBundleMessageSource();
-        messageSource.setBasenames("classpath:fhdp","classpath:ui", "classpath:translations", "classpath:enums");
+        messageSource.setBasenames("classpath:fhdp", "classpath:ui", "classpath:translations", "classpath:fhdp-enums" , "classpath:enums");
         messageSource.setDefaultEncoding("UTF-8");
         messageSource.setUseCodeAsDefaultMessage(false);
         messageSource.setCacheMillis(1000);

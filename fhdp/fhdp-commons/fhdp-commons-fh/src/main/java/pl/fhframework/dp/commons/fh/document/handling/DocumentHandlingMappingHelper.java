@@ -1,11 +1,15 @@
 package pl.fhframework.dp.commons.fh.document.handling;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.BeanWrapperImpl;
 
 import java.beans.PropertyDescriptor;
 import java.util.Map;
 
+//TODO: generalize? J. Kosecki?
+@Getter @Setter
 public class DocumentHandlingMappingHelper {
 
     private Object document;

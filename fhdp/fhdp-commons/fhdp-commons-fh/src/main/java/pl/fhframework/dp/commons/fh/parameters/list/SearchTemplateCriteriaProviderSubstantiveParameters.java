@@ -1,5 +1,7 @@
 package pl.fhframework.dp.commons.fh.parameters.list;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.stereotype.Service;
 import pl.fhframework.dp.commons.fh.document.list.searchtemplate.Column;
 import pl.fhframework.dp.commons.fh.document.list.searchtemplate.ISearchTemplateCriteriaProvider;
@@ -8,6 +10,7 @@ import pl.fhframework.dp.transport.dto.parameters.SubstantiveParametersDto;
 import java.util.List;
 
 @Service
+@Getter @Setter
 public class SearchTemplateCriteriaProviderSubstantiveParameters implements ISearchTemplateCriteriaProvider<SubstantiveParametersDto> {
 //    @Autowired
 //    private BaseAppMessageHelper baseAppMessageHelper;

@@ -1,5 +1,7 @@
 package pl.fhframework.dp.commons.fh.document.handling;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.fhframework.dp.transport.dto.commons.OperationStateResponseDto;
 import pl.fhframework.dp.transport.dto.commons.OperationStepDto;
@@ -22,6 +24,7 @@ import java.util.List;
  * @created 25.10.2019
  */
 @UseCase
+@Getter @Setter
 public class OperationStatusCheckUC implements IUseCaseOneInput<OperationStatusCheckForm.Model, IUseCaseSaveCancelCallback<OperationStatusCheckForm.Model>> {
 
     private OperationStatusCheckForm.Model model;
