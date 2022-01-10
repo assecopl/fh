@@ -6,7 +6,9 @@ class TableRow extends HTMLFormComponent {
     protected readonly mainId: string;
     public readonly parent: TableOptimized;
     protected isEmpty: any;
-    protected onRowClickEvent:() => void = null;
+    protected onRowClickEvent: () => void = null;
+
+    public isHighlighted: boolean = false;
 
     constructor(componentObj: any, parent: Table) {
         super(componentObj, parent);
@@ -44,7 +46,7 @@ class TableRow extends HTMLFormComponent {
         }
     };
 
-    addComponent(componentObj , cellTypeCheck = 'TableCell') {
+    addComponent(componentObj, cellTypeCheck = 'TableCell') {
         super.addComponent(componentObj);
 
         if (componentObj.type !== cellTypeCheck) {
@@ -62,12 +64,13 @@ class TableRow extends HTMLFormComponent {
     };
 
 
-    public highlightRow(scrollAnimate:boolean = false) {
+    public highlightRow(scrollAnimate: boolean = false) {
         const idx = ((this.parent.rawValue) || []).findIndex(function (element, index) {
             return element == this.mainId
         }.bind(this));
         if (idx != -1) {
             this.component.classList.add('table-primary');
+            this.isHighlighted = true;
             let container = $(this.parent.component);
             let scrollTo = $(this.component);
             if (this.parent.rawValue.length < 2) {
@@ -83,9 +86,17 @@ class TableRow extends HTMLFormComponent {
                 }
             }
         } else {
-            this.component.classList.remove('table-primary');
+            this.unhighlightRow();
         }
     };
+
+    public unhighlightRow() {
+        this.component.classList.remove('table-primary');
+        this.isHighlighted = false;
+        if (this.parent["selectionCheckboxes"]) {
+            this.component.querySelector('input[type="checkbox"]').checked = false;
+        }
+    }
 }
 
 export {TableRow};
