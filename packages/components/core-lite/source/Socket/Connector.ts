@@ -10,6 +10,7 @@ import {ConnectorEN} from '../I18n/Connector.en';
 import {I18n} from "../I18n/I18n";
 
 import {FhContainer} from "../FhContainer";
+import * as Pako from "pako";
 
 declare const ENV_IS_DEVELOPMENT: boolean;
 
@@ -45,6 +46,9 @@ class Connector {
     private pingInterval: () => void = null;
     private _incomingMessageCallback: (data: string) => void = null;
     private _outcomingMessageCallback: (data: string) => void = null;
+
+    private totalLengthOfAllCompressedMessages: number = 0;
+    private totalLengthOfAllUncompressedMessages: number = 0;
 
     constructor(target: string,
                 reconnectCallback: () => void,
@@ -313,21 +317,44 @@ class Connector {
 
         var i = event.data.indexOf(':');
         var requestId = event.data.slice(0, i);
-        var stringData = event.data.slice(i + 1);
 
-        var data = JSON.parse(stringData);
+        let receivedData = event.data.slice(i + 1);
+        //Message decompression (if any compression used)
+        this.decompressData(receivedData, stringData =>{
+            var data = JSON.parse(stringData);
 
-        if (ENV_IS_DEVELOPMENT) {
-            console.log('Received:', data);
+            if (ENV_IS_DEVELOPMENT) {
+                console.log('Received:', data);
+            }
+            var callback = this.runningCommands[requestId];
+            this.runningCommands[requestId] = undefined;
+            if (callback != null) {
+                //console.log('Command execution finished');
+                callback(requestId, data);
+            } else {
+                this.formsManager.handleEvent(requestId, data);
+            }
+        });
+    }
+
+    /**
+     * Decompress gzip data in rawDataString and call calback passing as an argument uncompressed data as string
+     * @param rawDataString array of bytes with compressed message or uncompressed message - if messege starts with char code 0 it means it is compressed message
+     * @param callback method with one argument for uncompressed data string
+     */
+    decompressData(rawDataString, callback){
+        if (rawDataString.charAt(0) =='\u0000') {
+            let rawCompressedData = new Array(rawDataString.length-1)
+            for (let i=0;i<rawCompressedData.length;i++){
+                rawCompressedData[i] = rawDataString.charCodeAt(i+1);
+            }
+
+            const decompressionString = Pako.ungzip(new Uint8Array(rawCompressedData), {to:'string'});
+            callback(decompressionString);
+        }else{
+            callback (rawDataString);
         }
-        var callback = this.runningCommands[requestId];
-        this.runningCommands[requestId] = undefined;
-        if (callback != null) {
-            //console.log('Command execution finished');
-            callback(requestId, data);
-        } else {
-            this.formsManager.handleEvent(requestId, data);
-        }
+
     }
 
     public isOpen(): boolean {

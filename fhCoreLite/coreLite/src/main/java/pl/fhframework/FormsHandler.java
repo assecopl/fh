@@ -88,6 +88,9 @@ public abstract class FormsHandler {
     @Value("${fh.web.inactive_session_auto_logout:false}")
     private boolean sessionTimeoutManagerActive;
 
+    @Value("${fh.web.socket.compresion:false}")
+    private boolean gzipCompresion;
+
     private UseCaseUrlParser parser = new UseCaseUrlParser();
 
     public abstract String getConnectionId();
@@ -167,9 +170,11 @@ public abstract class FormsHandler {
             objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
             objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
             String serialized = afterMessageSerialization(objectMapper.writeValueAsString(data), context);
+            //compress only bigger messages
+            String compressed = (gzipCompresion && (serialized.length())>1024)? packSerializedData(serialized) : serialized;
 
             long moment2 = System.nanoTime();
-            sendResponse(requestId, serialized, context);
+            sendResponse(requestId, compressed, context);
             long moment3 = System.nanoTime();
             int size = serialized.length();
 
@@ -608,6 +613,16 @@ public abstract class FormsHandler {
 
     private WebSocketSessionManager.EventProcessState getStep(WebSocketContext context) {
         return context.getRequestContext().getEventProcessState();
+    }
+
+    private String packSerializedData(String plainMessage){
+        byte[] compressedData = GZIPCompression.compress(plainMessage);
+        StringBuilder sb = new StringBuilder();
+        sb.append((char)0);
+        for (byte b : compressedData){
+            sb.append((char)b);
+        }
+        return sb.toString();
     }
 
 }
