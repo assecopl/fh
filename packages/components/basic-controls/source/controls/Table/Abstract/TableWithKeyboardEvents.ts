@@ -170,15 +170,9 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
      * @param scrollAnimate
      */
     protected highlightSelectedRows(scrollAnimate: boolean = false) {
-        let oldSelected = this.table.querySelectorAll('.table-primary');
-        if (oldSelected && oldSelected.length) {
-            [].forEach.call(oldSelected, function (row) {
-                row.classList.remove('table-primary');
-                if (this.selectionCheckboxes) {
-                    row.firstChild.querySelector('input[type="checkbox"]').checked = false;
-                }
-            }.bind(this));
-        }
+        this.rows.forEach(row => {
+           row.unhighlightRow();
+        });
         (this.rawValue || []).forEach(function (value) {
             if (value != -1) {
                 const row: TableRowOptimized = this.rows[parseInt(value)];

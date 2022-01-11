@@ -345,6 +345,8 @@ public class TablePaged extends Table {
             }
         }
 
+        this.selectedRowsNumbers = getSelectedRowNumberBasedOnBinding(currentPage.getContent(), this.multiselect);
+        elementChange.addChange(SELECTED_ROW_NUMBER, this.selectedRowsNumbers);
 
         this.language = LanguageResolver.languageChanges(getForm().getAbstractUseCase().getUserSession(), this.language, elementChange);
 
