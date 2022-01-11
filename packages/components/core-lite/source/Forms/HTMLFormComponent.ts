@@ -1162,20 +1162,28 @@ abstract class HTMLFormComponent extends FormComponent {
             if (this.componentObj.type === 'RadioOption' || this.componentObj.type === 'RadioOptionsGroup' || this.componentObj.type === 'CheckBox') {
                 let label = this.htmlElement.firstChild;
                 let controlLabelWithText = label.innerText.length;
-                if (controlLabelWithText) {
-                    label.removeChild(this.requiredElement);
-                } else {
-                    this.htmlElement.removeChild(this.requiredElement);
+                try {
+                    if (controlLabelWithText) {
+                        label.removeChild(this.requiredElement);
+                    } else {
+                        this.htmlElement.removeChild(this.requiredElement);
+                    }
+                } catch (e) {
+                    this.requiredElement.remove();
                 }
 
             } else {
 
-                if (this.labelElement != null) {
-                    this.labelElement.removeChild(this.requiredElement);
-                } else if (this.component.classList.contains('field-required')) {
-                    this.component.removeChild(this.requiredElement);
-                } else {
-                    this.htmlElement.removeChild(this.requiredElement);
+                try {
+                    if (this.labelElement != null) {
+                        this.labelElement.removeChild(this.requiredElement);
+                    } else if (this.component.classList.contains('field-required')) {
+                        this.component.removeChild(this.requiredElement);
+                    } else {
+                        this.htmlElement.removeChild(this.requiredElement);
+                    }
+                }catch (e) {
+                    this.requiredElement.remove();
                 }
             }
 
