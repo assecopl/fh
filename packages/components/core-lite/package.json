@@ -17,6 +17,7 @@
     "@types/bootstrap": "4.3.1",
     "@types/jquery": "3.3.31",
     "@types/jqueryui": "1.12.10",
+    "@types/pako": "^1.0.3",
     "less": "3.9.0",
     "typescript": "3.5.3"
   },
@@ -32,6 +33,6 @@
     "jquery-ui": "1.12.1",
     "js-cookie": "^2.2.1",
     "focus-trap": "5.1.0",
-    "@stardazed/streams-polyfill": "2.4.0"
+    "pako": "^2.0.4"
   }
 }

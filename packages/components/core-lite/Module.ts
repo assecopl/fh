@@ -44,7 +44,7 @@ import {LayoutHandler} from "./source/LayoutHandler";
 import {ChatEvent} from "./source/Events/ChatEvent"
 import {ScrollEvent} from "./source/Events/ScrollEvent";
 import {ChatListEvent} from "./source/Events/ChatListEvent";
-import "@stardazed/streams-polyfill";
+
 
 class FormsHandler extends FhModule {
     protected registerComponents() {
