@@ -73,7 +73,11 @@ module.exports = function (cmdEnv) {
             }]
         },
         resolve: {
-            extensions: ['.ts', '.tsx', '.js']
+            extensions: ['.ts', '.tsx', '.js'],
+            alias: {
+                pako: Path.join(__dirname + '/../../node_modules/pako/dist/pako.es5.js')
+                ,
+            }
         },
         plugins: [
             new Webpack.ProvidePlugin({

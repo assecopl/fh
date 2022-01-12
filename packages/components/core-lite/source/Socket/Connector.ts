@@ -10,6 +10,7 @@ import {ConnectorEN} from '../I18n/Connector.en';
 import {I18n} from "../I18n/I18n";
 
 import {FhContainer} from "../FhContainer";
+import * as Pako from "pako";
 
 declare const ENV_IS_DEVELOPMENT: boolean;
 
@@ -344,29 +345,8 @@ class Connector {
                 rawCompressedData[i] = rawDataString.charCodeAt(i+1);
             }
 
-            // @ts-ignore
-            let arrayBuffer = new Uint8Array(rawCompressedData).buffer;
-            // @ts-ignore
-            let blob = new Blob([arrayBuffer]);
-
-            // @ts-ignore
-            const ds = new DecompressionStream('gzip');
-            // @ts-ignore
-            const decompressionStream = blob.stream().pipeThrough(ds);
-
-            // @ts-ignore
-            let decompressedBlobPromise = new Response(decompressionStream).blob();
-            // @ts-ignore
-            decompressedBlobPromise.then(nextResponse=> {
-                // @ts-ignore
-                let decompressedStringPromise = nextResponse.text();
-                // @ts-ignore
-                decompressedStringPromise.then(decompressedString =>{
-                    callback(decompressedString);
-                    this.totalLengthOfAllCompressedMessages += rawDataString.length;
-                    this.totalLengthOfAllUncompressedMessages += decompressedString.length;
-                })
-            })
+            const decompressionString = Pako.ungzip(new Uint8Array(rawCompressedData), {to:'string'});
+            callback(decompressionString);
         }else{
             callback (rawDataString);
         }
