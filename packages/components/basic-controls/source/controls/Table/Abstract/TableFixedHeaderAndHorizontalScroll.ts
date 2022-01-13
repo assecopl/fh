@@ -252,6 +252,8 @@ abstract class TableFixedHeaderAndHorizontalScroll extends HTMLFormComponent {
                     grip.classList.add(this.table.id + "_grip");
 
                     const listener = function (e) {
+                        e.stopPropagation();
+                        e.preventDefault();
                         this.thElm = this.container.querySelectorAll("." + column.id);
                         this.scrollbarWidth = this.component.offsetWidth - this.component.clientWidth;
                         this.lastThWidth = this.lastThColumn.htmlElement.offsetWidth;
@@ -294,6 +296,8 @@ abstract class TableFixedHeaderAndHorizontalScroll extends HTMLFormComponent {
             }.bind(this));
 
             this.container.addEventListener('mouseup', function (e) {
+                e.stopPropagation();
+                e.preventDefault();
                 this.thElm = undefined;
             }.bind(this));
 

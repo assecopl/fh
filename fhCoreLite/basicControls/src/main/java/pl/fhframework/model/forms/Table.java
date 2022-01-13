@@ -68,7 +68,7 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
     private CsvService csvService;
 
     @Getter
-    private boolean multiselect = false;
+    protected boolean multiselect = false;
 
     @JsonIgnore
     @Getter
@@ -268,7 +268,7 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
 
     private static final String TABLE_ROWS = "tableRows";
 
-    private static final String SELECTED_ROW_NUMBER = "selectedRowNumber";
+    protected static final String SELECTED_ROW_NUMBER = "selectedRowNumber";
 
     private static final String SELECTED = "selected";
 
