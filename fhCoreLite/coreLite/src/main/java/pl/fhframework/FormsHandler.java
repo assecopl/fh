@@ -88,6 +88,9 @@ public abstract class FormsHandler {
     @Value("${fh.web.inactive_session_auto_logout:false}")
     private boolean sessionTimeoutManagerActive;
 
+    @Value("${fh.web.socket.compresion:false}")
+    private boolean gzipCompresion;
+
     private UseCaseUrlParser parser = new UseCaseUrlParser();
 
     public abstract String getConnectionId();
@@ -168,7 +171,7 @@ public abstract class FormsHandler {
             objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
             String serialized = afterMessageSerialization(objectMapper.writeValueAsString(data), context);
             //compress only bigger messages
-            String compressed = (serialized.length()>1024)? packSerializedData(serialized) : serialized;
+            String compressed = (gzipCompresion && (serialized.length())>1024)? packSerializedData(serialized) : serialized;
 
             long moment2 = System.nanoTime();
             sendResponse(requestId, compressed, context);
