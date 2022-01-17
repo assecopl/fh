@@ -29,7 +29,7 @@
 		<module>bom-project-lite</module>
 		<module>fhCoreLite</module>
 	</modules>
-	
+
 	<licenses>
 		<license>
 			<name>The Apache License, Version 2.0</name>
@@ -51,4 +51,15 @@
 		<developerConnection>scm:git:ssh://github.com:assecopl/fh.git</developerConnection>
 		<url>http://github.com/assecopl/fh/tree/master</url>
 	</scm>
+
+	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+	</distributionManagement>
 </project>
