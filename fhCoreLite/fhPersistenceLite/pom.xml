@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>fhPersistenceLite</artifactId>
   <groupId>pl.fhframework.persistence</groupId>
-  <version>4.8.15</version>
+  <version>4.8.16-SNAPSHOT</version>
   <packaging>jar</packaging>
   <url>https://github.com/assecopl/fh</url>
   <name>persistenceLite</name>
@@ -10,7 +10,7 @@
   <parent>
     <groupId>pl.fhframework</groupId>
     <artifactId>fhCoreLite</artifactId>
-    <version>4.8.15</version>
+    <version>4.8.16-SNAPSHOT</version>
   </parent>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -50,7 +50,7 @@
     <dependency>
       <groupId>pl.fhframework</groupId>
       <artifactId>coreLite</artifactId>
-      <version>4.8.15</version>
+      <version>4.8.16-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.hibernate.javax.persistence</groupId>
