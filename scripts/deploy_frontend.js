@@ -140,7 +140,7 @@ const publishProcess = (path, onlyUpdate) => {
     if (isDev && !isSnapshot) {
       tag = 'dev';
     } else if (isSnapshot) {
-      tag = 'snapshot';
+      tag = 'snapshot-4.8';
     } else if (isProd) {
       tag = 'latest';
     }
