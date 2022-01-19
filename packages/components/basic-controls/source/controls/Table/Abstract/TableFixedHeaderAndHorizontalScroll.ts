@@ -266,6 +266,11 @@ abstract class TableFixedHeaderAndHorizontalScroll extends HTMLFormComponent {
                     col.each(function (index) {
                         const gripClone = <any>grip.cloneNode(true);
                         gripClone.addEventListener('mousedown', listener);
+                        gripClone.addEventListener('click', function (e) {
+                            e.stopPropagation();
+                            e.preventDefault();
+                        })
+
                         $(this).append(gripClone);
                     });
 
