@@ -29,10 +29,6 @@ public class ADPropertiesFilter implements Filter {
                 FhLogger.info("Credentials: {}", auth.getCredentials());
                 HttpSession session = ((HttpServletRequest) servletRequest).getSession(true);
                 session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
-
-//                FhLogger.info("username: {}", ((UserDetails) auth.getPrincipal()).getUsername());
-//            HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
-//            httpResponse.sendRedirect("/vlp");
         }
         filterChain.doFilter(servletRequest, servletResponse);
     }

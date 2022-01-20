@@ -1,4 +1,4 @@
-package pl.fhframework.dp.commons.camunda.service;
+package pl.fhframework.dp.commons.services.endpointcfg;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;

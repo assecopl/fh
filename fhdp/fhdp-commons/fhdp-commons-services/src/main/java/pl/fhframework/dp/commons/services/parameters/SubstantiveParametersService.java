@@ -7,11 +7,10 @@ import org.elasticsearch.index.query.SpanNearQueryBuilder;
 import org.elasticsearch.index.query.TermQueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.fhframework.dp.commons.model.repositories.SubstantiveParametersESRepository;
+import pl.fhframework.dp.commons.els.repositories.SubstantiveParametersESRepository;
 import pl.fhframework.dp.commons.services.facade.GenericDtoService;
 import pl.fhframework.dp.transport.dto.parameters.*;
 import pl.fhframework.dp.transport.service.ISubstantiveParametersService;
-import pl.fhframework.dp.transport.dto.parameters.*;
 
 import java.util.List;
 import java.util.Optional;

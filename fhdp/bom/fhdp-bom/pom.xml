@@ -11,23 +11,6 @@
 
     <packaging>pom</packaging>
 
-    <properties>
-<!--        <camunda.version>7.14.0</camunda.version>-->
-<!--        <springboot.version>2.4.2</springboot.version>-->
-<!--        <spring.version>5.3.3</spring.version>-->
-<!--        <spring.security.version>5.4.2</spring.security.version>-->
-<!--        <hibernate.version>5.3.20.Final</hibernate.version>-->
-<!--        <jackson.version>2.11.4</jackson.version>-->
-<!--        <jaxb.version>2.2.11</jaxb.version>-->
-<!--        <httpclient.version>4.5.13</httpclient.version>-->
-<!--        <spring.data.elasticsearch.version>4.1.5</spring.data.elasticsearch.version>-->
-<!--        <elasticsearch.version>7.9.3</elasticsearch.version>-->
-<!--        <java.cas.client.version>3.6.2</java.cas.client.version>-->
-
-<!--        <cxf.version>3.4.2</cxf.version>-->
-    </properties>
-
-
     <dependencyManagement>
         <dependencies>
             <dependency>

@@ -3,7 +3,7 @@ package pl.fhframework.dp.commons.services.parameters;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.fhframework.dp.commons.model.repositories.SubstantiveParametersTagESRepository;
+import pl.fhframework.dp.commons.els.repositories.SubstantiveParametersTagESRepository;
 import pl.fhframework.dp.commons.services.facade.GenericDtoService;
 import pl.fhframework.dp.transport.dto.parameters.SubstantiveParametersTagDto;
 import pl.fhframework.dp.transport.dto.parameters.SubstantiveParametersTagDtoQuery;

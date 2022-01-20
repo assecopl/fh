@@ -1,4 +1,4 @@
-package pl.fhframework.dp.commons.camunda.service;
+package pl.fhframework.dp.commons.services.endpointcfg;
 
 import pl.fhframework.dp.commons.base.model.AuthorizationTypeEnum;
 import pl.fhframework.dp.commons.base.model.IEndpointCfg;

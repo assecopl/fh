@@ -1,4 +1,4 @@
-package pl.fhframework.dp.commons.camunda;
+package pl.fhframework.dp.commons.services.spring;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;

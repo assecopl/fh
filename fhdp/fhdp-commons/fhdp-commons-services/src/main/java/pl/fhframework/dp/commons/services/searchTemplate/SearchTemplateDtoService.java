@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.fhframework.dp.commons.model.entities.SearchTemplate;
-import pl.fhframework.dp.commons.model.repositories.SearchTemplateESRepository;
+import pl.fhframework.dp.commons.els.repositories.SearchTemplateESRepository;
 import pl.fhframework.dp.commons.model.repositories.SearchTemplateJPARepository;
 import pl.fhframework.dp.commons.services.facade.GenericDtoService;
 import pl.fhframework.dp.commons.utils.conversion.BeanConversionUtil;
