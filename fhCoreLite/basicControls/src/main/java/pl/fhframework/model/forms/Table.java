@@ -713,8 +713,9 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
                 int[] newSelectedRows = new int[newSelectedElementsList.size()];
                 for (int i = 0; i < ((Collection) newSelectedValue).size(); i++) {
                     int index = -1;
+                    newSelectedRows[i] = -1;
                     Object obj = newSelectedElementsList.get(i);
-                    for (int c = 0; i < collection.size(); c++) {
+                    for (int c = 0; c < collection.size(); c++) {
                         if(this.compareFunction.apply(tempCollection[c], obj)){
                             newSelectedRows[i] = c;
                             break;
