@@ -28,8 +28,12 @@ import pl.fhframework.model.forms.designer.IDesignerEventListener;
 import pl.fhframework.model.forms.table.LowLevelRowMetadata;
 import pl.fhframework.model.forms.table.RowIteratorMetadata;
 
+import java.lang.reflect.Array;
 import java.util.*;
+import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -102,6 +106,16 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
     @DocumentedComponentAttribute(defaultValue = "true", value = "Turns on/off table header checkbox to select/unselect all rows. Works only with 'selectionCheckboxes' option trun on.")
     @DesignerXMLProperty(functionalArea = SPECIFIC, priority = 10)
     private boolean selectAllChceckbox = true;
+
+    @JsonIgnore
+    protected BiFunction<Object, Object, Boolean> compareFunction;
+
+    @Getter
+    @Setter
+    @XMLProperty
+    @DocumentedComponentAttribute(value = "Additional function to compare with selected object when checking table selections.")
+    @DesignerXMLProperty(functionalArea = SPECIFIC, priority = 15)
+    private ModelBinding compareFunctionBinding;
 
     @Getter
     @Setter
@@ -309,6 +323,7 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
             csvButton.setGroupingParentComponent(footer);
             footer.addSubcomponent(csvButton);
         }
+        setCompareFunction();
     }
 
     @Override
@@ -693,11 +708,19 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
         }
         if (multiselect || (selectedElementBinding instanceof CompiledBinding && ((CompiledBinding<?>) selectedElementBinding).getTargetType() == List.class)) {
             if (newSelectedValue instanceof Collection) {
-                List<?> tempCollection = new LinkedList<>(collection);
+                Object[] tempCollection = collection.toArray();
                 List<?> newSelectedElementsList = new LinkedList<>((Collection) newSelectedValue);
                 int[] newSelectedRows = new int[newSelectedElementsList.size()];
                 for (int i = 0; i < ((Collection) newSelectedValue).size(); i++) {
-                    newSelectedRows[i] = tempCollection.indexOf(newSelectedElementsList.get(i));
+                    int index = -1;
+                    Object obj = newSelectedElementsList.get(i);
+                    for (int c = 0; i < collection.size(); c++) {
+                        if(this.compareFunction.apply(tempCollection[c], obj)){
+                            newSelectedRows[i] = c;
+                            break;
+                        }
+                    }
+
                 }
                 return newSelectedRows;
             } else {
@@ -922,4 +945,14 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
         column.init();
         return column;
     }
+
+    protected void setCompareFunction() {
+        BindingResult filterBindingResult = getCompareFunctionBinding() != null ? getCompareFunctionBinding().getBindingResult() : null;
+        if (filterBindingResult != null) {
+            this.compareFunction = (BiFunction<Object, Object, Boolean>)  filterBindingResult.getValue();
+        } else {
+            this.compareFunction = (value1, value2) -> Objects.equals(value1, value2);
+        }
+    }
+
 }
