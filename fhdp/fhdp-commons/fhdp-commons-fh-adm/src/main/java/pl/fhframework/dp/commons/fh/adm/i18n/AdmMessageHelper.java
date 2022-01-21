@@ -13,11 +13,11 @@ import pl.fhframework.event.dto.NotificationEvent;
 @RequiredArgsConstructor
 public class AdmMessageHelper {
 
-    public static final String PERMISSION_SAVED_MESSAGE = "adm.message.permissions.saved";
-    public static final String PERMISSION_DELETED_MESSAGE = "adm.message.permissions.deleted";
-    public static final String ROLE_SAVED_MESSAGE = "adm.message.role.saved";
-    public static final String ROLE_DELETED_MESSAGE = "adm.message.role.deleted";
-    public static final String ROLE_EXISTS_MESSAGE = "adm.roles.create.validation.duplicated_role";
+    public static final String PERMISSION_SAVED_MESSAGE = "fhdp.adm.message.permissions.saved";
+    public static final String PERMISSION_DELETED_MESSAGE = "fhdp.adm.message.permissions.deleted";
+    public static final String ROLE_SAVED_MESSAGE = "fhdp.adm.message.role.saved";
+    public static final String ROLE_DELETED_MESSAGE = "fhdp.adm.message.role.deleted";
+    public static final String ROLE_EXISTS_MESSAGE = "fhdp.adm.roles.create.validation.duplicated_role";
 
     private final MessageService messageService;
     private final EventRegistry eventRegistry;

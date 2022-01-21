@@ -24,7 +24,7 @@
                     </Group>
                     <OutputLabel availability="VIEW" width="md-12"
                                  styleClasses="panel-title output-label-no-padding output-max-width white-space--break-spaces"
-                                 value="{$.parameters.property.titleOfDetailsForm}"
+                                 value="{$.fhdp.parameters.property.titleOfDetailsForm}"
                                  hint = "Title"/>
                     <OutputLabel availability="VIEW" width="md-12"
                                  styleClasses="panel-status output-label-no-padding output-max-width white-space--break-spaces"
@@ -36,7 +36,7 @@
                              styleClasses="button-icon-group justify-content-end panel-options-base" width="xs-1">
                     <Button id="cancelButtonParameters" style="default" styleClasses="panel-option margin__unset" horizontalAlign="right"
                             label="[b][icon='fas fa-times'][/b]"
-                            hint="{$.common.close}" hintTrigger="HOVER"
+                            hint="{$.fhdp.common.close}" hintTrigger="HOVER"
                             hintPlacement="BOTTOM"
                             onClick="cancel"/>
                 </ButtonGroup>
@@ -46,24 +46,24 @@
             <PanelGroup>
                 <Row width="md-12">
                     <Group width="md-6">
-                        <OutputLabel width="md-12" value="{$.parameters.property.name}"/>
+                        <OutputLabel width="md-12" value="{$.fhdp.parameters.property.name}"/>
                         <OutputLabel width="md-12" value="{selectedSubstantiveParametersDto.parameterNames[0].name}"
                                      styleClasses="font-weight-bold"/>
                     </Group>
                     <Group width="md-6">
-                        <OutputLabel width="md-12" value="{$.parameters.property.key}" availability="{checkControlVisibility()}"/>
+                        <OutputLabel width="md-12" value="{$.fhdp.parameters.property.key}" availability="{checkControlVisibility()}"/>
                         <OutputLabel width="md-12" value="{selectedSubstantiveParametersDto.key}"
                                      styleClasses="font-weight-bold" availability="{checkControlVisibility()}"/>
                     </Group>
                 </Row>
                 <Row width="md-12">
                     <Group width="md-6">
-                        <OutputLabel width="md-12" value="{$.parameters.property.component}"/>
+                        <OutputLabel width="md-12" value="{$.fhdp.parameters.property.component}"/>
                         <OutputLabel width="md-12" value="{selectedSubstantiveParametersDto.components}"
                                      styleClasses="font-weight-bold"/>
                     </Group>
                     <Group width="md-6">
-                        <OutputLabel width="md-12" value="{$.parameters.property.type}"/>
+                        <OutputLabel width="md-12" value="{$.fhdp.parameters.property.type}"/>
                         <OutputLabel width="md-12" value="{selectedSubstantiveParametersDto.valueTypes}"
                                      styleClasses="font-weight-bold"/>
                     </Group>
@@ -78,7 +78,7 @@
                 -->
                 <Row width="md-12">
                     <Group width="md-6">
-                        <OutputLabel width="md-12" value="{$.parameters.property.value}"/>
+                        <OutputLabel width="md-12" value="{$.fhdp.parameters.property.value}"/>
                         <CheckBox label=" " width="" value="{selectedSubstantiveParametersDto.value}"
                                   availability="{checkControlVisibility(selectedSubstantiveParametersDto.valueTypes, 'CheckBox')}"/>
                         <InputNumber width="md-12" value="{selectedSubstantiveParametersDto.value}"
@@ -92,7 +92,7 @@
                         </Repeater>
                     </Group>
                     <Group width="md-6">
-                        <OutputLabel width="md-12" value="{$.parameters.property.unit}"
+                        <OutputLabel width="md-12" value="{$.fhdp.parameters.property.unit}"
                                      availability="{checkControlVisibility(selectedSubstantiveParametersDto.unit)}"/>
                         <OutputLabel width="md-12" value="{selectedSubstantiveParametersDto.unit}"
                                      availability="{checkControlVisibility(selectedSubstantiveParametersDto.unit)}"
@@ -100,13 +100,13 @@
                     </Group>
                 </Row>
             </PanelGroup>
-            <PanelGroup width="md-12" label="{$.parameters.property.description}">
+            <PanelGroup width="md-12" label="{$.fhdp.parameters.property.description}">
                 <Row width="md-12">
                     <OutputLabel inlineStyle="line-height: 1.5;" width="md-12" value="{selectedSubstantiveParametersDto.parameterDescriptions[0].description}"/>
                 </Row>
             </PanelGroup>
 
-            <PanelGroup width="md-12" label="{$.parameters.property.tags}">
+            <PanelGroup width="md-12" label="{$.fhdp.parameters.property.tags}">
                 <Row width="md-12">
                     <Combo
                            width="md-4" emptyValue="true"
@@ -122,7 +122,7 @@
             <Row elementsHorizontalAlign="LEFT" styleClasses="panel-footer">
                 <Button id="btnEdit"
                         width="xs-1" availability="EDIT"
-                        onClick="edit" label="{$.parameters.property.edit}"
+                        onClick="edit" label="{$.fhdp.parameters.property.edit}"
                         hintPlacement="BOTTOM"
                         inlineStyle="line-height: unset;"
                         wrapperStyle="margin-bottom: unset; margin-right: 5px;"/>

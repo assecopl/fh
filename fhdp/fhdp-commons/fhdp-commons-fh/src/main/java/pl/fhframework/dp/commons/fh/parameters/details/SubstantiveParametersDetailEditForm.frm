@@ -40,7 +40,7 @@
 
                 <OutputLabel availability="VIEW" width="md-12"
                              styleClasses="panel-title output-label-no-padding white-space--break-spaces"
-                             value="{$.parameters.property.titleOfEditForm}"
+                             value="{$.fhdp.parameters.property.titleOfEditForm}"
                              hint = "Type of operation"/>
                 <OutputLabel availability="VIEW" width="md-12"
                              styleClasses="panel-status output-label-no-padding white-space--break-spaces"
@@ -53,7 +53,7 @@
                          styleClasses="button-icon-group justify-content-end panel-options-base" width="xs-1">
                 <Button id="cancelButtonEditParameters" style="default" styleClasses="panel-option margin__unset" horizontalAlign="right"
                         label="[b][icon='fas fa-times'][/b]"
-                        hint="{$.common.close}" hintTrigger="HOVER"
+                        hint="{$.fhdp.common.close}" hintTrigger="HOVER"
                         hintPlacement="BOTTOM"
                         onClick="cancel"/>
             </ButtonGroup>
@@ -67,26 +67,26 @@
             </Row>
             <Row width="md-12">
                 <Group width="md-12">
-                    <OutputLabel width="md-12" value="{$.parameters.property.value}"/>
+                    <OutputLabel width="md-12" value="{$.fhdp.parameters.property.value}"/>
                     <Group width="md-12">
                         <CheckBox label=" " width="md-1" value="{dto.value}"
                                   availability="{checkControlVisibility(dto.valueTypes, 'CheckBox')}"/>
-                        <!--<InputNumber width="md-12" value="{dto.value}" requiredRegexBinding="{dto.pattern}" requiredRegexMessage="{$.parameters.validation.message}"
+                        <!--<InputNumber width="md-12" value="{dto.value}" requiredRegexBinding="{dto.pattern}" requiredRegexMessage="{$.fhdp.parameters.validation.message}"
                                      availability="{checkControlVisibility(dto.valueTypes, 'InputNumber')}"/>-->
                         <!-- maskDefinition="x[0-9]" mask="x{*}" -->
-                        <InputText width="md-12" value="{dto.value}"  requiredRegexBinding="{dto.pattern}" requiredRegexMessage="{$.parameters.validation.message}"
+                        <InputText width="md-12" value="{dto.value}"  requiredRegexBinding="{dto.pattern}" requiredRegexMessage="{$.fhdp.parameters.validation.message}"
                                    availability="{checkControlVisibility(dto.valueTypes, 'InputText')}"/>
-                        <InputDate width="md-12" value="{dto.value}" requiredRegexBinding="{dto.pattern}" requiredRegexMessage="{$.parameters.validation.message}"
+                        <InputDate width="md-12" value="{dto.value}" requiredRegexBinding="{dto.pattern}" requiredRegexMessage="{$.fhdp.parameters.validation.message}"
                                    availability="{checkControlVisibility(dto.valueTypes, 'InputDate')}"/>
                         <Repeater collection="{dto.values}" iterator="row">
-                            <InputText width="md-10" value="{row.value}" requiredRegexBinding="{dto.pattern}" requiredRegexMessage="{$.parameters.validation.message}"/>
+                            <InputText width="md-10" value="{row.value}" requiredRegexBinding="{dto.pattern}" requiredRegexMessage="{$.fhdp.parameters.validation.message}"/>
                             <Button width="md-2" label="[icon='far fa-trash-alt']"
                                     styleClasses="pl-0 ml-0" style="primary" onClick="removeRepeater({row$rowNo})"/>
                         </Repeater>
                     </Group>
                 </Group>
                 <Group width="md-12">
-                    <OutputLabel width="md-12" value="{$.parameters.property.tags}"/>
+                    <OutputLabel width="md-12" value="{$.fhdp.parameters.property.tags}"/>
                     <Combo id="tag"
                            width="md-4" emptyValue="true"
                            multiselect="true"
@@ -99,14 +99,14 @@
                                availability="{checkControlVisibility()}"/>
                     <Button id="btnSaveTag"
                             width="xs-1"
-                            onClick="saveTag" label="{$.parameters.property.save}"
+                            onClick="saveTag" label="{$.fhdp.parameters.property.save}"
                             hintPlacement="BOTTOM"
                             inlineStyle="line-height: unset;"
                             wrapperStyle="margin-bottom: unset; margin-right: 5px;"
                             availability="{checkControlVisibility()}"/>
                     <Button id="btnCancelAddTag"
                             width="xs-1"
-                            onClick="cancelAddTag" label="{$.parameters.property.cancel}"
+                            onClick="cancelAddTag" label="{$.fhdp.parameters.property.cancel}"
                             hintPlacement="BOTTOM" style="default"
                             inlineStyle="line-height: unset;"
                             wrapperStyle="margin-bottom: unset; margin-right: 5px;"
@@ -120,13 +120,13 @@
     <Row elementsHorizontalAlign="LEFT" styleClasses="panel-footer mb-n3">
         <Button id="btnSave"
                 width="xs-1"
-                onClick="save" label="{$.parameters.property.save}"
+                onClick="save" label="{$.fhdp.parameters.property.save}"
                 hintPlacement="BOTTOM"
                 inlineStyle="line-height: unset;"
                 wrapperStyle="margin-bottom: unset; margin-right: 5px;"/>
         <Button id="btnCancel"
                 width="xs-1" availability="EDIT"
-                onClick="cancel" label="{$.parameters.property.cancel}"
+                onClick="cancel" label="{$.fhdp.parameters.property.cancel}"
                 hintPlacement="BOTTOM" style="default"
                 inlineStyle="line-height: unset;"
                 wrapperStyle="margin-bottom: unset; margin-right: 5px;"/>

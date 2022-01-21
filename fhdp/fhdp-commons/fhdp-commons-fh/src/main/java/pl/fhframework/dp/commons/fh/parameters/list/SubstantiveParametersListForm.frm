@@ -21,7 +21,7 @@
                         </Group>
                         <OutputLabel availability="VIEW" width="md-12"
                                      styleClasses="panel-title output-label-no-padding white-space--break-spaces"
-                                     value="{$.parameters.property.titleOfListForm}"/>
+                                     value="{$.fhdp.parameters.property.titleOfListForm}"/>
                         <OutputLabel availability="VIEW" width="md-12"
                                      styleClasses="panel-status output-label-no-padding white-space--break-spaces"
                                      value=" "/>
@@ -34,8 +34,8 @@
             <TablePaged id="modelFrmUserTable" iterator="row" collection="{list}"
                         selected="{selectedSubstantiveParametersDto}" onRowClick="showParameterDetails()"
                         inlineStyle="overflow-x: unset;" horizontalScrolling="true">
-                <ColumnPaged label="{$.parameters.property.rowNumber}" value="{row$rowNo}" width="5" availability="{checkControlVisibility()}"/>
-                <ColumnPaged styleClasses="rowDisplayFlex" label="{$.parameters.property.nameAndKey}" width="35" sortBy="parameterNames.name.keyword">
+                <ColumnPaged label="{$.fhdp.parameters.property.rowNumber}" value="{row$rowNo}" width="5" availability="{checkControlVisibility()}"/>
+                <ColumnPaged styleClasses="rowDisplayFlex" label="{$.fhdp.parameters.property.nameAndKey}" width="35" sortBy="parameterNames.name.keyword">
                     <OutputLabel width="md-12" value="{row.parameterNames[0].name}"
                                  styleClasses="h6 text-wrap font-weight-bold"/>
                     <OutputLabel width="md-12" value="{row.key}" styleClasses="text-wrap"/>
@@ -44,13 +44,13 @@
                     <OutputLabel id="parameterWarningScope" width="xs-1" value="{row.scope}" styleClasses="text-wrap status status--warning mt-10"
                                  inlineStyle="padding: 6px 10px;" availability="{checkScopeVisibility(row, 'warning')}"/>
                 </ColumnPaged>
-                <ColumnPaged label="{$.parameters.property.value}" width="30" styleClasses="text-wrap" sortBy="value.keyword">
+                <ColumnPaged label="{$.fhdp.parameters.property.value}" width="30" styleClasses="text-wrap" sortBy="value.keyword">
                     <OutputLabel value="{row.getFormattedCollectionValues()}" width="md-12"/>
                     <OutputLabel value="{row.value}" width="md-12"/>
                 </ColumnPaged>
-                <ColumnPaged label="{$.parameters.property.unit}" value="{row.unit}" width="10" sortBy="unit.keyword"/>
-                <ColumnPaged label="{$.parameters.property.component}" value="{row.components}" width="7" sortBy="components.keyword"/>
-                <ColumnPaged label="{$.parameters.property.tags}" styleClasses="text-wrap" value="{row.tags}" formatter="arrayStringFormatter" width="15" sortBy="tagsDisplay.keyword"/>
+                <ColumnPaged label="{$.fhdp.parameters.property.unit}" value="{row.unit}" width="10" sortBy="unit.keyword"/>
+                <ColumnPaged label="{$.fhdp.parameters.property.component}" value="{row.components}" width="7" sortBy="components.keyword"/>
+                <ColumnPaged label="{$.fhdp.parameters.property.tags}" styleClasses="text-wrap" value="{row.tags}" formatter="arrayStringFormatter" width="15" sortBy="tagsDisplay.keyword"/>
             </TablePaged>
         </Group>
 

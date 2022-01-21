@@ -19,10 +19,10 @@
         -->
     </Group>
     <PanelGroup>
-        <InputText width="md-12" value="{query.name}" label="{$.parameters.search.query.name.label}" onKeyEvent="search" keyEvent="ENTER"/>
-        <InputText width="md-12" value="{query.key}" label="{$.parameters.search.query.key.label}" onKeyEvent="search" keyEvent="ENTER"/>
-        <InputText width="md-12" value="{query.tag}" label="{$.parameters.search.query.tag.label}" onKeyEvent="search" keyEvent="ENTER"/>
-        <!--<InputText width="md-12" value="{query.customsOffice}" label="{$.parameters.search.query.customsOffice.label}" onKeyEvent="search" keyEvent="ENTER"/>-->
+        <InputText width="md-12" value="{query.name}" label="{$.fhdp.parameters.search.query.name.label}" onKeyEvent="search" keyEvent="ENTER"/>
+        <InputText width="md-12" value="{query.key}" label="{$.fhdp.parameters.search.query.key.label}" onKeyEvent="search" keyEvent="ENTER"/>
+        <InputText width="md-12" value="{query.tag}" label="{$.fhdp.parameters.search.query.tag.label}" onKeyEvent="search" keyEvent="ENTER"/>
+        <!--<InputText width="md-12" value="{query.customsOffice}" label="{$.fhdp.parameters.search.query.customsOffice.label}" onKeyEvent="search" keyEvent="ENTER"/>-->
     </PanelGroup>
 
     <Model externalClass="pl.fhframework.dp.commons.fh.parameters.list.SubstantiveParametersCTListSearch"/>

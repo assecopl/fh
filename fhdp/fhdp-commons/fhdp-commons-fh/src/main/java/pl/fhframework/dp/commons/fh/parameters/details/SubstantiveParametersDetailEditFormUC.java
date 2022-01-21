@@ -113,7 +113,7 @@ public class SubstantiveParametersDetailEditFormUC implements IUseCaseOneInput<S
         if(model.getSubstantiveParametersTagList().contains(model.getName())) {
             reportValidationError(model,
                 "name",
-                messageService.getAllBundles().getMessage("parameters.validation.message.tag"),
+                messageService.getAllBundles().getMessage("fhdp.parameters.validation.message.tag"),
                 PresentationStyleEnum.ERROR);
         }
         return !getUserSession().getValidationResults().hasAtLeastErrors();

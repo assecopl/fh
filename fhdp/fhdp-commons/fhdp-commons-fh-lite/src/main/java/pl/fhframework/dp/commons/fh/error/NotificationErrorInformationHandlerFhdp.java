@@ -54,7 +54,7 @@ public class NotificationErrorInformationHandlerFhdp implements NonResponsiveInf
                 eventRegistry.fireNotificationEvent(NotificationEvent.Level.WARNING,
                         throwable.getMessage());
             } else {
-                String title = messageService.getAllBundles().getMessage("common.error");
+                String title = messageService.getAllBundles().getMessage("fhdp.common.error");
                 if(StringUtils.isEmpty(emailAddresses)) {
                     if(showAsMessage) {
                         eventRegistry.fireMessageEvent(title,
@@ -65,10 +65,10 @@ public class NotificationErrorInformationHandlerFhdp implements NonResponsiveInf
                     }
                 } else {
                     if(showAsMessage) {
-                        eventRegistry.fireMessageEvent(title, messageService.getAllBundles().getMessage("common.error.message"));
+                        eventRegistry.fireMessageEvent(title, messageService.getAllBundles().getMessage("fhdp.common.error.message"));
                     } else {
                         eventRegistry.fireNotificationEvent(NotificationEvent.Level.ERROR,
-                                messageService.getAllBundles().getMessage("common.error.message"));
+                                messageService.getAllBundles().getMessage("fhdp.common.error.message"));
                     }
                     // Notify admins
                     if(notificationService != null) {

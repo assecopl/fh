@@ -3,13 +3,13 @@
     <Row elementsHorizontalAlign="LEFT" styleClasses="m-0">
         <Button id="saveButton"
                 width="xs-1"
-                onClick="save" label="{$.common.save}"
+                onClick="save" label="{$.fhdp.common.save}"
                 hintPlacement="BOTTOM" hintTrigger="HOVER"
                 style="success" inlineStyle="line-height: unset;"
                 wrapperStyle="margin-bottom: unset; margin-right: 5px;"/>
         <Button id="cancelButton"
                 width="xs-1"
-                onClick="cancel" label="{$.common.cancel}"
+                onClick="cancel" label="{$.fhdp.common.cancel}"
                 hintPlacement="BOTTOM" hintTrigger="HOVER"
                 style="default" inlineStyle="line-height: unset;"
                 wrapperStyle="margin-bottom: unset; margin-right: 5px;"/>

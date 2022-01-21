@@ -4,31 +4,31 @@
         <Invisible when="onlyContrastStyle==true">allStyles</Invisible>
     </AvailabilityConfiguration>
 
-    <PanelHeaderFhDP info="{$.document.ct.sider.settings.info}" title="{$.document.ct.sider.settings.title}" onClick="closeAppSider" width="md-12" />
+    <PanelHeaderFhDP info="{$.fhdp.document.ct.sider.settings.info}" title="{$.fhdp.document.ct.sider.settings.title}" onClick="closeAppSider" width="md-12" />
 
     <Group styleClasses="search-box-group">
         <PanelGroup styleClasses="switches" inlineStyle="margin-left: -15px;">
             <Row styleClasses="switch switch--unselected" inlineStyle="margin-bottom: 5px;">
-                <OutputLabel width="md-6" value="{$.document.ct.sider.settings.tightMode}" styleClasses="switch-label"/>
+                <OutputLabel width="md-6" value="{$.fhdp.document.ct.sider.settings.tightMode}" styleClasses="switch-label"/>
                 <CheckBox label=" " value=" " onChange="changeNarrowStyle"/>
             </Row>
             <Row styleClasses="switch switch--unselected" inlineStyle="margin-bottom: 5px;">
-                <OutputLabel width="md-6" value="{$.document.ct.sider.settings.labelOperations}" styleClasses="switch-label"/>
+                <OutputLabel width="md-6" value="{$.fhdp.document.ct.sider.settings.labelOperations}" styleClasses="switch-label"/>
                 <CheckBox label=" " value=" " onChange="changeOperationLabels"/>
             </Row>
 
 <!--            <Row styleClasses="switch switch&#45;&#45;unselected" inlineStyle="margin-bottom: 5px;">-->
-<!--&lt;!&ndash;                <OutputLabel width="md-6" value="{$.document.ct.sider.settings.labelOperations}" styleClasses="switch-label"/>&ndash;&gt;-->
-<!--                <CheckBox width="md-12" labelPosition="left" label="{$.document.ct.sider.settings.labelOperations}" value=" " onChange="changeOperationLabels"/>-->
+<!--&lt;!&ndash;                <OutputLabel width="md-6" value="{$.fhdp.document.ct.sider.settings.labelOperations}" styleClasses="switch-label"/>&ndash;&gt;-->
+<!--                <CheckBox width="md-12" labelPosition="left" label="{$.fhdp.document.ct.sider.settings.labelOperations}" value=" " onChange="changeOperationLabels"/>-->
 <!--            </Row>-->
 
             <Row id="onlyOneStyle" styleClasses="switch switch--unselected" inlineStyle="margin-bottom: 5px;">
-                <OutputLabel width="md-6" value="{$.document.ct.sider.settings.style}" styleClasses="switch-label"/>
+                <OutputLabel width="md-6" value="{$.fhdp.document.ct.sider.settings.style}" styleClasses="switch-label"/>
                 <CheckBox label=" " value="onlyContrastStyleChecked" onChange="onChangeOnlyContrastStyle"/>
             </Row>
 
             <Row id="allStyles" styleClasses="switch switch--unselected" inlineStyle="margin-bottom: 5px;">
-                <OutputLabel width="md-3" value="{$.document.ct.sider.settings.style}" styleClasses="switch-label"/>
+                <OutputLabel width="md-3" value="{$.fhdp.document.ct.sider.settings.style}" styleClasses="switch-label"/>
                 <RadioOptionsGroup width="md-6" label=" "
                                    value="{selectedStyle}"
                                    values="{possibleStyles}"

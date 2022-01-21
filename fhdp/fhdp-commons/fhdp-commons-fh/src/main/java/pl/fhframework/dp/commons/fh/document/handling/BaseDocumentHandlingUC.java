@@ -264,12 +264,12 @@ public  abstract class BaseDocumentHandlingUC<MODEL extends BaseDocumentHandling
         // TO DO: language handling
         // the below key should be used
         // message.operation.result
-        refreshView(messageService.getAllBundles().getMessage("document.ct.actions.refresh.manual"));
+        refreshView(messageService.getAllBundles().getMessage("fhdp.document.ct.actions.refresh.manual"));
     }
 
     @Action(validate = false)
     public void refreshManual() {
-        refreshView(messageService.getAllBundles().getMessage("document.ct.actions.refresh.manual"));
+        refreshView(messageService.getAllBundles().getMessage("fhdp.document.ct.actions.refresh.manual"));
     }
 
     @Action(validate = false)

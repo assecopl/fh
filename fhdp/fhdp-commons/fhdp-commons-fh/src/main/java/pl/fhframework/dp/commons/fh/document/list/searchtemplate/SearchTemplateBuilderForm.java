@@ -61,7 +61,7 @@ public class SearchTemplateBuilderForm extends CompositeForm<SearchTemplateBuild
         if (row.getRowType() == RowTypeEnum.BRACKET_START) {
             List<SearchTemplateBuilderModel.ConditionRow> rowsInside = getModel().getConditionRowsInsideBrackets(row);
             if (rowsInside.size() > 3) {
-                FhUtils.showConfirmDialogYesNo(commonsMessageHelper.getMessage("common.confirm"),
+                FhUtils.showConfirmDialogYesNo(commonsMessageHelper.getMessage("fhdp.common.confirm"),
                         commonsMessageHelper.getMessage("document.ct.searchCriteria.tab.template.confirmDialog.deleteParentBrackets"),
                         () -> getModel().getConditionRows().removeAll(rowsInside));
             } else {
@@ -156,7 +156,7 @@ public class SearchTemplateBuilderForm extends CompositeForm<SearchTemplateBuild
         SearchTemplateDto selectedFilter = getModel().getUserDefinedSelectedFilter();
         if (selectedFilter != null) {
             if (getModel().containsUserChanges()) {
-                FhUtils.showConfirmDialogYesNo(commonsMessageHelper.getMessage("common.confirm"),
+                FhUtils.showConfirmDialogYesNo(commonsMessageHelper.getMessage("fhdp.common.confirm"),
                         commonsMessageHelper.getMessage("document.ct.searchCriteria.tab.template.confirmDialog.loadFilter"),
                         () -> doLoadFilterWithNotification(selectedFilter));
             } else {
@@ -170,7 +170,7 @@ public class SearchTemplateBuilderForm extends CompositeForm<SearchTemplateBuild
         getModel().setSourceFilter(filter);
         getModel().setConditionRows(prepareRowsForFilterDefinition(filter.getSearchTemplateDefinitions()));
         eventRegistry.fireNotificationEvent(NotificationEvent.Level.INFO,
-                commonsMessageHelper.getMessage("document.ct.searchCriteria.tab.template.notification.filterLoaded", filter.getTemplateName()));
+                commonsMessageHelper.getMessage("fhdp.document.ct.searchCriteria.tab.template.notification.filterLoaded", filter.getTemplateName()));
     }
     @Action
     public void onSaveFilter() {
@@ -195,7 +195,7 @@ public class SearchTemplateBuilderForm extends CompositeForm<SearchTemplateBuild
             return;
         if (getModel().getSourceFilter() != null) {
             SearchTemplateDto filter = new SearchTemplateDto();
-            filter.setTemplateName(getModel().getSourceFilter().getTemplateName() + "-" + commonsMessageHelper.getMessage("common.copy"));
+            filter.setTemplateName(getModel().getSourceFilter().getTemplateName() + "-" + commonsMessageHelper.getMessage("fhdp.common.copy"));
             saveFilterWithDialog(filter);
         }
     }
@@ -474,7 +474,7 @@ public class SearchTemplateBuilderForm extends CompositeForm<SearchTemplateBuild
     public void onRemoveFilter() {
         SearchTemplateDto filter = getModel().getSourceFilter();
         if (filter != null) {
-            FhUtils.showConfirmDialogYesNo(commonsMessageHelper.getMessage("common.confirm"), commonsMessageHelper.getMessage("document.ct.searchCriteria.tab.template.confirmDialog.deleteFilter", filter.getTemplateName()), () -> {
+            FhUtils.showConfirmDialogYesNo(commonsMessageHelper.getMessage("fhdp.common.confirm"), commonsMessageHelper.getMessage("document.ct.searchCriteria.tab.template.confirmDialog.deleteFilter", filter.getTemplateName()), () -> {
                 searchCriteriaDtoService.deleteDto(filter.getId());
                 eventRegistry.fireNotificationEvent(NotificationEvent.Level.INFO, commonsMessageHelper.getMessage("document.ct.searchCriteria.tab.template.notification.filterDeleted", filter.getTemplateName()));
                 getModel().setUserDefinedFilters(findTemplatesByNameAndUser());

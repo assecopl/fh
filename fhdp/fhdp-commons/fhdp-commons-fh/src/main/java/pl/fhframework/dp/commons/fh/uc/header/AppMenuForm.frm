@@ -1,6 +1,6 @@
 <Form container="menuForm" id="menuInner" xmlns="http://fh.asseco.com/form/1.0" >
     <Row width="md-12" elementsHorizontalAlign="CENTER" styleClasses="search-padding,search-label">
-    <InputText width="md-4" label="{$.menu.form.search}" value="{searchText}" onInput="filter" styleClasses="search-input"/>
+    <InputText width="md-4" label="{$.fhdp.menu.form.search}" value="{searchText}" onInput="filter" styleClasses="search-input"/>
     </Row>
     <Row width="md-12" elementsHorizontalAlign="AROUND" styleClasses="tree-menu">
         <Repeater width="md-12" collection="{menuElements}" iterator="el" styleClasses="child-wrapper-min-width">
