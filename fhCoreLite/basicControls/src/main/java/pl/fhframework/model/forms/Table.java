@@ -110,11 +110,12 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
     @JsonIgnore
     protected BiFunction<Object, Object, Boolean> compareFunction;
 
+    @JsonIgnore
     @Getter
     @Setter
     @XMLProperty
-    @DocumentedComponentAttribute(value = "Additional function to compare with selected object when checking table selections.")
-    @DesignerXMLProperty(functionalArea = SPECIFIC, priority = 15)
+    @DocumentedComponentAttribute(boundable = true, value = "Additional function to compare with selected object when checking table selections.")
+    @DesignerXMLProperty(allowedTypes = BiPredicate.class)
     private ModelBinding compareFunctionBinding;
 
     @Getter
@@ -728,7 +729,17 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
                 return new int[]{-1};
             }
         } else {
-            return new int[]{new LinkedList(collection).indexOf(newSelectedValue)};
+            Object[] tempCollection = collection.toArray();
+            int[] newSelectedRows = new int[1];
+            newSelectedRows[0] = -1;
+            Object obj = newSelectedValue;
+            for (int c = 0; c < collection.size(); c++) {
+                if(this.compareFunction.apply(tempCollection[c], obj)){
+                    newSelectedRows[0] = c;
+                    break;
+                }
+            }
+            return newSelectedRows;
         }
     }
 
