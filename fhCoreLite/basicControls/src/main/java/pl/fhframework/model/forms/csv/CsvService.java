@@ -16,6 +16,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -31,6 +32,12 @@ public class CsvService {
         TemporaryResource resource = createTempResource();
         try (FileWriter output = new FileWriter(resource.getFile());
              CSVPrinter printer = new CSVPrinter(output, CSVFormat.EXCEL.withDelimiter(';'))) {
+
+            //Add BOM mark to UTF-8 for better import to Excel
+            if(Objects.equals(output.getEncoding(), "UTF8") || Objects.equals(output.getEncoding(), "UTF-8")) {
+                final byte[] bom = new byte[]{(byte) 0xEF, (byte) 0xBB, (byte) 0xBF};
+                output.write(new String(bom));
+            }
 
             // headers
             List<String> headers = table.getColumns().stream()
