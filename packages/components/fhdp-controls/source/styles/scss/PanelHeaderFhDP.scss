@@ -1,0 +1,52 @@
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  background: var(--color-white);
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
+  position: relative;
+  z-index: 2;
+  align-items: center;
+  user-select: none;
+}
+
+.panel-header--transparent {
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.panel-sub-header {
+  z-index: 1;
+}
+
+.panel-header-group {
+  padding: var(--padding-bigger);
+  justify-self: start;
+  flex-grow: 1;
+  flex-basis: 0;
+  user-select: text;
+}
+
+.panel-options {
+  padding: var(--padding-bigger);
+  display: flex;
+}
+
+.panel-info {
+  font-weight: 900;
+}
+
+.panel-title {
+  font-weight: 900;
+  font-size: 2rem;
+}
+
+.panel-option {
+  font-size: 1.3rem;
+  padding: 15px 10px;
+  margin: 5px;
+  border: 0;
+  background: transparent;
+  border-radius: 5px;
+  color: var(--color-text);
+  position: relative;
+}

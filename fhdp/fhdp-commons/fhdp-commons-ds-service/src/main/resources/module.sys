@@ -1,0 +1,2 @@
+<subsystem name="FhdpCommonsDsService" label="FHDP commons DS Service" productUUID="e5ac91e1-4591-4407-8dd1-52220db6ed3c" basePackage="pl.fhframework.dp.commons.ds" access="private">
+</subsystem>

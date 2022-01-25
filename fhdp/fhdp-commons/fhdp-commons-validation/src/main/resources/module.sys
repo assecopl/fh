@@ -1,0 +1,2 @@
+<subsystem name="FHDPCommonsValidation" label="FHDP commons validation" productUUID="e5ac91e1-4591-4407-8dd1-52220db6ed3c" basePackage="pl.fhframework.dp.commons.validation" access="private">
+</subsystem>
