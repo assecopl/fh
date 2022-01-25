@@ -4,14 +4,14 @@
     <groupId>pl.fhframework.dp</groupId>
     <artifactId>fhdp</artifactId>
     <packaging>pom</packaging>
-    <version>4.9.22-SNAPSHOT</version>
+    <version>4.9.23-SNAPSHOT</version>
 
     <description>FHDP common modules</description>
 
     <url>https://github.com/assecopl/fh</url>
 
     <properties>
-        <fh.version>4.9.22-SNAPSHOT</fh.version>
+        <fh.version>4.9.23-SNAPSHOT</fh.version>
 
         <sfl4j.version>1.7.30</sfl4j.version>
         <infinispan.version>11.0.9.Final</infinispan.version>
