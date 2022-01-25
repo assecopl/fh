@@ -226,6 +226,17 @@ public class TablePaged extends Table {
                             Collection muliselectCol = (Collection) getSelectedElementBinding().getBindingResult().getValue();
                             if (muliselectCol != null) {
                                 muliselectCol.removeAll(bindedObjectsList);
+                                Iterator i = muliselectCol.iterator();
+                                Collection<Object> bindedObjectsList2 = new ArrayList<>();
+                                while (i.hasNext()) {
+                                    Object o = i.next();
+                                    bindedObjectsList.forEach(o1 -> {
+                                        if (this.compareFunction.apply(o, o1)) {
+                                            bindedObjectsList2.add(o);
+                                        }
+                                    });
+                                }
+                                muliselectCol.removeAll(bindedObjectsList2);
                                 muliselectCol.addAll((Collection) newSelectedElement);
                             } else {
                                 getSelectedElementBinding().setValue(newSelectedElement);
@@ -345,6 +356,8 @@ public class TablePaged extends Table {
             }
         }
 
+//        this.selectedRowsNumbers = getSelectedRowNumberBasedOnBinding(mainCollection, this.multiselect);
+//        elementChange.addChange(SELECTED_ROW_NUMBER, this.selectedRowsNumbers);
 
         this.language = LanguageResolver.languageChanges(getForm().getAbstractUseCase().getUserSession(), this.language, elementChange);
 

@@ -8,7 +8,7 @@
   <parent>
     <groupId>pl.fhframework</groupId>
     <artifactId>fhCoreLite</artifactId>
-    <version>4.9.22-SNAPSHOT</version>
+    <version>4.9.23-SNAPSHOT</version>
   </parent>
   <dependencies>
     <dependency>

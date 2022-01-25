@@ -193,12 +193,8 @@ class Table extends TableWithKeyboardEvents {
                         this.scrollTopInside();
                         break;
                     case 'selectedRowNumber':
-                        //Chcek if values are same and set no selection. We don't need to fire higlight logic again.
-                        const noSelected = (this.rawValue[0] == -1 && newValue[0] == -1)
                         this.rawValue = change.changedAttributes['selectedRowNumber'];
-                        if (!noSelected) {
                             this.highlightSelectedRows();
-                        }
                         break;
                     case 'rowStylesMapping':
                         this.rowStylesMapping = newValue;

@@ -45,6 +45,7 @@ import {ChatEvent} from "./source/Events/ChatEvent"
 import {ScrollEvent} from "./source/Events/ScrollEvent";
 import {ChatListEvent} from "./source/Events/ChatListEvent";
 
+
 class FormsHandler extends FhModule {
     protected registerComponents() {
         FhContainer.bind<I18n>('I18n').to(I18n).inSingletonScope();
