@@ -1,6 +1,6 @@
 {
   "name": "fhdp-controls",
-  "version": "4.9.23-SNAPSHOT-1643111141537",
+  "version": "4.9.23-SNAPSHOT-1643113944236",
   "author": {
     "name": "Jakub Kosecki",
     "email": "j.kosecki@doittechnology.pl"
@@ -38,8 +38,8 @@
   "dependencies": {
     "@popperjs/core": "2.5.3",
     "bootstrap-table": "^1.17.1",
-    "fh-basic-controls": "4.9.23-SNAPSHOT-1643111141537",
-    "fh-forms-handler": "4.9.23-SNAPSHOT-1643111141537",
+    "fh-basic-controls": "4.9.23-SNAPSHOT-1643113944236",
+    "fh-forms-handler": "4.9.23-SNAPSHOT-1643113944236",
     "iso-639-1": "^2.1.4",
     "jquery-mousewheel": "^3.1.13",
     "jvectormap-next": "^3.1.1",
