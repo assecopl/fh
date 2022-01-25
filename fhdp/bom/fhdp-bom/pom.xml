@@ -16,7 +16,7 @@
             <dependency>
                 <groupId>pl.fhframework</groupId>
                 <artifactId>fh-boot-bom</artifactId>
-                <version>${fh.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.camunda.bpm</groupId>
@@ -26,47 +26,47 @@
             <dependency>
                 <groupId>pl.fhframework</groupId>
                 <artifactId>coreLite</artifactId>
-                <version>${fh.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>pl.fhframework</groupId>
                 <artifactId>fhJpa-jee</artifactId>
-                <version>${fh.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>pl.fhframework</groupId>
                 <artifactId>cache-standalone</artifactId>
-                <version>${fh.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>pl.fhframework.integration</groupId>
                 <artifactId>integrationCoreLite</artifactId>
-                <version>${fh.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>pl.fhframework.persistence</groupId>
                 <artifactId>fhPersistenceLite</artifactId>
-                <version>${fh.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>pl.fhframework.core.security.provider</groupId>
                 <artifactId>securityDataProvider</artifactId>
-                <version>${fh.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>pl.fhframework.core.security.provider</groupId>
                 <artifactId>securityDataProvider-jdbc</artifactId>
-                <version>${fh.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>pl.fhframework.core.security.permission</groupId>
                 <artifactId>permissionProvider-jdbc</artifactId>
-                <version>${fh.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>pl.fhframework</groupId>
                 <artifactId>docs</artifactId>
-                <version>${fh.version}</version>
+                <version>${project.version}</version>
                 <exclusions>
                     <exclusion>
                         <artifactId>base</artifactId>
@@ -77,27 +77,27 @@
             <dependency>
                 <groupId>pl.fhframework</groupId>
                 <artifactId>basicControls</artifactId>
-                <version>${fh.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>pl.fhframework</groupId>
                 <artifactId>coreApplication</artifactId>
-                <version>${fh.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>pl.asseco.luna.integration</groupId>
                 <artifactId>integrationCore</artifactId>
-                <version>${fh.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>pl.asseco.luna.core</groupId>
                 <artifactId>base</artifactId>
-                <version>${fh.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>pl.asseco.luna.core</groupId>
                 <artifactId>lunaApplication</artifactId>
-                <version>${fh.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jasig.cas.client</groupId>
@@ -112,7 +112,7 @@
 <!--            <dependency>-->
 <!--                <groupId>pl.asseco.luna.sam</groupId>-->
 <!--                <artifactId>lunaSam</artifactId>-->
-<!--                <version>${fh.version}</version>-->
+<!--                <version>${project.version}</version>-->
 <!--            </dependency>-->
             <dependency>
                 <groupId>javax.validation</groupId>
@@ -240,22 +240,22 @@
             <dependency>
                 <groupId>pl.asseco.luna.core</groupId>
                 <artifactId>persistence</artifactId>
-                <version>${fh.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>pl.fhframework.core.security.provider</groupId>
                 <artifactId>securityDataProvider-rest</artifactId>
-                <version>${fh.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>pl.fhframework.core.security.permission</groupId>
                 <artifactId>permissionProvider-rest</artifactId>
-                <version>${fh.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>pl.fhframework.core.security.provider</groupId>
                 <artifactId>securityDataProvider-remote</artifactId>
-                <version>${fh.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.ldap</groupId>

@@ -167,7 +167,7 @@
                     <dependency>
                         <groupId>pl.fhframework</groupId>
                         <artifactId>fh-compiler</artifactId>
-                        <version>${fh.version}</version>
+                        <version>${project.version}</version>
                     </dependency>
                     <dependency>
                         <groupId>pl.fhframework.dp</groupId>

@@ -30,52 +30,52 @@
             <dependency>
                 <groupId>pl.fhframework</groupId>
                 <artifactId>fh-boot-bom</artifactId>
-                <version>${fh.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>pl.fhframework</groupId>
                 <artifactId>coreLite</artifactId>
-                <version>${fh.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>pl.fhframework</groupId>
                 <artifactId>defaultApplication</artifactId>
-                <version>${fh.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>pl.fhframework</groupId>
                 <artifactId>cache-standalone</artifactId>
-                <version>${fh.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>pl.fhframework.core.security.permission</groupId>
                 <artifactId>permissionProvider-jdbc</artifactId>
-                <version>${fh.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>pl.fhframework</groupId>
                 <artifactId>pubsub-standalone</artifactId>
-                <version>${fh.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>pl.fhframework.core.security.provider</groupId>
                 <artifactId>securityDataProvider</artifactId>
-                <version>${fh.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>pl.fhframework.core.security.provider</groupId>
                 <artifactId>securityDataProvider-jdbc</artifactId>
-                <version>${fh.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>pl.fhframework.persistence</groupId>
                 <artifactId>fhPersistenceLite</artifactId>
-                <version>${fh.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>pl.fhframework</groupId>
                 <artifactId>fhJpa-jee</artifactId>
-                <version>${fh.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>pl.fhframework</groupId>
@@ -85,22 +85,22 @@
             <dependency>
                 <groupId>pl.fhframework</groupId>
                 <artifactId>fhTomcat-config</artifactId>
-                <version>${fh.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>pl.fhframework.integration</groupId>
                 <artifactId>integrationCoreLite</artifactId>
-                <version>${fh.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>pl.fhframework</groupId>
                 <artifactId>basicControls</artifactId>
-                <version>${fh.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>pl.fhframework</groupId>
                 <artifactId>chartsControls</artifactId>
-                <version>${fh.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.geolatte</groupId>
