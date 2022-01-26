@@ -15,6 +15,7 @@ import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.core.security.model.SessionInfo;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 import java.net.InetAddress;
@@ -30,7 +31,7 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
     @Getter
     private Map<String, UserSession> userSessions = new ConcurrentHashMap<>();
     private Map<String, UserSession> userSessionsByConversationId = new ConcurrentHashMap<>();
-    private Map<Integer, UserSession> userSessionsHash = new ConcurrentHashMap<>();
+    private Map<String, UserSession> userSessionsByFhId = new ConcurrentHashMap<>();
     private Set<Consumer<UserSession>> userSessionDestroyedListeners = new HashSet<>();
     private Set<Consumer<UserSession>> userSessionKeepAliveListeners = new HashSet<>();
 
@@ -100,26 +101,30 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
     }
 
     public void setUserSession(String httpSessionId, UserSession userSession) {
-        // ChangeSessionIdAuthenticationStrategy silently modify session id after security filter, remove old userSession
-        int httpSessionHash = System.identityHashCode(userSession.getHttpSession());
-        UserSession oldUserSession = userSessionsHash.get(httpSessionHash);
+        String fhSessionId = userSession.getFhSessionId();
+
+        UserSession oldUserSession = userSessionsByFhId.get(fhSessionId);
         if (oldUserSession != null) {
-            removeUserSession(oldUserSession.getHttpSessionOrgId());
+            removeUserSession(oldUserSession);
         }
-        userSessionsHash.put(httpSessionHash, userSession);
+        userSessionsByFhId.put(fhSessionId, userSession);
         userSessions.put(httpSessionId, userSession);
         userSessionsByConversationId.put(userSession.getConversationUniqueId(), userSession);
-        putSessionInfo(httpSessionId, userSession);
+        putSessionInfo(fhSessionId, userSession);
     }
 
     public void removeUserSession(String httpSessionId) {
         UserSession userSession = userSessions.remove(httpSessionId);
-        userSessionsHash.remove(System.identityHashCode(userSession.getHttpSession()));
-        userSessionsByConversationId.remove(userSession.getConversationUniqueId());
-        removeSessionInfo(httpSessionId);
+        removeUserSession(userSession);
     }
 
-    private synchronized void putSessionInfo(String httpSessionId, UserSession userSession) {
+    private void removeUserSession(UserSession userSession) {
+        userSessionsByFhId.remove(userSession.getFhSessionId());
+        userSessionsByConversationId.remove(userSession.getConversationUniqueId());
+        removeSessionInfo(userSession.getFhSessionId());
+    }
+
+    private synchronized void putSessionInfo(String fhSessionId, UserSession userSession) {
         SessionInfo sessionInfo = new SessionInfo();
         sessionInfo.setSessionId(userSession.getConversationUniqueId());
         sessionInfo.setLogonTime(new Date(userSession.getCreationTimestamp().toEpochMilli()));
@@ -127,13 +132,13 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
         sessionInfo.setNodeUrl(nodeUrl);
         // put into cache
         Map<String, SessionInfo> sessionsInfo = sessionInfoCache.getSessionsInfoForNode(nodeUrl);
-        sessionsInfo.put(httpSessionId, sessionInfo);
+        sessionsInfo.put(fhSessionId, sessionInfo);
         sessionInfoCache.putSessionsInfoForNode(nodeUrl, sessionsInfo);
     }
 
-    private synchronized void removeSessionInfo(String httpSessionId) {
+    private synchronized void removeSessionInfo(String fhSessionId) {
         Map<String, SessionInfo> sessionsInfo = sessionInfoCache.getSessionsInfoForNode(nodeUrl);
-        sessionsInfo.remove(httpSessionId);
+        sessionsInfo.remove(fhSessionId);
         sessionInfoCache.putSessionsInfoForNode(nodeUrl, sessionsInfo);
     }
 
@@ -177,7 +182,11 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
 
     @Override
     public void sessionCreated(HttpSessionEvent httpSessionEvent) {
-        // ignore
+        // ChangeSessionIdAuthenticationStrategy silently modify session id after security filter, remove old userSession
+        HttpSession session = httpSessionEvent.getSession();
+        if (session.getAttribute(UserSession.FH_SESSION_ID) != null) {
+            session.setAttribute(UserSession.FH_SESSION_ID, session.getId());
+        }
     }
 
     @Override
