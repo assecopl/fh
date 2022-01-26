@@ -37,6 +37,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class UserSession extends Session {
 
+    public static final String FH_SESSION_ID = "fh_session_id";
+
     private static final int ERROR_INFORMATION_LIMIT = 10;
 
     @Getter
@@ -70,8 +72,8 @@ public class UserSession extends Session {
 
     private HttpSession httpSession;
 
-    // original session id - ChangeSessionIdAuthenticationStrategy is called after logging in
-    private String httpSessionOrgId;
+    // fh session id - ChangeSessionIdAuthenticationStrategy is called after logging in
+    private String fhSessionId;
 
     /**
      * Optional authentication propagated from a remote cloud server.
@@ -93,9 +95,12 @@ public class UserSession extends Session {
 
     private RuntimeException exception;
 
-    public UserSession(SystemUser systemUser, UserSessionDescription description) {
+    private Integer sustainTimeOutMinutesOverride;
+
+    public UserSession(SystemUser systemUser, UserSessionDescription description, HttpSession httpSession) {
         super(description);
         setSystemUser(systemUser);
+        setFhSessionId((String) httpSession.getAttribute(FH_SESSION_ID));
     }
 
     @PostConstruct
@@ -246,12 +251,6 @@ public class UserSession extends Session {
 
     public void setHttpSession(HttpSession httpSession) {
         this.httpSession = httpSession;
-        if (httpSession != null) {
-            httpSessionOrgId = httpSession.getId();
-        }
-        else {
-            httpSessionOrgId = null;
-        }
     }
 
     private long lastUsageMoment = System.currentTimeMillis();
