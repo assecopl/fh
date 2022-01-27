@@ -124,14 +124,17 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
     }
 
     public void removeUserSession(String httpSessionId) {
-        UserSession userSession = userSessions.remove(httpSessionId);
+        UserSession userSession = userSessions.get(httpSessionId);
         removeUserSession(userSession);
     }
 
     private void removeUserSession(UserSession userSession) {
-        userSessionsByFhId.remove(userSession.getFhSessionId());
-        userSessionsByConversationId.remove(userSession.getConversationUniqueId());
-        removeSessionInfo(userSession.getFhSessionId());
+        userSessions.values().remove(userSession);
+        userSessionsByFhId.values().remove(userSession);
+        userSessionsByConversationId.values().remove(userSession);
+//        userSessionsByFhId.remove(userSession.getFhSessionId());
+//        userSessionsByConversationId.remove(userSession.getConversationUniqueId());
+//        removeSessionInfo(userSession.getFhSessionId());
     }
 
     private synchronized void putSessionInfo(String fhSessionId, UserSession userSession) {
