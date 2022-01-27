@@ -213,37 +213,39 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
 
     @Scheduled(fixedDelay = 60000)
     private void cleanupLeakedSessions(){
+        if (emergencyRemovalUnusedSessions) {
 
-        Set<String> invalidatedSessionToRemove = new HashSet<>(invalidatedIndexSessions);
+            Set<String> invalidatedSessionToRemove = new HashSet<>(invalidatedIndexSessions);
 
-        //Calculate collections of session keys (http session id) of sessions to remove
-        Set<String> sessionKeysToRemove =  getKeysToRemove(userSessions.entrySet());
-        //Removing sessions in convinient way
-        emergencySessionRemoval(sessionKeysToRemove);
+            //Calculate collections of session keys (http session id) of sessions to remove
+            Set<String> sessionKeysToRemove = getKeysToRemove(userSessions.entrySet());
+            //Removing sessions in convinient way
+            emergencySessionRemoval(sessionKeysToRemove);
 
-        //Calculate leaked sessions in userSessionsByConversationId
-        sessionKeysToRemove = getKeysToRemove(userSessionsByConversationId.entrySet());
-        if (sessionKeysToRemove.size()>0){
-            FhLogger.error("Lost sessions in userSessionsByConversationId!!!");
-            sessionKeysToRemove.forEach(key -> {
-                UserSession session = userSessionsByConversationId.get(key);
-                FhLogger.error("Removing {} in userSessionsByConversationId for user {}", key, getUserLogin(session));
-                userSessionsByConversationId.remove(key);
-            });
+            //Calculate leaked sessions in userSessionsByConversationId
+            sessionKeysToRemove = getKeysToRemove(userSessionsByConversationId.entrySet());
+            if (sessionKeysToRemove.size() > 0) {
+                FhLogger.error("Lost sessions in userSessionsByConversationId!!!");
+                sessionKeysToRemove.forEach(key -> {
+                    UserSession session = userSessionsByConversationId.get(key);
+                    FhLogger.error("Removing {} in userSessionsByConversationId for user {}", key, getUserLogin(session));
+                    userSessionsByConversationId.remove(key);
+                });
+            }
+
+            //Calculate leaked sessions in userSessionsHash
+            Set<Integer> sessionHashKeysToRemove = getKeysToRemove(userSessionsHash.entrySet());
+            if (sessionKeysToRemove.size() > 0) {
+                FhLogger.error("Lost sessions in userSessionsHash!!!");
+                sessionKeysToRemove.forEach(key -> {
+                    UserSession session = userSessionsHash.get(key);
+                    FhLogger.error("Removing {} in userSessionsByConversationId for user {}", key, getUserLogin(session));
+                    userSessionsHash.remove(key);
+                });
+            }
+
+            invalidatedIndexSessions.removeAll(invalidatedSessionToRemove);
         }
-
-        //Calculate leaked sessions in userSessionsHash
-        Set<Integer> sessionHashKeysToRemove = getKeysToRemove(userSessionsHash.entrySet());
-        if (sessionKeysToRemove.size()>0){
-            FhLogger.error("Lost sessions in userSessionsHash!!!");
-            sessionKeysToRemove.forEach(key -> {
-                UserSession session = userSessionsHash.get(key);
-                FhLogger.error("Removing {} in userSessionsByConversationId for user {}", key, getUserLogin(session));
-                userSessionsHash.remove(key);
-            });
-        }
-
-        invalidatedIndexSessions.removeAll(invalidatedSessionToRemove);
     }
 
     private void emergencySessionRemoval(Set<String> sessionKeysToRemove) {
