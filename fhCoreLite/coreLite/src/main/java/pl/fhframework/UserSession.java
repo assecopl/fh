@@ -27,6 +27,7 @@ import pl.fhframework.validation.IValidationResults;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
+import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -106,6 +107,7 @@ public class UserSession extends Session {
 
     void handleEvent(InMessageEventData eventData) {
         useCaseContainer.handleEvent(eventData);
+        refreshLastUsageTime();
     }
 
     public void runUseCase(String useCaseQualifiedClassName) {
@@ -253,4 +255,16 @@ public class UserSession extends Session {
             httpSessionOrgId = null;
         }
     }
+
+    private long lastUsageMoment;
+    private void refreshLastUsageTime() {
+        lastUsageMoment = System.currentTimeMillis();
+    }
+
+    public boolean hasNotBeenUsedIn(long amountOfTimeSinceLastUsageInMillis) {
+        return  System.currentTimeMillis() - lastUsageMoment >amountOfTimeSinceLastUsageInMillis;
+    }
+
+
+
 }
