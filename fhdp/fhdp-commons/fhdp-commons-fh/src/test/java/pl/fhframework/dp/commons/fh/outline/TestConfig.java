@@ -6,7 +6,7 @@ import org.springframework.context.annotation.PropertySource;
 import pl.fhframework.core.i18n.MessageService;
 
 /**
- * @author <a href="mailto:jacek_borowiec@skg.pl">Jacek Borowiec</a>
+ * @author <a href="mailto:jacek.borowiec@asseco.pl">Jacek Borowiec</a>
  * @version :  $, :  $
  * @created 14/08/2020
  */

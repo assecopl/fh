@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 /**
- * @author <a href="mailto:jacek_borowiec@skg.pl">Jacek Borowiec</a>
+ * @author <a href="mailto:jacek.borowiec@asseco.pl">Jacek Borowiec</a>
  * @version :  $, :  $
  * @created 23/04/2021
  */

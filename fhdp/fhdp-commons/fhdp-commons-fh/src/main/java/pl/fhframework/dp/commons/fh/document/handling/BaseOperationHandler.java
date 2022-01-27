@@ -9,7 +9,7 @@ import pl.fhframework.dp.transport.dto.commons.OperationResultBaseDto;
 import pl.fhframework.dp.transport.dto.commons.OperationStateResponseDto;
 
 /**
- * @author <a href="mailto:jacek_borowiec@skg.pl">Jacek Borowiec</a>
+ * @author <a href="mailto:jacek.borowiec@asseco.pl">Jacek Borowiec</a>
  * @version :  $, :  $
  * @created 25/05/2020
  */

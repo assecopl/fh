@@ -7,7 +7,7 @@ import java.text.ParseException;
 import java.util.Locale;
 
 /**
- * @author <a href="mailto:jacek_borowiec@skg.pl">Jacek Borowiec</a>
+ * @author <a href="mailto:jacek.borowiec@asseco.pl">Jacek Borowiec</a>
  * @version :  $, :  $
  * @created 09/08/2020
  */

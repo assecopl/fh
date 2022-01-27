@@ -13,7 +13,7 @@ import java.util.List;
 import static org.springframework.ldap.query.LdapQueryBuilder.query;
 
 /**
- * @author <a href="mailto:jacek_borowiec@skg.pl">Jacek Borowiec</a>
+ * @author <a href="mailto:jacek.borowiec@asseco.pl">Jacek Borowiec</a>
  * @version :  $, :  $
  * @created 05/01/2021
  */

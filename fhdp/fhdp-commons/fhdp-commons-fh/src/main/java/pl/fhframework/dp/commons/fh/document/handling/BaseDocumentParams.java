@@ -7,7 +7,7 @@ import lombok.Setter;
 import pl.fhframework.dp.transport.enums.IDocType;
 
 /**
- * @author <a href="mailto:jacek_borowiec@skg.pl">Jacek Borowiec</a>
+ * @author <a href="mailto:jacek.borowiec@asseco.pl">Jacek Borowiec</a>
  * @version :  $, :  $
  * @created 01/11/2021
  */

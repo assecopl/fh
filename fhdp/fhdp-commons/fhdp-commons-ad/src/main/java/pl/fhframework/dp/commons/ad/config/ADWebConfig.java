@@ -14,7 +14,7 @@ import pl.fhframework.core.logging.FhLogger;
 import javax.servlet.Filter;
 
 /**
- * @author <a href="mailto:jacek_borowiec@skg.pl">Jacek Borowiec</a>
+ * @author <a href="mailto:jacek.borowiec@asseco.pl">Jacek Borowiec</a>
  * @version :  $, :  $
  * @created 02/09/2020
  */

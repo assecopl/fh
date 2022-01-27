@@ -5,7 +5,7 @@ import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
 /**
- * @author <a href="mailto:jacek_borowiec@skg.pl">Jacek Borowiec</a>
+ * @author <a href="mailto:jacek.borowiec@asseco.pl">Jacek Borowiec</a>
  * @version :  $, :  $
  * @created 23/03/2021
  */

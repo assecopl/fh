@@ -13,7 +13,7 @@ import pl.fhframework.model.forms.optimized.ColumnOptimized;
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.CONTENT;
 
 /**
- * @author <a href="mailto:jacek_borowiec@skg.pl">Jacek Borowiec</a>
+ * @author <a href="mailto:jacek.borowiec@asseco.pl">Jacek Borowiec</a>
  * @version :  $, :  $
  * @created 02/06/2020
  */

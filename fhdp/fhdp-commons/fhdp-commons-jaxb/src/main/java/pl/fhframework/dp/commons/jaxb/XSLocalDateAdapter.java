@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 import java.time.LocalDate;
 
 /**
- * @author <a href="mailto:jacek_borowiec@skg.pl">Jacek Borowiec</a>
+ * @author <a href="mailto:jacek.borowiec@asseco.pl">Jacek Borowiec</a>
  * @version $Revision:  $, $Date:  $
  * @created 2019-01-16
  */

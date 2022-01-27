@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.net.InetAddress;
 
 /**
- * @author <a href="mailto:jacek_borowiec@skg.pl">Jacek Borowiec</a>
+ * @author <a href="mailto:jacek.borowiec@asseco.pl">Jacek Borowiec</a>
  * @version :  $, :  $
  * @created 20/08/2020
  */

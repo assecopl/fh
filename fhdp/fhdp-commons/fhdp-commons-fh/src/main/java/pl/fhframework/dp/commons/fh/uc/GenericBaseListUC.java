@@ -15,7 +15,7 @@ import pl.fhframework.model.forms.Form;
  * D: internal list data model
  * Fp: Detail form parameters model
  *
- * @author <a href="mailto:jacek_borowiec@skg.pl">Jacek Borowiec</a>
+ * @author <a href="mailto:jacek.borowiec@asseco.pl">Jacek Borowiec</a>
  * @version :  $, :  $
  * @created 2019-08-06
  */

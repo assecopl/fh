@@ -15,7 +15,7 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 /**
- * @author <a href="mailto:jacek_borowiec@skg.pl">Jacek Borowiec</a>
+ * @author <a href="mailto:jacek.borowiec@asseco.pl">Jacek Borowiec</a>
  * @version :  $, :  $
  * @created 02.09.2019
  */
