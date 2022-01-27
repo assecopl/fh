@@ -5,7 +5,7 @@ import pl.fhframework.dp.commons.utils.conversion.BeanConversionUtil;
 
 
 /**
- * @author <a href="mailto:jacek_borowiec@skg.pl">Jacek Borowiec</a>
+ * @author <a href="mailto:jacek.borowiec@asseco.pl">Jacek Borowiec</a>
  * @version :  $, :  $
  * @created 28/12/2020
  */

@@ -5,7 +5,7 @@ import lombok.Setter;
 import pl.fhframework.dp.commons.base.model.IEndpointCfgDefinition;
 
 /**
- * @author <a href="mailto:jacek_borowiec@skg.pl">Jacek Borowiec</a>
+ * @author <a href="mailto:jacek.borowiec@asseco.pl">Jacek Borowiec</a>
  * @version :  $, :  $
  * @created 08/09/2020
  */

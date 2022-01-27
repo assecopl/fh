@@ -3,7 +3,7 @@ package pl.fhframework.dp.commons.jaxb;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 /**
- * @author <a href="mailto:jacek_borowiec@skg.pl">Jacek Borowiec</a>
+ * @author <a href="mailto:jacek.borowiec@asseco.pl">Jacek Borowiec</a>
  * @version :  $, :  $
  * @created 06/04/2021
  */

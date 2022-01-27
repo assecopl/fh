@@ -3,7 +3,7 @@ package pl.fhframework.dp.commons.fh.error;
 import pl.fhframework.UserSession;
 
 /**
- * @author <a href="mailto:jacek_borowiec@skg.pl">Jacek Borowiec</a>
+ * @author <a href="mailto:jacek.borowiec@asseco.pl">Jacek Borowiec</a>
  * @version :  $, :  $
  * @created 15/01/2021
  */

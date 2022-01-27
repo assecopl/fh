@@ -5,7 +5,7 @@ import pl.fhframework.dp.transport.dto.operations.OperationStepDto;
 
 
 /**
- * @author <a href="mailto:jacek_borowiec@skg.pl">Jacek Borowiec</a>
+ * @author <a href="mailto:jacek.borowiec@asseco.pl">Jacek Borowiec</a>
  * @version $Revision:  $, $Date:  $
  * @created 2021-11-29
  */

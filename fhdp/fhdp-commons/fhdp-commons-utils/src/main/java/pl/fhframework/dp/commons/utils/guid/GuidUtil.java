@@ -1,7 +1,7 @@
 package pl.fhframework.dp.commons.utils.guid;
 
 /**
- * @author <a href="mailto:jacek_borowiec@skg.pl">Jacek Borowiec</a>
+ * @author <a href="mailto:jacek.borowiec@asseco.pl">Jacek Borowiec</a>
  * @version :  $, :  $
  * @created 31/12/2020
  */

@@ -10,7 +10,7 @@ import pl.fhframework.dp.transport.prints.PrintRequestType;
 import pl.fhframework.dp.transport.prints.PrintResponseType;
 
 /**
- * @author <a href="mailto:jacek_borowiec@skg.pl">Jacek Borowiec</a>
+ * @author <a href="mailto:jacek.borowiec@asseco.pl">Jacek Borowiec</a>
  * @version :  $, :  $
  * @created 27.12.2019
  */

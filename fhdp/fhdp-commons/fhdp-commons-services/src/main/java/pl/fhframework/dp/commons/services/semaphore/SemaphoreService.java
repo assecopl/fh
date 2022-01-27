@@ -10,7 +10,7 @@ import pl.fhframework.dp.commons.base.semafor.SemaphoreStatusEnum;
 import pl.fhframework.dp.commons.model.dao.SemaphoreDAO;
 
 /**
- * @author <a href="mailto:jacek_borowiec@skg.pl">Jacek Borowiec</a>
+ * @author <a href="mailto:jacek.borowiec@asseco.pl">Jacek Borowiec</a>
  * @version :  $, :  $
  * @created 28/08/2020
  */

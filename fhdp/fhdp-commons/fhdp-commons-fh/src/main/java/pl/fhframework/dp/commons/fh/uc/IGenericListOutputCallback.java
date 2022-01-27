@@ -3,7 +3,7 @@ package pl.fhframework.dp.commons.fh.uc;
 import pl.fhframework.core.uc.IUseCaseOutputCallback;
 
 /**
- * @author <a href="mailto:jacek_borowiec@skg.pl">Jacek Borowiec</a>
+ * @author <a href="mailto:jacek.borowiec@asseco.pl">Jacek Borowiec</a>
  * @version :  $, :  $
  * @created 2019-08-06
  */

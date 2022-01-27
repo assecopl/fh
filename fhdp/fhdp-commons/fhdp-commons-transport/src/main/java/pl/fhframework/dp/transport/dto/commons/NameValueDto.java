@@ -7,7 +7,7 @@ import org.apache.http.NameValuePair;
 import java.io.Serializable;
 
 /**
- * @author <a href="mailto:jacek_borowiec@skg.pl">Jacek Borowiec</a>
+ * @author <a href="mailto:jacek.borowiec@asseco.pl">Jacek Borowiec</a>
  * @version :  $, :  $
  * @created 04.09.2019
  */

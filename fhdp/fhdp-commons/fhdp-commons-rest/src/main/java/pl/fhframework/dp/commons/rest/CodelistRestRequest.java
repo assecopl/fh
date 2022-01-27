@@ -3,7 +3,7 @@ package pl.fhframework.dp.commons.rest;
 import pl.fhframework.dp.transport.dto.commons.CodelistRequestDto;
 
 /**
- * @author <a href="mailto:jacek_borowiec@skg.pl">Jacek Borowiec</a>
+ * @author <a href="mailto:jacek.borowiec@asseco.pl">Jacek Borowiec</a>
  * @version :  $, :  $
  * @created 04.09.2019
  */

@@ -5,7 +5,7 @@ import lombok.Setter;
 import pl.fhframework.dp.transport.dto.commons.BaseDtoQuery;
 
 /**
- * @author <a href="mailto:jacek_borowiec@skg.pl">Jacek Borowiec</a>
+ * @author <a href="mailto:jacek.borowiec@asseco.pl">Jacek Borowiec</a>
  * @version :  $, :  $
  * @created 23/03/2021
  */

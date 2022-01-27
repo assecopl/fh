@@ -6,7 +6,7 @@ import pl.fhframework.model.forms.AccessibilityEnum;
 import pl.fhframework.model.forms.Tab;
 
 /**
- * @author <a href="mailto:jacek_borowiec@skg.pl">Jacek Borowiec</a>
+ * @author <a href="mailto:jacek.borowiec@asseco.pl">Jacek Borowiec</a>
  * @version :  $, :  $
  * @created 07/12/2021
  */

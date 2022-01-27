@@ -8,7 +8,7 @@ import pl.fhframework.dp.transport.dto.document.SeverityEnum;
 import java.time.LocalDateTime;
 
 /**
- * @author <a href="mailto:jacek_borowiec@skg.pl">Jacek Borowiec</a>
+ * @author <a href="mailto:jacek.borowiec@asseco.pl">Jacek Borowiec</a>
  * @version :  $, :  $
  * @created 15/09/2020
  */

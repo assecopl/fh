@@ -7,7 +7,7 @@ import pl.fhframework.dp.transport.dto.commons.OperationStepDto;
 import pl.fhframework.model.forms.Form;
 
 /**
- * @author <a href="mailto:jacek_borowiec@skg.pl">Jacek Borowiec</a>
+ * @author <a href="mailto:jacek.borowiec@asseco.pl">Jacek Borowiec</a>
  * @version :  $, :  $
  * @created 25.10.2019
  */

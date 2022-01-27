@@ -8,7 +8,7 @@ import pl.fhframework.core.security.model.IUserAccount;
 import java.util.List;
 
 /**
- * @author <a href="mailto:jacek_borowiec@skg.pl">Jacek Borowiec</a>
+ * @author <a href="mailto:jacek.borowiec@asseco.pl">Jacek Borowiec</a>
  * @version :  $, :  $
  * @created 09.01.2020
  */
