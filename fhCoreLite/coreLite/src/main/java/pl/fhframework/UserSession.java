@@ -254,7 +254,7 @@ public class UserSession extends Session {
         }
     }
 
-    private long lastUsageMoment;
+    private long lastUsageMoment = System.currentTimeMillis();
     private void refreshLastUsageTime() {
         lastUsageMoment = System.currentTimeMillis();
     }
