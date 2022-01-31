@@ -176,6 +176,7 @@ public class TreeFhDP extends GroupingComponent<TreeElementFhDP> implements Boun
                     clonedTreeElement.setLevel(level);
                     clonedTreeElement.setIconBinding(replaceModelBinding(clonedTreeElement.getIconBinding(), indices, level, clonedTreeElement));
                     clonedTreeElement.setLabelModelBinding(replaceModelBinding(clonedTreeElement.getLabelModelBinding(), indices, level, clonedTreeElement));
+                    clonedTreeElement.setIsHighlightBinding(replaceModelBinding(clonedTreeElement.getIsHighlightBinding(), indices, level, clonedTreeElement));
                     clonedTreeElement.setUrlBinding(replaceModelBinding(clonedTreeElement.getUrlBinding(), indices, level, clonedTreeElement));
                     clonedTreeElement.setAvailabilityModelBinding(replaceModelBinding(clonedTreeElement.getAvailabilityModelBinding(), indices, level, clonedTreeElement));
                     if (clonedTreeElement.getOnLabelClick() != null) {

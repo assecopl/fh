@@ -67,16 +67,23 @@ public class SearchTemplateDtoService extends GenericDtoService<Long, SearchTemp
     @Override
     @Transactional
     public Long persistDto(SearchTemplateDto searchTemplateDto) {
-            SearchTemplate searchTemplate = mapDtoToEntity(searchTemplateDto, true);
-            searchTemplate.setTemplateDefinitionJson(BeanConversionUtil.toJson(searchTemplateDto.getSearchTemplateDefinitions()));
-            SearchTemplate ret = searchTemplateRepository.saveAndFlush(searchTemplate);
-            searchTemplateDto.setId(ret.getId());
-            searchTemplateDto.setVersion(ret.getVersion());
-            searchTemplateESRepository.save(searchTemplateDto);
-  //          reindex();
-            return ret.getId();
-    }
+        SearchTemplate searchTemplate;
+        if(searchTemplateDto.getId() != null) {
+            Optional<SearchTemplate> findSearchTemplate = searchTemplateRepository.findById(searchTemplateDto.getId());
+            searchTemplate = findSearchTemplate.orElseGet(() -> mapDtoToEntity(searchTemplateDto, true));
+        } else {
+            searchTemplate = mapDtoToEntity(searchTemplateDto, true);
+        }
 
+        searchTemplate.setTemplateDefinitionJson(BeanConversionUtil.toJson(searchTemplateDto.getSearchTemplateDefinitions()));
+
+        SearchTemplate ret = searchTemplateRepository.saveAndFlush(searchTemplate);
+        searchTemplateDto.setId(ret.getId());
+        searchTemplateDto.setVersion(ret.getVersion());
+        searchTemplateESRepository.save(searchTemplateDto);
+        //          reindex();
+        return ret.getId();
+    }
     @Override
     @Transactional
     public void deleteDto(Long key) {
