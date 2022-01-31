@@ -13,6 +13,7 @@ import javax.xml.bind.Unmarshaller;
 import java.io.InputStream;
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * @author <a href="mailto:jacek.borowiec@asseco.pl">Jacek Borowiec</a>
@@ -28,7 +29,7 @@ public class OutlineService {
     public boolean isDirection;
 
     protected Map<String, ElementCT> elements = new HashMap<>();
-    protected Map<String, String> mappings = new HashMap<>();
+    protected Map<String, Set<String>> mappings = new HashMap<>();
 
     @Autowired
     protected MessageService messageService;
@@ -54,11 +55,20 @@ public class OutlineService {
             if(el.getMappings() != null) {
                 List<String> mappingsList = el.getMappings().getPointer();
                 for(String p: mappingsList) {
-                    mappings.put(p.toLowerCase(), el.getId());
+                    putMapping(p.toLowerCase(), el.getId());
                 }
             }
             buildMaps(el.getElement());
         }
+    }
+
+    private void putMapping(String pointerName, String elementId){
+        Set<String> elementIdList = mappings.get(pointerName);
+        if(null == elementIdList) {
+            elementIdList = new HashSet<>();
+            mappings.put(pointerName, elementIdList);
+        }
+        elementIdList.add(elementId);
     }
 
     /**
@@ -71,16 +81,35 @@ public class OutlineService {
         ElementCT ret = null;
         String p = pointer.toLowerCase();
         String id = null;
-        do {
-            id = mappings.get(p);
-            if(id == null) {
-                p = reducePointer(p);
-            }
-        } while(id == null && !p.isEmpty());
-        if(id != null) {
-            ret = elements.get(id);
+        List<String> mappingList = findMapping(pointer);
+        if(mappingList != null && mappingList.size() > 0) {
+            String firstIdElement = mappingList.get(0);
+            ret = elements.get(firstIdElement);
         }
         return ret;
+    }
+
+    public List<ElementCT> findAllElementFromPointer(String pointer){
+        List<String> mappingList = findMapping(pointer);
+        if(null != mappingList) {
+            return mappingList.stream().map(x -> elements.get(x)).collect(Collectors.toList());
+        }
+        return new ArrayList<>();
+    }
+
+    private List<String> findMapping(String pointer){
+        String pointerName = pointer.toLowerCase();
+        Set<String> mappingIdList;
+        do {
+            mappingIdList = mappings.get(pointerName);
+            if(mappingIdList == null) {
+                pointerName = reducePointer(pointerName);
+            }
+        } while(mappingIdList == null && !pointerName.isEmpty());
+        if(null == mappingIdList){
+            return null;
+        }
+        return new ArrayList<>(mappingIdList);
     }
 
     private String reducePointer(String p) {

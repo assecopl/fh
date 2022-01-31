@@ -8,6 +8,8 @@ class TreeElementFhDP extends TreeElement {
   private selectedOverride: boolean;
   private labelOverride: string;
   private currentElement: boolean;
+  private isCustomHighlight: boolean;
+  private customHighlightColor: string;
 
   constructor(componentObj: any, parent: HTMLFormComponent) {
     super(componentObj, parent);
@@ -17,6 +19,8 @@ class TreeElementFhDP extends TreeElement {
     this.onLabelClickOverride = componentObj.onLabelClick;
     this.selectedOverride = componentObj.selected || false;
     this.labelOverride = componentObj.label;
+    this.isCustomHighlight = componentObj.isHighlight;
+    this.customHighlightColor = componentObj.highlightColor;
     TreeElementHelper.getInstance().registerElement(this);
   }
 
@@ -59,7 +63,7 @@ class TreeElementFhDP extends TreeElement {
 
   setCurrent(isCurrent) {
     this.currentElement = isCurrent;
-    this.toggleHighlight();
+    this.changeCustomHighlight();
   }
 
   selectBranch(branchToSelect) {
@@ -105,6 +109,33 @@ class TreeElementFhDP extends TreeElement {
           }
         } catch (e) {}
       }
+    }
+
+    this.setIsCustomHighlight(change.changedAttributes.isHighlight)
+  }
+
+  private setIsCustomHighlight(value?:boolean){
+    this.isCustomHighlight = true === value;
+    this.changeCustomHighlight();
+  }
+
+  private changeCustomHighlight() {
+    let value = this.isCustomHighlight;
+    if(undefined === value) {
+      this.toggleHighlight();
+      return;
+    }
+
+    let color = this.customHighlightColor;
+    if(undefined === color){
+      color = 'var(--color-main)'
+    }
+    if(value) {
+      // set custom highlight color
+      this.component.querySelector('.row').style.color = color;
+    } else {
+      // set default colors
+      this.toggleHighlight();
     }
   }
 
