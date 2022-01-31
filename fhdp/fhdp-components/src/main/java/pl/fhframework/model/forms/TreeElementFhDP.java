@@ -34,6 +34,8 @@ public class TreeElementFhDP extends GroupingComponent<TreeElementFhDP> implemen
     private static final String ATTR_COLLAPSED = "collapsed";
     private static final String ATTR_NEXT_LEVEL_EXPANDABLE = "nextLevelExpandable";
     private static final String ATTR_EXPANDED_EXCEPTION = "expandedException";
+    private static final String ATTR_IS_HIGHLIGHT = "isHighlight";
+    private static final String ATTR_HIGHLIGHT_COLOR = "highlightColor";
 
     @JsonIgnore
     @Getter
@@ -71,6 +73,26 @@ public class TreeElementFhDP extends GroupingComponent<TreeElementFhDP> implemen
 
     @Getter
     private String url; // not supported in js. make it work or remove this
+
+    @JsonIgnore
+    @Getter
+    @Setter
+    @XMLProperty(value = ATTR_HIGHLIGHT_COLOR)
+    @DesignerXMLProperty(previewValueProvider = BindingExpressionDesignerPreviewProvider.class)
+    private ModelBinding<String> highlightColorBinding;
+
+    @Getter
+    private String highlightColor;
+
+    @JsonIgnore
+    @Getter
+    @Setter
+    @XMLProperty(value = ATTR_IS_HIGHLIGHT)
+    @DesignerXMLProperty(previewValueProvider = BindingExpressionDesignerPreviewProvider.class)
+    private ModelBinding<Boolean> isHighlightBinding;
+
+    @Getter
+    private Boolean isHighlight;
 
     @Getter
     @DesignerXMLProperty(functionalArea = BEHAVIOR)
@@ -238,6 +260,28 @@ public class TreeElementFhDP extends GroupingComponent<TreeElementFhDP> implemen
                 if (!areValuesTheSame(newLabelValue, label)) {
                     this.label = newLabelValue;
                     elementChanges.addChange(ATTR_LABEL, label);
+                }
+            }
+        }
+
+        if(isHighlightBinding != null){
+            BindingResult<Boolean> bindingResult = isHighlightBinding.getBindingResult();
+            if (bindingResult != null) {
+                Boolean newIsHighlightValue = bindingResult.getValue();
+                if (!areValuesTheSame(newIsHighlightValue, this.isHighlight)) {
+                    this.isHighlight = newIsHighlightValue;
+                    elementChanges.addChange(ATTR_IS_HIGHLIGHT, this.isHighlight);
+                }
+            }
+        }
+
+        if(highlightColorBinding != null){
+            BindingResult<String> bindingResult = highlightColorBinding.getBindingResult();
+            if (bindingResult != null) {
+                String newhighlightColorValue = bindingResult.getValue();
+                if (!areValuesTheSame(newhighlightColorValue, this.highlightColor)) {
+                    this.highlightColor = newhighlightColorValue;
+                    elementChanges.addChange(ATTR_HIGHLIGHT_COLOR, this.highlightColor);
                 }
             }
         }
