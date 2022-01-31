@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import pl.fhframework.dp.commons.fh.dataProviders.NameValueItem;
 import pl.fhframework.dp.transport.searchtemplate.LogicalCondition;
+import pl.fhframework.dp.transport.searchtemplate.NestedType;
 import pl.fhframework.dp.transport.searchtemplate.OperatorType;
 import pl.fhframework.dp.transport.searchtemplate.DictionaryItemType;
 import pl.fhframework.dp.transport.searchtemplate.SearchTemplateDto;
@@ -35,6 +36,7 @@ public class SearchTemplateBuilderModel {
     private ISearchTemplateCriteriaProvider searchCriteriaProvider;
     //nazwa komponentu do zapisu w db i identyfikacji powiązania szablonu wyszukiwania z obiektem którego dotyczy
     private String componentName;
+    private NestedType nestedType;
     //data ważności dla słowników
     LocalDate referenceDate = LocalDate.now();
 
