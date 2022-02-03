@@ -12,7 +12,7 @@ interface BarElement {
     legendText: string,
 }
 
-class ChartTime24FhDP extends HTMLFormComponent {
+class ChartTime24 extends HTMLFormComponent {
     //? base prop
     private hAxisName: string;
     private vAxisName: string;
@@ -511,4 +511,4 @@ class ChartTime24FhDP extends HTMLFormComponent {
     };
 }
 
-export { ChartTime24FhDP }
+export { ChartTime24 }

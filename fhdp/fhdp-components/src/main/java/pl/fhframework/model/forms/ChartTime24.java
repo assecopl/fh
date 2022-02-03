@@ -18,7 +18,7 @@ import java.util.List;
 @DesignerControl(defaultWidth = 1)
 @Control(parents = {PanelGroup.class, Column.class, ColumnOptimized.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class, PanelHeaderFhDP.class, PanelFhDP.class}, invalidParents = {Table.class, Widget.class, Repeater.class}, canBeDesigned = true)
 @DocumentedComponent(category = DocumentedComponent.Category.IMAGE_HTML_MD, value = "Show data on charts", icon = "fa fa-eye")
-public class ChartTime24FhDP extends FormElement {
+public class ChartTime24 extends FormElement {
 
     // base parameters
     public static final String ATTR_V_AXIS_NAME = "vAxisName";
@@ -495,7 +495,7 @@ public class ChartTime24FhDP extends FormElement {
     @DesignerXMLProperty(commonUse = true, previewValueProvider = BindingExpressionDesignerPreviewProvider.class, functionalArea = DesignerXMLProperty.PropertyFunctionalArea.CONTENT)
     private ModelBinding<String> labelNameBreakBinding;
 
-    public ChartTime24FhDP(Form form){
+    public ChartTime24(Form form){
         super(form);
     }
 

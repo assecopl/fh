@@ -1,20 +1,20 @@
 import {FhContainer, FhModule} from "fh-forms-handler";
 import * as pack from './package.json';
-import {ChartTime24FhDP} from './source/charts/ChartTime24FhDP';
+import {ChartTime24} from './source/charts/ChartTime24';
 
-class FHDPCharts extends FhModule {
+class FhDPCharts extends FhModule {
 
     protected registerComponents() {
 
-        FhContainer.bind<(componentObj: any, parent: any) => ChartTime24FhDP>("ChartTime24FhDP")
-        .toFactory<ChartTime24FhDP>(() => {
+        FhContainer.bind<(componentObj: any, parent: any) => ChartTime24>("ChartTime24")
+        .toFactory<ChartTime24>(() => {
             return (componentObj: any, parent: any) => {
-                return new ChartTime24FhDP(componentObj, parent);
+                return new ChartTime24(componentObj, parent);
             };
         });
 
-        console.log(`FHDP-charts version: ${pack.version}`)
+        console.log(`FhDP-charts version: ${pack.version}`)
     }
 }
 
-export {FHDPCharts, ChartTime24FhDP}
+export {FhDPCharts, ChartTime24}
