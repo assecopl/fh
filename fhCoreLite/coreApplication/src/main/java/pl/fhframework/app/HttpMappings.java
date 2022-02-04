@@ -43,7 +43,6 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Controller
-//@EnableWebMvc
 public class HttpMappings {
     @Autowired
     private ImageRepository imageRepository;

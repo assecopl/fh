@@ -2,6 +2,7 @@ package pl.fhframework.dp.commons.ad.kerberos.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -23,10 +24,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Locale;
 
 @Controller
-@EnableWebMvc
 public class KerberosNoSsoController {
 
     @Resource
+    @Lazy
     private LocaleResolver localeResolver;
 
     @Value("${fh.web.guests.allowed:false}")

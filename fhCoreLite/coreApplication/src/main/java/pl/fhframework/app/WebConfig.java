@@ -14,15 +14,16 @@ import java.util.Locale;
 
 @Configuration
 @Slf4j
-@Order(1)
+@Order(0)
 public class WebConfig extends DelegatingWebMvcConfiguration {
 
     @Value("${fhframework.language.default:pl}")
     private String defaultLang;
 
     @Bean
+    @Override
     @Primary
-    public LocaleResolver fhLocaleResolver() {
+    public LocaleResolver localeResolver() {
         log.info("************* Start cookie locale resolver...");
         CookieLocaleResolver resolver = new CookieLocaleResolver();
         resolver.setCookieName("USERLANG");
