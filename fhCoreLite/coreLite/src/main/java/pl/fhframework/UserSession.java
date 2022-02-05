@@ -100,7 +100,11 @@ public class UserSession extends Session {
     public UserSession(SystemUser systemUser, UserSessionDescription description, HttpSession httpSession) {
         super(description);
         setSystemUser(systemUser);
-        setFhSessionId((String) httpSession.getAttribute(FH_SESSION_ID));
+        String fhSessionId = (String) httpSession.getAttribute(FH_SESSION_ID);
+        if (fhSessionId==null){
+            fhSessionId = httpSession.getId();
+        }
+        setFhSessionId(fhSessionId);
     }
 
     @PostConstruct
