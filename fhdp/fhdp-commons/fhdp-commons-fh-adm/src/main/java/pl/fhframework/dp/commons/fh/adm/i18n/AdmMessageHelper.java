@@ -18,6 +18,7 @@ public class AdmMessageHelper {
     public static final String ROLE_SAVED_MESSAGE = "fhdp.adm.message.role.saved";
     public static final String ROLE_DELETED_MESSAGE = "fhdp.adm.message.role.deleted";
     public static final String ROLE_EXISTS_MESSAGE = "fhdp.adm.roles.create.validation.duplicated_role";
+    public static final String ROLE_MENU_MESSAGE = "fhdp.app.menu.permissions.label";
 
     private final MessageService messageService;
     private final EventRegistry eventRegistry;
