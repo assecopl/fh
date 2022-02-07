@@ -64,7 +64,7 @@ public class OperationStatusCheckUC implements IUseCaseOneInput<OperationStatusC
             WebSocketSessionManager.setWebSocketSession(webSocketContext.get().getWebSocketSession());
 //            List<UseCaseContainer.UseCaseContext> runningUsecases = webSocketContext.get().getUserSession().getUseCaseContainer().getUseCases(OperationStatusCheckUC.class);
             while (run) {
-                FhLogger.info("Calling service for operation ID {}...", model.getOperationGUID());
+                FhLogger.debug("Calling service for operation ID {}...", model.getOperationGUID());
                 OperationStateResponseDto state = model.getDocumentHandler().checkOperationState(model.getOperationGUID());
                 List<OperationStepDto> steps = state.getSteps();
                 Collections.sort(steps);

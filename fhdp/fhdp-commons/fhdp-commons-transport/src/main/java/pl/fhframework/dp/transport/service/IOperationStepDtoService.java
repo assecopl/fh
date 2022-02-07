@@ -5,7 +5,7 @@
  */
 package pl.fhframework.dp.transport.service;
 
-import pl.fhframework.dp.transport.dto.operations.OperationStepDto;
+import pl.fhframework.dp.transport.dto.commons.OperationStepDto;
 import pl.fhframework.dp.transport.dto.operations.OperationStepDtoQuery;
 
 /**

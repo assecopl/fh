@@ -2,42 +2,85 @@ package pl.fhframework.dp.commons.services.operations;
 
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import pl.fhframework.dp.commons.els.repositories.OperationStepESRepository;
 import pl.fhframework.dp.commons.services.facade.GenericDtoService;
-import pl.fhframework.dp.transport.dto.operations.OperationStepDto;
+import pl.fhframework.dp.transport.dto.commons.OperationStepDto;
 import pl.fhframework.dp.transport.dto.operations.OperationStepDtoQuery;
 import pl.fhframework.dp.transport.service.IOperationStepDtoService;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * @author <a href="mailto:jacek.borowiec@asseco.pl">Jacek Borowiec</a>
  * @version :  $, :  $
  * @created 29/11/2021
  */
-//@Component
+@Service
 public class OperationStepDtoService extends GenericDtoService<String, OperationStepDto, OperationStepDto, OperationStepDtoQuery, OperationStepDto> implements IOperationStepDtoService {
-//    @Autowired
+    @Autowired
     OperationStepESRepository operationStepESRepository;
 
-    public OperationStepDtoService(Class<OperationStepDto> operationStepDtoClass, Class<OperationStepDto> dtoClazz, Class<OperationStepDto> entityClazz) {
-        super(operationStepDtoClass, dtoClazz, entityClazz);
+    public OperationStepDtoService() {
+        super(OperationStepDto.class, OperationStepDto.class, OperationStepDto.class);
+    }
+
+    public void logOperationStepStart(String msgKey, String processID, String masterProcessId, String operationGUID, String stepID, Long docId) {
+        OperationStepDto dto = new OperationStepDto();
+        dto.setDescription(msgKey);
+        dto.setProcessId(processID);
+        dto.setMasterProcessId(masterProcessId);
+        dto.setOperationGUID(operationGUID);
+        dto.setStepId(stepID);
+        dto.setDocID(docId);
+        dto.setId(UUID.randomUUID().toString());
+        dto.setStarted(LocalDateTime.now());
+        persistDto(dto);
+    }
+
+    public void logOperationStepFinish(String processID, String operationGUID, String stepID) {
+        OperationStepDtoQuery query = new OperationStepDtoQuery();
+        query.setProcessId(processID);
+        query.setOperationGUID(operationGUID);
+        query.setStepId(stepID);
+        List<OperationStepDto> list = listDto(query);
+        if(list.isEmpty()) {
+            String msg = "Can not find operation step for OpGuid: " + operationGUID;
+            throw new RuntimeException(msg);
+        } else {
+            OperationStepDto dto = list.get(0);
+            dto.setFinished(LocalDateTime.now());
+            persistDto(dto);
+        }
+    }
+
+    @Override
+    public List<OperationStepDto> listDto(OperationStepDtoQuery query) {
+        if(query.getSortProperty() == null) {
+            query.setSortProperty("id.keyword");
+        }
+        return super.listDto(query);
     }
 
     @Override
     protected BoolQueryBuilder extendQueryBuilder(BoolQueryBuilder builder, OperationStepDtoQuery query) {
         if(query.getOperationGUID() != null) {
-            builder.must(QueryBuilders.termQuery("operationGUID.keyword", query.getOperationGUID()));
+            builder.must(QueryBuilders.termsQuery("operationGUID.keyword", query.getOperationGUID()));
         }
         if(query.getDocID() != null) {
             builder.must(QueryBuilders.termQuery("docID", query.getDocID()));
         }
         if(query.getMasterProcessId() != null) {
-            builder.must(QueryBuilders.termQuery("masterProcessId.keyword", query.getMasterProcessId()));
+            builder.must(QueryBuilders.termsQuery("masterProcessId.keyword", query.getMasterProcessId()));
         }
         if(query.getProcessId() != null) {
-            builder.must(QueryBuilders.termQuery("processId.keyword", query.getProcessId()));
+            builder.must(QueryBuilders.termsQuery("processId.keyword", query.getProcessId()));
         }
         if(query.getStepId() != null) {
-            builder.must(QueryBuilders.termQuery("stepId.keyword", query.getStepId()));
+            builder.must(QueryBuilders.termsQuery("stepId.keyword", query.getStepId()));
         }
         return builder;
     }

@@ -1,7 +1,7 @@
 package pl.fhframework.dp.commons.els.repositories;
 
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
-import pl.fhframework.dp.transport.dto.operations.OperationStepDto;
+import pl.fhframework.dp.transport.dto.commons.OperationStepDto;
 
 
 /**
