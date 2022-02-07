@@ -119,6 +119,7 @@ public class AuditLogDtoService extends GenericDtoService<String, AuditLogDto, A
 
     }
 
+    @Deprecated
     public void logOperationStepStart(String messageKey,
                           String processID,
                           String operationGUID,
@@ -136,6 +137,7 @@ public class AuditLogDtoService extends GenericDtoService<String, AuditLogDto, A
         persistDto(dto);
     }
 
+    @Deprecated
     public void logOperationStepFinish(String processID,
                                       String operationGUID,
                                       String stepID) {
