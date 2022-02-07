@@ -113,7 +113,7 @@ public class WebSocketSessionManager implements ISessionManagerImpl {
      */
     public static void setUserSession(UserSession userSession) {
         HttpSession sessionHttp = getHttpSession();
-        UserSession pUserSession = getUserSessionRepository().getUserSession(sessionHttp.getId());
+        UserSession pUserSession = getUserSessionRepository().getUserSession(sessionHttp);
         if (pUserSession == null || pUserSession.getSystemUser().isGuest()) {
             getUserSessionRepository().setUserSession(sessionHttp.getId(), userSession);
         }
@@ -123,7 +123,7 @@ public class WebSocketSessionManager implements ISessionManagerImpl {
      * Checks if an UserSession is already bound to current HTTP session
      */
     public static boolean hasUserSession() {
-        return getUserSessionRepository().getUserSession(getHttpSession().getId()) != null;
+        return getUserSessionRepository().getUserSession(getHttpSession()) != null;
     }
 
     public static void prepareSessionScope() {
@@ -163,7 +163,7 @@ public class WebSocketSessionManager implements ISessionManagerImpl {
 
     public UserSession getSession() {
         HttpSession sessionHttp = getHttpSession();
-        return getUserSessionRepository().getUserSession(sessionHttp.getId());
+        return getUserSessionRepository().getUserSession(sessionHttp);
     }
 
     public static WebSocketSession getWebSocketSession() {
