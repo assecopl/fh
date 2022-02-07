@@ -22,7 +22,7 @@ public class HttpSessionUserSessionFinder implements IRestUserSessionFinder {
     public Optional<UserSession> getUserSession(HttpServletRequest httpServletRequest) {
         HttpSession httpSession = httpServletRequest.getSession(false);
         if (httpSession != null) {
-            return Optional.ofNullable (userSessionRepository.getUserSession(httpSession.getId()));
+            return Optional.ofNullable (userSessionRepository.getUserSession(httpSession));
         } else {
             return Optional.empty();
         }

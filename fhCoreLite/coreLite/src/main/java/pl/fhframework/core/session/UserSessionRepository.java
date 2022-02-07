@@ -29,7 +29,7 @@ import java.util.function.Consumer;
 public class UserSessionRepository implements HttpSessionListener, ApplicationListener<ContextRefreshedEvent> {
 
     @Getter
-    private Map<String, UserSession> userSessions = new ConcurrentHashMap<>();
+//    private Map<String, UserSession> userSessions = new ConcurrentHashMap<>();
     private Map<String, UserSession> userSessionsByConversationId = new ConcurrentHashMap<>();
     private Map<String, UserSession> userSessionsByFhId = new ConcurrentHashMap<>();
     private Set<Consumer<UserSession>> userSessionDestroyedListeners = new HashSet<>();
@@ -89,7 +89,7 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
     }
 
     public int getUserSessionCount() {
-        return userSessions.size();
+        return userSessionsByFhId.size();
     }
 
     public void addUserSessionDestroyedListener(Consumer<UserSession> listener) {
@@ -108,18 +108,18 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
             removeUserSession(oldUserSession);
         }
         userSessionsByFhId.put(fhSessionId, userSession);
-        userSessions.put(httpSessionId, userSession);
+        //userSessions.put(httpSessionId, userSession);
         userSessionsByConversationId.put(userSession.getConversationUniqueId(), userSession);
         putSessionInfo(fhSessionId, userSession);
     }
 
-    public void removeUserSession(String httpSessionId) {
-        UserSession userSession = userSessions.get(httpSessionId);
-        removeUserSession(userSession);
-    }
+//    public void removeUserSession(String httpSessionId) {
+//        UserSession userSession = userSessions.get(httpSessionId);
+//        removeUserSession(userSession);
+//    }
 
     private void removeUserSession(UserSession userSession) {
-        userSessions.values().remove(userSession);
+//        userSessions.values().remove(userSession);
         userSessionsByFhId.values().remove(userSession);
         userSessionsByConversationId.values().remove(userSession);
 //        userSessionsByFhId.remove(userSession.getFhSessionId());
@@ -148,10 +148,10 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
     private String generateNodeUrl() {
         try {
             return String.format(
-                "%s://%s:%s/",
-                sessionInfoProtocol,
-                InetAddress.getLocalHost().getHostAddress(),
-                serverPort
+                    "%s://%s:%s/",
+                    sessionInfoProtocol,
+                    InetAddress.getLocalHost().getHostAddress(),
+                    serverPort
             );
         } catch (UnknownHostException e) {
             FhLogger.errorSuppressed(e);
@@ -179,22 +179,26 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
         sessionInfoCache.evictSessionsInfoForNode(node);
     }
 
-    public UserSession getUserSession(String httpSessionId) {
-        return userSessions.get(httpSessionId);
+    //    public UserSession getUserSession(String httpSessionId) {
+//        return userSessions.get(httpSessionId);
+//    }
+    public UserSession getUserSession(HttpSession httpSession) {
+        String fhSessionId = httpSession.getAttribute(UserSession.FH_SESSION_ID).toString();
+        return userSessionsByFhId.get(fhSessionId);
     }
 
     @Override
     public void sessionCreated(HttpSessionEvent httpSessionEvent) {
         // ChangeSessionIdAuthenticationStrategy silently modify session id after security filter, remove old userSession
         HttpSession session = httpSessionEvent.getSession();
-        if (session.getAttribute(UserSession.FH_SESSION_ID) != null) {
+        if (session.getAttribute(UserSession.FH_SESSION_ID) == null) {
             session.setAttribute(UserSession.FH_SESSION_ID, session.getId());
         }
     }
 
     @Override
     public void sessionDestroyed(HttpSessionEvent httpSessionEvent) {
-        onSessionExpired(httpSessionEvent.getSession().getId());
+        onSessionExpired(httpSessionEvent.getSession());
     }
 
     public void onSessionKeepAlive(String conversationId) {
@@ -206,17 +210,21 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
         }
     }
 
-    private void onSessionExpired(String sessionId) {
-        UserSession session = userSessions.get(sessionId);
+    private void onSessionExpired(HttpSession httpSession) {
+        UserSession session = getUserSession(httpSession);
         if (session != null) {
             try {
                 for (Consumer<UserSession> listener : userSessionDestroyedListeners) {
                     listener.accept(session);
                 }
             } finally {
-                removeUserSession(sessionId);
+                removeUserSession(session);
             }
         }
+    }
+
+    public Set<UserSession> getAllUserSessions(){
+        return new HashSet<>(userSessionsByFhId.values());
     }
 
 }
