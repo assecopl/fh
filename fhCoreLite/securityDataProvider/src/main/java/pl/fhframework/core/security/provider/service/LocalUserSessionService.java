@@ -81,7 +81,7 @@ public class LocalUserSessionService implements IUserSessionService {
 
     @Override
     public String getUserActiveFunctionality(String sessionId) {
-        return userSessionRepository.getUserSessions().values().stream()
+        return userSessionRepository.getAllUserSessions().stream()
                 .filter(session -> StringUtils.equal(sessionId, session.getConversationUniqueId()))
                 .findAny()
                 .map(session -> session.getUseCaseContainer().logStatePretty())
@@ -89,7 +89,7 @@ public class LocalUserSessionService implements IUserSessionService {
     }
 
     private UserSession findUserSession(String sessionConversationUniqueId) {
-        for (UserSession userSession : userSessionRepository.getUserSessions().values()) {
+        for (UserSession userSession : userSessionRepository.getAllUserSessions()) {
             if (userSession.getConversationUniqueId().equals(sessionConversationUniqueId)) {
                 return userSession;
             }
@@ -98,7 +98,7 @@ public class LocalUserSessionService implements IUserSessionService {
     }
 
     private List<UserSession> findUserSessions(Set<String> sessionConversationUniqueIds) {
-        return userSessionRepository.getUserSessions().values().stream()
+        return userSessionRepository.getAllUserSessions().stream()
                 .filter(session -> sessionConversationUniqueIds.isEmpty() || sessionConversationUniqueIds.contains(session.getConversationUniqueId()))
                 .collect(Collectors.toList());
     }
