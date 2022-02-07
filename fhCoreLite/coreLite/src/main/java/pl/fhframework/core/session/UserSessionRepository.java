@@ -24,7 +24,6 @@ import java.net.UnknownHostException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -58,7 +57,7 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
      * The maximum amount of time an unused session can survive - devault value = 12 houres (43200 seconds)
      */
     @Value("${fh.session.emergency_removal_time_unused_session:43200}")
-    private int emergencyRemovalTimeUnusedSession;
+    private int emergencyRemovalTimeUnusedSessionInSeconds;
 
     private String nodeUrl;
 
@@ -209,7 +208,6 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
 
     @Override
     public void sessionDestroyed(HttpSessionEvent httpSessionEvent) {
-        invalidatedIndexSessions.add(httpSessionEvent.getSession().getId());
         onSessionExpired(httpSessionEvent.getSession());
     }
 
@@ -239,20 +237,28 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
         return new HashSet<>(userSessionsByFhId.values());
     }
 
-    private Set<String> invalidatedIndexSessions = Collections.synchronizedSet(new HashSet<>());
 
     @Scheduled(fixedDelay = 60000)
     private void cleanupLeakedSessions(){
-
-        Set<String> invalidatedSessionToRemove = new HashSet<>(invalidatedIndexSessions);
-
         //Calculate collections of session keys (http session id) of sessions to remove
-        Set<String> sessionKeysToRemove =  getKeysToRemove(userSessions.entrySet());
+        Set<String> sessionKeysToRemove =  getKeysToRemove(userSessionsByFhId.entrySet());
         //Removing sessions in convinient way
         emergencySessionRemoval(sessionKeysToRemove);
 
         //Calculate leaked sessions in userSessionsByConversationId
         sessionKeysToRemove = getKeysToRemove(userSessionsByConversationId.entrySet());
+        unkomonEmergencySessionRemovalInUserSessionsByConversationId(sessionKeysToRemove);
+    }
+
+    private void emergencySessionRemoval(Set<String> sessionKeysToRemove) {
+        sessionKeysToRemove.forEach(key -> {
+            UserSession session = userSessionsByFhId.get(key);
+            FhLogger.warn(UserSessionRepository.class, "Emergency removal of unnecessary session {}, {}", key, getUserLogin(session) );
+            removeUserSession(session);
+        });
+    }
+
+    private void unkomonEmergencySessionRemovalInUserSessionsByConversationId(Set<String> sessionKeysToRemove) {
         if (sessionKeysToRemove.size()>0){
             FhLogger.error("Lost sessions in userSessionsByConversationId!!!");
             sessionKeysToRemove.forEach(key -> {
@@ -261,27 +267,6 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
                 userSessionsByConversationId.remove(key);
             });
         }
-
-        //Calculate leaked sessions in userSessionsHash
-        Set<Integer> sessionHashKeysToRemove = getKeysToRemove(userSessionsHash.entrySet());
-        if (sessionKeysToRemove.size()>0){
-            FhLogger.error("Lost sessions in userSessionsHash!!!");
-            sessionKeysToRemove.forEach(key -> {
-                UserSession session = userSessionsHash.get(key);
-                FhLogger.error("Removing {} in userSessionsByConversationId for user {}", key, getUserLogin(session));
-                userSessionsHash.remove(key);
-            });
-        }
-
-        invalidatedIndexSessions.removeAll(invalidatedSessionToRemove);
-    }
-
-    private void emergencySessionRemoval(Set<String> sessionKeysToRemove) {
-        sessionKeysToRemove.forEach(key -> {
-            UserSession session = userSessions.get(key);
-            FhLogger.warn(UserSessionRepository.class, "Emergency removal of unnecessary session {}, {}", key, getUserLogin(session) );
-            removeUserSession(key);
-        });
     }
 
     private <T> Set<T> getKeysToRemove(Set<Map.Entry<T, UserSession>> entries){
@@ -297,7 +282,7 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
 
 
     private boolean doesSessionShouldBeRemoved(UserSession userSession) {
-        return userSession.hasNotBeenUsedIn(emergencyRemovalTimeUnusedSession*1000) || invalidatedIndexSessions.contains(userSession.getHttpSession().getId());
+        return userSession.hasNotBeenUsedIn(emergencyRemovalTimeUnusedSessionInSeconds *1000);
     }
 
     private String getUserLogin(UserSession userSession){
