@@ -27,6 +27,7 @@ import pl.fhframework.validation.IValidationResults;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
+import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -35,6 +36,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @org.springframework.stereotype.Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class UserSession extends Session {
+
+    public static final String FH_SESSION_ID = "fh_session_id";
 
     private static final int ERROR_INFORMATION_LIMIT = 10;
 
@@ -69,8 +72,8 @@ public class UserSession extends Session {
 
     private HttpSession httpSession;
 
-    // original session id - ChangeSessionIdAuthenticationStrategy is called after logging in
-    private String httpSessionOrgId;
+    // fh session id - ChangeSessionIdAuthenticationStrategy is called after logging in
+    private String fhSessionId;
 
     /**
      * Optional authentication propagated from a remote cloud server.
@@ -94,9 +97,14 @@ public class UserSession extends Session {
 
     private Integer sustainTimeOutMinutesOverride;
 
-    public UserSession(SystemUser systemUser, UserSessionDescription description) {
+    public UserSession(SystemUser systemUser, UserSessionDescription description, HttpSession httpSession) {
         super(description);
         setSystemUser(systemUser);
+        String fhSessionId = (String) httpSession.getAttribute(FH_SESSION_ID);
+        if (fhSessionId==null){
+            fhSessionId = httpSession.getId();
+        }
+        setFhSessionId(fhSessionId);
     }
 
     @PostConstruct
@@ -106,6 +114,7 @@ public class UserSession extends Session {
 
     void handleEvent(InMessageEventData eventData) {
         useCaseContainer.handleEvent(eventData);
+        refreshLastUsageTime();
     }
 
     public void runUseCase(String useCaseQualifiedClassName) {
@@ -126,8 +135,8 @@ public class UserSession extends Session {
 
     public void logState() {
         FhLogger.info(this.getClass(), "Session State: "
-                + "\n   stackPU {}"
-                + "\n   form: {}",
+                        + "\n   stackPU {}"
+                        + "\n   form: {}",
                 useCaseContainer.logState(),
                 useCaseContainer.getFormsContainer().logState());
         if (!getUseCaseRequestContext().getFormsToHide().isEmpty())
@@ -246,11 +255,17 @@ public class UserSession extends Session {
 
     public void setHttpSession(HttpSession httpSession) {
         this.httpSession = httpSession;
-        if (httpSession != null) {
-            httpSessionOrgId = httpSession.getId();
-        }
-        else {
-            httpSessionOrgId = null;
-        }
     }
+
+    private long lastUsageMoment;
+    private void refreshLastUsageTime() {
+        lastUsageMoment = System.currentTimeMillis();
+    }
+
+    public boolean hasNotBeenUsedIn(long amountOfTimeSinceLastUsageInMillis) {
+        return  System.currentTimeMillis() - lastUsageMoment >amountOfTimeSinceLastUsageInMillis;
+    }
+
+
+
 }
