@@ -1,5 +1,6 @@
 package pl.fhframework.dp.commons.services.operations;
 
+import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import java.util.UUID;
  * @created 29/11/2021
  */
 @Service
+@Slf4j
 public class OperationStepDtoService extends GenericDtoService<String, OperationStepDto, OperationStepDto, OperationStepDtoQuery, OperationStepDto> implements IOperationStepDtoService {
     @Autowired
     OperationStepESRepository operationStepESRepository;
@@ -60,8 +62,7 @@ public class OperationStepDtoService extends GenericDtoService<String, Operation
     public void logOperationStepFinish(String processID, String operationGUID, String stepID) {
         OperationStepDto dto = findOperationStep(processID, operationGUID, stepID);
         if(dto == null) {
-            String msg = "Can not find operation step for OpGuid: " + operationGUID;
-            throw new RuntimeException(msg);
+            log.error("Can not find operation step for OpGuid: {}, processId :{}, stepId: {}", operationGUID, processID, stepID);
         } else {
             dto.setFinished(LocalDateTime.now());
             persistDto(dto);
