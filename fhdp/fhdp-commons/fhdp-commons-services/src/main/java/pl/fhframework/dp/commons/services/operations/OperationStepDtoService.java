@@ -29,29 +29,40 @@ public class OperationStepDtoService extends GenericDtoService<String, Operation
     }
 
     public void logOperationStepStart(String msgKey, String processID, String masterProcessId, String operationGUID, String stepID, Long docId) {
-        OperationStepDto dto = new OperationStepDto();
-        dto.setDescription(msgKey);
-        dto.setProcessId(processID);
-        dto.setMasterProcessId(masterProcessId);
-        dto.setOperationGUID(operationGUID);
-        dto.setStepId(stepID);
-        dto.setDocID(docId);
-        dto.setId(UUID.randomUUID().toString());
-        dto.setStarted(LocalDateTime.now());
-        persistDto(dto);
+        OperationStepDto dto = findOperationStep(processID, operationGUID, stepID);
+        if(dto == null) {
+            dto.setDescription(msgKey);
+            dto.setProcessId(processID);
+            dto.setMasterProcessId(masterProcessId);
+            dto.setOperationGUID(operationGUID);
+            dto.setStepId(stepID);
+            dto.setDocID(docId);
+            dto.setId(UUID.randomUUID().toString());
+            dto.setStarted(LocalDateTime.now());
+            persistDto(dto);
+        }
     }
 
-    public void logOperationStepFinish(String processID, String operationGUID, String stepID) {
+    public OperationStepDto findOperationStep(String processID, String operationGUID, String stepID) {
         OperationStepDtoQuery query = new OperationStepDtoQuery();
         query.setProcessId(processID);
         query.setOperationGUID(operationGUID);
         query.setStepId(stepID);
         List<OperationStepDto> list = listDto(query);
         if(list.isEmpty()) {
+            return null;
+        } else {
+            OperationStepDto dto = list.get(0);
+            return dto;
+        }
+    }
+
+    public void logOperationStepFinish(String processID, String operationGUID, String stepID) {
+        OperationStepDto dto = findOperationStep(processID, operationGUID, stepID);
+        if(dto == null) {
             String msg = "Can not find operation step for OpGuid: " + operationGUID;
             throw new RuntimeException(msg);
         } else {
-            OperationStepDto dto = list.get(0);
             dto.setFinished(LocalDateTime.now());
             persistDto(dto);
         }
