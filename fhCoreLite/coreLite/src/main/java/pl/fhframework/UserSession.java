@@ -266,6 +266,10 @@ public class UserSession extends Session {
         return  System.currentTimeMillis() - lastUsageMoment >amountOfTimeSinceLastUsageInMillis;
     }
 
+    @Deprecated
+    public String getHttpSessionOrgId(){
+        return fhSessionId;
+    }
 
 
 }
