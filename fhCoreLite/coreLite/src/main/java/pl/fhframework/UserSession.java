@@ -135,8 +135,8 @@ public class UserSession extends Session {
 
     public void logState() {
         FhLogger.info(this.getClass(), "Session State: "
-                + "\n   stackPU {}"
-                + "\n   form: {}",
+                        + "\n   stackPU {}"
+                        + "\n   form: {}",
                 useCaseContainer.logState(),
                 useCaseContainer.getFormsContainer().logState());
         if (!getUseCaseRequestContext().getFormsToHide().isEmpty())
@@ -257,7 +257,7 @@ public class UserSession extends Session {
         this.httpSession = httpSession;
     }
 
-    private long lastUsageMoment = System.currentTimeMillis();
+    private long lastUsageMoment;
     private void refreshLastUsageTime() {
         lastUsageMoment = System.currentTimeMillis();
     }

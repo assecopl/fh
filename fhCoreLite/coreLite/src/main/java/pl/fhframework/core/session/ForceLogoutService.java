@@ -30,7 +30,7 @@ public class ForceLogoutService {
 
     @Autowired
     private UserSessionRepository userSessionRepository;
-    
+
     public boolean forceLogoutByUsername(String username, ForcedLogoutEvent.Reason reason) {
         for (UserSession session : findUserSessionsByUsername(username)) {
             forceLogout(session, reason);
