@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 import pl.fhframework.UserSession;
+import pl.fhframework.WebSocketSessionManager;
 import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.core.security.model.SessionInfo;
 
@@ -23,7 +24,6 @@ import java.net.UnknownHostException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -36,14 +36,19 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
     private Set<Consumer<UserSession>> userSessionDestroyedListeners = new HashSet<>();
     private Set<Consumer<UserSession>> userSessionKeepAliveListeners = new HashSet<>();
 
-    private final ApplicationContext applicationContext;
+    @Autowired
+    private ApplicationContext applicationContext;
+    @Autowired
     private final SessionInfoCache sessionInfoCache;
+    @Autowired
     private SessionInfoService sessionInfoService;
 
     @Value("${server.port}")
     private int serverPort;
     @Value("${fh.session.info.protocol:http}")
     private String sessionInfoProtocol;
+    @Value("${fh.ws.closed.inactive_session_max_time:5}")
+    private int sustainTimeOutMinutes;
 
     @Value("${fh.session.emergency_removal_unused_sessions:true}")
     private boolean emergencyRemovalUnusedSessions;
@@ -52,18 +57,11 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
      * The maximum amount of time an unused session can survive - devault value = 12 houres (43200 seconds)
      */
     @Value("${fh.session.emergency_removal_time_unused_session:43200}")
-    private int emergencyRemovalTimeUnusedSession;
-
-    @Value("${fh.session.emergency_removal_unused_sessions:true}")
-    private boolean emergencyRemovalUnusedSessions;
-
-    /**
-     * The maximum amount of time an unused session can survive - devault value = 12 houres (43200 seconds)
-     */
-    @Value("${fh.session.emergency_removal_time_unused_session:43200}")
-    private int emergencyRemovalTimeUnusedSession;
+    private int emergencyRemovalTimeUnusedSessionInSeconds;
 
     private String nodeUrl;
+
+
 
     @PostConstruct
     public void init() {
@@ -77,6 +75,8 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
 
     @Override
     public synchronized void onApplicationEvent(ContextRefreshedEvent event) {
+        WebSocketSessionManager.setSustainTimeout(sustainTimeOutMinutes * 60);
+
         // register node in cache
         nodeUrl = generateNodeUrl();
         int iter = 0;
@@ -237,20 +237,28 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
         return new HashSet<>(userSessionsByFhId.values());
     }
 
-    private Set<String> invalidatedIndexSessions = Collections.synchronizedSet(new HashSet<>());
 
     @Scheduled(fixedDelay = 60000)
     private void cleanupLeakedSessions(){
-
-        Set<String> invalidatedSessionToRemove = new HashSet<>(invalidatedIndexSessions);
-
         //Calculate collections of session keys (http session id) of sessions to remove
-        Set<String> sessionKeysToRemove =  getKeysToRemove(userSessions.entrySet());
+        Set<String> sessionKeysToRemove =  getKeysToRemove(userSessionsByFhId.entrySet());
         //Removing sessions in convinient way
         emergencySessionRemoval(sessionKeysToRemove);
 
         //Calculate leaked sessions in userSessionsByConversationId
         sessionKeysToRemove = getKeysToRemove(userSessionsByConversationId.entrySet());
+        unkomonEmergencySessionRemovalInUserSessionsByConversationId(sessionKeysToRemove);
+    }
+
+    private void emergencySessionRemoval(Set<String> sessionKeysToRemove) {
+        sessionKeysToRemove.forEach(key -> {
+            UserSession session = userSessionsByFhId.get(key);
+            FhLogger.warn(UserSessionRepository.class, "Emergency removal of unnecessary session {}, {}", key, getUserLogin(session) );
+            removeUserSession(session);
+        });
+    }
+
+    private void unkomonEmergencySessionRemovalInUserSessionsByConversationId(Set<String> sessionKeysToRemove) {
         if (sessionKeysToRemove.size()>0){
             FhLogger.error("Lost sessions in userSessionsByConversationId!!!");
             sessionKeysToRemove.forEach(key -> {
@@ -259,27 +267,6 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
                 userSessionsByConversationId.remove(key);
             });
         }
-
-        //Calculate leaked sessions in userSessionsHash
-        Set<Integer> sessionHashKeysToRemove = getKeysToRemove(userSessionsHash.entrySet());
-        if (sessionKeysToRemove.size()>0){
-            FhLogger.error("Lost sessions in userSessionsHash!!!");
-            sessionKeysToRemove.forEach(key -> {
-                UserSession session = userSessionsHash.get(key);
-                FhLogger.error("Removing {} in userSessionsByConversationId for user {}", key, getUserLogin(session));
-                userSessionsHash.remove(key);
-            });
-        }
-
-        invalidatedIndexSessions.removeAll(invalidatedSessionToRemove);
-    }
-
-    private void emergencySessionRemoval(Set<String> sessionKeysToRemove) {
-        sessionKeysToRemove.forEach(key -> {
-            UserSession session = userSessions.get(key);
-            FhLogger.warn(UserSessionRepository.class, "Emergency removal of unnecessary session {}, {}", key, getUserLogin(session) );
-            removeUserSession(key);
-        });
     }
 
     private <T> Set<T> getKeysToRemove(Set<Map.Entry<T, UserSession>> entries){
@@ -295,7 +282,7 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
 
 
     private boolean doesSessionShouldBeRemoved(UserSession userSession) {
-        return userSession.hasNotBeenUsedIn(emergencyRemovalTimeUnusedSession*1000) || invalidatedIndexSessions.contains(userSession.getHttpSession().getId());
+        return userSession.hasNotBeenUsedIn(emergencyRemovalTimeUnusedSessionInSeconds *1000);
     }
 
     private String getUserLogin(UserSession userSession){
