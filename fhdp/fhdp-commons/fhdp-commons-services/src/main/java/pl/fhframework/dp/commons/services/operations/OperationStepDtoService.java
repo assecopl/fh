@@ -33,6 +33,7 @@ public class OperationStepDtoService extends GenericDtoService<String, Operation
     public void logOperationStepStart(String msgKey, String processID, String masterProcessId, String operationGUID, String stepID, Long docId) {
         OperationStepDto dto = findOperationStep(processID, operationGUID, stepID);
         if(dto == null) {
+            dto = new OperationStepDto();
             dto.setDescription(msgKey);
             dto.setProcessId(processID);
             dto.setMasterProcessId(masterProcessId);
