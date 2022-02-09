@@ -1,6 +1,6 @@
 {
   "name": "fh-charts-controls",
-  "version": "4.9.23-SNAPSHOT-1643904125949",
+  "version": "4.9.24-SNAPSHOT-1644431965282",
   "main": "dist/Module.js",
   "types": "dist/Module.d.ts",
   "description": "fh framework charts controls",
@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "chart.js": "2.8.0",
-    "fh-forms-handler": "4.9.23-SNAPSHOT-1643904125949",
+    "fh-forms-handler": "4.9.24-SNAPSHOT-1644431965282",
     "copyfiles": "2.1.1"
   }
 }
