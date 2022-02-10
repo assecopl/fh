@@ -1,0 +1,5 @@
+<subsystem name="fhdp-commons-els" label="FHDP commons els"
+    productUUID="e5ac91e1-4591-4407-8dd1-52220db6ed3c"
+    basePackage="pl.fhframework.dp.commons.els"
+    access="private">
+</subsystem>

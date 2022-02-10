@@ -1,0 +1,67 @@
+.old-value {
+  color: #F10052;
+  text-decoration: line-through;
+}
+
+.hide-old-value {
+  display: none;
+}
+
+.input-old-value.input-old-value-remove-line {
+  text-decoration: none;
+  color: #F10052;
+}
+
+.bnt :hover {
+  background: #f90;
+}
+
+.dc-element {
+  background: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  z-index: 99;
+  left: 2% !important;
+  width: 80%;
+}
+
+.non-display {
+  display: none !important;
+}
+
+.hidden-popper {
+  visibility: hidden;
+  pointer-events: none;
+  display: none;
+}
+
+.popper-content .row {
+  margin-right: 0px;
+  margin-left: 0px;
+}
+
+.popper-content .fc.table > thead > tr > th {
+  top: unset;
+  width: 70%;
+}
+
+.icon-parent {
+  right: auto;
+  cursor: pointer;
+  display: inline-table;
+  border: none;
+  margin-left: 97%;
+}
+
+.popper-header {
+  width: auto;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.fc.outputLabel.dictionary-title {
+  margin-left: -99%;
+}
+
+/*# sourceMappingURL=DictionaryCombofhdp.css.map */

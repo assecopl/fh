@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "sourceMap": true,
+    "target": "es5",
+    "outDir": "dist",
+    "lib": [
+      "es6",
+      "dom",
+      "es2017",
+      "scripthost"
+    ],
+    "types": ["reflect-metadata", "jquery", "jqueryui", "bootstrap", "node"],
+    "module": "commonjs",
+    "baseUrl": ".",
+    "moduleResolution": "node",
+    "declaration": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "resolveJsonModule": true,
+    "rootDir": ".",
+  },
+  "exclude": ["node_modules", "target", "dist"]
+}

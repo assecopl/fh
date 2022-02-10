@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://fh.asseco.com/outline/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://fh.asseco.com/outline/1.0" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="Outline">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Element" type="ElementCT" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="ElementCT">
+		<xs:sequence>
+			<xs:element name="mappings" type="MappingsListCT" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="Element" type="ElementCT" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="id" type="xs:string" use="required"/>
+		<xs:attribute name="label" type="xs:string" use="required"/>
+		<xs:attribute name="hint" type="xs:string" use="optional"/>
+		<xs:attribute name="form" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="MappingsListCT">
+		<xs:sequence>
+			<xs:element name="pointer" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+<!--	<xs:complexType name="PointerCT">-->
+<!--		<xs:attribute name="pointer" type="xs:string" use="required"/>-->
+<!--	</xs:complexType>-->
+</xs:schema>

@@ -1,0 +1,3 @@
+<subsystem name="fhdp-commons-fh-adm" label="FHDP Administration" productUUID="bed4b55f-a00c-4c28-814e-c07ecd0d76cf" basePackage="pl.fhframework.dp.commons.fh" access="private">
+    <systemFunctionsMapper ref="pl.fhframework.dp.commons.fh.adm.security.FhAdmSystemFunctionsMapper"/>
+</subsystem>

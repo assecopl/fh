@@ -1,0 +1,37 @@
+{
+  "name": "fhdp-charts",
+  "version": "4.9.23",
+  "author": {
+    "name": "Krzysztof Czajka",
+    "email": "k.czajka@doittechnology.pl"
+  },
+  "main": "dist/Module.js",
+  "types": "dist/Module.d.ts",
+  "scripts": {
+    "prepublish": "node prepublish",
+    "postpublish": "node postpublish",
+    "build": "tsc && copyfiles ./source/external/** ./source/styles/css/*.css ./source/styles/external-css/*.css ./source/styles/img/*.png source/Module.css ./dist",
+    "copyDev": "cp -r ./dist/*  ../../../fhdp-common/fhdp-commons/fhdp-commons-fh-starter/node_modules/fhdp-charts/dist",
+    "prepare": "yarn build",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "sass": "sass --watch ./source/styles/scss:./source/styles/css"
+  },
+  "devDependencies": {
+    "@types/bootstrap": "4.3.1",
+    "@types/highlight.js": "9.12.3",
+    "@types/jquery": "3.3.31",
+    "@types/jqueryui": "1.12.7",
+    "@types/marked": "0.6.5",
+    "@types/node": "14.14.36",
+    "imports-loader": "0.8.0",
+    "less": "3.9.0",
+    "sass": "^1.26.8",
+    "typescript": "3.5.3"
+  },
+  "dependencies": {
+    "canvas": "^2.8.0",
+    "fh-basic-controls": "4.9.23",
+    "fh-forms-handler": "4.9.23",
+    "konva": "^8.0.4"
+  }
+}

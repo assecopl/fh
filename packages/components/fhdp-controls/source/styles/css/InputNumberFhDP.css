@@ -1,0 +1,35 @@
+.input-old-value {
+  text-decoration: line-through;
+  color: #F10052;
+}
+
+.input-group-text {
+  background-color: var(--color-bg-light);
+  border-color: var(--color-border);
+}
+
+.input-group > .input-group-append > .btn {
+  border-color: var(--color-border);
+  box-shadow: none;
+}
+
+.input-group > .input-group-append > .btn:hover, .input-group > .input-group-append > .btn:active, .input-group > .input-group-append > .btn:focus {
+  background-color: var(--color-bg-light);
+  color: var(--color-text);
+}
+
+.old-value {
+  color: #F10052;
+  text-decoration: line-through;
+}
+
+.hide-old-value {
+  display: none;
+}
+
+.input-old-value.input-old-value-remove-line {
+  text-decoration: none;
+  color: #F10052;
+}
+
+/*# sourceMappingURL=InputNumberfhdp.css.map */

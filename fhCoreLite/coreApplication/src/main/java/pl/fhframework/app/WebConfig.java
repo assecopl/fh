@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.DelegatingWebMvcConfiguration;
@@ -13,7 +14,7 @@ import java.util.Locale;
 
 @Configuration
 @Slf4j
-@Order(1)
+@Order(0)
 public class WebConfig extends DelegatingWebMvcConfiguration {
 
     @Value("${fhframework.language.default:pl}")
@@ -21,6 +22,7 @@ public class WebConfig extends DelegatingWebMvcConfiguration {
 
     @Bean
     @Override
+    @Primary
     public LocaleResolver localeResolver() {
         log.info("************* Start cookie locale resolver...");
         CookieLocaleResolver resolver = new CookieLocaleResolver();

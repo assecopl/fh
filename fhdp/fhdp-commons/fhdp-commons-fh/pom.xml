@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>fhdp-commons</artifactId>
+        <groupId>pl.fhframework.dp</groupId>
+        <version>4.9.23</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>fhdp-commons-fh</artifactId>
+    <packaging>jar</packaging>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>pl.fhframework.dp</groupId>
+                <artifactId>fhdp-bom</artifactId>
+                <version>${project.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>pl.fhframework.dp</groupId>
+            <artifactId>fhdp-commons-rest</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>pl.fhframework.dp</groupId>
+            <artifactId>fhdp-commons-fh-lite</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>pl.fhframework.dp</groupId>
+            <artifactId>fhdp-commons-validation</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>pl.fhframework.dp</groupId>
+            <artifactId>fhdp-commons-utils</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>pl.fhframework.dp</groupId>
+            <artifactId>fhdp-components</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>pl.fhframework</groupId>
+            <artifactId>coreLite</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>pl.fhframework</groupId>
+            <artifactId>coreApplication</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>pl.fhframework.persistence</groupId>
+            <artifactId>fhPersistenceLite</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>pl.fhframework.integration</groupId>
+            <artifactId>integrationCoreLite</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>pl.fhframework</groupId>
+            <artifactId>basicControls</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+        </dependency>
+    </dependencies>
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>**/*.scss</exclude>
+                    <exclude>**/*.ts</exclude>
+                    <exclude>static/css/*</exclude>
+                    <exclude>static/Application.css</exclude>
+                </excludes>
+            </resource>
+        </resources>
+        <plugins>
+            <!-- ANT copies XMLs of dynamic classes and keeps last modified timestamps (maven-resources-plugin does NOT) -->
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <phase>process-resources</phase>
+                        <configuration>
+                            <tasks>
+                                <copy todir="${project.build.directory}/dynamics" preservelastmodified="true">
+                                    <fileset dir="src/main/java">
+                                        <include name="**/*.frm" />
+                                        <include name="**/*.duc" />
+                                        <include name="**/*.dmo" />
+                                        <include name="**/*.dru" />
+                                        <include name="**/*.srv" />
+                                        <include name="menu.xml" />
+                                        <include name="module.xml" />
+                                    </fileset>
+                                </copy>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.3.2</version>
+                <executions>
+                    <execution>
+                        <id>generate-java-forms</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>pl.fhframework.compiler.core.dynamic.MavenDynamicClassCompiler</mainClass>
+                    <arguments>
+                        <argument>--sources=${project.build.directory}/dynamics</argument>
+                        <argument>--output=${project.build.directory}/generated-form-sources</argument>
+                        <argument>--classes=${project.build.outputDirectory}</argument>
+                        <argument>--failOnError=true</argument>
+                        <argument>--verbose=true</argument>
+                        <argument>--coreLiteTarget=true</argument>
+                    </arguments>
+                    <sourceRoot>${project.build.directory}/generated-form-sources</sourceRoot>
+                    <includePluginDependencies>true</includePluginDependencies>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>pl.fhframework</groupId>
+                        <artifactId>fh-compiler</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>pl.fhframework.dp</groupId>
+                        <artifactId>fhdp-components</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>aspectj-maven-plugin</artifactId>
+                <version>1.9</version>
+                <configuration>
+                    <showWeaveInfo>true</showWeaveInfo>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                    <Xlint>ignore</Xlint>
+                    <complianceLevel>${maven.compiler.source}</complianceLevel>
+                    <encoding>UTF-8</encoding>
+                    <verbose>true</verbose>
+                    <forceAjcCompile>true</forceAjcCompile>
+                    <sources />
+                    <weaveDirectories>
+                        <weaveDirectory>${project.build.directory}/classes</weaveDirectory>
+                    </weaveDirectories>
+                    <aspectLibraries>
+                        <aspectLibrary>
+                            <groupId>pl.fhframework.aspects</groupId>
+                            <artifactId>fhAspects</artifactId>
+                        </aspectLibrary>
+                    </aspectLibraries>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
