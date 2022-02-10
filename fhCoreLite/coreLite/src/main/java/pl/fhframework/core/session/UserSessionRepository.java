@@ -247,4 +247,10 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
             return "unkwnon user";
         }
     }
+
+    @Deprecated
+    public Map<String, UserSession> getUserSessions() {
+        return userSessionsByFhId;
+    }
+
 }
