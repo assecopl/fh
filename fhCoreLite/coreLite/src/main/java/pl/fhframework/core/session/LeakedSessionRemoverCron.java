@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Mechanism for temporaly session deletion. Contains cron which seek for abandoned session and removes it.
+ * Temporary session deletion mechanism. It contains a cron that finds an abandoned sessions and removes them.
  */
 @Component
 public class LeakedSessionRemoverCron {
