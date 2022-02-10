@@ -6,6 +6,8 @@
     <packaging>pom</packaging>
     <version>4.9.24-SNAPSHOT</version>
 
+    <name>fhdp</name>
+
     <description>FHDP common modules</description>
 
     <url>https://github.com/assecopl/fh</url>
@@ -129,6 +131,9 @@
                                 <goals>
                                     <goal>jar</goal>
                                 </goals>
+                                <configuration> <!-- add this to disable checking -->
+                                    <additionalparam>-Xdoclint:none</additionalparam>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
