@@ -100,7 +100,12 @@ public class WebSocketSessionManager implements ISessionManagerImpl {
         try {
             // include current inactive time - FH-7448
             int sustainTimeout = WebSocketSessionManager.getSustainTimeout();
-            Integer sustainTimeoutOverride = getInstance().getSession().getSustainTimeOutMinutesOverride();
+            UserSession userSession = getInstance().getSession();
+            if (userSession==null){
+                FhLogger.error("Sorry, no session found in current context!");
+                throw new IllegalStateException();
+            }
+            Integer sustainTimeoutOverride = userSession.getSustainTimeOutMinutesOverride();
             if (sustainTimeoutOverride != null) {
                 sustainTimeout = sustainTimeoutOverride * 60;
             }

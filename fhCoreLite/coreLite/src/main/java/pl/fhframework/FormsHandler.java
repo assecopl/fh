@@ -22,6 +22,7 @@ import pl.fhframework.core.util.DebugUtils;
 import pl.fhframework.core.util.JsonUtil;
 import pl.fhframework.core.util.StringUtils;
 import pl.fhframework.event.dto.EventDTO;
+import pl.fhframework.event.dto.ForcedLogoutEvent;
 import pl.fhframework.event.dto.SessionTimeoutEvent;
 import pl.fhframework.events.IClientDataHandler;
 import pl.fhframework.events.UseCaseRequestContext;
@@ -257,7 +258,13 @@ public abstract class FormsHandler {
         AbstractMessage inMessage = parseMessage(payloadParts[1]);
         Throwable exception = null;
         IUseCase topUseCase = null;
-        if (getUserSession(context).getUseCaseContainer().getCurrentUseCaseContext() != null) {
+        UserSession userSession = getUserSession(context);
+        if (userSession==null){
+            FhLogger.warn("Can't process serviceRequest, because sessions has been already removed!!!");
+            sendOutMessage("FORCED_LOGOUT", new ForcedLogoutEvent(ForcedLogoutEvent.Reason.LOGOUT_TIMEOUT), context);
+            return;
+        }
+        if (userSession.getUseCaseContainer().getCurrentUseCaseContext() != null) {
             topUseCase = getUserSession(context).getUseCaseContainer().getCurrentUseCaseContext().getUseCase();
         }
         try {
