@@ -257,13 +257,17 @@ public class UserSession extends Session {
         this.httpSession = httpSession;
     }
 
-    private long lastUsageMoment;
+    private long lastUsageMoment = System.currentTimeMillis();
     private void refreshLastUsageTime() {
         lastUsageMoment = System.currentTimeMillis();
     }
 
     public boolean hasNotBeenUsedIn(long amountOfTimeSinceLastUsageInMillis) {
-        return  System.currentTimeMillis() - lastUsageMoment >amountOfTimeSinceLastUsageInMillis;
+        return  getHowLongIsUnusedInMillis() >amountOfTimeSinceLastUsageInMillis;
+    }
+
+    public long getHowLongIsUnusedInMillis(){
+        return System.currentTimeMillis() - lastUsageMoment;
     }
 
 

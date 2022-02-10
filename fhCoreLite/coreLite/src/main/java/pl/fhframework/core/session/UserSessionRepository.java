@@ -50,14 +50,7 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
     @Value("${fh.ws.closed.inactive_session_max_time:5}")
     private int sustainTimeOutMinutes;
 
-    @Value("${fh.session.emergency_removal_unused_sessions:true}")
-    private boolean emergencyRemovalUnusedSessions;
 
-    /**
-     * The maximum amount of time an unused session can survive - devault value = 12 houres (43200 seconds)
-     */
-    @Value("${fh.session.emergency_removal_time_unused_session:43200}")
-    private int emergencyRemovalTimeUnusedSessionInSeconds;
 
     private String nodeUrl;
 
@@ -123,18 +116,10 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
         putSessionInfo(fhSessionId, userSession);
     }
 
-//    public void removeUserSession(String httpSessionId) {
-//        UserSession userSession = userSessions.get(httpSessionId);
-//        removeUserSession(userSession);
-//    }
-
-    private void removeUserSession(UserSession userSession) {
-//        userSessions.values().remove(userSession);
-        userSessionsByFhId.values().remove(userSession);
+    protected boolean removeUserSession(UserSession userSession) {
+        boolean response = userSessionsByFhId.values().remove(userSession);
         userSessionsByConversationId.values().remove(userSession);
-//        userSessionsByFhId.remove(userSession.getFhSessionId());
-//        userSessionsByConversationId.remove(userSession.getConversationUniqueId());
-//        removeSessionInfo(userSession.getFhSessionId());
+        return response;
     }
 
     private synchronized void putSessionInfo(String fhSessionId, UserSession userSession) {
@@ -228,7 +213,12 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
                     listener.accept(session);
                 }
             } finally {
-                removeUserSession(session);
+                boolean response = removeUserSession(session);
+                if (response) {
+                    FhLogger.info("Removed expired session for {}.", getUserLogin(session));
+                }else{
+                    FhLogger.error("Unsuccessful attempt to delete the session for {}", getUserLogin(session));
+                }
             }
         }
     }
@@ -237,60 +227,24 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
         return new HashSet<>(userSessionsByFhId.values());
     }
 
-
-    @Scheduled(fixedDelay = 60000)
-    private void cleanupLeakedSessions(){
-        //Calculate collections of session keys (http session id) of sessions to remove
-        Set<String> sessionKeysToRemove =  getKeysToRemove(userSessionsByFhId.entrySet());
-        //Removing sessions in convinient way
-        emergencySessionRemoval(sessionKeysToRemove);
-
-        //Calculate leaked sessions in userSessionsByConversationId
-        sessionKeysToRemove = getKeysToRemove(userSessionsByConversationId.entrySet());
-        unkomonEmergencySessionRemovalInUserSessionsByConversationId(sessionKeysToRemove);
-    }
-
-    private void emergencySessionRemoval(Set<String> sessionKeysToRemove) {
-        sessionKeysToRemove.forEach(key -> {
-            UserSession session = userSessionsByFhId.get(key);
-            FhLogger.warn(UserSessionRepository.class, "Emergency removal of unnecessary session {}, {}", key, getUserLogin(session) );
-            removeUserSession(session);
-        });
-    }
-
-    private void unkomonEmergencySessionRemovalInUserSessionsByConversationId(Set<String> sessionKeysToRemove) {
-        if (sessionKeysToRemove.size()>0){
-            FhLogger.error("Lost sessions in userSessionsByConversationId!!!");
-            sessionKeysToRemove.forEach(key -> {
-                UserSession session = userSessionsByConversationId.get(key);
-                FhLogger.error("Removing {} in userSessionsByConversationId for user {}", key, getUserLogin(session));
-                userSessionsByConversationId.remove(key);
-            });
-        }
-    }
-
-    private <T> Set<T> getKeysToRemove(Set<Map.Entry<T, UserSession>> entries){
-        Set<T> sessionKeysToRemove = new HashSet<>();
-        entries.forEach(entry -> {
-            UserSession session = entry.getValue();
-            if (doesSessionShouldBeRemoved(session)){
-                sessionKeysToRemove.add(entry.getKey());
-            }
-        });
-        return sessionKeysToRemove;
+    protected Map<String, UserSession> getUserSessionsByFhId(){
+        return Collections.unmodifiableMap(this.userSessionsByFhId);
     }
 
 
-    private boolean doesSessionShouldBeRemoved(UserSession userSession) {
-        return userSession.hasNotBeenUsedIn(emergencyRemovalTimeUnusedSessionInSeconds *1000);
+    protected UserSession getUserSessionByFhId(String fhId) {
+        return this.userSessionsByFhId.get(fhId);
     }
 
-    private String getUserLogin(UserSession userSession){
+    protected int getNoOfSessions(){
+        return userSessionsByFhId.size();
+    }
+
+    public static String getUserLogin(UserSession userSession){
         try{
             return userSession.getSystemUser().getLogin();
         }catch (Exception ex){
             return "unkwnon user";
         }
     }
-
 }
