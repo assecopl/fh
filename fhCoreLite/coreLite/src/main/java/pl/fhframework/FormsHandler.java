@@ -54,6 +54,13 @@ public abstract class FormsHandler {
 
     protected final ObjectMapper objectMapper;//TODO:Check if multithread safe - In DOC is written "threadSafe".
 
+
+    /**
+     * A flag that turns on session reconnection mechanism.
+     */
+    @Value("${fh.session.reconnect:true}")
+    private boolean reconectToOldSession;
+
     @Autowired
     private SubsystemManager subsystemManager;
 
@@ -336,7 +343,11 @@ public abstract class FormsHandler {
         String url = message.getUrl();
         UserSession userSession = getUserSession(context);
 
-        userSession.getUseCaseContainer().getFormsContainer().doForEachFullyManagedForm(form -> form.setShowingTimestamp(Instant.now()));
+        if (reconectToOldSession) {
+            userSession.getUseCaseContainer().getFormsContainer().doForEachFullyManagedForm(form -> form.setShowingTimestamp(Instant.now()));
+        } else {
+            userSession.getUseCaseContainer().clear();
+        }
 
         if (sessionTimeoutManagerActive && !sessionNeverExpireForUser(userSession)) {
             sessionTimeoutManager.registerConversation(userSession.getConversationUniqueId());
@@ -353,7 +364,7 @@ public abstract class FormsHandler {
         // run system use cases if url not on disabled list
         if (shouldRunSystemUseCases(url)) {
             for (String systemUseCase : subsystemManager.getSystemUseCases()) {
-                if (!SessionManager.getUserSession().getUseCaseContainer().isSystemUseCaseRunning(systemUseCase)) {
+                if (!reconectToOldSession || !SessionManager.getUserSession().getUseCaseContainer().isSystemUseCaseRunning(systemUseCase)) {
                     userSession.runSystemUseCase(systemUseCase);
                 }
             }
