@@ -47,6 +47,7 @@ public class LeakedSessionRemoverCron {
      */
     @Scheduled(fixedDelay = 1000)
     private void cleanupLeakedSessions(){
+        FhLogger.debug("Cleanup leaked sessions cron: Try to run");
         if (emergencyRemovalUnusedSessions && lastCronTime<=System.currentTimeMillis() - leakedSessionRemoverPeriod * 1000) {
             lastCronTime = System.currentTimeMillis();
             FhLogger.info("Cleanup leaked sessions cron: Seeking for outdated sessions. There are {} sessions. The oldest one hasn't been used since {} seconds.", userSessionRepository.getNoOfSessions(), getInactivityTimeForMostExpiredSessions()/1000);
