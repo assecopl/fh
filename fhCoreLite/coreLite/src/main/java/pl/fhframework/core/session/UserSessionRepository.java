@@ -116,7 +116,7 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
         putSessionInfo(fhSessionId, userSession);
     }
 
-    protected boolean removeUserSession(UserSession userSession) {
+    public boolean removeUserSession(UserSession userSession) {
         boolean response = userSessionsByFhId.values().remove(userSession);
         userSessionsByConversationId.values().remove(userSession);
         return response;
