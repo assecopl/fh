@@ -95,7 +95,7 @@ public class WebSocketFormsHandler extends FormsHandler {
         } else {
             try {
                 SystemUser systemUser = securityManager.buildSystemUser(session.getPrincipal());
-                boundSession = applicationContext.getBean(UserSession.class, systemUser, createDescription(session));//new UserSession(this, systemUser, description);
+                boundSession = applicationContext.getBean(UserSession.class, systemUser, createDescription(session), WebSocketSessionManager.getHttpSession());//new UserSession(this, systemUser, description);
                 boundSession.setHttpSession(WebSocketSessionManager.getHttpSession());
                 updateSessionAttributes(boundSession);
                 WebSocketSessionManager.setUserSession(boundSession);
@@ -106,7 +106,7 @@ public class WebSocketFormsHandler extends FormsHandler {
                 FhLogger.error("Error creating session", e);
                 SystemUser systemUser = new SystemUser(session.getPrincipal());
                 systemUser.getBusinessRoles().add(new NoneBusinessRole());
-                boundSession = applicationContext.getBean(UserSession.class, systemUser, createDescription(session));//new UserSession(this, systemUser, description);
+                boundSession = applicationContext.getBean(UserSession.class, systemUser, createDescription(session), WebSocketSessionManager.getHttpSession());//new UserSession(this, systemUser, description);
                 boundSession.setHttpSession(WebSocketSessionManager.getHttpSession());
                 WebSocketSessionManager.setUserSession(boundSession);
                 wssRepository.onConnectionEstabilished(boundSession, session);
