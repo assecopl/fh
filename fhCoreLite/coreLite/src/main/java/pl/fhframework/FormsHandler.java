@@ -22,7 +22,6 @@ import pl.fhframework.core.util.DebugUtils;
 import pl.fhframework.core.util.JsonUtil;
 import pl.fhframework.core.util.StringUtils;
 import pl.fhframework.event.dto.EventDTO;
-import pl.fhframework.event.dto.ForcedLogoutEvent;
 import pl.fhframework.event.dto.SessionTimeoutEvent;
 import pl.fhframework.events.IClientDataHandler;
 import pl.fhframework.events.UseCaseRequestContext;
@@ -53,13 +52,6 @@ public abstract class FormsHandler {
     private static final DateTimeFormatter CLIENT_JSON_OUTPUT_FILE_FORMAT = DateTimeFormatter.ofPattern("'$user$_'yyyy-MM-dd_HH_mm_ss_SSS'_client_$command$.json'");
 
     protected final ObjectMapper objectMapper;//TODO:Check if multithread safe - In DOC is written "threadSafe".
-
-
-    /**
-     * A flag that turns on session reconnection mechanism.
-     */
-    @Value("${fh.session.reconnect:true}")
-    private boolean reconectToOldSession;
 
     @Autowired
     private SubsystemManager subsystemManager;
@@ -265,13 +257,7 @@ public abstract class FormsHandler {
         AbstractMessage inMessage = parseMessage(payloadParts[1]);
         Throwable exception = null;
         IUseCase topUseCase = null;
-        UserSession userSession = getUserSession(context);
-        if (userSession==null){
-            FhLogger.warn("Can't process serviceRequest, because sessions has been already removed!!!");
-            sendOutMessage("FORCED_LOGOUT", new ForcedLogoutEvent(ForcedLogoutEvent.Reason.LOGOUT_TIMEOUT), context);
-            return;
-        }
-        if (userSession.getUseCaseContainer().getCurrentUseCaseContext() != null) {
+        if (getUserSession(context).getUseCaseContainer().getCurrentUseCaseContext() != null) {
             topUseCase = getUserSession(context).getUseCaseContainer().getCurrentUseCaseContext().getUseCase();
         }
         try {
@@ -343,11 +329,7 @@ public abstract class FormsHandler {
         String url = message.getUrl();
         UserSession userSession = getUserSession(context);
 
-        if (reconectToOldSession) {
-            userSession.getUseCaseContainer().getFormsContainer().doForEachFullyManagedForm(form -> form.setShowingTimestamp(Instant.now()));
-        } else {
-            userSession.getUseCaseContainer().clear();
-        }
+        userSession.getUseCaseContainer().getFormsContainer().doForEachFullyManagedForm(form -> form.setShowingTimestamp(Instant.now()));
 
         if (sessionTimeoutManagerActive && !sessionNeverExpireForUser(userSession)) {
             sessionTimeoutManager.registerConversation(userSession.getConversationUniqueId());
@@ -364,7 +346,7 @@ public abstract class FormsHandler {
         // run system use cases if url not on disabled list
         if (shouldRunSystemUseCases(url)) {
             for (String systemUseCase : subsystemManager.getSystemUseCases()) {
-                if (!reconectToOldSession || !SessionManager.getUserSession().getUseCaseContainer().isSystemUseCaseRunning(systemUseCase)) {
+                if (!SessionManager.getUserSession().getUseCaseContainer().isSystemUseCaseRunning(systemUseCase)) {
                     userSession.runSystemUseCase(systemUseCase);
                 }
             }
