@@ -37,9 +37,6 @@ public class LeakedSessionRemoverCron {
     @Value("${fh.session.leaked_session_remover_cron_period:3600}")
     private int leakedSessionRemoverPeriod;
 
-    @Value("${dupa:Ala}")
-    private String ddd;
-
     /**
      * Time in millis when the last time cron has been working
      */
