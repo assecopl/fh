@@ -27,7 +27,6 @@ import pl.fhframework.validation.IValidationResults;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
-import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -36,8 +35,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @org.springframework.stereotype.Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class UserSession extends Session {
-
-    public static final String FH_SESSION_ID = "fh_session_id";
 
     private static final int ERROR_INFORMATION_LIMIT = 10;
 
@@ -72,8 +69,8 @@ public class UserSession extends Session {
 
     private HttpSession httpSession;
 
-    // fh session id - ChangeSessionIdAuthenticationStrategy is called after logging in
-    private String fhSessionId;
+    // original session id - ChangeSessionIdAuthenticationStrategy is called after logging in
+    private String httpSessionOrgId;
 
     /**
      * Optional authentication propagated from a remote cloud server.
@@ -95,16 +92,9 @@ public class UserSession extends Session {
 
     private RuntimeException exception;
 
-    private Integer sustainTimeOutMinutesOverride;
-
-    public UserSession(SystemUser systemUser, UserSessionDescription description, HttpSession httpSession) {
+    public UserSession(SystemUser systemUser, UserSessionDescription description) {
         super(description);
         setSystemUser(systemUser);
-        String fhSessionId = (String) httpSession.getAttribute(FH_SESSION_ID);
-        if (fhSessionId==null){
-            fhSessionId = httpSession.getId();
-        }
-        setFhSessionId(fhSessionId);
     }
 
     @PostConstruct
@@ -114,7 +104,6 @@ public class UserSession extends Session {
 
     void handleEvent(InMessageEventData eventData) {
         useCaseContainer.handleEvent(eventData);
-        refreshLastUsageTime();
     }
 
     public void runUseCase(String useCaseQualifiedClassName) {
@@ -255,25 +244,11 @@ public class UserSession extends Session {
 
     public void setHttpSession(HttpSession httpSession) {
         this.httpSession = httpSession;
+        if (httpSession != null) {
+            httpSessionOrgId = httpSession.getId();
+        }
+        else {
+            httpSessionOrgId = null;
+        }
     }
-
-    private long lastUsageMoment = System.currentTimeMillis();
-    private void refreshLastUsageTime() {
-        lastUsageMoment = System.currentTimeMillis();
-    }
-
-    public boolean hasNotBeenUsedIn(long amountOfTimeSinceLastUsageInMillis) {
-        return  getHowLongIsUnusedInMillis() >amountOfTimeSinceLastUsageInMillis;
-    }
-
-    public long getHowLongIsUnusedInMillis(){
-        return System.currentTimeMillis() - lastUsageMoment;
-    }
-
-    @Deprecated
-    public String getHttpSessionOrgId(){
-        return fhSessionId;
-    }
-
-
 }

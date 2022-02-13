@@ -59,9 +59,7 @@ public class WebSocketSessionManager implements ISessionManagerImpl {
      * Timeout of http session when WS session is interrupted
      * This time should allow user to reconnect (to the same server or other node in cluster)
      */
-    @Getter
-    @Setter
-    private static int sustainTimeout = 5 * 60;
+    public static final int SUSTAIN_TIMEOUT = 5 * 60;
 
     /**
      * Infinitive HttpSesion timeout
@@ -99,18 +97,8 @@ public class WebSocketSessionManager implements ISessionManagerImpl {
         HttpSession sessionHttp = getHttpSession();
         try {
             // include current inactive time - FH-7448
-            int sustainTimeout = WebSocketSessionManager.getSustainTimeout();
-            UserSession userSession = getInstance().getSession();
-            if (userSession==null){
-                FhLogger.error("Sorry, no session found in current context!");
-                throw new IllegalStateException();
-            }
-            Integer sustainTimeoutOverride = userSession.getSustainTimeOutMinutesOverride();
-            if (sustainTimeoutOverride != null) {
-                sustainTimeout = sustainTimeoutOverride * 60;
-            }
             int currentInactiveTime = (int) ((System.currentTimeMillis() - sessionHttp.getLastAccessedTime()) / 1000);
-            sessionHttp.setMaxInactiveInterval(currentInactiveTime + sustainTimeout);
+            sessionHttp.setMaxInactiveInterval(currentInactiveTime + SUSTAIN_TIMEOUT);
             FhLogger.info( "HttpSession marked for sustain timeout");
         } catch (IllegalStateException ise) {
             // session allready invalidated
@@ -125,7 +113,7 @@ public class WebSocketSessionManager implements ISessionManagerImpl {
      */
     public static void setUserSession(UserSession userSession) {
         HttpSession sessionHttp = getHttpSession();
-        UserSession pUserSession = getUserSessionRepository().getUserSession(sessionHttp);
+        UserSession pUserSession = getUserSessionRepository().getUserSession(sessionHttp.getId());
         if (pUserSession == null || pUserSession.getSystemUser().isGuest()) {
             getUserSessionRepository().setUserSession(sessionHttp.getId(), userSession);
         }
@@ -135,7 +123,7 @@ public class WebSocketSessionManager implements ISessionManagerImpl {
      * Checks if an UserSession is already bound to current HTTP session
      */
     public static boolean hasUserSession() {
-        return getUserSessionRepository().getUserSession(getHttpSession()) != null;
+        return getUserSessionRepository().getUserSession(getHttpSession().getId()) != null;
     }
 
     public static void prepareSessionScope() {
