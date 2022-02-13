@@ -2,6 +2,7 @@ package pl.fhframework.core.session;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import pl.fhframework.UserSession;
@@ -14,6 +15,7 @@ import java.util.Set;
 /**
  * Mechanism for temporaly session deletion. Contains cron which seek for abandoned session and removes it.
  */
+@Lazy(false)
 @Component
 public class LeakedSessionRemoverCron {
     @Autowired
@@ -46,7 +48,7 @@ public class LeakedSessionRemoverCron {
      * Cron seeks leaked sessions in period defined in fh.session.leaked_session_remover_cron_period (leakedSessionRemoverPeriod)
      */
     @Scheduled(fixedDelay = 1000)
-    private void cleanupLeakedSessions(){
+    public void cleanupLeakedSessions(){
         if (emergencyRemovalUnusedSessions && lastCronTime<=System.currentTimeMillis() - leakedSessionRemoverPeriod * 1000) {
             lastCronTime = System.currentTimeMillis();
             FhLogger.info("Cleanup leaked sessions cron: Seeking for outdated sessions. There are {} sessions. The oldest one hasn't been used since {} seconds.", userSessionRepository.getNoOfSessions(), getInactivityTimeForMostExpiredSessions()/1000);

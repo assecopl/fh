@@ -56,6 +56,9 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
         this.sessionInfoService = sessionInfoService;
     }
 
+    @Autowired
+    private LeakedSessionRemoverCron leakedSessionRemoverCron;
+
     @Override
     public synchronized void onApplicationEvent(ContextRefreshedEvent event) {
         // register node in cache
@@ -207,6 +210,7 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
                 }
             }
         }
+        leakedSessionRemoverCron.cleanupLeakedSessions();
     }
 
     public Set<UserSession> getAllUserSessions(){
