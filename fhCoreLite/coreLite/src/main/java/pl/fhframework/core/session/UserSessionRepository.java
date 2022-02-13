@@ -29,7 +29,6 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
 
     @Getter
     private Map<String, UserSession> userSessions = new ConcurrentHashMap<>();
-    @Getter
     private Map<String, UserSession> userSessionsByConversationId = new ConcurrentHashMap<>();
     private Map<Integer, UserSession> userSessionsHash = new ConcurrentHashMap<>();
     private Set<Consumer<UserSession>> userSessionDestroyedListeners = new HashSet<>();
@@ -43,14 +42,8 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
     private int serverPort;
     @Value("${fh.session.info.protocol:http}")
     private String sessionInfoProtocol;
-    @Value("${fh.ws.closed.inactive_session_max_time:5}")
-    private int sustainTimeOutMinutes;
-
-
 
     private String nodeUrl;
-
-
 
     @PostConstruct
     public void init() {
@@ -110,12 +103,11 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
         putSessionInfo(httpSessionId, userSession);
     }
 
-    public boolean removeUserSession(String httpSessionId) {
+    public void removeUserSession(String httpSessionId) {
         UserSession userSession = userSessions.remove(httpSessionId);
         userSessionsHash.remove(System.identityHashCode(userSession.getHttpSession()));
         userSessionsByConversationId.remove(userSession.getConversationUniqueId());
         removeSessionInfo(httpSessionId);
-        return userSession!=null;
     }
 
     private synchronized void putSessionInfo(String httpSessionId, UserSession userSession) {
@@ -170,22 +162,18 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
         sessionInfoCache.evictSessionsInfoForNode(node);
     }
 
-    public UserSession getUserSession(HttpSession httpSession) {
-        return userSessions.get(httpSession.getId());
+    public UserSession getUserSession(String httpSessionId) {
+        return userSessions.get(httpSessionId);
     }
 
     @Override
     public void sessionCreated(HttpSessionEvent httpSessionEvent) {
-        // ChangeSessionIdAuthenticationStrategy silently modify session id after security filter, remove old userSession
-        HttpSession session = httpSessionEvent.getSession();
-        if (session.getAttribute(UserSession.FH_SESSION_ID) == null) {
-            session.setAttribute(UserSession.FH_SESSION_ID, session.getId());
-        }
+        // ignore
     }
 
     @Override
     public void sessionDestroyed(HttpSessionEvent httpSessionEvent) {
-        onSessionExpired(httpSessionEvent.getSession());
+        onSessionExpired(httpSessionEvent.getSession().getId());
     }
 
     public void onSessionKeepAlive(String conversationId) {
@@ -197,47 +185,24 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
         }
     }
 
-    private void onSessionExpired(HttpSession httpSession) {
-        UserSession session = getUserSession(httpSession);
+    private void onSessionExpired(String sessionId) {
+        UserSession session = userSessions.get(sessionId);
         if (session != null) {
             try {
                 for (Consumer<UserSession> listener : userSessionDestroyedListeners) {
                     listener.accept(session);
                 }
             } finally {
-                boolean response = removeUserSession(httpSession.getId());
-                if (response) {
-                    FhLogger.info("Removed expired session for {}.", getUserLogin(session));
-                }else{
-                    FhLogger.error("Unsuccessful attempt to delete the session for {}", getUserLogin(session));
-                }
+                removeUserSession(sessionId);
             }
         }
     }
 
-    public Set<UserSession> getAllUserSessions(){
-        return new HashSet<>(userSessions.values());
+    public UserSession getUserSession(HttpSession session){
+        return getUserSession(session.getId());
     }
 
-    protected Map<String, UserSession> getUserSessionsByFhId(){
-        return Collections.unmodifiableMap(this.userSessions);
+    public Collection<UserSession> getAllUserSessions(){
+        return getUserSessions().values();
     }
-
-
-    protected UserSession getUserSessionByFhId(String fhId) {
-        return this.userSessions.get(fhId);
-    }
-
-    protected int getNoOfSessions(){
-        return userSessions.size();
-    }
-
-    public static String getUserLogin(UserSession userSession){
-        try{
-            return userSession.getSystemUser().getLogin();
-        }catch (Exception ex){
-            return "unkwnon user";
-        }
-    }
-
 }
