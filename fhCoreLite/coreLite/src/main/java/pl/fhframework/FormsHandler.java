@@ -3,7 +3,6 @@ package pl.fhframework;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.hibernate.LazyInitializationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -54,6 +53,13 @@ public abstract class FormsHandler {
     private static final DateTimeFormatter CLIENT_JSON_OUTPUT_FILE_FORMAT = DateTimeFormatter.ofPattern("'$user$_'yyyy-MM-dd_HH_mm_ss_SSS'_client_$command$.json'");
 
     protected final ObjectMapper objectMapper;//TODO:Check if multithread safe - In DOC is written "threadSafe".
+
+
+    /**
+     * A flag that turns on session reconnection mechanism.
+     */
+    @Value("${fh.session.reconnect:true}")
+    private boolean reconectToOldSession;
 
     @Autowired
     private SubsystemManager subsystemManager;
@@ -117,8 +123,6 @@ public abstract class FormsHandler {
     public FormsHandler() {
         this.objectMapper = new ObjectMapper();
         formatXML(false);
-        objectMapper.registerModule(new JavaTimeModule());
-        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
     }
 
     public void formatXML(boolean format) {
@@ -339,7 +343,11 @@ public abstract class FormsHandler {
         String url = message.getUrl();
         UserSession userSession = getUserSession(context);
 
-        userSession.getUseCaseContainer().getFormsContainer().doForEachFullyManagedForm(form -> form.setShowingTimestamp(Instant.now()));
+        if (reconectToOldSession) {
+            userSession.getUseCaseContainer().getFormsContainer().doForEachFullyManagedForm(form -> form.setShowingTimestamp(Instant.now()));
+        } else {
+            userSession.getUseCaseContainer().clear();
+        }
 
         if (sessionTimeoutManagerActive && !sessionNeverExpireForUser(userSession)) {
             sessionTimeoutManager.registerConversation(userSession.getConversationUniqueId());
@@ -356,7 +364,7 @@ public abstract class FormsHandler {
         // run system use cases if url not on disabled list
         if (shouldRunSystemUseCases(url)) {
             for (String systemUseCase : subsystemManager.getSystemUseCases()) {
-                if (!SessionManager.getUserSession().getUseCaseContainer().isSystemUseCaseRunning(systemUseCase)) {
+                if (!reconectToOldSession || !SessionManager.getUserSession().getUseCaseContainer().isSystemUseCaseRunning(systemUseCase)) {
                     userSession.runSystemUseCase(systemUseCase);
                 }
             }
