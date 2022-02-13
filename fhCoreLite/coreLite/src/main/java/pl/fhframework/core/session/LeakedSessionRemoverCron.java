@@ -47,7 +47,7 @@ public class LeakedSessionRemoverCron {
     /**
      * Cron seeks leaked sessions in period defined in fh.session.leaked_session_remover_cron_period (leakedSessionRemoverPeriod)
      */
-    @Scheduled(fixedDelay = 1000)
+    @Scheduled(fixedDelay = 1000, initialDelay = 120000)
     public void cleanupLeakedSessions(){
         if (emergencyRemovalUnusedSessions && lastCronTime<=System.currentTimeMillis() - leakedSessionRemoverPeriod * 1000) {
             lastCronTime = System.currentTimeMillis();
