@@ -72,6 +72,9 @@ public class UserSession extends Session {
 
     private HttpSession httpSession;
 
+    // original session id - ChangeSessionIdAuthenticationStrategy is called after logging in
+    private String httpSessionOrgId;
+
     // fh session id - ChangeSessionIdAuthenticationStrategy is called after logging in
     private String fhSessionId;
 
@@ -255,6 +258,12 @@ public class UserSession extends Session {
 
     public void setHttpSession(HttpSession httpSession) {
         this.httpSession = httpSession;
+        if (httpSession != null) {
+            httpSessionOrgId = httpSession.getId();
+        }
+        else {
+            httpSessionOrgId = null;
+        }
     }
 
     private long lastUsageMoment = System.currentTimeMillis();
@@ -269,11 +278,4 @@ public class UserSession extends Session {
     public long getHowLongIsUnusedInMillis(){
         return System.currentTimeMillis() - lastUsageMoment;
     }
-
-    @Deprecated
-    public String getHttpSessionOrgId(){
-        return fhSessionId;
-    }
-
-
 }
