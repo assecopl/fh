@@ -1,5 +1,6 @@
 package pl.fhframework.core.session;
 
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -23,23 +24,27 @@ public class LeakedSessionRemoverCron {
      * A flag that turns on the mechanism for emergency session deletion. Default on/true value.
      */
     @Value("${fh.session.emergency_removal_unused_sessions:true}")
+    @Getter
     private boolean emergencyRemovalUnusedSessions;
 
     /**
      * The maximum amount of time an unused session can survive - devault value = 12 houres (43200 seconds)
      */
     @Value("${fh.session.emergency_removal_time_unused_session:43200}")
+    @Getter
     private int emergencyRemovalTimeUnusedSessionInSeconds;
 
     /**
      * The period for scheduler - devault value = 1 houre (3600 seconds)
      */
     @Value("${fh.session.leaked_session_remover_cron_period:3600}")
+    @Getter
     private int leakedSessionRemoverPeriod;
 
     /**
      * Time in millis when the last time cron has been working
      */
+    @Getter
     private long lastCronTime = 0;
 
     /**
