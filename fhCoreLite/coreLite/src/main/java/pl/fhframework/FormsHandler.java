@@ -58,7 +58,7 @@ public abstract class FormsHandler {
     /**
      * A flag that turns on session reconnection mechanism.
      */
-    @Value("${fh.session.reconnect:false}")
+    @Value("${fh.session.reconnect:true}")
     private boolean reconectToOldSession;
 
     @Autowired
