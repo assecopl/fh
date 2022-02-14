@@ -10,7 +10,7 @@
     <parent>
         <groupId>pl.fhframework</groupId>
         <artifactId>fh-boot-bom</artifactId>
-        <version>4.9.24-SNAPSHOT</version>
+        <version>4.9.24-SNAPSHOT-PL</version>
         <relativePath>../../bom-project-lite/fh-boot-bom</relativePath>
     </parent>
     <properties>
