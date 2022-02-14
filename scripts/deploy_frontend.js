@@ -142,7 +142,7 @@ const publishProcess = (path, onlyUpdate) => {
     } else if (isSnapshot) {
       tag = 'snapshot-4.8';
     } else if (isProd) {
-      tag = 'latest';
+      tag = 'latest-4.8';
     }
 
     runProcess(`npm run build`);
