@@ -4,6 +4,7 @@
   "main": "Module.ts",
   "private": true,
   "scripts": {
+    "prebuild": "npm install",
     "build": "webpack --env.env=production --env.wrapped=false --progress --display-error-details",
     "dev": "webpack --env.env=development --env.wrapped=false --progress --watch --display-error-details",
     "build-css-wrapped": "webpack --env.env=production --env.wrapped --progress",
