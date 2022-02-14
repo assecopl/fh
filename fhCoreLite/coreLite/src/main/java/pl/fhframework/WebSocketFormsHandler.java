@@ -2,8 +2,11 @@ package pl.fhframework;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.core.session.SessionInformation;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.socket.CloseStatus;
@@ -17,12 +20,14 @@ import pl.fhframework.core.FhFrameworkException;
 import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.core.security.UserAttributesTempCache;
 import pl.fhframework.core.security.model.NoneBusinessRole;
+import pl.fhframework.core.session.UserSessionRepository;
 import pl.fhframework.core.websocket.HeartbeatWebSocketHandlerDecorator;
 import pl.fhframework.event.dto.RedirectEvent;
 import pl.fhframework.model.dto.AbstractMessage;
 import pl.fhframework.model.dto.OutMessageEventHandlingResult;
 import pl.fhframework.model.security.SystemUser;
 
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -32,6 +37,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class WebSocketFormsHandler extends FormsHandler {
+    /**
+     * A flag that marks if the session must be removed immediately after websocket disconnect.
+     */
+    @Value("${fh.session.remove_session_immediately_after_websocket_close:false}")
+    private boolean removeSessionImmediately;
 
     @Autowired
     private SingleLoginLockManager loginLockManager;
@@ -50,6 +60,12 @@ public class WebSocketFormsHandler extends FormsHandler {
 
     @Autowired
     private WebSocketConfiguration webSocketConfiguration;
+
+    @Autowired
+    private UserSessionRepository userSessionRepository;
+
+    @Autowired
+    private SessionRegistry sessionRegistry;
 
     private final static boolean FORBID_MULTI_SEND = false;//TODO: We can change it, but in case of activation of non-WebSocket-based connection we need to change the protocol on JSON tag so you could put several commands in one response.
 
@@ -95,8 +111,7 @@ public class WebSocketFormsHandler extends FormsHandler {
         } else {
             try {
                 SystemUser systemUser = securityManager.buildSystemUser(session.getPrincipal());
-                boundSession = applicationContext.getBean(UserSession.class, systemUser, createDescription(session));//new UserSession(this, systemUser, description);
-                boundSession.setHttpSession(WebSocketSessionManager.getHttpSession());
+                boundSession = applicationContext.getBean(UserSession.class, systemUser, createDescription(session), WebSocketSessionManager.getHttpSession());//new UserSession(this, systemUser, description);
                 updateSessionAttributes(boundSession);
                 WebSocketSessionManager.setUserSession(boundSession);
                 sessionLogger.logUserSessionCreation(boundSession);
@@ -106,8 +121,7 @@ public class WebSocketFormsHandler extends FormsHandler {
                 FhLogger.error("Error creating session", e);
                 SystemUser systemUser = new SystemUser(session.getPrincipal());
                 systemUser.getBusinessRoles().add(new NoneBusinessRole());
-                boundSession = applicationContext.getBean(UserSession.class, systemUser, createDescription(session));//new UserSession(this, systemUser, description);
-                boundSession.setHttpSession(WebSocketSessionManager.getHttpSession());
+                boundSession = applicationContext.getBean(UserSession.class, systemUser, createDescription(session), WebSocketSessionManager.getHttpSession());//new UserSession(this, systemUser, description);
                 WebSocketSessionManager.setUserSession(boundSession);
                 wssRepository.onConnectionEstabilished(boundSession, session);
                 boundSession.setException(e);
@@ -279,23 +293,42 @@ public class WebSocketFormsHandler extends FormsHandler {
                 SessionManager.getUserSession().getUseCaseContainer().clearUseCaseStack();
             }
             try {
-                String sessionId = WebSocketSessionManager.getHttpSession().getId();
-                String userName = sessionId; // for guests take sessionId as name, it provides proper function of windows session overtake
-                if (session.getPrincipal() != null) {
-                    userName = session.getPrincipal().getName();
-                }
-                WebSocketSession webSocketSession = userNames.get(userName);
-                // webSocketSession can be null when same login can be reused
-                if (webSocketSession != null && session.getId().equals(webSocketSession.getId())) {
-                    loginLockManager.releaseUserLogin(userName, WebSocketSessionManager.getHttpSession().getId());
-                    userNames.remove(userName);
-                    WebSocketSessionManager.sustainSession(session);
+                HttpSession httpSession = WebSocketSessionManager.getHttpSession();
+                if (removeSessionImmediately) {
+                    removeSessionNow(httpSession);
+                }else{
+                    String sessionId = httpSession.getId();
+                    String userName = sessionId; // for guests take sessionId as name, it provides proper function of windows session overtake
+                    if (session.getPrincipal() != null) {
+                        userName = session.getPrincipal().getName();
+                    }
+                    WebSocketSession webSocketSession = userNames.get(userName);
+                    // webSocketSession can be null when same login can be reused
+                    if (webSocketSession != null && session.getId().equals(webSocketSession.getId())) {
+                        loginLockManager.releaseUserLogin(userName, WebSocketSessionManager.getHttpSession().getId());
+                        userNames.remove(userName);
+                        WebSocketSessionManager.sustainSession(session);
+                    }
                 }
             } catch (Throwable e) {
                 FhLogger.errorSuppressed("Error during connection closing", e);
             } finally {
                 WebSocketSessionManager.setWebSocketSession(prev);
                 concurrentWebSocketSessions.remove(session.getId());
+            }
+        }
+
+        private void removeSessionNow(HttpSession httpSession) {
+            userSessionRepository.removeUserSession(httpSession);
+            SessionInformation si = sessionRegistry.getSessionInformation(httpSession.getId());
+            if (si != null) {
+                si.expireNow();
+            }
+            try {
+                httpSession.invalidate();
+            } catch (IllegalStateException ise) {
+                // it can be simultanously invalidated from browser with logout timer
+                FhLogger.warn("Session " + httpSession.getId() + " was already invalidated");
             }
         }
     }
