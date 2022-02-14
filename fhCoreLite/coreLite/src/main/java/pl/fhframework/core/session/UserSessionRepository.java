@@ -205,7 +205,7 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
             } finally {
                 boolean response = removeUserSession(httpSession.getId());
                 if (response) {
-                    FhLogger.info("Removed expired session for {}.", getUserLogin(session));
+                    FhLogger.info("Removed expired session for {}. fhId={}  httpId={}", getUserLogin(session), session.getFhSessionId(), httpSession.getId());
                 }else{
                     FhLogger.error("Unsuccessful attempt to delete the session for {}", getUserLogin(session));
                 }
@@ -241,6 +241,10 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
 
     public UserSession getUserSession(String httpSessionId) {
         return userSessions.get(httpSessionId);
+    }
+
+    public void removeUserSession(HttpSession httpSession){
+        onSessionExpired(httpSession);
     }
 
 }
