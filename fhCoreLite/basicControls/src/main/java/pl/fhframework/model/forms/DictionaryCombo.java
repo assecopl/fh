@@ -190,9 +190,9 @@ public class DictionaryCombo extends Combo implements IGroupingComponent<Diction
     List<Object> getValuesFromDictionaryComboParameters(List<DictionaryComboParameter> dcp) {
         List<Object> l = new LinkedList<>();
         dcp.forEach(dictionaryComboParameter -> {
-            String br = dictionaryComboParameter.resolveValue();
+            BindingResult br = dictionaryComboParameter.getModelBinding().getBindingResult();
             if (br != null) {
-                l.add(br);
+                l.add(br.getValue());
             } else {
                 throw new FhException("No attribute for " + DictionaryComboParameter.class.getSimpleName() + " : " + dictionaryComboParameter.getName());
             }
