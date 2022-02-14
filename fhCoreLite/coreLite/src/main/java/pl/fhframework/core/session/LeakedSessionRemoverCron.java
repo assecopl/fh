@@ -11,6 +11,7 @@ import pl.fhframework.core.logging.FhLogger;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Mechanism for temporaly session deletion. Contains cron which seek for abandoned session and removes it.
@@ -40,14 +41,30 @@ public class LeakedSessionRemoverCron {
     private int leakedSessionRemoverPeriod;
 
     /**
+     * A flag that switch between spring scheduling and manual (by thread) implementation of cron.
+     */
+    @Value("${fh.session.leaked_session_remover_manual_cron:true}")
+    private boolean manualCron;
+
+
+    /**
      * Time in millis when the last time cron has been working
      */
     private long lastCronTime = 0;
 
     /**
+     * Scheduler to run cron
+     */
+    @Scheduled(fixedDelay = 10000, initialDelay = 120000)
+    public void cleanupLeakedSessionsCron(){
+        if (!manualCron){
+            cleanupLeakedSessions();
+        }
+    }
+
+    /**
      * Cron seeks leaked sessions in period defined in fh.session.leaked_session_remover_cron_period (leakedSessionRemoverPeriod)
      */
-    @Scheduled(fixedDelay = 1000, initialDelay = 120000)
     public void cleanupLeakedSessions(){
         if (emergencyRemovalUnusedSessions && lastCronTime<=System.currentTimeMillis() - leakedSessionRemoverPeriod * 1000) {
             lastCronTime = System.currentTimeMillis();
@@ -148,5 +165,34 @@ public class LeakedSessionRemoverCron {
         return userSession.hasNotBeenUsedIn(emergencyRemovalTimeUnusedSessionInSeconds *1000);
     }
 
+    private AtomicBoolean manualHasStarted = new AtomicBoolean(false);
+
+    /**
+     * Method to start cron manualy
+     */
+    public synchronized void startManualScheduler(){
+        if (manualCron && !manualHasStarted.get()){
+            manualHasStarted.set(true);
+            Thread t = new Thread(){
+                public void run(){
+                    FhLogger.info("LeakedSessionRemoverCron is starting manualy.");
+                    while(emergencyRemovalUnusedSessions && manualHasStarted.get()) {
+                        try {
+                            Thread.sleep(500);
+                            cleanupLeakedSessions();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    FhLogger.info("LeakedSessionRemoverCron manual routine has been stopped.");
+                }
+            };
+            t.start();
+        }
+    }
+
+    public void stopScheduler(){
+        manualHasStarted.set(false);
+    }
 
 }

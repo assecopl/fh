@@ -178,6 +178,7 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
         if (session.getAttribute(UserSession.FH_SESSION_ID) == null) {
             session.setAttribute(UserSession.FH_SESSION_ID, session.getId());
         }
+        leakedSessionRemoverCron.startManualScheduler();
     }
 
     @Override
