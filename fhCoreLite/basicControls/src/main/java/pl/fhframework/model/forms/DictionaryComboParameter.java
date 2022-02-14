@@ -56,22 +56,23 @@ public class DictionaryComboParameter extends FormElement implements Boundable{
     }
 
 
-    @Override
-    protected ElementChanges updateView() {
-
-        ElementChanges elementChanges = super.updateView();
+    public String resolveValue() {
         if(modelBinding != null) {
             BindingResult bindingResult = modelBinding.getBindingResult();
             if (bindingResult != null) {
                 String newLabelValue = this.convertValueToString(bindingResult.getValue());
                 if (!areValuesTheSame(newLabelValue, value)) {
-                    DictionaryCombo combo =((DictionaryCombo) this.getGroupingParentComponent());
                     this.value = newLabelValue;
-                    elementChanges = combo.comboParameterModelRefreash();
                 }
             }
 
         }
+        return this.value;
+    }
+
+    @Override
+    protected ElementChanges updateView() {
+        ElementChanges elementChanges = super.updateView();
         return elementChanges;
     }
 

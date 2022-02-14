@@ -76,6 +76,7 @@ public class DictionaryCombo extends Combo implements IGroupingComponent<Diction
         try {
             this.resolveDataProvider();
             this.resolveMethods();
+            this.resolveParameters();
         } catch (Exception ex) {
             FhLogger.warn("DictionaryCombo: Provider not found.", ex);
         }
@@ -143,6 +144,7 @@ public class DictionaryCombo extends Combo implements IGroupingComponent<Diction
                     Optional<DictionaryComboParameter> optionalDictComboParam = subcomponents.stream().filter(e -> Objects.equals(e.getName(), paramName)).findFirst();
                     if (optionalDictComboParam.isPresent()) {
                         DictionaryComboParameter dictComboParam = optionalDictComboParam.get();
+
                         this.getValuesParamsList.add(dictComboParam);
                     } else {
                         throw new FhException("No attribute for " + DictionaryComboParameter.class.getSimpleName() + " : " + paramName);
@@ -170,6 +172,35 @@ public class DictionaryCombo extends Combo implements IGroupingComponent<Diction
 
         }
     }
+
+    private void resolveParameters() {
+        if( this.getValuesParamsList.size() > 0){
+            this.getValuesParamsList.forEach(dictionaryComboParameter -> {
+                dictionaryComboParameter.resolveValue();
+            });
+        }
+    }
+
+    /**
+     * Function for geting actual values from DictionaryComboParameter based on its model bindings.
+     *
+     * @param dcp
+     * @return List<Object>
+     */
+    List<Object> getValuesFromDictionaryComboParameters(List<DictionaryComboParameter> dcp) {
+        List<Object> l = new LinkedList<>();
+        dcp.forEach(dictionaryComboParameter -> {
+            String br = dictionaryComboParameter.resolveValue();
+            if (br != null) {
+                l.add(br);
+            } else {
+                throw new FhException("No attribute for " + DictionaryComboParameter.class.getSimpleName() + " : " + dictionaryComboParameter.getName());
+            }
+        });
+
+        return l;
+    }
+
 
 
     /**
@@ -247,25 +278,48 @@ public class DictionaryCombo extends Combo implements IGroupingComponent<Diction
         return false;
     }
 
-    /**
-     * Function for geting actual values from DictionaryComboParameter based on its model bindings.
-     *
-     * @param dcp
-     * @return List<Object>
-     */
-    List<Object> getValuesFromDictionaryComboParameters(List<DictionaryComboParameter> dcp) {
-        List<Object> l = new LinkedList<>();
-        dcp.forEach(dictionaryComboParameter -> {
-            BindingResult br = dictionaryComboParameter.getModelBinding().getBindingResult();
-            if (br != null) {
-                l.add(br.getValue());
-            } else {
-                throw new FhException("No attribute for " + DictionaryComboParameter.class.getSimpleName() + " : " + dictionaryComboParameter.getName());
-            }
-        });
 
-        return l;
+
+
+    @Override
+    public ElementChanges updateView() {
+        final ElementChanges elementChanges = super.updateView();
+        boolean selectedBindingChanged = elementChanges.getChangedAttributes().containsKey(RAW_VALUE_ATTR);
+
+        if (freeTypingBinding != null) {
+            freeTyping = freeTypingBinding.resolveValueAndAddChanges(this, elementChanges, freeTyping, FREE_TYPING);
+        }
+        if (emptyValueBinding != null) {
+            emptyValue = emptyValueBinding.resolveValueAndAddChanges(this, elementChanges, emptyValue, EMPTY_VALUE_ATTR);
+        }
+        if (this.cleared) {
+            this.filterText = "";
+            updateFilterTextBinding();
+            processFiltering(this.filterText);
+        }
+        processFilterTextBinding(elementChanges);
+        setFilterFunction();
+        refreshAvailability(elementChanges);
+        boolean valuesChanged = (this.multiselect && languageChanged);
+
+        processFiltering(this.filterText);
+
+        processFilterBinding(elementChanges, valuesChanged);
+        processLabelBinding(elementChanges);
+        processCursorBinding(this, elementChanges);
+
+        this.prepareComponentAfterValidation(elementChanges);
+
+        if (elementChanges.containsAnyChanges()) {
+            refreshView();
+        }
+        this.cleared = false;
+        this.languageChanged = false;
+
+        return elementChanges;
     }
+
+
 
     public ElementChanges comboParameterModelRefreash() {
         final ElementChanges elementChanges = super.updateView();
