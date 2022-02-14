@@ -98,11 +98,7 @@ public class DictionaryCombo extends Combo implements IGroupingComponent<Diction
 
     @Override
     protected boolean processValuesBinding() {
-        boolean valuesChanged = false;
-        if (this.values.isEmpty()) {
-            valuesChanged = processValuesExternal(null);
-        }
-        return valuesChanged;
+        return true;
     }
 
     protected boolean processValuesExternal(String text) {
@@ -277,49 +273,6 @@ public class DictionaryCombo extends Combo implements IGroupingComponent<Diction
         }
         return false;
     }
-
-
-
-
-    @Override
-    public ElementChanges updateView() {
-        final ElementChanges elementChanges = super.updateView();
-        boolean selectedBindingChanged = elementChanges.getChangedAttributes().containsKey(RAW_VALUE_ATTR);
-
-        if (freeTypingBinding != null) {
-            freeTyping = freeTypingBinding.resolveValueAndAddChanges(this, elementChanges, freeTyping, FREE_TYPING);
-        }
-        if (emptyValueBinding != null) {
-            emptyValue = emptyValueBinding.resolveValueAndAddChanges(this, elementChanges, emptyValue, EMPTY_VALUE_ATTR);
-        }
-        if (this.cleared) {
-            this.filterText = "";
-            updateFilterTextBinding();
-            processFiltering(this.filterText);
-        }
-        processFilterTextBinding(elementChanges);
-        setFilterFunction();
-        refreshAvailability(elementChanges);
-        boolean valuesChanged = (this.multiselect && languageChanged);
-
-        processFiltering(this.filterText);
-
-        processFilterBinding(elementChanges, valuesChanged);
-        processLabelBinding(elementChanges);
-        processCursorBinding(this, elementChanges);
-
-        this.prepareComponentAfterValidation(elementChanges);
-
-        if (elementChanges.containsAnyChanges()) {
-            refreshView();
-        }
-        this.cleared = false;
-        this.languageChanged = false;
-
-        return elementChanges;
-    }
-
-
 
     public ElementChanges comboParameterModelRefreash() {
         final ElementChanges elementChanges = super.updateView();
