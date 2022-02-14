@@ -92,6 +92,26 @@
                         </goals>
                     </execution>
                     <execution>
+                        <id>version check</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>yarn</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>-v</arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>version check</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>node</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>-v</arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>yarn lerna run build</id>
                         <phase>generate-resources</phase>
                         <goals>
