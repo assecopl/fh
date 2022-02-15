@@ -2,12 +2,12 @@
   <parent>
     <groupId>pl.fhframework</groupId>
     <artifactId>fhCoreLite</artifactId>
-    <version>4.8.16</version>
+    <version>4.8.17-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>pl.fhframework</groupId>
   <artifactId>fhLogback</artifactId>
-  <version>4.8.16</version>
+  <version>4.8.17-SNAPSHOT</version>
   <packaging>jar</packaging>
   <properties>
     <maven.compiler.source>8</maven.compiler.source>
@@ -17,7 +17,7 @@
     <dependency>
       <groupId>pl.fhframework</groupId>
       <artifactId>coreLite</artifactId>
-      <version>4.8.16</version>
+      <version>4.8.17-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
