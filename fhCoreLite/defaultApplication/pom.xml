@@ -85,7 +85,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>yarn install</id>
+                        <id>yarn registry</id>
                         <phase>generate-resources</phase>
                         <goals>
                             <goal>yarn</goal>
