@@ -7,7 +7,7 @@
     <artifactId>bom-project-lite</artifactId>
   <version>4.8.16</version>
     <packaging>pom</packaging>
-
+    <url>https://github.com/assecopl/fh</url>
     <name>bom-projects-lite</name>
     <description>Configurable dependencies information set</description>
 
