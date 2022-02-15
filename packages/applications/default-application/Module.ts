@@ -12,7 +12,7 @@ import {ModulePL} from "./Module.pl";
 import {ModuleEN} from "./Module.en";
 
 class FhApplication {
-    static registerModule(module: { new(): FhModule }) {
+    static registerModule(module: any) {
         new module().init();
     }
 
