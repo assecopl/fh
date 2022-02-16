@@ -22,7 +22,7 @@ module.exports = function (cmdEnv) {
      * @type {{mode: string, devtool: string, output: {path: *, filename: string}, entry: string[], resolve: {extensions: string[]}, plugins: *[], module: {rules: *[]}}}
      */
     let baseConfig = {
-        entry: ['@babel/polyfill', './Module.ts'],
+        entry: ['@babel/polyfill', './Module.js'],
         mode: 'development',
         output: {
             path: Path.resolve('./../../../fhCoreLite/defaultApplication/target/classes/static'),
@@ -71,13 +71,6 @@ module.exports = function (cmdEnv) {
                 test: /\.png$/,
                 use: ["url-loader?mimetype=image/png"]
             }]
-        },
-        resolve: {
-            extensions: ['.ts', '.tsx', '.js'],
-            alias: {
-                pako: Path.join(__dirname + '/../../node_modules/pako/dist/pako.es5.js')
-                ,
-            }
         },
         plugins: [
             new Webpack.ProvidePlugin({
