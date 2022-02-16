@@ -2,7 +2,6 @@
   "compilerOptions": {
     "sourceMap": true,
     "target": "es5",
-    "outDir": "build",
     "lib": ["es6", "dom", "esnext", "es2017"],
     "types": ["reflect-metadata", "jquery", "jqueryui", "bootstrap"],
     "module": "commonjs",
