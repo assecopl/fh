@@ -1,0 +1,16 @@
+{
+  "name": "fh-cli",
+  "version": "1.0.0",
+  "description": "CLI for FH frontend",
+  "main": "cli.js",
+  "scripts": {
+    "start": "node cli.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "./node_modules/.bin/pkg cli.js"
+  },
+  "author": "Jakub Kosecki",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "pkg": "^5.5.2"
+  }
+}

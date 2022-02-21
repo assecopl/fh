@@ -17,8 +17,11 @@ class CLI {
   }
   
   validate(pName) {
-    const match = pName.match(/[a-zA-Z0-9]+/);
-    return match[0] === match.input && pName !== 'constructor';
+    if (pName) {
+      const match = pName.match(/[a-zA-Z0-9]+/);
+      return match[0] === match.input && pName !== 'constructor';
+    }
+    return false;
   }
 }
 

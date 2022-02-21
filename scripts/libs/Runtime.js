@@ -78,7 +78,7 @@ class Runtime {
     }
   }
 
-  _run(processName, params) {
+  _run(processName='help', params) {
     const fn = this[processName];
     if (fn) {
       if (params.has('help')) {
