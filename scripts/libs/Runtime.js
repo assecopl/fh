@@ -60,6 +60,12 @@ This command deploys all packages to local registry.
 Supported params: 
 --address={verdaccio address} - default is set to npmjs registry,
 --verbose - enables verbose log
+  `,
+
+  clearLocalRegistry: `
+This command clears local registry.
+Supported params: 
+--verbose - enables verbose log
   `
 
 }
