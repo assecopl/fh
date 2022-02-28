@@ -247,4 +247,31 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
         onSessionExpired(httpSession);
     }
 
+    public void removeObsoleteSessionsWithAttribute(String key, Object value){
+        if (value == null || key == null){
+            throw new RuntimeException("Key or value must not be null!");
+        }else {
+            UserSession liveSession = getLiveSession(key, value);
+            if (liveSession != null) {
+                for (UserSession userSession : getAllUserSessions()) {
+                    if (userSession != liveSession //TODO: Powino być !=
+                            && value.equals(userSession.getAttributes().getOrDefault(key, null))) {
+                        removeUserSession(userSession.getHttpSession());
+                    }
+                }
+            }
+        }
+    }
+
+    public UserSession getLiveSession(String key, Object value) {
+        UserSession liveSession = null;
+        for (UserSession userSession : getAllUserSessions()){
+            if (value.equals(userSession.getAttributes().getOrDefault(key, null))){
+                if (liveSession == null || liveSession.getLastUsageMoment() < userSession.getLastUsageMoment()){
+                    liveSession = userSession;
+                }
+            }
+        }
+        return liveSession;
+    }
 }
