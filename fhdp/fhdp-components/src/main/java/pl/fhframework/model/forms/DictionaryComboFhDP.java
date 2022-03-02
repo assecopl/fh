@@ -363,6 +363,8 @@ public class DictionaryComboFhDP extends ComboFhDP implements IGroupingComponent
 
         if (s.getClass().equals(String.class)) {
             return (String) s;
+        } else if(s.getClass().equals(Boolean.class)) {
+            return s.toString();
         } else {
             return this.dataProvider.getDisplayValue(s);
         }
