@@ -184,8 +184,14 @@ const localDeploy = (packagePath, timestamp, address, verbose) => {
   const pkgName = `${pkg.name}-${pkg.version}.tgz`
   const tgzSourcePath = `${dirPath}${path.sep}${pkgName}`;
   const tgzDestPath = `${LOCAL_REGISTRY_PATH}${path.sep}${pkgName}`;
-  utils.runProcess(`cp ${tgzSourcePath} ${tgzDestPath}`, verbose);
-  utils.runProcess(`rm ${tgzSourcePath}`, verbose);
+
+  if(require('os').platform() === 'win32') {
+    utils.runProcess(`COPY "${tgzSourcePath}" "${tgzDestPath}"`, verbose);
+    utils.runProcess(`del /f "${tgzSourcePath}"`, verbose);
+  } else {
+    utils.runProcess(`cp ${tgzSourcePath} ${tgzDestPath}`, verbose);
+    utils.runProcess(`rm ${tgzSourcePath}`, verbose);
+  }
 
   return {name: pkg.name, version: tgzDestPath};
 }

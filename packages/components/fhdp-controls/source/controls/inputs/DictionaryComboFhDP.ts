@@ -79,8 +79,11 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
         const id = `FhDP-dictionary-combo-${+new Date()}`;
         this.getInputGroupElement().id = id
         this.guuid = id;
+
+        this.fireEventWithLock('setGuuid', JSON.stringify({id: this.guuid}));
+
         this.getInputGroupElement().appendChild(self.divTooltip);
-        
+
         this.i18n.subscribe(this);
         this.display();
 
@@ -113,7 +116,7 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
                 this.changesQueue.queueAttributeChange('searchRequested', true);
                 this.popupOpen = false;
                 this.isSearch = true;
-                this.fireEventWithLock('onClickSearchIcon', 'search');           
+                this.fireEventWithLock('onClickSearchIcon', 'search');
                 this.renderPopup();
             }
         })
@@ -154,10 +157,10 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
     validated(result: boolean) {
         console.log("validated mark dirty?", result)
         if (result) {
-            if (this.displayOnlyCode) {
-                this.fireEventWithLock('recordSelected', this.input.value);
-                this.fireEventWithLock('onChange', this.onChange);
-            }
+            // if (this.displayOnlyCode) {
+            //     this.fireEventWithLock('recordSelected', this.input.value);
+            //     this.fireEventWithLock('onChange', this.onChange);
+            // }
             this.unmarkDirty();
             this.clickInPopup = false;
             this.popupOpen = false;
@@ -283,7 +286,7 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
             console.log('is dirty?', this.dirty);
             console.log('is clickInPopup?', this.clickInPopup);
             if ((!this.dirty && !this.clickInPopup) || force) {
-                this.popupOpen = false; 
+                this.popupOpen = false;
                 this.renderPopup();
             }
         }
@@ -321,7 +324,7 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
                     this.rawValue = record.value;
                     this.fireEventWithLock('recordSelected', record.value);
                     handlePopupClose(true);
-                    this.fireEventWithLock('dictionaryComboValidate', JSON.stringify({id: this.guuid, code: record.value}));
+                    // this.fireEventWithLock('dictionaryComboValidate', JSON.stringify({id: this.guuid, code: record.value}));
                     this.fireEventWithLock('onChange', this.onChange);
                 } else if (!this.dirty && (this.input.value === record.value || this.input.value.startsWith(record.value))) {
                     handlePopupClose(true);

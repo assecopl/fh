@@ -21,12 +21,12 @@ Supported params:
 
   switchToRemote: `
 This command swithces all fh paths to remote ones.
-Supported params: 
+Supported params:
 --verbose - enables verbose log
 --priority none|next|latest - setups action priority of non existing remotely component,
-                              Means: when switch will not find remote version of 
+                              Means: when switch will not find remote version of
                               dependency lib registry, then it will:
-                                
+
                                 none - do nothing, just skip,
                                 next - download version tagged as next,
                                 latest - download version tagged as latest,
@@ -34,19 +34,19 @@ Supported params:
 
 updateToNewestVersion: `
   This command update all fh paths to remote ones with provided tag.
-  Supported params: 
+  Supported params:
   --verbose - enables verbose log
   --priority next|latest - setups action priority of non existing remotely component,
-                                Means: when switch will not find remote version of 
+                                Means: when switch will not find remote version of
                                 dependency lib registry, then it will:
-                                  
+
                                 next - download version tagged as next,
                                 latest - download version tagged as latest,
     `,
 
   deploy: `
 This command deploys all packages to npm repository.
-Supported params: 
+Supported params:
 --address={verdaccio address} - default is set to npmjs registry,
 --fhVer={new fh version} - if not setted will be getted from registry,
 --prod - setup as prod
@@ -57,14 +57,15 @@ Supported params:
 
   deployLocal: `
 This command deploys all packages to local registry.
-Supported params: 
+Supported params:
 --address={verdaccio address} - default is set to npmjs registry,
---verbose - enables verbose log
+--verbose - enables verbose log,
+--only={partial path name} - filters finded paths by param and deploys only finded ones,
   `,
 
   clearLocalRegistry: `
 This command clears local registry.
-Supported params: 
+Supported params:
 --verbose - enables verbose log
   `
 
@@ -161,14 +162,14 @@ class Runtime {
       if (shouldPublish && !onlyUpdate) {
         console.log(process.cwd())
         utils.runProcess(`npm install --registry ${address}`, verbose);
-        
+
         let tag;
         if (isSnapshot) {
           tag = 'next';
         } else if (isProd) {
           tag = 'latest';
         }
-    
+
         utils.runProcess(`npm run build`, verbose);
         utils.runProcess(`npm publish --force --tag ${tag} --registry ${address}`, verbose);
         utils.runProcess('rm -fr node_modules package-lock.json', verbose);
@@ -226,7 +227,11 @@ class Runtime {
   async deployLocal(params) {
     const pkgs = await utils.getPackages('../', params.has('verbose'));
     const tstmp = +new Date();
-    const paths = packages_list.dirs.map(path => pth.join(process.cwd(), path));
+    let paths = packages_list.dirs.map(path => pth.join(process.cwd(), path));
+    if(params.has("only")) {
+        const only = params.get("only");
+        paths = paths.filter(el => el.includes(only))
+    }
     console.log(paths);
     for (const path of paths) {
       console.log(`deployng local package on path (${path})`)
