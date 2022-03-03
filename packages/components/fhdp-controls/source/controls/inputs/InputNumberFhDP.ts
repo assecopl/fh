@@ -172,6 +172,13 @@ class InputNumberFhDP extends HTMLFormComponent {
                     }
                     this.input.value = newValue;
                     break;
+                case 'hideCrossed':
+                    this.hideCrossed = newValue;
+                    let theSameValue = this.rawValue == this.lastValue;
+                    if(this.lastValue===undefined && !!this.newValueText) {
+                        theSameValue = this.rawValue === '';
+                    }
+                    this.toogleLastValueElement(theSameValue);
             }
         }.bind(this));
     };
@@ -323,15 +330,17 @@ class InputNumberFhDP extends HTMLFormComponent {
     protected toogleLastValueElement(theSameValue){
         console.log('w toogleLastValueElement');
         let oldValueElement = this.inputGroupElement.getElementsByClassName('input-old-value');
-        if(oldValueElement[0]) {
+        if(oldValueElement[0] ) {
             if(theSameValue){
                 oldValueElement[0].classList.add('hide-old-value');
-                if(this.hideCrossed == "true"){
-                    oldValueElement[0].classList.add('input-old-value-remove-line');
-
-                }
             } else {
                 oldValueElement[0].classList.remove('hide-old-value');
+            }
+
+            if(this.hideCrossed == "true"){
+                oldValueElement[0].classList.add('input-old-value-remove-line');
+            } else {
+                oldValueElement[0].classList.remove('input-old-value-remove-line');
             }
 
         }
