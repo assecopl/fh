@@ -12,10 +12,12 @@ import pl.fhframework.annotations.CompilationTraversable;
 import pl.fhframework.annotations.Control;
 import pl.fhframework.annotations.DocumentedComponent;
 import pl.fhframework.annotations.XMLProperty;
+import pl.fhframework.binding.ActionBinding;
 import pl.fhframework.core.FhCL;
 import pl.fhframework.core.FhException;
 import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.model.dto.ElementChanges;
+import pl.fhframework.model.dto.InMessageEventData;
 import pl.fhframework.model.forms.provider.IComboDataProvider;
 
 import java.lang.reflect.Method;
@@ -64,6 +66,9 @@ public class DictionaryCombo extends Combo implements IGroupingComponent<Diction
     @JsonIgnore
     private List<DictionaryComboParameter> getValueParamsList = new LinkedList<>();
 
+    private boolean initializing = false;
+    private boolean filterEnabled = false;
+
 
     public DictionaryCombo(Form form) {
         super(form);
@@ -77,6 +82,7 @@ public class DictionaryCombo extends Combo implements IGroupingComponent<Diction
             this.resolveDataProvider();
             this.resolveMethods();
             this.resolveParameters();
+            this.initializing = true;
         } catch (Exception ex) {
             FhLogger.warn("DictionaryCombo: Provider not found.", ex);
         }
@@ -120,12 +126,14 @@ public class DictionaryCombo extends Combo implements IGroupingComponent<Diction
 
 
     protected void processFiltering(String text) {
-        filteredObjectValues.clear();
-        processValuesExternal(text);
-        Map<String, List<Object>> filtered = values.entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, p -> p.getValue().stream().collect(Collectors.toList())));
-        filteredObjectValues.putAll(filtered);
-        filterInvoked = true;
+        if(!initializing && this.filterEnabled) {
+            filteredObjectValues.clear();
+            processValuesExternal(text);
+            Map<String, List<Object>> filtered = values.entrySet().stream()
+                    .collect(Collectors.toMap(Map.Entry::getKey, p -> p.getValue().stream().collect(Collectors.toList())));
+            filteredObjectValues.putAll(filtered);
+            filterInvoked = true;
+        }
     }
 
     private void resolveMethods() {
@@ -281,6 +289,54 @@ public class DictionaryCombo extends Combo implements IGroupingComponent<Diction
         this.refreshView();
         return elementChanges;
 
+    }
+
+
+    @Override
+    public ElementChanges updateView() {
+        final ElementChanges elementChanges = super.updateView();
+        boolean selectedBindingChanged = elementChanges.getChangedAttributes().containsKey(RAW_VALUE_ATTR);
+
+        if (freeTypingBinding != null) {
+            freeTyping = freeTypingBinding.resolveValueAndAddChanges(this, elementChanges, freeTyping, FREE_TYPING);
+        }
+        if (emptyValueBinding != null) {
+            emptyValue = emptyValueBinding.resolveValueAndAddChanges(this, elementChanges, emptyValue, EMPTY_VALUE_ATTR);
+        }
+        if (this.cleared) {
+            this.filterText = "";
+            updateFilterTextBinding();
+            processFiltering(this.filterText);
+        }
+        processFilterTextBinding(elementChanges);
+        setFilterFunction();
+        refreshAvailability(elementChanges);
+        boolean valuesChanged = (this.multiselect && languageChanged) || processValuesBinding();
+        if (selectedBindingChanged || valuesChanged ) {
+            processFiltering(this.filterText);
+        }
+        processFilterBinding(elementChanges, valuesChanged);
+        processLabelBinding(elementChanges);
+        processCursorBinding(this, elementChanges);
+
+        this.prepareComponentAfterValidation(elementChanges);
+
+        if (elementChanges.containsAnyChanges()) {
+            refreshView();
+        }
+        this.cleared = false;
+        this.languageChanged = false;
+        this.initializing = false;
+        this.filterEnabled = false;
+
+        return elementChanges;
+    }
+
+    @Override
+    public Optional<ActionBinding> getEventHandler(InMessageEventData eventData) {
+        //Only this component events allow to fire filtering.
+        this.filterEnabled = true;
+        return super.getEventHandler(eventData);
     }
 
 
