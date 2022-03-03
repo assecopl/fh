@@ -21,8 +21,13 @@ class InputNumberFhDP extends HTMLFormComponent {
 
     constructor(componentObj: any, parent: HTMLFormComponent) {
         console.log('In InputNumberFhDP ', componentObj);
+        if (componentObj.value == undefined) {
+            componentObj.value = '';
+        }
         if (componentObj.rawValue != undefined) {
             componentObj.rawValue = componentObj.rawValue.replace(',', '.');
+        } else {
+            componentObj.rawValue = '';
         }
 
         super(componentObj, parent);
@@ -317,7 +322,7 @@ class InputNumberFhDP extends HTMLFormComponent {
             groupSpan.classList.add('input-group-text');
             groupSpan.classList.add('input-old-value');
             groupSpan.classList.add('text-decoration-none');
-            if(this.rawValue === '' || this.rawValue === undefined){
+            if(this.rawValue === ''){
                 groupSpan.classList.add('hide-old-value');
             }
 
