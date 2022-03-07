@@ -572,8 +572,8 @@ public abstract class FormsHandler {
         eventHandlingResult.setCloseForm(new HashSet<>());
         for (Form formToClose : useCaseRequestContext.getFormsToHide())
             eventHandlingResult.getCloseForm().add(formToClose.getId());
-        eventHandlingResult.setChanges(new HashSet<>(useCaseRequestContext.getChanges()));
-        eventHandlingResult.setEvents(new ArrayList<>(useCaseRequestContext.getEvents()));
+        eventHandlingResult.setChanges(useCaseRequestContext.getChanges());
+        eventHandlingResult.setEvents(useCaseRequestContext.getEvents());
         return eventHandlingResult;
     }
 
