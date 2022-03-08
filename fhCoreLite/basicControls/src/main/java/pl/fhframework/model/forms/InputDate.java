@@ -2,13 +2,23 @@ package pl.fhframework.model.forms;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.core.convert.ConversionFailedException;
 import pl.fhframework.annotations.*;
+import pl.fhframework.binding.ModelBinding;
 import pl.fhframework.core.FhBindingException;
+import pl.fhframework.core.util.StringUtils;
+import pl.fhframework.model.PresentationStyleEnum;
+import pl.fhframework.model.dto.ElementChanges;
+import pl.fhframework.model.dto.ValueChange;
 import pl.fhframework.model.forms.designer.InputFieldDesignerPreviewProvider;
 import pl.fhframework.model.forms.optimized.ColumnOptimized;
+import pl.fhframework.validation.IValidationResults;
 
+import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.Map;
+import java.util.Optional;
 
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.CONTENT;
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.SPECIFIC;
@@ -52,6 +62,14 @@ public class InputDate extends BaseInputFieldWithKeySupport {
     @DocumentedComponentAttribute(value = "Creates interactive mask for user")
     private boolean maskEnabled;
 
+    @Getter
+    @Setter
+    @XMLProperty
+    @DocumentedComponentAttribute(value = "Is date valid.")
+    @DesignerXMLProperty(functionalArea = SPECIFIC, priority = 96)
+    private ModelBinding<Boolean> invalidDate;
+
+
     public InputDate(Form container) {
         super(container);
     }
@@ -70,13 +88,37 @@ public class InputDate extends BaseInputFieldWithKeySupport {
         clone.setFormat(getFormat());
     }
 
-    @Override
-    protected void processCoversionException(FhBindingException cfe) {
-        // here do nothing, but ovveride areValueTheSame
+
+    //    @Override
+    protected void processCoversionException(FhBindingException cfe) {}
+
+    protected void processInvalidDateInformation(){
+        if(invalidDate != null) {
+            this.updateBindingForValue(this.isValidConversion(), invalidDate, invalidDate.getBindingExpression(), Optional.empty());
+        }
     }
 
     @Override
     protected boolean areModelValuesTheSame(Object firstValue, Object secondValue) {
         return !this.isValidConversion() || super.areValuesTheSame(firstValue, secondValue);
     }
+
+
+    @Override
+    public void updateModel(ValueChange valueChange) {
+       super.updateModel(valueChange);
+        processInvalidDateInformation();
+    }
+
+
+    @Override
+    public ElementChanges updateView() {
+        ElementChanges elementChanges = super.updateView();
+
+        return elementChanges;
+    }
+
+
+
+
 }
