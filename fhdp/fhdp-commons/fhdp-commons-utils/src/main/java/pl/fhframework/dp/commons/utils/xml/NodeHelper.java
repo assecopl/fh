@@ -1,13 +1,4 @@
 package pl.fhframework.dp.commons.utils.xml;
-/*
- * NodeHelper.java
- *
- * Prawa autorskie do oprogramowania i jego kodów źródłowych
- * przysługują w pełnym zakresie wyłącznie SKG S.A.
- *
- * All copyrights to software and its source code
- * belong fully and exclusively to SKG S.A.
- */
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
