@@ -94,7 +94,7 @@ public class InputDate extends BaseInputFieldWithKeySupport {
 
     protected void processInvalidDateInformation(){
         if(invalidDate != null) {
-            this.updateBindingForValue(this.isValidConversion(), invalidDate, invalidDate.getBindingExpression(), Optional.empty());
+            this.updateBindingForValue(!this.isValidConversion(), invalidDate, invalidDate.getBindingExpression(), Optional.empty());
         }
     }
 
