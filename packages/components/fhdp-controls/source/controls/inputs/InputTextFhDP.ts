@@ -1,6 +1,5 @@
 import {InputTextFhDPPl} from './i18n/InputTextFhDP.pl';
 import {InputTextFhDPEn} from './i18n/InputTextFhDP.en';
-import {InputTextFhDPRu} from './i18n/InputTextFhDP.ru';
 import {InputTextLT} from './i18n/InputTextFhDP.lt'
 import {FhContainer, FormComponent, FormComponentKeySupport, HTMLFormComponent} from "fh-forms-handler";
 import * as autosize from 'fh-basic-controls/dist/source/external/autosize.min.js';
@@ -71,7 +70,6 @@ class InputTextFhDP extends HTMLFormComponent {
 
         this.i18n.registerStrings('pl', InputTextFhDPPl);
         this.i18n.registerStrings('en', InputTextFhDPEn);
-        this.i18n.registerStrings('ru', InputTextFhDPRu);
         this.i18n.registerStrings('lt', InputTextLT);
 
         this.isTextarea = (this.componentObj.rowsCount && this.componentObj.rowsCount > 0) || this.componentObj.rowsCountAuto;
@@ -518,6 +516,14 @@ class InputTextFhDP extends HTMLFormComponent {
                         this.accessibility = newValue;
                         this.setAccessibility(newValue);
                         break;
+                    case 'hideCrossed':
+                        this.hideCrossed = newValue;
+                        let theSameValue = this.rawValue == this.lastValue;
+                        if(this.lastValue===undefined && !!this.newValueText) {
+                            theSameValue = this.rawValue === '';
+                        }
+                        this.toogleLastValueElement(theSameValue);
+                        break;
                 }
             }.bind(this));
         }
@@ -618,14 +624,15 @@ class InputTextFhDP extends HTMLFormComponent {
         if(oldValueElement[0] ) {
             if(theSameValue){
                 oldValueElement[0].classList.add('hide-old-value');
-                if(this.hideCrossed == "true"){
-                    oldValueElement[0].classList.add('input-old-value-remove-line');
-
-                }
             } else {
                 oldValueElement[0].classList.remove('hide-old-value');
             }
 
+            if(this.hideCrossed == "true"){
+                oldValueElement[0].classList.add('input-old-value-remove-line');
+            } else {
+                oldValueElement[0].classList.remove('input-old-value-remove-line');
+            }
         }
     }
 }
