@@ -5,9 +5,11 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.AbstractPlatformTransactionManager;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 import pl.fhframework.dp.commons.base.semafor.SemaphoreStatusEnum;
@@ -34,8 +36,9 @@ public class SemaphoreDAO {
     @PersistenceContext
     private EntityManager entityManager;
     @Autowired()
-    private PlatformTransactionManager transactionManager;
+    private AbstractPlatformTransactionManager transactionManager;
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public SemaphoreStatusEnum lockSemaphore(Enum type, String key, String value, int seconds) {
         TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
         transactionTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
@@ -63,6 +66,7 @@ public class SemaphoreDAO {
         });
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public SemaphoreStatusEnum unlockSemaphore(Enum type, String key, String value) {
         return internalLockSemaphore(type.name(), key, value, 0);
     }

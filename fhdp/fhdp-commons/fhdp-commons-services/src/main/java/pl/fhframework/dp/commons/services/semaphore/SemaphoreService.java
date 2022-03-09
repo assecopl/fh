@@ -35,7 +35,6 @@ public class SemaphoreService implements ISemaphoreService {
      * @return SemaforStatusEnum.InValid - if semaphore is already locked by another value.
      */
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public SemaphoreStatusEnum lockSemaphore(Enum type, String key, String value, int seconds) {
         return semaphoreDAO.lockSemaphore(type, key, value, seconds);
     }
@@ -51,7 +50,6 @@ public class SemaphoreService implements ISemaphoreService {
      * </b>
      */
     @Override
-    @Transactional(propagation = Propagation.REQUIRED)
     public SemaphoreStatusEnum unlockSemaphore(Enum type, String key, String value) {
         return semaphoreDAO.unlockSemaphore(type, key, value);
     }
