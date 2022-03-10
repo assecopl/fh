@@ -48,7 +48,7 @@ public class HeartbeatWebSocketHandlerDecorator extends WebSocketHandlerDecorato
                     try {
                         session.sendMessage(new PongMessage());
                     } catch (IOException ex) {
-                        FhLogger.error("Can't send Pong message", ex);
+                        FhLogger.error("Can't send Pong message for session " + session.getId(), ex);
                     }
                     return;
                 }
@@ -58,7 +58,7 @@ public class HeartbeatWebSocketHandlerDecorator extends WebSocketHandlerDecorato
             try {
                 session.sendMessage(new PongMessage(pingMessage.getPayload()));
             } catch (IOException ex) {
-                FhLogger.error("Can't send Pong message", ex);
+                FhLogger.error("Can't send Pong message for session " + session.getId(), ex);
             }
             return;
         }
