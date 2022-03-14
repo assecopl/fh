@@ -94,6 +94,8 @@ public class DictionaryComboFhDP extends ComboFhDP implements IGroupingComponent
     @Getter
     private String title;
 
+    @Getter
+    private String guuid;
 
     @Getter
     private Boolean displayOnlyCode = true;
@@ -213,9 +215,9 @@ public class DictionaryComboFhDP extends ComboFhDP implements IGroupingComponent
                     dirty = currentValue == null;
                     if (currentValue != null) {
                         if (displayOnlyCode) {
-                                selectedItem = currentValue;
-                                filterText = String.valueOf(currentValue);
-                                rawValue = String.valueOf(currentValue);
+                            selectedItem = currentValue;
+                            filterText = String.valueOf(currentValue);
+                            rawValue = String.valueOf(currentValue);
                         } else {
                             filterText = String.valueOf(currentValue);
                             selectedItem = getValueFromProvider(filterText);
@@ -361,6 +363,8 @@ public class DictionaryComboFhDP extends ComboFhDP implements IGroupingComponent
 
         if (s.getClass().equals(String.class)) {
             return (String) s;
+        } else if(s.getClass().equals(Boolean.class)) {
+            return s.toString();
         } else {
             return this.dataProvider.getDisplayValue(s);
         }
@@ -532,6 +536,13 @@ public class DictionaryComboFhDP extends ComboFhDP implements IGroupingComponent
             if(filterText != null) {
                 selectedItem = getValueFromProvider(filterText);
                 result = dataProvider.getCode(selectedItem);
+
+                //Validate
+                ValidateInput input = new ValidateInput();
+                input.setId(this.getGuuid());
+                input.setCode(filterText);
+                dictionaryComboValidate(input);
+
                 dirty = false;
             } else {
                 selectedItem = null;
@@ -662,19 +673,15 @@ public class DictionaryComboFhDP extends ComboFhDP implements IGroupingComponent
                     case "dictionaryComboValidate":
                         String json = eventData.getActionName();
                         ValidateInput input = (ValidateInput) getFromJson(json, ValidateInput.class);
-                        Object testValue = getValueFromProvider(input.getCode());
-                        ValidateResult result = new ValidateResult();
-                        result.setId(input.getId());
-                        if(testValue != null) {
-                            result.setResult(true);
-                        }
-                        String jsonResult = toJson(result);
-                        eventRegistry.fireCustomActionEvent("dictionaryComboValidated", jsonResult);
+                        dictionaryComboValidate(input);
                         break;
                     case "cleanupSearch":
                         page = -10;
                         pagesCount = 0;
                         rows = new ArrayList();
+                        break;
+                    case "setGuuid":
+                        setGuuidByEventData(eventData);
                         break;
                     case "nextPage":
                         pageable = pageable.next();
@@ -705,6 +712,23 @@ public class DictionaryComboFhDP extends ComboFhDP implements IGroupingComponent
             lastEvent = null;
             return super.getEventHandler(eventData);
         }
+    }
+
+    private void dictionaryComboValidate(ValidateInput input) {
+        Object testValue = getValueFromProvider(input.getCode());
+        ValidateResult result = new ValidateResult();
+        result.setId(input.getId());
+        if(testValue != null) {
+            result.setResult(true);
+        }
+        String jsonResult = toJson(result);
+        eventRegistry.fireCustomActionEvent("dictionaryComboValidated", jsonResult);
+    }
+
+    private void setGuuidByEventData(InMessageEventData eventData) {
+        String json = eventData.getActionName();
+        ValidateInput input = (ValidateInput) getFromJson(json, ValidateInput.class);
+        this.guuid = input.getId();
     }
 
     public static Object getFromJson(String json, Class mappedClass) {
