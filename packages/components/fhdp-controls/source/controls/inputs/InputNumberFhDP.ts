@@ -21,8 +21,13 @@ class InputNumberFhDP extends HTMLFormComponent {
 
     constructor(componentObj: any, parent: HTMLFormComponent) {
         console.log('In InputNumberFhDP ', componentObj);
+        if (componentObj.value == undefined) {
+            componentObj.value = '';
+        }
         if (componentObj.rawValue != undefined) {
             componentObj.rawValue = componentObj.rawValue.replace(',', '.');
+        } else {
+            componentObj.rawValue = '';
         }
 
         super(componentObj, parent);
@@ -102,7 +107,7 @@ class InputNumberFhDP extends HTMLFormComponent {
         this.display();
         this.applyMask();
     };
-    
+
     applyMask() {
         if (!this.inputmaskEnabled) {
             // @ts-ignore
@@ -172,10 +177,18 @@ class InputNumberFhDP extends HTMLFormComponent {
                     }
                     this.input.value = newValue;
                     break;
+                case 'hideCrossed':
+                    this.hideCrossed = newValue;
+                    let theSameValue = this.rawValue == this.lastValue;
+                    if(this.lastValue===undefined && !!this.newValueText) {
+                        theSameValue = this.rawValue === '';
+                    }
+                    this.toogleLastValueElement(theSameValue);
+                    break;
             }
         }.bind(this));
     };
-    
+
     unifyValue(value: string | number) {
         let valueToUnify = `${value}`;
         valueToUnify = valueToUnify.replace(',' , '.');
@@ -310,7 +323,7 @@ class InputNumberFhDP extends HTMLFormComponent {
             groupSpan.classList.add('input-group-text');
             groupSpan.classList.add('input-old-value');
             groupSpan.classList.add('text-decoration-none');
-            if(this.rawValue === '' || this.rawValue === undefined){
+            if(this.rawValue === ''){
                 groupSpan.classList.add('hide-old-value');
             }
 
@@ -326,14 +339,15 @@ class InputNumberFhDP extends HTMLFormComponent {
         if(oldValueElement[0]) {
             if(theSameValue){
                 oldValueElement[0].classList.add('hide-old-value');
-                if(this.hideCrossed == "true"){
-                    oldValueElement[0].classList.add('input-old-value-remove-line');
-
-                }
             } else {
                 oldValueElement[0].classList.remove('hide-old-value');
             }
 
+            if(this.hideCrossed == "true"){
+                oldValueElement[0].classList.add('input-old-value-remove-line');
+            } else {
+                oldValueElement[0].classList.remove('input-old-value-remove-line');
+            }
         }
     }
 
