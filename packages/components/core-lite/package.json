@@ -19,15 +19,15 @@
     "typescript": "3.5.3"
   },
   "dependencies": {
-    "jquery": "3.4.1",
+    "jquery": "3.5.1",
     "popper.js": "1.16.0",
     "bootstrap": "4.4.1",
     "inversify": "5.0.1",
     "inversify-inject-decorators": "3.1.0",
     "reflect-metadata": "0.1.13",
-    "copyfiles": "2.1.1",
+    "copyfiles": "2.4.1",
     "@fortawesome/fontawesome-free": "5.15.3",
-    "jquery-ui": "1.12.1",
+    "jquery-ui": "1.13.1",
     "js-cookie": "^2.2.1",
     "focus-trap": "5.1.0",
     "pako": "^2.0.4"
