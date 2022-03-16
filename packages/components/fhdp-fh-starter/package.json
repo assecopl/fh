@@ -9,7 +9,7 @@
   "main": "dist/Module.js",
   "types": "dist/Module.d.ts",
   "scripts": {
-    "build": "rm -fr ./docs && tsc",
+    "build": "tsc",
     "docgen": "rm -fr ./docs && npx typedoc ./FhApplication.ts",
     "prepare": "yarn build",
     "test": "echo \"Error: no test specified\" && exit 1"
