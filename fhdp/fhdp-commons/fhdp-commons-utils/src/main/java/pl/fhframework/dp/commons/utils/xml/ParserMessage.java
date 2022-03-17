@@ -1,11 +1,6 @@
 /*
  * ParserMessage.java
  *
- * Prawa autorskie do oprogramowania i jego kodów źródłowych
- * przysługują w pełnym zakresie wyłącznie SKG S.A.
- *
- * All copyrights to software and its source code
- * belong fully and exclusively to SKG S.A.
  */
 package pl.fhframework.dp.commons.utils.xml;
 

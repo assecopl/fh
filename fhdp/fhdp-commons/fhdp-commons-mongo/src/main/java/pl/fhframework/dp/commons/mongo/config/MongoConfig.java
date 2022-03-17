@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 @Configuration
 public class MongoConfig extends AbstractMongoClientConfiguration {
 
-    @Value("${mongo.hostAndPort:172.25.107.187:27018}")
+    @Value("${mongo.hostAndPort:localhost:27017}")
     private String hostAndPort;
     @Value("${mongo.database:fhdp-repository}")
     private String dbName;
