@@ -3,6 +3,7 @@ package pl.fhframework.model.forms;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.core.convert.ConversionFailedException;
+import pl.fhframework.BindingResult;
 import pl.fhframework.annotations.*;
 import pl.fhframework.binding.ModelBinding;
 import pl.fhframework.core.FhBindingException;
@@ -118,6 +119,16 @@ public class InputDate extends BaseInputFieldWithKeySupport {
         return elementChanges;
     }
 
+    @Override
+    protected boolean processValueBinding(ElementChanges elementChanges) {
+        boolean hasChange = super.processValueBinding(elementChanges);
+        if(hasChange) {
+            this.validConversion = true;
+            this.updateBindingForValue(!this.isValidConversion(), invalidDate, invalidDate.getBindingExpression(), Optional.empty());
+
+        }
+        return hasChange;
+    }
 
 
 
