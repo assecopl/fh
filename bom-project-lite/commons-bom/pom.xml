@@ -5,7 +5,7 @@
 
     <groupId>pl.fhframework</groupId>
     <artifactId>commons-bom</artifactId>
-    <version>4.9.24-SNAPSHOT-PL</version>
+    <version>4.9.24-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>commons-bom</name>
