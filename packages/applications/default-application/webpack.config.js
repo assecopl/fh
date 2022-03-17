@@ -90,7 +90,7 @@ module.exports = function (cmdEnv) {
     /**
      * Add css wrapp plugin if needed.
      */
-    if(cmdEnv.wrapped == true) {
+    if(cmdEnv.wrapped == 'true') {
         console.log("Adding wrapping css logic" , cmdEnv.wrapped);
         baseConfig =  Merge(baseConfig, {
             plugins :[
