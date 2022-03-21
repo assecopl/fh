@@ -124,8 +124,9 @@ public class InputDate extends BaseInputFieldWithKeySupport {
         boolean hasChange = super.processValueBinding(elementChanges);
         if(hasChange) {
             this.validConversion = true;
-            this.updateBindingForValue(!this.isValidConversion(), invalidDate, invalidDate.getBindingExpression(), Optional.empty());
-
+            if(invalidDate != null) {
+                this.updateBindingForValue(!this.isValidConversion(), invalidDate, invalidDate.getBindingExpression(), Optional.empty());
+            }
         }
         return hasChange;
     }
