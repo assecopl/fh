@@ -5,7 +5,7 @@
 
     <groupId>pl.fhframework</groupId>
     <artifactId>fh-springboot-bom</artifactId>
-    <version>4.9.24-SNAPSHOT</version>
+    <version>4.9.25-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>fh-springboot-bom</name>
@@ -40,29 +40,29 @@
             <dependency>
                 <groupId>pl.fhframework</groupId>
                 <artifactId>commons-bom</artifactId>
-                <version>4.9.24-SNAPSHOT</version>
+                <version>4.9.25-SNAPSHOT</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>pl.fhframework</groupId>
                 <artifactId>fhJpa-standalone</artifactId>
-                <version>4.9.24-SNAPSHOT</version>
+                <version>4.9.25-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>pl.fhframework</groupId>
                 <artifactId>fhTomcat-config</artifactId>
-                <version>4.9.24-SNAPSHOT</version>
+                <version>4.9.25-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>pl.fhframework</groupId>
                 <artifactId>cache-standalone</artifactId>
-                <version>4.9.24-SNAPSHOT</version>
+                <version>4.9.25-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>pl.fhframework</groupId>
                 <artifactId>pubsub-standalone</artifactId>
-                <version>4.9.24-SNAPSHOT</version>
+                <version>4.9.25-SNAPSHOT</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
