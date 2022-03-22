@@ -35,7 +35,7 @@ public class ElasticSearchConfig extends ElasticsearchConfigurationSupport {
     private final Logger logger = LoggerFactory.getLogger(ElasticSearchConfig.class);
 
 
-    @Value("${elasticSearch.hostAndPort:172.25.107.186:9200}")
+    @Value("${elasticSearch.hostAndPort:localhost:9200}")
     private String hostAndPort;
 
     @Getter

@@ -1,6 +1,6 @@
 {
   "name": "fhdp-fh-starter",
-  "version": "4.9.23",
+  "version": "4.9.24",
   "author": {
     "name": "Jakub Kosecki",
     "email": "j.kosecki@doittechnology.pl"
@@ -9,8 +9,8 @@
   "main": "dist/Module.js",
   "types": "dist/Module.d.ts",
   "scripts": {
-    "build": "rm -fr ./docs && tsc",
-    "docgen": "rm -fr ./docs && npx typedoc ./FhApplication.ts",
+    "build": "tsc",
+    "docgen": "npx typedoc ./FhApplication.ts",
     "prepare": "yarn build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -23,10 +23,10 @@
     "typescript": "3.9"
   },
   "dependencies": {
-    "fh-basic-controls": "4.9.23",
-    "fh-charts-controls": "4.9.23",
-    "fh-forms-handler": "4.9.23",
-    "fhdp-controls": "4.9.23",
-    "fhdp-extenders": "4.9.23"
+    "fh-basic-controls": "4.9.24",
+    "fh-charts-controls": "4.9.24",
+    "fh-forms-handler": "4.9.24",
+    "fhdp-controls": "4.9.24",
+    "fhdp-extenders": "4.9.24"
   }
 }

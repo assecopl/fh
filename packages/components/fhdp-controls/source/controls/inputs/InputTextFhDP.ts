@@ -516,6 +516,14 @@ class InputTextFhDP extends HTMLFormComponent {
                         this.accessibility = newValue;
                         this.setAccessibility(newValue);
                         break;
+                    case 'hideCrossed':
+                        this.hideCrossed = newValue;
+                        let theSameValue = this.rawValue == this.lastValue;
+                        if(this.lastValue===undefined && !!this.newValueText) {
+                            theSameValue = this.rawValue === '';
+                        }
+                        this.toogleLastValueElement(theSameValue);
+                        break;
                 }
             }.bind(this));
         }
@@ -616,14 +624,15 @@ class InputTextFhDP extends HTMLFormComponent {
         if(oldValueElement[0] ) {
             if(theSameValue){
                 oldValueElement[0].classList.add('hide-old-value');
-                if(this.hideCrossed == "true"){
-                    oldValueElement[0].classList.add('input-old-value-remove-line');
-
-                }
             } else {
                 oldValueElement[0].classList.remove('hide-old-value');
             }
 
+            if(this.hideCrossed == "true"){
+                oldValueElement[0].classList.add('input-old-value-remove-line');
+            } else {
+                oldValueElement[0].classList.remove('input-old-value-remove-line');
+            }
         }
     }
 }
