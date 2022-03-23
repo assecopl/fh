@@ -144,6 +144,13 @@ public class UseCaseContainer implements Serializable {
     @Value("${fh.web.guests.authenticate.path:authenticateGuest}")
     private String authenticateGuestPath;
 
+    private final static String SHOW_EXTENDED_INFO = "SHOW_EXTENDED_INFO";
+    private final static String SHOW_NORMAL_INFO = "SHOW_NORMAL_INFO";
+    private final static String HIDE_INFO = "HIDE_INFO";
+
+    @Value("${fh.extendedInfoWhenEventCannotBeProcessed:" + HIDE_INFO + "}")
+    private String infoLevelWhenEventCannotBeProcessed;
+
     @Getter
     private final FormsContainer formsContainer = new FormsContainer();
 
@@ -767,6 +774,9 @@ public class UseCaseContainer implements Serializable {
 
             Optional<Form<?>> formOptional = formsContainer.findActiveFormById(eventData.getFormId());
             if (!formOptional.isPresent()) {
+                if (infoLevelWhenEventCannotBeProcessed == SHOW_EXTENDED_INFO) {
+                    FhLogger.errorSuppressed("Event {} cannot be processed because there is no active form whith id {}", eventData.getActionName(), eventData.getFormId());
+                }
                 return false;
             }
 
@@ -774,11 +784,14 @@ public class UseCaseContainer implements Serializable {
             if (form.getViewMode() != Form.ViewMode.NORMAL) {
                 return true;
             }
-
             IEventSource sourceFormComponent = form.getEventSource(eventData.getEventSourceId());
             if (sourceFormComponent != null) {
                 AccessibilityEnum availability = ((pl.fhframework.model.forms.Component) sourceFormComponent).getAvailability();
-                return AccessibilityEnum.EDIT == availability || !sourceFormComponent.isModificationEvent(eventData.getEventType());
+                boolean result = AccessibilityEnum.EDIT == availability || !sourceFormComponent.isModificationEvent(eventData.getEventType());;
+                if (!result && infoLevelWhenEventCannotBeProcessed == SHOW_EXTENDED_INFO){
+                    FhLogger.errorSuppressed("Event {} cannot be processed because control {} is {} and {} is modification event", eventData.getActionName(), sourceFormComponent.getId(), availability, eventData.getEventType());
+                }
+                return result;
             }
             return false;
         }
@@ -1398,8 +1411,10 @@ public class UseCaseContainer implements Serializable {
         if (eventData.isEventPresent()) {
             // check if event source component is in proper state to send request
             if (eventUseCaseContext == null || !eventUseCaseContext.canProcessEvent(eventData)) {
-                String msg = String.format("Request for given form component cannot be processed - formId: '%s', eventType: '%s', sourceId: '%s', action: '%s', ", eventData.getFormId(), eventData.getEventType(), eventData.getEventSourceId(), eventData.getActionName());
-                FhLogger.errorSuppressed(msg);
+                if (infoLevelWhenEventCannotBeProcessed != HIDE_INFO) {
+                    String msg = String.format("Request for given form component cannot be processed - formId: '%s', eventType: '%s', sourceId: '%s', action: '%s', found event use case context: '%s'", eventData.getFormId(), eventData.getEventType(), eventData.getEventSourceId(), eventData.getActionName(), eventUseCaseContext != null);
+                    FhLogger.errorSuppressed(msg);
+                }
                 return;
             }
 
