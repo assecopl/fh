@@ -1,10 +1,10 @@
 {
   "name": "fh-application",
-  "version": "4.9.24-SNAPSHOT-1644431965282",
+  "version": "4.9.25-SNAPSHOT-SNAPSHOT-1647946282016",
   "main": "Module.ts",
   "private": true,
   "scripts": {
-    "build": "tsc && webpack --env.env=production --env.wrapped=false --progress --display-error-details",
+    "build": "tsc && copyfiles ./source/css/*.css ./source/img/* ./Module.css ./dist && webpack --env.env=production --env.wrapped=false --progress --display-error-details",
     "dev": "webpack --env.env=development --env.wrapped=false --progress --watch --display-error-details",
     "build-css-wrapped": "webpack --env.env=production --env.wrapped --progress",
     "dev-css-wrapped": "webpack --env.env=development --env.wrapped --progress --watch --display-error-details"
@@ -33,11 +33,12 @@
     "optimize-css-assets-webpack-plugin": "5.0.1",
     "webpack-cli": "3.1.0",
     "webpack-merge": "4.2.1",
-    "postcss-wrapper-loader": "1.0.1"
+    "postcss-wrapper-loader": "1.0.1",
+    "copyfiles": "2.1.1"
   },
   "dependencies": {
-    "fh-forms-handler": "4.9.24-SNAPSHOT-1644431965282",
-    "fh-basic-controls": "4.9.24-SNAPSHOT-1644431965282",
-    "fh-charts-controls": "4.9.24-SNAPSHOT-1644431965282"
+    "fh-forms-handler": "4.9.25-SNAPSHOT-SNAPSHOT-1647946282016",
+    "fh-basic-controls": "4.9.25-SNAPSHOT-SNAPSHOT-1647946282016",
+    "fh-charts-controls": "4.9.25-SNAPSHOT-SNAPSHOT-1647946282016"
   }
 }

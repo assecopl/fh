@@ -22,7 +22,7 @@ module.exports = function (cmdEnv) {
      * @type {{mode: string, devtool: string, output: {path: *, filename: string}, entry: string[], resolve: {extensions: string[]}, plugins: *[], module: {rules: *[]}}}
      */
     let baseConfig = {
-        entry: ['@babel/polyfill', './Module.js'],
+        entry: ['@babel/polyfill', './dist/Module.js'],
         mode: 'development',
         output: {
             path: Path.resolve('./../../../fhCoreLite/defaultApplication/target/classes/static'),
@@ -90,7 +90,7 @@ module.exports = function (cmdEnv) {
     /**
      * Add css wrapp plugin if needed.
      */
-    if(cmdEnv.wrapped == true) {
+    if(cmdEnv.wrapped == 'true') {
         console.log("Adding wrapping css logic" , cmdEnv.wrapped);
         baseConfig =  Merge(baseConfig, {
             plugins :[
