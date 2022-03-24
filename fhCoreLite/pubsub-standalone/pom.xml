@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>pl.fhframework</groupId>
   <artifactId>pubsub-standalone</artifactId>
-  <version>4.8.17</version>
+  <version>4.8.18-SNAPSHOT</version>
   <packaging>jar</packaging>
   <url>https://github.com/assecopl/fh</url>
   <name>pubsub-standalone</name>
@@ -10,7 +10,7 @@
   <parent>
     <groupId>pl.fhframework</groupId>
     <artifactId>fhCoreLite</artifactId>
-    <version>4.8.17</version>
+    <version>4.8.18-SNAPSHOT</version>
   </parent>
   <dependencies>
     <dependency>
