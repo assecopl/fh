@@ -1,6 +1,6 @@
 {
   "name": "fhdp-fh-starter",
-  "version": "4.9.24-SNAPSHOT-1644431965282",
+  "version": "4.9.25-SNAPSHOT-SNAPSHOT-1647946282016",
   "author": {
     "name": "Jakub Kosecki",
     "email": "j.kosecki@doittechnology.pl"
@@ -10,7 +10,7 @@
   "types": "dist/Module.d.ts",
   "scripts": {
     "build": "tsc",
-    "docgen": "rm -fr ./docs && npx typedoc ./FhApplication.ts",
+    "docgen": "npx typedoc ./FhApplication.ts",
     "prepare": "yarn build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -23,10 +23,10 @@
     "typescript": "3.9"
   },
   "dependencies": {
-    "fh-basic-controls": "4.9.24-SNAPSHOT-1644431965282",
-    "fh-charts-controls": "4.9.24-SNAPSHOT-1644431965282",
-    "fh-forms-handler": "4.9.24-SNAPSHOT-1644431965282",
-    "fhdp-controls": "4.9.24-SNAPSHOT-1644431965282",
-    "fhdp-extenders": "4.9.24-SNAPSHOT-1644431965282"
+    "fh-basic-controls": "4.9.25-SNAPSHOT-SNAPSHOT-1647946282016",
+    "fh-charts-controls": "4.9.25-SNAPSHOT-SNAPSHOT-1647946282016",
+    "fh-forms-handler": "4.9.25-SNAPSHOT-SNAPSHOT-1647946282016",
+    "fhdp-controls": "4.9.25-SNAPSHOT-SNAPSHOT-1647946282016",
+    "fhdp-extenders": "4.9.25-SNAPSHOT-SNAPSHOT-1647946282016"
   }
 }

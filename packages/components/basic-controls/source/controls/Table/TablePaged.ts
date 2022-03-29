@@ -224,6 +224,9 @@ class TablePaged extends Table {
 
                         this.scrollTopInside();
                         $(window).trigger('pageChanged.table');
+                        if(this.selectAllChceckboxElement){
+                           this.selectAllChceckboxElement.checked = false
+                        }
                         break;
                     case 'totalPages':
                         this.totalPages = newValue;
