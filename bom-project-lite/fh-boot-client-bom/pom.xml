@@ -5,7 +5,7 @@
 
     <groupId>pl.fhframework</groupId>
     <artifactId>fh-boot-client-bom</artifactId>
-  <version>4.8.17</version>
+  <version>4.8.17-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>fh-boot-client-bom</name>
@@ -14,7 +14,7 @@
    <parent>
         <groupId>pl.fhframework</groupId>
         <artifactId>fh-boot-bom</artifactId>
-    <version>4.8.17</version>
+    <version>4.8.17-SNAPSHOT</version>
        <relativePath>../fh-boot-bom</relativePath>
     </parent>
 

@@ -5,7 +5,7 @@
 
     <groupId>pl.fhframework</groupId>
     <artifactId>bom-project-lite</artifactId>
-  <version>4.8.17</version>
+  <version>4.8.17-SNAPSHOT</version>
     <packaging>pom</packaging>
     <url>https://github.com/assecopl/fh</url>
     <name>bom-projects-lite</name>

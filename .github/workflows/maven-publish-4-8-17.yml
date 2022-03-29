@@ -1,11 +1,11 @@
 # This workflow will build a package using Maven and then publish it to GitHub packages when a release is created
 # For more information see: https://github.com/actions/setup-java/blob/main/docs/advanced-usage.md#apache-maven-with-a-settings-path
 
-name: 4.8 - Maven snapshot deploy
+name: 4.8.17 - Maven snapshot deploy
 
 on:
   push:
-    branches: [ support/4.8 ]
+    branches: [ support/4.8.17 ]
 #  release:
 #    types: [created]
 
@@ -33,15 +33,3 @@ jobs:
         env:
           MAVEN_USERNAME: ${{ secrets.FH_MAVEN_USER }}
           MAVEN_PASSWORD: ${{ secrets.FH_MAVEN_PASS }}
-
-#    - name: Publish to NPM
-#      uses: actions/setup-node@v2
-#      with:
-#        node-version: '12'
-#
-#    - run: NPM_CONFIG_TOKEN=${{ secrets.FH_NPM_PUBLISH_TOKEN }} node scripts/deploy_frontend.js --snap --verbose
-#      env:
-#        NODE_AUTH_TOKEN: ${{ secrets.FH_NPM_TOKEN }}
-#        NPM_TOKEN: ${{ secrets.FH_NPM_TOKEN }}
-#        NPM_CONFIG_TOKEN: ${{ secrets.FH_NPM_TOKEN }}
-#        token: ${{ secrets.FH_NPM_TOKEN }}
