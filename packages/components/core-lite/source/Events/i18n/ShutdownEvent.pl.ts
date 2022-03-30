@@ -1,6 +1,6 @@
 export let ShutdownEventPL = {
   "title": "Wyłączenie serwera",
-  "message": "Serwer został wyłączany.",
+  "message": "Serwer został wyłączony.",
   "button": "Przeładuj stronę",
   "graceful.title": "Wyłączenie serwera",
   "graceful.message": "Ten serwer jest wyłączany.<br>Proszę zapisać swoje dane i odświeżyć stronę (zazwyczaj poprzez naciśnięcie F5).",

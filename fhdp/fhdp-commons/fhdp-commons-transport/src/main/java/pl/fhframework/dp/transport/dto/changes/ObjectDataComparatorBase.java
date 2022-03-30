@@ -342,6 +342,12 @@ public abstract class ObjectDataComparatorBase<CHANGE, DTO> {
 					String className = value.getClass().getName();
 					if(value.toString().startsWith(className + "@")) {
 						registerFields(value, changes, xPathPrefix + field.getName() + getXpathSeparator(), added);
+					} else if (value instanceof List) {
+						int counter = 1;
+						for(Object el: (List)value) {
+							String xpathPrefix = xPathPrefix + field.getName() + "[" + counter++ + "]" + getXpathSeparator();
+							registerFields(el, changes, xpathPrefix , added);
+						}
 					} else {
 						if(added) {
 							changes.add(newChange(xPathPrefix + field.getName(), ADDED, beautify(field.get(obj), field.getName())));
