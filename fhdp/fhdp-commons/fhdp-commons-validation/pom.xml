@@ -24,6 +24,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>pl.fhframework.dp</groupId>
+            <artifactId>fhdp-commons-utils</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
