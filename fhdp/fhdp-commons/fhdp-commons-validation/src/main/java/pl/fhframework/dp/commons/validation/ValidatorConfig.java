@@ -25,10 +25,10 @@ public class ValidatorConfig {
         return messageSource;
     }
 
-    @Bean
-    public LocalValidatorFactoryBean fhdpValidatorFactoryBean() {
-        LocalValidatorFactoryBean factory = new LocalValidatorFactoryBean();
-        factory.setValidationMessageSource(validationTranslationsMessageSource());
-        return factory;
-    }
+//    @Bean
+//    public LocalValidatorFactoryBean fhdpValidatorFactoryBean() {
+//        LocalValidatorFactoryBean factory = new LocalValidatorFactoryBean();
+//        factory.setValidationMessageSource(validationTranslationsMessageSource());
+//        return factory;
+//    }
 }
