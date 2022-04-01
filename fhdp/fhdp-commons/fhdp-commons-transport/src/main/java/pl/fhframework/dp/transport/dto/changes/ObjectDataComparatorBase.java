@@ -331,7 +331,7 @@ public abstract class ObjectDataComparatorBase<CHANGE, DTO> {
 		return changes;
 	}
 
-	private void registerFields(Object obj, List<CHANGE> changes, String xPathPrefix, boolean added) {
+	protected void registerFields(Object obj, List<CHANGE> changes, String xPathPrefix, boolean added) {
 		Field[] fields = obj.getClass().getDeclaredFields();
 		for(Field field: fields) {
 			try {
