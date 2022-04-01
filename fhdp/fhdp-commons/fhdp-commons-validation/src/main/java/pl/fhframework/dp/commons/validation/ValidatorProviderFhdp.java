@@ -6,6 +6,7 @@ import org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpo
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.validation.beanvalidation.MessageSourceResourceBundleLocator;
 
 import javax.validation.MessageInterpolator;
@@ -18,16 +19,21 @@ import java.util.Locale;
 @Slf4j
 public class ValidatorProviderFhdp {
 
-    @Autowired
-    private ValidatorFactory fhdpValidatorFactoryBean;
+    private static ValidatorFactory validatorFactory;
     @Autowired
     private MessageSource validationTranslationsMessageSource;
 
     public Validator getValidator(Locale locale) {
         Locale currentLocale = locale;
         log.debug("Selected locale for validator:{}", currentLocale);
-
-        return fhdpValidatorFactoryBean.usingContext()
+        if(validatorFactory == null) {
+            validatorFactory = Validation.byDefaultProvider()
+                    .configure()
+                    .messageInterpolator(new ParameterMessageInterpolator())
+                    .buildValidatorFactory();
+        }
+        return validatorFactory
+                .usingContext()
                 .messageInterpolator(new MessageInterpolatorFhdp(locale, new MessageSourceResourceBundleLocator(validationTranslationsMessageSource)))
                 .getValidator();
     }

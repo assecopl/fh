@@ -6,11 +6,11 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+import pl.fhframework.dp.commons.utils.lng.LngDescriptionHolder;
 
 import javax.validation.ConstraintViolation;
 import java.math.BigDecimal;
-import java.util.Locale;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -30,11 +30,8 @@ public class ValidatorProviderFhdpTest {
         TestDto dto = new TestDto();
         dto.setTestRegexp("");
         dto.setNetMass(BigDecimal.ZERO);
-        Locale locale = new Locale("en");
-        Set<ConstraintViolation<Object>> result = validatorProviderFhdp.getValidator(locale).validate(dto, new Class[0]);
-        log.info("Found {} errors", result.size());
-        Locale locale2 = new Locale("lt");
-        Set<ConstraintViolation<Object>> result2 = validatorProviderFhdp.getValidator(locale2).validate(dto, new Class[0]);
+        List<String> languages = Arrays.asList("lt", "en");
+        Map<String, LngDescriptionHolder> result2 = validatorProviderFhdp.validateJsr(dto, languages);
         log.info("Found {} errors", result2.size());
     }
 
