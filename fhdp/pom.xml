@@ -171,6 +171,7 @@
         <module>bom</module>
         <module>fhdp-commons</module>
         <module>fhdp-components</module>
+        <module>fhdp-example</module>
     </modules>
 
 </project>
