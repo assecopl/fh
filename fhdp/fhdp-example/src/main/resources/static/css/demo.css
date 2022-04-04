@@ -1,0 +1,13 @@
+
+.tab-badge {
+    margin-left: 5px;
+    background: #F10052;
+    display: inline-block;
+    border-radius: 100%;
+    color: white;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    line-height: 19px;
+    font-size: .7rem;
+}
