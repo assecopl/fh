@@ -10,7 +10,7 @@
     <parent>
         <groupId>pl.fhframework</groupId>
         <artifactId>fhCoreLite</artifactId>
-        <version>4.9.25</version>
+        <version>4.9.25.1</version>
     </parent>
     <dependencies>
         <dependency>
