@@ -59,6 +59,7 @@ public  abstract class BaseDocumentHandlingUC<MODEL extends BaseDocumentHandling
     protected IDocumentHandler documentHandler;
     //    protected Params parameters;
     protected IDocType documentType;
+    protected List<String> additionalOutlineNames = new ArrayList<>();
     protected String redirectUrl;
 
     protected OperationStatusCheckForm.Model pendingOperationFormModel;
@@ -124,6 +125,10 @@ public  abstract class BaseDocumentHandlingUC<MODEL extends BaseDocumentHandling
         } catch (BeansException e) {
             FhLogger.error("{}{}", e.getMessage(), e);
         }
+    }
+
+    protected void addAdditionalOutlineName(String name){
+        this.additionalOutlineNames.add(name);
     }
 
     protected abstract OUTLINE showOutlineForm();
@@ -539,16 +544,12 @@ public  abstract class BaseDocumentHandlingUC<MODEL extends BaseDocumentHandling
                 }
             });
 
-            try {
-                List<ElementCT> result = outlineService.generateOutline(getDocumentType().getTypeName());
-                for (String pointer : resultList) {
-                    ElementCT el = outlineService.findElementFromPointer(pointer);
-                    if (el != null && el.getId() != null) {
-                        pointers.add(el.getId());
-                    }
+            OutlineService.OutlineMapping mappings = outlineService.findMappings(getDocumentType().getTypeName());
+            for (String pointer : resultList) {
+                ElementCT el = outlineService.findElementFromPointer(pointer, mappings);
+                if (el != null && el.getId() != null) {
+                    pointers.add(el.getId());
                 }
-            } catch (JAXBException e) {
-                e.printStackTrace();
             }
 
             getModel().setSearchPointers(pointers);

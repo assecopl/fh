@@ -11,6 +11,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.xml.bind.JAXBException;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author <a href="mailto:jacek.borowiec@asseco.pl">Jacek Borowiec</a>
@@ -28,9 +30,10 @@ public class OutlineServiceTest {
     @Test
     public void generateOutline() throws JAXBException {
         List<ElementCT> result = outlineService.generateOutline("TEST");
+        OutlineService.OutlineMapping mappings = outlineService.findMappings("TEST");
         log.info("Returned {} items", result.size());
         String pointer = "document.customers";
-        ElementCT el = outlineService.findElementFromPointer(pointer);
+        ElementCT el = outlineService.findElementFromPointer(pointer, mappings);
         if(el != null) {
             log.info("Found {}", el.getId());
         } else {
