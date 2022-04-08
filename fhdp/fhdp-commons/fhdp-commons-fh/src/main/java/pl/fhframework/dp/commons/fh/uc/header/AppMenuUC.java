@@ -17,6 +17,7 @@ import pl.fhframework.event.EventRegistry;
 import pl.fhframework.event.dto.NotificationEvent;
 import pl.fhframework.menu.MenuElement;
 import pl.fhframework.menu.MenuManager;
+import pl.fhframework.model.forms.Form;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,18 +28,18 @@ public class AppMenuUC extends FhdpBaseUC implements ISystemUseCase, IUseCase18n
     public static final String MENU_CONTAINER_ID = "menuForm";
 
     @Autowired
-    private MenuManager menuManager;
+    protected MenuManager menuManager;
     @Autowired
-    private MenuService menuService;
+    protected MenuService menuService;
     @Autowired
-    private EventRegistry eventRegistry;
+    protected EventRegistry eventRegistry;
 
     @Autowired
-    ApplicationContext context;
+    protected ApplicationContext context;
 
 
-    private AppMenuForm.Model model;
-    private AppMenuForm form;
+    protected AppMenuForm.Model model;
+    protected Form form;
 
     @Override
     public void start() {
@@ -53,10 +54,14 @@ public class AppMenuUC extends FhdpBaseUC implements ISystemUseCase, IUseCase18n
             copyChildrenRecursive(el, elCopy);
             model.getOriginalElements().put(el.getName(), elCopy);
         }
-        form = showForm(AppMenuForm.class, model);
+        form = showForm(getFormClass(), model);
     }
 
-    private void copyChildrenRecursive(MenuElement el, MenuElement elCopy) {
+    protected String getFormClass(){
+        return AppMenuForm.class.getName();
+    }
+
+    protected void copyChildrenRecursive(MenuElement el, MenuElement elCopy) {
         for(MenuElement e: el.getChildren()) {
             MenuElement eCopy = new MenuElement(e);
             if(e.getChildren() != null && e.getChildren().size() > 0) {
@@ -89,7 +94,7 @@ public class AppMenuUC extends FhdpBaseUC implements ISystemUseCase, IUseCase18n
         getActiveForm().refreshView();
     }
 
-    private List<MenuElement> filterMenuElements(String filteredName, List<MenuElement> children) {
+    protected List<MenuElement> filterMenuElements(String filteredName, List<MenuElement> children) {
         List<MenuElement> menuElements = children;
         if (filteredName != null) {
             menuElements = menuElements.stream()
@@ -153,7 +158,7 @@ public class AppMenuUC extends FhdpBaseUC implements ISystemUseCase, IUseCase18n
         showForm(form);
     }
 
-    private void translateElements(List<MenuElement> elements) {
+    protected void translateElements(List<MenuElement> elements) {
         if(elements == null) return;
         for(MenuElement element: elements) {
             element.setName(menuManager.translateLabel(element.getKey()));
