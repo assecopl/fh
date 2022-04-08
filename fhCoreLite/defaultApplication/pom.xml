@@ -85,16 +85,6 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>yarn registry</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>yarn</goal>
-                        </goals>
-                        <configuration>
-                            <arguments>config set registry http://172.25.107.188:4873/</arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
                         <id>yarn install</id>
                         <phase>generate-resources</phase>
                         <goals>
