@@ -8,6 +8,8 @@ import pl.fhframework.annotations.*;
 import pl.fhframework.binding.CompiledBinding;
 import pl.fhframework.binding.ModelBinding;
 import pl.fhframework.core.FhBindingException;
+import pl.fhframework.model.dto.ElementChanges;
+import pl.fhframework.model.dto.ValueChange;
 import pl.fhframework.model.forms.designer.InputFieldDesignerPreviewProvider;
 import pl.fhframework.model.forms.optimized.ColumnOptimized;
 
@@ -17,6 +19,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.CONTENT;
+import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.SPECIFIC;
 
 /**
  * Class represents input field for date and time. Receives every attribute of input field.  This
@@ -41,6 +44,13 @@ public class InputTimestamp extends BaseInputFieldWithKeySupport {
     @DocumentedComponentAttribute(value = "Date format, may be one of following described here: http://momentjs.com/docs/#/displaying/format/")
     private String format;
 
+    @Getter
+    @Setter
+    @XMLProperty
+    @DocumentedComponentAttribute(value = "Is date valid.")
+    @DesignerXMLProperty(functionalArea = SPECIFIC, priority = 96)
+    private ModelBinding<Boolean> invalidTimestamp;
+
     public InputTimestamp(Form form) {
         super(form);
     }
@@ -63,6 +73,12 @@ public class InputTimestamp extends BaseInputFieldWithKeySupport {
         // here do nothing, but ovveride areValueTheSame
     }
 
+    protected void processInvalidTimestampInformation(){
+        if(invalidTimestamp != null) {
+            this.updateBindingForValue(!this.isValidConversion(), invalidTimestamp, invalidTimestamp.getBindingExpression(), Optional.empty());
+        }
+    }
+
     @JsonIgnore
     @Override
     public Optional<String> getOptionalFormatter() {
@@ -80,4 +96,21 @@ public class InputTimestamp extends BaseInputFieldWithKeySupport {
     protected boolean areModelValuesTheSame(Object firstValue, Object secondValue) {
         return !this.isValidConversion() || super.areValuesTheSame(firstValue, secondValue);
     }
+
+    @Override
+    public void updateModel(ValueChange valueChange) {
+        super.updateModel(valueChange);
+        processInvalidTimestampInformation();
+    }
+
+    @Override
+    protected boolean processValueBinding(ElementChanges elementChanges) {
+        boolean hasChange = super.processValueBinding(elementChanges);
+        if(hasChange) {
+            this.validConversion = true;
+            processInvalidTimestampInformation();
+        }
+        return hasChange;
+    }
+
 }
