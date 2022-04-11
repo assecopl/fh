@@ -111,7 +111,7 @@
                     <Combo
                            width="md-4" emptyValue="true"
                            multiselect="true"
-                           value="{selectedSubstantiveParametersDto.tags}"
+                           value="{FORM.getTags()}"
                            availability="VIEW"/>
                     <!-- <InputText width="md-12" value="{selectedSubstantiveParametersDto.tags}" formatter="arrayStringFormatter" rowsCountAuto="true" availability="VIEW"/> -->
                 </Row>
