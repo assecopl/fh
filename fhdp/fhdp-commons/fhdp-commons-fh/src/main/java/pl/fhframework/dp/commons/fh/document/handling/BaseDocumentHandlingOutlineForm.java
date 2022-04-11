@@ -24,6 +24,11 @@ public abstract class BaseDocumentHandlingOutlineForm<T extends BaseDocumentHand
 
     @Override
     public void init() {
+        removeNotUsedElements();
+        super.init();
+    }
+
+    protected void removeNotUsedElements() {
         if(isHasTabs()) {
             outlineMainName = "outlineMainTab";
             outlineMessagesName = "messagesTab";
@@ -32,7 +37,6 @@ public abstract class BaseDocumentHandlingOutlineForm<T extends BaseDocumentHand
         Row messagesContainer = (Row) getFormElement(outlineMessagesName);
         getForm().removeSubcomponent(mainContainer);
         getForm().removeSubcomponent(messagesContainer);
-        super.init();
     }
 
     public void selectLeftMenuElementByLabel(String elementLabel){
