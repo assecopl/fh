@@ -1,6 +1,6 @@
 {
   "name": "fhdp-charts",
-  "version": "4.9.26-SNAPSHOT-1648656740663",
+  "version": "4.9.27-SNAPSHOT-1649774729442",
   "author": {
     "name": "Krzysztof Czajka",
     "email": "k.czajka@doittechnology.pl"
@@ -30,8 +30,8 @@
   },
   "dependencies": {
     "canvas": "^2.8.0",
-    "fh-basic-controls": "4.9.26-SNAPSHOT-1648656740663",
-    "fh-forms-handler": "4.9.26-SNAPSHOT-1648656740663",
+    "fh-basic-controls": "4.9.27-SNAPSHOT-1649774729442",
+    "fh-forms-handler": "4.9.27-SNAPSHOT-1649774729442",
     "konva": "^8.0.4"
   }
 }

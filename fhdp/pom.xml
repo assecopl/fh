@@ -4,7 +4,7 @@
     <groupId>pl.fhframework.dp</groupId>
     <artifactId>fhdp</artifactId>
     <packaging>pom</packaging>
-    <version>4.9.26-SNAPSHOT</version>
+    <version>4.9.27-SNAPSHOT</version>
 
     <name>fhdp</name>
 
