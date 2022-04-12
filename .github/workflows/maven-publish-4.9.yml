@@ -5,7 +5,7 @@ name: Maven and NPM snapshot deploy
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ support/4.9 ]
 #  release:
 #    types: [created]
 
