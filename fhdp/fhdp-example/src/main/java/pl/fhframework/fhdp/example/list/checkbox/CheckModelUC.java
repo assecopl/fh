@@ -6,9 +6,7 @@ import pl.fhframework.core.uc.IUseCaseOneInput;
 import pl.fhframework.core.uc.UseCase;
 
 /**
- * @author <a href="mailto:jacek_borowiec@skg.pl">Jacek Borowiec</a>
- * @version :  $, :  $
- * @created 09/08/2020
+ * @author <a href="mailto:jacek_borowiec@asseco.pl">Jacek Borowiec</a>
  */
 @UseCase
 public class CheckModelUC implements IUseCaseOneInput<CheckBoxOnTheListModel, IUseCaseNoCallback> {
