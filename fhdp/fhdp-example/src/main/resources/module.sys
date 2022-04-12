@@ -1,0 +1,5 @@
+<subsystem name="fhdp_starter"
+    label="FHDP starter"
+    basePackage="pl.fhframework.fhdp.example"
+    productUUID="6a01406b-62a8-49fd-af55-a79df19c8951">
+</subsystem>

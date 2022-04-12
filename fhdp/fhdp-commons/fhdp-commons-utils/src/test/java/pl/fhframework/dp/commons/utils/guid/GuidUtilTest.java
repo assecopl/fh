@@ -17,4 +17,14 @@ public class GuidUtilTest {
         String ret = GuidUtil.stripToGuid(activityId);
         log.info("Returned {}", ret);
     }
+
+    @Test
+    public void composeMessageId() {
+        String activityId = "Activity_0uce44m";
+        String processInstanceId = "44fa1d7a-b0ee-11ec-909e-005056010889";
+        String messageId = GuidUtil.composeMessageId(activityId, processInstanceId);
+        int length = messageId.length();
+        int lengthProcInstId = processInstanceId.length();
+        log.info("Returned: {}", messageId);
+    }
 }
