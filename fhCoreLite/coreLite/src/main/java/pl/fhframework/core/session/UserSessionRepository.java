@@ -44,6 +44,12 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
     @Value("${fh.session.info.protocol:http}")
     private String sessionInfoProtocol;
 
+    /**
+     * A flag that switch between spring scheduling and manual (by thread) implementation of cron.
+     */
+    @Value("${fh.session.force_clear_session_data_after_session_removal:false}")
+    private boolean forceClearSessionDataAfterSessionRemoval;
+
     private String nodeUrl;
 
     @PostConstruct
@@ -112,6 +118,9 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
         userSessionsHash.remove(System.identityHashCode(userSession.getHttpSession()));
         userSessionsByConversationId.remove(userSession.getConversationUniqueId());
         removeSessionInfo(httpSessionId);
+        if (forceClearSessionDataAfterSessionRemoval) {
+            userSession.removeAllValuesBeforeSessionRemove();
+        }
         return userSession!=null;
     }
 
@@ -204,6 +213,7 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
                 }
             } finally {
                 boolean response = removeUserSession(httpSession.getId());
+
                 if (response) {
                     FhLogger.info("Removed expired session for {}.", getUserLogin(session), session.getFhSessionId(), httpSession.getId());
                 }else{

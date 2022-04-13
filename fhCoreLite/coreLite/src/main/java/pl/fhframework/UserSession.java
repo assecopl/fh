@@ -278,4 +278,26 @@ public class UserSession extends Session {
     public long getHowLongIsUnusedInMillis(){
         return System.currentTimeMillis() - lastUsageMoment;
     }
+
+    public void removeAllValuesBeforeSessionRemove(){
+        this.useCaseContainer = null;
+        this.useCaseRequestContext = null;
+        this.actionContext = null;
+        this.uploadFileIndexes = null;
+        this.downloadFileIndexes = null;
+        this.awaitingErrorInformations = null;
+        this.errorInformationProcessors = null;
+        this.formsHandler = null;
+        this.applicationContext = null;
+        this.eventRegistry = null;
+        //this.httpSession = null;
+        //this.httpSessionOrgId = null;
+        //this.fhSessionId = null;
+        this.attributes = null;
+        this.cloudServersSessionIds = null;
+        this.resourcesUrlPrefix = null;
+        this.propagatedAuthentication = null;
+        this.validationResults = null;
+        this.exception = null;
+    }
 }
