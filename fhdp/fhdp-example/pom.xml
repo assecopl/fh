@@ -48,6 +48,7 @@
         <dependency>
             <groupId>pl.fhframework</groupId>
             <artifactId>coreApplication</artifactId>
+            <version>${fh.version}</version>
         </dependency>
         <dependency>
             <groupId>pl.fhframework.core.security.provider</groupId>

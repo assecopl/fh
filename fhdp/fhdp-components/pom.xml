@@ -27,11 +27,13 @@
         <dependency>
             <groupId>pl.fhframework</groupId>
             <artifactId>coreLite</artifactId>
+            <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>pl.fhframework</groupId>
             <artifactId>basicControls</artifactId>
+            <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
 <!--        WARNING!!! Do not add any dependencies on other fhdp modules here!!!!! Only FH.-->
