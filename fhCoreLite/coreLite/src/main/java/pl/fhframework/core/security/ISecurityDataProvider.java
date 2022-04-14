@@ -51,9 +51,9 @@ public interface ISecurityDataProvider {
     void deletePermission(IPermission permission);
     List<IPermission> findPermissionsForRole(IBusinessRole businessRole);
 
-    // AUTHORIZATION MANAGER
-    Set<AuthorizationManager.Function> getAllSystemFunctions();
-    List<AuthorizationManager.Module> getAllModules();
-    void invalidatePermissionCacheForRole(IBusinessRole businessRole);
+//    // AUTHORIZATION MANAGER
+//    Set<AuthorizationManager.Function> getAllSystemFunctions();
+//    List<AuthorizationManager.Module> getAllModules();
+//    void invalidatePermissionCacheForRole(IBusinessRole businessRole);
 
 }
