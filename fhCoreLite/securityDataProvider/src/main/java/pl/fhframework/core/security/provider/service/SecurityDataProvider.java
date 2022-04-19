@@ -36,12 +36,12 @@ public class SecurityDataProvider implements ISecurityDataProvider {
     @NonNull
     private final LocalServerDefinitionUpdateInformer changesInformer;
 
-    private AuthorizationManager authorizationManager;
-
-    @Autowired // inject by setter to avoid dependency cycle
-    public void setAuthorizationManager(AuthorizationManager authorizationManager) {
-        this.authorizationManager = authorizationManager;
-    }
+//    private AuthorizationManager authorizationManager;
+//
+//    @Autowired // inject by setter to avoid dependency cycle
+//    public void setAuthorizationManager(AuthorizationManager authorizationManager) {
+//        this.authorizationManager = authorizationManager;
+//    }
 
     // USERS
     //====================================================================================
@@ -238,23 +238,23 @@ public class SecurityDataProvider implements ISecurityDataProvider {
         return permissionProvider.findPermissionsForRole(businessRole);
     }
 
-    // AUTHORIZATION MANAGER
-    //====================================================================================
-
-    @Override
-    public Set<AuthorizationManager.Function> getAllSystemFunctions() {
-        return authorizationManager.getAllSystemFunctions();
-    }
-
-    @Override
-    public List<AuthorizationManager.Module> getAllModules() {
-        return authorizationManager.getAllModules();
-    }
-
-    @Override
-    public void invalidatePermissionCacheForRole(IBusinessRole businessRole) {
-        authorizationManager.invalidatePermissionCacheForRole(businessRole);
-        changesInformer.informServerDefinitionChanged();
-    }
+//    // AUTHORIZATION MANAGER
+//    //====================================================================================
+//
+//    @Override
+//    public Set<AuthorizationManager.Function> getAllSystemFunctions() {
+//        return authorizationManager.getAllSystemFunctions();
+//    }
+//
+//    @Override
+//    public List<AuthorizationManager.Module> getAllModules() {
+//        return authorizationManager.getAllModules();
+//    }
+//
+//    @Override
+//    public void invalidatePermissionCacheForRole(IBusinessRole businessRole) {
+//        authorizationManager.invalidatePermissionCacheForRole(businessRole);
+//        changesInformer.informServerDefinitionChanged();
+//    }
 
 }

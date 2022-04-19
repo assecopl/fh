@@ -111,7 +111,7 @@ public class ElasticSearchConfig extends ElasticsearchConfigurationSupport {
 
 
 //    @WritingConverter
-//    public class LocalDateTimeWritingConverter implements Converter<LocalDateTime, String>  {
+//    public class LocalDateTimeWritingConverter implements Converter<LocalDateTime, String> {
 //
 //        @Override
 //        public String convert(LocalDateTime source) {
@@ -120,7 +120,7 @@ public class ElasticSearchConfig extends ElasticsearchConfigurationSupport {
 //    }
 //
 //    @ReadingConverter
-//    public class LocalDateTimeReadingConverter implements Converter<String, LocalDateTime>  {
+//    public class LocalDateTimeReadingConverter implements Converter<String, LocalDateTime> {
 //
 //        @Override
 //        public LocalDateTime convert(String source) {
@@ -149,7 +149,7 @@ public class ElasticSearchConfig extends ElasticsearchConfigurationSupport {
 //    @Bean
 //    @Override
 //    public ElasticsearchCustomConversions elasticsearchCustomConversions() {
-//        return new ElasticsearchCustomConversions(List.of(new LocalDateTimeWritingConverter(),
+//        return new ElasticsearchCustomConversions(Arrays.asList(new LocalDateTimeWritingConverter(),
 //                new LocalDateTimeReadingConverter(), new LocalDateReadingConverter(),
 //                new LocalDateWritingConverter()));
 //    }

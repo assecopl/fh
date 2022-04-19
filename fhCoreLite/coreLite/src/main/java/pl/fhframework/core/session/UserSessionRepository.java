@@ -39,7 +39,10 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
     @Autowired
     private final SessionInfoCache sessionInfoCache;
     @Autowired
-    private SessionInfoService sessionInfoService;
+    private SessionInfoAPIClient sessionInfoAPIClient;
+
+    @Value("${fhframework.managementApi.enabled:false}")
+    private boolean managementApiEnabled;
 
     @Value("${server.port}")
     private int serverPort;
@@ -57,10 +60,6 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
         ((WebApplicationContext) applicationContext).getServletContext().addListener(this);
     }
 
-    @Autowired
-    public void setSessionInfoService(SessionInfoService sessionInfoService) {
-        this.sessionInfoService = sessionInfoService;
-    }
 
     @Override
     public synchronized void onApplicationEvent(ContextRefreshedEvent event) {
@@ -155,13 +154,22 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
         Map<String, SessionInfo> sessions = new ConcurrentHashMap<>();
         Set<String> nodes = sessionInfoCache.getNodes();
         for (String node : nodes) {
-            if (sessionInfoService.isNodeActive(node)) {
+            if (isNodeActive(node)) {
                 sessions.putAll(sessionInfoCache.getSessionsInfoForNode(node));
             } /*else {
                 removeNodeFromCache(node);
             }*/
         }
         return sessions;
+    }
+
+    /** Returns whether given node is active */
+    public boolean isNodeActive(String nodeUrl) {
+        if (managementApiEnabled) {
+            return sessionInfoAPIClient.isNodeActive(nodeUrl);
+        } else {
+            return true; // only local user sessions
+        }
     }
 
     private synchronized void removeNodeFromCache(String node) {

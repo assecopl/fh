@@ -92,6 +92,7 @@
         <dependency>
             <groupId>pl.fhframework</groupId>
             <artifactId>coreLite</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 

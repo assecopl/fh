@@ -1,17 +1,15 @@
 package pl.fhframework.dp.transport.dto.commons;
 
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.elasticsearch.annotations.*;
 import pl.fhframework.dp.commons.base.model.IPersistentObject;
+import pl.fhframework.dp.transport.converters.CustomZonedDateTimeConverter;
 import pl.fhframework.dp.transport.dto.document.SeverityEnum;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * @author <a href="mailto:jacek.borowiec@asseco.pl">Jacek Borowiec</a>
@@ -27,8 +25,10 @@ public class OperationStepDto  implements Comparable<OperationStepDto>, IPersist
     private String description;
     private SeverityEnum type;
     @Field(type = FieldType.Date, format = DateFormat.custom, pattern = "uuuu-MM-dd'T'HH:mm:ss.SSSX")
+    @ValueConverter(CustomZonedDateTimeConverter.class)
     private LocalDateTime started;
     @Field(type = FieldType.Date, format = DateFormat.custom, pattern = "uuuu-MM-dd'T'HH:mm:ss.SSSX")
+    @ValueConverter(CustomZonedDateTimeConverter.class)
     private LocalDateTime finished;
     private Long docID;
     private String operationGUID;

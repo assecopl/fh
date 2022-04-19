@@ -33,6 +33,7 @@
         <dependency>
             <groupId>pl.fhframework</groupId>
             <artifactId>basicControls</artifactId>
+            <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
 

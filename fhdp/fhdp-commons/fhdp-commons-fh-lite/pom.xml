@@ -53,27 +53,32 @@
         <dependency>
             <groupId>pl.fhframework</groupId>
             <artifactId>coreLite</artifactId>
+            <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>pl.fhframework</groupId>
             <artifactId>coreApplication</artifactId>
+            <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>pl.fhframework.persistence</groupId>
             <artifactId>fhPersistenceLite</artifactId>
+            <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>pl.fhframework.integration</groupId>
             <artifactId>integrationCoreLite</artifactId>
+            <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>pl.fhframework</groupId>
             <artifactId>basicControls</artifactId>
+            <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
 

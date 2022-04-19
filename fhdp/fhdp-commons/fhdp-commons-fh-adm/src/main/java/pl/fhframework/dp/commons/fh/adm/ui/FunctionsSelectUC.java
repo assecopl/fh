@@ -1,6 +1,7 @@
 package pl.fhframework.dp.commons.fh.adm.ui;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import pl.fhframework.dp.commons.fh.adm.security.FhAdmSystemFunction;
 import pl.fhframework.dp.commons.fh.uc.FhdpBaseUC;
 import pl.fhframework.annotations.Action;
@@ -23,13 +24,15 @@ public class FunctionsSelectUC extends FhdpBaseUC implements IUseCaseNoInput<IUs
 
     private FunctionsSelectForm.Model model;
 
-    private final SecurityDataProvider securityDataProvider;
+
+    private final AuthorizationManager authorizationManager;
+
 
     @Override
     public void start() {
         FunctionsTreeBuilder functionsTreeBuilder = new FunctionsTreeBuilder(
-                securityDataProvider.getAllModules(),
-                securityDataProvider.getAllSystemFunctions()
+                authorizationManager.getAllModules(),
+                authorizationManager.getAllSystemFunctions()
         );
         model = new FunctionsSelectForm.Model(functionsTreeBuilder);
         showForm(FunctionsSelectForm.class, model);

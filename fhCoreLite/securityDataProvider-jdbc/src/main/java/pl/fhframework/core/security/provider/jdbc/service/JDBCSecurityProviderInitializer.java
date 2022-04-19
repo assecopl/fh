@@ -103,7 +103,7 @@ public class JDBCSecurityProviderInitializer extends AbstractSecurityProviderIni
 
                 Set<IFunction> functions;
                 if (defaultRole.isAllFunctions()) {
-                    functions = new HashSet<>(securityDataProvider.getAllSystemFunctions());
+                    functions = new HashSet<>(authorizationManager.getAllSystemFunctions());
                 } else {
                     functions = defaultRole.getFunctions();
                 }
