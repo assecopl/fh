@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.*;
 import pl.fhframework.dp.commons.base.model.IPersistentObject;
+import pl.fhframework.dp.transport.converters.CustomZonedDateTimeConverter;
 import pl.fhframework.dp.transport.dto.document.SeverityEnum;
 
 import java.time.LocalDateTime;
@@ -27,8 +28,10 @@ public class AuditLogDto implements IPersistentObject<String> {
     private SeverityEnum severity;
     private String category;
     @Field(type = FieldType.Date, format = DateFormat.custom, pattern = "uuuu-MM-dd'T'HH:mm:ss.SSSX")
+    @ValueConverter(CustomZonedDateTimeConverter.class)
     private LocalDateTime eventTime;
     @Field(type = FieldType.Date, format = DateFormat.custom, pattern = "uuuu-MM-dd'T'HH:mm:ss.SSSX")
+    @ValueConverter(CustomZonedDateTimeConverter.class)
     private LocalDateTime endTime;
     private String messageKey;
     private String comment;

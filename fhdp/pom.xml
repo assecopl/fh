@@ -29,12 +29,12 @@
 <!--        <spring.data.elasticsearch.version>4.1.15</spring.data.elasticsearch.version>-->
 <!--        <spring.data.jpa.version>2.4.3</spring.data.jpa.version>-->
 <!--        <elasticsearch.version>7.12.1</elasticsearch.version>-->
-<!--        <fasterxml.version>2.11.4</fasterxml.version>-->
+        <fasterxml.version>2.11.3</fasterxml.version>
 
 <!--        <spring.security.version>5.4.2</spring.security.version>-->
 <!--        <jackson.version>2.11.4</jackson.version>-->
 <!--        <jaxb.version>2.2.11</jaxb.version>-->
-<!--        <cxf.version>3.4.2</cxf.version>-->
+        <cxf.version>3.5.2</cxf.version>
 <!--        <httpclient.version>4.5.13</httpclient.version>-->
         <java.cas.client.version>3.6.2</java.cas.client.version>
 

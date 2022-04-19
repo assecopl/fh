@@ -88,11 +88,11 @@
 <!--                <artifactId>chartsControls</artifactId>-->
 <!--                <version>${project.version}</version>-->
 <!--            </dependency>-->
-<!--            <dependency>-->
-<!--                <groupId>org.geolatte</groupId>-->
-<!--                <artifactId>geolatte-geom</artifactId>-->
-<!--                <version>1.4.0</version>-->
-<!--            </dependency>-->
+            <dependency>
+                <groupId>org.geolatte</groupId>
+                <artifactId>geolatte-geom</artifactId>
+                <version>1.8.2</version>
+            </dependency>
             <dependency>
                 <groupId>org.camunda.bpm</groupId>
                 <artifactId>camunda-engine</artifactId>
@@ -199,11 +199,6 @@
 <!--                <version>6.0</version>-->
 <!--                <scope>provided</scope>-->
 <!--            </dependency>-->
-<!--            <dependency>-->
-<!--                <groupId>com.fasterxml.jackson.datatype</groupId>-->
-<!--                <artifactId>jackson-datatype-jsr310</artifactId>-->
-<!--                <version>${fasterxml.version}</version>-->
-<!--            </dependency>-->
             <dependency>
                 <groupId>org.jboss.ws.cxf</groupId>
                 <artifactId>jbossws-cxf-client</artifactId>
@@ -211,21 +206,61 @@
                 <scope>provided</scope>
             </dependency>
 
-<!--            <dependency>-->
-<!--                <groupId>com.fasterxml.jackson.core</groupId>-->
-<!--                <artifactId>jackson-core</artifactId>-->
-<!--                <version>${fasterxml.version}</version>-->
-<!--            </dependency>-->
-<!--            <dependency>-->
-<!--                <groupId>com.fasterxml.jackson.core</groupId>-->
-<!--                <artifactId>jackson-annotations</artifactId>-->
-<!--                <version>${fasterxml.version}</version>-->
-<!--            </dependency>-->
-<!--            <dependency>-->
-<!--                <groupId>com.fasterxml.jackson.core</groupId>-->
-<!--                <artifactId>jackson-databind</artifactId>-->
-<!--                <version>${fasterxml.version}</version>-->
-<!--            </dependency>-->
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${fasterxml.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${fasterxml.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${fasterxml.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.module</groupId>
+                <artifactId>jackson-module-jaxb-annotations</artifactId>
+                <version>${fasterxml.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.datatype</groupId>
+                <artifactId>jackson-datatype-jsr310</artifactId>
+                <version>${fasterxml.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.module</groupId>
+                <artifactId>jackson-module-parameter-names</artifactId>
+                <version>${fasterxml.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.datatype</groupId>
+                <artifactId>jackson-datatype-jdk8</artifactId>
+                <version>2.11.3</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.dataformat</groupId>
+                <artifactId>jackson-dataformat-yaml</artifactId>
+                <version>${fasterxml.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.dataformat</groupId>
+                <artifactId>jackson-dataformat-xml</artifactId>
+                <version>${fasterxml.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.dataformat</groupId>
+                <artifactId>jackson-dataformat-smile</artifactId>
+                <version>${fasterxml.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.dataformat</groupId>
+                <artifactId>jackson-dataformat-cbor</artifactId>
+                <version>${fasterxml.version}</version>
+            </dependency>
 <!--            <dependency>-->
 <!--                <groupId>javax.validation</groupId>-->
 <!--                <artifactId>validation-api</artifactId>-->
@@ -237,11 +272,11 @@
 <!--                <version>${springboot.version}</version>-->
 <!--                <scope>provided</scope>-->
 <!--            </dependency>-->
-<!--            <dependency>-->
-<!--                <groupId>org.springframework.boot</groupId>-->
-<!--                <artifactId>spring-boot-starter-webflux</artifactId>-->
-<!--                <version>${springboot.version}</version>-->
-<!--            </dependency>-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-webflux</artifactId>
+                <version>${springboot.version}</version>
+            </dependency>
 <!--            <dependency>-->
 <!--                <groupId>javax.persistence</groupId>-->
 <!--                <artifactId>javax.persistence-api</artifactId>-->
@@ -259,11 +294,11 @@
 <!--                <artifactId>postgresql</artifactId>-->
 <!--                <version>9.1-901.jdbc4</version>-->
 <!--            </dependency>-->
-<!--            <dependency>-->
-<!--                <groupId>org.threeten</groupId>-->
-<!--                <artifactId>threetenbp</artifactId>-->
-<!--                <version>1.4.0</version>-->
-<!--            </dependency>-->
+            <dependency>
+                <groupId>org.threeten</groupId>
+                <artifactId>threetenbp</artifactId>
+                <version>1.6.0</version>
+            </dependency>
 
 <!--            <dependency>-->
 <!--                <groupId>org.projectlombok</groupId>-->
@@ -277,11 +312,11 @@
 <!--                <artifactId>poi</artifactId>-->
 <!--                <version>4.1.2</version>-->
 <!--            </dependency>-->
-<!--            <dependency>-->
-<!--                <groupId>org.apache.velocity</groupId>-->
-<!--                <artifactId>velocity-engine-core</artifactId>-->
-<!--                <version>2.2</version>-->
-<!--            </dependency>-->
+            <dependency>
+                <groupId>org.apache.velocity</groupId>
+                <artifactId>velocity-engine-core</artifactId>
+                <version>2.3</version>
+            </dependency>
 <!--            <dependency>-->
 <!--                <groupId>org.glassfish.jaxb</groupId>-->
 <!--                <artifactId>jaxb-xjc</artifactId>-->
