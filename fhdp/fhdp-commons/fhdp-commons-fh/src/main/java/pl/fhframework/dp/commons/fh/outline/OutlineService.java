@@ -1,5 +1,6 @@
 package pl.fhframework.dp.commons.fh.outline;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +29,6 @@ public class OutlineService {
     @Value("${fhdp.direction:true}")
     public boolean isDirection;
 
-    protected Map<String, ElementCT> elements = new HashMap<>();
-    protected Map<String, Set<String>> mappings = new HashMap<>();
-
     @Autowired
     protected MessageService messageService;
 
@@ -41,32 +39,44 @@ public class OutlineService {
         InputStream is = OutlineService.class.getResourceAsStream(fileName);
         Outline ret = (Outline) unmarshaller.unmarshal(is);
         if(ret.getElement() != null) {
-            buildMaps(ret.getElement().get(0).getElement());
             return ret.getElement().get(0).getElement();
         } else {
             return new ArrayList<>();
         }
     }
 
-    private void buildMaps(List<ElementCT> list) {
+    public OutlineMapping findMappings(String ...docType){
+        OutlineMapping mappings = new OutlineMapping();
+        for(String doc: docType) {
+            try {
+                List<ElementCT> elementCTS = generateOutline(doc);
+                buildMaps(elementCTS, mappings);
+            } catch (JAXBException e) {
+                e.printStackTrace();
+            }
+        }
+        return mappings;
+    }
+
+    private void buildMaps(List<ElementCT> list, OutlineMapping mapping) {
         if(list == null) return;
         for(ElementCT el: list) {
-            elements.put(el.getId(), el);
+            mapping.getElements().put(el.getId(), el);
             if(el.getMappings() != null) {
                 List<String> mappingsList = el.getMappings().getPointer();
                 for(String p: mappingsList) {
-                    putMapping(p.toLowerCase(), el.getId());
+                    putMapping(p.toLowerCase(), el.getId(), mapping);
                 }
             }
-            buildMaps(el.getElement());
+            buildMaps(el.getElement(), mapping);
         }
     }
 
-    private void putMapping(String pointerName, String elementId){
-        Set<String> elementIdList = mappings.get(pointerName);
+    private void putMapping(String pointerName, String elementId, OutlineMapping mapping){
+        Set<String> elementIdList = mapping.getMappings().get(pointerName);
         if(null == elementIdList) {
             elementIdList = new HashSet<>();
-            mappings.put(pointerName, elementIdList);
+            mapping.getMappings().put(pointerName, elementIdList);
         }
         elementIdList.add(elementId);
     }
@@ -77,38 +87,36 @@ public class OutlineService {
      * @param pointer
      * @return found element or null.
      */
-    public ElementCT findElementFromPointer(String pointer) {
+    public ElementCT findElementFromPointer(String pointer, OutlineMapping mapping) {
         ElementCT ret = null;
         String p = pointer.toLowerCase();
         String id = null;
-        List<String> mappingList = findMapping(pointer);
+        List<String> mappingList = findMapping(pointer, mapping);
         if(mappingList != null && mappingList.size() > 0) {
             String firstIdElement = mappingList.get(0);
-            ret = elements.get(firstIdElement);
+            ret = mapping.getElements().get(firstIdElement);
         }
         return ret;
     }
 
-    public List<ElementCT> findAllElementFromPointer(String pointer){
-        List<String> mappingList = findMapping(pointer);
+    public List<ElementCT> findAllElementFromPointer(String pointer, OutlineMapping mapping){
+        List<String> mappingList = findMapping(pointer, mapping);
         if(null != mappingList) {
-            return mappingList.stream().map(x -> elements.get(x)).collect(Collectors.toList());
+            return mappingList.stream().map(x -> mapping.getElements().get(x)).collect(Collectors.toList());
         }
         return new ArrayList<>();
     }
 
-    private List<String> findMapping(String pointer){
+    private List<String> findMapping(String pointer, OutlineMapping mapping){
         String pointerName = pointer.toLowerCase();
-        Set<String> mappingIdList;
+        Set<String> mappingIdList = new HashSet<>();
         do {
-            mappingIdList = mappings.get(pointerName);
-            if(mappingIdList == null) {
-                pointerName = reducePointer(pointerName);
+            Set<String> mappingsId = mapping.getMappings().get(pointerName);
+            if(mappingsId != null) {
+                mappingIdList.addAll(mappingsId);
             }
-        } while(mappingIdList == null && !pointerName.isEmpty());
-        if(null == mappingIdList){
-            return null;
-        }
+            pointerName = reducePointer(pointerName);
+        } while(!pointerName.isEmpty());
         return new ArrayList<>(mappingIdList);
     }
 
@@ -259,5 +267,11 @@ public class OutlineService {
         } else {
             return label;
         }
+    }
+
+    @Data
+    public static class OutlineMapping {
+        private Map<String, ElementCT> elements = new HashMap<>();
+        private Map<String, Set<String>> mappings = new HashMap<>();
     }
 }
