@@ -4,12 +4,9 @@ package pl.fhframework.dp.transport.searchtemplate;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.elasticsearch.annotations.DateFormat;
-import org.springframework.data.elasticsearch.annotations.Document;
-import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldType;
-import org.springframework.data.elasticsearch.annotations.Setting;
+import org.springframework.data.elasticsearch.annotations.*;
 import pl.fhframework.dp.commons.base.model.IPersistentLong;
+import pl.fhframework.dp.transport.converters.CustomZonedDateTimeConverter;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -29,9 +26,11 @@ public class SearchTemplateDto implements Serializable, IPersistentLong {
     private List<SearchTemplateDefinition> searchTemplateDefinitions;
 
     @Field(type = FieldType.Date, format = DateFormat.custom, pattern = "uuuu-MM-dd'T'HH:mm:ss.SSSX")
+    @ValueConverter(CustomZonedDateTimeConverter.class)
     private LocalDateTime created;
 
     @Field(type = FieldType.Date, format = DateFormat.custom, pattern = "uuuu-MM-dd'T'HH:mm:ss.SSSX")
+    @ValueConverter(CustomZonedDateTimeConverter.class)
     private LocalDateTime modified;
 
     private String lastUserName;

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<menu>
+    <group label="$.sample.menu.examples">
+        <usecase ref="pl.fhframework.fhdp.example.embedded.EmbeddedViewUC" label="$.sample.ui.usecases.embeddedView" cloudExposed="false"/>
+        <usecase ref="pl.fhframework.fhdp.example.buttons.ExampleButtonsUC" label="$.sample.ui.usecases.buttons" cloudExposed="false"/>
+        <usecase ref="pl.fhframework.fhdp.example.list.checkbox.CheckBoxOnListUC" label="$.sample.ui.usecases.list.checkbox" cloudExposed="false"/>
+        <usecase ref="pl.fhframework.fhdp.example.fhml.ExtendedFHMLViewUC" label="$.sample.ui.usecases.extendedFHMLView" cloudExposed="false"/>
+        <usecase ref="pl.fhframework.fhdp.example.hint.ExampleHintUC" label="$.sample.ui.usecases.hints" cloudExposed="false"/>
+        <usecase ref="pl.fhframework.fhdp.example.table.ExampleTableUC" label="$.sample.ui.usecases.tables" cloudExposed="false"/>
+<!--        <usecase ref="eu.cdm.example.ui.chart.ChartICDTSUC" label="$.sample.ui.usecases.chart" cloudExposed="false"/>-->
+    </group>
+</menu>

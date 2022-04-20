@@ -3,7 +3,7 @@
     <parent>
         <artifactId>fhdp-commons</artifactId>
         <groupId>pl.fhframework.dp</groupId>
-        <version>4.9.24-SNAPSHOT-PL</version>
+        <version>4.10.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -53,27 +53,32 @@
         <dependency>
             <groupId>pl.fhframework</groupId>
             <artifactId>coreLite</artifactId>
+            <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>pl.fhframework</groupId>
             <artifactId>coreApplication</artifactId>
+            <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>pl.fhframework.persistence</groupId>
             <artifactId>fhPersistenceLite</artifactId>
+            <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>pl.fhframework.integration</groupId>
             <artifactId>integrationCoreLite</artifactId>
+            <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>pl.fhframework</groupId>
             <artifactId>basicControls</artifactId>
+            <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
 

@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>pl.fhframework</groupId>
+        <artifactId>fh-compile-bom</artifactId>
+        <version>4.10.0-SNAPSHOT</version>
+        <relativePath>../bom-project-lite/fh-compile-bom</relativePath>
+    </parent>
     <groupId>pl.fhframework.dp</groupId>
     <artifactId>fhdp</artifactId>
     <packaging>pom</packaging>
-    <version>4.9.24-SNAPSHOT-PL</version>
+    <version>4.10.0-SNAPSHOT</version>
 
     <name>fhdp</name>
 
@@ -13,23 +19,23 @@
     <url>https://github.com/assecopl/fh</url>
 
     <properties>
-        <sfl4j.version>1.7.30</sfl4j.version>
-        <infinispan.version>11.0.9.Final</infinispan.version>
-        <spring.version>5.3.3</spring.version>
-        <springboot.version>2.4.2</springboot.version>
-        <hibernate.version>5.3.20.Final</hibernate.version>
-        <geotools.version>20.2</geotools.version>
+<!--        <sfl4j.version>1.7.30</sfl4j.version>-->
+<!--        <infinispan.version>11.0.9.Final</infinispan.version>-->
+<!--        <spring.version>5.3.3</spring.version>-->
+<!--        <springboot.version>2.6.4</springboot.version>-->
+<!--        <hibernate.version>5.3.20.Final</hibernate.version>-->
+<!--        <geotools.version>20.2</geotools.version>-->
         <camunda.version>7.14.0</camunda.version>
-        <spring.data.elasticsearch.version>4.1.15</spring.data.elasticsearch.version>
-        <spring.data.jpa.version>2.4.3</spring.data.jpa.version>
-        <elasticsearch.version>7.12.1</elasticsearch.version>
-        <fasterxml.version>2.11.4</fasterxml.version>
+<!--        <spring.data.elasticsearch.version>4.1.15</spring.data.elasticsearch.version>-->
+<!--        <spring.data.jpa.version>2.4.3</spring.data.jpa.version>-->
+<!--        <elasticsearch.version>7.12.1</elasticsearch.version>-->
+        <fasterxml.version>2.11.3</fasterxml.version>
 
-        <spring.security.version>5.4.2</spring.security.version>
-        <jackson.version>2.11.4</jackson.version>
-        <jaxb.version>2.2.11</jaxb.version>
-        <cxf.version>3.4.2</cxf.version>
-        <httpclient.version>4.5.13</httpclient.version>
+<!--        <spring.security.version>5.4.2</spring.security.version>-->
+<!--        <jackson.version>2.11.4</jackson.version>-->
+<!--        <jaxb.version>2.2.11</jaxb.version>-->
+        <cxf.version>3.5.2</cxf.version>
+<!--        <httpclient.version>4.5.13</httpclient.version>-->
         <java.cas.client.version>3.6.2</java.cas.client.version>
 
         <maven.compiler.source>8</maven.compiler.source>
@@ -75,18 +81,15 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>${sfl4j.version}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.20</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.2.3</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
@@ -98,7 +101,6 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -171,6 +173,7 @@
         <module>bom</module>
         <module>fhdp-commons</module>
         <module>fhdp-components</module>
+        <module>fhdp-example</module>
     </modules>
 
 </project>

@@ -31,6 +31,6 @@ yarn-error.log*
 
 **/log
 **/database
-**/_dynamic
+**/_dynamic*
 
 **/rebel.xml

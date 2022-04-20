@@ -1,8 +1,10 @@
 package pl.fhframework.core.security.provider.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import pl.fhframework.core.logging.FhLogger;
+import pl.fhframework.core.security.AuthorizationManager;
 import pl.fhframework.core.security.IFunction;
 import pl.fhframework.core.security.ISecurityDataProvider;
 import pl.fhframework.core.security.SecurityProviderInitializer;
@@ -34,6 +36,13 @@ public abstract class AbstractSecurityProviderInitializer implements SecurityPro
     protected boolean guestsAllowed;
 
     protected final ISecurityDataProvider securityDataProvider;
+
+    protected AuthorizationManager authorizationManager;
+
+    @Autowired // inject by setter to avoid dependency cycle
+    public void setAuthorizationManager(AuthorizationManager authorizationManager) {
+        this.authorizationManager = authorizationManager;
+    }
 
     protected AbstractSecurityProviderInitializer(ISecurityDataProvider securityDataProvider) {
         this.securityDataProvider = securityDataProvider;
@@ -73,7 +82,7 @@ public abstract class AbstractSecurityProviderInitializer implements SecurityPro
             List<IPermission> permissions = securityDataProvider.findPermissionsForRole(adminRole);
             if (permissions.isEmpty()) {
                 if (defaultAdminAllPermissions) { // create permissions to all system functions
-                    for (IFunction function : securityDataProvider.getAllSystemFunctions()) {
+                    for (IFunction function : authorizationManager.getAllSystemFunctions()) {
                         permissions.add(securityDataProvider.createSimplePermissionInstance(
                                 adminRole.getRoleName(), function.getName(), function.getModuleUUID()));
                     }

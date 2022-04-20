@@ -633,7 +633,7 @@ class InputTextFhDP extends HTMLFormComponent {
             } else {
                 oldValueElement[0].classList.remove('input-old-value-remove-line');
             }
-}
+        }
     }
 }
 

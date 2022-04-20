@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.*;
 import pl.fhframework.dp.commons.base.model.IEndpointCfg;
 import pl.fhframework.dp.commons.base.model.IPersistentObject;
+import pl.fhframework.dp.transport.converters.CustomZonedDateTimeConverter;
 import pl.fhframework.dp.transport.enums.EndpointCheckFrequencyEnum;
 
 import java.time.LocalDateTime;
@@ -34,6 +35,7 @@ public class EndpointCfgDto implements IEndpointCfg, IPersistentObject<String> {
     private Integer requestTimeout;
     private Boolean logOn;
     @Field(type = FieldType.Date, format = DateFormat.custom, pattern = "uuuu-MM-dd'T'HH:mm:ss.SSSX")
+    @ValueConverter(CustomZonedDateTimeConverter.class)
 	private LocalDateTime lastCheck;
     private String proxyHost;
     private Integer proxyPort;
