@@ -8,6 +8,7 @@ import pl.fhframework.core.IApplicationInformation;
 import pl.fhframework.core.security.AuthorizationManager;
 import pl.fhframework.core.session.scope.SessionScopeBeanContainer;
 import pl.fhframework.configuration.FHConfiguration;
+import pl.fhframework.core.util.StringUtils;
 import pl.fhframework.model.security.SystemUser;
 
 import java.time.Instant;
@@ -88,5 +89,19 @@ public abstract class Session {
             this.counterElementId = counterElementId;
             this.maxInactivityMinutes = maxInactivityMinutes;
         }
+    }
+
+    /**
+     * Resolved client address
+     * @return Full client address with port
+     */
+    public String getClientAddress() {
+        if (description instanceof UserSessionDescription) {
+            String value = ((UserSessionDescription) description).getUserAddress();
+            if (!StringUtils.isNullOrEmpty(value)) {
+                return value;
+            }
+        }
+        return "unknown";
     }
 }
