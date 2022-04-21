@@ -88,15 +88,14 @@ public abstract class GenericDtoService<ID,
         return list;
     }
 
-    private BoolQueryBuilder createQueryBuilderInternal(QUERY query) {
+    protected BoolQueryBuilder createQueryBuilderInternal(QUERY query) {
         BoolQueryBuilder ret = QueryBuilders.boolQuery();
         if(query.getTextSearch() != null) {
-            String txt = (query.isWholeWordsOnly()? "": "*") +
-                    escapeSpecialCharacters(query.getTextSearch() +
+            String txt = escapeSpecialCharacters(query.getTextSearch() +
                             (query.isWholeWordsOnly()? "": "*"));
             ret.must(QueryBuilders.queryStringQuery(txt)
                     .analyzeWildcard(true)
-                    .allowLeadingWildcard(true));
+                    .allowLeadingWildcard(false));
         }
         ret = extendQueryBuilder(ret, query);
         return ret;
