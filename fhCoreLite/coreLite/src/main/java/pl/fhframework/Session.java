@@ -99,9 +99,12 @@ public abstract class Session {
         if (description instanceof UserSessionDescription) {
             String value = ((UserSessionDescription) description).getUserAddress();
             if (!StringUtils.isNullOrEmpty(value)) {
+                if (value.charAt(0) == '/'){
+                    return value.substring(1);
+                }
                 return value;
             }
         }
-        return "unknown";
+        return null;
     }
 }
