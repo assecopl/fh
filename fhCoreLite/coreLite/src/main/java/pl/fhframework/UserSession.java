@@ -27,7 +27,6 @@ import pl.fhframework.validation.IValidationResults;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
-import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -99,6 +98,13 @@ public class UserSession extends Session {
     private RuntimeException exception;
 
 
+    /**
+     * Ip address with port.
+     * Usually is derived from UserSessionDescription (@see UserSession constructor)
+     * Could be delivered by other components by HttpSession attribute (@See ClientAddressProvider.HTTP_SESSION_KEY_NAME).
+     */
+    private final String clientAddress;
+
     public UserSession(SystemUser systemUser, UserSessionDescription description, HttpSession httpSession) {
         super(description);
         setSystemUser(systemUser);
@@ -108,6 +114,7 @@ public class UserSession extends Session {
             fhSessionId = httpSession.getId();
         }
         setFhSessionId(fhSessionId);
+        clientAddress = ClientAddressProvider.getClientAddress(httpSession, description);
     }
 
     @PostConstruct
