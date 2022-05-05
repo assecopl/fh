@@ -140,6 +140,9 @@ class Table extends TableWithKeyboardEvents {
             let row = document.createElement('tr');
             let footCell = document.createElement('td');
             footCell.colSpan = this.componentObj.columns ? this.componentObj.columns.length : 0;
+            if(this.selectionCheckboxes){
+                footCell.colSpan = this.totalColumns + 1;
+            }
             row.appendChild(footCell);
             footer.appendChild(row);
             this.table.appendChild(footer);
