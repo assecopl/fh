@@ -15,7 +15,7 @@ public class ClientAddressProvider {
     public static String getClientAddress(HttpSession httpSession, SessionDescription description) {
         if (httpSession != null) {
             String derivedClientAddress = (String) httpSession.getAttribute(HTTP_SESSION_KEY_NAME);
-            if (StringUtils.isNullOrEmpty(derivedClientAddress)) {
+            if (!StringUtils.isNullOrEmpty(derivedClientAddress)) {
                 return derivedClientAddress;
             }
         }
