@@ -1,6 +1,6 @@
 {
   "name": "fh-forms-handler",
-  "version": "4.8.18-SNAPSHOT-1652265517531",
+  "version": "4.8.18-SNAPSHOT-1652268008006",
   "main": "dist/Module.js",
   "types": "dist/Module.d.ts",
   "scripts": {
