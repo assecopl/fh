@@ -1,6 +1,3 @@
-/*
- * KUD 2019.
- */
 package pl.fhframework.dp.commons.ad.handler;
 
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;

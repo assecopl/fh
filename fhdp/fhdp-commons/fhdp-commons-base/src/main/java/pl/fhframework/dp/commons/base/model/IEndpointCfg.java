@@ -3,13 +3,7 @@ package pl.fhframework.dp.commons.base.model;
 
 import java.time.LocalDateTime;
 
-/**
- * Endpoint configuration
- *
- * @author <a href="mailto:dariusz_skrudlik@javiko.pl">Dariusz Skrudlik</a>
- * @version $Revision: 2647 $, $Date: 2019-09-23 19:20:32 +0200 (pon) $
- * @created 15/01/2019
- */
+
 public interface IEndpointCfg extends IEndpointCfgDefinition {
 
     /**

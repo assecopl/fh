@@ -8,10 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-/**
- * @author Dariusz Skrudlik
- * @version $Revision: 126 $, $Date: 2009-10-29 23:11:46 +0100 (Cz, 29 paź 2009) $
- */
 public class NodeHelper {
 
     /** Creates a new instance of NodeHelper */

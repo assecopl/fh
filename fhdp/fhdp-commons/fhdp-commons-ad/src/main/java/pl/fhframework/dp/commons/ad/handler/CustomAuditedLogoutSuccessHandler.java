@@ -1,6 +1,3 @@
-/*
- * KUD 2020.
- */
 package pl.fhframework.dp.commons.ad.handler;
 
 import org.springframework.security.core.Authentication;
