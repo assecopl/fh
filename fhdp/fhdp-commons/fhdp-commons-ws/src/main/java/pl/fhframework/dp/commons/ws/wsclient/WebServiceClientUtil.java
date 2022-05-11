@@ -47,17 +47,6 @@ import static org.apache.cxf.ws.addressing.JAXWSAConstants.CLIENT_ADDRESSING_PRO
  * WS-SEC + WS-ADDR,
  * - ssl
  * f.e..:BlindSSLSocketFactory
- * <p>
- * Example:
- * <p>
- * pdrOnDemandService = new WebServiceClientUtil(1000, 60000, new WebServiceClientUtil.IConfigInterceptors() {
- * @Override public void addInterceptor(Client client) {
- * client.getInInterceptors().add(new LoggingInInterceptor());
- * client.getOutInterceptors().add(new LoggingOutInterceptor());
- * <p>
- * }
- * }, null).configureWsaPort(PdrOnDemandWebService.class, "https://pdr.skg.pl/pdr-web/services/OnDemandPort", "skg", null, "skg", "sasasa", AuthorizationTypeEnum.Digest, true);
- * @created 17/12/2013
  */
 public class WebServiceClientUtil {
 

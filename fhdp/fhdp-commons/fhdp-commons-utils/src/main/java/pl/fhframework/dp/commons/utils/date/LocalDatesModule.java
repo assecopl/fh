@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2019. SKG S.A.
- */
-
 package pl.fhframework.dp.commons.utils.date;
 
 import com.fasterxml.jackson.core.Version;

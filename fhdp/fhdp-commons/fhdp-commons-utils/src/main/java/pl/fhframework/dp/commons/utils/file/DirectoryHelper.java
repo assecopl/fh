@@ -1,20 +1,7 @@
-/*
- * DirectoryHelper.java
- *
- * Prawa autorskie do oprogramowania i jego kodów źródłowych
- * przysługują w pełnym zakresie wyłącznie SKG S.A.
- *
- * All copyrights to software and its source code
- * belong fully and exclusively to SKG S.A.
- */
-
 package pl.fhframework.dp.commons.utils.file;
 
 import java.io.File;
 
-/**
- * @author Dariusz Skrudlik
- */
 public class DirectoryHelper {
 
     /**
@@ -24,9 +11,9 @@ public class DirectoryHelper {
         if (!(wdir != null && ((wdir.exists() && wdir.isDirectory()) || wdir.mkdirs()))) {
 
             if (wdir != null) {
-                throw new RuntimeException("Błędny katalog: " + wdir.getAbsolutePath());
+                throw new RuntimeException("Bad folder: " + wdir.getAbsolutePath());
             } else {
-                throw new RuntimeException("Błędny katalog: <null>");
+                throw new RuntimeException("Bad folder: <null>");
             }
         } //ok
     }
