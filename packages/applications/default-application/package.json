@@ -4,7 +4,7 @@
   "main": "Module.ts",
   "private": true,
   "scripts": {
-    "build": "tsc && copyfiles ./source/css/*.css ./source/img/* ./Module.css ./dist && webpack --env.env=production --env.wrapped=false --progress --display-error-details",
+    "build": "tsc && webpack --env.env=production --env.wrapped=false --progress --display-error-details",
     "dev": "webpack --env.env=development --env.wrapped=false --progress --watch --display-error-details",
     "build-css-wrapped": "webpack --env.env=production --env.wrapped --progress",
     "dev-css-wrapped": "webpack --env.env=development --env.wrapped --progress --watch --display-error-details"
