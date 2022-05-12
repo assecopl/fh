@@ -22,6 +22,7 @@ import {FileUploadRU} from "./source/i18n/FileUpload.ru"
 import {TreeFhDP} from './source/controls/TreeFhDP';
 import {TablePagedLT} from "./source/i18n/TablePaged.lt"
 import {HtmlViewExtended} from "./source/controls/HtmlViewExtended"
+import {HTMLRawViewFhDP} from "./source/controls/HTMLRawViewFhDP"
 import {CheckBoxFhDP} from './source/controls/inputs/CheckBoxFhDP';
 import {NotificationEventFhDP} from './source/controls/NotificationEventFhDP';
 import {XMLViewerFhDP} from './source/controls/XMLViewerFhDP';
@@ -181,6 +182,12 @@ class FhDPControls extends FhModule {
             .toFactory<HtmlViewExtended>(() => {
                 return (componentObj: any, parent: any) => {
                     return new HtmlViewExtended(componentObj, parent);
+                };
+            });
+        FhContainer.bind<(componentObj: any, parent: any) => HTMLRawViewFhDP>("HTMLRawViewFhDP")
+            .toFactory<HTMLRawViewFhDP>(() => {
+                return (componentObj: any, parent: any) => {
+                    return new HTMLRawViewFhDP(componentObj, parent);
                 };
             });
         FhContainer.rebind<(componentObj: any, parent: any) => CheckBoxFhDP>("CheckBox")

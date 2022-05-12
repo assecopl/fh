@@ -109,14 +109,14 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
                     this.popupOpen = true;
                 }
                 this.isSearch = true;
-                this.fireEventWithLock('onClickSearchIcon', 'search');
+                this.fireEvent('onClickSearchIcon', 'search');
             }
 
             if (ev.key === "Escape") {
                 this.changesQueue.queueAttributeChange('searchRequested', true);
                 this.popupOpen = false;
                 this.isSearch = true;
-                this.fireEventWithLock('onClickSearchIcon', 'search');
+                this.fireEvent('onClickSearchIcon', 'search');
                 this.renderPopup();
             }
         })
@@ -160,6 +160,8 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
             this.unmarkDirty();
             this.clickInPopup = false;
             this.popupOpen = false;
+            this.fireEventWithLock('recordSelected', this.rawValue);
+            this.fireEventWithLock('onChange', this.onChange);
             this.renderPopup();
         } else {
             if ((this.clickInPopup && this.popupOpen) || (this.pageChangeClicked && this.popupOpen)) {
@@ -171,7 +173,7 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
                     this.popupOpen = true;
                 }
                 this.isSearch = true;
-                this.fireEventWithLock('onClickSearchIcon', 'search');
+                this.fireEvent('onClickSearchIcon', 'search');
                 this.crateTooltip($("div.search-icon", this.getInputGroupElement())[0]);
             }
             this.getInputGroupElement().style.border = 'solid red 1px';
@@ -210,6 +212,11 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
     handleTextInputChange(ev) {
         console.log('******* handleTextInputChange', ev)
 
+        function isCtrlV(ev: any) {
+            let code = ev.keycode || ev.which;
+            return code === 86 && ev.ctrlKey;
+        }
+
         function isPrintableKey(ev: any) {
             let code = ev.keycode || ev.which;
             if(code >= 96 && code <= 105) return true;
@@ -222,7 +229,7 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
             else return true;
         }
 
-        if(isPrintableKey(ev)) {
+        if(isPrintableKey(ev) || isCtrlV(ev)) {
             console.log('is printable!')
             this.markDirty();
             if (this._writingDebaunceTimer) {
@@ -241,7 +248,7 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
                         this.popupOpen = true;
                     }
                     this.isSearch = true;
-                    this.fireEventWithLock('onClickSearchIcon', 'search');
+                    this.fireEvent('onClickSearchIcon', 'search');
                     this.crateTooltip($("div.search-icon", this.getInputGroupElement())[0])
                 }
             }
@@ -350,11 +357,11 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
 
             if (isSearch) {
                 this.isSearch = true;
-                this.fireEventWithLock('onClickSearchIcon', "search");
+                this.fireEvent('onClickSearchIcon', "search");
             }
             if (isOldValue) {
                 this.isSearch = false;
-                this.fireEventWithLock('onClickLastValue', "search");
+                this.fireEvent('onClickLastValue', "search");
             }
         }
         this.renderPopup();
@@ -379,7 +386,7 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
     languageChanged(code: string) {
         this.languageWrapped = code;
         if (this.popupOpen) {
-            this.fireEventWithLock('onClickSearchIcon', 'search');
+            this.fireEvent('onClickSearchIcon', 'search');
             this.crateTooltip($("div.search-icon", this.getInputGroupElement())[0])
         }
         this.renderPopup();
@@ -491,7 +498,7 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
             if (this._formId === 'FormPreview') {
                 this.fireEvent('onClickSearchIcon', "preview");
             } else {
-                this.fireEventWithLock('onClickSearchIcon', "search");
+                this.fireEvent('onClickSearchIcon', "search");
             }
         }
         this.crateTooltip($("div.search-icon", this.getInputGroupElement())[0]);

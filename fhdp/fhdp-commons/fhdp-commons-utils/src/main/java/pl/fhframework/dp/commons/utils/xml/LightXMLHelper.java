@@ -17,6 +17,12 @@ import java.io.InputStream;
  *
  * @author <a href="mailto:pawelk@skg.pl">Pawel Kasprzak</a>
  * @version $Revision: 1487 $, $Date: 2019-01-03 18:18:38 +0100 (czw) $
+ *
+ * Prawa autorskie do oprogramowania i jego kodów źródłowych
+ * przysługują w pełnym zakresie wyłącznie SKG S.A.
+ *
+ * All copyrights to software and its source code
+ * belong fully and exclusively to SKG S.A.
  */
 public class LightXMLHelper {
 

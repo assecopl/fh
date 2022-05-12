@@ -11,6 +11,12 @@ import java.util.StringTokenizer;
 /**
  * @author Dariusz Skrudlik
  * @version $Revision: 126 $, $Date: 2009-10-29 23:11:46 +0100 (Cz, 29 paź 2009) $
+ *
+ * Prawa autorskie do oprogramowania i jego kodów źródłowych
+ * przysługują w pełnym zakresie wyłącznie SKG S.A.
+ *
+ * All copyrights to software and its source code
+ * belong fully and exclusively to SKG S.A.
  */
 public class NodeHelper {
 

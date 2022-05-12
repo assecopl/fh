@@ -24,6 +24,7 @@
     "fh-forms-handler": "4.10.0-SNAPSHOT-1649781554462",
     "lodash": "4.17.21",
     "moment": "^2.24.0",
-    "moment-timezone": "0.5.34"
+    "moment-timezone": "0.5.34",
+    "moment-with-locales-es6": "2.18.1"
   }
 }
