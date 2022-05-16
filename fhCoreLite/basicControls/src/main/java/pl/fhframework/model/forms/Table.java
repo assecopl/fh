@@ -28,9 +28,7 @@ import pl.fhframework.model.forms.designer.IDesignerEventListener;
 import pl.fhframework.model.forms.table.LowLevelRowMetadata;
 import pl.fhframework.model.forms.table.RowIteratorMetadata;
 
-import java.lang.reflect.Array;
 import java.util.*;
-import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
@@ -156,6 +154,12 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
     @Setter
     @XMLMetadataSubelement
     protected Footer footer;
+
+
+    @Getter
+    @Setter
+    @XMLMetadataSubelement
+    protected Group csvExportComponent;
 
     @JsonIgnore
     protected List<LowLevelRowMetadata> tableRowMetadata = new ArrayList<>();
@@ -308,11 +312,9 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
 
         // CSV export button
         if (csvExport && !getForm().isDesignMode()) {
-            if (footer == null) {
-                footer = new Footer(getForm());
-                footer.setInvisible(false);
-                footer.setGroupingParentComponent(this);
-            }
+            csvExportComponent = new Group(getForm());
+            csvExportComponent.setInvisible(false);
+            csvExportComponent.setGroupingParentComponent(this);
 
             Button csvButton = new Button(getForm());
             csvButton.setWidth("md-1");
@@ -321,8 +323,8 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
             csvButton.setHorizontalAlign(HorizontalAlign.RIGHT);
             csvButton.setInvisible(false);
             csvButton.setOnClick(() -> csvService.exportTableToCsv(this));
-            csvButton.setGroupingParentComponent(footer);
-            footer.addSubcomponent(csvButton);
+            csvButton.setGroupingParentComponent(csvExportComponent);
+            csvExportComponent.addSubcomponent(csvButton);
         }
         setCompareFunction();
     }
@@ -350,6 +352,9 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
 
         if (this.footer != null) {
             footer.doActionForEverySubcomponent(action);
+        }
+        if (this.csvExportComponent != null) {
+            csvExportComponent.doActionForEverySubcomponent(action);
         }
     }
 

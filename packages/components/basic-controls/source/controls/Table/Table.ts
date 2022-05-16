@@ -22,6 +22,7 @@ class Table extends TableWithKeyboardEvents {
     protected table: HTMLTableElement;
     protected header: HTMLTableSectionElement;
     protected footer: HTMLTableSectionElement = null;
+    protected csvExportComponent: HTMLTableSectionElement = null;
     private _dataWrapper: HTMLTableSectionElement;
 
     private selectAllChceckboxElement: HTMLElement = null;
@@ -150,6 +151,14 @@ class Table extends TableWithKeyboardEvents {
 
             this.contentWrapper = footCell;
             this.addComponent(this.componentObj.footer);
+            this.contentWrapper = headingRow;
+        }
+
+        if (this.componentObj.csvExportComponent) {
+
+            this.contentWrapper = this.htmlElement;
+            this.componentObj.csvExportComponent.wrapperStyle = "padding:0px;"
+            this.addComponent(this.componentObj.csvExportComponent);
             this.contentWrapper = headingRow;
         }
 
