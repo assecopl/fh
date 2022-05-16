@@ -320,7 +320,7 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
             Button csvButton = new Button(getForm());
             csvButton.setWidth("md-1");
             csvButton.setLabelModelBinding(new StaticBinding<>("[icon=\'fas fa-download\'] CSV"));
-            csvButton.setStyleModelBinding(new StaticBinding<>("link"));
+            csvButton.setStyleModelBinding(new StaticBinding<>("secondary"));
             csvButton.setStyleClasses("btn-csv");
             csvButton.setHorizontalAlign(HorizontalAlign.RIGHT);
             csvButton.setInvisible(false);
