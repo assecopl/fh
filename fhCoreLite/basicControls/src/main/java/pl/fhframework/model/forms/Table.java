@@ -315,6 +315,7 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
             csvExportComponent = new Group(getForm());
             csvExportComponent.setInvisible(false);
             csvExportComponent.setGroupingParentComponent(this);
+            csvExportComponent.setStyleClasses("table-csv-export-row");
 
             Button csvButton = new Button(getForm());
             csvButton.setWidth("md-1");
