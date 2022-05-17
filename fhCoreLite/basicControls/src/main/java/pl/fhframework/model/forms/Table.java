@@ -137,6 +137,13 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
     @DesignerXMLProperty(functionalArea = SPECIFIC, priority = 15)
     private boolean csvExport;
 
+    @Getter
+    @Setter
+    @XMLProperty
+    @DocumentedComponentAttribute(defaultValue = "[icon=\'fas fa-download\'] CSV")
+    @DesignerXMLProperty(functionalArea = SPECIFIC, priority = 15)
+    private String csvButtonText = "[icon=\'fas fa-download\'] CSV";
+
     @JsonIgnore
     @Getter
     @Setter
@@ -318,8 +325,8 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
             csvExportComponent.setStyleClasses("table-csv-export-row");
 
             Button csvButton = new Button(getForm());
-            csvButton.setWidth("md-1");
-            csvButton.setLabelModelBinding(new StaticBinding<>("[icon=\'fas fa-download\'] CSV"));
+            csvButton.setWidth("auto");
+            csvButton.setLabelModelBinding(new StaticBinding<>(this.csvButtonText));
             csvButton.setStyleModelBinding(new StaticBinding<>("secondary"));
             csvButton.setStyleClasses("btn-csv");
             csvButton.setHorizontalAlign(HorizontalAlign.RIGHT);
