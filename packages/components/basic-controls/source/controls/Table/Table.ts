@@ -157,7 +157,6 @@ class Table extends TableWithKeyboardEvents {
         if (this.componentObj.csvExportComponent) {
 
             this.contentWrapper = this.htmlElement;
-            this.componentObj.csvExportComponent.wrapperStyle = "padding:0px;"
             this.addComponent(this.componentObj.csvExportComponent);
             this.contentWrapper = headingRow;
         }
