@@ -86,6 +86,7 @@
                 <groupId>javax.validation</groupId>
                 <artifactId>validation-api</artifactId>
                 <version>2.0.1.Final</version>
+                <scope>provided</scope>
             </dependency>
 <!--            <dependency>-->
 <!--                <groupId>org.springframework.data</groupId>-->
