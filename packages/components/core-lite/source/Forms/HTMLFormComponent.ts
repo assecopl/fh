@@ -919,6 +919,8 @@ abstract class HTMLFormComponent extends FormComponent {
                 if (HTMLFormComponent.bootstrapColRegexp.test(width)) {
                     //In bootstrap 4 "co-xs-12" was replaced with "col-12" so we need to delete it from string.
                     wrapper.classList.remove('col-' + width.replace('xs-', '-'));
+                } else if (width == "auto") {
+                    wrapper.classList.remove('col-auto');
                 } else if (HTMLFormComponent.bootstrapColWidthRegexp.test(width)) {
                     wrapper.classList.remove('exactWidth');
                     wrapper.style.width = undefined;
@@ -932,6 +934,8 @@ abstract class HTMLFormComponent extends FormComponent {
             if (HTMLFormComponent.bootstrapColRegexp.test(width)) {
                 //In bootstrap 4 "co-xs-12" was replaced with "col-12" so we need to delete it from string.
                 wrapper.classList.add('col-' + width.replace('xs-', '-'));
+            } else if (width == "auto") {
+                wrapper.classList.add('col-auto');
             } else if (HTMLFormComponent.bootstrapColWidthRegexp.test(width)) {
                 wrapper.classList.add('exactWidth');
                 wrapper.style.width = width;
