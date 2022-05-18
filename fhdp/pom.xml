@@ -20,7 +20,7 @@
 
     <properties>
 <!--        <sfl4j.version>1.7.30</sfl4j.version>-->
-<!--        <infinispan.version>11.0.9.Final</infinispan.version>-->
+<!--        <infinispan.version>13.0.10.Final</infinispan.version>-->
 <!--        <spring.version>5.3.3</spring.version>-->
 <!--        <springboot.version>2.6.4</springboot.version>-->
 <!--        <hibernate.version>5.3.20.Final</hibernate.version>-->
