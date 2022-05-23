@@ -163,7 +163,9 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
             this.renderPopup();
 
             this.fireEventWithLock('recordSelected', this.rawValue);
-            handlePopupClose(true);
+            if(window['handlePopupClose']) {
+                window['handlePopupClose'](true);
+            }
             this.fireEventWithLock('onChange', this.onChange);
         } else {
             if ((this.clickInPopup && this.popupOpen) || (this.pageChangeClicked && this.popupOpen)) {
