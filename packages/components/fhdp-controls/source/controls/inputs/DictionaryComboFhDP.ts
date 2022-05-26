@@ -63,9 +63,6 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
     create() {
         super.create();
         let self = this;
-        console.log("**** DictionaryComboFhDP v.0.96.010 ****")
-        console.log("Title:", this.title);
-        console.log("Columns:", this.columns);
 
         let inputGroup = this.getInputGroupElement();
         let iconSearch = this.getIconClass();
@@ -73,6 +70,7 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
         self.divTooltipId = Date.now();
         self.divTooltip = document.createElement('div');
         self.divTooltip.classList.add('dc-element');
+
         self.divTooltip.classList.add('hidden-popper');
         self.divTooltip.id = self.divTooltipId.toString();
 
@@ -85,10 +83,10 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
         this.getInputGroupElement().appendChild(self.divTooltip);
 
         this.i18n.subscribe(this);
-        this.display();
 
         DictionaryComboFhDPHelper.getInstance().registerElement(this);
 
+        this.display();
         document.getElementById(this.input.id).addEventListener('change', this.handleRawDataChange.bind(this));
         document.getElementById(this.input.id).addEventListener('keypress', this.handleTextInputChange.bind(this));
         this.input.addEventListener('blur', this.handleTextInputBlur.bind(this));
@@ -97,7 +95,7 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
             $($("div.search-icon", inputGroup)[0]).addClass('fc-editable');
             $($("div.search-icon", inputGroup)[0]).on("click", function(){
                 if(self.accessibility === "VIEW"){//w trybie VIEW nie działa onClickSearchIcon
-                   self.isSearch = true;
+                    self.isSearch = true;
                     self.crateTooltip($("div.search-icon", self.getInputGroupElement())[0]);
                 }
             })
@@ -127,11 +125,13 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
                 clearBtn.addEventListener('click', (ev) => {
                     this.input.value = "";
                     this.rawValue = null;
-                    this.popupOpen = true;
                     this.changesQueue.queueAttributeChange('text', null);
                     this.changesQueue.queueAttributeChange('cleared', true);
                     this.fireEventWithLock('cleanupSearch', 'cleanupSearch');
-                    this.isSearch = false;
+                    // this.fireEventWithLock('recordSelected', null);
+                    if(this.popupOpen){
+                        this.onClickSearchIconEvent(ev);
+                    }
                     this.input.focus();
                 });
             }
@@ -160,9 +160,13 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
             this.unmarkDirty();
             this.clickInPopup = false;
             this.popupOpen = false;
-            this.fireEventWithLock('recordSelected', this.rawValue);
-            this.fireEventWithLock('onChange', this.onChange);
             this.renderPopup();
+
+            this.fireEventWithLock('recordSelected', this.rawValue);
+            if(window['handlePopupClose']) {
+                window['handlePopupClose'](true);
+            }
+            this.fireEventWithLock('onChange', this.onChange);
         } else {
             if ((this.clickInPopup && this.popupOpen) || (this.pageChangeClicked && this.popupOpen)) {
                 this.clickInPopup = false;
@@ -266,7 +270,7 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
     handleTextInputBlur(ev) {
         console.log('blur', this.dirty, this.clickInPopup)
         if (this.dirty && !this.clickInPopup) {
-            if (ev.target.value === '') {
+            if (ev.target.value === '' && this.rawValue) {
                 this.fireEventWithLock('recordSelected', null);
                 this.unmarkDirty();
             } else {
@@ -320,6 +324,7 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
             },
             handleClose: handlePopupClose,
             recordClick: (record: any) => {
+                this.clickInPopup = true;
                 console.log("Clicked record", this.input.value, record.value, this.input.value.startsWith(record.value))
                 if (this.dirty || this.input.value === '' || (this.input.value !== record.value && !this.input.value.startsWith(record.value))) {
                     console.log('----- Clicked record', record)
@@ -340,15 +345,15 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
     }
 
     crateTooltip(element){
-       let allTooltips = document.getElementsByClassName("dc-element");
+        let allTooltips = document.getElementsByClassName("dc-element");
 
-       if(allTooltips.length >0){
-           for(var i=0; i< allTooltips.length;i++){
-               allTooltips[i]
-               if (!allTooltips[i].classList.contains("hidden-popper") && allTooltips[i].id != this.divTooltipId.toString()){
-                   allTooltips[i].classList.add("hidden-popper");
-               }
-           }
+        if(allTooltips.length >0){
+            for(var i=0; i< allTooltips.length;i++){
+                allTooltips[i]
+                if (!allTooltips[i].classList.contains("hidden-popper") && allTooltips[i].id != this.divTooltipId.toString()){
+                    allTooltips[i].classList.add("hidden-popper");
+                }
+            }
         }
         this.popupOpen = true;
         if (element && this.accessibility === "VIEW") {
