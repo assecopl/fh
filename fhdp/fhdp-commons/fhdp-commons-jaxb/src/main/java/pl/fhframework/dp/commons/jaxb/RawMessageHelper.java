@@ -213,31 +213,6 @@ public class RawMessageHelper {
         }
     }
 
-    public static String extractSelfRef(String strRawData) {
-        //String xmlName = extractXMLName(strRawData);
-        String selfRef = extractFromTo(strRawData, "<MesIdeMES19>", "</");
-        if ("".equals(selfRef)) {
-            selfRef = extractFromTo(strRawData, "NrWlasny=\"", "\"");
-        }
-        if ("".equals(selfRef)) {
-            selfRef = extractFromTo(strRawData, "NrWlasny-LRN=\"", "\"");
-        }
-        // DPDZ
-        if ("".equals(selfRef)) {
-            selfRef = extractFromTo(strRawData, "NumerWlasny-LRN=\"", "\"");
-        }
-        return selfRef;
-    }
-
-    public static String extractRefNo(String strRawData) {
-        //String xmlName = extractXMLName(strRawData);
-        String selfRef = extractFromTo(strRawData, "MRN=\"", "\"");
-        /*if ("".equals(selfRef)){
-			selfRef = extractFromTo(strRawData,"NrWlasny-LRN=\"","\"");
-		}*/
-        return selfRef;
-    }
-
     /**
      * Wycina z komunikatu wszystkie przestrzenie nazw z wyjątkiem przestrzeni
      * dla elementu "root"
