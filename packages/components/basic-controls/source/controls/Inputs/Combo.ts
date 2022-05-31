@@ -646,7 +646,7 @@ class Combo extends InputText {
                 a.innerHTML = displayValue;
                 a.addEventListener('mousedown', function (itemValue, indexGroup, index, targetValue, targetCursorPosition, event) {
                     event.preventDefault();
-
+                    this.autocompleterFocus = false;
                     if (this.accessibility !== 'EDIT' || disabled) {
                         return;
                     }
