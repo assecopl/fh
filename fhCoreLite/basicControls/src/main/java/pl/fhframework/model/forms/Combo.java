@@ -51,6 +51,8 @@ public class Combo extends BaseInputFieldWithKeySupport implements I18nFormEleme
     private static final String VALUES_ATTR = "values";
     protected static final String TEXT = "text";
     protected static final String ADDED_TAG = "addedTag";
+
+    protected static final String BLUR_EVENT = "blur";
     protected static final String FILTERED_VALUES = "filteredValues";
     private static final String FILTER_FUNCTION_ATTR = "filterFunction";
     private static final String FILTER_TEXT = "filterText";
@@ -305,6 +307,8 @@ public class Combo extends BaseInputFieldWithKeySupport implements I18nFormEleme
     @Getter
     protected Integer cursor = 0;
 
+    protected Boolean blurEvent = false;
+
     public Combo(Form form) {
         super(form);
     }
@@ -328,6 +332,7 @@ public class Combo extends BaseInputFieldWithKeySupport implements I18nFormEleme
     public void updateModel(ValueChange valueChange) {
         Object textObj = valueChange.getStringAttribute(TEXT);
         Boolean addedTag = valueChange.getBooleanAttribute(ADDED_TAG);
+        blurEvent = valueChange.getBooleanAttribute(BLUR_EVENT);
 
         if (textObj != null && textObj.equals("") && !this.multiselect) {
             this.cleared = true;
@@ -559,6 +564,7 @@ public class Combo extends BaseInputFieldWithKeySupport implements I18nFormEleme
         this.cleared = false;
         this.languageChanged = false;
 
+        this.blurEvent = false;
         return elementChanges;
     }
 

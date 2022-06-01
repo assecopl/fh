@@ -70,6 +70,7 @@ public class DictionaryCombo extends Combo implements IGroupingComponent<Diction
     private boolean filterEnabled = false;
 
 
+
     public DictionaryCombo(Form form) {
         super(form);
     }
@@ -294,6 +295,7 @@ public class DictionaryCombo extends Combo implements IGroupingComponent<Diction
 
     @Override
     public ElementChanges updateView() {
+        Boolean blur = this.blurEvent;
         final ElementChanges elementChanges = super.updateView();
         boolean selectedBindingChanged = elementChanges.getChangedAttributes().containsKey(RAW_VALUE_ATTR);
 
@@ -329,6 +331,20 @@ public class DictionaryCombo extends Combo implements IGroupingComponent<Diction
         this.initializing = false;
         this.filterEnabled = false;
 
+        if(blur != null && blur.booleanValue() == true) {
+            BindingResult bindingResult = getModelBinding() != null ? getModelBinding().getBindingResult() : null;
+//              String newRawValue = convertToRaw(bindingResult);
+            String newRawValue = toRawValue(this.selectedItem);
+
+            if (!areModelValuesTheSame(newRawValue, rawValue) || !this.filterText.equals(rawValue)) {
+                this.rawValue = newRawValue;
+                elementChanges.addChange(RAW_VALUE_ATTR, this.rawValue);
+                this.filterText = rawValue != null ? rawValue : "";
+                updateFilterTextBinding();
+            }
+            this.blurEvent = false;
+        }
+
         return elementChanges;
     }
 
@@ -341,7 +357,6 @@ public class DictionaryCombo extends Combo implements IGroupingComponent<Diction
 
 
 }
-
 
 
 
