@@ -296,6 +296,7 @@ public class DictionaryCombo extends Combo implements IGroupingComponent<Diction
     @Override
     public ElementChanges updateView() {
         Boolean blur = this.blurEvent;
+        this.blurEvent = false;
         final ElementChanges elementChanges = super.updateView();
         boolean selectedBindingChanged = elementChanges.getChangedAttributes().containsKey(RAW_VALUE_ATTR);
 

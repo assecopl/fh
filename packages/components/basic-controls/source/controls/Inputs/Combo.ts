@@ -131,7 +131,8 @@ class Combo extends InputText {
                     }
                 }
                 this.updateModel();
-                if (this.onChange && (this.rawValue !== this.oldValue || this.multiselectRawValue !== this.multiselectOldValue || this.changeToFired)) {
+                if ((this.onChange && (this.rawValue !== this.oldValue || this.multiselectRawValue !== this.multiselectOldValue || this.changeToFired)) || keyCode === 9) {
+                    this.blurEvent = keyCode === 9;
                     this.fireEventWithLock('onChange', this.onChange, event);
                     this.changeToFired = false;
                 }

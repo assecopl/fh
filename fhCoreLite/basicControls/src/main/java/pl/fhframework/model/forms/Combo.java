@@ -563,7 +563,19 @@ public class Combo extends BaseInputFieldWithKeySupport implements I18nFormEleme
         }
         this.cleared = false;
         this.languageChanged = false;
+        if(this.blurEvent != null && this.blurEvent.booleanValue() == true) {
+            BindingResult bindingResult = getModelBinding() != null ? getModelBinding().getBindingResult() : null;
+//              String newRawValue = convertToRaw(bindingResult);
+            String newRawValue = toRawValue(this.selectedItem);
 
+            if (!areModelValuesTheSame(newRawValue, rawValue) || !this.filterText.equals(rawValue)) {
+                this.rawValue = newRawValue;
+                elementChanges.addChange(RAW_VALUE_ATTR, this.rawValue);
+                this.filterText = rawValue != null ? rawValue : "";
+                updateFilterTextBinding();
+            }
+            this.blurEvent = false;
+        }
         this.blurEvent = false;
         return elementChanges;
     }
