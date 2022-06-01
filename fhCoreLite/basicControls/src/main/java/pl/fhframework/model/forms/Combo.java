@@ -573,7 +573,7 @@ public class Combo extends BaseInputFieldWithKeySupport implements I18nFormEleme
                 elementChanges.addChange(RAW_VALUE_ATTR, this.rawValue);
                 this.filterText = rawValue != null ? rawValue : "";
                 updateFilterTextBinding();
-            }
+                processFiltering(this.filterText);
             this.blurEvent = false;
         }
         this.blurEvent = false;
