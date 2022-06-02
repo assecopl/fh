@@ -284,8 +284,12 @@ class Combo extends InputText {
         });
         autocompleter.id = this.id + '_autocompleter';
 
-
         this.autocompleter = autocompleter;
+
+        //IE11 Set true for autocompleter actions. We need to prevent focusout on input then.
+        this.autocompleter.addEventListener('mousedown', function (event) {
+            this.autocompleterFocus = true;
+        }.bind(this));
 
         this.component = this.input;
         this.focusableComponent = input;
@@ -411,10 +415,7 @@ class Combo extends InputText {
             this.autocompleter.style.setProperty('left', 'auto', "important");
         }
 
-        //IE11 Set true for autocompleter actions. We need to prevent focusout on input then.
-        this.autocompleter.addEventListener('mousedown', function (event) {
-            this.autocompleterFocus = true;
-        }.bind(this));
+
 
         let parent = null;
 
