@@ -297,6 +297,8 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
 
     private static final String ROW_STYLES_MAPPING = "rowStylesMapping";
 
+    protected boolean rowClickEvent = false;
+
     public Table(Form form) {
         super(form);
     }
@@ -664,7 +666,7 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
                 }
             }
         });
-
+        rowClickEvent = false;
         return elementChange;
     }
 
@@ -797,8 +799,10 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
     @Override
     public Optional<ActionBinding> getEventHandler(InMessageEventData eventData) {
         if (eventData.getEventType().equals(ON_ROW_CLICK)) {
+            rowClickEvent = true;
             return Optional.ofNullable(onRowClick);
         } else if (eventData.getEventType().equals(ON_ROW_DOUBLE_CLICK)){
+            rowClickEvent = true;
             return Optional.ofNullable(onRowDoubleClick);
         } else {
             return super.getEventHandler(eventData);

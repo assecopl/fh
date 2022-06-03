@@ -220,7 +220,7 @@ public class TablePaged extends Table {
                             .map(String::trim).mapToInt(Integer::parseInt).toArray();
                     Collection<Object> bindedObjectsList = getBindedObjectsList();
                     Object newSelectedElement;
-                    if (isMultiselect()) {
+                    if (isMultiselect() && !rowClickEvent) {
                         newSelectedElement = getSelectedElementsBasedOnRowsNumbers(bindedObjectsList, this.selectedRowsNumbers);
                         if (getSelectedElementBinding().getBindingResult() != null) {
                             Collection muliselectCol = (Collection) getSelectedElementBinding().getBindingResult().getValue();
@@ -282,6 +282,7 @@ public class TablePaged extends Table {
         if (refreshNeeded && pageModel != null) {
             pageModel.refreshNeeded();
         }
+
     }
 
 
@@ -360,7 +361,6 @@ public class TablePaged extends Table {
 //        elementChange.addChange(SELECTED_ROW_NUMBER, this.selectedRowsNumbers);
 
         this.language = LanguageResolver.languageChanges(getForm().getAbstractUseCase().getUserSession(), this.language, elementChange);
-
         return elementChange;
     }
 
