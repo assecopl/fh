@@ -324,9 +324,9 @@ class Table extends TableWithKeyboardEvents {
                 }
 
                 if (this._formId === 'FormPreview') {
-                    this.fireEvent('onRowClick', this.onRowClick);
+                    this.fireEvent('onChange', this.onRowClick);
                 } else {
-                    this.fireEventWithLock('onRowClick', this.onRowClick, event);
+                    this.fireEventWithLock('onChange', this.onRowClick, event);
                 }
             }.bind(this));
             row.contentWrapper.insertBefore(cell, row.contentWrapper.firstChild);
