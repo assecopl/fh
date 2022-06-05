@@ -569,14 +569,18 @@ public class Combo extends BaseInputFieldWithKeySupport implements I18nFormEleme
             String newRawValue = toRawValue(this.selectedItem);
 
             if (!areModelValuesTheSame(newRawValue, rawValue) || !this.filterText.equals(rawValue)) {
-                this.rawValue = newRawValue;
-                elementChanges.addChange(RAW_VALUE_ATTR, this.rawValue);
-                this.filterText = rawValue != null ? rawValue : "";
+                if (isMultiselect()) {
+                    this.selectedItem = new ArrayList<>((List) this.selectedItem);
+                    this.multiselectRawValue = toRawValue(this.selectedItem);
+                    elementChanges.addChange(MULTISELECT_RAW_VALUE_ATTR, this.multiselectRawValue);
+                } else {
+                    this.rawValue = newRawValue;
+                    elementChanges.addChange(RAW_VALUE_ATTR, this.rawValue);
+                }
                 this.filterText = "";
                 updateFilterTextBinding();
                 processFiltering(this.filterText);
             }
-            this.blurEvent = false;
         }
         this.blurEvent = false;
         return elementChanges;
