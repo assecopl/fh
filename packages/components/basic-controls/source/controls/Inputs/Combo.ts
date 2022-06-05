@@ -673,6 +673,9 @@ class Combo extends InputText {
                     if (shouldBlur) {
                         this.blurEventWithoutChange = true;
                         this.input.blur(); // must be after onChange
+                        if(!this.multiselect) {
+                            this.closeAutocomplete();
+                        }
                     }
                 }.bind(this, itemValue, key, i, itemValue.targetValue, itemValue.targetCursorPosition));
 
