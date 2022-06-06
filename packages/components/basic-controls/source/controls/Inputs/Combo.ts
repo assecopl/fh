@@ -266,7 +266,7 @@ class Combo extends InputText {
 
 
         }.bind(this));
-        if (this.onChange) {
+        // if (this.onChange) {
             $(input).on('blur', function (event) {
                 if (this.accessibility === 'EDIT' && !this.blurEventWithoutChange && (this.changeToFired || this.rawValue !== this.oldValue || this.multiselectRawValue !== this.multiselectOldValue || this.forceSendSelectedIndex)) {
                     this.blurEvent = true;
@@ -275,7 +275,7 @@ class Combo extends InputText {
                 }
                 this.blurEventWithoutChange = false;
             }.bind(this));
-        }
+        // }
 
 
         let autocompleter = document.createElement('ul');
