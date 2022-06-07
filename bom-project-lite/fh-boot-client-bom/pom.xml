@@ -12,7 +12,7 @@
     <parent>
         <groupId>pl.fhframework</groupId>
         <artifactId>fh-boot-bom</artifactId>
-        <version>4.10.0.PL.0</version>
+        <version>4.10.0.PL-SNAPSHOT</version>
         <relativePath>../fh-boot-bom</relativePath>
     </parent>
 
