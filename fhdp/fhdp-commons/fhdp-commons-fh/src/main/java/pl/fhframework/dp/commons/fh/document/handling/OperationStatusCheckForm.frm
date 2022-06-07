@@ -70,5 +70,5 @@
                 inlineStyle="line-height: unset;"
                 wrapperStyle="margin-bottom: unset; margin-right: 5px;"/>
     </Row>
-
+    <Timer interval="{timerTimeout}"  onTimer="checkTask()" />
 </Form>
