@@ -230,13 +230,13 @@ class FormsManager {
 
         let form = this.findForm(formId);
         if (!serviceType && form === false && ENV_IS_DEVELOPMENT) {
-            console.error('%cForm not found. EventType: %s, formId: %s, componentId: %s', 'background: #cc0000; color: #FFF', eventType, formId, componentId);
-            alert('Form not found. See console for more information.');
+            console.warn('%cForm not found. EventType: %s, formId: %s, componentId: %s', 'background: #cc0000; color: #FFF', eventType, formId, componentId);
+            // alert('Form not found. See console for more information.');
             return false;
         }
         if (!serviceType && form.container === undefined && ENV_IS_DEVELOPMENT) {
-            console.error('%cForm container not found. EventType: %s, formId: %s, componentId: %s, form: %o', 'background: #cc0000; color: #FFF', eventType, formId, componentId, form);
-            alert('Form container not found. See console for more information.');
+            console.warn('%cForm container not found. EventType: %s, formId: %s, componentId: %s, form: %o', 'background: #cc0000; color: #FFF', eventType, formId, componentId, form);
+            // alert('Form container not found. See console for more information.');
             return false;
         }
 
