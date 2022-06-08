@@ -88,8 +88,9 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
 
         this.display();
         document.getElementById(this.input.id).addEventListener('change', this.handleRawDataChange.bind(this));
-        document.getElementById(this.input.id).addEventListener('keypress', this.handleTextInputChange.bind(this));
+//         document.getElementById(this.input.id).addEventListener('keypress', this.handleTextInputChange.bind(this));
         this.input.addEventListener('blur', this.handleTextInputBlur.bind(this));
+        document.getElementById(this.input.id).addEventListener('keydown', this.handleTextInputChange.bind(this));
 
         if(iconSearch != null){
             $($("div.search-icon", inputGroup)[0]).addClass('fc-editable');
