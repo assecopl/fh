@@ -1,6 +1,6 @@
 {
   "name": "fh-application",
-  "version": "4.10.0-SNAPSHOT-1654604225517",
+  "version": "4.10.0-SNAPSHOT-1655019918079",
   "main": "Module.ts",
   "private": true,
   "scripts": {
@@ -37,8 +37,8 @@
     "copyfiles": "2.1.1"
   },
   "dependencies": {
-    "fh-forms-handler": "4.10.0-SNAPSHOT-1654604225517",
-    "fh-basic-controls": "4.10.0-SNAPSHOT-1654604225517",
-    "fh-charts-controls": "4.10.0-SNAPSHOT-1654604225517"
+    "fh-forms-handler": "4.10.0-SNAPSHOT-1655019918079",
+    "fh-basic-controls": "4.10.0-SNAPSHOT-1655019918079",
+    "fh-charts-controls": "4.10.0-SNAPSHOT-1655019918079"
   }
 }
