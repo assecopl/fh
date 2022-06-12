@@ -186,12 +186,11 @@ class InputDateFhDP extends InputTextFhDP implements LanguageChangeObserver {
 
     protected makePlaceholder(format: string) {
         if (this.accessibility == 'EDIT') {
-            format = format.replace(new RegExp('Y', 'g'), this.__('year_character').innerText).toLowerCase();
-            format = format.replace(new RegExp('M', 'g'), this.__('month_character').innerText).toLowerCase();
-            format = format.replace(new RegExp('D', 'g'), this.__('day_character').innerText).toLowerCase();
-            format = format.replace(new RegExp('H', 'g'), this.__('hour_character').innerText).toLowerCase();
-
-            return format;
+            format = format.replace(new RegExp('Y', 'g'), this.__('year_character').innerText);
+            format = format.replace(new RegExp('M', 'g'), this.__('month_character').innerText);
+            format = format.replace(new RegExp('D', 'g'), this.__('day_character').innerText);
+            format = format.replace(new RegExp('H', 'g'), this.__('hour_character').innerText);
+            return format.toLowerCase();
         } else {
             return '';
         }
