@@ -20,7 +20,9 @@ public class ForcedLogoutEvent extends EventDTO {
 
         LOGOUT_FORCE("force"),
 
-        LOGOUT_TIMEOUT("timeout");
+        LOGOUT_TIMEOUT("timeout"),
+
+        LOGOUT_NO_PERMISSION("no_permission");
 
         @Getter
         private String code;
