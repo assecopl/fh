@@ -98,6 +98,8 @@ public class HttpMappings {
                     model.addObject("message", $("fh.infos.successfully_logged_out", locale));
                 } else if (logout.equals(ForcedLogoutEvent.Reason.LOGOUT_FORCE.getCode())) {
                     model.addObject("message", $("fh.infos.successfully_logged_out_by_admin", locale));
+                } else if (logout.equals(ForcedLogoutEvent.Reason.LOGOUT_NO_PERMISSION.getCode())) {
+                    model.addObject("message", $("fh.infos.successfully_logged_out_no_permission", locale));
                 } else {
                     model.addObject("message", $("fh.infos.successfully_logged_out", locale));
                 }
