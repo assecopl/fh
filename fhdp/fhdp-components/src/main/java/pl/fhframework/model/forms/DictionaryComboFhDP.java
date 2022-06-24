@@ -183,13 +183,13 @@ public class DictionaryComboFhDP extends ComboFhDP implements IGroupingComponent
 
     @Override
     public void init(){
-//        log.debug("init...");
         log.debug("Init...");
         super.init();
         try {
             AutowireHelper.autowire(this, eventRegistry);
             this.resolveDataProvider();
             this.resolveMethods();
+            this.resolveParameters();
 
             columns = dataProvider.getColumnDefinitions();
 //            pageModel = new PageModel<NameValue>(pageable -> initPageModel(pageable));
@@ -460,18 +460,6 @@ public class DictionaryComboFhDP extends ComboFhDP implements IGroupingComponent
         });
 
         return l;
-    }
-
-    public ElementChanges comboParameterModelRefreash() {
-        final ElementChanges elementChanges = super.updateView();
-        log.debug("comboParameterModelRefreash... page: " + page);
-//        if( !firstLoad) {
-//            this.processFiltering("");
-//            this.processFilterBinding(elementChanges, true);
-//            this.refreshView();
-//        }
-        return elementChanges;
-
     }
 
     @Override
@@ -785,4 +773,14 @@ public class DictionaryComboFhDP extends ComboFhDP implements IGroupingComponent
         private String id;
         private boolean result = false;
     }
+
+
+    private void resolveParameters() {
+        if( this.getValuesParamsList.size() > 0){
+            this.getValuesParamsList.forEach(dictionaryComboParameter -> {
+                dictionaryComboParameter.resolveValue();
+            });
+        }
+    }
+
 }

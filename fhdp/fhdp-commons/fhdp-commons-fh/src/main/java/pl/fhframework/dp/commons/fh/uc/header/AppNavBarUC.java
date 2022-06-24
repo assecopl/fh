@@ -86,9 +86,9 @@ public class AppNavBarUC extends FhdpBaseUC implements INavbar, ISystemUseCase {
     @Value("${fhdp.onlyContrastStyle:false}")
     private boolean isOnlyContrastStyle;
 
-    private boolean isAppSiderOpen;
-    private boolean isOperationSiderOpen;
-    private boolean isHelpPageSiderOpen;
+    protected boolean isAppSiderOpen;
+    protected boolean isOperationSiderOpen;
+    protected boolean isHelpPageSiderOpen;
 
     @Autowired
     private DefaultApplicationConfigurer configurer;

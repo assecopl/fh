@@ -2,6 +2,7 @@ package pl.fhframework.app;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -12,6 +13,9 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 @Component
 @Slf4j
 public class WebMvcConfig implements WebMvcConfigurer {
+
+    @Value("${fh.index.path:/}")
+    private String indexPath;
 
     @Autowired
     LocaleChangeInterceptor yourInjectedInterceptor;
@@ -38,8 +42,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/").setViewName("index");
-        registry.addViewController("/login").setViewName("login");
+        registry.addViewController(indexPath).setViewName("index");
+        registry.addViewController(indexPath + "/login").setViewName("login");
     }
 
     @Override

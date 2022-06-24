@@ -6,12 +6,7 @@ package pl.fhframework.dp.commons.utils.xml;
 
 import java.util.ArrayList;
 
-/**
- * ParserResult
- *
- * @author dariuszs
- * @version $Revision: 7671 $, $Date: 2011-06-16 11:54:52 +0200 (Cz, 16 cze 2011) $
- */
+
 public class ParserResult {
     private ArrayList arr;
 

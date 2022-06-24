@@ -26,14 +26,12 @@ public class LocalDateTimeDeserializer extends StdDeserializer<LocalDateTime> {
     @Override
     public LocalDateTime deserialize(JsonParser parser, DeserializationContext context) throws IOException {
         String valueStr = parser.readValueAs(String.class);
+        return convert(valueStr);
+
+    }
+
+    public LocalDateTime convert(String valueStr) {
         if(valueStr == null) return null;
-
-        Matcher matcher = pattern.matcher(valueStr);
-        if(matcher.matches()){
-            valueStr = valueStr.substring(0, valueStr.length() - 2) + ":" + valueStr.substring(valueStr.length() - 2);
-        }
-
-        OffsetDateTime ofdt = OffsetDateTime.parse(valueStr);
-        return ofdt.toLocalDateTime();
+        return LocalDateTime.parse(valueStr);
     }
 }

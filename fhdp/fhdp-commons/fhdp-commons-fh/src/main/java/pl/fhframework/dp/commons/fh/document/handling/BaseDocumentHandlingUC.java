@@ -48,7 +48,7 @@ import java.util.*;
 public  abstract class BaseDocumentHandlingUC<MODEL extends BaseDocumentHandlingFormModel, C extends IGenericListOutputCallback, OUTLINE extends BaseDocumentHandlingOutlineForm<MODEL>> extends FhdpBaseUC
         implements IUseCase<C>, IUseCase18nListener {
 
-    @Value("${fhdp.timerTimeout:1000}")
+    @Value("${fhdp.timerTimeout:1}")
     protected int timerTimeout;
 
     protected static final String PENDING_OPERATION_TAB_ID = "pendingOperation";
@@ -59,6 +59,7 @@ public  abstract class BaseDocumentHandlingUC<MODEL extends BaseDocumentHandling
     protected IDocumentHandler documentHandler;
     //    protected Params parameters;
     protected IDocType documentType;
+    protected List<String> additionalOutlineNames = new ArrayList<>();
     protected String redirectUrl;
 
     protected OperationStatusCheckForm.Model pendingOperationFormModel;
@@ -126,6 +127,10 @@ public  abstract class BaseDocumentHandlingUC<MODEL extends BaseDocumentHandling
         }
     }
 
+    protected void addAdditionalOutlineName(String name){
+        this.additionalOutlineNames.add(name);
+    }
+
     protected abstract OUTLINE showOutlineForm();
 
     protected abstract IDocumentHandlingForm showMainForm();
@@ -178,8 +183,9 @@ public  abstract class BaseDocumentHandlingUC<MODEL extends BaseDocumentHandling
             BaseOperationHandler operationHandler = getContext().getBean(operationName, BaseOperationHandler.class);
             documentHandler.setOperationHandler(operationHandler);
             model.setTimerTimeout(this.timerTimeout);
+            model.setActiveTabIndex(index);
         } else {
-            model.setTimerTimeout(0);
+            model.setTimerTimeout(this.timerTimeout);
             model.setActiveTabIndex(form.indexOfTab(tab));
         }
     }
@@ -204,6 +210,9 @@ public  abstract class BaseDocumentHandlingUC<MODEL extends BaseDocumentHandling
         Collections.sort(steps);
         pendingOperationFormModel.getOperationStateResponse().setSteps(steps);
         pendingOperationFormModel.getOperationStateResponse().setFinished(state.isFinished());
+        if(state.isFinished()) {
+            refreshView();
+        }
     }
 
     protected void initLeftMenu(){
@@ -510,7 +519,7 @@ public  abstract class BaseDocumentHandlingUC<MODEL extends BaseDocumentHandling
 
                         @Override
                         public void cancel() {
-                            exit().cancel();
+                            refreshView();
                         }
                     });
                 }
@@ -539,16 +548,12 @@ public  abstract class BaseDocumentHandlingUC<MODEL extends BaseDocumentHandling
                 }
             });
 
-            try {
-                List<ElementCT> result = outlineService.generateOutline(getDocumentType().getTypeName());
-                for (String pointer : resultList) {
-                    ElementCT el = outlineService.findElementFromPointer(pointer);
-                    if (el != null && el.getId() != null) {
-                        pointers.add(el.getId());
-                    }
+            OutlineService.OutlineMapping mappings = outlineService.findMappings(getDocumentType().getTypeName());
+            for (String pointer : resultList) {
+                ElementCT el = outlineService.findElementFromPointer(pointer, mappings);
+                if (el != null && el.getId() != null) {
+                    pointers.add(el.getId());
                 }
-            } catch (JAXBException e) {
-                e.printStackTrace();
             }
 
             getModel().setSearchPointers(pointers);

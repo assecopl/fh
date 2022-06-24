@@ -1,12 +1,3 @@
-/*
- * FileHelper.java
- *
- * Prawa autorskie do oprogramowania i jego kodów źródłowych
- * przysługują w pełnym zakresie wyłącznie SKG S.A.
- *
- * All copyrights to software and its source code
- * belong fully and exclusively to SKG S.A.
- */
 package pl.fhframework.dp.commons.utils.file;
 
 import org.apache.commons.lang3.StringUtils;
@@ -21,10 +12,6 @@ import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-/**
- * @author <a href="mailto:dariusz_skrudlik@skg.pl">Dariusz Skrudlik</a>
- * @version $Revision: 44151 $, $Date: 2013-08-27 08:37:06 +0200 (Wt, 27 sie 2013) $
- */
 public class FileHelper {
 
     private static final Logger log = LoggerFactory.getLogger(FileHelper.class);
@@ -94,13 +81,6 @@ public class FileHelper {
         return result;
     }
 
-    /**
-     * Metoda konwertuje strumień z danymi do tablicy bajtów.
-     * UWAGA! Metody należy używać do odczytu danych binarnych w strumieniach (np sockety)
-     *
-     * @param in
-     * @return
-     */
     public static byte[] readBytesFromStream(InputStream in) {
         ByteArrayOutputStream data = new ByteArrayOutputStream();
         try {
@@ -121,13 +101,6 @@ public class FileHelper {
         return data.toByteArray();
     }
 
-    /**
-     * Metoda konwertuje strumień z danymi do tablicy bajtów.
-     * UWAGA! Metody należy używać do odczytu danych binarnych np plikow pdf
-     *
-     * @param instrm
-     * @return
-     */
     public static byte[] readInputStreamtoBytes(InputStream instrm) {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         try {
@@ -149,16 +122,6 @@ public class FileHelper {
         return buffer.toByteArray();
     }
 
-    /**
-     * Metoda konwertuje strumien z danymi do tablicy bajtow, przy uzyciu podanego encodingu
-     * UWAGA! Metody należy używać tylko do danych tekstowych (odczyt wykonywany
-     * jest poprzez klase rozszerzającą klasę java.io.Reader).
-     * Do odczytu danych binarnych należy używać metody readInputStreamtoBytes(InputStream instrm)
-     *
-     * @param instrm
-     * @param encoding
-     * @return
-     */
     public static byte[] readInputStreamtoBytes(InputStream instrm, String encoding) {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         InputStreamReader isr = null;
@@ -229,7 +192,7 @@ public class FileHelper {
             fos.write(content);
         } catch (IOException ex) {
             log.error(ex.getMessage(), ex);
-            throw new RuntimeException("Błąd zapisu pliku: " + filename, ex);
+            throw new RuntimeException("Error saving file: " + filename, ex);
         } finally {
             if (fos != null) {
                 try {
@@ -255,7 +218,7 @@ public class FileHelper {
             out.close();
         } catch (IOException ex) {
             log.error(ex.getMessage(), ex);
-            throw new RuntimeException("Błąd zapisu pliku: " + filename, ex);
+            throw new RuntimeException("Eror saving file: " + filename, ex);
         } finally {
             if (fos != null) {
                 try {
@@ -288,15 +251,11 @@ public class FileHelper {
             bundle = new Properties();
             bundle.load(is);
         } else {
-            throw new IOException("Properties file " + propertiesName + " not avilable");
+            throw new IOException("Properties file " + propertiesName + " not available");
         }
         return bundle;
     }
 
-    /**
-     * F-ja odczytuje plik znajdujący się wewnątrz jar'a
-     * Jako argument należy podać pełną ścieżkę względem głównego folderu jar'a
-     */
     public static InputStream getInputStreamFromJar(String fileNameInsideJar) throws IOException {
         URL url = Thread.currentThread().getContextClassLoader().getResource(fileNameInsideJar);
         if (url != null) {
@@ -415,13 +374,6 @@ public class FileHelper {
         os.close();
     }
 
-    /**
-     * Przygotowuje ścieżkę na podstawie przekazanego stringa.
-     * (dodaje na początku i na końcu '/')
-     * Jeśli null zwraca główny katalog.
-     *
-     * @param path - żródło do przygotowanie scieżki
-     */
     public static final String preparePath(String path) {
         if (path == null || StringUtils.isEmpty(path)) {
             path = "/";
@@ -437,7 +389,6 @@ public class FileHelper {
         return path;
     }
 
-    /** Pobranie pliku z archiwum **/
     public static final byte[] getBytesFromJar(String zipFilePath, String zipEntryName) {
 
         ZipInputStream zipIn = null;

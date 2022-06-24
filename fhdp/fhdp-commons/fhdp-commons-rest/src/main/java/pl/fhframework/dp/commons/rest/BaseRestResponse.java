@@ -1,10 +1,3 @@
-/*
- * MessageType.java
- *
- * Created on 3 styczeń 2007, 14:13
- *
- */
-
 package pl.fhframework.dp.commons.rest;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -13,11 +6,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.io.Serializable;
 import java.util.List;
 
-/**
- *
- * @author <a href="mailto:dariusz_skrudlik@skg.pl">Dariusz Skrudlik</a>
- * @version $Revision: 1552 $, $Date: 2009-06-25 13:39:06 +0200 (Cz, 25 cze 2009) $
- */
 public class BaseRestResponse<E,F> implements Serializable {
     private static final long serialVersionUID = 1L;
     

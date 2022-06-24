@@ -3,6 +3,8 @@ package pl.fhframework.dp.commons.utils.date;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -24,14 +26,19 @@ public class LocalDateTimeSerializer extends StdSerializer<LocalDateTime> {
         super(LocalDateTime.class);
     }
 
+
     public void serialize(LocalDateTime value, JsonGenerator generator, SerializerProvider provider) throws IOException {
-        if (value != null) {
-            ZoneId zone = ZoneId.of("Europe/Warsaw");
-            ZoneOffset offset = zone.getRules().getOffset(LocalDateTime.now());
-            OffsetDateTime offSetByTwo = OffsetDateTime.of(value.withNano(0), offset);
-            DateTimeFormatter formatter = (new DateTimeFormatterBuilder()).appendPattern("yyyy-MM-dd'T'HH:mm:ss[XXXXX]").parseDefaulting(ChronoField.OFFSET_SECONDS, 0L).toFormatter();
-            String ret = offSetByTwo.format(formatter);
+        String ret = convert(value);
+        if(ret != null) {
             generator.writeString(ret);
         }
+    }
+
+    public String convert(LocalDateTime value) {
+
+        if (value != null) {
+            return value.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS"));
+        }
+        return null;
     }
 }
