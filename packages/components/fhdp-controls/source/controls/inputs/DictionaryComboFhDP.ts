@@ -425,6 +425,7 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
                             this.input.value = newValue || '';
                             this.unmarkDirty();
                             this.valueFromChangedBinding = newValue || '';
+                            this.toogleLastValueElement(this.rawValue == this.lastValue);
                         }
                         break;
                     case 'shouldCloseTooltip':
