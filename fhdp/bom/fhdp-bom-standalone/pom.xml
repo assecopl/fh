@@ -3,12 +3,12 @@
     <parent>
         <artifactId>bom</artifactId>
         <groupId>pl.fhframework.dp</groupId>
-        <version>4.10.0.PL.2</version>
+        <version>4.10.0.PL.3-SNAPSHOT</version>
    </parent>
     <modelVersion>4.0.0</modelVersion>
 <!--    <groupId>pl.fhframework.dp</groupId>-->
     <artifactId>fhdp-bom-standalone</artifactId>
-<!--    <version>4.10.0.PL.2</version>-->
+<!--    <version>4.10.0.PL.3-SNAPSHOT</version>-->
     <packaging>pom</packaging>
 
     <dependencyManagement>
