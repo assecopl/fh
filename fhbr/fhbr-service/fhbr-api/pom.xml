@@ -2,20 +2,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>fhbr-service</artifactId>
+        <groupId>org.fhbr</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.fhbr</groupId>
-    <artifactId>fhbr</artifactId>
-    <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
-    <modules>
-        <module>fhbr-bom</module>
-        <module>fhbr-service</module>
-        <module>fhbr-client</module>
-        <module>fhbr-example</module>
-    </modules>
-
-    <name>FH BRule</name>
+    <artifactId>fhbr-api</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
