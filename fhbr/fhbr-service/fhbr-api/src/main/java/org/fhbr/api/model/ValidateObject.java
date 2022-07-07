@@ -12,21 +12,26 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.fhbr.api.service;
 
-import org.fhbr.api.model.ValidateObject;
-import org.fhbr.api.model.ValidationMessage;
-import org.fhbr.api.model.ValidationResult;
+package org.fhbr.api.model;
 
-import java.util.Map;
+
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalDate;
 
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 05/07/2022
+ * @created 06/07/2022
  */
-public interface ValidatorService {
+@Getter
+@Setter
+public class ValidateObject<O> {
 
-    ValidationResult validate(String moduleCode, ValidateObject object, Map<String, Object> context);
-    
+    private LocalDate onDate; //validate on date (default current date)
+
+    private O object;
+
 }

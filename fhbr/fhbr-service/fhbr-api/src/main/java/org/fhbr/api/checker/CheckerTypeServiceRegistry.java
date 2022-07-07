@@ -12,21 +12,24 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.fhbr.api.service;
 
-import org.fhbr.api.model.ValidateObject;
-import org.fhbr.api.model.ValidationMessage;
-import org.fhbr.api.model.ValidationResult;
+package org.fhbr.api.checker;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 05/07/2022
+ * @created 07/07/2022
  */
-public interface ValidatorService {
+public class CheckerTypeServiceRegistry {
 
-    ValidationResult validate(String moduleCode, ValidateObject object, Map<String, Object> context);
-    
+    private Map<String, CheckerTypeServiceFactory> registry = new HashMap();
+
+    public CheckerTypeServiceRegistry addCheckerTypeService(String checkerType, CheckerTypeServiceFactory checkerTypeServiceFactory) {
+        registry.put(checkerType, checkerTypeServiceFactory);
+        return this;
+    }
+
 }

@@ -12,21 +12,21 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.fhbr.api.service;
 
-import org.fhbr.api.model.ValidateObject;
-import org.fhbr.api.model.ValidationMessage;
-import org.fhbr.api.model.ValidationResult;
+package org.fhbr.api.dao;
 
-import java.util.Map;
+import org.fhbr.api.model.dto.BRuleDto;
+
+import java.time.LocalDate;
+import java.util.List;
 
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 05/07/2022
+ * @created 06/07/2022
  */
-public interface ValidatorService {
+public interface ModuleDao {
 
-    ValidationResult validate(String moduleCode, ValidateObject object, Map<String, Object> context);
-    
+    List<BRuleDto> findByModuleCode(String code, String phase, boolean active, LocalDate onDate);
+
 }

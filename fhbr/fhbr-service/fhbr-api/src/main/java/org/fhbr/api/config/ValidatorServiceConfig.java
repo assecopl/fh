@@ -14,10 +14,18 @@
  */
 package org.fhbr.api.config;
 
+import lombok.Getter;
+import org.fhbr.api.checker.CheckerTypeServiceRegistry;
+
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
  * @created 05/07/2022
  */
+@Getter
 public class ValidatorServiceConfig {
+
+    private CheckerTypeServiceRegistry checkerTypeServiceRegistry = new CheckerTypeServiceRegistry();
+
+
 }

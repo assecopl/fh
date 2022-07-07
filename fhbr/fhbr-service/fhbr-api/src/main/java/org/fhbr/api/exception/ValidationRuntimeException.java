@@ -12,21 +12,32 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.fhbr.api.service;
 
-import org.fhbr.api.model.ValidateObject;
-import org.fhbr.api.model.ValidationMessage;
-import org.fhbr.api.model.ValidationResult;
+package org.fhbr.api.exception;
 
-import java.util.Map;
+import lombok.Getter;
 
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 05/07/2022
+ * @created 06/07/2022
  */
-public interface ValidatorService {
+@Getter
+public class ValidationRuntimeException extends RuntimeException {
 
-    ValidationResult validate(String moduleCode, ValidateObject object, Map<String, Object> context);
-    
+    private String moduleCode;
+    private String ruleCode;
+
+    public ValidationRuntimeException(String messageKey, String moduleCode, String ruleCode) {
+        super(messageKey);
+        this.moduleCode = moduleCode;
+        this.ruleCode = ruleCode;
+    }
+
+    public ValidationRuntimeException(String messageKey, String moduleCode, String ruleCode, Throwable t) {
+        super(messageKey, t);
+        this.moduleCode = moduleCode;
+        this.ruleCode = ruleCode;
+    }
+
 }

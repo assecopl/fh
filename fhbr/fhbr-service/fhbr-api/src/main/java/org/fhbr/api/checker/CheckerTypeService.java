@@ -12,21 +12,24 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.fhbr.api.service;
 
-import org.fhbr.api.model.ValidateObject;
-import org.fhbr.api.model.ValidationMessage;
+package org.fhbr.api.checker;
+
 import org.fhbr.api.model.ValidationResult;
+import org.fhbr.api.model.dto.BRuleDto;
 
+import java.util.List;
 import java.util.Map;
 
 /**
+ * Interface for the validation engine service of the definied type
+ *
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 05/07/2022
+ * @created 07/07/2022
  */
-public interface ValidatorService {
+public interface CheckerTypeService {
 
-    ValidationResult validate(String moduleCode, ValidateObject object, Map<String, Object> context);
-    
+    ValidationResult validate(Object object, Map<String, Object> context, List<BRuleDto> rules);
+
 }
