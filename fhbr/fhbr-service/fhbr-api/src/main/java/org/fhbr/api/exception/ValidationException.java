@@ -43,7 +43,7 @@ public class ValidationException extends RuntimeException {
         this.msgProperties = msgProperties;
     }
 
-    public ValidationException(String msgKey, Map<String,String> msgProperties) {
+    public ValidationException(String msgKey, Map<String, String> msgProperties) {
         this.msgKey = msgKey;
         this.msgProperties = msgProperties;
     }
@@ -51,6 +51,13 @@ public class ValidationException extends RuntimeException {
     public ValidationException(String msgKey, String key, String value) {
         this.msgKey = msgKey;
         this.msgProperties = new HashMap<>();
-        this.msgProperties.put(key,value);
+        this.msgProperties.put(key, value);
+    }
+
+    public ValidationException(String msgKey, String key, String value, Throwable t) {
+        super(t);
+        this.msgKey = msgKey;
+        this.msgProperties = new HashMap<>();
+        this.msgProperties.put(key, value);
     }
 }

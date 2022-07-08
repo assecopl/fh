@@ -13,7 +13,7 @@
  * governing permissions and limitations under the License.
  */
 
-package fhbr.validator.schema.xsd;
+package fhbr.validator.schema.xsd.resolver;
 
 import org.apache.commons.io.input.BOMInputStream;
 import org.apache.commons.lang3.StringUtils;
@@ -31,17 +31,17 @@ import java.time.LocalDate;
 /**
  * Created by dariuszs on 13.07.2013.
  */
-public class XsdResolver implements LSResourceResolver {
+public class BaseXsdResolver implements LSResourceResolver {
 
     private final LocalDate onDate;
     protected XsdRepositoryDao xsdRepositoryDao;
     protected DOMImplementationLS domImplementationLS;
 
-    protected XsdResolver() {
+    protected BaseXsdResolver() {
         this(null, LocalDate.now());
     }
 
-    public XsdResolver(XsdRepositoryDao xsdRepositoryDao, LocalDate onDate) {
+    public BaseXsdResolver(XsdRepositoryDao xsdRepositoryDao, LocalDate onDate) {
         this.xsdRepositoryDao = xsdRepositoryDao;
         this.onDate = onDate;
         DOMImplementationRegistry registry = null;
@@ -51,8 +51,8 @@ public class XsdResolver implements LSResourceResolver {
             try {
                 System.setProperty(DOMImplementationRegistry.PROPERTY, DOMXSImplementationSourceImpl.class.getName());
                 registry = DOMImplementationRegistry.newInstance();
-            } catch (ClassNotFoundException |InstantiationException |IllegalAccessException e2) {
-                LoggerFactory.getLogger(XsdResolver.class).error("Error create DOMImplementationLS 2", e2);
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e2) {
+                LoggerFactory.getLogger(BaseXsdResolver.class).error("Error create DOMImplementationLS 2", e2);
                 throw new RuntimeException("Error create DOMImplementationLS", e);
             }
         }
@@ -86,7 +86,7 @@ public class XsdResolver implements LSResourceResolver {
             }
         }
 
-        //standardowe schematy
+        //common schema
         if ("http://www.w3.org/2001/XMLSchema".equals(namespaceURI)) {
             lsInput = domImplementationLS.createLSInput();
             try {

@@ -13,22 +13,16 @@
  * governing permissions and limitations under the License.
  */
 
-package fhbr.validator.schema.exception;
+package fhbr.validator.schema.xsd;
 
-import org.fhbr.api.exception.ValidationException;
+import org.w3c.dom.ls.LSResourceResolver;
 
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
  * @created 08/07/2022
  */
-public class UnknownNamespace extends ValidationException {
+public interface XsdResolverFactory {
 
-    public UnknownNamespace(String namespace) {
-        super("fhbr.validator.schema.xsd.unknownNamespace", "namespace", namespace);
-    }
-
-    public UnknownNamespace(String namespace, Throwable t) {
-        super("fhbr.validator.schema.xsd.unknownNamespace", "namespace", namespace);
-    }
+    LSResourceResolver newInstance();
 }

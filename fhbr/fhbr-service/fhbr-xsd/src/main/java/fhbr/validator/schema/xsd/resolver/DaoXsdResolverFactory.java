@@ -13,22 +13,32 @@
  * governing permissions and limitations under the License.
  */
 
-package fhbr.validator.schema.exception;
+package fhbr.validator.schema.xsd.resolver;
 
-import org.fhbr.api.exception.ValidationException;
+import fhbr.validator.schema.xsd.XsdResolverFactory;
+import org.fhbr.api.dao.XsdRepositoryDao;
+import org.w3c.dom.ls.LSResourceResolver;
+
+import java.time.LocalDate;
 
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
  * @created 08/07/2022
  */
-public class UnknownNamespace extends ValidationException {
+public class DaoXsdResolverFactory implements XsdResolverFactory {
 
-    public UnknownNamespace(String namespace) {
-        super("fhbr.validator.schema.xsd.unknownNamespace", "namespace", namespace);
+    private final XsdRepositoryDao xsdRepositoryDao;
+    private final LocalDate onDate;
+
+    public DaoXsdResolverFactory(XsdRepositoryDao xsdRepositoryDao, LocalDate onDate) {
+        this.xsdRepositoryDao = xsdRepositoryDao;
+        this.onDate = onDate;
     }
 
-    public UnknownNamespace(String namespace, Throwable t) {
-        super("fhbr.validator.schema.xsd.unknownNamespace", "namespace", namespace);
+    @Override
+    public LSResourceResolver newInstance() {
+        BaseXsdResolver xsdResolver = new BaseXsdResolver(xsdRepositoryDao, onDate);
+        return xsdResolver;
     }
 }

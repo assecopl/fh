@@ -17,10 +17,9 @@ package fhbr.validator.schema;
 
 import fhbr.validator.schema.exception.UnknownNamespace;
 import fhbr.validator.schema.xsd.XsdErrorHandler;
-import fhbr.validator.schema.xsd.XsdResolver;
+import fhbr.validator.schema.xsd.XsdResolverFactory;
 import org.apache.commons.io.input.BOMInputStream;
 import org.apache.xerces.impl.Constants;
-import org.fhbr.api.dao.XsdRepositoryDao;
 import org.fhbr.api.model.ValidationMessage;
 import org.fhbr.api.model.ValidationMessageSeverity;
 import org.fhbr.api.model.ValidationResult;
@@ -40,7 +39,6 @@ import javax.xml.validation.SchemaFactory;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.time.LocalDate;
 
 /**
  * Created by dariuszs on 22.09.2016.
@@ -52,16 +50,14 @@ public class SchemaValidatorHelper {
 
     private final Logger logger = LoggerFactory.getLogger(SchemaValidatorHelper.class);
 
-    private final XsdRepositoryDao xsdRepositoryDao;
-    private final LocalDate onDate;
+    private final XsdResolverFactory xsdResolverFactory;
 
-    public SchemaValidatorHelper() {
-        this(null, LocalDate.now());
+    public SchemaValidatorHelper(XsdResolverFactory xsdResolverFactory) {
+        this.xsdResolverFactory = xsdResolverFactory;
     }
 
-    public SchemaValidatorHelper(XsdRepositoryDao xsdRepositoryDao, LocalDate onDate) {
-        this.xsdRepositoryDao = xsdRepositoryDao;
-        this.onDate = onDate;
+    public ValidationResult validate(String namespace, byte[] content) {
+        return validate(namespace, content, prepareXsdResolver());
     }
 
     public ValidationResult validate(String namespace, byte[] content, LSResourceResolver lsResourceResolver) {
@@ -162,9 +158,8 @@ public class SchemaValidatorHelper {
         return factory.newSchema(xsdStreamSource);
     }
 
-    private XsdResolver prepareXsdResolver() {
-        XsdResolver xsdResolver = new XsdResolver(xsdRepositoryDao, onDate);
-        return xsdResolver;
+    private LSResourceResolver prepareXsdResolver() {
+        return xsdResolverFactory.newInstance();
     }
 
 }
