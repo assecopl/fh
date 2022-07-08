@@ -13,31 +13,12 @@
  * governing permissions and limitations under the License.
  */
 
-package org.fhbr.api.exception;
-
-import lombok.Getter;
+package org.fhbr.api.xsd;
 
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 06/07/2022
+ * @created 07/07/2022
  */
-@Getter
-public class ValidationRuntimeException extends RuntimeException {
-
-    private String moduleCode;
-    private String ruleCode;
-
-    public ValidationRuntimeException(String messageKey, String moduleCode, String ruleCode) {
-        super(messageKey);
-        this.moduleCode = moduleCode;
-        this.ruleCode = ruleCode;
-    }
-
-    public ValidationRuntimeException(String messageKey, String moduleCode, String ruleCode, Throwable t) {
-        super(messageKey, t);
-        this.moduleCode = moduleCode;
-        this.ruleCode = ruleCode;
-    }
-
+public interface SchemaErrorHandler {
 }

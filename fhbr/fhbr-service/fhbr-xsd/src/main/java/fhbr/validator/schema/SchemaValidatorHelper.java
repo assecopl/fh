@@ -1,0 +1,154 @@
+package fhbr.validator.schema;
+
+import fhbr.validator.schema.exception.UnknownNamespace;
+import fhbr.validator.schema.xsd.XsdErrorHandler;
+import fhbr.validator.schema.xsd.XsdResolver;
+import org.apache.commons.io.input.BOMInputStream;
+import org.apache.xerces.impl.Constants;
+import org.fhbr.api.dao.XsdRepositoryDao;
+import org.fhbr.api.model.ValidationMessage;
+import org.fhbr.api.model.ValidationMessageSeverity;
+import org.fhbr.api.model.ValidationResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.ls.LSInput;
+import org.w3c.dom.ls.LSResourceResolver;
+import org.xml.sax.SAXException;
+
+import javax.xml.XMLConstants;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.time.LocalDate;
+
+/**
+ * Created by dariuszs on 22.09.2016.
+ */
+public class SchemaValidatorHelper {
+
+    private static final String SAX_PARSER_FACTORY = "org.apache.xerces.jaxp.validation.XMLSchemaFactory";
+    private static final String SAX_PARSER_FACTORY_CLASS = "org.apache.xerces.jaxp.SAXParserFactoryImpl";
+
+    private final Logger logger = LoggerFactory.getLogger(SchemaValidatorHelper.class);
+
+    private final XsdRepositoryDao xsdRepositoryDao;
+    private final LocalDate onDate;
+
+    public SchemaValidatorHelper() {
+        this(null, LocalDate.now());
+    }
+
+    public SchemaValidatorHelper(XsdRepositoryDao xsdRepositoryDao, LocalDate onDate) {
+        this.xsdRepositoryDao = xsdRepositoryDao;
+        this.onDate = onDate;
+    }
+
+    public ValidationResult validate(String namespace, byte[] content, LSResourceResolver lsResourceResolver) {
+        ValidationResult result;
+        XsdErrorHandler errorHandler = new XsdErrorHandler();
+        SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        factory.setResourceResolver(lsResourceResolver);
+        factory.setErrorHandler(errorHandler);
+        Schema schema = null;
+        try {
+            LSInput lsInput = lsResourceResolver.resolveResource(null, namespace, null, null, null);
+            if (lsInput == null) {
+                return fromException("Unknown namespace", new UnknownNamespace(namespace));
+            }
+            StreamSource ss = new StreamSource(new BOMInputStream(lsInput.getByteStream()));
+            schema = factory.newSchema(ss);
+
+            if (!errorHandler.getValidationResult().getValidationResultMessages().isEmpty()) {
+                result = errorHandler.getValidationResult();
+            } else {
+                result = validate(namespace, content, schema);
+            }
+        } catch (SAXException e) {
+            result = fromException("Invalid namespace '" + namespace + "'.", e);
+        }
+
+        return result;
+    }
+
+    private ValidationResult fromException(String message, Exception e) {
+        logger.warn(message, e);
+        ValidationResult result = new ValidationResult();
+        ValidationMessage msg = new ValidationMessage(ValidationMessageSeverity.E, message, e.getMessage());
+        result.addValidationMessage(msg);
+        return result;
+    }
+
+    public ValidationResult validate(byte[] content, Schema schema) throws Exception {
+        SAXParserFactory parserFactory = SAXParserFactory.newInstance(SAX_PARSER_FACTORY_CLASS, null);
+        parserFactory.setNamespaceAware(true);
+        parserFactory.setSchema(schema);
+
+        SAXParser saxParser = parserFactory.newSAXParser();
+        XsdErrorHandler errorHandler = new XsdErrorHandler();
+        saxParser.parse(new BOMInputStream(new ByteArrayInputStream(content)), errorHandler);
+        return errorHandler.getValidationResult();
+    }
+
+    private ValidationResult validate(String namespace, byte[] content, Schema schema) {
+
+        SAXParserFactory parserFactory = SAXParserFactory.newInstance(SAX_PARSER_FACTORY_CLASS, null);
+        parserFactory.setNamespaceAware(true);
+        parserFactory.setSchema(schema);
+
+        SAXParser saxParser;
+        try {
+            saxParser = parserFactory.newSAXParser();
+        } catch (ParserConfigurationException e) {
+            return fromException("Invalid namespace config '" + namespace + "'.", e);
+        } catch (SAXException e) {
+            return fromException("Invalid namespace '" + namespace + "'.", e);
+        }
+
+        XsdErrorHandler errorHandler = new XsdErrorHandler();
+        try {
+            saxParser.parse(new BOMInputStream(new ByteArrayInputStream(content)), errorHandler);
+        } catch (SAXException | IOException e) {
+            return fromException("Parse error for namespace'" + namespace + "'", e);
+        }
+
+        return errorHandler.getValidationResult();
+    }
+
+    public ValidationResult validateXSD(String namespace, byte[] content) {
+
+        ValidationResult result;
+
+        InputStream xmlScheme_xsd = this.getClass().getResourceAsStream("/scheme/XMLSchema.xsd");
+
+        SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI, SAX_PARSER_FACTORY, null);
+        factory.setResourceResolver(prepareXsdResolver());
+        try {
+            Schema schema = factory.newSchema(new StreamSource[]{new StreamSource(xmlScheme_xsd)});
+            result = validate(namespace, content, schema);
+        } catch (SAXException e) {
+
+            result = fromException("Błąd odczytu schematu '" + namespace + "'.", e);
+        }
+        return result;
+
+    }
+
+    public Schema buildSchema(StreamSource[] xsdStreamSource) throws Exception {
+        SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI, SAX_PARSER_FACTORY, null);
+        factory.setFeature(Constants.XERCES_FEATURE_PREFIX + Constants.NAMESPACE_GROWTH_FEATURE, true);
+        factory.setResourceResolver(prepareXsdResolver());
+        return factory.newSchema(xsdStreamSource);
+    }
+
+    private XsdResolver prepareXsdResolver() {
+        XsdResolver xsdResolver = new XsdResolver(xsdRepositoryDao, onDate);
+        return xsdResolver;
+    }
+
+}

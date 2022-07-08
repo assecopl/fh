@@ -18,13 +18,13 @@ package fhbr.engine;
 import org.apache.commons.lang3.StringUtils;
 import org.fhbr.api.checker.CheckerTypeService;
 import org.fhbr.api.dao.ModuleDao;
-import org.fhbr.api.exception.ValidationRuntimeException;
+import org.fhbr.api.exception.RuleValidationException;
+import org.fhbr.api.exception.ValidationException;
 import org.fhbr.api.model.ValidateObject;
 import org.fhbr.api.model.ValidationResult;
 import org.fhbr.api.model.dto.BRuleDto;
 import org.fhbr.api.service.ValidatorService;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -60,7 +60,7 @@ public class ValidatorServiceImpl implements ValidatorService {
                     try {
                         validatorService = prepareCheckerTypeService(ruleType);
                     } catch (Exception e) {
-                        throw new ValidationRuntimeException("fhbr.exception.createRuleValidatorService", moduleCode, null, e);
+                        throw new RuleValidationException("fhbr.exception.createRuleValidatorService", moduleCode, null, e);
                     }
 
                     validatorService.validate(object, context, ruleTypeLists)

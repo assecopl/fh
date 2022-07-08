@@ -16,6 +16,7 @@
     <modules>
         <module>fhbr-api</module>
         <module>fhbr-engine</module>
+        <module>fhbr-xsd</module>
     </modules>
 
     <properties>
