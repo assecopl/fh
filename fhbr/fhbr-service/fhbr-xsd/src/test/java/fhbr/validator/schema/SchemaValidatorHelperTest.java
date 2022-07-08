@@ -15,7 +15,13 @@
 
 package fhbr.validator.schema;
 
+import org.apache.commons.io.IOUtils;
+import org.fhbr.api.model.ValidationResult;
+import org.fhbr.api.model.ValidationResultStatus;
+import org.junit.Assert;
 import org.junit.Test;
+
+import java.io.IOException;
 
 /**
  * @author Dariusz Skrudlik
@@ -25,10 +31,31 @@ import org.junit.Test;
 public class SchemaValidatorHelperTest {
 
     @Test
-    public void validate() {
+    public void validate() throws IOException {
+
+        //GIVEN
+        byte[] xml = IOUtils.resourceToByteArray("/testset_1/test_ok.xml");
+
+        //WHEN
+        ValidationResult validationResult = new SchemaValidatorHelper().validateXSD(xml);
+
+        //THEN
+        Assert.assertTrue(ValidationResultStatus.NOK.equals(validationResult.getValidationResultStatus()));
+        Assert.assertTrue(validationResult.getValidationResultMessages().size() == 1);
+
+
     }
 
     @Test
-    public void validateXSD() {
+    public void validateXSD() throws IOException {
+
+        //GIVEN
+        byte[] xsd = IOUtils.resourceToByteArray("/testset_1/test_v1r0.xsd");
+
+        //WHEN
+        ValidationResult validationResult = new SchemaValidatorHelper().validateXSD(xsd);
+
+        //THEN
+        Assert.assertTrue(ValidationResultStatus.OK.equals(validationResult.getValidationResultStatus()));
     }
 }

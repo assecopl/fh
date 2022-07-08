@@ -1,3 +1,18 @@
+/*
+ * Copyright 2019 Asseco Poland S.A.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this work except in compliance with the License.
+ * You may obtain a copy of the License in the LICENSE file,
+ * or at: http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ */
+
 package fhbr.validator.schema;
 
 import fhbr.validator.schema.exception.UnknownNamespace;
@@ -120,11 +135,12 @@ public class SchemaValidatorHelper {
         return errorHandler.getValidationResult();
     }
 
-    public ValidationResult validateXSD(String namespace, byte[] content) {
+    public ValidationResult validateXSD(byte[] content) {
 
         ValidationResult result;
+        String namespace = "http://www.w3.org/2001/XMLSchema";
 
-        InputStream xmlScheme_xsd = this.getClass().getResourceAsStream("/scheme/XMLSchema.xsd");
+        InputStream xmlScheme_xsd = this.getClass().getResourceAsStream("/schema/XMLSchema.xsd");
 
         SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI, SAX_PARSER_FACTORY, null);
         factory.setResourceResolver(prepareXsdResolver());
@@ -133,7 +149,7 @@ public class SchemaValidatorHelper {
             result = validate(namespace, content, schema);
         } catch (SAXException e) {
 
-            result = fromException("Błąd odczytu schematu '" + namespace + "'.", e);
+            result = fromException("Invalid schema '" + namespace + "'.", e);
         }
         return result;
 

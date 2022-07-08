@@ -1,3 +1,18 @@
+/*
+ * Copyright 2019 Asseco Poland S.A.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); 
+ * you may not use this work except in compliance with the License. 
+ * You may obtain a copy of the License in the LICENSE file, 
+ * or at: http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, 
+ * software distributed under the License is distributed 
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+ * either express or implied. See the License for the specific language 
+ * governing permissions and limitations under the License.
+ */
+
 package fhbr.validator.schema.xsd;
 
 import org.apache.commons.io.input.BOMInputStream;
@@ -75,7 +90,7 @@ public class XsdResolver implements LSResourceResolver {
         if ("http://www.w3.org/2001/XMLSchema".equals(namespaceURI)) {
             lsInput = domImplementationLS.createLSInput();
             try {
-                BOMInputStream inputStream = new BOMInputStream((this.getClass().getResourceAsStream("/scheme/XMLSchema.xsd")));
+                BOMInputStream inputStream = new BOMInputStream((this.getClass().getResourceAsStream("/schema/XMLSchema.xsd")));
                 lsInput.setByteStream(inputStream);
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -84,7 +99,7 @@ public class XsdResolver implements LSResourceResolver {
         } else if (systemId != null && systemId.endsWith("XMLSchema.dtd")) {
             lsInput = domImplementationLS.createLSInput();
             try {
-                BOMInputStream inputStream = new BOMInputStream((this.getClass().getResourceAsStream("/scheme/XMLSchema.dtd")));
+                BOMInputStream inputStream = new BOMInputStream((this.getClass().getResourceAsStream("/schema/XMLSchema.dtd")));
                 lsInput.setByteStream(inputStream);
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -94,7 +109,7 @@ public class XsdResolver implements LSResourceResolver {
         if (systemId != null && systemId.endsWith("datatypes.dtd")) {
             lsInput = domImplementationLS.createLSInput();
             try {
-                BOMInputStream inputStream = new BOMInputStream((this.getClass().getResourceAsStream("/scheme/datatypes.dtd")));
+                BOMInputStream inputStream = new BOMInputStream((this.getClass().getResourceAsStream("/schema/datatypes.dtd")));
                 lsInput.setByteStream(inputStream);
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -104,7 +119,7 @@ public class XsdResolver implements LSResourceResolver {
         if (systemId != null && systemId.endsWith("xml.xsd") || "http://www.w3.org/XML/1998/namespace".equals(namespaceURI)) {
             lsInput = domImplementationLS.createLSInput();
             try {
-                BOMInputStream inputStream = new BOMInputStream((this.getClass().getResourceAsStream("/scheme/xml.xsd")));
+                BOMInputStream inputStream = new BOMInputStream((this.getClass().getResourceAsStream("/schema/xml.xsd")));
                 lsInput.setByteStream(inputStream);
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -114,7 +129,7 @@ public class XsdResolver implements LSResourceResolver {
         if ("http://uri.etsi.org/01903/v1.3.2#".equals(namespaceURI)) {
             lsInput = domImplementationLS.createLSInput();
             try {
-                BOMInputStream inputStream = new BOMInputStream((this.getClass().getResourceAsStream("/scheme/XAdES.xsd")));
+                BOMInputStream inputStream = new BOMInputStream((this.getClass().getResourceAsStream("/schema/XAdES.xsd")));
                 lsInput.setByteStream(inputStream);
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -124,7 +139,7 @@ public class XsdResolver implements LSResourceResolver {
         if ("http://www.w3.org/2000/09/xmldsig#".equals(namespaceURI)) {
             lsInput = domImplementationLS.createLSInput();
             try {
-                BOMInputStream inputStream = new BOMInputStream((this.getClass().getResourceAsStream("/scheme/xmldsig-core-schema.xsd")));
+                BOMInputStream inputStream = new BOMInputStream((this.getClass().getResourceAsStream("/schema/xmldsig-core-schema.xsd")));
                 lsInput.setByteStream(inputStream);
             } catch (Exception e) {
                 throw new RuntimeException(e);
