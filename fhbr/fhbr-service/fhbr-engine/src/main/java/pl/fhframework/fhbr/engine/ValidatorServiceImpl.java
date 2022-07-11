@@ -19,9 +19,9 @@ import org.apache.commons.lang3.StringUtils;
 import pl.fhframework.fhbr.api.checker.CheckerTypeService;
 import pl.fhframework.fhbr.api.dao.ModuleDao;
 import pl.fhframework.fhbr.api.exception.RuleValidationException;
-import pl.fhframework.fhbr.api.model.ValidateObject;
-import pl.fhframework.fhbr.api.model.ValidationResult;
-import pl.fhframework.fhbr.api.model.dto.BRuleDto;
+import pl.fhframework.fhbr.api.model.BRuleDto;
+import pl.fhframework.fhbr.api.service.ValidateObject;
+import pl.fhframework.fhbr.api.service.ValidationResult;
 import pl.fhframework.fhbr.api.service.ValidatorService;
 
 import java.util.List;

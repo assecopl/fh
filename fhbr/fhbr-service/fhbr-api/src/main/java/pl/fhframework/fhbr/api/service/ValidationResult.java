@@ -12,7 +12,7 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package pl.fhframework.fhbr.api.model;
+package pl.fhframework.fhbr.api.service;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -28,7 +28,7 @@ public class ValidationResult {
 
     private ValidationResultStatus validationResultStatus = ValidationResultStatus.OK;
 
-    private List<ValidationMessage> validationMessages = new LinkedList<ValidationMessage>();
+    private List<ValidationMessage> validationMessages = Collections.synchronizedList(new LinkedList<ValidationMessage>());
 
     public ValidationResult() {
     }

@@ -14,15 +14,15 @@
  */
 package pl.fhframework.fhbr.api.service;
 
-import java.util.Map;
-
 /**
+ * Validation status
+ *
  * @author Dariusz Skrudlik
  * @version :  $, :  $
  * @created 05/07/2022
  */
-public interface ValidatorService {
+public enum ValidationResultStatus  {
+    OK, //sukces
+    NOK;
 
-    ValidationResult validate(String moduleCode, ValidateObject object, Map<String, Object> context);
-    
 }

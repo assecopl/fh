@@ -13,25 +13,19 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.api.model;
+package pl.fhframework.fhbr.api.service;
 
-
-import lombok.Getter;
-import lombok.Setter;
-
-import java.time.LocalDate;
+import pl.fhframework.fhbr.api.model.BRuleDto;
 
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 06/07/2022
+ * @created 11/07/2022
  */
-@Getter
-@Setter
-public class ValidateObject<O> {
+public interface ValidationMessageFactory<M extends ValidationMessage> {
 
-    private LocalDate onDate; //validate on date (default current date)
+    M newInstance();
 
-    private O object;
+    M prepareValidationMessage(BRuleDto rule);
 
 }

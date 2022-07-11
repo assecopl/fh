@@ -12,17 +12,18 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package pl.fhframework.fhbr.api.model;
+
+package pl.fhframework.fhbr.api.rule;
+
+import java.util.Map;
 
 /**
- * Validation status
- *
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 05/07/2022
+ * @created 08/07/2022
  */
-public enum ValidationResultStatus  {
-    OK, //sukces
-    NOK;
+public interface SimpleRule<O> {
+
+    boolean isValid(O object, Map<String, Object> context) throws Exception;
 
 }

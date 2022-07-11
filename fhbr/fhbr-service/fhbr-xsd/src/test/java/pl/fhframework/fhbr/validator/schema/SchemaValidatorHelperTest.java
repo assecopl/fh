@@ -18,8 +18,10 @@ package pl.fhframework.fhbr.validator.schema;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
-import pl.fhframework.fhbr.api.model.ValidationResult;
-import pl.fhframework.fhbr.api.model.ValidationResultStatus;
+import pl.fhframework.fhbr.api.service.ValidationMessageFactory;
+import pl.fhframework.fhbr.api.service.ValidationResult;
+import pl.fhframework.fhbr.api.service.ValidationResultStatus;
+import pl.fhframework.fhbr.engine.result.ValidationMessageFactoryImpl;
 import pl.fhframework.fhbr.validator.schema.xsd.XsdResolverFactory;
 import pl.fhframework.fhbr.validator.schema.xsd.resolver.DaoXsdResolverFactory;
 import pl.fhframework.fhbr.validator.schema.xsd.resolver.ResourcePathXsdResolverFactory;
@@ -35,6 +37,7 @@ import java.util.Map;
  */
 public class SchemaValidatorHelperTest {
 
+    ValidationMessageFactory validationMessageFactory = new ValidationMessageFactoryImpl();
 
     @Test
     public void validate() throws IOException {
@@ -45,7 +48,7 @@ public class SchemaValidatorHelperTest {
 
         //WHEN
         XsdResolverFactory xsdResolverFactory = new DaoXsdResolverFactory(null, null);
-        ValidationResult validationResult = new SchemaValidatorHelper(xsdResolverFactory).validateXSD(xml);
+        ValidationResult validationResult = new SchemaValidatorHelper(xsdResolverFactory, validationMessageFactory).validateXSD(xml);
 
         //THEN
         Assert.assertTrue(ValidationResultStatus.NOK.equals(validationResult.getValidationResultStatus()));
@@ -57,13 +60,13 @@ public class SchemaValidatorHelperTest {
         schemeResourcesMap.put("http://fhframework.pl/fh/fhbr-xsd/test_v1r0.xsd", "/testset_1/test_v1r0.xsd");
         xsdResolverFactory = new ResourcePathXsdResolverFactory(schemeResourcesMap);
 
-        validationResult = new SchemaValidatorHelper(xsdResolverFactory).validate("http://fhframework.pl/fh/fhbr-xsd/test_v1r0.xsd", xml);
+        validationResult = new SchemaValidatorHelper(xsdResolverFactory, validationMessageFactory).validate("http://fhframework.pl/fh/fhbr-xsd/test_v1r0.xsd", xml);
 
         //THEN
         Assert.assertTrue(ValidationResultStatus.OK.equals(validationResult.getValidationResultStatus()));
 
         //WHEN - nok
-        validationResult = new SchemaValidatorHelper(xsdResolverFactory)
+        validationResult = new SchemaValidatorHelper(xsdResolverFactory, validationMessageFactory)
                 .validate("http://fhframework.pl/fh/fhbr-xsd/test_v1r0.xsd", xml_n);
 
         //THEN
@@ -78,7 +81,7 @@ public class SchemaValidatorHelperTest {
 
         //WHEN
         DaoXsdResolverFactory xsdResolverFactory = new DaoXsdResolverFactory(null, null);
-        ValidationResult validationResult = new SchemaValidatorHelper(xsdResolverFactory).validateXSD(xsd);
+        ValidationResult validationResult = new SchemaValidatorHelper(xsdResolverFactory, validationMessageFactory).validateXSD(xsd);
 
         //THEN
         Assert.assertTrue(ValidationResultStatus.OK.equals(validationResult.getValidationResultStatus()));

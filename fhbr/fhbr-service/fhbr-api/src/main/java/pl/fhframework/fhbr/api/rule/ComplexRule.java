@@ -12,16 +12,22 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package pl.fhframework.fhbr.api.model;
+
+package pl.fhframework.fhbr.api.rule;
+
+import pl.fhframework.fhbr.api.model.BRuleDto;
+import pl.fhframework.fhbr.api.service.ValidationMessage;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 05/07/2022
+ * @created 08/07/2022
  */
-public enum ValidationMessageSeverity {
-    E, //error
-    W, //warning
-    I; //info
+public interface ComplexRule<O> {
+
+    List<ValidationMessage> check(O object, Map<String, Object> context, BRuleDto rule) throws Exception;
 
 }

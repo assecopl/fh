@@ -15,8 +15,9 @@
 
 package pl.fhframework.fhbr.api.checker;
 
-import pl.fhframework.fhbr.api.model.ValidationResult;
-import pl.fhframework.fhbr.api.model.dto.BRuleDto;
+import pl.fhframework.fhbr.api.model.BRuleDto;
+import pl.fhframework.fhbr.api.service.ValidationMessageFactory;
+import pl.fhframework.fhbr.api.service.ValidationResult;
 
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,8 @@ import java.util.Map;
  * @created 07/07/2022
  */
 public interface CheckerTypeService {
+
+    void setValidationMessageFactory(ValidationMessageFactory validationMessageFactory);
 
     ValidationResult validate(Object object, Map<String, Object> context, List<BRuleDto> rules);
 

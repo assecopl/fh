@@ -14,15 +14,14 @@
  */
 package pl.fhframework.fhbr.api.service;
 
-import java.util.Map;
-
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
  * @created 05/07/2022
  */
-public interface ValidatorService {
+public enum ValidationMessageSeverity {
+    E, //error
+    W, //warning
+    I; //info
 
-    ValidationResult validate(String moduleCode, ValidateObject object, Map<String, Object> context);
-    
 }

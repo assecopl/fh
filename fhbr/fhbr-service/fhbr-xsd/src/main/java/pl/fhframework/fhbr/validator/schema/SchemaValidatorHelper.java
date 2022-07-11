@@ -22,9 +22,10 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.ls.LSInput;
 import org.w3c.dom.ls.LSResourceResolver;
 import org.xml.sax.SAXException;
-import pl.fhframework.fhbr.api.model.ValidationMessage;
-import pl.fhframework.fhbr.api.model.ValidationMessageSeverity;
-import pl.fhframework.fhbr.api.model.ValidationResult;
+import pl.fhframework.fhbr.api.service.ValidationMessage;
+import pl.fhframework.fhbr.api.service.ValidationMessageFactory;
+import pl.fhframework.fhbr.api.service.ValidationMessageSeverity;
+import pl.fhframework.fhbr.api.service.ValidationResult;
 import pl.fhframework.fhbr.validator.schema.exception.UnknownNamespace;
 import pl.fhframework.fhbr.validator.schema.xsd.XsdErrorHandler;
 import pl.fhframework.fhbr.validator.schema.xsd.XsdResolverFactory;
@@ -51,9 +52,11 @@ public class SchemaValidatorHelper {
     private final Logger logger = LoggerFactory.getLogger(SchemaValidatorHelper.class);
 
     private final XsdResolverFactory xsdResolverFactory;
+    private final ValidationMessageFactory validationMessageFactory;
 
-    public SchemaValidatorHelper(XsdResolverFactory xsdResolverFactory) {
+    public SchemaValidatorHelper(XsdResolverFactory xsdResolverFactory, ValidationMessageFactory validationMessageFactory) {
         this.xsdResolverFactory = xsdResolverFactory;
+        this.validationMessageFactory = validationMessageFactory;
     }
 
     public ValidationResult validate(String namespace, byte[] content) {
@@ -62,7 +65,7 @@ public class SchemaValidatorHelper {
 
     public ValidationResult validate(String namespace, byte[] content, LSResourceResolver lsResourceResolver) {
         ValidationResult result;
-        XsdErrorHandler errorHandler = new XsdErrorHandler();
+        XsdErrorHandler errorHandler = new XsdErrorHandler(validationMessageFactory);
         SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         factory.setResourceResolver(lsResourceResolver);
         factory.setErrorHandler(errorHandler);
@@ -90,7 +93,9 @@ public class SchemaValidatorHelper {
     private ValidationResult fromException(String message, Exception e) {
         logger.warn(message, e);
         ValidationResult result = new ValidationResult();
-        ValidationMessage msg = new ValidationMessage(ValidationMessageSeverity.E, message, e.getMessage());
+        ValidationMessage msg = validationMessageFactory.newInstance();
+        msg.setSeverity(ValidationMessageSeverity.E);
+        msg.setMessage(message);
         result.addValidationMessage(msg);
         return result;
     }
@@ -101,7 +106,7 @@ public class SchemaValidatorHelper {
         parserFactory.setSchema(schema);
 
         SAXParser saxParser = parserFactory.newSAXParser();
-        XsdErrorHandler errorHandler = new XsdErrorHandler();
+        XsdErrorHandler errorHandler = new XsdErrorHandler(validationMessageFactory);
         saxParser.parse(new BOMInputStream(new ByteArrayInputStream(content)), errorHandler);
         return errorHandler.getValidationResult();
     }
@@ -121,7 +126,7 @@ public class SchemaValidatorHelper {
             return fromException("Invalid namespace '" + namespace + "'.", e);
         }
 
-        XsdErrorHandler errorHandler = new XsdErrorHandler();
+        XsdErrorHandler errorHandler = new XsdErrorHandler(validationMessageFactory);
         try {
             saxParser.parse(new BOMInputStream(new ByteArrayInputStream(content)), errorHandler);
         } catch (SAXException | IOException e) {

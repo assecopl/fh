@@ -13,13 +13,12 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.api.model.dto;
+package pl.fhframework.fhbr.api.service;
 
-import lombok.Data;
+
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
@@ -27,41 +26,12 @@ import java.time.LocalDate;
  * @version :  $, :  $
  * @created 06/07/2022
  */
-@Setter
 @Getter
-@Data
-public class BRuleDto implements Serializable {
+@Setter
+public class ValidateObject<O> {
 
-    private Long id; // id
+    private LocalDate onDate; //validate on date (default current date)
 
-    private String businessKey;
-
-    private boolean active;
-
-    private String name;
-
-    private String messageKey;
-
-    private String message;
-
-    private String pointer;
-
-    private int callOrder;
-
-    private String severity;
-
-    private LocalDate validFrom;
-
-    private LocalDate validTo;
-
-    private boolean critical;
-
-    private String phase; //  phase eg. DEFAULT
-
-    private String checkerType; // service type must be registered
-
-    private String ruleClass;
-
-    private String ruleExpression;
+    private O object;
 
 }

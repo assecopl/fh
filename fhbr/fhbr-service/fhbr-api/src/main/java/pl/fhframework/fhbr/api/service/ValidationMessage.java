@@ -12,17 +12,28 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package pl.fhframework.fhbr.api.service;
 
-import java.util.Map;
+package pl.fhframework.fhbr.api.service;
 
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 05/07/2022
+ * @created 11/07/2022
  */
-public interface ValidatorService {
+public interface ValidationMessage {
+    String getMessage();
 
-    ValidationResult validate(String moduleCode, ValidateObject object, Map<String, Object> context);
-    
+    void setMessage(String message);
+
+    ValidationMessageSeverity getSeverity();
+
+    void setSeverity(ValidationMessageSeverity severity);
+
+    String getPointer();
+
+    void setPointer(String pointer);
+
+    String getRuleCode();
+
+    void setRuleCode(String ruleCode);
 }

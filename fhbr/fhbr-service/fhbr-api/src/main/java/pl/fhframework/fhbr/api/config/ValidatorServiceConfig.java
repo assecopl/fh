@@ -17,15 +17,24 @@ package pl.fhframework.fhbr.api.config;
 import lombok.Getter;
 import pl.fhframework.fhbr.api.checker.CheckerTypeServiceRegistry;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
  * @created 05/07/2022
  */
-@Getter
 public class ValidatorServiceConfig {
 
+    @Getter
     private CheckerTypeServiceRegistry checkerTypeServiceRegistry = new CheckerTypeServiceRegistry();
+
+    private Map<String, String> feature = new HashMap();
+
+    public void setFeature(String featureKey, String featureValue) {
+        feature.put(featureKey, featureValue);
+    }
 
 
 }

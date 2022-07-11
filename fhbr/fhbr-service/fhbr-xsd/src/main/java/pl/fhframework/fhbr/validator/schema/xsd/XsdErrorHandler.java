@@ -19,9 +19,10 @@ import lombok.Getter;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
-import pl.fhframework.fhbr.api.model.ValidationMessage;
-import pl.fhframework.fhbr.api.model.ValidationMessageSeverity;
-import pl.fhframework.fhbr.api.model.ValidationResult;
+import pl.fhframework.fhbr.api.service.ValidationMessage;
+import pl.fhframework.fhbr.api.service.ValidationMessageFactory;
+import pl.fhframework.fhbr.api.service.ValidationMessageSeverity;
+import pl.fhframework.fhbr.api.service.ValidationResult;
 
 /**
  * @author Dariusz Skrudlik
@@ -32,10 +33,15 @@ public class XsdErrorHandler extends DefaultHandler {
 
     @Getter
     private ValidationResult validationResult = new ValidationResult();
+    private final ValidationMessageFactory validationMessageFactory;
+
+    public XsdErrorHandler(ValidationMessageFactory validationMessageFactory) {
+        this.validationMessageFactory = validationMessageFactory;
+    }
 
     @Override
     public void error(SAXParseException e) throws SAXException {
-        ValidationMessage schemaValidationMessage = new ValidationMessage(ValidationMessageSeverity.E, e.getLocalizedMessage(), computeCurrentXPath());
+        ValidationMessage schemaValidationMessage = prepareValidationMessage(ValidationMessageSeverity.E, e.getLocalizedMessage(), computeCurrentXPath());
         validationResult.addValidationMessage(schemaValidationMessage);
     }
 
@@ -45,7 +51,15 @@ public class XsdErrorHandler extends DefaultHandler {
 
     @Override
     public void fatalError(SAXParseException e) throws SAXException {
-        ValidationMessage schemaValidationMessage = new ValidationMessage(ValidationMessageSeverity.E, e.getLocalizedMessage(), computeCurrentXPath());
+        ValidationMessage schemaValidationMessage = prepareValidationMessage(ValidationMessageSeverity.E, e.getLocalizedMessage(), computeCurrentXPath());
         validationResult.addValidationMessage(schemaValidationMessage);
+    }
+
+    private ValidationMessage prepareValidationMessage(ValidationMessageSeverity validationMessageSeverity, String message, String pointer) {
+        ValidationMessage validationMessage = validationMessageFactory.newInstance();
+        validationMessage.setSeverity(validationMessageSeverity);
+        validationMessage.setPointer(pointer);
+        validationMessage.setMessage(message);
+        return validationMessage;
     }
 }

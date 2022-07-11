@@ -15,7 +15,7 @@
 
 package pl.fhframework.fhbr.api.dao;
 
-import pl.fhframework.fhbr.api.model.dto.BRuleDto;
+import pl.fhframework.fhbr.api.model.BRuleDto;
 
 import java.time.LocalDate;
 import java.util.List;
