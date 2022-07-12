@@ -60,8 +60,12 @@ public class DirectUsageExample {
 
                 BRuleDto r1 = new BRuleDto();
                 r1.setName("R1");
+                r1.setActive(true);
                 r1.setBusinessKey("R1");
                 r1.setRuleClass(R1.class.getName());
+                r1.setCheckerType("clazz");
+
+                bRuleList.add(r1);
 
                 moduleDao.getStorage().put("M1", bRuleList);
                 return moduleDao;

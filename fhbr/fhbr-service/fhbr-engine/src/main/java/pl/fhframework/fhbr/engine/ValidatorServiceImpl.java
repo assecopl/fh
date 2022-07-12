@@ -44,11 +44,11 @@ public class ValidatorServiceImpl implements ValidatorService {
     }
 
     @Override
-    public ValidationResult validate(String moduleCode, ValidateObject object, Map<String, Object> context) {
+    public ValidationResult validate(String moduleCode, ValidateObject validateObject, Map<String, Object> context) {
 
         ValidationResult validationResult = new ValidationResult();
 
-        List<BRuleDto> rules = moduleDao.findByModuleCode(moduleCode, "DEFAULT", true, object.getOnDate());
+        List<BRuleDto> rules = moduleDao.findByModuleCode(moduleCode, "DEFAULT", true, validateObject.getOnDate());
 
         rules.stream()
                 .filter(r -> StringUtils.isNotBlank(r.getCheckerType()))
@@ -62,7 +62,7 @@ public class ValidatorServiceImpl implements ValidatorService {
                         throw new RuleValidationException("fhbr.exception.createRuleValidatorService", moduleCode, null, e);
                     }
 
-                    validatorService.validate(object, context, ruleTypeLists)
+                    validatorService.validate(validateObject.getObject(), context, ruleTypeLists)
                             .getValidationResultMessages()
                             .stream().forEach(vm -> validationResult.addValidationMessage(vm));
                 });

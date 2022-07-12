@@ -87,8 +87,20 @@ public class ValidationMessageImpl implements ValidationMessage {
 
 
     public String toString() {
-        return " " + (validationMessageSeverity != null ? validationMessageSeverity : "") + "\n\r " + message +
-                (ruleCode != null ? " (" + ruleCode + ")" : "") +
-                (pointer != null ? " [" + pointer + "]" : "") + ". \n\r";
+        StringBuilder sb = new StringBuilder().append("{");
+        if (validationMessageSeverity != null)
+            sb.append("\"severity\": \"").append(validationMessageSeverity).append("\"");
+        if (ruleCode != null)
+            sb.append(sb.length() > 1 ? ", " : "").append("\"ruleCode\": \"").append(ruleCode).append("\"");
+        ;
+        if (message != null)
+            sb.append(sb.length() > 1 ? ", " : "").append("\"message\": \"").append(message).append("\"");
+        ;
+        if (pointer != null)
+            sb.append(sb.length() > 1 ? ", " : "").append("\"pointer\": \"").append(pointer).append("\"");
+        ;
+        sb.append("}");
+
+        return sb.toString();
     }
 }

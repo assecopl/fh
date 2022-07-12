@@ -32,7 +32,7 @@ public class R1 implements SimpleRule<TestObject> {
     public boolean isValid(TestObject object, Map<String, Object> context) throws Exception {
 
         //IF active THEN amount must by greater than zero
-        return object.getActive() != null || (!object.getActive() ||
+        return object.getActive() != null && (!object.getActive() ||
                 (object.getActive() && object.getAmount() != null
                         && (object.getAmount().compareTo(BigDecimal.ZERO) > 1)
                 )

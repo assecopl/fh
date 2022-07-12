@@ -34,7 +34,7 @@ public class DirectUsageExampleTest {
 
         ValidationResult validationResult = new DirectUsageExample().validate();
 
-        logger.info("ValidationResultStatus: ?", validationResult.getValidationResultStatus());
+        logger.info("ValidationResultStatus: {}", validationResult.getValidationResultStatus());
         validationResult.getValidationResultMessages().forEach(m -> logger.warn(m.toString()));
 
     }
