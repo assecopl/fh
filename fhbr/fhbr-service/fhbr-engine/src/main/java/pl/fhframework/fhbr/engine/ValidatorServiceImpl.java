@@ -36,11 +36,11 @@ import java.util.stream.Collectors;
 public class ValidatorServiceImpl implements ValidatorService {
 
     private final ModuleDao moduleDao;
-    private final Map<String, CheckerTypeService> checkerTypeService;
+    private final Map<String, CheckerTypeService> checkerTypeCollection;
 
-    public ValidatorServiceImpl(ModuleDao moduleDao, Map<String, CheckerTypeService> checkerTypeService) {
+    public ValidatorServiceImpl(ModuleDao moduleDao, Map<String, CheckerTypeService> checkerTypeCollection) {
         this.moduleDao = moduleDao;
-        this.checkerTypeService = checkerTypeService;
+        this.checkerTypeCollection = checkerTypeCollection;
     }
 
     @Override
@@ -72,7 +72,7 @@ public class ValidatorServiceImpl implements ValidatorService {
     }
 
     private CheckerTypeService prepareCheckerTypeService(String checkerType) {
-        return checkerTypeService.get(checkerType);
+        return checkerTypeCollection.get(checkerType);
     }
 
 }

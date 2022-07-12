@@ -13,22 +13,42 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.client.direct;
+package pl.fhframework.fhbr.example;
 
-import pl.fhframework.fhbr.api.config.ValidatorServiceConfig;
-import pl.fhframework.fhbr.api.service.ValidatorService;
-import pl.fhframework.fhbr.api.service.ValidatorServiceFactory;
+import java.math.BigDecimal;
 
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 06/07/2022
+ * @created 11/07/2022
  */
-public class ValidatorServiceFactoryImpl implements ValidatorServiceFactory {
+public class TestObject {
 
-    @Override
-    public ValidatorService newInstance(ValidatorServiceConfig config) {
-        return null;
+    private String code;
+    private BigDecimal amount;
+    private Boolean active;
+
+    public String getCode() {
+        return code;
     }
 
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
 }

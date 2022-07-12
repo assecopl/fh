@@ -13,19 +13,14 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.api.checker;
-
-import pl.fhframework.fhbr.api.service.ValidationMessageFactory;
+package pl.fhframework.fhbr.api.factory;
 
 /**
- * Interface for the CheckerTypeService
- *
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 07/07/2022
+ * @created 11/07/2022
  */
-public interface CheckerTypeServiceFactory {
+public interface Factory<S> {
 
-    CheckerTypeService newInstance(ValidationMessageFactory messageFactory);
-
+    S newInstance();
 }

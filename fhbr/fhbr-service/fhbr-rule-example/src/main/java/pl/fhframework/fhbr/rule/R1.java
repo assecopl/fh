@@ -13,19 +13,30 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.api.checker;
+package pl.fhframework.fhbr.rule;
 
-import pl.fhframework.fhbr.api.service.ValidationMessageFactory;
+import pl.fhframework.fhbr.api.rule.SimpleRule;
+import pl.fhframework.fhbr.example.TestObject;
+
+import java.math.BigDecimal;
+import java.util.Map;
 
 /**
- * Interface for the CheckerTypeService
- *
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 07/07/2022
+ * @created 11/07/2022
  */
-public interface CheckerTypeServiceFactory {
+public class R1 implements SimpleRule<TestObject> {
 
-    CheckerTypeService newInstance(ValidationMessageFactory messageFactory);
+    @Override
+    public boolean isValid(TestObject object, Map<String, Object> context) throws Exception {
+
+        //IF active THEN amount must by greater than zero
+        return object.getActive() != null || (!object.getActive() ||
+                (object.getActive() && object.getAmount() != null
+                        && (object.getAmount().compareTo(BigDecimal.ZERO) > 1)
+                )
+        );
+    }
 
 }

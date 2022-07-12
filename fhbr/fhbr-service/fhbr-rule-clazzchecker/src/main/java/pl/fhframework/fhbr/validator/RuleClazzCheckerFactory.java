@@ -13,19 +13,23 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.api.checker;
+package pl.fhframework.fhbr.validator;
 
+import pl.fhframework.fhbr.api.checker.CheckerTypeService;
+import pl.fhframework.fhbr.api.checker.CheckerTypeServiceFactory;
 import pl.fhframework.fhbr.api.service.ValidationMessageFactory;
 
 /**
- * Interface for the CheckerTypeService
- *
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 07/07/2022
+ * @created 12/07/2022
  */
-public interface CheckerTypeServiceFactory {
+public class RuleClazzCheckerFactory implements CheckerTypeServiceFactory {
 
-    CheckerTypeService newInstance(ValidationMessageFactory messageFactory);
-
+    @Override
+    public CheckerTypeService newInstance(ValidationMessageFactory messageFactory) {
+        CheckerTypeService checkerTypeService = new RuleClazzChecker();
+        checkerTypeService.setValidationMessageFactory(messageFactory);
+        return checkerTypeService;
+    }
 }

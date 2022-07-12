@@ -13,19 +13,29 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.api.checker;
+package pl.fhframework.fhbr.example.direct;
 
-import pl.fhframework.fhbr.api.service.ValidationMessageFactory;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import pl.fhframework.fhbr.api.service.ValidationResult;
 
 /**
- * Interface for the CheckerTypeService
- *
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 07/07/2022
+ * @created 12/07/2022
  */
-public interface CheckerTypeServiceFactory {
+public class DirectUsageExampleTest {
 
-    CheckerTypeService newInstance(ValidationMessageFactory messageFactory);
+    private static Logger logger = LoggerFactory.getLogger(DirectUsageExample.class);
 
+    @Test
+    public void v() {
+
+        ValidationResult validationResult = new DirectUsageExample().validate();
+
+        logger.info("ValidationResultStatus: ?", validationResult.getValidationResultStatus());
+        validationResult.getValidationResultMessages().forEach(m -> logger.warn(m.toString()));
+
+    }
 }

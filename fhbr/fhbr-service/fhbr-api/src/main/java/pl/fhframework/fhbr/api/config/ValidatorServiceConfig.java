@@ -15,7 +15,11 @@
 package pl.fhframework.fhbr.api.config;
 
 import lombok.Getter;
-import pl.fhframework.fhbr.api.checker.CheckerTypeServiceRegistry;
+import lombok.Setter;
+import pl.fhframework.fhbr.api.checker.CheckerTypeServiceFactory;
+import pl.fhframework.fhbr.api.dao.ModuleDao;
+import pl.fhframework.fhbr.api.factory.Factory;
+import pl.fhframework.fhbr.api.service.ValidationMessageFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,9 +32,22 @@ import java.util.Map;
 public class ValidatorServiceConfig {
 
     @Getter
-    private CheckerTypeServiceRegistry checkerTypeServiceRegistry = new CheckerTypeServiceRegistry();
+    private Map<String, CheckerTypeServiceFactory> checkerTypeRegistry = new HashMap();
+
+    public ValidatorServiceConfig addCheckerTypeFactory(String checkerType, CheckerTypeServiceFactory checkerTypeServiceFactory) {
+        checkerTypeRegistry.put(checkerType, checkerTypeServiceFactory);
+        return this;
+    }
 
     private Map<String, String> feature = new HashMap();
+
+    @Setter
+    @Getter
+    private Factory<ModuleDao> moduleDaoFactory;
+
+    @Getter
+    @Setter
+    private ValidationMessageFactory messageFactory;
 
     public void setFeature(String featureKey, String featureValue) {
         feature.put(featureKey, featureValue);

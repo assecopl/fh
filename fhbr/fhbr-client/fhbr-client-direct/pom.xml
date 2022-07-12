@@ -35,7 +35,12 @@
     <dependencies>
         <dependency>
             <groupId>pl.fhframework.fhbr</groupId>
-            <artifactId>fhbr-api</artifactId>
+            <artifactId>fhbr-engine</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>pl.fhframework.fhbr</groupId>
+            <artifactId>fhbr-test-rule</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>

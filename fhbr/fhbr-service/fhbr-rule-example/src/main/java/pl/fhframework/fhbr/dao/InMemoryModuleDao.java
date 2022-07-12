@@ -13,23 +13,31 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.api.checker;
+package pl.fhframework.fhbr.dao;
 
+import lombok.Getter;
+import pl.fhframework.fhbr.api.dao.ModuleDao;
+import pl.fhframework.fhbr.api.model.BRuleDto;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 07/07/2022
+ * @created 11/07/2022
  */
-public class CheckerTypeServiceRegistry {
+public class InMemoryModuleDao implements ModuleDao {
 
-    private Map<String, CheckerTypeServiceFactory> registry = new HashMap();
+    @Getter
+    private Map<String, List<BRuleDto>> storage = new HashMap<>();
 
-    public CheckerTypeServiceRegistry addCheckerTypeService(String checkerType, CheckerTypeServiceFactory checkerTypeServiceFactory) {
-        registry.put(checkerType, checkerTypeServiceFactory);
-        return this;
+    @Override
+    public List<BRuleDto> findByModuleCode(String code, String phase, boolean active, LocalDate onDate) {
+        return storage.containsKey(code) ? new ArrayList<>(storage.get(code)) : new ArrayList<>();
     }
 
 }
