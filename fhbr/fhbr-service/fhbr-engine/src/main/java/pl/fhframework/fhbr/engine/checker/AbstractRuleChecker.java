@@ -15,7 +15,6 @@
 
 package pl.fhframework.fhbr.engine.checker;
 
-import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.fhframework.fhbr.api.checker.CheckerTypeService;
@@ -23,7 +22,6 @@ import pl.fhframework.fhbr.api.config.ValidatorFeature;
 import pl.fhframework.fhbr.api.model.BRuleDto;
 import pl.fhframework.fhbr.api.service.ValidateContext;
 import pl.fhframework.fhbr.api.service.ValidationMessage;
-import pl.fhframework.fhbr.api.service.ValidationMessageFactory;
 import pl.fhframework.fhbr.api.service.ValidationResult;
 
 import java.math.BigDecimal;
@@ -39,13 +37,8 @@ public abstract class AbstractRuleChecker implements CheckerTypeService {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Setter
-    protected ValidationMessageFactory validationMessageFactory;
-
     @Override
     public ValidationResult validate(Object object, ValidateContext context, List<BRuleDto> rules) {
-
-        assert validationMessageFactory != null;
 
         ValidationResult validationResult = new ValidationResult();
         boolean trace = Boolean.parseBoolean(System.getProperty(ValidatorFeature.RULE_TRACE, "false"));

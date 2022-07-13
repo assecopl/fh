@@ -23,6 +23,6 @@ import java.util.Map;
  */
 public interface ValidatorService {
 
-    ValidationResult validate(String moduleCode, ValidateObject object, Map<String, Object> context);
+    ValidationResult validate(String moduleCode, ValidateObject object, Map<String, Object> param);
     
 }

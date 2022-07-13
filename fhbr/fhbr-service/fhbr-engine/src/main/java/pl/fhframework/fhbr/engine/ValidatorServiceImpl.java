@@ -20,10 +20,7 @@ import pl.fhframework.fhbr.api.checker.CheckerTypeService;
 import pl.fhframework.fhbr.api.dao.ModuleDao;
 import pl.fhframework.fhbr.api.exception.RuleValidationException;
 import pl.fhframework.fhbr.api.model.BRuleDto;
-import pl.fhframework.fhbr.api.service.ValidateContext;
-import pl.fhframework.fhbr.api.service.ValidateObject;
-import pl.fhframework.fhbr.api.service.ValidationResult;
-import pl.fhframework.fhbr.api.service.ValidatorService;
+import pl.fhframework.fhbr.api.service.*;
 
 import java.util.List;
 import java.util.Map;
@@ -37,9 +34,11 @@ import java.util.stream.Collectors;
 public class ValidatorServiceImpl implements ValidatorService {
 
     private final ModuleDao moduleDao;
+    private final ValidationMessageFactory messageFactory;
     private final Map<String, CheckerTypeService> checkerTypeCollection;
 
-    public ValidatorServiceImpl(ModuleDao moduleDao, Map<String, CheckerTypeService> checkerTypeCollection) {
+    public ValidatorServiceImpl(ValidationMessageFactory messageFactory, ModuleDao moduleDao, Map<String, CheckerTypeService> checkerTypeCollection) {
+        this.messageFactory = messageFactory;
         this.moduleDao = moduleDao;
         this.checkerTypeCollection = checkerTypeCollection;
     }
@@ -48,7 +47,7 @@ public class ValidatorServiceImpl implements ValidatorService {
     public ValidationResult validate(String moduleCode, ValidateObject validateObject, Map<String, Object> param) {
 
         ValidationResult validationResult = new ValidationResult();
-        ValidateContext context = new ValidateContext(param);
+        ValidateContext context = new ValidateContext(messageFactory, param);
 
         List<BRuleDto> rules = moduleDao.findByModuleCode(moduleCode, "DEFAULT", true, validateObject.getOnDate());
 

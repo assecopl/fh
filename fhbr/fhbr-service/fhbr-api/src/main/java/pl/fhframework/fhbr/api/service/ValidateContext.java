@@ -31,7 +31,11 @@ public class ValidateContext {
     @Getter
     private final Map<String, Object> property;
 
-    public ValidateContext(Map<String, Object> property) {
+    @Getter
+    protected ValidationMessageFactory messageFactory;
+
+    public ValidateContext(ValidationMessageFactory messageFactory, Map<String, Object> property) {
+        this.messageFactory = messageFactory;
         this.property = Collections.synchronizedMap(new HashMap<>(property));
     }
 }

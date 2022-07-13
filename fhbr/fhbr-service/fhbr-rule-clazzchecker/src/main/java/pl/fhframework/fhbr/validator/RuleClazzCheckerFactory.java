@@ -17,7 +17,6 @@ package pl.fhframework.fhbr.validator;
 
 import pl.fhframework.fhbr.api.checker.CheckerTypeService;
 import pl.fhframework.fhbr.api.checker.CheckerTypeServiceFactory;
-import pl.fhframework.fhbr.api.service.ValidationMessageFactory;
 
 /**
  * @author Dariusz Skrudlik
@@ -27,9 +26,8 @@ import pl.fhframework.fhbr.api.service.ValidationMessageFactory;
 public class RuleClazzCheckerFactory implements CheckerTypeServiceFactory {
 
     @Override
-    public CheckerTypeService newInstance(ValidationMessageFactory messageFactory) {
+    public CheckerTypeService newInstance() {
         CheckerTypeService checkerTypeService = new RuleClazzChecker();
-        checkerTypeService.setValidationMessageFactory(messageFactory);
         return checkerTypeService;
     }
 }

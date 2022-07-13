@@ -43,7 +43,7 @@ public class RuleClazzChecker extends AbstractRuleChecker {
             if (ruleInstance instanceof SimpleRule) {
                 SimpleRule ruleChecker = (SimpleRule) ruleInstance;
                 if (!ruleChecker.isValid(object, context)) {
-                    validationMessages.add(validationMessageFactory.prepareValidationMessage(rule));
+                    validationMessages.add(context.getMessageFactory().prepareValidationMessage(rule));
                 }
             } else {
                 ComplexRule ruleChecker = (ComplexRule) ruleInstance;

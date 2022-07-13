@@ -41,11 +41,11 @@ public class ValidatorServiceFactoryImpl implements ValidatorServiceFactory {
         Map<String, CheckerTypeService> checkerTypeCollection = new HashMap<>();
 
         config.getCheckerTypeRegistry().forEach((type, checkerTypeServiceFactory) ->
-                checkerTypeCollection.put(type, checkerTypeServiceFactory.newInstance(messageFactory))
+                checkerTypeCollection.put(type, checkerTypeServiceFactory.newInstance())
         );
         ModuleDao moduleDao = config.getModuleDaoFactory().newInstance();
 
-        return new ValidatorServiceImpl(moduleDao, checkerTypeCollection);
+        return new ValidatorServiceImpl(messageFactory, moduleDao, checkerTypeCollection);
     }
 
 }

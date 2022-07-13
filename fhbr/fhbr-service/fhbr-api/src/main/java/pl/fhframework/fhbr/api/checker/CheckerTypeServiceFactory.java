@@ -15,8 +15,6 @@
 
 package pl.fhframework.fhbr.api.checker;
 
-import pl.fhframework.fhbr.api.service.ValidationMessageFactory;
-
 /**
  * Interface for the CheckerTypeService
  *
@@ -26,6 +24,6 @@ import pl.fhframework.fhbr.api.service.ValidationMessageFactory;
  */
 public interface CheckerTypeServiceFactory {
 
-    CheckerTypeService newInstance(ValidationMessageFactory messageFactory);
+    CheckerTypeService newInstance();
 
 }
