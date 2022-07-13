@@ -16,8 +16,6 @@
 package pl.fhframework.fhbr.example.direct;
 
 import pl.fhframework.fhbr.api.config.ValidatorServiceConfig;
-import pl.fhframework.fhbr.api.dao.ModuleDao;
-import pl.fhframework.fhbr.api.factory.Factory;
 import pl.fhframework.fhbr.api.model.BRuleDto;
 import pl.fhframework.fhbr.api.service.ValidateObject;
 import pl.fhframework.fhbr.api.service.ValidationResult;
@@ -52,24 +50,22 @@ public class DirectUsageExample {
         ValidatorServiceFactory validatorFactory = new ValidatorServiceFactoryImpl();
         ValidatorServiceConfig config = new ValidatorServiceConfig();
 
-        config.setModuleDaoFactory(new Factory<ModuleDao>() {
-            @Override
-            public ModuleDao newInstance() {
-                InMemoryModuleDao moduleDao = new InMemoryModuleDao();
-                List<BRuleDto> bRuleList = new ArrayList<>();
+        config.setModuleDaoFactory(() -> {
+            InMemoryModuleDao moduleDao = new InMemoryModuleDao();
+            List<BRuleDto> bRuleList = new ArrayList<>();
 
-                BRuleDto r1 = new BRuleDto();
-                r1.setName("R1");
-                r1.setActive(true);
-                r1.setBusinessKey("R1");
-                r1.setRuleClass(R1.class.getName());
-                r1.setCheckerType("clazz");
+            BRuleDto r1 = new BRuleDto();
+            r1.setName("R1");
+            r1.setActive(true);
+            r1.setBusinessKey("R1");
+            r1.setRuleClass(R1.class.getName());
+            r1.setCheckerType("clazz");
+            r1.setMessageKey("message.key.for.r1");
 
-                bRuleList.add(r1);
+            bRuleList.add(r1);
 
-                moduleDao.getStorage().put("M1", bRuleList);
-                return moduleDao;
-            }
+            moduleDao.getStorage().put("M1", bRuleList);
+            return moduleDao;
         });
 
         config.getCheckerTypeRegistry().put("clazz", new RuleClazzCheckerFactory());

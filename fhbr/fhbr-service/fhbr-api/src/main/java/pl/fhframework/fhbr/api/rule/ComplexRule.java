@@ -16,10 +16,10 @@
 package pl.fhframework.fhbr.api.rule;
 
 import pl.fhframework.fhbr.api.model.BRuleDto;
+import pl.fhframework.fhbr.api.service.ValidateContext;
 import pl.fhframework.fhbr.api.service.ValidationMessage;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Dariusz Skrudlik
@@ -28,6 +28,6 @@ import java.util.Map;
  */
 public interface ComplexRule<O> {
 
-    List<ValidationMessage> check(O object, Map<String, Object> context, BRuleDto rule) throws Exception;
+    List<ValidationMessage> check(O object, ValidateContext context, BRuleDto rule) throws Exception;
 
 }

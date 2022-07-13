@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import pl.fhframework.fhbr.api.checker.CheckerTypeService;
 import pl.fhframework.fhbr.api.config.ValidatorFeature;
 import pl.fhframework.fhbr.api.model.BRuleDto;
+import pl.fhframework.fhbr.api.service.ValidateContext;
 import pl.fhframework.fhbr.api.service.ValidationMessage;
 import pl.fhframework.fhbr.api.service.ValidationMessageFactory;
 import pl.fhframework.fhbr.api.service.ValidationResult;
@@ -28,7 +29,6 @@ import pl.fhframework.fhbr.api.service.ValidationResult;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Dariusz Skrudlik
@@ -43,7 +43,7 @@ public abstract class AbstractRuleChecker implements CheckerTypeService {
     protected ValidationMessageFactory validationMessageFactory;
 
     @Override
-    public ValidationResult validate(Object object, Map<String, Object> context, List<BRuleDto> rules) {
+    public ValidationResult validate(Object object, ValidateContext context, List<BRuleDto> rules) {
 
         assert validationMessageFactory != null;
 
@@ -86,6 +86,6 @@ public abstract class AbstractRuleChecker implements CheckerTypeService {
      * @return List<IValidationMessage> list of validation massages (not null)
      * @throws Exception
      */
-    protected abstract List<ValidationMessage> check(Object object, Map<String, Object> context, BRuleDto rule) throws Exception;
+    protected abstract List<ValidationMessage> check(Object object, ValidateContext context, BRuleDto rule) throws Exception;
 
 }

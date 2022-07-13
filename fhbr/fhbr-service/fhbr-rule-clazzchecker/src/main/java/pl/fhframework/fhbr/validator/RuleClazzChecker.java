@@ -19,12 +19,12 @@ import org.slf4j.LoggerFactory;
 import pl.fhframework.fhbr.api.model.BRuleDto;
 import pl.fhframework.fhbr.api.rule.ComplexRule;
 import pl.fhframework.fhbr.api.rule.SimpleRule;
+import pl.fhframework.fhbr.api.service.ValidateContext;
 import pl.fhframework.fhbr.api.service.ValidationMessage;
 import pl.fhframework.fhbr.engine.checker.AbstractRuleChecker;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Dariusz Skrudlik
@@ -34,7 +34,7 @@ import java.util.Map;
 public class RuleClazzChecker extends AbstractRuleChecker {
 
     @Override
-    protected List<ValidationMessage> check(Object object, Map<String, Object> context, BRuleDto rule) throws Exception {
+    protected List<ValidationMessage> check(Object object, ValidateContext context, BRuleDto rule) throws Exception {
 
         List<ValidationMessage> validationMessages = new ArrayList<>();
         try {

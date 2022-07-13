@@ -15,7 +15,7 @@
 
 package pl.fhframework.fhbr.api.rule;
 
-import java.util.Map;
+import pl.fhframework.fhbr.api.service.ValidateContext;
 
 /**
  * @author Dariusz Skrudlik
@@ -24,6 +24,6 @@ import java.util.Map;
  */
 public interface SimpleRule<O> {
 
-    boolean isValid(O object, Map<String, Object> context) throws Exception;
+    boolean isValid(O object, ValidateContext context) throws Exception;
 
 }

@@ -13,26 +13,25 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.api.checker;
+package pl.fhframework.fhbr.api.service;
 
-import pl.fhframework.fhbr.api.model.BRuleDto;
-import pl.fhframework.fhbr.api.service.ValidateContext;
-import pl.fhframework.fhbr.api.service.ValidationMessageFactory;
-import pl.fhframework.fhbr.api.service.ValidationResult;
+import lombok.Getter;
 
-import java.util.List;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * Interface for the validation engine service of the definied type
- *
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 07/07/2022
+ * @created 13/07/2022
  */
-public interface CheckerTypeService {
+public class ValidateContext {
 
-    void setValidationMessageFactory(ValidationMessageFactory validationMessageFactory);
+    @Getter
+    private final Map<String, Object> property;
 
-    ValidationResult validate(Object object, ValidateContext context, List<BRuleDto> rules);
-
+    public ValidateContext(Map<String, Object> property) {
+        this.property = Collections.synchronizedMap(new HashMap<>(property));
+    }
 }

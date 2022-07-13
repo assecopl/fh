@@ -20,6 +20,7 @@ import pl.fhframework.fhbr.api.checker.CheckerTypeService;
 import pl.fhframework.fhbr.api.dao.ModuleDao;
 import pl.fhframework.fhbr.api.exception.RuleValidationException;
 import pl.fhframework.fhbr.api.model.BRuleDto;
+import pl.fhframework.fhbr.api.service.ValidateContext;
 import pl.fhframework.fhbr.api.service.ValidateObject;
 import pl.fhframework.fhbr.api.service.ValidationResult;
 import pl.fhframework.fhbr.api.service.ValidatorService;
@@ -44,9 +45,10 @@ public class ValidatorServiceImpl implements ValidatorService {
     }
 
     @Override
-    public ValidationResult validate(String moduleCode, ValidateObject validateObject, Map<String, Object> context) {
+    public ValidationResult validate(String moduleCode, ValidateObject validateObject, Map<String, Object> param) {
 
         ValidationResult validationResult = new ValidationResult();
+        ValidateContext context = new ValidateContext(param);
 
         List<BRuleDto> rules = moduleDao.findByModuleCode(moduleCode, "DEFAULT", true, validateObject.getOnDate());
 

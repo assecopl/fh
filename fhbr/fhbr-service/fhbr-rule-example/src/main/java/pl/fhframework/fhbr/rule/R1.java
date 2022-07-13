@@ -16,10 +16,10 @@
 package pl.fhframework.fhbr.rule;
 
 import pl.fhframework.fhbr.api.rule.SimpleRule;
+import pl.fhframework.fhbr.api.service.ValidateContext;
 import pl.fhframework.fhbr.example.TestObject;
 
 import java.math.BigDecimal;
-import java.util.Map;
 
 /**
  * @author Dariusz Skrudlik
@@ -29,7 +29,7 @@ import java.util.Map;
 public class R1 implements SimpleRule<TestObject> {
 
     @Override
-    public boolean isValid(TestObject object, Map<String, Object> context) throws Exception {
+    public boolean isValid(TestObject object, ValidateContext context) throws Exception {
 
         //IF active THEN amount must by greater than zero
         return object.getActive() != null && (!object.getActive() ||
