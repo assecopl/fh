@@ -17,12 +17,32 @@ package pl.fhframework.fhbr.api.service;
 import java.util.Map;
 
 /**
+ * The validator service internal (direct) interface.
+ * <p>
+ * Verify correctness of the passed object according
+ * - schema (structure)
+ * - list (reference data)
+ * - rule
+ * compiled in the named module.
+ *
  * @author Dariusz Skrudlik
  * @version :  $, :  $
  * @created 05/07/2022
  */
 public interface ValidatorService {
 
-    ValidationResult validate(String moduleCode, ValidateObject object, Map<String, Object> param);
-    
+    /**
+     * Valiadtion
+     *
+     * @param moduleCode - module code (named set of services and rules)
+     *                   Can only be null when validate object contains xml message  then
+     *                   data parser select module automatically based on namespace and root element name
+     * @param phase      - each module may have configuration for different phases of business process
+     *                   If null, DEFAULT phase is used.
+     * @param object     - object for check
+     * @param param      - additional parameters used during checking
+     * @return result of validation
+     */
+    ValidationResult validate(String moduleCode, String phase, ValidateObject object, Map<String, Object> param);
+
 }

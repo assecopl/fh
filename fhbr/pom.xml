@@ -27,7 +27,6 @@
         <module>fhbr-bom</module>
         <module>fhbr-service</module>
         <module>fhbr-client</module>
-        <module>fhbr-example</module>
     </modules>
 
     <name>FH BRule</name>

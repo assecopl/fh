@@ -20,7 +20,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import pl.fhframework.fhbr.api.service.ValidationMessageFactory;
 import pl.fhframework.fhbr.api.service.ValidationResult;
-import pl.fhframework.fhbr.api.service.ValidationResultStatus;
 import pl.fhframework.fhbr.engine.result.ValidationMessageFactoryImpl;
 import pl.fhframework.fhbr.validator.schema.xsd.XsdResolverFactory;
 import pl.fhframework.fhbr.validator.schema.xsd.resolver.DaoXsdResolverFactory;
@@ -51,7 +50,7 @@ public class SchemaValidatorHelperTest {
         ValidationResult validationResult = new SchemaValidatorHelper(xsdResolverFactory, validationMessageFactory).validateXSD(xml);
 
         //THEN
-        Assert.assertTrue(ValidationResultStatus.NOK.equals(validationResult.getValidationResultStatus()));
+        Assert.assertTrue(!validationResult.getValid());
         Assert.assertTrue(validationResult.getValidationResultMessages().size() == 1);
 
 
@@ -63,14 +62,14 @@ public class SchemaValidatorHelperTest {
         validationResult = new SchemaValidatorHelper(xsdResolverFactory, validationMessageFactory).validate("http://fhframework.pl/fh/fhbr-xsd/test_v1r0.xsd", xml);
 
         //THEN
-        Assert.assertTrue(ValidationResultStatus.OK.equals(validationResult.getValidationResultStatus()));
+        Assert.assertTrue(validationResult.getValid());
 
         //WHEN - nok
         validationResult = new SchemaValidatorHelper(xsdResolverFactory, validationMessageFactory)
                 .validate("http://fhframework.pl/fh/fhbr-xsd/test_v1r0.xsd", xml_n);
 
         //THEN
-        Assert.assertTrue(ValidationResultStatus.NOK.equals(validationResult.getValidationResultStatus()));
+        Assert.assertTrue(!validationResult.getValid());
     }
 
     @Test
@@ -84,6 +83,6 @@ public class SchemaValidatorHelperTest {
         ValidationResult validationResult = new SchemaValidatorHelper(xsdResolverFactory, validationMessageFactory).validateXSD(xsd);
 
         //THEN
-        Assert.assertTrue(ValidationResultStatus.OK.equals(validationResult.getValidationResultStatus()));
+        Assert.assertTrue(validationResult.getValid());
     }
 }

@@ -26,28 +26,28 @@ import java.util.List;
  */
 public class ValidationResult {
 
-    private ValidationResultStatus validationResultStatus = ValidationResultStatus.OK;
+    private boolean valid = true;
 
     private List<ValidationMessage> validationMessages = Collections.synchronizedList(new LinkedList<ValidationMessage>());
 
     public ValidationResult() {
     }
 
-    public ValidationResult(ValidationResultStatus validationResultStatus, List<ValidationMessage> validationMessages) {
-        this.validationResultStatus = validationResultStatus;
+    public ValidationResult(boolean valid, List<ValidationMessage> validationMessages) {
+        this.valid = valid;
         if (validationMessages != null) {
             this.validationMessages.addAll(validationMessages);
         }
     }
 
 
-    public ValidationResultStatus getValidationResultStatus() {
-        return validationResultStatus;
+    public boolean getValid() {
+        return valid;
     }
 
 
-    public void setValidationResultStatus(ValidationResultStatus status) {
-        this.validationResultStatus = status;
+    public void setValid(boolean status) {
+        this.valid = status;
     }
 
 
@@ -56,9 +56,9 @@ public class ValidationResult {
     }
 
     public void addValidationMessage(ValidationMessage validationMessage) {
-        if (validationMessage!=null) {
+        if (validationMessage != null) {
             if (ValidationMessageSeverity.E.equals(validationMessage.getSeverity())) {
-                validationResultStatus = ValidationResultStatus.NOK;
+                valid = false;
             }
             validationMessages.add(validationMessage);
         }
@@ -67,9 +67,10 @@ public class ValidationResult {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(validationResultStatus)
-                .append(" ")
+        sb.append("{ \"valid\": ").append(valid);
+        sb
+                .append(", ")
                 .append(Arrays.toString(getValidationResultMessages().toArray()));
-        return sb.toString();
+        return sb.append(" }").toString();
     }
 }

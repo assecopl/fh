@@ -44,12 +44,12 @@ public class ValidatorServiceImpl implements ValidatorService {
     }
 
     @Override
-    public ValidationResult validate(String moduleCode, ValidateObject validateObject, Map<String, Object> param) {
+    public ValidationResult validate(String moduleCode, String phase, ValidateObject validateObject, Map<String, Object> param) {
 
         ValidationResult validationResult = new ValidationResult();
         ValidateContext context = new ValidateContext(messageFactory, param);
 
-        List<BRuleDto> rules = moduleDao.findByModuleCode(moduleCode, "DEFAULT", true, validateObject.getOnDate());
+        List<BRuleDto> rules = moduleDao.findByModuleCode(moduleCode, phase, true, validateObject.getOnDate());
 
         rules.stream()
                 .filter(r -> StringUtils.isNotBlank(r.getCheckerType()))

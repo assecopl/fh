@@ -13,8 +13,11 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.example.direct;
+package pl.fhframework.fhbr.client.direct;
 
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pl.fhframework.fhbr.api.config.ValidatorServiceConfig;
 import pl.fhframework.fhbr.api.model.BRuleDto;
 import pl.fhframework.fhbr.api.service.ValidateObject;
@@ -36,13 +39,14 @@ import java.util.Map;
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 06/07/2022
+ * @created 12/07/2022
  */
-public class DirectUsageExample {
+public class DirectUsageExampleTest {
 
-    private ValidatorService validatorService;
+    private static Logger logger = LoggerFactory.getLogger(DirectUsageExampleTest.class);
 
-    public ValidationResult validate() {
+    @Test
+    public void v() {
 
         TestObject testObject = new TestObject();
         testObject.setActive(Boolean.TRUE);
@@ -72,18 +76,16 @@ public class DirectUsageExample {
 //        config.getCheckerTypeRegistry().put("groovy", new GroovyClazzCheckerFactory());
 //        config.getCheckerTypeRegistry().put("other", new OtherClazzCheckerFactory());
 
-        validatorService = validatorFactory.newInstance(config);
+        ValidatorService validatorService = validatorFactory.newInstance(config);
 
         Map<String, Object> context = new HashMap<>();
         ValidateObject<TestObject> validateObject = new ValidateObject();
         validateObject.setObject(testObject);
         validateObject.setOnDate(LocalDate.now());
 
-        ValidationResult validationResult = validatorService.validate("M1", validateObject, context);
+        ValidationResult validationResult = validatorService.validate("M1", null, validateObject, context);
 
-        return validationResult;
+        logger.info(validationResult.toString());
 
     }
-
-
 }
