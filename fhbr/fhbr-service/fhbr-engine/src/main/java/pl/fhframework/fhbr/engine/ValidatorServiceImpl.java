@@ -18,10 +18,15 @@ package pl.fhframework.fhbr.engine;
 import org.apache.commons.lang3.StringUtils;
 import pl.fhframework.fhbr.api.checker.CheckerTypeService;
 import pl.fhframework.fhbr.api.dao.ModuleDao;
+import pl.fhframework.fhbr.api.dao.XsdRepositoryDao;
 import pl.fhframework.fhbr.api.exception.RuleValidationException;
 import pl.fhframework.fhbr.api.model.BRuleDto;
+import pl.fhframework.fhbr.api.model.ModuleDto;
 import pl.fhframework.fhbr.api.service.*;
+import pl.fhframework.fhbr.validator.schema.SchemaValidatorHelper;
+import pl.fhframework.fhbr.validator.schema.xsd.resolver.DaoXsdResolverFactory;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -34,12 +39,14 @@ import java.util.stream.Collectors;
 public class ValidatorServiceImpl implements ValidatorService {
 
     private final ModuleDao moduleDao;
+    private final XsdRepositoryDao xsdRepositoryDao;
     private final ValidationMessageFactory messageFactory;
     private final Map<String, CheckerTypeService> checkerTypeCollection;
 
-    public ValidatorServiceImpl(ValidationMessageFactory messageFactory, ModuleDao moduleDao, Map<String, CheckerTypeService> checkerTypeCollection) {
+    public ValidatorServiceImpl(ValidationMessageFactory messageFactory, ModuleDao moduleDao, XsdRepositoryDao xsdRepositoryDao, Map<String, CheckerTypeService> checkerTypeCollection) {
         this.messageFactory = messageFactory;
         this.moduleDao = moduleDao;
+        this.xsdRepositoryDao = xsdRepositoryDao;
         this.checkerTypeCollection = checkerTypeCollection;
     }
 
@@ -49,7 +56,23 @@ public class ValidatorServiceImpl implements ValidatorService {
         ValidationResult validationResult = new ValidationResult();
         ValidateContext context = new ValidateContext(messageFactory, param);
 
-        List<BRuleDto> rules = moduleDao.findByModuleCode(moduleCode, phase, true, validateObject.getOnDate());
+        ModuleDto module = moduleDao.findModule(moduleCode, phase);
+        if (module == null) {
+            ValidationMessage m = messageFactory.newInstance();
+            m.setSeverity(ValidationMessageSeverity.E);
+            m.setMessage("pl.fhframework.fhbr.message.error.unknownModuleCode");
+            validationResult.addValidationMessage(m);
+        }
+        if (module.isScheamaValidator()) {
+            new DaoXsdResolverFactory(xsdRepositoryDao, LocalDate.now());
+            ValidationResult partialResult = new SchemaValidatorHelper(new DaoXsdResolverFactory(xsdRepositoryDao, LocalDate.now()), messageFactory)
+                    .validate(module.getNamespace(), (byte[]) validateObject.getObject());
+            rewriteValidationMessage(partialResult, validationResult);
+            if (!validationResult.getValid()) {
+                return validationResult;
+            }
+        }
+        List<BRuleDto> rules = moduleDao.findRules(moduleCode, phase, true, validateObject.getOnDate());
 
         rules.stream()
                 .filter(r -> StringUtils.isNotBlank(r.getCheckerType()))
@@ -63,9 +86,8 @@ public class ValidatorServiceImpl implements ValidatorService {
                         throw new RuleValidationException("fhbr.exception.createRuleValidatorService", moduleCode, null, e);
                     }
 
-                    validatorService.validate(validateObject.getObject(), context, ruleTypeLists)
-                            .getValidationResultMessages()
-                            .stream().forEach(vm -> validationResult.addValidationMessage(vm));
+                    ValidationResult partialResult = validatorService.validate(validateObject.getObject(), context, ruleTypeLists);
+                    rewriteValidationMessage(partialResult, validationResult);
                 });
 
         return validationResult;
@@ -74,6 +96,11 @@ public class ValidatorServiceImpl implements ValidatorService {
 
     private CheckerTypeService prepareCheckerTypeService(String checkerType) {
         return checkerTypeCollection.get(checkerType);
+    }
+
+    private void rewriteValidationMessage(ValidationResult s, ValidationResult t) {
+        s.getValidationResultMessages()
+                .stream().forEach(vm -> t.addValidationMessage(vm));
     }
 
 }

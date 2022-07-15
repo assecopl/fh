@@ -18,6 +18,7 @@ import lombok.Getter;
 import lombok.Setter;
 import pl.fhframework.fhbr.api.checker.CheckerTypeServiceFactory;
 import pl.fhframework.fhbr.api.dao.ModuleDao;
+import pl.fhframework.fhbr.api.dao.XsdRepositoryDao;
 import pl.fhframework.fhbr.api.factory.Factory;
 import pl.fhframework.fhbr.api.service.ValidationMessageFactory;
 
@@ -44,6 +45,10 @@ public class ValidatorServiceConfig {
     @Setter
     @Getter
     private Factory<ModuleDao> moduleDaoFactory;
+
+    @Setter
+    @Getter
+    private Factory<XsdRepositoryDao> xsdRepositoryDaoFactory;
 
     @Getter
     @Setter

@@ -13,23 +13,39 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.api.dao;
+package pl.fhframework.fhbr.dao;
 
+import lombok.Getter;
+import pl.fhframework.fhbr.api.dao.ModuleDao;
 import pl.fhframework.fhbr.api.model.BRuleDto;
 import pl.fhframework.fhbr.api.model.ModuleDto;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 06/07/2022
+ * @created 11/07/2022
  */
-public interface ModuleDao {
+public class InMemoryBussinesRuleDao implements ModuleDao {
 
-    List<BRuleDto> findRules(String code, String phase, boolean active, LocalDate onDate);
+    @Getter
+    private Map<String, List<BRuleDto>> storage = new HashMap<>();
+    @Getter
+    private Map<String, ModuleDto> modules = new HashMap<>();
 
-    ModuleDto findModule(String moduleCode, String phase);
+    @Override
+    public List<BRuleDto> findRules(String code, String phase, boolean active, LocalDate onDate) {
+        return storage.containsKey(code) ? new ArrayList<>(storage.get(code)) : new ArrayList<>();
+    }
+
+    @Override
+    public ModuleDto findModule(String moduleCode, String phase) {
+        return modules.get(moduleCode);
+    }
 
 }

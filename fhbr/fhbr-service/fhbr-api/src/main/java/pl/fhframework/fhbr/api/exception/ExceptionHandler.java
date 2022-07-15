@@ -13,23 +13,14 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.api.dao;
-
-import pl.fhframework.fhbr.api.model.BRuleDto;
-import pl.fhframework.fhbr.api.model.ModuleDto;
-
-import java.time.LocalDate;
-import java.util.List;
+package pl.fhframework.fhbr.api.exception;
 
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 06/07/2022
+ * @created 07/07/2022
  */
-public interface ModuleDao {
+public interface ExceptionHandler {
 
-    List<BRuleDto> findRules(String code, String phase, boolean active, LocalDate onDate);
-
-    ModuleDto findModule(String moduleCode, String phase);
-
+    void handle(Exception ex);
 }

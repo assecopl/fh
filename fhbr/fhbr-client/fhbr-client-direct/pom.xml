@@ -42,10 +42,20 @@
             <artifactId>fhbr-rule-clazzchecker</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>pl.fhframework.fhbr</groupId>
-            <artifactId>fhbr-rule-example</artifactId>
+            <artifactId>fhbr-xsd</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>pl.fhframework.fhbr</groupId>
+            <artifactId>fhbr-test-mock</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>

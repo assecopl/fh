@@ -31,9 +31,9 @@
     <modules>
         <module>fhbr-api</module>
         <module>fhbr-engine</module>
-        <module>fhbr-xsd</module>
+        <module>fhbr-schema-validator</module>
         <module>fhbr-rule-clazzchecker</module>
-        <module>fhbr-rule-example</module>
+        <module>fhbr-test-mock</module>
     </modules>
 
     <properties>

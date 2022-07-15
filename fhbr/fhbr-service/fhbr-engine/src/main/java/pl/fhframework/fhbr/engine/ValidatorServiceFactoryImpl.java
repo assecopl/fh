@@ -18,10 +18,11 @@ package pl.fhframework.fhbr.engine;
 import pl.fhframework.fhbr.api.checker.CheckerTypeService;
 import pl.fhframework.fhbr.api.config.ValidatorServiceConfig;
 import pl.fhframework.fhbr.api.dao.ModuleDao;
+import pl.fhframework.fhbr.api.dao.XsdRepositoryDao;
 import pl.fhframework.fhbr.api.service.ValidationMessageFactory;
 import pl.fhframework.fhbr.api.service.ValidatorService;
 import pl.fhframework.fhbr.api.service.ValidatorServiceFactory;
-import pl.fhframework.fhbr.engine.result.ValidationMessageFactoryImpl;
+import pl.fhframework.fhbr.api.service.impl.ValidationMessageFactoryImpl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,16 +37,25 @@ public class ValidatorServiceFactoryImpl implements ValidatorServiceFactory {
     @Override
     public ValidatorService newInstance(ValidatorServiceConfig config) {
 
+        //prepare messaga factory
         ValidationMessageFactory messageFactory = config.getMessageFactory() != null ? config.getMessageFactory() : new ValidationMessageFactoryImpl();
 
+        //prepare registered checkers
         Map<String, CheckerTypeService> checkerTypeCollection = new HashMap<>();
 
         config.getCheckerTypeRegistry().forEach((type, checkerTypeServiceFactory) ->
                 checkerTypeCollection.put(type, checkerTypeServiceFactory.newInstance())
         );
+        //prepare module dao
         ModuleDao moduleDao = config.getModuleDaoFactory().newInstance();
 
-        return new ValidatorServiceImpl(messageFactory, moduleDao, checkerTypeCollection);
+        XsdRepositoryDao xsdRepositoryDao = null;
+        if (config.getXsdRepositoryDaoFactory() != null) {
+            xsdRepositoryDao = config.getXsdRepositoryDaoFactory().newInstance();
+        }
+
+        //create the validator service
+        return new ValidatorServiceImpl(messageFactory, moduleDao, xsdRepositoryDao, checkerTypeCollection);
     }
 
 }

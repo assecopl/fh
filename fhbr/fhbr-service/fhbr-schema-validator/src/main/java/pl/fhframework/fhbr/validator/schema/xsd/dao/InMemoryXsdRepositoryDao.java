@@ -13,23 +13,33 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.api.dao;
+package pl.fhframework.fhbr.validator.schema.xsd.dao;
 
-import pl.fhframework.fhbr.api.model.BRuleDto;
-import pl.fhframework.fhbr.api.model.ModuleDto;
+import pl.fhframework.fhbr.api.dao.XsdRepositoryDao;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Map;
 
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 06/07/2022
+ * @created 14/07/2022
  */
-public interface ModuleDao {
+public class InMemoryXsdRepositoryDao implements XsdRepositoryDao {
 
-    List<BRuleDto> findRules(String code, String phase, boolean active, LocalDate onDate);
+    private final Map<String, byte[]> schemeContentMap;
 
-    ModuleDto findModule(String moduleCode, String phase);
+    public InMemoryXsdRepositoryDao(Map<String, byte[]> schemeContentMap) {
+        this.schemeContentMap = schemeContentMap;
+    }
 
+    @Override
+    public byte[] getByNamespace(String namespace, LocalDate onDate) {
+        return schemeContentMap.get(namespace);
+    }
+
+    @Override
+    public byte[] getByPublicId(String publicId, LocalDate onDate) {
+        return schemeContentMap.get(publicId);
+    }
 }
