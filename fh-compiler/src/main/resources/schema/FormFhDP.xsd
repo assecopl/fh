@@ -82,7 +82,7 @@
                         <xs:element type="DictionaryComboFhDPType" name="DictionaryComboFhDP"/>
                         <xs:element type="CheckBoxFhDPType" name="CheckBoxFhDP"/>
                         <xs:element type="ComboFhDPType" name="ComboFhDP"/>
-                        <xs:element type="ChartTime24TimeType" name="ChartTime24Time"/>
+                        <xs:element type="ChartTime24Type" name="ChartTime24"/>
                         <xs:element type="EmbeddedViewType" name="EmbeddedView"/>
                         <xs:element type="FHMLStandaloneType" name="FHMLStandalone"/>
                         <xs:element type="FileUploadPortletFhDPType" name="FileUploadPortletFhDP"/>
@@ -113,8 +113,8 @@
     <xs:include schemaLocation="FormFHCoreLite.xsd"/>
 
 
-    <xs:element name="ChartTime24Time" type="ChartTime24TimeType"/>
-    <xs:complexType name="ChartTime24TimeType">
+    <xs:element name="ChartTime24" type="ChartTime24Type"/>
+    <xs:complexType name="ChartTime24Type">
         <!-- TODO ChartTime24TimeType attrs-->
     </xs:complexType>
 
