@@ -1,0 +1,154 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:cs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://fh.asseco.com/form/1.0"
+           xmlns="http://fh.asseco.com/form/1.0"
+           elementFormDefault="qualified">
+    <xs:annotation>
+        <xs:documentation>
+            <![CDATA[
+              <p>The XML Schema for the FH Form configuration file</p>
+
+              <p>All FH Forms configuration files must indicate
+              the FH Form schema by indicating the FH namespace:</p>
+
+              <p>http://fh.asseco.com/form/1.0</p>
+        ]]>
+        </xs:documentation>
+    </xs:annotation>
+    <xs:redefine xmlns:xs="http://www.w3.org/2001/XMLSchema"   schemaLocation="./FormFHCoreLite.xsd">
+        <xs:complexType name="RowType">
+            <xs:complexContent>
+                <xs:extension base="RowType">
+                    <xs:choice maxOccurs="unbounded" minOccurs="0">
+                        <xs:element type="DictionaryComboFhDPType" name="DictionaryComboFhDP"/>
+                    </xs:choice>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:redefine>
+
+    <!-- =====================================================================================================
+    Form configuration
+    ===================================================================================================== -->
+    <xs:include schemaLocation="FormFHCoreLite.xsd"/>
+
+
+    <xs:element name="ChartTime24Time" type="ChartTime24TimeType"/>
+    <xs:complexType name="ChartTime24TimeType">
+        <!-- TODO ChartTime24TimeType attrs-->
+    </xs:complexType>
+
+    <xs:element name="CheckBoxFhDP" type="CheckBoxFhDPType"/>
+    <xs:complexType name="CheckBoxFhDPType">
+        <!-- TODO CheckBoxFhDP attrs-->
+    </xs:complexType>
+
+    <xs:element name="ComboFhDP" type="ComboFhDPType"/>
+    <xs:complexType name="ComboFhDPType">
+        <!-- TODO ComboFhDP attrs-->
+    </xs:complexType>
+
+    <xs:element name="DictionaryComboFhDP" type="DictionaryComboFhDPType"/>
+    <xs:complexType name="DictionaryComboFhDPType">
+        <!-- TODO DictionaryComboFhDP attrs-->
+    </xs:complexType>
+
+    <xs:element name="DictionaryComboParameterFhDP" type="DictionaryComboParameterFhDPType"/>
+    <xs:complexType name="DictionaryComboParameterFhDPType">
+        <!-- TODO DictionaryComboParameterFhDP attrs-->
+    </xs:complexType>
+
+    <xs:element name="EmbeddedView" type="EmbeddedViewType"/>
+    <xs:complexType name="EmbeddedViewType">
+        <!-- TODO EmbeddedView attrs-->
+    </xs:complexType>
+
+    <xs:element name="FHMLStandalone" type="FHMLStandaloneType"/>
+    <xs:complexType name="FHMLStandaloneType">
+        <!-- TODO FHMLStandalone attrs-->
+    </xs:complexType>
+
+    <xs:element name="FileUploadPortletFhDP" type="FileUploadPortletFhDPType"/>
+    <xs:complexType name="FileUploadPortletFhDPType">
+        <!-- TODO FileUploadPortletFhDP attrs-->
+    </xs:complexType>
+
+    <xs:element name="HTMLRawViewFhDP" type="HTMLRawViewFhDPType"/>
+    <xs:complexType name="HTMLRawViewFhDPType">
+        <!-- TODO HTMLRawViewFhDP attrs-->
+    </xs:complexType>
+
+    <xs:element name="InputDateFhDP" type="InputDateFhDPType"/>
+    <xs:complexType name="InputDateFhDPType">
+        <!-- TODO InputDateFhDP attrs-->
+    </xs:complexType>
+
+    <xs:element name="InputTextFhDP" type="InputTextFhDPType"/>
+    <xs:complexType name="InputTextFhDPType">
+        <!-- TODO InputTextFhDP attrs-->
+    </xs:complexType>
+
+    <xs:element name="InputTimeFhDP" type="InputTimeFhDPType"/>
+    <xs:complexType name="InputTimeFhDPType">
+        <!-- TODO InputTimeFhDP attrs-->
+    </xs:complexType>
+
+    <xs:element name="InputTimestampFhDP" type="InputTimestampFhDPType"/>
+    <xs:complexType name="InputTimestampFhDPType">
+        <!-- TODO InputTimestampFhDP attrs-->
+    </xs:complexType>
+
+    <xs:element name="MSReportsView" type="MSReportsViewType"/>
+    <xs:complexType name="MSReportsViewType">
+        <!-- TODO MSReportsView attrs-->
+    </xs:complexType>
+
+    <xs:element name="PanelFhDP" type="PanelFhDPType"/>
+    <xs:complexType name="PanelFhDPType">
+        <!-- TODO PanelFhDP attrs-->
+    </xs:complexType>
+
+    <xs:element name="PanelHeaderFhDP" type="PanelHeaderFhDPType"/>
+    <xs:complexType name="PanelHeaderFhDPType">
+        <!-- TODO PanelHeaderFhDP attrs-->
+    </xs:complexType>
+
+    <xs:element name="RegionPickerFhDP" type="RegionPickerFhDPType"/>
+    <xs:complexType name="RegionPickerFhDPType">
+        <!-- TODO RegionPickerFhDP attrs-->
+    </xs:complexType>
+
+    <xs:element name="SelectComboMenuFhDP" type="SelectComboMenuFhDPType"/>
+    <xs:complexType name="SelectComboMenuFhDPType">
+        <!-- TODO SelectComboMenuFhDP attrs-->
+    </xs:complexType>
+
+    <xs:element name="TabContainerFhDP" type="TabContainerFhDPType"/>
+    <xs:complexType name="TabContainerFhDPType">
+        <!-- TODO TabContainerFhDP attrs-->
+    </xs:complexType>
+
+    <xs:element name="TimerFhDP" type="TimerFhDPType"/>
+    <xs:complexType name="TimerFhDPType">
+        <!-- TODO TimerFhDP attrs-->
+    </xs:complexType>
+
+    <xs:element name="TreeElementFhDP" type="TreeElementFhDPType"/>
+    <xs:complexType name="TreeElementFhDPType">
+        <!-- TODO TreeElementFhDP attrs-->
+    </xs:complexType>
+
+    <xs:element name="TreeFhDP" type="TreeFhDPType"/>
+    <xs:complexType name="TreeFhDPType">
+        <!-- TODO TreeFhDP attrs-->
+    </xs:complexType>
+
+    <xs:element name="XMLViewerFhDP" type="XMLViewerFhDPType"/>
+    <xs:complexType name="XMLViewerFhDPType">
+        <!-- TODO XMLViewerFhDP attrs-->
+    </xs:complexType>
+
+    //Extension of usage
+
+
+
+</xs:schema>
