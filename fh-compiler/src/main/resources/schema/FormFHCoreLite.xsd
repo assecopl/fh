@@ -28,63 +28,62 @@
                     <xs:field xpath="@id"/>
                 </xs:unique>
             </xs:element>
-            <xs:element type="ModelType" name="Model"/>
-            <xs:element type="AccordionType" name="Accordion"/>
-            <xs:element type="ButtonType" name="Button"/>
-            <xs:element type="ButtonGroupType" name="ButtonGroup"/>
-            <xs:element type="CalendarType" name="Calendar"/>
-            <xs:element type="CheckBoxType" name="CheckBox"/>
-            <xs:element type="ComboType" name="Combo"/>
-            <xs:element type="DictionaryComboType" name="DictionaryCombo"/>
-            <xs:element type="PanelGroupType" name="PanelGroup"/>
-            <xs:element type="FloatingGroupType" name="FloatingGroup"/>
-            <xs:element type="ImageType" name="Image"/>
-            <xs:element type="MdFileViewerType" name="MdFileViewer"/>
-            <xs:element type="IncludeType" name="Include"/>
-            <xs:element type="InputDateType" name="InputDate"/>
-            <xs:element type="InputDateOptimizedType" name="InputDateOptimized"/>
-            <xs:element type="InputNumberType" name="InputNumber"/>
-            <xs:element type="InputTextType" name="InputText"/>
-            <xs:element type="InputTimestampType" name="InputTimestamp"/>
-            <xs:element type="LinkType" name="Link"/>
-            <xs:element type="LocaleBundleType" name="LocaleBundle"/>
-            <xs:element type="OutputLabelType" name="OutputLabel"/>
-            <xs:element type="OptionsListType" name="OptionsList"/>
-            <xs:element type="RadioOptionType" name="RadioOption"/>
-            <xs:element type="RadioOptionsGroupType" name="RadioOptionsGroup"/>
-            <xs:element type="RepeaterType" name="Repeater"/>
-            <xs:element type="TimerType" name="Timer"/>
-            <xs:element type="KeyboardEventType" name="KeyboardEvent"/>
-            <xs:element type="GroupType" name="Group"/>
-            <xs:element type="HtmlEditorType" name="HtmlEditor"/>
-            <xs:element type="HtmlViewType" name="HtmlView"/>
-            <xs:element type="EmbedPageType" name="EmbedPage"/>
-            <xs:element type="SelectOneMenuType" name="SelectOneMenu"/>
-            <xs:element type="SelectComboMenuType" name="SelectComboMenu"/>
-            <xs:element type="SelectComboMenuType" name="SelectComboMenuOptimized"/>
-            <xs:element type="SpacerType" name="Spacer"/>
-            <xs:element type="SplitContainerType" name="SplitContainer"/>
-            <xs:element type="TabContainerType" name="TabContainer"/>
-            <xs:element type="TablePagedType" name="TablePaged"/>
-            <xs:element type="TableLazyType" name="TableLazy"/>
-            <xs:element type="TableOptimizedType" name="TableOptimized"/>
-            <xs:element type="TableType" name="Table"/>
-            <xs:element type="TreeType" name="Tree"/>
-            <xs:element type="ImageGridType" name="ImageGrid"/>
-            <xs:element type="MarkdownGridType" name="MarkdownGrid"/>
-            <xs:element type="ValidateMessagesType" name="ValidateMessages"/>
-            <xs:element type="FileUploadType" name="FileUpload"/>
-            <xs:element type="WidgetType" name="Widget"/>
-            <xs:element type="WizardType" name="Wizard"/>
-            <xs:element type="DashboardType" name="Dashboard"/>
-            <xs:element name="Comment"/>
-            <xs:element type="IMapLiteType" name="IMapLite"/>
-            <xs:element type="OpenLayersType" name="OpenLayers"/>
-            <xs:element type="DropdownType" name="Dropdown"/>
-            <xs:element type="RowType" name="Row"/>
-            <xs:element type="AnchorType" name="Anchor"/>
-            <xs:element type="UmlDiagramType" name="UmlDiagram"/>
-
+            <xs:element type="ModelType" name="Model" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="AccordionType" name="Accordion" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="ButtonType" name="Button" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="ButtonGroupType" name="ButtonGroup" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="CalendarType" name="Calendar" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="CheckBoxType" name="CheckBox" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="ComboType" name="Combo" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="DictionaryComboType" name="DictionaryCombo" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="PanelGroupType" name="PanelGroup" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="FloatingGroupType" name="FloatingGroup" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="ImageType" name="Image" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="MdFileViewerType" name="MdFileViewer" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="IncludeType" name="Include" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="InputDateType" name="InputDate" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="InputDateOptimizedType" name="InputDateOptimized" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="InputNumberType" name="InputNumber" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="InputTextType" name="InputText" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="InputTimestampType" name="InputTimestamp" v/>
+            <xs:element type="LinkType" name="Link" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="LocaleBundleType" name="LocaleBundle" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="OutputLabelType" name="OutputLabel" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="OptionsListType" name="OptionsList" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="RadioOptionType" name="RadioOption" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="RadioOptionsGroupType" name="RadioOptionsGroup" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="RepeaterType" name="Repeater" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="TimerType" name="Timer" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="KeyboardEventType" name="KeyboardEvent" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="GroupType" name="Group" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="HtmlEditorType" name="HtmlEditor" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="HtmlViewType" name="HtmlView" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="EmbedPageType" name="EmbedPage" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="SelectOneMenuType" name="SelectOneMenu" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="SelectComboMenuType" name="SelectComboMenu" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="SelectComboMenuType" name="SelectComboMenuOptimized" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="SpacerType" name="Spacer" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="SplitContainerType" name="SplitContainer" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="TabContainerType" name="TabContainer" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="TablePagedType" name="TablePaged" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="TableLazyType" name="TableLazy" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="TableOptimizedType" name="TableOptimized" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="TableType" name="Table" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="TreeType" name="Tree" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="ImageGridType" name="ImageGrid" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="MarkdownGridType" name="MarkdownGrid" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="ValidateMessagesType" name="ValidateMessages" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="FileUploadType" name="FileUpload" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="WidgetType" name="Widget" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="WizardType" name="Wizard" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="DashboardType" name="Dashboard" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element name="Comment" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="IMapLiteType" name="IMapLite" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="OpenLayersType" name="OpenLayers" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="DropdownType" name="Dropdown" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="RowType" name="Row" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="AnchorType" name="Anchor" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="UmlDiagramType" name="UmlDiagram" maxOccurs="unbounded" minOccurs="0"/>
         </xs:choice>
         <xs:attribute type="xs:string" name="container"/>
         <xs:attribute type="xs:string" name="id"/>
@@ -1332,8 +1331,8 @@
         <xs:attribute type="xs:string" name="active" default="true"/>
     </xs:complexType>
 
-    <xs:complexType name="RowType">
-        <xs:choice maxOccurs="unbounded" minOccurs="0">
+    <xs:group name="RowTypeChoiceGroup">
+        <xs:choice>
             <xs:element type="AccordionType" name="Accordion"/>
             <xs:element type="MdFileViewerType" name="MdFileViewer"/>
             <xs:element type="ButtonType" name="Button"/>
@@ -1377,6 +1376,12 @@
             <xs:element type="LinkType" name="Link"/>
             <xs:element type="WidgetType" name="Widget"/>
             <xs:element type="SplitContainerType" name="SplitContainer"/>
+        </xs:choice>
+    </xs:group>
+
+    <xs:complexType name="RowType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+           <xs:group ref="RowTypeChoiceGroup"/>
         </xs:choice>
         <xs:attribute type="pixelOrPercentageType" name="height"/>
         <xs:attribute type="xs:ID" name="id"/>
