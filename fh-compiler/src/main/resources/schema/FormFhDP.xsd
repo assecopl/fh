@@ -22,7 +22,7 @@
                         <xs:element type="DictionaryComboFhDPType" name="DictionaryComboFhDP"/>
                         <xs:element type="CheckBoxFhDPType" name="CheckBoxFhDP"/>
                         <xs:element type="ComboFhDPType" name="ComboFhDP"/>
-                        <xs:element type="ChartTime24TimeType" name="ChartTime24Time"/>
+                        <xs:element type="ChartTime24Type" name="ChartTime24"/>
                         <xs:element type="EmbeddedViewType" name="EmbeddedView"/>
                         <xs:element type="FHMLStandaloneType" name="FHMLStandalone"/>
                         <xs:element type="FileUploadPortletFhDPType" name="FileUploadPortletFhDP"/>
@@ -38,7 +38,6 @@
                         <xs:element type="SelectComboMenuFhDPType" name="SelectComboMenuFhDP"/>
                         <xs:element type="TabContainerFhDPType" name="TabContainerFhDP"/>
                         <xs:element type="TimerFhDPType" name="TimerFhDP"/>
-                        <xs:element type="TreeElementFhDPType" name="TreeElementFhDP"/>
                         <xs:element type="TreeFhDPType" name="TreeFhDP"/>
                         <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
                     </xs:choice>
@@ -52,7 +51,7 @@
                         <xs:element type="DictionaryComboFhDPType" name="DictionaryComboFhDP"/>
                         <xs:element type="CheckBoxFhDPType" name="CheckBoxFhDP"/>
                         <xs:element type="ComboFhDPType" name="ComboFhDP"/>
-                        <xs:element type="ChartTime24TimeType" name="ChartTime24Time"/>
+                        <xs:element type="ChartTime24Type" name="ChartTime24"/>
                         <xs:element type="EmbeddedViewType" name="EmbeddedView"/>
                         <xs:element type="FHMLStandaloneType" name="FHMLStandalone"/>
                         <xs:element type="FileUploadPortletFhDPType" name="FileUploadPortletFhDP"/>
@@ -68,7 +67,6 @@
                         <xs:element type="SelectComboMenuFhDPType" name="SelectComboMenuFhDP"/>
                         <xs:element type="TabContainerFhDPType" name="TabContainerFhDP"/>
                         <xs:element type="TimerFhDPType" name="TimerFhDP"/>
-                        <xs:element type="TreeElementFhDPType" name="TreeElementFhDP"/>
                         <xs:element type="TreeFhDPType" name="TreeFhDP"/>
                         <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
                     </xs:choice>
@@ -98,8 +96,118 @@
                         <xs:element type="SelectComboMenuFhDPType" name="SelectComboMenuFhDP"/>
                         <xs:element type="TabContainerFhDPType" name="TabContainerFhDP"/>
                         <xs:element type="TimerFhDPType" name="TimerFhDP"/>
-                        <xs:element type="TreeElementFhDPType" name="TreeElementFhDP"/>
                         <xs:element type="TreeFhDPType" name="TreeFhDP"/>
+                        <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
+                    </xs:choice>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+        <xs:complexType name="RepeaterType">
+            <xs:complexContent>
+                <xs:extension base="RepeaterType">
+                    <xs:choice maxOccurs="unbounded" minOccurs="0">
+                        <xs:element type="DictionaryComboFhDPType" name="DictionaryComboFhDP"/>
+                        <xs:element type="CheckBoxFhDPType" name="CheckBoxFhDP"/>
+                        <xs:element type="ComboFhDPType" name="ComboFhDP"/>
+                        <xs:element type="ChartTime24Type" name="ChartTime24"/>
+                        <xs:element type="FHMLStandaloneType" name="FHMLStandalone"/>
+                        <xs:element type="HTMLRawViewFhDPType" name="HTMLRawViewFhDP"/>
+                        <xs:element type="InputDateFhDPType" name="InputDateFhDP"/>
+                        <xs:element type="InputTextFhDPType" name="InputTextFhDP"/>
+                        <xs:element type="InputTimeFhDPType" name="InputTimeFhDP"/>
+                        <xs:element type="InputTimestampFhDPType" name="InputTimestampFhDP"/>
+                        <xs:element type="SelectComboMenuFhDPType" name="SelectComboMenuFhDP"/>
+                        <xs:element type="TabContainerFhDPType" name="TabContainerFhDP"/>
+                        <xs:element type="TreeFhDPType" name="TreeFhDP"/>
+                        <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
+                    </xs:choice>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+        <xs:complexType name="FormType">
+            <xs:complexContent>
+                <xs:extension base="FormType">
+                    <xs:choice maxOccurs="unbounded" minOccurs="0">
+                        <xs:element type="DictionaryComboFhDPType" name="DictionaryComboFhDP"/>
+                        <xs:element type="CheckBoxFhDPType" name="CheckBoxFhDP"/>
+                        <xs:element type="ComboFhDPType" name="ComboFhDP"/>
+                        <xs:element type="ChartTime24Type" name="ChartTime24"/>
+                        <xs:element type="EmbeddedViewType" name="EmbeddedView"/>
+                        <xs:element type="FHMLStandaloneType" name="FHMLStandalone"/>
+                        <xs:element type="FileUploadPortletFhDPType" name="FileUploadPortletFhDP"/>
+                        <xs:element type="HTMLRawViewFhDPType" name="HTMLRawViewFhDP"/>
+                        <xs:element type="InputDateFhDPType" name="InputDateFhDP"/>
+                        <xs:element type="InputTextFhDPType" name="InputTextFhDP"/>
+                        <xs:element type="InputTimeFhDPType" name="InputTimeFhDP"/>
+                        <xs:element type="InputTimestampFhDPType" name="InputTimestampFhDP"/>
+                        <xs:element type="MSReportsViewType" name="MSReportsView"/>
+                        <xs:element type="PanelFhDPType" name="PanelFhDP"/>
+                        <xs:element type="PanelHeaderFhDPType" name="PanelHeaderFhDP"/>
+                        <xs:element type="RegionPickerFhDPType" name="RegionPickerFhDP"/>
+                        <xs:element type="SelectComboMenuFhDPType" name="SelectComboMenuFhDP"/>
+                        <xs:element type="TabContainerFhDPType" name="TabContainerFhDP"/>
+                        <xs:element type="TimerFhDPType" name="TimerFhDP"/>
+                        <xs:element type="TreeFhDPType" name="TreeFhDP"/>
+                        <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
+                    </xs:choice>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+        <xs:complexType name="TabType">
+            <xs:complexContent>
+                <xs:extension base="TabType">
+                    <xs:choice maxOccurs="unbounded" minOccurs="0">
+                        <xs:element type="DictionaryComboFhDPType" name="DictionaryComboFhDP"/>
+                        <xs:element type="CheckBoxFhDPType" name="CheckBoxFhDP"/>
+                        <xs:element type="ComboFhDPType" name="ComboFhDP"/>
+                        <xs:element type="ChartTime24Type" name="ChartTime24"/>
+                        <xs:element type="EmbeddedViewType" name="EmbeddedView"/>
+                        <xs:element type="FHMLStandaloneType" name="FHMLStandalone"/>
+                        <xs:element type="FileUploadPortletFhDPType" name="FileUploadPortletFhDP"/>
+                        <xs:element type="HTMLRawViewFhDPType" name="HTMLRawViewFhDP"/>
+                        <xs:element type="InputDateFhDPType" name="InputDateFhDP"/>
+                        <xs:element type="InputTextFhDPType" name="InputTextFhDP"/>
+                        <xs:element type="InputTimeFhDPType" name="InputTimeFhDP"/>
+                        <xs:element type="InputTimestampFhDPType" name="InputTimestampFhDP"/>
+                        <xs:element type="MSReportsViewType" name="MSReportsView"/>
+                        <xs:element type="PanelFhDPType" name="PanelFhDP"/>
+                        <xs:element type="PanelHeaderFhDPType" name="PanelHeaderFhDP"/>
+                        <xs:element type="RegionPickerFhDPType" name="RegionPickerFhDP"/>
+                        <xs:element type="SelectComboMenuFhDPType" name="SelectComboMenuFhDP"/>
+                        <xs:element type="TabContainerFhDPType" name="TabContainerFhDP"/>
+                        <xs:element type="TreeFhDPType" name="TreeFhDP"/>
+                        <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
+                    </xs:choice>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+        <xs:complexType name="ColumnType">
+            <xs:complexContent>
+                <xs:extension base="ColumnType">
+                    <xs:choice maxOccurs="unbounded" minOccurs="0">
+                        <xs:element type="DictionaryComboFhDPType" name="DictionaryComboFhDP"/>
+                        <xs:element type="CheckBoxFhDPType" name="CheckBoxFhDP"/>
+                        <xs:element type="ComboFhDPType" name="ComboFhDP"/>
+                        <xs:element type="ChartTime24Type" name="ChartTime24"/>
+                        <xs:element type="FHMLStandaloneType" name="FHMLStandalone"/>
+                        <xs:element type="HTMLRawViewFhDPType" name="HTMLRawViewFhDP"/>
+                        <xs:element type="InputDateFhDPType" name="InputDateFhDP"/>
+                        <xs:element type="InputTextFhDPType" name="InputTextFhDP"/>
+                        <xs:element type="InputTimeFhDPType" name="InputTimeFhDP"/>
+                        <xs:element type="InputTimestampFhDPType" name="InputTimestampFhDP"/>
+                        <xs:element type="SelectComboMenuFhDPType" name="SelectComboMenuFhDP"/>
+                        <xs:element type="TabContainerFhDPType" name="TabContainerFhDP"/>
+                        <xs:element type="TreeFhDPType" name="TreeFhDP"/>
+                        <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
+                    </xs:choice>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+        <xs:complexType name="FooterType">
+            <xs:complexContent>
+                <xs:extension base="FooterType">
+                    <xs:choice maxOccurs="unbounded" minOccurs="0">
+                        <xs:element type="TimerFhDPType" name="TimerFhDP"/>
                         <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
                     </xs:choice>
                 </xs:extension>
@@ -478,6 +586,12 @@
 
     <xs:element name="PanelFhDP" type="PanelFhDPType"/>
     <xs:complexType name="PanelFhDPType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="ChartTime24Type" name="ChartTime24"/>
+            <xs:element type="FHMLStandaloneType" name="FHMLStandalone"/>
+            <xs:element type="HTMLRawViewFhDPType" name="HTMLRawViewFhDP"/>
+            <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
+        </xs:choice>
         <!-- TODO PanelFhDP attrs-->
         <xs:attributeGroup ref="FormElementTypeGroup"/>
         <xs:attribute type="xs:string" name="info" use="required"/>
@@ -487,11 +601,18 @@
 
     <xs:element name="PanelHeaderFhDP" type="PanelHeaderFhDPType"/>
     <xs:complexType name="PanelHeaderFhDPType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="ChartTime24Type" name="ChartTime24"/>
+            <xs:element type="FHMLStandaloneType" name="FHMLStandalone"/>
+            <xs:element type="HTMLRawViewFhDPType" name="HTMLRawViewFhDP"/>
+            <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
+        </xs:choice>
         <!-- TODO PanelHeaderFhDP attrs-->
         <xs:attributeGroup ref="FormElementTypeGroup"/>
         <xs:attribute type="xs:string" name="info" use="required"/>
         <xs:attribute type="xs:string" name="title" use="required"/>
         <xs:attribute type="xs:string" name="onClick"/>
+
 
     </xs:complexType>
 
