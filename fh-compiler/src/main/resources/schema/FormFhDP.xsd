@@ -1,0 +1,747 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:cs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://fh.asseco.com/form/1.0"
+           xmlns="http://fh.asseco.com/form/1.0"
+           elementFormDefault="qualified">
+    <xs:annotation>
+        <xs:documentation>
+            <![CDATA[
+              <p>The XML Schema for the FH Form configuration file</p>
+
+              <p>All FH Forms configuration files must indicate
+              the FH Form schema by indicating the FH namespace:</p>
+
+              <p>http://fh.asseco.com/form/1.0</p>
+        ]]>
+        </xs:documentation>
+    </xs:annotation>
+    <xs:redefine xmlns:xs="http://www.w3.org/2001/XMLSchema" schemaLocation="./FormFHCoreLite.xsd">
+        <xs:complexType  name="RowType">
+            <xs:complexContent >
+                <xs:extension base="RowType"  >
+                    <xs:choice  maxOccurs="unbounded" minOccurs="0">
+                        <xs:element type="DictionaryComboFhDPType" name="DictionaryComboFhDP"/>
+                        <xs:element type="CheckBoxFhDPType" name="CheckBoxFhDP"/>
+                        <xs:element type="ComboFhDPType" name="ComboFhDP"/>
+                        <xs:element type="ChartTime24Type" name="ChartTime24"/>
+                        <xs:element type="EmbeddedViewType" name="EmbeddedView"/>
+                        <xs:element type="FHMLStandaloneType" name="FHMLStandalone"/>
+                        <xs:element type="FileUploadPortletFhDPType" name="FileUploadPortletFhDP"/>
+                        <xs:element type="HTMLRawViewFhDPType" name="HTMLRawViewFhDP"/>
+                        <xs:element type="InputDateFhDPType" name="InputDateFhDP"/>
+                        <xs:element type="InputTextFhDPType" name="InputTextFhDP"/>
+                        <xs:element type="InputTimeFhDPType" name="InputTimeFhDP"/>
+                        <xs:element type="InputTimestampFhDPType" name="InputTimestampFhDP"/>
+                        <xs:element type="MSReportsViewType" name="MSReportsView"/>
+                        <xs:element type="PanelFhDPType" name="PanelFhDP"/>
+                        <xs:element type="PanelHeaderFhDPType" name="PanelHeaderFhDP"/>
+                        <xs:element type="RegionPickerFhDPType" name="RegionPickerFhDP"/>
+                        <xs:element type="SelectComboMenuFhDPType" name="SelectComboMenuFhDP"/>
+                        <xs:element type="TabContainerFhDPType" name="TabContainerFhDP"/>
+                        <xs:element type="TimerFhDPType" name="TimerFhDP"/>
+                        <xs:element type="TreeFhDPType" name="TreeFhDP"/>
+                        <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
+
+                    </xs:choice>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+        <xs:complexType name="GroupType">
+            <xs:complexContent>
+                <xs:restriction base="GroupType">
+                    <xs:choice maxOccurs="unbounded" minOccurs="0">
+                        <xs:element type="DictionaryComboFhDPType" name="DictionaryComboFhDP"/>
+                        <xs:element type="CheckBoxFhDPType" name="CheckBoxFhDP"/>
+                        <xs:element type="ComboFhDPType" name="ComboFhDP"/>
+                        <xs:element type="ChartTime24Type" name="ChartTime24"/>
+                        <xs:element type="EmbeddedViewType" name="EmbeddedView"/>
+                        <xs:element type="FHMLStandaloneType" name="FHMLStandalone"/>
+                        <xs:element type="FileUploadPortletFhDPType" name="FileUploadPortletFhDP"/>
+                        <xs:element type="HTMLRawViewFhDPType" name="HTMLRawViewFhDP"/>
+                        <xs:element type="InputDateFhDPType" name="InputDateFhDP"/>
+                        <xs:element type="InputTextFhDPType" name="InputTextFhDP"/>
+                        <xs:element type="InputTimeFhDPType" name="InputTimeFhDP"/>
+                        <xs:element type="InputTimestampFhDPType" name="InputTimestampFhDP"/>
+                        <xs:element type="MSReportsViewType" name="MSReportsView"/>
+                        <xs:element type="PanelFhDPType" name="PanelFhDP"/>
+                        <xs:element type="PanelHeaderFhDPType" name="PanelHeaderFhDP"/>
+                        <xs:element type="RegionPickerFhDPType" name="RegionPickerFhDP"/>
+                        <xs:element type="SelectComboMenuFhDPType" name="SelectComboMenuFhDP"/>
+                        <xs:element type="TabContainerFhDPType" name="TabContainerFhDP"/>
+                        <xs:element type="TimerFhDPType" name="TimerFhDP"/>
+                        <xs:element type="TreeFhDPType" name="TreeFhDP"/>
+                        <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
+                        <xs:element type="RowType" name="Row"/>
+                    </xs:choice>
+                </xs:restriction>
+            </xs:complexContent>
+        </xs:complexType>
+        <xs:complexType name="PanelGroupType">
+            <xs:complexContent>
+                <xs:restriction base="PanelGroupType">
+                    <xs:choice maxOccurs="unbounded" minOccurs="0">
+                        <xs:element type="DictionaryComboFhDPType" name="DictionaryComboFhDP"/>
+                        <xs:element type="CheckBoxFhDPType" name="CheckBoxFhDP"/>
+                        <xs:element type="ComboFhDPType" name="ComboFhDP"/>
+                        <xs:element type="ChartTime24Type" name="ChartTime24"/>
+                        <xs:element type="EmbeddedViewType" name="EmbeddedView"/>
+                        <xs:element type="FHMLStandaloneType" name="FHMLStandalone"/>
+                        <xs:element type="FileUploadPortletFhDPType" name="FileUploadPortletFhDP"/>
+                        <xs:element type="HTMLRawViewFhDPType" name="HTMLRawViewFhDP"/>
+                        <xs:element type="InputDateFhDPType" name="InputDateFhDP"/>
+                        <xs:element type="InputTextFhDPType" name="InputTextFhDP"/>
+                        <xs:element type="InputTimeFhDPType" name="InputTimeFhDP"/>
+                        <xs:element type="InputTimestampFhDPType" name="InputTimestampFhDP"/>
+                        <xs:element type="MSReportsViewType" name="MSReportsView"/>
+                        <xs:element type="PanelFhDPType" name="PanelFhDP"/>
+                        <xs:element type="PanelHeaderFhDPType" name="PanelHeaderFhDP"/>
+                        <xs:element type="RegionPickerFhDPType" name="RegionPickerFhDP"/>
+                        <xs:element type="SelectComboMenuFhDPType" name="SelectComboMenuFhDP"/>
+                        <xs:element type="TabContainerFhDPType" name="TabContainerFhDP"/>
+                        <xs:element type="TimerFhDPType" name="TimerFhDP"/>
+                        <xs:element type="TreeFhDPType" name="TreeFhDP"/>
+                        <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
+                        <xs:element type="RowType" name="Row"/>
+                    </xs:choice>
+                </xs:restriction>
+            </xs:complexContent>
+        </xs:complexType>
+        <xs:complexType name="RepeaterType">
+            <xs:complexContent>
+                <xs:extension base="RepeaterType">
+                    <xs:choice maxOccurs="unbounded" minOccurs="0">
+                        <xs:element type="DictionaryComboFhDPType" name="DictionaryComboFhDP"/>
+                        <xs:element type="CheckBoxFhDPType" name="CheckBoxFhDP"/>
+                        <xs:element type="ComboFhDPType" name="ComboFhDP"/>
+                        <xs:element type="ChartTime24Type" name="ChartTime24"/>
+                        <xs:element type="FHMLStandaloneType" name="FHMLStandalone"/>
+                        <xs:element type="HTMLRawViewFhDPType" name="HTMLRawViewFhDP"/>
+                        <xs:element type="InputDateFhDPType" name="InputDateFhDP"/>
+                        <xs:element type="InputTextFhDPType" name="InputTextFhDP"/>
+                        <xs:element type="InputTimeFhDPType" name="InputTimeFhDP"/>
+                        <xs:element type="InputTimestampFhDPType" name="InputTimestampFhDP"/>
+                        <xs:element type="SelectComboMenuFhDPType" name="SelectComboMenuFhDP"/>
+                        <xs:element type="TabContainerFhDPType" name="TabContainerFhDP"/>
+                        <xs:element type="TreeFhDPType" name="TreeFhDP"/>
+                        <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
+                        <xs:element type="RowType" name="Row"/>
+                    </xs:choice>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+        <xs:complexType name="FormType">
+            <xs:complexContent>
+                <xs:extension base="FormType">
+                    <xs:choice maxOccurs="unbounded" minOccurs="0">
+                        <xs:element type="CheckBoxFhDPType" name="CheckBoxFhDP" maxOccurs="unbounded" minOccurs="0"/>
+                        <xs:element type="DictionaryComboFhDPType" name="DictionaryComboFhDP" maxOccurs="unbounded" minOccurs="0"/>
+
+                        <xs:element type="ComboFhDPType" name="ComboFhDP"/>
+                        <xs:element type="ChartTime24Type" name="ChartTime24"/>
+                        <xs:element type="EmbeddedViewType" name="EmbeddedView"/>
+                        <xs:element type="FHMLStandaloneType" name="FHMLStandalone"/>
+                        <xs:element type="FileUploadPortletFhDPType" name="FileUploadPortletFhDP"/>
+                        <xs:element type="HTMLRawViewFhDPType" name="HTMLRawViewFhDP"/>
+                        <xs:element type="InputDateFhDPType" name="InputDateFhDP"/>
+                        <xs:element type="InputTextFhDPType" name="InputTextFhDP"/>
+                        <xs:element type="InputTimeFhDPType" name="InputTimeFhDP"/>
+                        <xs:element type="InputTimestampFhDPType" name="InputTimestampFhDP"/>
+                        <xs:element type="MSReportsViewType" name="MSReportsView"/>
+                        <xs:element type="PanelFhDPType" name="PanelFhDP"/>
+                        <xs:element type="PanelHeaderFhDPType" name="PanelHeaderFhDP"/>
+                        <xs:element type="RegionPickerFhDPType" name="RegionPickerFhDP"/>
+                        <xs:element type="SelectComboMenuFhDPType" name="SelectComboMenuFhDP"/>
+                        <xs:element type="TabContainerFhDPType" name="TabContainerFhDP"/>
+                        <xs:element type="TimerFhDPType" name="TimerFhDP"/>
+                        <xs:element type="TreeFhDPType" name="TreeFhDP"/>
+                        <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
+                        <xs:element type="RowType" name="Row"/>
+                        <xs:element type="RowType" name="Row"/>
+                    </xs:choice>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+        <xs:complexType name="TabType">
+            <xs:complexContent>
+                <xs:extension base="TabType">
+                    <xs:choice maxOccurs="unbounded" minOccurs="0">
+                        <xs:element type="DictionaryComboFhDPType" name="DictionaryComboFhDP"/>
+                        <xs:element type="CheckBoxFhDPType" name="CheckBoxFhDP"/>
+                        <xs:element type="ComboFhDPType" name="ComboFhDP"/>
+                        <xs:element type="ChartTime24Type" name="ChartTime24"/>
+                        <xs:element type="EmbeddedViewType" name="EmbeddedView"/>
+                        <xs:element type="FHMLStandaloneType" name="FHMLStandalone"/>
+                        <xs:element type="FileUploadPortletFhDPType" name="FileUploadPortletFhDP"/>
+                        <xs:element type="HTMLRawViewFhDPType" name="HTMLRawViewFhDP"/>
+                        <xs:element type="InputDateFhDPType" name="InputDateFhDP"/>
+                        <xs:element type="InputTextFhDPType" name="InputTextFhDP"/>
+                        <xs:element type="InputTimeFhDPType" name="InputTimeFhDP"/>
+                        <xs:element type="InputTimestampFhDPType" name="InputTimestampFhDP"/>
+                        <xs:element type="MSReportsViewType" name="MSReportsView"/>
+                        <xs:element type="PanelFhDPType" name="PanelFhDP"/>
+                        <xs:element type="PanelHeaderFhDPType" name="PanelHeaderFhDP"/>
+                        <xs:element type="RegionPickerFhDPType" name="RegionPickerFhDP"/>
+                        <xs:element type="SelectComboMenuFhDPType" name="SelectComboMenuFhDP"/>
+                        <xs:element type="TabContainerFhDPType" name="TabContainerFhDP"/>
+                        <xs:element type="TreeFhDPType" name="TreeFhDP"/>
+                        <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
+                        <xs:element type="RowType" name="Row"/>
+                    </xs:choice>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+        <xs:complexType name="ColumnType">
+            <xs:complexContent>
+                <xs:extension base="ColumnType">
+                    <xs:choice maxOccurs="unbounded" minOccurs="0">
+                        <xs:element type="DictionaryComboFhDPType" name="DictionaryComboFhDP"/>
+                        <xs:element type="CheckBoxFhDPType" name="CheckBoxFhDP"/>
+                        <xs:element type="ComboFhDPType" name="ComboFhDP"/>
+                        <xs:element type="ChartTime24Type" name="ChartTime24"/>
+                        <xs:element type="FHMLStandaloneType" name="FHMLStandalone"/>
+                        <xs:element type="HTMLRawViewFhDPType" name="HTMLRawViewFhDP"/>
+                        <xs:element type="InputDateFhDPType" name="InputDateFhDP"/>
+                        <xs:element type="InputTextFhDPType" name="InputTextFhDP"/>
+                        <xs:element type="InputTimeFhDPType" name="InputTimeFhDP"/>
+                        <xs:element type="InputTimestampFhDPType" name="InputTimestampFhDP"/>
+                        <xs:element type="SelectComboMenuFhDPType" name="SelectComboMenuFhDP"/>
+                        <xs:element type="TabContainerFhDPType" name="TabContainerFhDP"/>
+                        <xs:element type="TreeFhDPType" name="TreeFhDP"/>
+                        <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
+                        <xs:element type="RowType" name="Row"/>
+                    </xs:choice>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+        <xs:complexType name="FooterType">
+            <xs:complexContent>
+                <xs:extension base="FooterType">
+                    <xs:choice maxOccurs="unbounded" minOccurs="0">
+                        <xs:element type="TimerFhDPType" name="TimerFhDP"/>
+                        <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
+                    </xs:choice>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:redefine>
+
+    <!-- =====================================================================================================
+    Form configuration
+    ===================================================================================================== -->
+    <xs:include schemaLocation="FormFHCoreLite.xsd"/>
+
+
+    <xs:element name="ChartTime24" type="ChartTime24Type"/>
+    <xs:complexType name="ChartTime24Type">
+        <!-- TODO ChartTime24TimeType attrs-->
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="vAxisName"/>
+        <xs:attribute type="xs:string" name="hAxisName"/>
+        <xs:attribute type="xs:string" name="bgColor"/>
+        <xs:attribute type="xs:string" name="tooltipBgColor"/>
+        <xs:attribute type="xs:string" name="axisLabelColor"/>
+        <xs:attribute type="xs:string" name="lineColor"/>
+        <xs:attribute type="xs:string" name="tooltipColor"/>
+        <xs:attribute type="xs:string" name="fontFamily"/>
+        <xs:attribute type="xs:string" name="bars" use="required"/>
+        <xs:attribute type="xs:string" name="highlightedValue"/>
+        <xs:attribute type="xs:string" name="highlightedStroke"/>
+        <xs:attribute type="xs:string" name="gradation"/>
+        <xs:attribute type="xs:string" name="maxValueX"/>
+        <xs:attribute type="xs:string" name="mainElementId"/>
+        <xs:attribute type="xs:string" name="scrollContainerId"/>
+        <xs:attribute type="xs:string" name="barBreakWidth"/>
+        <xs:attribute type="xs:string" name="barHeight"/>
+        <xs:attribute type="xs:string" name="barBreakHeight"/>
+        <xs:attribute type="xs:string" name="percentDarkColorOnMove"/>
+        <xs:attribute type="xs:string" name="scrollSizeChart"/>
+        <xs:attribute type="xs:string" name="protrudingLinesHeight"/>
+        <xs:attribute type="xs:string" name="labelTextHeight"/>
+        <xs:attribute type="xs:string" name="labelTextFontSize"/>
+        <xs:attribute type="xs:string" name="lineStrokeWidth"/>
+        <xs:attribute type="xs:string" name="topMarginLegend"/>
+        <xs:attribute type="xs:string" name="legendColorWidth"/>
+        <xs:attribute type="xs:string" name="legendColorHeight"/>
+        <xs:attribute type="xs:string" name="legendFontSize"/>
+        <xs:attribute type="xs:string" name="legendBreakColorText"/>
+        <xs:attribute type="xs:string" name="legendElementBreakWidth"/>
+        <xs:attribute type="xs:string" name="legendElementBreakHeight"/>
+        <xs:attribute type="xs:string" name="tooltipOpacity"/>
+        <xs:attribute type="xs:string" name="tooltipPointerWidth"/>
+        <xs:attribute type="xs:string" name="tooltipPointerHeight"/>
+        <xs:attribute type="xs:string" name="tooltipCornerRadius"/>
+        <xs:attribute type="xs:string" name="tooltipFontSize"/>
+        <xs:attribute type="xs:string" name="tooltipPadding"/>
+        <xs:attribute type="xs:string" name="labelNameFontSize"/>
+        <xs:attribute type="xs:string" name="labelNameBreak"/>
+        <xs:attribute type="xs:string" name="leftMarginChart"/>
+        <xs:attribute type="xs:string" name="rightMarginChart"/>
+        <xs:attribute type="xs:string" name="topMarginChart"/>
+        <xs:attribute type="xs:string" name="bottomMarginChart"/>
+    </xs:complexType>
+
+    <xs:element name="CheckBoxFhDP" type="CheckBoxFhDPType"/>
+    <xs:complexType name="CheckBoxFhDPType">
+        <!-- TODO CheckBoxFhDP attrs-->
+        <xs:attributeGroup ref="ConfirmationDialogSupport"/>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="icon"/>
+        <xs:attribute type="InputSizeType" name="inputSize"/>
+        <xs:attribute type="LabelSizeType" name="labelSize"/>
+        <xs:attribute type="xs:string" name="iconAlignment"/>
+        <xs:attribute type="xs:string" name="label" use="required"/>
+        <xs:attribute type="xs:string" name="validationLabel"/>
+        <xs:attribute type="LabelPositionType" name="labelPosition"/>
+        <xs:attribute type="xs:string" name="onChange"/>
+        <xs:attribute type="xs:string" name="required" default="false"/>
+        <xs:attribute type="xs:string" name="value"/>
+        <xs:attribute type="xs:string" name="width" use="required" default="md-2"/>
+        <xs:attribute type="xs:string" name="labelId"/>
+    </xs:complexType>
+
+    <xs:element name="ComboFhDP" type="ComboFhDPType"/>
+    <xs:complexType name="ComboFhDPType">
+        <!-- TODO ComboFhDP attrs-->
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="OnKeyEventType" name="OnKeyEvent"/>
+        </xs:choice>
+        <xs:attributeGroup ref="ConfirmationDialogSupport"/>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="cursor"/>
+        <xs:attribute type="xs:string" name="icon"/>
+        <xs:attribute type="xs:string" name="iconAlignment" default="before"/>
+        <xs:attribute type="InputSizeType" name="inputSize"/>
+        <xs:attribute type="LabelSizeType" name="labelSize"/>
+        <xs:attribute type="xs:string" name="freeTyping"/>
+        <xs:attribute type="xs:string" name="filterFunction"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="xs:string" name="validationLabel"/>
+        <xs:attribute type="LabelPositionType" name="labelPosition"/>
+        <xs:attribute type="xs:string" name="onChange"/>
+        <xs:attribute type="xs:string" name="onInput"/>
+        <xs:attribute type="xs:string" name="onSpecialKey"/>
+        <xs:attribute type="xs:string" name="onDblSpecialKey"/>
+        <xs:attribute type="xs:string" name="onEmptyValue"/>
+        <xs:attribute type="xs:string" name="required" default="false"/>
+        <xs:attribute type="xs:string" name="values"/>
+        <xs:attribute type="xs:string" name="value"/>
+        <xs:attribute type="xs:string" name="lastValue"/>
+        <xs:attribute type="xs:string" name="hideCrossed"/>
+        <xs:attribute type="xs:string" name="emptyValue" default="false"/>
+        <xs:attribute type="xs:boolean" name="openOnFocus" default="true"/>
+        <xs:attribute type="xs:string" name="formatter"/>
+        <xs:attribute type="xs:boolean" name="preload"/>
+        <xs:attribute type="xs:string" name="onKeyEvent"/>
+        <xs:attribute type="xs:string" name="keyEvent"/>
+        <xs:attribute type="xs:string" name="displayExpression"/>
+        <xs:attribute type="xs:string" name="filterText"/>
+        <xs:attribute type="xs:boolean" name="multiselect"/>
+        <xs:attribute type="xs:string" name="displayRule"/>
+        <xs:attribute type="xs:string" name="labelId"/>
+        <xs:attribute type="hintPlacementType" name="hintPlacement"/>
+        <xs:attribute type="hintTriggerType" name="hintTrigger"/>
+        <xs:attribute type="xs:string" name="width" default="md-2" use="required"/>
+        <xs:attribute type="xs:string" name="displayFunction">
+            <xs:annotation>
+                <xs:documentation>Name of model object (java.util.function.BiPredicate) which will be used to format
+                    items as text.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+
+    <xs:element name="DictionaryComboFhDP" type="DictionaryComboFhDPType"/>
+    <xs:complexType name="DictionaryComboFhDPType">
+        <!-- TODO DictionaryComboFhDP attrs-->
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="OnKeyEventType" name="OnKeyEvent"/>
+            <xs:element type="DictionaryComboParameterFhDPType" name="DictionaryComboParameterFhDP"/>
+        </xs:choice>
+        <xs:attributeGroup ref="ConfirmationDialogSupport"/>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="cursor"/>
+        <xs:attribute type="xs:string" name="icon"/>
+        <xs:attribute type="xs:string" name="iconAlignment" default="before"/>
+        <xs:attribute type="InputSizeType" name="inputSize"/>
+        <xs:attribute type="LabelSizeType" name="labelSize"/>
+        <xs:attribute type="xs:string" name="freeTyping"/>
+        <xs:attribute type="xs:string" name="filterFunction"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="xs:string" name="validationLabel"/>
+        <xs:attribute type="LabelPositionType" name="labelPosition"/>
+        <xs:attribute type="xs:string" name="onChange"/>
+        <xs:attribute type="xs:string" name="onInput"/>
+        <xs:attribute type="xs:string" name="onSpecialKey"/>
+        <xs:attribute type="xs:string" name="onDblSpecialKey"/>
+        <xs:attribute type="xs:string" name="onEmptyValue"/>
+        <xs:attribute type="xs:string" name="onClickLastValue"/>
+        <xs:attribute type="xs:string" name="onClickSearchIcon"/>
+        <xs:attribute type="xs:string" name="shouldCloseTooltip"/>
+        <xs:attribute type="xs:string" name="dispalyOnlyCode"/>
+        <xs:attribute type="xs:string" name="required" default="false"/>
+        <xs:attribute type="xs:string" name="values"/>
+        <xs:attribute type="xs:string" name="value"/>
+        <xs:attribute type="xs:string" name="lastValue"/>
+        <xs:attribute type="xs:string" name="valuesPaged"/>
+        <xs:attribute type="xs:string" name="displayedComponentId"/>
+        <xs:attribute type="xs:string" name="hideCrossed"/>
+        <xs:attribute type="xs:string" name="addClearButton"/>
+        <xs:attribute type="xs:string" name="emptyValue" default="false"/>
+        <xs:attribute type="xs:string" name="formatter"/>
+        <xs:attribute type="xs:boolean" name="preload"/>
+        <xs:attribute type="xs:string" name="onKeyEvent"/>
+        <xs:attribute type="xs:string" name="keyEvent"/>
+        <xs:attribute type="xs:string" name="labelId"/>
+        <xs:attribute type="xs:string" name="width" use="required" default="md-2"/>
+        <xs:attribute type="xs:string" name="displayExpression"/>
+        <xs:attribute type="xs:boolean" name="multiselect"/>
+        <xs:attribute type="xs:string" name="filterText"/>
+        <xs:attribute type="xs:string" name="provider"/>
+        <xs:attribute type="TimeoutType" name="onInputTimeout"/>
+        <xs:attribute type="xs:string" name="displayFunction">
+            <xs:annotation>
+                <xs:documentation>Name of model object (java.util.function.BiPredicate) which will be used to format
+                    items as text.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+
+    <xs:element name="DictionaryComboParameterFhDP" type="DictionaryComboParameterFhDPType"/>
+    <xs:complexType name="DictionaryComboParameterFhDPType">
+        <!-- TODO DictionaryComboParameterFhDP attrs-->
+        <xs:attribute type="xs:string" name="name"/>
+        <xs:attribute type="xs:string" name="value"/>
+    </xs:complexType>
+
+    <xs:element name="EmbeddedView" type="EmbeddedViewType"/>
+    <xs:complexType name="EmbeddedViewType">
+        <!-- TODO EmbeddedView attrs-->
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="xs:string" name="src"/>
+    </xs:complexType>
+
+    <xs:element name="FHMLStandalone" type="FHMLStandaloneType"/>
+    <xs:complexType name="FHMLStandaloneType">
+        <!-- TODO FHMLStandalone attrs-->
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="content"/>
+        <xs:attribute type="xs:string" name="tag"/>
+    </xs:complexType>
+
+    <xs:element name="FileUploadPortletFhDP" type="FileUploadPortletFhDPType"/>
+    <xs:complexType name="FileUploadPortletFhDPType">
+        <!-- TODO FileUploadPortletFhDP attrs-->
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="file"/>
+        <xs:attribute type="xs:string" name="files"/>
+        <xs:attribute type="xs:long" name="maxSize" use="required"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="xs:string" name="validationLabel"/>
+        <xs:attribute type="xs:string" name="onUpload" use="required"/>
+        <xs:attribute type="xs:string" name="width" default="md-2" use="required"/>
+        <xs:attribute type="xs:string" name="extensions"/>
+        <xs:attribute type="xs:boolean" name="multiple" default="false"/>
+        <xs:attribute type="xs:boolean" name="labelHidden" default="false"/>
+        <xs:attribute type="xs:boolean" name="required" default="false"/>
+    </xs:complexType>
+
+    <xs:element name="HTMLRawViewFhDP" type="HTMLRawViewFhDPType"/>
+    <xs:complexType name="HTMLRawViewFhDPType">
+        <!-- TODO HTMLRawViewFhDP attrs-->
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="text"/>
+        <xs:attribute type="xs:string" name="formatter"/>
+    </xs:complexType>
+
+    <xs:element name="InputDateFhDP" type="InputDateFhDPType"/>
+    <xs:complexType name="InputDateFhDPType">
+        <!-- TODO InputDateFhDP attrs-->
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="OnKeyEventType" name="OnKeyEvent"/>
+        </xs:choice>
+        <xs:attributeGroup ref="ConfirmationDialogSupport"/>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="format"/>
+        <xs:attribute type="xs:boolean" name="maskEnabled"/>
+        <xs:attribute type="xs:string" name="icon"/>
+        <xs:attribute type="xs:string" name="iconAlignment"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="xs:string" name="validationLabel"/>
+        <xs:attribute type="xs:string" name="onChange"/>
+        <xs:attribute type="xs:string" name="required" default="false"/>
+        <xs:attribute type="xs:string" name="value"/>
+        <xs:attribute type="xs:string" name="lastValue"/>
+        <xs:attribute type="xs:string" name="hideCrossed"/>
+        <xs:attribute type="xs:string" name="validationRule"/>
+        <xs:attribute type="xs:string" name="onKeyEvent"/>
+        <xs:attribute type="xs:string" name="keyEvent"/>
+        <xs:attribute type="xs:boolean" name="maskDynamic"/>
+        <xs:attribute type="xs:boolean" name="highlightToday"/>
+        <xs:attribute type="xs:string" name="width" use="required" default="md-3"/>
+        <xs:attribute type="LabelPositionType" name="labelPosition"/>
+        <xs:attribute type="InputSizeType" name="inputSize"/>
+        <xs:attribute type="LabelSizeType" name="labelSize"/>
+    </xs:complexType>
+
+    <xs:element name="InputTextFhDP" type="InputTextFhDPType"/>
+    <xs:complexType name="InputTextFhDPType">
+        <!-- TODO InputTextFhDP attrs-->
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="OnKeyEventType" name="OnKeyEvent"/>
+        </xs:choice>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attributeGroup ref="ConfirmationDialogSupport"/>
+        <xs:attribute type="xs:string" name="icon"/>
+        <xs:attribute type="xs:string" name="iconAlignment"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="xs:string" name="validationLabel"/>
+        <xs:attribute type="xs:string" name="mask"/>
+        <xs:attribute type="xs:string" name="maskBinding"/>
+        <xs:attribute type="xs:positiveInteger" name="maxLength"/>
+        <xs:attribute type="xs:string" name="maxLengthBinding"/>
+        <xs:attribute type="xs:string" name="onChange"/>
+        <xs:attribute type="xs:string" name="onInput"/>
+        <xs:attribute type="xs:string" name="placeholder"/>
+        <xs:attribute type="xs:boolean" name="maskInsertMode"/>
+        <xs:attribute type="xs:string" name="required" default="false"/>
+        <xs:attribute type="TextAlignType" name="textAlign"/>
+        <xs:attribute type="xs:string" name="validationRule"/>
+        <xs:attribute type="xs:positiveInteger" name="rowsCount"/>
+        <xs:attribute type="xs:string" name="value"/>
+        <xs:attribute type="xs:string" name="lastValue"/>
+        <xs:attribute type="xs:string" name="hideCrossed"/>
+        <xs:attribute type="inputTextType" name="inputType"/>
+        <xs:attribute type="xs:string" name="onKeyEvent"/>
+        <xs:attribute type="xs:string" name="keyEvent"/>
+        <xs:attribute type="xs:string" name="formatter"/>
+        <xs:attribute type="xs:string" name="formatterBinding"/>
+        <xs:attribute type="LabelPositionType" name="labelPosition"/>
+        <xs:attribute type="InputSizeType" name="inputSize"/>
+        <xs:attribute type="LabelSizeType" name="labelSize"/>
+        <xs:attribute type="xs:string" name="maskDefinition"/>
+        <xs:attribute type="xs:boolean" name="maskDynamic"/>
+        <xs:attribute type="xs:string" name="requiredRegex"/>
+        <xs:attribute type="xs:string" name="requiredRegexBinding"/>
+        <xs:attribute type="xs:string" name="requiredRegexMessage"/>
+        <xs:attribute type="xs:string" name="labelId"/>
+        <xs:attribute type="xs:string" name="width" use="required" default="md-3"/>
+    </xs:complexType>
+
+    <xs:element name="InputTimeFhDP" type="InputTimeFhDPType"/>
+    <xs:complexType name="InputTimeFhDPType">
+        <!-- TODO InputTimeFhDP attrs-->
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="OnKeyEventType" name="OnKeyEvent"/>
+        </xs:choice>
+        <xs:attributeGroup ref="ConfirmationDialogSupport"/>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="format"/>
+        <xs:attribute type="xs:boolean" name="maskEnabled"/>
+        <xs:attribute type="xs:string" name="icon"/>
+        <xs:attribute type="xs:string" name="iconAlignment"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="xs:string" name="validationLabel"/>
+        <xs:attribute type="xs:string" name="onChange"/>
+        <xs:attribute type="xs:string" name="required" default="false"/>
+        <xs:attribute type="xs:string" name="value"/>
+        <xs:attribute type="xs:string" name="lastValue"/>
+        <xs:attribute type="xs:string" name="hideCrossed"/>
+        <xs:attribute type="xs:string" name="validationRule"/>
+        <xs:attribute type="xs:string" name="onKeyEvent"/>
+        <xs:attribute type="xs:string" name="keyEvent"/>
+        <xs:attribute type="xs:boolean" name="maskDynamic"/>
+        <xs:attribute type="xs:boolean" name="highlightToday"/>
+        <xs:attribute type="xs:string" name="width" use="required" default="md-3"/>
+        <xs:attribute type="LabelPositionType" name="labelPosition"/>
+        <xs:attribute type="InputSizeType" name="inputSize"/>
+        <xs:attribute type="LabelSizeType" name="labelSize"/>
+    </xs:complexType>
+
+    <xs:element name="InputTimestampFhDP" type="InputTimestampFhDPType"/>
+    <xs:complexType name="InputTimestampFhDPType">
+        <!-- TODO InputTimestampFhDP attrs-->
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="OnKeyEventType" name="OnKeyEvent"/>
+        </xs:choice>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="format"/>
+        <xs:attribute type="xs:string" name="icon"/>
+        <xs:attribute type="xs:string" name="iconAlignment"/>
+        <xs:attribute type="InputSizeType" name="inputSize"/>
+        <xs:attribute type="LabelSizeType" name="labelSize"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="xs:string" name="validationLabel"/>
+        <xs:attribute type="LabelPositionType" name="labelPosition"/>
+        <xs:attribute type="xs:string" name="onChange"/>
+        <xs:attribute type="xs:string" name="required" default="false"/>
+        <xs:attribute type="xs:string" name="validationRule"/>
+        <xs:attribute type="xs:string" name="value"/>
+        <xs:attribute type="xs:string" name="lastValue"/>
+        <xs:attribute type="xs:string" name="hideCrossed"/>
+        <xs:attribute type="xs:string" name="onKeyEvent"/>
+        <xs:attribute type="xs:string" name="keyEvent"/>
+        <xs:attribute type="xs:string" name="width" use="required" default="md-3"/>
+    </xs:complexType>
+
+    <xs:element name="MSReportsView" type="MSReportsViewType"/>
+    <xs:complexType name="MSReportsViewType">
+        <!-- TODO MSReportsView attrs-->
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="content" use="required"/>
+        <xs:attribute type="xs:string" name="link" use="required"/>
+        <xs:attribute type="xs:string" name="onLinkClicked"/>
+    </xs:complexType>
+
+    <xs:element name="PanelFhDP" type="PanelFhDPType"/>
+    <xs:complexType name="PanelFhDPType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="ChartTime24Type" name="ChartTime24"/>
+            <xs:element type="FHMLStandaloneType" name="FHMLStandalone"/>
+            <xs:element type="HTMLRawViewFhDPType" name="HTMLRawViewFhDP"/>
+            <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
+        </xs:choice>
+        <!-- TODO PanelFhDP attrs-->
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="info" use="required"/>
+        <xs:attribute type="xs:string" name="title" use="required"/>
+        <xs:attribute type="xs:string" name="onClick"/>
+    </xs:complexType>
+
+    <xs:element name="PanelHeaderFhDP" type="PanelHeaderFhDPType"/>
+    <xs:complexType name="PanelHeaderFhDPType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="ChartTime24Type" name="ChartTime24"/>
+            <xs:element type="FHMLStandaloneType" name="FHMLStandalone"/>
+            <xs:element type="HTMLRawViewFhDPType" name="HTMLRawViewFhDP"/>
+            <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
+        </xs:choice>
+        <!-- TODO PanelHeaderFhDP attrs-->
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="info" use="required"/>
+        <xs:attribute type="xs:string" name="title" use="required"/>
+        <xs:attribute type="xs:string" name="onClick"/>
+
+
+    </xs:complexType>
+
+    <xs:element name="RegionPickerFhDP" type="RegionPickerFhDPType"/>
+    <xs:complexType name="RegionPickerFhDPType">
+        <!-- TODO RegionPickerFhDP attrs-->
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="map" use="required"/>
+        <xs:attribute type="xs:string" name="bgColor" use="required"/>
+        <xs:attribute type="xs:string" name="code" use="required"/>
+    </xs:complexType>
+
+    <xs:element name="SelectComboMenuFhDP" type="SelectComboMenuFhDPType"/>
+    <xs:complexType name="SelectComboMenuFhDPType">
+        <!-- TODO SelectComboMenuFhDP attrs-->
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="OnKeyEventType" name="OnKeyEvent"/>
+        </xs:choice>
+        <xs:attributeGroup ref="ConfirmationDialogSupport"/>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="icon"/>
+        <xs:attribute type="xs:string" name="iconAlignment" default="before"/>
+        <xs:attribute type="InputSizeType" name="inputSize"/>
+        <xs:attribute type="LabelSizeType" name="labelSize"/>
+        <xs:attribute type="xs:string" name="freeTyping"/>
+        <xs:attribute type="xs:string" name="filterFunction"/>
+        <xs:attribute type="xs:string" name="emptyValue"/>
+        <xs:attribute type="xs:string" name="displayExpression"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="xs:string" name="validationLabel"/>
+        <xs:attribute type="LabelPositionType" name="labelPosition"/>
+        <xs:attribute type="xs:string" name="onChange"/>
+        <xs:attribute type="xs:string" name="onInput"/>
+        <xs:attribute type="xs:string" name="onSpecialKey"/>
+        <xs:attribute type="xs:string" name="onDblSpecialKey"/>
+        <xs:attribute type="xs:string" name="required" default="false"/>
+        <xs:attribute type="xs:string" name="values"/>
+        <xs:attribute type="xs:string" name="value"/>
+        <xs:attribute type="xs:string" name="lastValue"/>
+        <xs:attribute type="xs:string" name="hideCrossed"/>
+        <xs:attribute type="xs:string" name="formatter"/>
+        <xs:attribute type="xs:string" name="hoverStyle" default="background: #0069D9; color: #FFFFFF"/>
+        <xs:attribute type="xs:string" name="initialStyle" default="background: #FFFFFF; color: #000000"/>
+        <xs:attribute type="xs:boolean" name="preload"/>
+        <xs:attribute type="xs:string" name="onKeyEvent"/>
+        <xs:attribute type="xs:string" name="keyEvent"/>
+        <xs:attribute type="xs:string" name="width" use="required" default="md-3" />
+        <xs:attribute type="xs:boolean" name="emptyLabel" default="false"/>
+        <xs:attribute type="xs:string" name="emptyLabelText" default="false"/>
+        <xs:attribute type="xs:string" name="labelId"/>
+        <xs:attribute type="xs:string" name="displayFunction">
+            <xs:annotation>
+                <xs:documentation>Name of model object (java.util.function.BiPredicate) which will be used to format
+                    items as text.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+
+    <xs:element name="TabContainerFhDP" type="TabContainerFhDPType"/>
+    <xs:complexType name="TabContainerFhDPType">
+        <!-- TODO TabContainerFhDP attrs-->
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="TabType" name="Tab"/>
+        </xs:choice>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="activeTabIndex"/>
+        <xs:attribute type="xs:string" name="activeTabId"/>
+        <xs:attribute type="xs:string" name="onTabChange"/>
+        <xs:attribute type="xs:string" name="portalContainerId"/>
+        <xs:attribute type="xs:string" name="isTabsSeparated"/>
+    </xs:complexType>
+
+    <xs:element name="TimerFhDP" type="TimerFhDPType"/>
+    <xs:complexType name="TimerFhDPType">
+        <!-- TODO TimerFhDP attrs-->
+        <xs:attribute type="xs:integer" name="timeout"/>
+        <xs:attribute type="xs:string" name="onInterval"/>
+    </xs:complexType>
+
+    <xs:element name="TreeElementFhDP" type="TreeElementFhDPType"/>
+    <xs:complexType name="TreeElementFhDPType">
+        <!-- TODO TreeElementFhDP attrs-->
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="xs:string" name="icon"/>
+        <xs:attribute type="xs:string" name="url"/>
+        <xs:attribute type="xs:string" name="onLabelClick"/>
+        <xs:attribute type="xs:string" name="onIconClick"/>
+        <xs:attribute type="xs:string" name="expandedException"/>
+        <xs:attribute type="xs:string" name="highlightColor"/>
+        <xs:attribute type="xs:boolean" name="isHighlight"/>
+    </xs:complexType>
+
+    <xs:element name="TreeFhDP" type="TreeFhDPType"/>
+    <xs:complexType name="TreeFhDPType">
+        <!-- TODO TreeFhDP attrs-->
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="TreeElementFhDPType" name="TreeElementFhDP"/>
+        </xs:choice>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attributeGroup ref="RepeatableTypeGroup"/>
+        <xs:attribute type="xs:string" name="relation" use="required"/>
+        <xs:attribute type="xs:string" name="nodeIcon"/>
+        <xs:attribute type="xs:string" name="collapsedNodeIcon"/>
+        <xs:attribute type="xs:string" name="leafIcon"/>
+        <xs:attribute type="xs:boolean" name="lines" default="true"/>
+        <xs:attribute type="xs:boolean" name="lazy" default="false"/>
+        <xs:attribute type="xs:boolean" name="expanded" default="false"/>
+        <xs:attribute type="xs:string" name="selected"/>
+        <xs:attribute type="xs:string" name="nextLevelExpandableExpression"/>
+        <xs:attribute type="xs:boolean" name="dynamic" default="true"/>
+        <xs:attribute type="xs:string" name="collection" />
+        <xs:attribute type="xs:string" name="iterator" />
+    </xs:complexType>
+
+    <xs:element name="XMLViewerFhDP" type="XMLViewerFhDPType"/>
+    <xs:complexType name="XMLViewerFhDPType">
+        <!-- TODO XMLViewerFhDP attrs-->
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="content" use="required"/>
+    </xs:complexType>
+</xs:schema>
