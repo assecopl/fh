@@ -40,7 +40,7 @@
                         <xs:element type="TimerFhDPType" name="TimerFhDP"/>
                         <xs:element type="TreeFhDPType" name="TreeFhDP"/>
                         <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
-
+                        <xs:element type="InputNumberFhDPType" name="InputNumberFhDP"/>
                     </xs:choice>
                 </xs:extension>
             </xs:complexContent>
@@ -71,6 +71,7 @@
                         <xs:element type="TreeFhDPType" name="TreeFhDP"/>
                         <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
                         <xs:element type="RowType" name="Row"/>
+                        <xs:element type="InputNumberFhDPType" name="InputNumberFhDP"/>
                     </xs:choice>
                 </xs:restriction>
             </xs:complexContent>
@@ -101,6 +102,7 @@
                         <xs:element type="TreeFhDPType" name="TreeFhDP"/>
                         <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
                         <xs:element type="RowType" name="Row"/>
+                        <xs:element type="InputNumberFhDPType" name="InputNumberFhDP"/>
                     </xs:choice>
                 </xs:restriction>
             </xs:complexContent>
@@ -124,6 +126,7 @@
                         <xs:element type="TreeFhDPType" name="TreeFhDP"/>
                         <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
                         <xs:element type="RowType" name="Row"/>
+                        <xs:element type="InputNumberFhDPType" name="InputNumberFhDP"/>
                     </xs:choice>
                 </xs:extension>
             </xs:complexContent>
@@ -156,6 +159,7 @@
                         <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
                         <xs:element type="RowType" name="Row"/>
                         <xs:element type="RowType" name="Row"/>
+                        <xs:element type="InputNumberFhDPType" name="InputNumberFhDP"/>
                     </xs:choice>
                 </xs:extension>
             </xs:complexContent>
@@ -185,6 +189,7 @@
                         <xs:element type="TreeFhDPType" name="TreeFhDP"/>
                         <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
                         <xs:element type="RowType" name="Row"/>
+                        <xs:element type="InputNumberFhDPType" name="InputNumberFhDP"/>
                     </xs:choice>
                 </xs:extension>
             </xs:complexContent>
@@ -208,6 +213,7 @@
                         <xs:element type="TreeFhDPType" name="TreeFhDP"/>
                         <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
                         <xs:element type="RowType" name="Row"/>
+                        <xs:element type="InputNumberFhDPType" name="InputNumberFhDP"/>
                     </xs:choice>
                 </xs:extension>
             </xs:complexContent>
@@ -743,5 +749,30 @@
         <!-- TODO XMLViewerFhDP attrs-->
         <xs:attributeGroup ref="FormElementTypeGroup"/>
         <xs:attribute type="xs:string" name="content" use="required"/>
+    </xs:complexType>
+
+    <xs:element name="InputNumberFhDP" type="InputNumberFhDPType"/>
+    <xs:complexType name="InputNumberFhDPType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="OnKeyEventType" name="OnKeyEvent"/>
+        </xs:choice>
+        <xs:attributeGroup ref="ConfirmationDialogSupport"/>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="format"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="xs:string" name="validationLabel"/>
+        <xs:attribute type="xs:string" name="onChange"/>
+        <xs:attribute type="xs:string" name="required" default="false"/>
+        <xs:attribute type="xs:string" name="value"/>
+        <xs:attribute type="xs:string" name="lastValue"/>
+        <xs:attribute type="xs:string" name="hideCrossed"/>
+        <xs:attribute type="xs:string" name="validationRule"/>
+        <xs:attribute type="xs:string" name="onKeyEvent"/>
+        <xs:attribute type="xs:string" name="keyEvent"/>
+        <xs:attribute type="LabelPositionType" name="labelPosition"/>
+        <xs:attribute type="InputSizeType" name="inputSize"/>
+        <xs:attribute type="LabelSizeType" name="labelSize"/>
+        <xs:attribute type="xs:string" name="maxFractionDigits"/>
+        <xs:attribute type="xs:string" name="maxIntigerDigits"/>
     </xs:complexType>
 </xs:schema>

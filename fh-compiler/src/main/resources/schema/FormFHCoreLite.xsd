@@ -366,6 +366,7 @@
         <xs:choice maxOccurs="unbounded" minOccurs="0">
             <xs:element type="ColumnType" name="Column"/>
             <xs:element type="ButtonType" name="Button"/>
+            <xs:element type="PanelGroupType" name="PanelGroup"/>
             <xs:element type="CalendarType" name="Calendar"/>
             <xs:element type="CheckBoxType" name="CheckBox"/>
             <xs:element type="ComboType" name="Combo"/>
