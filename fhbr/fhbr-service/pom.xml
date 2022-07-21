@@ -34,6 +34,7 @@
         <module>fhbr-schema-validator</module>
         <module>fhbr-rule-clazzchecker</module>
         <module>fhbr-test-mock</module>
+        <module>fhbr-test</module>
     </modules>
 
     <properties>

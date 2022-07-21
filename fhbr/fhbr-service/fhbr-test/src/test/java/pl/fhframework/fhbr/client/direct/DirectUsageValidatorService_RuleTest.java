@@ -28,7 +28,6 @@ import pl.fhframework.fhbr.api.service.ValidatorServiceFactory;
 import pl.fhframework.fhbr.dao.InMemoryBussinesRuleDao;
 import pl.fhframework.fhbr.engine.ValidatorServiceFactoryImpl;
 import pl.fhframework.fhbr.example.TestObject;
-import pl.fhframework.fhbr.rule.R1;
 import pl.fhframework.fhbr.validator.RuleClazzCheckerFactory;
 
 import java.time.LocalDate;
@@ -65,7 +64,7 @@ public class DirectUsageValidatorService_RuleTest {
             r1.setName("R1");
             r1.setActive(true);
             r1.setBusinessKey("R1");
-            r1.setRuleClass(R1.class.getName());
+            r1.setRuleClass("pl.fhframework.fhbr.rule.R1");
             r1.setCheckerType("clazz");
             r1.setMessageKey("message.key.for.r1");
 
