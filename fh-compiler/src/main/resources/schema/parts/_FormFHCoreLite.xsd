@@ -1,6 +1,4 @@
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:cs="http://www.w3.org/2001/XMLSchema"
-           targetNamespace="http://fh.asseco.com/form/1.0"
-           xmlns="http://fh.asseco.com/form/1.0"
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
            elementFormDefault="qualified">
     <xs:annotation>
         <xs:documentation>
@@ -19,9 +17,8 @@
     Form configuration
     ===================================================================================================== -->
     <xs:element name="Form" type="FormType"/>
-
     <xs:complexType name="FormType">
-        <xs:choice maxOccurs="unbounded" minOccurs="0">
+        <xs:choice>
             <xs:element type="AvailabilityConfigurationType" name="AvailabilityConfiguration">
                 <xs:unique name="uniqueVariantID">
                     <xs:selector xpath=".//*"/>
@@ -366,6 +363,7 @@
         <xs:choice maxOccurs="unbounded" minOccurs="0">
             <xs:element type="ColumnType" name="Column"/>
             <xs:element type="ButtonType" name="Button"/>
+            <xs:element type="PanelGroupType" name="PanelGroup"/>
             <xs:element type="CalendarType" name="Calendar"/>
             <xs:element type="CheckBoxType" name="CheckBox"/>
             <xs:element type="ComboType" name="Combo"/>

@@ -18,6 +18,5 @@
     <!-- =====================================================================================================
     Form configuration
     ===================================================================================================== -->
-    <xs:include schemaLocation="FormFHCoreLite.xsd"/>
-    <xs:include schemaLocation="FormFhDP.xsd"/>
+    <xs:include  schemaLocation="./parts/_FormFHCoreLite.xsd"/>
 </xs:schema>

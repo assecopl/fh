@@ -1,6 +1,7 @@
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:cs="http://www.w3.org/2001/XMLSchema"
-           targetNamespace="http://fh.asseco.com/form/1.0"
-           xmlns="http://fh.asseco.com/form/1.0"
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://fh.asseco.com/form/fhdp/1.0"
+           xmlns="http://fh.asseco.com/form/fhdp/1.0"
+           xmlns:lite="http://fh.asseco.com/form/1.0"
            elementFormDefault="qualified">
     <xs:annotation>
         <xs:documentation>
@@ -14,10 +15,11 @@
         ]]>
         </xs:documentation>
     </xs:annotation>
-    <xs:redefine xmlns:xs="http://www.w3.org/2001/XMLSchema" schemaLocation="./FormFHCoreLite.xsd">
+<!--    <xs:include schemaLocation="./parts/_FormFHCoreLite.xsd"/>-->
+    <xs:redefine xmlns:xs="http://www.w3.org/2001/XMLSchema" schemaLocation="./parts/_FormFHCoreLite.xsd">
         <xs:complexType  name="RowType">
             <xs:complexContent >
-                <xs:extension base="RowType"  >
+                <xs:extension base="lite:RowType"  >
                     <xs:choice  maxOccurs="unbounded" minOccurs="0">
                         <xs:element type="DictionaryComboFhDPType" name="DictionaryComboFhDP"/>
                         <xs:element type="CheckBoxFhDPType" name="CheckBoxFhDP"/>
@@ -40,14 +42,14 @@
                         <xs:element type="TimerFhDPType" name="TimerFhDP"/>
                         <xs:element type="TreeFhDPType" name="TreeFhDP"/>
                         <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
-
+                        <xs:element type="InputNumberFhDPType" name="InputNumberFhDP"/>
                     </xs:choice>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
         <xs:complexType name="GroupType">
             <xs:complexContent>
-                <xs:restriction base="GroupType">
+                <xs:restriction base="lite:GroupType">
                     <xs:choice maxOccurs="unbounded" minOccurs="0">
                         <xs:element type="DictionaryComboFhDPType" name="DictionaryComboFhDP"/>
                         <xs:element type="CheckBoxFhDPType" name="CheckBoxFhDP"/>
@@ -70,14 +72,14 @@
                         <xs:element type="TimerFhDPType" name="TimerFhDP"/>
                         <xs:element type="TreeFhDPType" name="TreeFhDP"/>
                         <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
-                        <xs:element type="RowType" name="Row"/>
+                        <xs:element type="InputNumberFhDPType" name="InputNumberFhDP"/>
                     </xs:choice>
                 </xs:restriction>
             </xs:complexContent>
         </xs:complexType>
         <xs:complexType name="PanelGroupType">
             <xs:complexContent>
-                <xs:restriction base="PanelGroupType">
+                <xs:restriction base="lite:PanelGroupType">
                     <xs:choice maxOccurs="unbounded" minOccurs="0">
                         <xs:element type="DictionaryComboFhDPType" name="DictionaryComboFhDP"/>
                         <xs:element type="CheckBoxFhDPType" name="CheckBoxFhDP"/>
@@ -100,14 +102,14 @@
                         <xs:element type="TimerFhDPType" name="TimerFhDP"/>
                         <xs:element type="TreeFhDPType" name="TreeFhDP"/>
                         <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
-                        <xs:element type="RowType" name="Row"/>
+                        <xs:element type="InputNumberFhDPType" name="InputNumberFhDP"/>
                     </xs:choice>
                 </xs:restriction>
             </xs:complexContent>
         </xs:complexType>
         <xs:complexType name="RepeaterType">
             <xs:complexContent>
-                <xs:extension base="RepeaterType">
+                <xs:extension base="lite:RepeaterType">
                     <xs:choice maxOccurs="unbounded" minOccurs="0">
                         <xs:element type="DictionaryComboFhDPType" name="DictionaryComboFhDP"/>
                         <xs:element type="CheckBoxFhDPType" name="CheckBoxFhDP"/>
@@ -124,17 +126,17 @@
                         <xs:element type="TreeFhDPType" name="TreeFhDP"/>
                         <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
                         <xs:element type="RowType" name="Row"/>
+                        <xs:element type="InputNumberFhDPType" name="InputNumberFhDP"/>
                     </xs:choice>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
         <xs:complexType name="FormType">
             <xs:complexContent>
-                <xs:extension base="FormType">
-                    <xs:choice maxOccurs="unbounded" minOccurs="0">
+                <xs:extension base="lite:FormType">
+                    <xs:choice>
                         <xs:element type="CheckBoxFhDPType" name="CheckBoxFhDP" maxOccurs="unbounded" minOccurs="0"/>
                         <xs:element type="DictionaryComboFhDPType" name="DictionaryComboFhDP" maxOccurs="unbounded" minOccurs="0"/>
-
                         <xs:element type="ComboFhDPType" name="ComboFhDP"/>
                         <xs:element type="ChartTime24Type" name="ChartTime24"/>
                         <xs:element type="EmbeddedViewType" name="EmbeddedView"/>
@@ -156,13 +158,14 @@
                         <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
                         <xs:element type="RowType" name="Row"/>
                         <xs:element type="RowType" name="Row"/>
+                        <xs:element type="InputNumberFhDPType" name="InputNumberFhDP"/>
                     </xs:choice>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
         <xs:complexType name="TabType">
             <xs:complexContent>
-                <xs:extension base="TabType">
+                <xs:extension base="lite:TabType">
                     <xs:choice maxOccurs="unbounded" minOccurs="0">
                         <xs:element type="DictionaryComboFhDPType" name="DictionaryComboFhDP"/>
                         <xs:element type="CheckBoxFhDPType" name="CheckBoxFhDP"/>
@@ -185,13 +188,14 @@
                         <xs:element type="TreeFhDPType" name="TreeFhDP"/>
                         <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
                         <xs:element type="RowType" name="Row"/>
+                        <xs:element type="InputNumberFhDPType" name="InputNumberFhDP"/>
                     </xs:choice>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
         <xs:complexType name="ColumnType">
             <xs:complexContent>
-                <xs:extension base="ColumnType">
+                <xs:extension base="lite:ColumnType">
                     <xs:choice maxOccurs="unbounded" minOccurs="0">
                         <xs:element type="DictionaryComboFhDPType" name="DictionaryComboFhDP"/>
                         <xs:element type="CheckBoxFhDPType" name="CheckBoxFhDP"/>
@@ -208,13 +212,14 @@
                         <xs:element type="TreeFhDPType" name="TreeFhDP"/>
                         <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
                         <xs:element type="RowType" name="Row"/>
+                        <xs:element type="InputNumberFhDPType" name="InputNumberFhDP"/>
                     </xs:choice>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
         <xs:complexType name="FooterType">
             <xs:complexContent>
-                <xs:extension base="FooterType">
+                <xs:extension base="lite:FooterType">
                     <xs:choice maxOccurs="unbounded" minOccurs="0">
                         <xs:element type="TimerFhDPType" name="TimerFhDP"/>
                         <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
@@ -223,11 +228,6 @@
             </xs:complexContent>
         </xs:complexType>
     </xs:redefine>
-
-    <!-- =====================================================================================================
-    Form configuration
-    ===================================================================================================== -->
-    <xs:include schemaLocation="FormFHCoreLite.xsd"/>
 
 
     <xs:element name="ChartTime24" type="ChartTime24Type"/>
@@ -743,5 +743,30 @@
         <!-- TODO XMLViewerFhDP attrs-->
         <xs:attributeGroup ref="FormElementTypeGroup"/>
         <xs:attribute type="xs:string" name="content" use="required"/>
+    </xs:complexType>
+
+    <xs:element name="InputNumberFhDP" type="InputNumberFhDPType"/>
+    <xs:complexType name="InputNumberFhDPType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="OnKeyEventType" name="OnKeyEvent"/>
+        </xs:choice>
+        <xs:attributeGroup ref="ConfirmationDialogSupport"/>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="format"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="xs:string" name="validationLabel"/>
+        <xs:attribute type="xs:string" name="onChange"/>
+        <xs:attribute type="xs:string" name="required" default="false"/>
+        <xs:attribute type="xs:string" name="value"/>
+        <xs:attribute type="xs:string" name="lastValue"/>
+        <xs:attribute type="xs:string" name="hideCrossed"/>
+        <xs:attribute type="xs:string" name="validationRule"/>
+        <xs:attribute type="xs:string" name="onKeyEvent"/>
+        <xs:attribute type="xs:string" name="keyEvent"/>
+        <xs:attribute type="LabelPositionType" name="labelPosition"/>
+        <xs:attribute type="InputSizeType" name="inputSize"/>
+        <xs:attribute type="LabelSizeType" name="labelSize"/>
+        <xs:attribute type="xs:string" name="maxFractionDigits"/>
+        <xs:attribute type="xs:string" name="maxIntigerDigits"/>
     </xs:complexType>
 </xs:schema>
