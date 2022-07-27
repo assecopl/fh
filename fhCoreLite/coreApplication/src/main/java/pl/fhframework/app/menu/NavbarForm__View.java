@@ -41,6 +41,7 @@ public class NavbarForm__View extends NavbarForm {
         ____actions.add(new ActionSignature("downloadUserLog"));
         ____actions.add(new ActionSignature("setLanguagePolish"));
         ____actions.add(new ActionSignature("setLanguageEnglish"));
+        ____actions.add(new ActionSignature("setLangViewKey"));
     }
 
     static {
@@ -61,6 +62,7 @@ public class NavbarForm__View extends NavbarForm {
     Dropdown a_dropdown_2_1;
     DropdownItem u_polishLang_1;
     DropdownItem u_englishLang_1;
+    DropdownItem u_noLang_1;
     DropdownItem u_diLogout_1;
     DropdownItem u_diLogin_1;
     LocaleBundle a_localeBundle_1;
@@ -654,6 +656,11 @@ public class NavbarForm__View extends NavbarForm {
         u_englishLang_1.setGroupingParentComponent(a_dropdown_2_1);
         initCmp_u_englishLang_1();
 
+        u_noLang_1 = new DropdownItem(this);
+        a_dropdown_2_1.addSubcomponent(u_noLang_1);
+        u_noLang_1.setGroupingParentComponent(a_dropdown_2_1);
+        initCmp_u_noLang_1();
+
         u_diLogout_1 = new DropdownItem(this);
         a_dropdown_2_1.addSubcomponent(u_diLogout_1);
         u_diLogout_1.setGroupingParentComponent(a_dropdown_2_1);
@@ -726,6 +733,16 @@ public class NavbarForm__View extends NavbarForm {
         ));
         u_englishLang_1.setId("englishLang");
         u_englishLang_1.setGroupingParentComponent(a_dropdown_2_1);
+    }
+
+    private void initCmp_u_noLang_1() {
+        u_noLang_1.setOnClick(new CompiledActionBinding(
+                "setLangViewKey", "setLangViewKey"));
+        u_noLang_1.setIconBinding(new StaticBinding<>("fa fa-cogs"));
+        u_noLang_1.setIconAlignment(IconAlignment.BEFORE);
+        u_noLang_1.setModelBindingForValue(new StaticBinding("View key"));
+        u_noLang_1.setId("viewKeyLang");
+        u_noLang_1.setGroupingParentComponent(a_dropdown_2_1);
     }
 
 

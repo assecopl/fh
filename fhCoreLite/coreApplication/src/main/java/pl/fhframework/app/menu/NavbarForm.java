@@ -36,7 +36,8 @@ public class NavbarForm extends Form<NavbarForm.Model> {
     }
 
     public enum Language {
-        POLISH("pl"), ENGLISH("en");
+        POLISH("pl"), ENGLISH("en"),
+        VIEWKEY("viewkey");
 
         private String value;
 
