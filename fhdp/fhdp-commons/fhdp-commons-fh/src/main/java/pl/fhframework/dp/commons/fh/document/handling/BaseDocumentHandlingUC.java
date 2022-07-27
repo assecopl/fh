@@ -497,8 +497,10 @@ public  abstract class BaseDocumentHandlingUC<MODEL extends BaseDocumentHandling
 
     @Override
     public void onSessionLanguageChange() {
-        getActiveForm().onSessionLanguageChange(getUserSession().getLanguage().toLanguageTag());
-        getActiveForm().refreshView();
+        if(getActiveForm() != null) {
+            getActiveForm().onSessionLanguageChange(getUserSession().getLanguage().toLanguageTag());
+            getActiveForm().refreshView();
+        }
         initLeftMenu();
     }
 
