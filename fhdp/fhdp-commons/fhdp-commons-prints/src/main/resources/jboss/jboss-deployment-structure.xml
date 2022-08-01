@@ -10,6 +10,7 @@
             <module name="org.jboss.ws.cxf.jbossws-cxf-client"/>
             <module name="org.apache.cxf"/>
             <module name="org.apache.cxf.impl"/>
+            <module name="org.codehaus.groovy.groovy-all"/>
             <!--            <module name="org.slf4j" export="true"/>-->
             <!--            <module name="org.apache.log4j" export="true"/>-->
             <system export="true">
