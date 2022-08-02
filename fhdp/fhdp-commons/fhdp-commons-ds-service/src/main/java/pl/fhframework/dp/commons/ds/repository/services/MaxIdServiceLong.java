@@ -37,5 +37,33 @@ public class MaxIdServiceLong implements IMaxIdServiceLong {
                 .findAndModifyValue();
         return newestValue.getValue();
     }
+    
+    /**
+     * 
+     * For migration only
+     * 
+     * @param key
+     * @param value
+     * @return
+     * @throws InterruptedException
+     */
+    public void setMaxId(String key, Long value) throws InterruptedException {
+        Query query = new Query(Criteria.where("key").is(key));
+        Update update = new Update().set("value", value);
+        MaxIdDtoLong result = mongoTemplate.findById(key, MaxIdDtoLong.class);
+        if(result == null) {
+            result = new MaxIdDtoLong(key);
+            mongoTemplate.save(result);
+        }
+        if(result.getValue()>value) {
+        	return;
+        }
+        MaxIdDtoLong newestValue = mongoTemplate.update(MaxIdDtoLong.class)
+                .matching(query)
+                .apply(update)
+                .withOptions(FindAndModifyOptions.options().returnNew(false)) // Now return the newly updated document when updating
+                .findAndModifyValue();
+    }
+    
 
 }
