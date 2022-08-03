@@ -23,6 +23,8 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
     private int minSize;
     @Value("${mongo.client.pool.maxSize:30}")
     private int maxSize;
+    @Value("${mongo.autoindex:false}")
+    private Boolean autoIndex;
 
     
     @Bean
@@ -63,4 +65,11 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
     protected String getDatabaseName() {
         return dbName;
     }
+    
+    @Override
+    protected boolean autoIndexCreation() {
+    	System.out.println("autoIndexCreation: "+autoIndex);
+        return autoIndex;
+    }    
+    
 }
