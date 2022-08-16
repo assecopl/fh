@@ -1,6 +1,6 @@
 {
   "name": "fhdp-charts",
-  "version": "4.9.26",
+  "version": "4.10.2",
   "author": {
     "name": "Krzysztof Czajka",
     "email": "k.czajka@doittechnology.pl"
@@ -20,7 +20,6 @@
     "@types/bootstrap": "4.3.1",
     "@types/highlight.js": "9.12.3",
     "@types/jquery": "3.3.31",
-    "@types/jqueryui": "1.12.7",
     "@types/marked": "0.6.5",
     "@types/node": "14.14.36",
     "imports-loader": "0.8.0",
@@ -30,8 +29,8 @@
   },
   "dependencies": {
     "canvas": "^2.8.0",
-    "fh-basic-controls": "4.9.26",
-    "fh-forms-handler": "4.9.26",
+    "fh-basic-controls": "4.10.2",
+    "fh-forms-handler": "4.10.2",
     "konva": "^8.0.4"
   }
 }

@@ -29,7 +29,7 @@ public class DocumentDAO extends BaseDAO<RepositoryDocument> {
 	private String collectionName;
 
     @Autowired
-    MongoTemplate mongoTemplate;
+    protected MongoTemplate mongoTemplate;
     
 	protected String getCollectionName() {
 		return collectionName;
@@ -108,12 +108,16 @@ public class DocumentDAO extends BaseDAO<RepositoryDocument> {
         	update = update.set("operation.name", request.getOperation().getName());
         	update = update.set("operation.description", request.getOperation().getDescription());
         }
+        additionalUpdates(update, request);
 		RepositoryDocument result = mongoTemplate.update(RepositoryDocument.class)
 				.inCollection(getCollectionName())
                 .matching(query)
                 .apply(update)
                 .withOptions(FindAndModifyOptions.options().returnNew(true)) // Now return the newly updated document when updating
                 .findAndModifyValue();
+	}
+
+	protected void additionalUpdates(Update update, UpdateDocumentRequest request) {
 	}
 
 	public List<RepositoryDocument> find(FindDocumentRequest request) {
@@ -142,20 +146,5 @@ public class DocumentDAO extends BaseDAO<RepositoryDocument> {
 		return result;
 	}
 
-
-
-
-//	protected void updateOtherMetadata(MongoCollection<BasicDBObject> collection, String id, String name, String value) {
-//		Bson filter = Filters.eq("_id", id);
-//        BasicDBObject update = new BasicDBObject();
-//        update.append("$pull", new BasicDBObject("metadata.otherMetadata", new BasicDBObject("name", name)));
-//        collection.findOneAndUpdate(filter, update);
-//        update = new BasicDBObject();
-//        BasicDBObject omd = new BasicDBObject();
-//        omd.append("name", name);
-//        omd.append("value", value);
-//        update.append("$push", new BasicDBObject("metadata.otherMetadata", omd));
-//        collection.findOneAndUpdate(filter, update);    
-//	}
     
 }

@@ -1,6 +1,6 @@
 {
   "name": "fh-forms-handler",
-  "version": "4.9.26",
+  "version": "4.10.2",
   "main": "dist/Module.js",
   "types": "dist/Module.d.ts",
   "description": "fh framework core for frontend",
@@ -16,7 +16,6 @@
   "devDependencies": {
     "@types/bootstrap": "4.3.1",
     "@types/jquery": "3.3.31",
-    "@types/jqueryui": "1.12.10",
     "@types/pako": "^1.0.3",
     "less": "3.9.0",
     "typescript": "3.5.3"
@@ -30,7 +29,6 @@
     "reflect-metadata": "0.1.13",
     "copyfiles": "2.4.1",
     "@fortawesome/fontawesome-free": "5.15.3",
-    "jquery-ui": "1.13.1",
     "js-cookie": "^2.2.1",
     "focus-trap": "5.1.0",
     "pako": "^2.0.4"

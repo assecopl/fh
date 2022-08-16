@@ -16,13 +16,15 @@
         <Invisible when="sessionClock==false">sessionClock</Invisible>
     </AvailabilityConfiguration>
     <Row styleClasses="flex-nowrap">
+        <OutputLabel value="Dupa"></OutputLabel>
         <Dropdown width="md-2" label="{language}"
                   styleClasses="tray-button tray-button--text button"
                   id="languageDropdown" hint="{$.fhdp.menu.ui.navbar.toogleLanguage}">
             <DropdownItem value="{$.fhdp.menu.ui.navbar.buttons.english}" icon="fas fa-globe-europe" id="englishLang" onClick="setLanguageEnglish" />
             <DropdownItem value="{$.fhdp.menu.ui.navbar.buttons.lithuanian}" icon="fas fa-globe-europe" id="lithuanianLang" onClick="setLanguageLithuanian" />
             <DropdownItem value="{$.fhdp.menu.ui.navbar.buttons.polish}" icon="fas fa-globe-europe" id="polishLang" onClick="setLanguagePolish" />
-<!--            <DropdownItem value="{$.menu.ui.navbar.buttons.no_lang}" icon="fas fa-globe-europe" id="noLang" onClick="setLanguageNo" />-->
+            <DropdownItem value="{$.menu.ui.navbar.buttons.no_lang}" icon="fas fa-globe-europe" id="noLang" onClick="setLanguageNo" />
+            <DropdownItem value="View Key" icon="fas fa-globe-europe" onClick="setViewkey" />
         </Dropdown>
         <Button width="md-2" label="[icon='fas fa-sliders-h']" hintTrigger="HOVER"
                 onClick="displayAppSider" styleClasses="tray-button button"
