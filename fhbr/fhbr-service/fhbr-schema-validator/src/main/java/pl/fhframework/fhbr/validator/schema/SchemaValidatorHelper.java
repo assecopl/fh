@@ -94,7 +94,7 @@ public class SchemaValidatorHelper {
         logger.warn(message, e);
         ValidationResult result = new ValidationResult();
         ValidationMessage msg = validationMessageFactory.newInstance();
-        msg.setSeverity(ValidationMessageSeverity.E);
+        msg.setSeverity(ValidationMessageSeverity.ERROR);
         msg.setMessage(message);
         result.addValidationMessage(msg);
         return result;

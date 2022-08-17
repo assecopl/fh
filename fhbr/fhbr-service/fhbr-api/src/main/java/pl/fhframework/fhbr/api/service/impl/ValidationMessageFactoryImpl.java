@@ -36,7 +36,7 @@ public class ValidationMessageFactoryImpl implements ValidationMessageFactory<Va
     @Override
     public ValidationMessage prepareValidationMessage(BRuleDto rule) {
         ValidationMessage message = new ValidationMessageImpl();
-        message.setSeverity(rule.getSeverity() != null ? ValidationMessageSeverity.valueOf(rule.getSeverity()) : ValidationMessageSeverity.E);
+        message.setSeverity(rule.getSeverity() != null ? ValidationMessageSeverity.valueOf(rule.getSeverity()) : ValidationMessageSeverity.ERROR);
         message.setPointer(rule.getPointer());
         message.setMessage(rule.getMessage());
         message.setRuleCode(rule.getBusinessKey());

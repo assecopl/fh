@@ -59,7 +59,7 @@ public class ValidatorServiceImpl implements ValidatorService {
         ModuleDto module = moduleDao.findModule(moduleCode, phase);
         if (module == null) {
             ValidationMessage m = messageFactory.newInstance();
-            m.setSeverity(ValidationMessageSeverity.E);
+            m.setSeverity(ValidationMessageSeverity.ERROR);
             m.setMessage("pl.fhframework.fhbr.message.error.unknownModuleCode");
             validationResult.addValidationMessage(m);
         }

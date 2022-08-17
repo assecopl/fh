@@ -20,9 +20,9 @@ package pl.fhframework.fhbr.api.service;
  * @created 05/07/2022
  */
 public enum ValidationMessageSeverity {
-    C, //critical
-    E, //error
-    W, //warning
-    I; //info - ok
+    CRITICAL, //critical
+    ERROR, //error
+    WARNING, //warning
+    INFORMATION; //info - ok
 
 }

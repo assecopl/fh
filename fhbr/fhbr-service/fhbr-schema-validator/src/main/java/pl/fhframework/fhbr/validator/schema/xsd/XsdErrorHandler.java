@@ -41,7 +41,7 @@ public class XsdErrorHandler extends DefaultHandler {
 
     @Override
     public void error(SAXParseException e) throws SAXException {
-        ValidationMessage schemaValidationMessage = prepareValidationMessage(ValidationMessageSeverity.E, e.getLocalizedMessage(), computeCurrentXPath());
+        ValidationMessage schemaValidationMessage = prepareValidationMessage(ValidationMessageSeverity.ERROR, e.getLocalizedMessage(), computeCurrentXPath());
         validationResult.addValidationMessage(schemaValidationMessage);
     }
 
@@ -51,7 +51,7 @@ public class XsdErrorHandler extends DefaultHandler {
 
     @Override
     public void fatalError(SAXParseException e) throws SAXException {
-        ValidationMessage schemaValidationMessage = prepareValidationMessage(ValidationMessageSeverity.E, e.getLocalizedMessage(), computeCurrentXPath());
+        ValidationMessage schemaValidationMessage = prepareValidationMessage(ValidationMessageSeverity.ERROR, e.getLocalizedMessage(), computeCurrentXPath());
         validationResult.addValidationMessage(schemaValidationMessage);
     }
 
