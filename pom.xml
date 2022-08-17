@@ -30,6 +30,7 @@
 		<module>fhdp</module>
         <module>example</module>
         <module>fh-compiler</module>
+        <module>fhbr</module>
     </modules>
 	
 	<licenses>
