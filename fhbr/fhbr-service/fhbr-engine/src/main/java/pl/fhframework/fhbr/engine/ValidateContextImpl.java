@@ -18,8 +18,10 @@ package pl.fhframework.fhbr.engine;
 import lombok.Getter;
 import pl.fhframework.fhbr.api.service.ValidateContext;
 import pl.fhframework.fhbr.api.service.ValidateObject;
+import pl.fhframework.fhbr.api.service.ValidationMessage;
 import pl.fhframework.fhbr.api.service.ValidationMessageFactory;
-import pl.fhframework.fhbr.api.service.ValidationResult;
+
+import java.util.List;
 
 /**
  * Context for single validation request.
@@ -31,15 +33,22 @@ import pl.fhframework.fhbr.api.service.ValidationResult;
 public class ValidateContextImpl implements ValidateContext {
 
     @Getter
+    private final String initialRuleSetCode;
+    @Getter
+    private final String initialPhase;
+
+    @Getter
     private ValidationMessageFactory messageFactory;
     private final ValidatorServiceImpl validatorService;
 
-    public ValidateContextImpl(ValidationMessageFactory messageFactory, ValidatorServiceImpl validatorService) {
+    public ValidateContextImpl(ValidationMessageFactory messageFactory, ValidatorServiceImpl validatorService, String initialRuleSetCode, String initialPhase) {
         this.messageFactory = messageFactory;
         this.validatorService = validatorService;
+        this.initialRuleSetCode = initialRuleSetCode;
+        this.initialPhase = initialPhase;
     }
 
-    public ValidationResult applyRules(String ruleSetCode, String phase, ValidateObject validateObject) {
+    public List<ValidationMessage> applyRules(String ruleSetCode, String phase, ValidateObject validateObject) {
         return validatorService.applyRules(this, ruleSetCode, phase, validateObject);
     }
 

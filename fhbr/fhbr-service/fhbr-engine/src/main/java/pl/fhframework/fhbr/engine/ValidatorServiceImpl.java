@@ -27,6 +27,8 @@ import pl.fhframework.fhbr.validator.schema.SchemaValidatorHelper;
 import pl.fhframework.fhbr.validator.schema.xsd.resolver.DaoXsdResolverFactory;
 
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -54,13 +56,13 @@ public class ValidatorServiceImpl implements ValidatorService {
     public ValidationResult validate(String ruleSetCode, String phase, ValidateObject validateObject) {
 
         ValidationResult validationResult = new ValidationResult();
-        ValidateContext context = new ValidateContextImpl(messageFactory, this);
+        ValidateContext context = new ValidateContextImpl(messageFactory, this, ruleSetCode, phase);
 
         BRuleSetDto bRuleSetDto = BRuleSetDao.findRuleSet(ruleSetCode, phase);
         if (bRuleSetDto == null) {
             ValidationMessage m = messageFactory.newInstance();
-            m.setSeverity(ValidationMessageSeverity.ERROR);
-            m.setMessage("pl.fhframework.fhbr.message.error.unknownModuleCode");
+            m.setSeverity(ValidationMessageSeverity.CRITICAL);
+            m.setMessage("pl.fhframework.fhbr.message.error.unknownRuleSetCode");
             validationResult.addValidationMessage(m);
         }
 
@@ -68,14 +70,14 @@ public class ValidatorServiceImpl implements ValidatorService {
             new DaoXsdResolverFactory(xsdRepositoryDao, LocalDate.now());
             ValidationResult partialResult = new SchemaValidatorHelper(new DaoXsdResolverFactory(xsdRepositoryDao, LocalDate.now()), messageFactory)
                     .validate(bRuleSetDto.getNamespace(), (byte[]) validateObject.getObject());
-            rewriteValidationMessage(partialResult, validationResult);
+            rewriteValidationMessage(partialResult.getValidationResultMessages(), validationResult);
             if (!validationResult.getValid()) {
                 return validationResult;
             }
         }
 
-        ValidationResult applyRulesResult = applyRules(context, ruleSetCode, phase, validateObject);
-        rewriteValidationMessage(applyRulesResult, validationResult);
+        List<ValidationMessage> validationMessages = applyRules(context, ruleSetCode, phase, validateObject);
+        rewriteValidationMessage(validationMessages, validationResult);
 
         return validationResult;
     }
@@ -90,37 +92,38 @@ public class ValidatorServiceImpl implements ValidatorService {
      * @param validateObject
      * @return
      */
-    ValidationResult applyRules(ValidateContext context, String ruleSetCode, String phase, ValidateObject validateObject) {
+    List<ValidationMessage> applyRules(ValidateContext context, String ruleSetCode, String phase, ValidateObject validateObject) {
 
-        ValidationResult validationResult = new ValidationResult();
+        List<ValidationMessage> validationMessages = Collections.synchronizedList(new LinkedList<ValidationMessage>());
 
         List<BRuleDto> rules = BRuleSetDao.findRules(ruleSetCode, phase, true, validateObject.getOnDate());
 
         rules.stream()
                 .filter(r -> StringUtils.isNotBlank(r.getCheckerType()))
+                .parallel()
                 .collect(Collectors.groupingBy(BRuleDto::getCheckerType))
                 .forEach((ruleType, ruleTypeLists) -> {
-                    CheckerTypeService validatorService = null;
+                    CheckerTypeService checkerTypeService = null;
 
                     try {
-                        validatorService = prepareCheckerTypeService(ruleType);
+                        checkerTypeService = prepareCheckerTypeService(ruleType);
                     } catch (Exception e) {
                         throw new RuleValidationException("fhbr.exception.createRuleValidatorService", ruleSetCode, null, e);
                     }
 
-                    ValidationResult partialResult = validatorService.validate(validateObject.getObject(), context, ruleTypeLists);
-                    rewriteValidationMessage(partialResult, validationResult);
+                    ValidationResult partialResult = checkerTypeService.validate(validateObject.getObject(), context, ruleTypeLists);
+                    validationMessages.addAll(partialResult.getValidationResultMessages());
                 });
 
-        return validationResult;
+        return validationMessages;
     }
 
     private CheckerTypeService prepareCheckerTypeService(String checkerType) {
         return checkerTypeCollection.get(checkerType);
     }
 
-    private void rewriteValidationMessage(ValidationResult s, ValidationResult t) {
-        s.getValidationResultMessages()
+    private void rewriteValidationMessage(List<ValidationMessage> validationMessages, ValidationResult t) {
+        validationMessages
                 .stream().forEach(vm -> t.addValidationMessage(vm));
     }
 

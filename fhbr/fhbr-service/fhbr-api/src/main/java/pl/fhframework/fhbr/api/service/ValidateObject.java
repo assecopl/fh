@@ -20,6 +20,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 /**
  * Wrapper for validated object.
@@ -30,12 +31,29 @@ import java.time.LocalDate;
  * @version :  $, :  $
  * @created 06/07/2022
  */
-@Getter
-@Setter
+
+
 public class ValidateObject<O> {
 
+    @Getter
+    private final String requestId; //unique request id
+
+    @Getter
+    @Setter
     private LocalDate onDate; //validate on date (default current date)
 
-    private O object;
+    @Getter
+    @Setter
+    private O object; // the target object for check
+
+    public ValidateObject() {
+        this.requestId = UUID.randomUUID().toString();
+    }
+
+    public ValidateObject(String requestId, LocalDate onDate, O object) {
+        this.requestId = requestId;
+        this.onDate = onDate;
+        this.object = object;
+    }
 
 }
