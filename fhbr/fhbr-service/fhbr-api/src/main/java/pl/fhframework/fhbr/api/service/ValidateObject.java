@@ -22,6 +22,10 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 /**
+ * Wrapper for validated object.
+ * <p>
+ * Extension class may contain additional fields required during rule execution.
+ *
  * @author Dariusz Skrudlik
  * @version :  $, :  $
  * @created 06/07/2022

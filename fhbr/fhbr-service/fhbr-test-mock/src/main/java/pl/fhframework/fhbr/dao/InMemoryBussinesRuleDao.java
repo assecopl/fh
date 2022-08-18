@@ -16,9 +16,9 @@
 package pl.fhframework.fhbr.dao;
 
 import lombok.Getter;
-import pl.fhframework.fhbr.api.dao.ModuleDao;
+import pl.fhframework.fhbr.api.dao.BRuleSetDao;
 import pl.fhframework.fhbr.api.model.BRuleDto;
-import pl.fhframework.fhbr.api.model.ModuleDto;
+import pl.fhframework.fhbr.api.model.BRuleSetDto;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -31,21 +31,21 @@ import java.util.Map;
  * @version :  $, :  $
  * @created 11/07/2022
  */
-public class InMemoryBussinesRuleDao implements ModuleDao {
+public class InMemoryBussinesRuleDao implements BRuleSetDao {
 
     @Getter
     private Map<String, List<BRuleDto>> storage = new HashMap<>();
     @Getter
-    private Map<String, ModuleDto> modules = new HashMap<>();
+    private Map<String, BRuleSetDto> modules = new HashMap<>();
 
     @Override
-    public List<BRuleDto> findRules(String code, String phase, boolean active, LocalDate onDate) {
-        return storage.containsKey(code) ? new ArrayList<>(storage.get(code)) : new ArrayList<>();
+    public List<BRuleDto> findRules(String ruleSetCode, String phase, boolean active, LocalDate onDate) {
+        return storage.containsKey(ruleSetCode) ? new ArrayList<>(storage.get(ruleSetCode)) : new ArrayList<>();
     }
 
     @Override
-    public ModuleDto findModule(String moduleCode, String phase) {
-        return modules.get(moduleCode);
+    public BRuleSetDto findRuleSet(String ruleSetCode, String phase) {
+        return modules.get(ruleSetCode);
     }
 
 }

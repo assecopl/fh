@@ -40,16 +40,19 @@ public class ValidationResult {
         }
     }
 
-
+    /**
+     * Result of validation
+     *
+     * @return true - ok
+     * false - not ok (in default each message with severity above WARNING makes result invalid)
+     */
     public boolean getValid() {
         return valid;
     }
 
-
-    public void setValid(boolean status) {
+    protected void setValid(boolean status) {
         this.valid = status;
     }
-
 
     public List<ValidationMessage> getValidationResultMessages() {
         return Collections.unmodifiableList(validationMessages);

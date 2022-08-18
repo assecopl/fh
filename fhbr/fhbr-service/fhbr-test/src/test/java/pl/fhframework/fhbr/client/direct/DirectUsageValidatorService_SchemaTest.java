@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 import pl.fhframework.fhbr.api.config.ValidatorServiceConfig;
 import pl.fhframework.fhbr.api.dao.XsdRepositoryDao;
 import pl.fhframework.fhbr.api.factory.Factory;
-import pl.fhframework.fhbr.api.model.ModuleDto;
+import pl.fhframework.fhbr.api.model.BRuleSetDto;
 import pl.fhframework.fhbr.api.service.ValidateObject;
 import pl.fhframework.fhbr.api.service.ValidationResult;
 import pl.fhframework.fhbr.api.service.ValidatorService;
@@ -57,7 +57,7 @@ public class DirectUsageValidatorService_SchemaTest {
         config.setModuleDaoFactory(() -> {
             InMemoryBussinesRuleDao moduleDao = new InMemoryBussinesRuleDao();
 
-            ModuleDto moduleTEST = new ModuleDto();
+            BRuleSetDto moduleTEST = new BRuleSetDto();
             moduleTEST.setCode("TEST");
             moduleTEST.setScheamaValidator(true);
             moduleTEST.setNamespace("http://fhframework.pl/fh/fhbr-xsd/test_v1r0.xsd");
@@ -86,13 +86,12 @@ public class DirectUsageValidatorService_SchemaTest {
         //GIVEN
         byte[] xml = IOUtils.resourceToByteArray("/testset_1/test_ok.xml");
 
-        Map<String, Object> context = new HashMap<>();
         ValidateObject<byte[]> validateObject = new ValidateObject();
         validateObject.setObject(xml);
         validateObject.setOnDate(LocalDate.now());
 
         //WHEN
-        ValidationResult validationResult = validatorService.validate("TEST", null, validateObject, context);
+        ValidationResult validationResult = validatorService.validate("TEST", null, validateObject);
 
         //THEN
         Assert.assertTrue(validationResult.getValid());
@@ -105,13 +104,12 @@ public class DirectUsageValidatorService_SchemaTest {
         //GIVEN
         byte[] xml_n = IOUtils.resourceToByteArray("/testset_1/test_nok_1.xml");
 
-        Map<String, Object> context = new HashMap<>();
         ValidateObject<byte[]> validateObject = new ValidateObject();
         validateObject.setObject(xml_n);
         validateObject.setOnDate(LocalDate.now());
 
         //WHEN
-        ValidationResult validationResult = validatorService.validate("TEST", null, validateObject, context);
+        ValidationResult validationResult = validatorService.validate("TEST", null, validateObject);
 
         //THEN
         Assert.assertTrue(!validationResult.getValid());
