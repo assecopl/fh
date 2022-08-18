@@ -17,11 +17,11 @@ package pl.fhframework.fhbr.engine;
 
 import org.apache.commons.lang3.StringUtils;
 import pl.fhframework.fhbr.api.checker.CheckerTypeService;
-import pl.fhframework.fhbr.api.dao.ModuleDao;
+import pl.fhframework.fhbr.api.dao.BRuleSetDao;
 import pl.fhframework.fhbr.api.dao.XsdRepositoryDao;
 import pl.fhframework.fhbr.api.exception.RuleValidationException;
 import pl.fhframework.fhbr.api.model.BRuleDto;
-import pl.fhframework.fhbr.api.model.ModuleDto;
+import pl.fhframework.fhbr.api.model.BRuleSetDto;
 import pl.fhframework.fhbr.api.service.*;
 import pl.fhframework.fhbr.validator.schema.SchemaValidatorHelper;
 import pl.fhframework.fhbr.validator.schema.xsd.resolver.DaoXsdResolverFactory;
@@ -38,41 +38,63 @@ import java.util.stream.Collectors;
  */
 public class ValidatorServiceImpl implements ValidatorService {
 
-    private final ModuleDao moduleDao;
+    private final BRuleSetDao BRuleSetDao;
     private final XsdRepositoryDao xsdRepositoryDao;
     private final ValidationMessageFactory messageFactory;
     private final Map<String, CheckerTypeService> checkerTypeCollection;
 
-    public ValidatorServiceImpl(ValidationMessageFactory messageFactory, ModuleDao moduleDao, XsdRepositoryDao xsdRepositoryDao, Map<String, CheckerTypeService> checkerTypeCollection) {
+    public ValidatorServiceImpl(ValidationMessageFactory messageFactory, BRuleSetDao BRuleSetDao, XsdRepositoryDao xsdRepositoryDao, Map<String, CheckerTypeService> checkerTypeCollection) {
         this.messageFactory = messageFactory;
-        this.moduleDao = moduleDao;
+        this.BRuleSetDao = BRuleSetDao;
         this.xsdRepositoryDao = xsdRepositoryDao;
         this.checkerTypeCollection = checkerTypeCollection;
     }
 
     @Override
-    public ValidationResult validate(String moduleCode, String phase, ValidateObject validateObject, Map<String, Object> param) {
+    public ValidationResult validate(String ruleSetCode, String phase, ValidateObject validateObject) {
 
         ValidationResult validationResult = new ValidationResult();
-        ValidateContext context = new ValidateContext(messageFactory, param);
+        ValidateContext context = new ValidateContextImpl(messageFactory, this);
 
-        ModuleDto module = moduleDao.findModule(moduleCode, phase);
-        if (module == null) {
+        BRuleSetDto bRuleSetDto = BRuleSetDao.findRuleSet(ruleSetCode, phase);
+        if (bRuleSetDto == null) {
             ValidationMessage m = messageFactory.newInstance();
             m.setSeverity(ValidationMessageSeverity.ERROR);
             m.setMessage("pl.fhframework.fhbr.message.error.unknownModuleCode");
             validationResult.addValidationMessage(m);
         }
-        if (module.isScheamaValidator()) {
+
+        if (bRuleSetDto.isScheamaValidator()) {
             new DaoXsdResolverFactory(xsdRepositoryDao, LocalDate.now());
             ValidationResult partialResult = new SchemaValidatorHelper(new DaoXsdResolverFactory(xsdRepositoryDao, LocalDate.now()), messageFactory)
-                    .validate(module.getNamespace(), (byte[]) validateObject.getObject());
+                    .validate(bRuleSetDto.getNamespace(), (byte[]) validateObject.getObject());
             rewriteValidationMessage(partialResult, validationResult);
             if (!validationResult.getValid()) {
                 return validationResult;
             }
         }
-        List<BRuleDto> rules = moduleDao.findRules(moduleCode, phase, true, validateObject.getOnDate());
+
+        ValidationResult applyRulesResult = applyRules(context, ruleSetCode, phase, validateObject);
+        rewriteValidationMessage(applyRulesResult, validationResult);
+
+        return validationResult;
+    }
+
+    /**
+     * Apply rule set on target object.
+     * Select rules by ruleSet/phase and execute verification with validateObject
+     *
+     * @param context
+     * @param ruleSetCode
+     * @param phase
+     * @param validateObject
+     * @return
+     */
+    ValidationResult applyRules(ValidateContext context, String ruleSetCode, String phase, ValidateObject validateObject) {
+
+        ValidationResult validationResult = new ValidationResult();
+
+        List<BRuleDto> rules = BRuleSetDao.findRules(ruleSetCode, phase, true, validateObject.getOnDate());
 
         rules.stream()
                 .filter(r -> StringUtils.isNotBlank(r.getCheckerType()))
@@ -83,7 +105,7 @@ public class ValidatorServiceImpl implements ValidatorService {
                     try {
                         validatorService = prepareCheckerTypeService(ruleType);
                     } catch (Exception e) {
-                        throw new RuleValidationException("fhbr.exception.createRuleValidatorService", moduleCode, null, e);
+                        throw new RuleValidationException("fhbr.exception.createRuleValidatorService", ruleSetCode, null, e);
                     }
 
                     ValidationResult partialResult = validatorService.validate(validateObject.getObject(), context, ruleTypeLists);
@@ -91,7 +113,6 @@ public class ValidatorServiceImpl implements ValidatorService {
                 });
 
         return validationResult;
-
     }
 
     private CheckerTypeService prepareCheckerTypeService(String checkerType) {

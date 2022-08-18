@@ -25,18 +25,18 @@ import lombok.Getter;
 @Getter
 public class RuleValidationException extends RuntimeException {
 
-    private String moduleCode;
+    private String ruleSetCode;
     private String ruleCode;
 
-    public RuleValidationException(String messageKey, String moduleCode, String ruleCode) {
+    public RuleValidationException(String messageKey, String ruleSetCode, String ruleCode) {
         super(messageKey);
-        this.moduleCode = moduleCode;
+        this.ruleSetCode = ruleSetCode;
         this.ruleCode = ruleCode;
     }
 
-    public RuleValidationException(String messageKey, String moduleCode, String ruleCode, Throwable t) {
+    public RuleValidationException(String messageKey, String ruleSetCode, String ruleCode, Throwable t) {
         super(messageKey, t);
-        this.moduleCode = moduleCode;
+        this.ruleSetCode = ruleSetCode;
         this.ruleCode = ruleCode;
     }
 

@@ -15,27 +15,14 @@
 
 package pl.fhframework.fhbr.api.service;
 
-import lombok.Getter;
-
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
 /**
+ * Context for single validation request.
+ *
  * @author Dariusz Skrudlik
  * @version :  $, :  $
  * @created 13/07/2022
  */
-public class ValidateContext {
+public interface ValidateContext {
 
-    @Getter
-    private final Map<String, Object> property;
-
-    @Getter
-    protected ValidationMessageFactory messageFactory;
-
-    public ValidateContext(ValidationMessageFactory messageFactory, Map<String, Object> property) {
-        this.messageFactory = messageFactory;
-        this.property = Collections.synchronizedMap(new HashMap<>(property));
-    }
+    ValidationMessageFactory getMessageFactory();
 }

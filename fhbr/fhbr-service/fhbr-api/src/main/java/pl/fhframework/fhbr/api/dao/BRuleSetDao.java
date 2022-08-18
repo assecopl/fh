@@ -13,26 +13,25 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.api.model;
+package pl.fhframework.fhbr.api.dao;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import pl.fhframework.fhbr.api.model.BRuleDto;
+import pl.fhframework.fhbr.api.model.BRuleSetDto;
+
+import java.time.LocalDate;
+import java.util.List;
 
 /**
+ * DAO for BRuleSet
+ *
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 15/07/2022
+ * @created 06/07/2022
  */
-@Setter
-@Getter
-@Data
-public class ModuleDto {
+public interface BRuleSetDao {
 
-    private String code;
+    List<BRuleDto> findRules(String ruleSetCode, String phase, boolean active, LocalDate onDate);
 
-    private boolean scheamaValidator;
-    private String namespace;
+    BRuleSetDto findRuleSet(String ruleSetCode, String phase);
 
-    private boolean listValidator;
 }

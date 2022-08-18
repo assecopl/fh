@@ -20,7 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.fhframework.fhbr.api.config.ValidatorServiceConfig;
 import pl.fhframework.fhbr.api.model.BRuleDto;
-import pl.fhframework.fhbr.api.model.ModuleDto;
+import pl.fhframework.fhbr.api.model.BRuleSetDto;
 import pl.fhframework.fhbr.api.service.ValidateObject;
 import pl.fhframework.fhbr.api.service.ValidationResult;
 import pl.fhframework.fhbr.api.service.ValidatorService;
@@ -32,9 +32,7 @@ import pl.fhframework.fhbr.validator.RuleClazzCheckerFactory;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Dariusz Skrudlik
@@ -56,7 +54,7 @@ public class DirectUsageValidatorService_RuleTest {
 
         config.setModuleDaoFactory(() -> {
             InMemoryBussinesRuleDao moduleDao = new InMemoryBussinesRuleDao();
-            moduleDao.getModules().put("M1", new ModuleDto());
+            moduleDao.getModules().put("M1", new BRuleSetDto());
 
             List<BRuleDto> bRuleList = new ArrayList<>();
 
@@ -81,12 +79,11 @@ public class DirectUsageValidatorService_RuleTest {
 
         ValidatorService validatorService = validatorFactory.newInstance(config);
 
-        Map<String, Object> context = new HashMap<>();
         ValidateObject<TestObject> validateObject = new ValidateObject();
         validateObject.setObject(testObject);
         validateObject.setOnDate(LocalDate.now());
 
-        ValidationResult validationResult = validatorService.validate("M1", null, validateObject, context);
+        ValidationResult validationResult = validatorService.validate("M1", null, validateObject);
 
         logger.info(validationResult.toString());
 
