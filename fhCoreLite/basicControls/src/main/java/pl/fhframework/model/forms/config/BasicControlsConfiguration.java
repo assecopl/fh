@@ -27,6 +27,14 @@ public class BasicControlsConfiguration {
     @Getter
     private HintType formElementHintType;
 
+    @Value("${fh.web.secure.caprcha.sitekey:null}")
+    @Getter
+    private String captchaSiteKey;
+
+    @Value("${fh.web.secure.caprcha.serverkey:null}")
+    @Getter
+    private String captchaServerKey;
+
     @PostConstruct
     void init () {
         INSTANCE = this;
