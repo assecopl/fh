@@ -7,6 +7,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 import pl.fhframework.dp.transport.drs.BaseRequest;
 
 import java.util.List;
+import java.util.Map;
 
 @Getter @Setter
 public class UpdateDocumentRequest extends BaseRequest {
@@ -21,7 +22,7 @@ public class UpdateDocumentRequest extends BaseRequest {
 	protected String contentType;
 	@Field(type = FieldType.Nested)
 	protected List<OtherMetadata> otherMetadata;
-	
+	protected Map<String, Object> extendedAttributes;
 	
 	protected boolean overwrite = false;
 }
