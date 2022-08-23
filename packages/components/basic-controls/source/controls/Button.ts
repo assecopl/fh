@@ -1,9 +1,14 @@
 import {HTMLFormComponent} from "fh-forms-handler";
 import {AdditionalButton} from "fh-forms-handler";
+//TODO fix import - import only when needed (move to index.html)
+import '../external/google_recaptchav3_api';
 
 class Button extends HTMLFormComponent {
     private readonly style: any;
     private readonly onClick: any;
+
+    private readonly reCAPTCHA: boolean;
+    private readonly captchaSiteKey: string;
 
     private ButtonPL = {
         "button_icon": "Ikona"
@@ -17,6 +22,9 @@ class Button extends HTMLFormComponent {
 
         this.style = this.componentObj.style;
         this.onClick = this.componentObj.onClick;
+
+        this.reCAPTCHA = this.componentObj.reCAPTCHA;
+        this.captchaSiteKey = this.componentObj.captchaSiteKey;
 
 
         this.i18n.registerStrings('pl', this.ButtonPL);
@@ -81,7 +89,19 @@ class Button extends HTMLFormComponent {
         if (this._formId === 'FormPreview') {
             this.fireEvent('onClick', this.onClick);
         } else {
-            this.fireEventWithLock('onClick', this.onClick);
+            if(this.reCAPTCHA) {
+
+                // @ts-ignore
+                grecaptcha.ready(function () {
+                    // @ts-ignore
+                    grecaptcha.execute(this.captchaSiteKey, {action: 'submit'}).then(function (token) {
+                        // Add your logic to submit to your backend server here.
+                        this.fireEventWithLock('onClick', this.onClick);
+                    }.bind(this));
+                }.bind(this));
+            } else {
+                this.fireEventWithLock('onClick', this.onClick);
+            }
         }
         event.target.blur();
     }

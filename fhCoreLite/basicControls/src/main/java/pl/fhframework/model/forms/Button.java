@@ -11,6 +11,7 @@ import pl.fhframework.binding.*;
 import pl.fhframework.core.forms.IHasBoundableLabel;
 import pl.fhframework.model.dto.ElementChanges;
 import pl.fhframework.model.dto.InMessageEventData;
+import pl.fhframework.model.forms.config.BasicControlsConfiguration;
 import pl.fhframework.model.forms.designer.BindingExpressionDesignerPreviewProvider;
 import pl.fhframework.model.forms.designer.ButtonStyleFixedValuesProvider;
 import pl.fhframework.model.forms.optimized.ColumnOptimized;
@@ -75,6 +76,23 @@ public class Button extends FormElementWithConfirmationSupport implements TableC
     @DesignerXMLProperty(functionalArea = LOOK_AND_STYLE, priority = 77, fixedValuesProvider = ButtonStyleFixedValuesProvider.class)
     private ModelBinding styleModelBinding;
 
+
+    @Getter
+    @Setter
+    @XMLProperty()
+    @DocumentedComponentAttribute(defaultValue = "false")
+    @DesignerXMLProperty(functionalArea = SPECIFIC, priority = 78, allowedTypes = boolean.class)
+    private boolean reCAPTCHA = false;
+
+    @Getter
+    @Setter
+    private String captchaSiteKey = null;
+
+    @Getter
+    @Setter
+    @JsonIgnore
+    private String captchaServerKey = null;
+
     public Button(Form form) {
         super(form);
     }
@@ -83,6 +101,10 @@ public class Button extends FormElementWithConfirmationSupport implements TableC
     public void init() {
         super.init();
         calculateAndSetDefaultSize();
+        if (this.reCAPTCHA == true) {
+            this.setCaptchaSiteKey(BasicControlsConfiguration.getInstance().getCaptchaSiteKey());
+            this.setCaptchaServerKey(BasicControlsConfiguration.getInstance().getCaptchaServerKey());
+        }
     }
 
     private void calculateAndSetDefaultSize() {
