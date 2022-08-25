@@ -298,6 +298,7 @@
         <xs:attribute type="xs:string" name="leftPadding"/>
         <xs:attribute type="xs:string" name="onClick"/>
         <xs:attribute type="xs:string" name="style"/>
+        <xs:attribute type="xs:boolean" name="reCAPTCHA"/>
     </xs:attributeGroup>
 
     <xs:attributeGroup name="ConfirmationDialogSupport">
