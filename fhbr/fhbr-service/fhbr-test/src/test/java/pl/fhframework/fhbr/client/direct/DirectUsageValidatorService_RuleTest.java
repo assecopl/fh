@@ -57,8 +57,9 @@ public class DirectUsageValidatorService_RuleTest {
         config.setModuleDaoFactory(() -> {
             InMemoryBussinesRuleDao moduleDao = new InMemoryBussinesRuleDao();
             moduleDao.getModules().put("M1", new BRuleSetDto());
+            moduleDao.getModules().put("M2", new BRuleSetDto());
 
-            List<BRuleDto> bRuleList = new ArrayList<>();
+            List<BRuleDto> bRuleList_M1 = new ArrayList<>();
 
             BRuleDto r1 = new BRuleDto();
             r1.setConfig(new BRuleCfgDto());
@@ -70,10 +71,24 @@ public class DirectUsageValidatorService_RuleTest {
             r1.getDefinition().setCheckerType("clazz");
             r1.getConfig().setMessageKey("message.key.for.r1");
 
-            bRuleList.add(r1);
+            bRuleList_M1.add(r1);
+
+            List<BRuleDto> bRuleList_M2 = new ArrayList<>();
+
+            BRuleDto r2 = new BRuleDto();
+            r2.setConfig(new BRuleCfgDto());
+            r2.setDefinition(new BRuleDefDto());
+            r2.getConfig().setName("R2_Flow");
+            r2.getConfig().setActive(true);
+            r2.getConfig().setBusinessKey("M2_Flow");
+            r2.getDefinition().setRuleClassName("pl.fhframework.fhbr.rule.M2_Flow");
+            r2.getDefinition().setCheckerType("clazz");
+
+            bRuleList_M2.add(r2);
 
 
-            moduleDao.getStorage().put("M1", bRuleList);
+            moduleDao.getStorage().put("M1", bRuleList_M1);
+            moduleDao.getStorage().put("M2", bRuleList_M2);
             return moduleDao;
         });
 
@@ -87,7 +102,7 @@ public class DirectUsageValidatorService_RuleTest {
         validateObject.setObject(testObject);
         validateObject.setOnDate(LocalDate.now());
 
-        ValidationResult validationResult = validatorService.validate("M1", null, validateObject);
+        ValidationResult validationResult = validatorService.validate("M2", null, validateObject);
 
         logger.info(validationResult.toString());
 
