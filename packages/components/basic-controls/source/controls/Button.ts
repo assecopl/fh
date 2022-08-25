@@ -34,6 +34,8 @@ class Button extends HTMLFormComponent {
     create() {
         let label = this.componentObj.label;
 
+
+
         let button = document.createElement('button');
         button.id = this.id;
         ['fc', 'button', 'btn', 'btn-' + this.style, 'btn-block'].forEach(function (cssClass) {
@@ -51,6 +53,10 @@ class Button extends HTMLFormComponent {
                 //Fill with icon default string.
                 button.setAttribute("aria-label", this.i18n.__("button_icon"));
             }
+        }
+
+        if(this.reCAPTCHA && !this.captchaSiteKey) {
+            label = "Site key not provided"
         }
 
         button.innerHTML = label;
