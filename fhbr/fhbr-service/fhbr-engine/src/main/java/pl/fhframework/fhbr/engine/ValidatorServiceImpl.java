@@ -66,10 +66,10 @@ public class ValidatorServiceImpl implements ValidatorService {
             validationResult.addValidationMessage(m);
         }
 
-        if (bRuleSetDto.isScheamaValidator()) {
+        if (bRuleSetDto.isSchemaValidator()) {
             new DaoXsdResolverFactory(xsdRepositoryDao, LocalDate.now());
             ValidationResult partialResult = new SchemaValidatorHelper(new DaoXsdResolverFactory(xsdRepositoryDao, LocalDate.now()), messageFactory)
-                    .validate(bRuleSetDto.getNamespace(), (byte[]) validateObject.getObject());
+                    .validate(bRuleSetDto.getSchemaNamespace(), (byte[]) validateObject.getObject());
             rewriteValidationMessage(partialResult.getValidationResultMessages(), validationResult);
             if (!validationResult.getValid()) {
                 return validationResult;
@@ -99,9 +99,8 @@ public class ValidatorServiceImpl implements ValidatorService {
         List<BRuleDto> rules = BRuleSetDao.findRules(ruleSetCode, phase, true, validateObject.getOnDate());
 
         rules.stream()
-                .filter(r -> StringUtils.isNotBlank(r.getCheckerType()))
-                .parallel()
-                .collect(Collectors.groupingBy(BRuleDto::getCheckerType))
+                .filter(r -> StringUtils.isNotBlank(r.getDefinition().getCheckerType()))
+                .collect(Collectors.groupingBy(bRuleDto -> bRuleDto.getDefinition().getCheckerType()))
                 .forEach((ruleType, ruleTypeLists) -> {
                     CheckerTypeService checkerTypeService = null;
 

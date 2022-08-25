@@ -15,7 +15,7 @@
 
 package pl.fhframework.fhbr.api.service;
 
-import pl.fhframework.fhbr.api.model.BRuleDto;
+import pl.fhframework.fhbr.api.model.BRuleCfgDto;
 
 /**
  * @author Dariusz Skrudlik
@@ -26,6 +26,6 @@ public interface ValidationMessageFactory<M extends ValidationMessage> {
 
     M newInstance();
 
-    M prepareValidationMessage(BRuleDto rule);
+    M prepareValidationMessage(BRuleCfgDto rule);
 
 }

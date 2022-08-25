@@ -19,6 +19,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.fhframework.fhbr.api.config.ValidatorServiceConfig;
+import pl.fhframework.fhbr.api.model.BRuleCfgDto;
+import pl.fhframework.fhbr.api.model.BRuleDefDto;
 import pl.fhframework.fhbr.api.model.BRuleDto;
 import pl.fhframework.fhbr.api.model.BRuleSetDto;
 import pl.fhframework.fhbr.api.service.ValidateObject;
@@ -59,12 +61,14 @@ public class DirectUsageValidatorService_RuleTest {
             List<BRuleDto> bRuleList = new ArrayList<>();
 
             BRuleDto r1 = new BRuleDto();
-            r1.setName("R1");
-            r1.setActive(true);
-            r1.setBusinessKey("R1");
-            r1.setRuleClass("pl.fhframework.fhbr.rule.R1");
-            r1.setCheckerType("clazz");
-            r1.setMessageKey("message.key.for.r1");
+            r1.setConfig(new BRuleCfgDto());
+            r1.setDefinition(new BRuleDefDto());
+            r1.getConfig().setName("R1");
+            r1.getConfig().setActive(true);
+            r1.getConfig().setBusinessKey("R1");
+            r1.getDefinition().setRuleClassName("pl.fhframework.fhbr.rule.R1");
+            r1.getDefinition().setCheckerType("clazz");
+            r1.getConfig().setMessageKey("message.key.for.r1");
 
             bRuleList.add(r1);
 

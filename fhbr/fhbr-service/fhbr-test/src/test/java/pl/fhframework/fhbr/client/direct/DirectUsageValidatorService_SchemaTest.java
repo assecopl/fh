@@ -59,8 +59,8 @@ public class DirectUsageValidatorService_SchemaTest {
 
             BRuleSetDto moduleTEST = new BRuleSetDto();
             moduleTEST.setCode("TEST");
-            moduleTEST.setScheamaValidator(true);
-            moduleTEST.setNamespace("http://fhframework.pl/fh/fhbr-xsd/test_v1r0.xsd");
+            moduleTEST.setSchemaValidator(true);
+            moduleTEST.setSchemaNamespace("http://fhframework.pl/fh/fhbr-xsd/test_v1r0.xsd");
             moduleDao.getModules().put("TEST", moduleTEST);
 
             return moduleDao;

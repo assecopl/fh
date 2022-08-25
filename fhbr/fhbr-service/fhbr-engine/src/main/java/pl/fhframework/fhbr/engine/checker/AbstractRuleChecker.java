@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.fhframework.fhbr.api.checker.CheckerTypeService;
 import pl.fhframework.fhbr.api.config.ValidatorFeature;
+import pl.fhframework.fhbr.api.model.BRuleCfgDto;
 import pl.fhframework.fhbr.api.model.BRuleDto;
 import pl.fhframework.fhbr.api.service.ValidateContext;
 import pl.fhframework.fhbr.api.service.ValidationMessage;
@@ -51,18 +52,19 @@ public abstract class AbstractRuleChecker implements CheckerTypeService {
 
         for (BRuleDto rule : rules) {
             long time = System.nanoTime();
+            BRuleCfgDto ruleConfig = rule.getConfig();
             try {
                 check(object, context, rule).stream().forEach(m -> {
                     validationResult.addValidationMessage(m);
                 });
             } catch (Exception e) {
-                throw new RuntimeException("Execution error '" + rule.getName() + "' : " + (rule.getBusinessKey() != null ? rule.getBusinessKey() : ""), e);
+                throw new RuntimeException("Execution error '" + ruleConfig.getName() + "' : " + (ruleConfig.getRuleCode() != null ? ruleConfig.getBusinessKey() : ""), e);
             } finally {
                 BigDecimal duration = new BigDecimal((System.nanoTime() - time) / (1000000.0)).setScale(1, RoundingMode.HALF_UP);
                 if (duration.longValue() > warn_duration) {
-                    logger.warn("{}: {}[ms]", rule.getRuleClass(), duration);
+                    logger.warn("{}: {}[ms]", rule.getDefinition().getRuleClassName(), duration);
                 } else if (trace) {
-                    logger.info("{}: {}[ms]", rule.getRuleClass(), duration);
+                    logger.info("{}: {}[ms]", rule.getDefinition().getRuleClassName(), duration);
                 }
             }
         }

@@ -20,7 +20,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 
 /**
  * @author Dariusz Skrudlik
@@ -32,36 +31,9 @@ import java.time.LocalDate;
 @Data
 public class BRuleDto implements Serializable {
 
-    private Long id; // id
+    Long id; // ???
 
-    private String businessKey;
+    BRuleCfgDto config;
 
-    private boolean active;
-
-    private String name;
-
-    private String messageKey;
-
-    private String message;
-
-    private String pointer;
-
-    private int callOrder;
-
-    private String severity;
-
-    private LocalDate validFrom;
-
-    private LocalDate validTo;
-
-    private boolean critical;
-
-    private String phase; //  phase eg. DEFAULT
-
-    private String checkerType; // service type must be registered
-
-    private String ruleClass;
-
-    private String ruleExpression;
-
+    BRuleDefDto definition;
 }

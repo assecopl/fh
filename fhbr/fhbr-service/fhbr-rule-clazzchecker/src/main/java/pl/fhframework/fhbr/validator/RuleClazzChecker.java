@@ -38,12 +38,12 @@ public class RuleClazzChecker extends AbstractRuleChecker {
 
         List<ValidationMessage> validationMessages = new ArrayList<>();
         try {
-            Object ruleInstance = Class.forName(rule.getRuleClass(), true, this.getClass().getClassLoader()).newInstance();
+            Object ruleInstance = Class.forName(rule.getDefinition().getRuleClassName(), true, this.getClass().getClassLoader()).newInstance();
 
             if (ruleInstance instanceof SimpleRule) {
                 SimpleRule ruleChecker = (SimpleRule) ruleInstance;
                 if (!ruleChecker.isValid(object, context)) {
-                    validationMessages.add(context.getMessageFactory().prepareValidationMessage(rule));
+                    validationMessages.add(context.getMessageFactory().prepareValidationMessage(rule.getConfig()));
                 }
             } else {
                 ComplexRule ruleChecker = (ComplexRule) ruleInstance;
@@ -54,9 +54,9 @@ public class RuleClazzChecker extends AbstractRuleChecker {
             }
         } catch (Exception e) {
             LoggerFactory.getLogger(RuleClazzChecker.class).error("Rule '{}' - {} [{}]: {} - error: {}",
-                    rule.getName(),
-                    rule.getBusinessKey(),
-                    rule.getId(), rule.getRuleExpression(), e);
+                    rule.getConfig().getName(),
+                    rule.getConfig().getBusinessKey(),
+                    rule.getId(), rule.getDefinition().getRuleExpression(), e);
             throw e;
         }
         return validationMessages;

@@ -19,23 +19,47 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+import java.time.LocalDate;
+
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 15/07/2022
+ * @created 06/07/2022
  */
 @Setter
 @Getter
 @Data
-public class BRuleSetDto {
+public class BRuleCfgDto implements Serializable {
 
-    private String code; //unique rule set code
+    @Getter
+    private String ruleCode; //unique rule code - businessKey _ variant
 
-    private String description; //
+    private String variant;
 
-    private boolean schemaValidator; // if tested object should be pre validate with schema validator
+    private String businessKey;
 
-    private String schemaNamespace; // target schema namespace for schema validation
+    private boolean active;
 
-    private boolean listValidator; //  if tested object should be pre validate with list validator
+    private String name;
+
+    private String messageKey;
+
+    private String message;
+
+    private String pointer;
+
+    private int callOrder;
+
+    private String severity;
+
+    private LocalDate validFrom;
+
+    private LocalDate validTo;
+
+    private boolean critical;
+
+    private String phase; //  phase eg. DEFAULT
+
+
 }
