@@ -1,7 +1,7 @@
 {
   "name": "fh-charts-controls",
   "version": "4.9.27-SNAPSHOT-1649774729442",
-  "main": "dist/Module.js",
+  "main": "Module.ts",
   "types": "dist/Module.d.ts",
   "description": "fh framework charts controls",
   "author": "AssecoPL",

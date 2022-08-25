@@ -11,7 +11,7 @@
       "email": "jacek.borowiec@asseco.pl"
     }
   ],
-  "main": "dist/Module.js",
+  "main": "Module.ts",
   "types": "dist/Module.d.ts",
   "scripts": {
     "prepublish": "node prepublish",

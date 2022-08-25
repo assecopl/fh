@@ -22,10 +22,10 @@ module.exports = function (cmdEnv) {
      * @type {{mode: string, devtool: string, output: {path: *, filename: string}, entry: string[], resolve: {extensions: string[]}, plugins: *[], module: {rules: *[]}}}
      */
     let baseConfig = {
-        entry: ['@babel/polyfill', './dist/Module.js'],
+        entry: ['@babel/polyfill', './Module.ts'],
         mode: 'development',
         output: {
-            path: Path.resolve('./../../../fhCoreLite/defaultApplication/target/classes/static'),
+            path: Path.resolve('./../../../fhdp/fhdp-example/target/classes/static'),
             filename: 'fhApplication.bundle.js'
         },
         module: {
@@ -71,6 +71,9 @@ module.exports = function (cmdEnv) {
                 test: /\.png$/,
                 use: ["url-loader?mimetype=image/png"]
             }]
+        },
+        resolve: {
+            extensions: ['.ts', '.tsx', '.js']
         },
         plugins: [
             new Webpack.ProvidePlugin({
