@@ -25,7 +25,7 @@ import {HtmlViewExtended} from "./source/controls/HtmlViewExtended"
 import {CheckBoxFhDP} from './source/controls/inputs/CheckBoxFhDP';
 import {NotificationEventFhDP} from './source/controls/NotificationEventFhDP';
 import {XMLViewerFhDP} from './source/controls/XMLViewerFhDP';
-import {RegionPickerFhDP} from './source/controls/RegionPickerFhDP';
+// import {RegionPickerFhDP} from './source/controls/RegionPickerFhDP';
 import * as pack from './package.json';
 import {MSReportsView} from './source/controls/MSReportsView';
 import {InputTimeFhDP} from './source/controls/inputs/InputTimeFhDP';
@@ -210,12 +210,12 @@ class FhDPControls extends FhModule {
                 };
             });
 
-        FhContainer.bind<(componentObj: any, parent: any) => RegionPickerFhDP>("RegionPickerFhDP")
-            .toFactory<RegionPickerFhDP>(() => {
-                return (componentObj: any, parent: any) => {
-                    return new RegionPickerFhDP(componentObj, parent);
-                };
-            });
+        // FhContainer.bind<(componentObj: any, parent: any) => RegionPickerFhDP>("RegionPickerFhDP")
+        //     .toFactory<RegionPickerFhDP>(() => {
+        //         return (componentObj: any, parent: any) => {
+        //             return new RegionPickerFhDP(componentObj, parent);
+        //         };
+        //     });
 
         FhContainer.bind<(componentObj: any, parent: any) => MSReportsView>("MSReportsView")
             .toFactory<MSReportsView>(() => {

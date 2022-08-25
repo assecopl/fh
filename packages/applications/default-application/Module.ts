@@ -10,6 +10,7 @@ import {BasicControls} from "fh-basic-controls";
 import {ChartsControls} from "fh-charts-controls";
 import {ModulePL} from "./Module.pl";
 import {ModuleEN} from "./Module.en";
+import {FhDPControls} from "fhdp-controls";
 
 class FhApplication {
     static registerModule(module: { new(): FhModule }) {
@@ -54,6 +55,7 @@ $(function () {
     FhApplication.registerModule(FormsHandler);
     FhApplication.registerModule(BasicControls);
     FhApplication.registerModule(ChartsControls);
+    FhApplication.registerModule(FhDPControls);
 
     FhApplication.registerCallback('hideMenu', function () {
         let menu = document.getElementById('menuForm');
