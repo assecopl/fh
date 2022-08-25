@@ -22,20 +22,25 @@ import lombok.Setter;
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 15/07/2022
+ * @created 19/08/2022
  */
 @Setter
 @Getter
 @Data
-public class BRuleSetDto {
+public class BRuleDefDto {
 
-    private String code; //unique rule set code
+    private int version;
 
-    private String description; //
+    private String checkerType; // service type must be registered
 
-    private boolean schemaValidator; // if tested object should be pre validate with schema validator
+    private String ruleClassName;
 
-    private String schemaNamespace; // target schema namespace for schema validation
+    private String description;
 
-    private boolean listValidator; //  if tested object should be pre validate with list validator
+    private String ruleExpression;
+
+    private String ruleSource;
+
+    private byte[] ruleByteCode;
+
 }

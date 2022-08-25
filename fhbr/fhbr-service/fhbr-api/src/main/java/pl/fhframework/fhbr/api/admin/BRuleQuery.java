@@ -13,29 +13,12 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.api.model;
-
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+package pl.fhframework.fhbr.api.admin;
 
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 15/07/2022
+ * @created 19/08/2022
  */
-@Setter
-@Getter
-@Data
-public class BRuleSetDto {
-
-    private String code; //unique rule set code
-
-    private String description; //
-
-    private boolean schemaValidator; // if tested object should be pre validate with schema validator
-
-    private String schemaNamespace; // target schema namespace for schema validation
-
-    private boolean listValidator; //  if tested object should be pre validate with list validator
+public class BRuleQuery {
 }

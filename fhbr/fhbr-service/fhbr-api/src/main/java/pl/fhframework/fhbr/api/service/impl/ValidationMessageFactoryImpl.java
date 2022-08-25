@@ -15,7 +15,7 @@
 
 package pl.fhframework.fhbr.api.service.impl;
 
-import pl.fhframework.fhbr.api.model.BRuleDto;
+import pl.fhframework.fhbr.api.model.BRuleCfgDto;
 import pl.fhframework.fhbr.api.service.ValidationMessage;
 import pl.fhframework.fhbr.api.service.ValidationMessageFactory;
 import pl.fhframework.fhbr.api.service.ValidationMessageSeverity;
@@ -34,7 +34,7 @@ public class ValidationMessageFactoryImpl implements ValidationMessageFactory<Va
     }
 
     @Override
-    public ValidationMessage prepareValidationMessage(BRuleDto rule) {
+    public ValidationMessage prepareValidationMessage(BRuleCfgDto rule) {
         ValidationMessage message = new ValidationMessageImpl();
         message.setSeverity(rule.getSeverity() != null ? ValidationMessageSeverity.valueOf(rule.getSeverity()) : ValidationMessageSeverity.ERROR);
         message.setPointer(rule.getPointer());
