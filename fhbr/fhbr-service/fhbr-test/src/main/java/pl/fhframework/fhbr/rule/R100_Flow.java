@@ -13,21 +13,38 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.api.rule;
+package pl.fhframework.fhbr.rule;
 
 import pl.fhframework.fhbr.api.model.BRuleDto;
+import pl.fhframework.fhbr.api.rule.ComplexRule;
 import pl.fhframework.fhbr.api.service.ValidateContext;
+import pl.fhframework.fhbr.api.service.ValidateObject;
 import pl.fhframework.fhbr.api.service.ValidationMessage;
+import pl.fhframework.fhbr.example.TestObject;
 
 import java.util.List;
 
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 08/07/2022
+ * @created 25/08/2022
  */
-public interface ComplexRule<O> {
+public class R100_Flow implements ComplexRule<TestObject> {
 
-    List<ValidationMessage> check(O targetObject, ValidateContext context, BRuleDto rule) throws Exception;
+    @Override
+    public List<ValidationMessage> check(TestObject targetObject, ValidateContext context, BRuleDto rule) throws Exception {
+
+        ValidateObject<TestObject> validateObject = new ValidateObject<>();
+        validateObject.setObject(targetObject);
+
+        List<ValidationMessage> validationMessages = context.applyRuleSet("M2", validateObject);
+
+        //
+        validationMessages.addAll(
+                context.subscribeRule("R500", R500.prepare(targetObject.getActive(), targetObject.getAmount()))
+        );
+
+        return validationMessages;
+    }
 
 }

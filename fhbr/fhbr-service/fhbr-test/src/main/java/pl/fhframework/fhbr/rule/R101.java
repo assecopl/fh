@@ -13,17 +13,30 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.api.rule;
+package pl.fhframework.fhbr.rule;
 
+import pl.fhframework.fhbr.api.rule.SimpleRule;
 import pl.fhframework.fhbr.api.service.ValidateContext;
+import pl.fhframework.fhbr.example.TestObject;
+
+import java.math.BigDecimal;
 
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 08/07/2022
+ * @created 11/07/2022
  */
-public interface SimpleRule<O> {
+public class R101 implements SimpleRule<TestObject> {
 
-    boolean isValid(O targetObject, ValidateContext context) throws Exception;
+    @Override
+    public boolean isValid(TestObject targetObject, ValidateContext context) throws Exception {
+
+        //IF active THEN amount must by greater than zero
+        return targetObject.getActive() != null && (!targetObject.getActive() ||
+                (targetObject.getActive() && targetObject.getAmount() != null
+                        && (targetObject.getAmount().compareTo(BigDecimal.ZERO) > 1)
+                )
+        );
+    }
 
 }

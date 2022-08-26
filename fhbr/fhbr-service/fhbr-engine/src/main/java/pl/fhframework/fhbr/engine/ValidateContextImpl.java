@@ -20,6 +20,7 @@ import pl.fhframework.fhbr.api.service.ValidateContext;
 import pl.fhframework.fhbr.api.service.ValidateObject;
 import pl.fhframework.fhbr.api.service.ValidationMessage;
 import pl.fhframework.fhbr.api.service.ValidationMessageFactory;
+import pl.fhframework.fhbr.engine.audit.AuditContextData;
 
 import java.util.List;
 
@@ -40,16 +41,34 @@ public class ValidateContextImpl implements ValidateContext {
     @Getter
     private ValidationMessageFactory messageFactory;
     private final ValidatorServiceImpl validatorService;
+    private final AuditContextData auditContextData;
 
     public ValidateContextImpl(ValidationMessageFactory messageFactory, ValidatorServiceImpl validatorService, String initialRuleSetCode, String initialPhase) {
         this.messageFactory = messageFactory;
         this.validatorService = validatorService;
         this.initialRuleSetCode = initialRuleSetCode;
         this.initialPhase = initialPhase;
+        this.auditContextData = new AuditContextData();
     }
 
-    public List<ValidationMessage> applyRules(String ruleSetCode, String phase, ValidateObject validateObject) {
-        return validatorService.applyRules(this, ruleSetCode, phase, validateObject);
+
+    public List<ValidationMessage> applyRuleSet(String ruleSetCode, String phase, ValidateObject validateObject) {
+        return validatorService.applyRuleSet(this, ruleSetCode, phase, validateObject);
     }
+
+    public List<ValidationMessage> applyRuleSet(String ruleSetCode, ValidateObject validateObject) {
+        return applyRuleSet(ruleSetCode, null, validateObject);
+    }
+
+    public List<ValidationMessage> subscribeRule(String ruleCode, ValidateObject validateObject) {
+        return validatorService.applyRule(this, ruleCode, null, validateObject);
+
+    }
+
+
+    void addCheckPoint(String checkPointNAme, String value) {
+        auditContextData.addCheckPoint(checkPointNAme, value);
+    }
+
 
 }

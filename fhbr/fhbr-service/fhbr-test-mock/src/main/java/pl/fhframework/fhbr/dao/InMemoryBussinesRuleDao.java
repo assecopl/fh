@@ -21,10 +21,7 @@ import pl.fhframework.fhbr.api.model.BRuleDto;
 import pl.fhframework.fhbr.api.model.BRuleSetDto;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Dariusz Skrudlik
@@ -34,18 +31,28 @@ import java.util.Map;
 public class InMemoryBussinesRuleDao implements BRuleSetDao {
 
     @Getter
-    private Map<String, List<BRuleDto>> storage = new HashMap<>();
+    private Map<String, List<BRuleDto>> ruleSetsRules = new HashMap<>();
     @Getter
-    private Map<String, BRuleSetDto> modules = new HashMap<>();
+    private Map<String, BRuleSetDto> ruleSets = new HashMap<>();
 
     @Override
-    public List<BRuleDto> findRules(String ruleSetCode, String phase, boolean active, LocalDate onDate) {
-        return storage.containsKey(ruleSetCode) ? new ArrayList<>(storage.get(ruleSetCode)) : new ArrayList<>();
+    public List<BRuleDto> findRuleSetRules(String ruleSetCode, String phase, boolean active, LocalDate onDate) {
+        return ruleSetsRules.containsKey(ruleSetCode) ? new ArrayList<>(ruleSetsRules.get(ruleSetCode)) : new ArrayList<>();
     }
 
     @Override
     public BRuleSetDto findRuleSet(String ruleSetCode, String phase) {
-        return modules.get(ruleSetCode);
+        return ruleSets.get(ruleSetCode);
+    }
+
+    @Override
+    public List<BRuleDto> findRule(String ruleCode, String phase, boolean active, LocalDate onDate) {
+        Set<BRuleDto> rules = new HashSet<>();
+
+        ruleSetsRules.values().forEach(ruleSetList -> ruleSetList.stream().filter(
+                        ruleDto -> ruleCode.equals(ruleDto.getConfig().getRuleCode()))
+                .forEach(ruleDto -> rules.add(ruleDto)));
+        return new ArrayList<BRuleDto>(rules);
     }
 
 }

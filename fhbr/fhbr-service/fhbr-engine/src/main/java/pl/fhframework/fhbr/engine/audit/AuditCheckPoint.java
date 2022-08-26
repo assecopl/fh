@@ -13,17 +13,22 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.api.rule;
-
-import pl.fhframework.fhbr.api.service.ValidateContext;
+package pl.fhframework.fhbr.engine.audit;
 
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 08/07/2022
+ * @created 25/08/2022
  */
-public interface SimpleRule<O> {
+public class AuditCheckPoint extends AuditPoint {
 
-    boolean isValid(O targetObject, ValidateContext context) throws Exception;
+    private final String checkPointName;
+    private final String value;
+
+    public AuditCheckPoint(String checkPointName, String value) {
+        super("CheckPoint");
+        this.checkPointName = checkPointName;
+        this.value = value;
+    }
 
 }

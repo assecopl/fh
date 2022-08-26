@@ -13,32 +13,20 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.rule;
+package pl.fhframework.fhbr.api.rule;
 
-import pl.fhframework.fhbr.api.model.BRuleDto;
-import pl.fhframework.fhbr.api.rule.ComplexRule;
 import pl.fhframework.fhbr.api.service.ValidateContext;
-import pl.fhframework.fhbr.api.service.ValidateObject;
 import pl.fhframework.fhbr.api.service.ValidationMessage;
-import pl.fhframework.fhbr.example.TestObject;
 
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
  * @created 25/08/2022
  */
-public class M2_Flow implements ComplexRule<TestObject> {
+public abstract class ConsumerRule implements Function<ValidateContext, List<ValidationMessage>> {
 
-    @Override
-    public List<ValidationMessage> check(TestObject object, ValidateContext context, BRuleDto rule) throws Exception {
-
-        ValidateObject<TestObject> validateObject = new ValidateObject<>();
-        validateObject.setObject(object);
-        List<ValidationMessage> validationMessages = context.applyRules("M1", null, validateObject);
-
-        return validationMessages;
-    }
 
 }

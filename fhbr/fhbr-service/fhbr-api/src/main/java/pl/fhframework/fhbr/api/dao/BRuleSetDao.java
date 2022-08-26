@@ -30,8 +30,10 @@ import java.util.List;
  */
 public interface BRuleSetDao {
 
-    List<BRuleDto> findRules(String ruleSetCode, String phase, boolean active, LocalDate onDate);
+    List<BRuleDto> findRuleSetRules(String ruleSetCode, String phase, boolean active, LocalDate onDate);
 
     BRuleSetDto findRuleSet(String ruleSetCode, String phase);
+
+    List<BRuleDto> findRule(String ruleCode, String phase, boolean active, LocalDate onDate);
 
 }
