@@ -138,6 +138,6 @@ public class DirectUsageValidatorService_RuleTest {
         ValidationResult validationResult = validatorService.validate("M1", null, validateObject);
 
 //        logger.info(validationResult.toString());
-        logger.info(new GsonBuilder().setPrettyPrinting().create().toJson(new JsonParser().parse(validationResult.toString())));
+        logger.info("validationResult = " + new GsonBuilder().setPrettyPrinting().create().toJson(new JsonParser().parse(validationResult.toString())));
     }
 }

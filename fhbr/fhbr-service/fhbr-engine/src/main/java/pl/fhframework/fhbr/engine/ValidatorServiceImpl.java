@@ -56,7 +56,7 @@ public class ValidatorServiceImpl implements ValidatorService {
     public ValidationResult validate(String ruleSetCode, String phase, ValidateObject target) {
 
         ValidationResult validationResult = new ValidationResult();
-        ValidateContext context = new ValidateContextImpl(messageFactory, this, ruleSetCode, phase);
+        ValidationContext context = new ValidationContextImpl(messageFactory, this, ruleSetCode, phase);
 
         BRuleSetDto bRuleSetDto = BRuleSetDao.findRuleSet(ruleSetCode, phase);
         if (bRuleSetDto == null) {
@@ -92,17 +92,17 @@ public class ValidatorServiceImpl implements ValidatorService {
      * @param validateObject
      * @return
      */
-    public List<ValidationMessage> applyRuleSet(ValidateContext context, String ruleSetCode, String phase, ValidateObject validateObject) {
+    public List<ValidationMessage> applyRuleSet(ValidationContext context, String ruleSetCode, String phase, ValidateObject validateObject) {
         List<BRuleDto> rules = BRuleSetDao.findRuleSetRules(ruleSetCode, phase, true, validateObject.getOnDate());
         return applyRules(context, validateObject, rules);
     }
 
-    public List<ValidationMessage> applyRule(ValidateContext context, String ruleCode, String phase, ValidateObject validateObject) {
+    public List<ValidationMessage> applyRule(ValidationContext context, String ruleCode, String phase, ValidateObject validateObject) {
         List<BRuleDto> rules = BRuleSetDao.findRule(ruleCode, phase, true, validateObject.getOnDate());
         return applyRules(context, validateObject, rules);
     }
 
-    List<ValidationMessage> applyRules(ValidateContext context, ValidateObject validateObject, List<BRuleDto> rules) {
+    List<ValidationMessage> applyRules(ValidationContext context, ValidateObject validateObject, List<BRuleDto> rules) {
 
         List<ValidationMessage> validationMessages = Collections.synchronizedList(new LinkedList<ValidationMessage>());
 

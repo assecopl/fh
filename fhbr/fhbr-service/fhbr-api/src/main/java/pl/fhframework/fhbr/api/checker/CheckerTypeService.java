@@ -16,7 +16,7 @@
 package pl.fhframework.fhbr.api.checker;
 
 import pl.fhframework.fhbr.api.model.BRuleDto;
-import pl.fhframework.fhbr.api.service.ValidateContext;
+import pl.fhframework.fhbr.api.service.ValidationContext;
 import pl.fhframework.fhbr.api.service.ValidationResult;
 
 import java.util.List;
@@ -32,6 +32,6 @@ public interface CheckerTypeService {
 
 //    void setValidationMessageFactory(ValidationMessageFactory validationMessageFactory);
 
-    ValidationResult validate(Object object, ValidateContext context, List<BRuleDto> rules);
+    ValidationResult validate(Object object, ValidationContext context, List<BRuleDto> rules);
 
 }

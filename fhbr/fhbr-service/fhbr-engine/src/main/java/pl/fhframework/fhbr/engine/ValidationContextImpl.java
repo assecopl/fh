@@ -16,8 +16,8 @@
 package pl.fhframework.fhbr.engine;
 
 import lombok.Getter;
-import pl.fhframework.fhbr.api.service.ValidateContext;
 import pl.fhframework.fhbr.api.service.ValidateObject;
+import pl.fhframework.fhbr.api.service.ValidationContext;
 import pl.fhframework.fhbr.api.service.ValidationMessage;
 import pl.fhframework.fhbr.api.service.ValidationMessageFactory;
 import pl.fhframework.fhbr.engine.audit.AuditContextData;
@@ -31,7 +31,7 @@ import java.util.List;
  * @version :  $, :  $
  * @created 18/08/2022
  */
-public class ValidateContextImpl implements ValidateContext {
+public class ValidationContextImpl implements ValidationContext {
 
     @Getter
     private final String initialRuleSetCode;
@@ -43,7 +43,7 @@ public class ValidateContextImpl implements ValidateContext {
     private final ValidatorServiceImpl validatorService;
     private final AuditContextData auditContextData;
 
-    public ValidateContextImpl(ValidationMessageFactory messageFactory, ValidatorServiceImpl validatorService, String initialRuleSetCode, String initialPhase) {
+    public ValidationContextImpl(ValidationMessageFactory messageFactory, ValidatorServiceImpl validatorService, String initialRuleSetCode, String initialPhase) {
         this.messageFactory = messageFactory;
         this.validatorService = validatorService;
         this.initialRuleSetCode = initialRuleSetCode;

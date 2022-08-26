@@ -15,7 +15,7 @@
 
 package pl.fhframework.fhbr.api.rule;
 
-import pl.fhframework.fhbr.api.service.ValidateContext;
+import pl.fhframework.fhbr.api.service.ValidationContext;
 import pl.fhframework.fhbr.api.service.ValidationMessage;
 
 import java.util.List;
@@ -26,7 +26,7 @@ import java.util.function.Function;
  * @version :  $, :  $
  * @created 25/08/2022
  */
-public abstract class ConsumerRule implements Function<ValidateContext, List<ValidationMessage>> {
+public abstract class ConsumerRule implements Function<ValidationContext, List<ValidationMessage>> {
 
 
 }

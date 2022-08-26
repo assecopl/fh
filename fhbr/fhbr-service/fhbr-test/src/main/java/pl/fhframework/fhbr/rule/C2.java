@@ -17,7 +17,7 @@ package pl.fhframework.fhbr.rule;
 
 import lombok.AllArgsConstructor;
 import pl.fhframework.fhbr.api.rule.ConsumerRule;
-import pl.fhframework.fhbr.api.service.ValidateContext;
+import pl.fhframework.fhbr.api.service.ValidationContext;
 import pl.fhframework.fhbr.api.service.ValidationMessage;
 
 import java.math.BigDecimal;
@@ -36,7 +36,7 @@ public class C2 extends ConsumerRule {
     private BigDecimal netMas;
 
     @Override
-    public List<ValidationMessage> apply(ValidateContext validateContext) {
+    public List<ValidationMessage> apply(ValidationContext validationContext) {
 
         return null;
     }

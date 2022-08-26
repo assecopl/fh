@@ -18,8 +18,8 @@ package pl.fhframework.fhbr.rule;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import pl.fhframework.fhbr.api.rule.SimpleRule;
-import pl.fhframework.fhbr.api.service.ValidateContext;
 import pl.fhframework.fhbr.api.service.ValidateObject;
+import pl.fhframework.fhbr.api.service.ValidationContext;
 
 import java.math.BigDecimal;
 
@@ -42,7 +42,7 @@ public class R500 implements SimpleRule<R500.Data> {
     }
 
     @Override
-    public boolean isValid(Data targetObject, ValidateContext context) throws Exception {
+    public boolean isValid(Data targetObject, ValidationContext context) throws Exception {
 
         //IF active THEN amount must by greater than zero
         return targetObject.getActive() != null && (!targetObject.getActive() ||

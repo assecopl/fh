@@ -24,7 +24,7 @@ import java.util.List;
  * @version :  $, :  $
  * @created 13/07/2022
  */
-public interface ValidateContext {
+public interface ValidationContext {
 
     /**
      * Initial rule set

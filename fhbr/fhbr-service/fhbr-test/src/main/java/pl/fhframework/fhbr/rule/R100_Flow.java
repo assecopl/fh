@@ -17,8 +17,8 @@ package pl.fhframework.fhbr.rule;
 
 import pl.fhframework.fhbr.api.model.BRuleDto;
 import pl.fhframework.fhbr.api.rule.ComplexRule;
-import pl.fhframework.fhbr.api.service.ValidateContext;
 import pl.fhframework.fhbr.api.service.ValidateObject;
+import pl.fhframework.fhbr.api.service.ValidationContext;
 import pl.fhframework.fhbr.api.service.ValidationMessage;
 import pl.fhframework.fhbr.example.TestObject;
 
@@ -32,7 +32,7 @@ import java.util.List;
 public class R100_Flow implements ComplexRule<TestObject> {
 
     @Override
-    public List<ValidationMessage> check(TestObject targetObject, ValidateContext context, BRuleDto rule) throws Exception {
+    public List<ValidationMessage> check(TestObject targetObject, ValidationContext context, BRuleDto rule) throws Exception {
 
         ValidateObject<TestObject> validateObject = new ValidateObject<>();
         validateObject.setObject(targetObject);
