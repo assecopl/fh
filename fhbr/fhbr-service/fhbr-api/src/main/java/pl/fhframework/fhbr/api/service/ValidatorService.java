@@ -37,9 +37,9 @@ public interface ValidatorService {
      *                    data parser select module automatically based on namespace and root element name
      * @param phase       - each module may have configuration for different phases of business process
      *                    If null, DEFAULT phase is used.
-     * @param object      - object for check
+     * @param target      - object for check
      * @return result of validation
      */
-    ValidationResult validate(String ruleSetCode, String phase, ValidateObject object);
+    ValidationResult validate(String ruleSetCode, String phase, ValidateObject target);
 
 }

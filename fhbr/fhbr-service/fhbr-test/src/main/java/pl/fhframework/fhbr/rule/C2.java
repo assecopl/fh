@@ -15,28 +15,29 @@
 
 package pl.fhframework.fhbr.rule;
 
-import pl.fhframework.fhbr.api.rule.SimpleRule;
+import lombok.AllArgsConstructor;
+import pl.fhframework.fhbr.api.rule.ConsumerRule;
 import pl.fhframework.fhbr.api.service.ValidateContext;
-import pl.fhframework.fhbr.example.TestObject;
+import pl.fhframework.fhbr.api.service.ValidationMessage;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 11/07/2022
+ * @created 26/08/2022
  */
-public class R1 implements SimpleRule<TestObject> {
+
+@AllArgsConstructor
+public class C2 extends ConsumerRule {
+
+    private BigDecimal grossMas;
+    private BigDecimal netMas;
 
     @Override
-    public boolean isValid(TestObject object, ValidateContext context) throws Exception {
+    public List<ValidationMessage> apply(ValidateContext validateContext) {
 
-        //IF active THEN amount must by greater than zero
-        return object.getActive() != null && (!object.getActive() ||
-                (object.getActive() && object.getAmount() != null
-                        && (object.getAmount().compareTo(BigDecimal.ZERO) > 1)
-                )
-        );
+        return null;
     }
-
 }

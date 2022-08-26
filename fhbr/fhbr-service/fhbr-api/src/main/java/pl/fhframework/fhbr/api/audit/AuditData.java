@@ -13,17 +13,21 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.api.rule;
+package pl.fhframework.fhbr.api.audit;
 
-import pl.fhframework.fhbr.api.service.ValidateContext;
+import java.util.List;
 
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 08/07/2022
+ * @created 25/08/2022
  */
-public interface SimpleRule<O> {
 
-    boolean isValid(O targetObject, ValidateContext context) throws Exception;
+public interface AuditData {
 
+    long getStartNanoTime();
+
+    String getName();
+
+    List<? extends AuditData> getAuditData();
 }

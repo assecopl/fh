@@ -27,6 +27,16 @@ import java.util.List;
 public interface ValidateContext {
 
     /**
+     * Initial rule set
+     */
+    String getInitialRuleSetCode();
+
+    /**
+     * Initial phase passed to service call
+     */
+    String getInitialPhase();
+
+    /**
      * Getter for MessageFactory.
      * <p>
      * Use for create ValidationMessage inside rule body.
@@ -55,5 +65,10 @@ public interface ValidateContext {
      * @param validateObject - target object wrapper
      * @return list of ValidationMessages
      */
-    List<ValidationMessage> applyRules(String ruleSetCode, String phase, ValidateObject validateObject);
+    List<ValidationMessage> applyRuleSet(String ruleSetCode, String phase, ValidateObject validateObject);
+
+    List<ValidationMessage> applyRuleSet(String ruleSetCode, ValidateObject validateObject);
+
+    List<ValidationMessage> subscribeRule(String ruleSetCode, ValidateObject validateObject);
+
 }

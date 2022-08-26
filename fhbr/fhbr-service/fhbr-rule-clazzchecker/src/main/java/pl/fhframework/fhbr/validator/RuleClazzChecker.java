@@ -18,6 +18,7 @@ package pl.fhframework.fhbr.validator;
 import org.slf4j.LoggerFactory;
 import pl.fhframework.fhbr.api.model.BRuleDto;
 import pl.fhframework.fhbr.api.rule.ComplexRule;
+import pl.fhframework.fhbr.api.rule.ConsumerRule;
 import pl.fhframework.fhbr.api.rule.SimpleRule;
 import pl.fhframework.fhbr.api.service.ValidateContext;
 import pl.fhframework.fhbr.api.service.ValidationMessage;
@@ -39,19 +40,25 @@ public class RuleClazzChecker extends AbstractRuleChecker {
         List<ValidationMessage> validationMessages = new ArrayList<>();
         try {
             Object ruleInstance = Class.forName(rule.getDefinition().getRuleClassName(), true, this.getClass().getClassLoader()).newInstance();
+            List<ValidationMessage> checkResult = null;
 
             if (ruleInstance instanceof SimpleRule) {
                 SimpleRule ruleChecker = (SimpleRule) ruleInstance;
                 if (!ruleChecker.isValid(object, context)) {
                     validationMessages.add(context.getMessageFactory().prepareValidationMessage(rule.getConfig()));
                 }
+            } else if (ruleInstance instanceof ConsumerRule) {
+                ConsumerRule consumerRule = (ConsumerRule) ruleInstance;
+                checkResult = consumerRule.apply(context); //ruleChecker.check(object, context, rule);
             } else {
                 ComplexRule ruleChecker = (ComplexRule) ruleInstance;
-                List<ValidationMessage> checkResult = ruleChecker.check(object, context, rule);
-                if (checkResult != null) {
-                    validationMessages.addAll(checkResult);
-                }
+                checkResult = ruleChecker.check(object, context, rule);
             }
+
+            if (checkResult != null) {
+                validationMessages.addAll(checkResult);
+            }
+
         } catch (Exception e) {
             LoggerFactory.getLogger(RuleClazzChecker.class).error("Rule '{}' - {} [{}]: {} - error: {}",
                     rule.getConfig().getName(),

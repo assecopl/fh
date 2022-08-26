@@ -53,7 +53,7 @@ public class ValidatorServiceImpl implements ValidatorService {
     }
 
     @Override
-    public ValidationResult validate(String ruleSetCode, String phase, ValidateObject validateObject) {
+    public ValidationResult validate(String ruleSetCode, String phase, ValidateObject target) {
 
         ValidationResult validationResult = new ValidationResult();
         ValidateContext context = new ValidateContextImpl(messageFactory, this, ruleSetCode, phase);
@@ -69,14 +69,14 @@ public class ValidatorServiceImpl implements ValidatorService {
         if (bRuleSetDto.isSchemaValidator()) {
             new DaoXsdResolverFactory(xsdRepositoryDao, LocalDate.now());
             ValidationResult partialResult = new SchemaValidatorHelper(new DaoXsdResolverFactory(xsdRepositoryDao, LocalDate.now()), messageFactory)
-                    .validate(bRuleSetDto.getSchemaNamespace(), (byte[]) validateObject.getObject());
+                    .validate(bRuleSetDto.getSchemaNamespace(), (byte[]) target.getObject());
             rewriteValidationMessage(partialResult.getValidationResultMessages(), validationResult);
             if (!validationResult.getValid()) {
                 return validationResult;
             }
         }
 
-        List<ValidationMessage> validationMessages = applyRules(context, ruleSetCode, phase, validateObject);
+        List<ValidationMessage> validationMessages = applyRuleSet(context, ruleSetCode, phase, target);
         rewriteValidationMessage(validationMessages, validationResult);
 
         return validationResult;
@@ -92,11 +92,19 @@ public class ValidatorServiceImpl implements ValidatorService {
      * @param validateObject
      * @return
      */
-    List<ValidationMessage> applyRules(ValidateContext context, String ruleSetCode, String phase, ValidateObject validateObject) {
+    public List<ValidationMessage> applyRuleSet(ValidateContext context, String ruleSetCode, String phase, ValidateObject validateObject) {
+        List<BRuleDto> rules = BRuleSetDao.findRuleSetRules(ruleSetCode, phase, true, validateObject.getOnDate());
+        return applyRules(context, validateObject, rules);
+    }
+
+    public List<ValidationMessage> applyRule(ValidateContext context, String ruleCode, String phase, ValidateObject validateObject) {
+        List<BRuleDto> rules = BRuleSetDao.findRule(ruleCode, phase, true, validateObject.getOnDate());
+        return applyRules(context, validateObject, rules);
+    }
+
+    List<ValidationMessage> applyRules(ValidateContext context, ValidateObject validateObject, List<BRuleDto> rules) {
 
         List<ValidationMessage> validationMessages = Collections.synchronizedList(new LinkedList<ValidationMessage>());
-
-        List<BRuleDto> rules = BRuleSetDao.findRules(ruleSetCode, phase, true, validateObject.getOnDate());
 
         rules.stream()
                 .filter(r -> StringUtils.isNotBlank(r.getDefinition().getCheckerType()))
@@ -107,7 +115,7 @@ public class ValidatorServiceImpl implements ValidatorService {
                     try {
                         checkerTypeService = prepareCheckerTypeService(ruleType);
                     } catch (Exception e) {
-                        throw new RuleValidationException("fhbr.exception.createRuleValidatorService", ruleSetCode, null, e);
+                        throw new RuleValidationException("fhbr.exception.createRuleValidatorService", null, null, e);
                     }
 
                     ValidationResult partialResult = checkerTypeService.validate(validateObject.getObject(), context, ruleTypeLists);

@@ -13,17 +13,27 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.api.rule;
+package pl.fhframework.fhbr.engine.audit;
 
-import pl.fhframework.fhbr.api.service.ValidateContext;
+import lombok.Getter;
 
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 08/07/2022
+ * @created 25/08/2022
  */
-public interface SimpleRule<O> {
+@Getter
+public class AuditRulSetStart extends AuditPoint {
 
-    boolean isValid(O targetObject, ValidateContext context) throws Exception;
+    private final String ruleSetName;
+    private long duration;
 
+    public AuditRulSetStart(String ruleSetName) {
+        super("RuleStartStart");
+        this.ruleSetName = ruleSetName;
+    }
+
+    void finish() {
+        duration = System.nanoTime() - startNanoTime;
+    }
 }

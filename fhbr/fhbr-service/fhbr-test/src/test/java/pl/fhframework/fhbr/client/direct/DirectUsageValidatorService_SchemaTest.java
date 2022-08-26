@@ -61,7 +61,7 @@ public class DirectUsageValidatorService_SchemaTest {
             moduleTEST.setCode("TEST");
             moduleTEST.setSchemaValidator(true);
             moduleTEST.setSchemaNamespace("http://fhframework.pl/fh/fhbr-xsd/test_v1r0.xsd");
-            moduleDao.getModules().put("TEST", moduleTEST);
+            moduleDao.getRuleSets().put("TEST", moduleTEST);
 
             return moduleDao;
         });
