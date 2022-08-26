@@ -15,6 +15,8 @@
 
 package pl.fhframework.fhbr.client.direct;
 
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParser;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -135,7 +137,7 @@ public class DirectUsageValidatorService_RuleTest {
 
         ValidationResult validationResult = validatorService.validate("M1", null, validateObject);
 
-        logger.info(validationResult.toString());
-
+//        logger.info(validationResult.toString());
+        logger.info(new GsonBuilder().setPrettyPrinting().create().toJson(new JsonParser().parse(validationResult.toString())));
     }
 }

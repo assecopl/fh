@@ -73,7 +73,7 @@ public class ValidationResult {
         StringBuilder sb = new StringBuilder();
         sb.append("{ \"valid\": ").append(valid);
         sb
-                .append(", ")
+                .append(", \"validationMessages\": ")
                 .append(Arrays.toString(getValidationResultMessages().toArray()));
         return sb.append(" }").toString();
     }
