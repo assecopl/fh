@@ -50,6 +50,19 @@ public class ValidateObject<O> {
         this.requestId = UUID.randomUUID().toString();
     }
 
+    public ValidateObject(O object) {
+        this();
+        this.object = object;
+    }
+
+    public ValidateObject(LocalDate onDate, O object) {
+        this(object);
+        this.onDate = onDate;
+    }
+
+    /**
+     * Only if unique (recognizable) requestId - e.g. soap message id
+     */
     public ValidateObject(String requestId, LocalDate onDate, O object) {
         this.requestId = requestId;
         this.onDate = onDate;
