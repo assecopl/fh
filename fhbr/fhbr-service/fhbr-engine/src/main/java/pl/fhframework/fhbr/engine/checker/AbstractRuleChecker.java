@@ -21,7 +21,7 @@ import pl.fhframework.fhbr.api.checker.CheckerTypeService;
 import pl.fhframework.fhbr.api.config.ValidatorFeature;
 import pl.fhframework.fhbr.api.model.BRuleCfgDto;
 import pl.fhframework.fhbr.api.model.BRuleDto;
-import pl.fhframework.fhbr.api.service.ValidateContext;
+import pl.fhframework.fhbr.api.service.ValidationContext;
 import pl.fhframework.fhbr.api.service.ValidationMessage;
 import pl.fhframework.fhbr.api.service.ValidationResult;
 
@@ -39,7 +39,7 @@ public abstract class AbstractRuleChecker implements CheckerTypeService {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
-    public ValidationResult validate(Object object, ValidateContext context, List<BRuleDto> rules) {
+    public ValidationResult validate(Object object, ValidationContext context, List<BRuleDto> rules) {
 
         ValidationResult validationResult = new ValidationResult();
         boolean trace = Boolean.parseBoolean(System.getProperty(ValidatorFeature.RULE_TRACE, "false"));
@@ -81,6 +81,6 @@ public abstract class AbstractRuleChecker implements CheckerTypeService {
      * @return List<IValidationMessage> list of validation massages (not null)
      * @throws Exception
      */
-    protected abstract List<ValidationMessage> check(Object object, ValidateContext context, BRuleDto rule) throws Exception;
+    protected abstract List<ValidationMessage> check(Object object, ValidationContext context, BRuleDto rule) throws Exception;
 
 }

@@ -20,7 +20,7 @@ import pl.fhframework.fhbr.api.model.BRuleDto;
 import pl.fhframework.fhbr.api.rule.ComplexRule;
 import pl.fhframework.fhbr.api.rule.ConsumerRule;
 import pl.fhframework.fhbr.api.rule.SimpleRule;
-import pl.fhframework.fhbr.api.service.ValidateContext;
+import pl.fhframework.fhbr.api.service.ValidationContext;
 import pl.fhframework.fhbr.api.service.ValidationMessage;
 import pl.fhframework.fhbr.engine.checker.AbstractRuleChecker;
 
@@ -35,7 +35,7 @@ import java.util.List;
 public class RuleClazzChecker extends AbstractRuleChecker {
 
     @Override
-    protected List<ValidationMessage> check(Object object, ValidateContext context, BRuleDto rule) throws Exception {
+    protected List<ValidationMessage> check(Object object, ValidationContext context, BRuleDto rule) throws Exception {
 
         List<ValidationMessage> validationMessages = new ArrayList<>();
         try {
