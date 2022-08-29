@@ -6,6 +6,8 @@ import com.mongodb.client.MongoClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.MongoDatabaseFactory;
+import org.springframework.data.mongodb.MongoTransactionManager;
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
 
 import java.util.ArrayList;
@@ -13,7 +15,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 @Configuration
-public class MongoConfig extends AbstractMongoClientConfiguration {
+public class MongoConfigTransactional extends AbstractMongoClientConfiguration {
 
     @Value("${mongo.hostAndPort:localhost:27017}")
     private String hostAndPort;
@@ -32,6 +34,10 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
         return super.mongoClient();
     }
 
+    @Bean
+    MongoTransactionManager mongoTransactionManager(MongoDatabaseFactory dbFactory) {
+        return new MongoTransactionManager(dbFactory);
+    }
 
     @Override
     protected void configureClientSettings(MongoClientSettings.Builder builder) {
@@ -64,7 +70,7 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
     
     @Override
     protected boolean autoIndexCreation() {
-    	System.out.println("autoIndexCreation: "+autoIndex);
+    	System.out.println("autoIndexCreation: " + autoIndex);
         return autoIndex;
     }    
     
