@@ -20,7 +20,7 @@
 
     <script type="text/javascript" src="fhApplication.bundle.js?version=@@buildNumber@@"></script>
 
-    <script th:if="${@environment.getProperty('fh.web.secure.caprcha.sitekey') != null}" th:src="@{https://www.google.com/recaptcha/api.js?render=__${@environment.getProperty('fh.application.css.url')}__}"></script>
+    <script th:if="${@environment.getProperty('fh.web.secure.caprcha.sitekey') != null}" th:src="@{https://www.google.com/recaptcha/api.js?render=__${@environment.getProperty('fh.web.secure.caprcha.sitekey')}__}"></script>
 
     <script type="text/javascript"
             th:attrappend="src=${@environment.getProperty('fh.application.js.url') != null}?@{__${@environment.getProperty('fh.application.js.url')}__?version=@@buildNumber@@}"></script>
