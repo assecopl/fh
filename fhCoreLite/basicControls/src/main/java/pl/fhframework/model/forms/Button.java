@@ -4,7 +4,10 @@ package pl.fhframework.model.forms;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
 import org.springframework.util.StringUtils;
+import org.springframework.web.client.RestTemplate;
 import pl.fhframework.BindingResult;
 import pl.fhframework.annotations.*;
 import pl.fhframework.binding.*;
@@ -16,10 +19,7 @@ import pl.fhframework.model.forms.designer.BindingExpressionDesignerPreviewProvi
 import pl.fhframework.model.forms.designer.ButtonStyleFixedValuesProvider;
 import pl.fhframework.model.forms.optimized.ColumnOptimized;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.*;
 
@@ -121,7 +121,18 @@ public class Button extends FormElementWithConfirmationSupport implements TableC
     @Override
     public Optional<ActionBinding> getEventHandler(InMessageEventData eventData) {
         if (eventData.getEventType().equals(ATTR_ON_CLICK)) {
-            return Optional.ofNullable(onClick);
+            if(this.reCAPTCHA) {
+
+               //TODO Token verify
+               String token = eventData.getParams().get(0).toString();
+                if(this.verifyCaptchaToken(token)) {
+                    return Optional.ofNullable(onClick);
+                } else {
+                    throw new RuntimeException("You are bot.");
+                }
+            } else {
+                return Optional.ofNullable(onClick);
+            }
         } else {
             return super.getEventHandler(eventData);
         }
@@ -186,4 +197,46 @@ public class Button extends FormElementWithConfirmationSupport implements TableC
     public void setOnClick(ActionBinding onClick) {
         this.onClick = onClick;
     }
+
+    public boolean verifyCaptchaToken(String token) {
+        String url = "https://www.google.com/recaptcha/api/siteverify?secret={secret}&response={response}";
+
+        // create headers
+        HttpHeaders headers = new HttpHeaders();
+        // set `content-type` header
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        // set `accept` header
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+
+        // create a map for post parameters
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("secret", this.getCaptchaServerKey());
+        map.put("response", token);
+
+        // build the request
+        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(map, headers);
+
+        // send POST request
+        ResponseEntity<LinkedHashMap> response = BasicControlsConfiguration.getInstance().getRestTemplate().postForEntity(url, entity, LinkedHashMap.class, map);
+
+        // check response status code
+        if (response.getStatusCode() == HttpStatus.OK) {
+            boolean success;
+            success = (boolean) response.getBody().get("success");
+            if(success) {
+               double score = (double) response.getBody().get("score");
+               if(score > 0){
+                   return true;
+               }
+            } else {
+                //TODO Do somthing with error codes
+            }
+            return false;
+        } else {
+            return false;
+        }
+    }
+
+
 }

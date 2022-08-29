@@ -1,8 +1,10 @@
 package pl.fhframework.model.forms.config;
 
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 import pl.fhframework.model.forms.attribute.HintType;
 
 import javax.annotation.PostConstruct;
@@ -34,6 +36,10 @@ public class BasicControlsConfiguration {
     @Value("${fh.web.secure.caprcha.serverkey:null}")
     @Getter
     private String captchaServerKey;
+
+    @Autowired
+    @Getter
+    private RestTemplate restTemplate;
 
     @PostConstruct
     void init () {
