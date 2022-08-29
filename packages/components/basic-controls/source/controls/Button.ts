@@ -1,7 +1,8 @@
 import {HTMLFormComponent} from "fh-forms-handler";
 import {AdditionalButton} from "fh-forms-handler";
 //TODO fix import - import only when needed (move to index.html)
-import '../external/google_recaptchav3_api';
+// import '../external/google_recaptchav3_api';
+
 
 class Button extends HTMLFormComponent {
     private readonly style: any;
@@ -102,7 +103,7 @@ class Button extends HTMLFormComponent {
                     // @ts-ignore
                     grecaptcha.execute(this.captchaSiteKey, {action: 'submit'}).then(function (token) {
                         // Add your logic to submit to your backend server here.
-                        this.fireEventWithLock('onClick', this.onClick);
+                        this.fireEventWithLock('onClick', this.onClick, [token]);
                     }.bind(this));
                 }.bind(this));
             } else {
