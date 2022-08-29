@@ -40,7 +40,7 @@ module.exports = function (cmdEnv) {
                 }]
             }, {
                 test: /\.(d.)?tsx?$/,
-                exclude: [/node_modules/, /dist/, /build/],
+                // exclude: [/node_modules/, /dist/, /build/],
                 use: [{
                     loader: 'babel-loader'
                 }, {
@@ -70,6 +70,9 @@ module.exports = function (cmdEnv) {
             }, {
                 test: /\.png$/,
                 use: ["url-loader?mimetype=image/png"]
+            }, {
+                test: /jquery-mousewheel/,
+                loader: "imports-loader?define=>false&this=>window"
             }]
         },
         resolve: {
