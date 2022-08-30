@@ -23,14 +23,13 @@ import pl.fhframework.fhbr.api.exception.RuleValidationException;
 import pl.fhframework.fhbr.api.model.BRuleDto;
 import pl.fhframework.fhbr.api.model.BRuleSetDto;
 import pl.fhframework.fhbr.api.service.*;
-import pl.fhframework.fhbr.engine.checker.FunctionRule;
+import pl.fhframework.fhbr.engine.checker.RuleFunction;
 import pl.fhframework.fhbr.engine.factory.RuleInstanceFactoryImpl;
 import pl.fhframework.fhbr.validator.schema.SchemaValidatorHelper;
 import pl.fhframework.fhbr.validator.schema.xsd.resolver.DaoXsdResolverFactory;
 
 import java.time.LocalDate;
 import java.util.*;
-import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -132,39 +131,45 @@ public class ValidatorServiceImpl implements ValidatorService {
         return bRuleSetDao.findActiveRule(businessRuleCode, onDay) != null;
     }
 
-    public <T> List<ValidationMessage> applyNow(ValidationContext validationContext, List<FunctionRule<? extends Class<?>>> fs) {
+    public <T> List<ValidationMessage> applyNow(ValidationContext validationContext, List<RuleFunction<? extends Class<?>>> ruleFunctionList) {
 
         List<ValidationMessage> result = Collections.synchronizedList(new ArrayList<>());
         //group by businessRuleCode
         //businessRuleCode => interface class. getSimpleName
-        Map<String, List<FunctionRule<? extends Class<?>>>> functionRuleMap = fs.stream().collect(Collectors.groupingBy(functionRule -> functionRule.getClazz().getSimpleName()));
-
-        List<BRuleDto> rules = bRuleSetDao.findActiveRules(new ArrayList<>(functionRuleMap.keySet()), validationContext.getInitialOnDate());
+        Map<String, List<RuleFunction<? extends Class<?>>>> functionRuleMap = ruleFunctionList.stream().collect(Collectors.groupingBy(ruleFunction -> ruleFunction.getClazz().getSimpleName()));
 
         //find rules configuration
+        List<BRuleDto> rules = bRuleSetDao.findActiveRules(new ArrayList<>(functionRuleMap.keySet()), validationContext.getInitialOnDate());
 
-        //TODO: order by priority and run parallel
+        //TODO: group by priority and run parallel
 
         rules.parallelStream().forEach(rule -> {
             functionRuleMap.get(rule.getConfig().getBusinessRuleCode()).parallelStream().forEach(f -> {
-                result.addAll(applyNow(validationContext, rule, f.getFunction()).get());
+                result.addAll(applyNow(validationContext, rule, f).get());
             });
         });
 
         return result;
     }
 
-    public <T> List<ValidationMessage> applyNow(ValidationContext validationContext, Class<T> clazz, Function<T, List<ValidationMessage>> function) {
-        BRuleDto bRuleDto = bRuleSetDao.findActiveRule(clazz.getSimpleName(), validationContext.getInitialOnDate());
+    //    public <T> List<ValidationMessage> applyNow(ValidationContext validationContext, Class<T> clazz, Function<T, List<ValidationMessage>> function) {
+    public <T> List<ValidationMessage> applyNow(ValidationContext validationContext, RuleFunction<T> ruleFunction) {
+        BRuleDto bRuleDto = bRuleSetDao.findActiveRule(ruleFunction.getClazz().getSimpleName(), validationContext.getInitialOnDate());
 
-        return applyNow(validationContext, bRuleDto, function).get();
+        return applyNow(validationContext, bRuleDto, ruleFunction).get();
     }
 
-    private <T> Supplier<List<ValidationMessage>> applyNow(ValidationContext validationContext, BRuleDto bRuleDto, Function<T, List<ValidationMessage>> function) {
+    //    private <T> Supplier<List<ValidationMessage>> applyNow(ValidationContext validationContext, BRuleDto bRuleDto, Function<T, List<ValidationMessage>> function) {
+    private <T> Supplier<List<ValidationMessage>> applyNow(ValidationContext validationContext, BRuleDto bRuleDto, RuleFunction<T> ruleFunction) {
         return () -> {
             if (bRuleDto != null) {
                 T rule = (T) ruleInstanceFactory.getRuleInstance(bRuleDto);
-                return function.apply(rule);
+                if (ruleFunction.isBiFunction()) {
+                    //TODO: add validatorContext decorator ?
+                    return ruleFunction.getBiFunction().apply(validationContext, rule);
+                } else {
+                    return ruleFunction.getFunction().apply(rule);
+                }
                 //                return function.apply(rule, bRuleDto);
             }
             return Collections.emptyList();

@@ -22,12 +22,13 @@ import pl.fhframework.fhbr.api.service.ValidationContext;
 import pl.fhframework.fhbr.api.service.ValidationMessage;
 import pl.fhframework.fhbr.api.service.ValidationMessageFactory;
 import pl.fhframework.fhbr.engine.audit.AuditContextData;
-import pl.fhframework.fhbr.engine.checker.FunctionRule;
+import pl.fhframework.fhbr.engine.checker.RuleFunction;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
@@ -50,7 +51,7 @@ public class ValidationContextImpl implements ValidationContext {
     private final AuditContextData auditContextData;
 
     @Getter
-    private List<FunctionRule<? extends Class<?>>> subscribedFunctionRules = Collections.synchronizedList(new ArrayList<>());
+    private List<RuleFunction<? extends Class<?>>> subscribedFunctionRules = Collections.synchronizedList(new ArrayList<>());
 
 //    @Getter
 //    private List<Function<T, List<ValidationMessage>>> subribedValidators ; //= Collections.synchronizedList(new ArrayList<>());
@@ -71,7 +72,7 @@ public class ValidationContextImpl implements ValidationContext {
 
     @Override
     public <T> List<ValidationMessage> applyRule(Class<T> clazz, Function<T, List<ValidationMessage>> function) {
-        List<ValidationMessage> result = validatorService.applyNow(this, clazz, function);
+        List<ValidationMessage> result = validatorService.applyNow(this, new RuleFunction<T>(clazz, function));
         return result != null ? result : new ArrayList<>();
 
     }
@@ -79,13 +80,20 @@ public class ValidationContextImpl implements ValidationContext {
     @Override
     public <T> void subscribeRule(Class<T> clazz, Function<T, List<ValidationMessage>> function) {
         synchronized (this) {
-            subscribedFunctionRules.add(new FunctionRule(clazz, function));
+            subscribedFunctionRules.add(new RuleFunction(clazz, function));
+        }
+    }
+
+    @Override
+    public <T> void subscribeRule(Class<T> clazz, BiFunction<ValidationContext, T, List<ValidationMessage>> function) {
+        synchronized (this) {
+            subscribedFunctionRules.add(new RuleFunction(clazz, function));
         }
     }
 
     @Override
     public List<ValidationMessage> runSubscribedRules() {
-        List<FunctionRule<? extends Class<?>>> functionRulesList;
+        List<RuleFunction<? extends Class<?>>> functionRulesList;
         synchronized (this) {
             // copy
             functionRulesList = new ArrayList<>(this.subscribedFunctionRules);
