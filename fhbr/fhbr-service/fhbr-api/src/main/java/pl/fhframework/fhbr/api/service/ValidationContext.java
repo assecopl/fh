@@ -19,6 +19,7 @@ import pl.fhframework.fhbr.api.model.BRuleCfgDto;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
@@ -74,6 +75,8 @@ public interface ValidationContext {
     <T> List<ValidationMessage> applyRule(Class<T> clazz, Function<T, List<ValidationMessage>> function);
 
     <T> void subscribeRule(Class<T> clazz, Function<T, List<ValidationMessage>> function);
+
+    <T> void subscribeRule(Class<T> clazz, BiFunction<ValidationContext, T, List<ValidationMessage>> function);
 
     List<ValidationMessage> runSubscribedRules();
 
