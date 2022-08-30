@@ -165,6 +165,7 @@ public class ValidatorServiceImpl implements ValidatorService {
             if (bRuleDto != null) {
                 T rule = (T) ruleInstanceFactory.getRuleInstance(bRuleDto);
                 return function.apply(rule);
+                //                return function.apply(rule, bRuleDto);
             }
             return Collections.emptyList();
         };

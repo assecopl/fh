@@ -28,5 +28,5 @@ import java.util.List;
 public interface R102 {
 
         List<ValidationMessage> execute(ValidationContext validationContext, int age, int shoeSizeNumber);
-
+//        List<ValidationMessage> execute(BRuleDto dto, ValidationContext validationContext, int age, int shoeSizeNumber);
 }
