@@ -37,6 +37,7 @@ class Button extends HTMLFormComponent {
 
 
 
+
         let button = document.createElement('button');
         button.id = this.id;
         ['fc', 'button', 'btn', 'btn-' + this.style, 'btn-block'].forEach(function (cssClass) {
@@ -89,6 +90,28 @@ class Button extends HTMLFormComponent {
             this.component.disabled = false;
         }
 
+        if(this.reCAPTCHA) {
+            let captchaDiv = document.createElement('div');
+            captchaDiv.id = this.id + "_captcha"
+            // captchaDiv.dataset.sitekey = this.captchaSiteKey;
+            // captchaDiv.dataset.callback = this.onClickEvent.bind(this);
+            captchaDiv.dataset.size = "invisible";
+            this.htmlElement.append(captchaDiv);
+            // @ts-ignore
+            grecaptcha.render(captchaDiv, {
+                'size':'invisible',
+                'sitekey' : this.captchaSiteKey,
+                'callback' : function (token) {
+                    // Add your logic to submit to your backend server here.
+                    this.fireEventWithLock('onClick', this.onClick, [token]);
+                    // @ts-ignore
+                    grecaptcha.reset();
+                }.bind(this)
+            });
+
+
+        }
+
     };
 
     onClickEvent(event) {
@@ -97,15 +120,22 @@ class Button extends HTMLFormComponent {
             this.fireEvent('onClick', this.onClick);
         } else {
             if(this.reCAPTCHA) {
-
                 // @ts-ignore
-                grecaptcha.ready(function () {
+                const a = grecaptcha.getResponse();
+                if(a){
+                    this.fireEventWithLock('onClick', this.onClick, [a]);
+                } else {
                     // @ts-ignore
-                    grecaptcha.execute(this.captchaSiteKey, {action: 'submit'}).then(function (token) {
-                        // Add your logic to submit to your backend server here.
-                        this.fireEventWithLock('onClick', this.onClick, [token]);
-                    }.bind(this));
-                }.bind(this));
+                    grecaptcha.execute();
+                }
+                // @ts-ignore
+                // grecaptcha.ready(function () {
+                //     // @ts-ignore
+                //     grecaptcha.execute(this.captchaSiteKey, {action: 'submit'}).then(function (token) {
+                //         // Add your logic to submit to your backend server here.
+                //         this.fireEventWithLock('onClick', this.onClick, [token]);
+                //     }.bind(this));
+                // }.bind(this));
             } else {
                 this.fireEventWithLock('onClick', this.onClick);
             }

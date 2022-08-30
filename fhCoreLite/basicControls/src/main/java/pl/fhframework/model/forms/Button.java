@@ -12,6 +12,7 @@ import pl.fhframework.BindingResult;
 import pl.fhframework.annotations.*;
 import pl.fhframework.binding.*;
 import pl.fhframework.core.forms.IHasBoundableLabel;
+import pl.fhframework.event.dto.NotificationEvent;
 import pl.fhframework.model.dto.ElementChanges;
 import pl.fhframework.model.dto.InMessageEventData;
 import pl.fhframework.model.forms.config.BasicControlsConfiguration;
@@ -93,6 +94,9 @@ public class Button extends FormElementWithConfirmationSupport implements TableC
     @JsonIgnore
     private String captchaServerKey = null;
 
+
+    private Boolean captchaResponse = null;
+
     public Button(Form form) {
         super(form);
     }
@@ -122,14 +126,19 @@ public class Button extends FormElementWithConfirmationSupport implements TableC
     public Optional<ActionBinding> getEventHandler(InMessageEventData eventData) {
         if (eventData.getEventType().equals(ATTR_ON_CLICK)) {
             if(this.reCAPTCHA) {
-
-               //TODO Token verify
-               String token = eventData.getParams().get(0).toString();
-                if(this.verifyCaptchaToken(token)) {
-                    return Optional.ofNullable(onClick);
+                if(this.captchaResponse != null){
+                    return this.captchaResponse ? Optional.ofNullable(onClick) : Optional.empty();
                 } else {
-                    throw new RuntimeException("You are bot.");
+                    if (eventData.getParams().size() > 0) {
+                        //TODO Token verify
+                        String token = eventData.getParams().get(0).toString();
+                        if (this.verifyCaptchaToken(token)) {
+                            return Optional.ofNullable(onClick);
+                        }
+                    }
                 }
+                this.getForm().getAbstractUseCase().getUserSession().getEventRegistry().fireNotificationEvent(NotificationEvent.Level.WARNING, "BOT!!!!!!!!!");
+                return Optional.empty();
             } else {
                 return Optional.ofNullable(onClick);
             }
@@ -154,6 +163,7 @@ public class Button extends FormElementWithConfirmationSupport implements TableC
                 refreshView();
             }
         }
+        this.captchaResponse = null;
         return elementChanges;
     }
 
@@ -222,18 +232,10 @@ public class Button extends FormElementWithConfirmationSupport implements TableC
 
         // check response status code
         if (response.getStatusCode() == HttpStatus.OK) {
-            boolean success;
-            success = (boolean) response.getBody().get("success");
-            if(success) {
-               double score = (double) response.getBody().get("score");
-               if(score > 0){
-                   return true;
-               }
-            } else {
-                //TODO Do somthing with error codes
-            }
-            return false;
+            this.captchaResponse = (Boolean) response.getBody().get("success");
+            return (boolean) response.getBody().get("success");
         } else {
+            this.captchaResponse = false;
             return false;
         }
     }
