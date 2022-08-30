@@ -58,7 +58,7 @@ public abstract class AbstractRuleChecker implements CheckerTypeService {
                     validationResult.addValidationMessage(m);
                 });
             } catch (Exception e) {
-                throw new RuntimeException("Execution error '" + ruleConfig.getName() + "' : " + (ruleConfig.getRuleCode() != null ? ruleConfig.getBusinessKey() : ""), e);
+                throw new RuntimeException("Execution error '" + ruleConfig.getName() + "' : " + ruleConfig.getRuleCode(), e);
             } finally {
                 BigDecimal duration = new BigDecimal((System.nanoTime() - time) / (1000000.0)).setScale(1, RoundingMode.HALF_UP);
                 if (duration.longValue() > warn_duration) {

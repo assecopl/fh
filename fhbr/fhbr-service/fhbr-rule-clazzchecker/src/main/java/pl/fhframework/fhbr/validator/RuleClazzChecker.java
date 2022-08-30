@@ -18,7 +18,6 @@ package pl.fhframework.fhbr.validator;
 import org.slf4j.LoggerFactory;
 import pl.fhframework.fhbr.api.model.BRuleDto;
 import pl.fhframework.fhbr.api.rule.ComplexRule;
-import pl.fhframework.fhbr.api.rule.ConsumerRule;
 import pl.fhframework.fhbr.api.rule.SimpleRule;
 import pl.fhframework.fhbr.api.service.ValidationContext;
 import pl.fhframework.fhbr.api.service.ValidationMessage;
@@ -26,6 +25,7 @@ import pl.fhframework.fhbr.engine.checker.AbstractRuleChecker;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * @author Dariusz Skrudlik
@@ -47,12 +47,11 @@ public class RuleClazzChecker extends AbstractRuleChecker {
                 if (!ruleChecker.isValid(object, context)) {
                     validationMessages.add(context.getMessageFactory().prepareValidationMessage(rule.getConfig()));
                 }
-            } else if (ruleInstance instanceof ConsumerRule) {
-                ConsumerRule consumerRule = (ConsumerRule) ruleInstance;
-                checkResult = consumerRule.apply(context); //ruleChecker.check(object, context, rule);
-            } else {
+            } else if (ruleInstance instanceof ComplexRule) {
                 ComplexRule ruleChecker = (ComplexRule) ruleInstance;
                 checkResult = ruleChecker.check(object, context, rule);
+            } else {
+                checkResult = (List<ValidationMessage>) ((Function) object).apply(ruleInstance);
             }
 
             if (checkResult != null) {
@@ -62,7 +61,7 @@ public class RuleClazzChecker extends AbstractRuleChecker {
         } catch (Exception e) {
             LoggerFactory.getLogger(RuleClazzChecker.class).error("Rule '{}' - {} [{}]: {} - error: {}",
                     rule.getConfig().getName(),
-                    rule.getConfig().getBusinessKey(),
+                    rule.getConfig().getBusinessRuleCode(),
                     rule.getId(), rule.getDefinition().getRuleExpression(), e);
             throw e;
         }

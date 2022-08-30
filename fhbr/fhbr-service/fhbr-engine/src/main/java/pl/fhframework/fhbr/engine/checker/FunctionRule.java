@@ -13,31 +13,33 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.rule;
+package pl.fhframework.fhbr.engine.checker;
 
-import lombok.AllArgsConstructor;
-import pl.fhframework.fhbr.api.rule.ConsumerRule;
-import pl.fhframework.fhbr.api.service.ValidationContext;
 import pl.fhframework.fhbr.api.service.ValidationMessage;
 
-import java.math.BigDecimal;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 26/08/2022
+ * @created 29/08/2022
  */
+public class FunctionRule<T> {
 
-@AllArgsConstructor
-public class C2 extends ConsumerRule {
+    private Class<T> clazz;
+    private Function<T, List<ValidationMessage>> function;
 
-    private BigDecimal grossMas;
-    private BigDecimal netMas;
+    public FunctionRule(Class<T> clazz, Function<T, List<ValidationMessage>> function) {
+        this.clazz = clazz;
+        this.function = function;
+    }
 
-    @Override
-    public List<ValidationMessage> apply(ValidationContext validationContext) {
+    public Class<T> getClazz() {
+        return clazz;
+    }
 
-        return null;
+    public Function<T, List<ValidationMessage>> getFunction() {
+        return function;
     }
 }

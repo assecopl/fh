@@ -14,6 +14,8 @@
  */
 package pl.fhframework.fhbr.api.service;
 
+import java.time.LocalDate;
+
 /**
  * The validator service internal (direct) interface.
  * <p>
@@ -35,11 +37,17 @@ public interface ValidatorService {
      * @param ruleSetCode - rule set code (named set of services and rules)
      *                    Can only be null when validate object contains xml message  then
      *                    data parser select module automatically based on namespace and root element name
-     * @param phase       - each module may have configuration for different phases of business process
-     *                    If null, DEFAULT phase is used.
      * @param target      - object for check
      * @return result of validation
      */
     ValidationResult validate(String ruleSetCode, String phase, ValidateObject target);
 
+    /**
+     * Check that rule with business code can by run
+     *
+     * @param businessRuleCode
+     * @param onDay            -
+     * @return
+     */
+    boolean canIRun(String businessRuleCode, LocalDate onDay);
 }

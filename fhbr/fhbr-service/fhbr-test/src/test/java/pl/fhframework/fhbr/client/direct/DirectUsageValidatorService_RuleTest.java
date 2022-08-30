@@ -24,7 +24,6 @@ import pl.fhframework.fhbr.api.config.ValidatorServiceConfig;
 import pl.fhframework.fhbr.api.model.BRuleCfgDto;
 import pl.fhframework.fhbr.api.model.BRuleDefDto;
 import pl.fhframework.fhbr.api.model.BRuleDto;
-import pl.fhframework.fhbr.api.model.BRuleSetDto;
 import pl.fhframework.fhbr.api.service.ValidateObject;
 import pl.fhframework.fhbr.api.service.ValidationResult;
 import pl.fhframework.fhbr.api.service.ValidatorService;
@@ -35,8 +34,6 @@ import pl.fhframework.fhbr.example.TestObject;
 import pl.fhframework.fhbr.validator.RuleClazzCheckerFactory;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Dariusz Skrudlik
@@ -58,70 +55,92 @@ public class DirectUsageValidatorService_RuleTest {
 
         /**
          {
-         M1 { R100_Flow; R101 }
+         M1 {   R100_Flow;
+         R101;
+         }
          M2 { R201 }
          M5 { R500 }
+
+         R102 v1 do 2022.03.31
+         R102 v2 do 2022.04.01
          */
         config.setModuleDaoFactory(() -> {
             InMemoryBussinesRuleDao moduleDao = new InMemoryBussinesRuleDao();
-            moduleDao.getRuleSets().put("M1", new BRuleSetDto());
-            moduleDao.getRuleSets().put("M2", new BRuleSetDto());
-            moduleDao.getRuleSets().put("M5", new BRuleSetDto());
-
-            List<BRuleDto> bRuleList_M1 = new ArrayList<>();
+            moduleDao.createRuleSet("M1");
+            moduleDao.createRuleSet("M2");
+            moduleDao.createRuleSet("M5");
 
             BRuleDto r100_flow = new BRuleDto();
             r100_flow.setConfig(new BRuleCfgDto());
             r100_flow.setDefinition(new BRuleDefDto());
             r100_flow.getConfig().setRuleCode("R100_Flow");
             r100_flow.getConfig().setActive(true);
-            r100_flow.getConfig().setBusinessKey("R100_Flow");
+            r100_flow.getConfig().setBusinessRuleCode("R100_Flow");
             r100_flow.getDefinition().setRuleClassName("pl.fhframework.fhbr.rule.R100_Flow");
             r100_flow.getDefinition().setCheckerType("clazz");
 
-            bRuleList_M1.add(r100_flow);
+            moduleDao.linkRule("M1", r100_flow);
 
-            BRuleDto r100 = new BRuleDto();
-            r100.setConfig(new BRuleCfgDto());
-            r100.setDefinition(new BRuleDefDto());
-            r100.getConfig().setRuleCode("R101");
-            r100.getConfig().setActive(true);
-            r100.getConfig().setBusinessKey("R100");
-            r100.getDefinition().setRuleClassName("pl.fhframework.fhbr.rule.R101");
-            r100.getDefinition().setCheckerType("clazz");
-            r100.getConfig().setMessageKey("message.key.for.r101");
+            BRuleDto r101 = new BRuleDto();
+            r101.setConfig(new BRuleCfgDto());
+            r101.setDefinition(new BRuleDefDto());
+            r101.getConfig().setRuleCode("R101");
+            r101.getConfig().setActive(true);
+            r101.getConfig().setBusinessRuleCode("R100");
+            r101.getDefinition().setRuleClassName("pl.fhframework.fhbr.rule.R101");
+            r101.getDefinition().setCheckerType("clazz");
+            r101.getConfig().setMessageKey("message.key.for.r101");
 
-            bRuleList_M1.add(r100);
+            moduleDao.linkRule("M1", r101);
 
-            List<BRuleDto> bRuleList_M2 = new ArrayList<>();
+            BRuleDto r102 = new BRuleDto();
+            r102.setConfig(new BRuleCfgDto());
+            r102.setDefinition(new BRuleDefDto());
+            r102.getConfig().setRuleCode("R102_v1");
+            r102.getConfig().setActive(true);
+            r102.getConfig().setValidTo(LocalDate.parse("2022-03-30"));
+            r102.getConfig().setBusinessRuleCode("R102");
+            r102.getDefinition().setRuleClassName("pl.fhframework.fhbr.rule.R102_v1");
+            r102.getDefinition().setCheckerType("function");
+            r102.getConfig().setMessageKey("message.key.for.r102_v1");
+
+            moduleDao.addRule(r102);
+
+            r102 = new BRuleDto();
+            r102.setConfig(new BRuleCfgDto());
+            r102.setDefinition(new BRuleDefDto());
+            r102.getConfig().setRuleCode("R102_v2");
+            r102.getConfig().setActive(true);
+            r102.getConfig().setValidFrom(LocalDate.parse("2022-04-01"));
+            r102.getConfig().setBusinessRuleCode("R102");
+            r102.getDefinition().setRuleClassName("pl.fhframework.fhbr.rule.R102_v2");
+            r102.getDefinition().setCheckerType("function");
+            r102.getConfig().setMessageKey("message.key.for.r102_v2");
+
+            moduleDao.addRule(r102);
 
             BRuleDto r201 = new BRuleDto();
             r201.setConfig(new BRuleCfgDto());
             r201.setDefinition(new BRuleDefDto());
             r201.getConfig().setRuleCode("R201");
             r201.getConfig().setActive(true);
-            r201.getConfig().setBusinessKey("R201");
+            r201.getConfig().setBusinessRuleCode("R201");
             r201.getDefinition().setRuleClassName("pl.fhframework.fhbr.rule.R201");
             r201.getDefinition().setCheckerType("clazz");
 
-            bRuleList_M2.add(r201);
-
-            List<BRuleDto> bRuleList_M5 = new ArrayList<>();
+            moduleDao.linkRule("M2", r201);
 
             BRuleDto r500 = new BRuleDto();
             r500.setConfig(new BRuleCfgDto());
             r500.setDefinition(new BRuleDefDto());
             r500.getConfig().setRuleCode("R500");
             r500.getConfig().setActive(true);
-            r500.getConfig().setBusinessKey("R500");
+            r500.getConfig().setBusinessRuleCode("R500");
             r500.getDefinition().setRuleClassName("pl.fhframework.fhbr.rule.R500");
             r500.getDefinition().setCheckerType("clazz");
 
-            bRuleList_M5.add(r500);
+            moduleDao.linkRule("M5", r500);
 
-            moduleDao.getRuleSetsRules().put("M1", bRuleList_M1);
-            moduleDao.getRuleSetsRules().put("M2", bRuleList_M2);
-            moduleDao.getRuleSetsRules().put("M5", bRuleList_M5);
             return moduleDao;
         });
 

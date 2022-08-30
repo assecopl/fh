@@ -39,7 +39,7 @@ public class ValidationMessageFactoryImpl implements ValidationMessageFactory<Va
         message.setSeverity(rule.getSeverity() != null ? ValidationMessageSeverity.valueOf(rule.getSeverity()) : ValidationMessageSeverity.ERROR);
         message.setPointer(rule.getPointer());
         message.setMessage(rule.getMessage());
-        message.setRuleCode(rule.getBusinessKey());
+        message.setRuleCode(rule.getBusinessRuleCode());
         return message;
     }
 }

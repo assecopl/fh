@@ -57,11 +57,10 @@ public class DirectUsageValidatorService_SchemaTest {
         config.setModuleDaoFactory(() -> {
             InMemoryBussinesRuleDao moduleDao = new InMemoryBussinesRuleDao();
 
-            BRuleSetDto moduleTEST = new BRuleSetDto();
+            BRuleSetDto moduleTEST = moduleDao.createRuleSet("TEST");
             moduleTEST.setCode("TEST");
             moduleTEST.setSchemaValidator(true);
             moduleTEST.setSchemaNamespace("http://fhframework.pl/fh/fhbr-xsd/test_v1r0.xsd");
-            moduleDao.getRuleSets().put("TEST", moduleTEST);
 
             return moduleDao;
         });

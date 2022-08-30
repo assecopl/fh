@@ -15,7 +15,11 @@
 
 package pl.fhframework.fhbr.api.service;
 
+import pl.fhframework.fhbr.api.model.BRuleCfgDto;
+
+import java.time.LocalDate;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * Context for single validation request.
@@ -32,9 +36,10 @@ public interface ValidationContext {
     String getInitialRuleSetCode();
 
     /**
-     * Initial phase passed to service call
+     * Initial onDate passed to service call - validation date
+     * (used for acquire rules from the repository)
      */
-    String getInitialPhase();
+    LocalDate getInitialOnDate();
 
     /**
      * Getter for MessageFactory.
@@ -61,14 +66,19 @@ public interface ValidationContext {
      * e.g. validationMessages.stream().forEach(vm -> validationResult.addValidationMessage(vm));
      *
      * @param ruleSetCode    - any ruleSet
-     * @param phase          - any phase
      * @param validateObject - target object wrapper
      * @return list of ValidationMessages
      */
-    List<ValidationMessage> applyRuleSet(String ruleSetCode, String phase, ValidateObject validateObject);
-
     List<ValidationMessage> applyRuleSet(String ruleSetCode, ValidateObject validateObject);
 
-    List<ValidationMessage> subscribeRule(String ruleSetCode, ValidateObject validateObject);
+    <T> List<ValidationMessage> applyRule(Class<T> clazz, Function<T, List<ValidationMessage>> function);
+
+    <T> void subscribeRule(Class<T> clazz, Function<T, List<ValidationMessage>> function);
+
+    List<ValidationMessage> runSubscribedRules();
+
+    ValidationMessage createError(String ruleCode, String message);
+
+    ValidationMessage createMessage(BRuleCfgDto ruleCfg);
 
 }
