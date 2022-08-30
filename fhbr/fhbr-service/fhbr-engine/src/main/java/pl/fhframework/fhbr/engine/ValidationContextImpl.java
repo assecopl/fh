@@ -16,7 +16,6 @@
 package pl.fhframework.fhbr.engine;
 
 import lombok.Getter;
-import lombok.Synchronized;
 import pl.fhframework.fhbr.api.model.BRuleCfgDto;
 import pl.fhframework.fhbr.api.service.ValidateObject;
 import pl.fhframework.fhbr.api.service.ValidationContext;
@@ -79,17 +78,20 @@ public class ValidationContextImpl implements ValidationContext {
 
     @Override
     public <T> void subscribeRule(Class<T> clazz, Function<T, List<ValidationMessage>> function) {
-        subscribedFunctionRules.add(new FunctionRule(clazz, function));
+        synchronized (this) {
+            subscribedFunctionRules.add(new FunctionRule(clazz, function));
+        }
     }
 
     @Override
-    @Synchronized
     public List<ValidationMessage> runSubscribedRules() {
-        // copy
-        List<FunctionRule<? extends Class<?>>> functionRulesList = new ArrayList<>(this.subscribedFunctionRules);
-        // clear
-        this.subscribedFunctionRules.clear();
-
+        List<FunctionRule<? extends Class<?>>> functionRulesList;
+        synchronized (this) {
+            // copy
+            functionRulesList = new ArrayList<>(this.subscribedFunctionRules);
+            // clear
+            this.subscribedFunctionRules.clear();
+        }
         // applyNow for copy
         List<ValidationMessage> result = validatorService.applyNow(this, functionRulesList);
 
