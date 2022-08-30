@@ -90,7 +90,7 @@ public class DirectUsageValidatorService_SchemaTest {
         validateObject.setOnDate(LocalDate.now());
 
         //WHEN
-        ValidationResult validationResult = validatorService.validate("TEST", null, validateObject);
+        ValidationResult validationResult = validatorService.validate("TEST", validateObject);
 
         //THEN
         Assert.assertTrue(validationResult.getValid());
@@ -108,7 +108,7 @@ public class DirectUsageValidatorService_SchemaTest {
         validateObject.setOnDate(LocalDate.now());
 
         //WHEN
-        ValidationResult validationResult = validatorService.validate("TEST", null, validateObject);
+        ValidationResult validationResult = validatorService.validate("TEST", validateObject);
 
         //THEN
         Assert.assertTrue(!validationResult.getValid());

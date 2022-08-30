@@ -66,7 +66,7 @@ public class ValidationContextImpl implements ValidationContext {
 
 
     public List<ValidationMessage> applyRuleSet(String ruleSetCode, ValidateObject validateObject) {
-        List<ValidationMessage> result = validatorService.applyRuleSet(this, ruleSetCode, null, validateObject);
+        List<ValidationMessage> result = validatorService.applyRuleSet(this, ruleSetCode, validateObject);
         return result != null ? result : new ArrayList<>();
     }
 

@@ -154,7 +154,7 @@ public class DirectUsageValidatorService_RuleTest {
         validateObject.setObject(testObject);
         validateObject.setOnDate(LocalDate.now());
 
-        ValidationResult validationResult = validatorService.validate("M1", null, validateObject);
+        ValidationResult validationResult = validatorService.validate("M1", validateObject);
 
 //        logger.info(validationResult.toString());
         logger.info("validationResult = " + new GsonBuilder().setPrettyPrinting().create().toJson(new JsonParser().parse(validationResult.toString())));

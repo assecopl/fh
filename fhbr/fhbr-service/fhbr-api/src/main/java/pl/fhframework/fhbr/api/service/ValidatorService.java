@@ -40,7 +40,7 @@ public interface ValidatorService {
      * @param target      - object for check
      * @return result of validation
      */
-    ValidationResult validate(String ruleSetCode, String phase, ValidateObject target);
+    ValidationResult validate(String ruleSetCode, ValidateObject target);
 
     /**
      * Check that rule with business code can by run
