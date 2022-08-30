@@ -29,8 +29,6 @@ import lombok.Setter;
 @Data
 public class BRuleDefDto {
 
-    private int version;
-
     private String checkerType; // service type must be registered
 
     private String ruleClassName;

@@ -13,20 +13,20 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.api.rule;
+package pl.fhframework.fhbr.rule;
 
 import pl.fhframework.fhbr.api.service.ValidationContext;
 import pl.fhframework.fhbr.api.service.ValidationMessage;
 
 import java.util.List;
-import java.util.function.Function;
 
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 25/08/2022
+ * @created 26/08/2022
  */
-public abstract class ConsumerRule implements Function<ValidationContext, List<ValidationMessage>> {
+public interface R102 {
 
+        List<ValidationMessage> execute(ValidationContext validationContext, int age, int shoeSizeNumber);
 
 }

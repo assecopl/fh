@@ -13,37 +13,29 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.api.dao;
+package pl.fhframework.fhbr.rule;
 
-import pl.fhframework.fhbr.api.model.BRuleDto;
-import pl.fhframework.fhbr.api.model.BRuleSetDto;
+import pl.fhframework.fhbr.api.service.ValidationContext;
+import pl.fhframework.fhbr.api.service.ValidationMessage;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * DAO for BRuleSet
- *
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 06/07/2022
+ * @created 26/08/2022
  */
-public interface BRuleSetDao {
+public class R102_v1 implements R102 {
 
-    BRuleSetDto findRuleSet(String ruleSetCode);
+    @Override
+    public List<ValidationMessage> execute(ValidationContext validationContext, int age, int shoeSizeNumber) {
+        List<ValidationMessage> msgList = new ArrayList<>();
 
-    List<BRuleDto> findRuleSetRules(String ruleSetCode, boolean active, LocalDate onDate);
+        if (age > shoeSizeNumber) {
+            msgList.add(validationContext.createError("R102", "Age should be less than shoe size number (v1)"));
+        }
 
-
-    /**
-     * Find active rule on date
-     *
-     * @param businessRuleCode
-     * @param onDate
-     * @return
-     */
-    BRuleDto findActiveRule(String businessRuleCode, LocalDate onDate);
-
-    List<BRuleDto> findActiveRules(List<String> businessRuleCode, LocalDate onDate);
-
+        return msgList;
+    }
 }

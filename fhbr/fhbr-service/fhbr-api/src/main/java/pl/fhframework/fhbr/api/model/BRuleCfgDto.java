@@ -23,6 +23,8 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
+ * Rule configuration.
+ *
  * @author Dariusz Skrudlik
  * @version :  $, :  $
  * @created 06/07/2022
@@ -33,11 +35,11 @@ import java.time.LocalDate;
 public class BRuleCfgDto implements Serializable {
 
     @Getter
-    private String ruleCode; //unique rule code - businessKey _ variant
+    private String ruleCode; //required, unique rule code - businessRuleCode + variant eg: R602_A
 
-    private String variant;
+    private String version; // on period defined by validFrom - validTo only one version with businessRuleCode is allowed
 
-    private String businessKey;
+    private String businessRuleCode; //eg: R602
 
     private boolean active;
 
@@ -49,13 +51,13 @@ public class BRuleCfgDto implements Serializable {
 
     private String pointer;
 
-    private int callOrder;
+    private int callOrder; // lower order -> higher priority (first run)
 
     private String severity;
 
-    private LocalDate validFrom;
+    private LocalDate validFrom; // start date of the period validity
 
-    private LocalDate validTo;
+    private LocalDate validTo; // end date of the period validity
 
     private boolean critical;
 
