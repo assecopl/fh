@@ -56,7 +56,7 @@ public class ValidatorServiceImpl implements ValidatorService {
     }
 
     @Override
-    public ValidationResult validate(String ruleSetCode, String phase, ValidateObject validateObject) {
+    public ValidationResult validate(String ruleSetCode, ValidateObject validateObject) {
 
         ValidationResult validationResult = new ValidationResult();
         ValidationContext context = new ValidationContextImpl(messageFactory, this, ruleSetCode, validateObject.getOnDate());
@@ -79,7 +79,7 @@ public class ValidatorServiceImpl implements ValidatorService {
             }
         }
 
-        List<ValidationMessage> validationMessages = applyRuleSet(context, ruleSetCode, phase, validateObject);
+        List<ValidationMessage> validationMessages = applyRuleSet(context, ruleSetCode, validateObject);
         rewriteValidationMessage(validationMessages, validationResult);
 
         return validationResult;
@@ -91,11 +91,10 @@ public class ValidatorServiceImpl implements ValidatorService {
      *
      * @param context
      * @param ruleSetCode
-     * @param phase
      * @param validateObject
      * @return
      */
-    public List<ValidationMessage> applyRuleSet(ValidationContext context, String ruleSetCode, String phase, ValidateObject validateObject) {
+    public List<ValidationMessage> applyRuleSet(ValidationContext context, String ruleSetCode, ValidateObject validateObject) {
         List<BRuleDto> rules = bRuleSetDao.findRuleSetRules(ruleSetCode, true, context.getInitialOnDate());
         return applyRules(context, validateObject, rules);
     }
