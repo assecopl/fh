@@ -43,6 +43,7 @@ public class R100_Flow implements ComplexRule<TestObject> {
 
         context.subscribeRule(R102.class, r102 -> r102.execute(context, 5, 10));
 
+//        context.subscribeRule(R102.class, (r102, dto) -> r102.execute(dto, context, 5, 10));
 
         validationMessages.addAll(context.runSubscribedRules());
 

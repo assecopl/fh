@@ -30,6 +30,8 @@ public class R102_v1 implements R102 {
 
     @Override
     public List<ValidationMessage> execute(ValidationContext validationContext, int age, int shoeSizeNumber) {
+//        public List<ValidationMessage> execute(BRuleDto dto, ValidationContext validationContext, int age, int shoeSizeNumber) {
+//
         List<ValidationMessage> msgList = new ArrayList<>();
 
         if (age > shoeSizeNumber) {
