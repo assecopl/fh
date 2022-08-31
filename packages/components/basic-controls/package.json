@@ -1,7 +1,7 @@
 {
   "name": "fh-basic-controls",
-  "version": "4.9.27-SNAPSHOT-1649774729442",
-  "main": "Module.ts",
+  "version": "4.9.27-SNAPSHOT-1661934722361",
+  "main": "dist/Module.js",
   "types": "dist/Module.d.ts",
   "description": "fh framework controls",
   "author": "AssecoPL",
@@ -27,7 +27,7 @@
   "dependencies": {
     "bootstrap": "4.4.1",
     "copyfiles": "2.4.1",
-    "fh-forms-handler": "4.9.27-SNAPSHOT-1649774729442",
+    "fh-forms-handler": "4.9.27-SNAPSHOT-1661934722361",
     "highlightjs": "9.12.0",
     "hotkeys-js": "3.6.14",
     "jquery": "3.5.1",

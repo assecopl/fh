@@ -1,7 +1,7 @@
 {
   "name": "fh-charts-controls",
-  "version": "4.9.27-SNAPSHOT-1649774729442",
-  "main": "Module.ts",
+  "version": "4.9.27-SNAPSHOT-1661934722361",
+  "main": "dist/Module.js",
   "types": "dist/Module.d.ts",
   "description": "fh framework charts controls",
   "author": "AssecoPL",
@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "chart.js": "2.9.4",
-    "fh-forms-handler": "4.9.27-SNAPSHOT-1649774729442",
+    "fh-forms-handler": "4.9.27-SNAPSHOT-1661934722361",
     "copyfiles": "2.4.1"
   }
 }
