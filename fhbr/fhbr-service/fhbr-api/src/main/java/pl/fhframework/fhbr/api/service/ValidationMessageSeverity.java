@@ -25,4 +25,8 @@ public enum ValidationMessageSeverity {
     WARNING, //warning
     INFORMATION; //info - ok
 
+    public static boolean isErrorOrAbove(ValidationMessageSeverity severity) {
+        return severity != null && severity.ordinal() >= ValidationMessageSeverity.ERROR.ordinal();
+    }
+
 }
