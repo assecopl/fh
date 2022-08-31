@@ -8,7 +8,7 @@ class Button extends HTMLFormComponent {
     private readonly style: any;
     private readonly onClick: any;
 
-    private readonly reCAPTCHA: boolean;
+    private reCAPTCHA: boolean;
     private readonly captchaSiteKey: string;
 
     private ButtonPL = {
@@ -97,17 +97,23 @@ class Button extends HTMLFormComponent {
             // captchaDiv.dataset.callback = this.onClickEvent.bind(this);
             captchaDiv.dataset.size = "invisible";
             this.htmlElement.append(captchaDiv);
-            // @ts-ignore
-            grecaptcha.render(captchaDiv, {
-                'size':'invisible',
-                'sitekey' : this.captchaSiteKey,
-                'callback' : function (token) {
-                    // Add your logic to submit to your backend server here.
-                    this.fireEventWithLock('onClick', this.onClick, [token]);
-                    // @ts-ignore
-                    grecaptcha.reset();
-                }.bind(this)
-            });
+            try {
+                // @ts-ignore
+                grecaptcha.render(captchaDiv, {
+                    'size': 'invisible',
+                    'sitekey': this.captchaSiteKey,
+                    'callback': function (token) {
+                        // Add your logic to submit to your backend server here.
+                        this.fireEventWithLock('onClick', this.onClick, [token]);
+                        // @ts-ignore
+                        grecaptcha.reset();
+                    }.bind(this)
+                });
+            } catch (e) {
+                console.warn(e);
+                console.warn("There were problem with grecaptcha!! Check if api.js was loaded.");
+                this.reCAPTCHA = false;
+            }
 
 
         }
@@ -128,14 +134,6 @@ class Button extends HTMLFormComponent {
                     // @ts-ignore
                     grecaptcha.execute();
                 }
-                // @ts-ignore
-                // grecaptcha.ready(function () {
-                //     // @ts-ignore
-                //     grecaptcha.execute(this.captchaSiteKey, {action: 'submit'}).then(function (token) {
-                //         // Add your logic to submit to your backend server here.
-                //         this.fireEventWithLock('onClick', this.onClick, [token]);
-                //     }.bind(this));
-                // }.bind(this));
             } else {
                 this.fireEventWithLock('onClick', this.onClick);
             }
