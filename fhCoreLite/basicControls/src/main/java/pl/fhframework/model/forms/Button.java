@@ -138,10 +138,11 @@ public class Button extends FormElementWithConfirmationSupport implements TableC
                             return Optional.ofNullable(onClick);
                         }
                     }
+                    this.captchaResponse = false;
+                    this.getForm().getAbstractUseCase().getUserSession().getEventRegistry().fireNotificationEvent(NotificationEvent.Level.WARNING,
+                            BasicControlsConfiguration.getInstance().getMessageService().getAllBundles().getMessage(RECAPTCHA_BOT_ERROR_MESSAGE_KEY));
+                    return Optional.empty();
                 }
-                this.getForm().getAbstractUseCase().getUserSession().getEventRegistry().fireNotificationEvent(NotificationEvent.Level.WARNING,
-                        BasicControlsConfiguration.getInstance().getMessageService().getAllBundles().getMessage(RECAPTCHA_BOT_ERROR_MESSAGE_KEY));
-                return Optional.empty();
             } else {
                 return Optional.ofNullable(onClick);
             }
