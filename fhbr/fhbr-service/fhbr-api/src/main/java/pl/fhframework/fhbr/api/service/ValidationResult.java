@@ -60,8 +60,7 @@ public class ValidationResult {
 
     public void addValidationMessage(ValidationMessage validationMessage) {
         if (validationMessage != null) {
-            if (ValidationMessageSeverity.ERROR.equals(validationMessage.getSeverity())
-                    || ValidationMessageSeverity.CRITICAL.equals(validationMessage.getSeverity())) {
+            if (ValidationMessageSeverity.isErrorOrAbove(validationMessage.getSeverity())) {
                 valid = false;
             }
             validationMessages.add(validationMessage);
