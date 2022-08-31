@@ -19,13 +19,13 @@ import org.slf4j.LoggerFactory;
 import pl.fhframework.fhbr.api.model.BRuleDto;
 import pl.fhframework.fhbr.api.rule.ComplexRule;
 import pl.fhframework.fhbr.api.rule.SimpleRule;
-import pl.fhframework.fhbr.api.service.ValidationContext;
 import pl.fhframework.fhbr.api.service.ValidationMessage;
+import pl.fhframework.fhbr.engine.ValidationContextImpl;
 import pl.fhframework.fhbr.engine.checker.AbstractRuleChecker;
+import pl.fhframework.fhbr.engine.context.InternalValidationContext;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 
 /**
  * @author Dariusz Skrudlik
@@ -35,7 +35,7 @@ import java.util.function.Function;
 public class RuleClazzChecker extends AbstractRuleChecker {
 
     @Override
-    protected List<ValidationMessage> check(Object object, ValidationContext context, BRuleDto rule) throws Exception {
+    protected List<ValidationMessage> check(Object object, InternalValidationContext context, BRuleDto rule) throws Exception {
 
         List<ValidationMessage> validationMessages = new ArrayList<>();
         try {
@@ -45,13 +45,12 @@ public class RuleClazzChecker extends AbstractRuleChecker {
             if (ruleInstance instanceof SimpleRule) {
                 SimpleRule ruleChecker = (SimpleRule) ruleInstance;
                 if (!ruleChecker.isValid(object, context)) {
-                    validationMessages.add(context.getMessageFactory().prepareValidationMessage(rule.getConfig()));
+                    validationMessages.add(new ValidationContextImpl(context, rule.getConfig()).getMessageFactory().prepareValidationMessage(rule.getConfig()));
                 }
-            } else if (ruleInstance instanceof ComplexRule) {
-                ComplexRule ruleChecker = (ComplexRule) ruleInstance;
-                checkResult = ruleChecker.check(object, context, rule);
             } else {
-                checkResult = (List<ValidationMessage>) ((Function) object).apply(ruleInstance);
+                ComplexRule ruleChecker = (ComplexRule) ruleInstance;
+
+                checkResult = ruleChecker.check(object, new ValidationContextImpl(context, rule.getConfig()), rule);
             }
 
             if (checkResult != null) {

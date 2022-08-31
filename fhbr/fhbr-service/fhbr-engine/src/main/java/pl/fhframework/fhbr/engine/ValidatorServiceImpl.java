@@ -24,6 +24,9 @@ import pl.fhframework.fhbr.api.model.BRuleDto;
 import pl.fhframework.fhbr.api.model.BRuleSetDto;
 import pl.fhframework.fhbr.api.service.*;
 import pl.fhframework.fhbr.engine.checker.RuleFunction;
+import pl.fhframework.fhbr.engine.context.DelegateValidationContextImpl;
+import pl.fhframework.fhbr.engine.context.InternalValidationContext;
+import pl.fhframework.fhbr.engine.context.MainValidationContextImpl;
 import pl.fhframework.fhbr.engine.factory.RuleInstanceFactoryImpl;
 import pl.fhframework.fhbr.validator.schema.SchemaValidatorHelper;
 import pl.fhframework.fhbr.validator.schema.xsd.resolver.DaoXsdResolverFactory;
@@ -58,7 +61,7 @@ public class ValidatorServiceImpl implements ValidatorService {
     public ValidationResult validate(String ruleSetCode, ValidateObject validateObject) {
 
         ValidationResult validationResult = new ValidationResult();
-        ValidationContext context = new ValidationContextImpl(messageFactory, this, ruleSetCode, validateObject.getOnDate());
+        InternalValidationContext context = new DelegateValidationContextImpl(new MainValidationContextImpl(messageFactory, this, ruleSetCode, validateObject.getOnDate()));
 
         BRuleSetDto bRuleSetDto = bRuleSetDao.findRuleSet(ruleSetCode);
         if (bRuleSetDto == null) {
@@ -93,7 +96,7 @@ public class ValidatorServiceImpl implements ValidatorService {
      * @param validateObject
      * @return
      */
-    public List<ValidationMessage> applyRuleSet(ValidationContext context, String ruleSetCode, ValidateObject validateObject) {
+    public List<ValidationMessage> applyRuleSet(InternalValidationContext context, String ruleSetCode, ValidateObject validateObject) {
         List<BRuleDto> rules = bRuleSetDao.findRuleSetRules(ruleSetCode, true, context.getInitialOnDate());
         return applyRules(context, validateObject, rules);
     }
@@ -103,7 +106,7 @@ public class ValidatorServiceImpl implements ValidatorService {
 //        return applyRules(context, validateObject, rules);
 //    }
 
-    List<ValidationMessage> applyRules(ValidationContext context, ValidateObject validateObject, List<BRuleDto> rules) {
+    List<ValidationMessage> applyRules(InternalValidationContext context, ValidateObject validateObject, List<BRuleDto> rules) {
 
         List<ValidationMessage> validationMessages = Collections.synchronizedList(new LinkedList<>());
 
@@ -131,7 +134,7 @@ public class ValidatorServiceImpl implements ValidatorService {
         return bRuleSetDao.findActiveRule(businessRuleCode, onDay) != null;
     }
 
-    public <T> List<ValidationMessage> applyNow(ValidationContext validationContext, List<RuleFunction<? extends Class<?>>> ruleFunctionList) {
+    public <T> List<ValidationMessage> applyNow(InternalValidationContext validationContext, List<RuleFunction<? extends Class<?>>> ruleFunctionList) {
 
         List<ValidationMessage> result = Collections.synchronizedList(new ArrayList<>());
         //group by businessRuleCode
@@ -153,20 +156,20 @@ public class ValidatorServiceImpl implements ValidatorService {
     }
 
     //    public <T> List<ValidationMessage> applyNow(ValidationContext validationContext, Class<T> clazz, Function<T, List<ValidationMessage>> function) {
-    public <T> List<ValidationMessage> applyNow(ValidationContext validationContext, RuleFunction<T> ruleFunction) {
+    public <T> List<ValidationMessage> applyNow(InternalValidationContext validationContext, RuleFunction<T> ruleFunction) {
         BRuleDto bRuleDto = bRuleSetDao.findActiveRule(ruleFunction.getClazz().getSimpleName(), validationContext.getInitialOnDate());
 
         return applyNow(validationContext, bRuleDto, ruleFunction).get();
     }
 
     //    private <T> Supplier<List<ValidationMessage>> applyNow(ValidationContext validationContext, BRuleDto bRuleDto, Function<T, List<ValidationMessage>> function) {
-    private <T> Supplier<List<ValidationMessage>> applyNow(ValidationContext validationContext, BRuleDto bRuleDto, RuleFunction<T> ruleFunction) {
+    private <T> Supplier<List<ValidationMessage>> applyNow(InternalValidationContext validationContext, BRuleDto bRuleDto, RuleFunction<T> ruleFunction) {
         return () -> {
             if (bRuleDto != null) {
                 T rule = (T) ruleInstanceFactory.getRuleInstance(bRuleDto);
                 if (ruleFunction.isBiFunction()) {
                     //TODO: add validatorContext decorator ?
-                    return ruleFunction.getBiFunction().apply(validationContext, rule);
+                    return ruleFunction.getBiFunction().apply(new ValidationContextImpl(validationContext, bRuleDto.getConfig()), rule);
                 } else {
                     return ruleFunction.getFunction().apply(rule);
                 }

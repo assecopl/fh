@@ -33,7 +33,7 @@ public class R102_v2 implements R102 {
         List<ValidationMessage> msgList = new ArrayList<>();
 
         if (age >= shoeSizeNumber / 2) {
-            msgList.add(validationContext.createError("R102", "Age should be less than half shoe size number (v2)"));
+            msgList.add(validationContext.createError("Age should be less than half shoe size number (v2)"));
         }
 
         return msgList;

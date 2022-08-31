@@ -46,8 +46,8 @@ public class AuditPoint implements AuditData {
         this.startNanoTime = System.nanoTime();
     }
 
-    public List<? extends AuditData> getAuditData() {
-        return Collections.unmodifiableList(auditData);
+    public List<? extends AuditData> copyAuditData() {
+        return auditData != null ? Collections.unmodifiableList(auditData) : null;
     }
 
     @Synchronized
