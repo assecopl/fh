@@ -15,16 +15,16 @@
 
 package pl.fhframework.fhbr.engine;
 
-import lombok.Getter;
 import pl.fhframework.fhbr.api.model.BRuleCfgDto;
 import pl.fhframework.fhbr.api.service.ValidateObject;
 import pl.fhframework.fhbr.api.service.ValidationContext;
 import pl.fhframework.fhbr.api.service.ValidationMessage;
-import pl.fhframework.fhbr.api.service.ValidationMessageFactory;
-import pl.fhframework.fhbr.engine.audit.AuditContextData;
+import pl.fhframework.fhbr.engine.audit.AuditPoint;
+import pl.fhframework.fhbr.engine.audit.AuditRuleApply;
 import pl.fhframework.fhbr.engine.checker.RuleFunction;
+import pl.fhframework.fhbr.engine.context.DelegateValidationContextImpl;
+import pl.fhframework.fhbr.engine.context.InternalValidationContext;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -38,43 +38,33 @@ import java.util.function.Function;
  * @version :  $, :  $
  * @created 18/08/2022
  */
-public class ValidationContextImpl implements ValidationContext {
+public class ValidationContextImpl extends DelegateValidationContextImpl {
 
-    @Getter
-    private final String initialRuleSetCode;
-    @Getter
-    private final LocalDate initialOnDate;
+    private final AuditPoint auditPoint;
+    private final BRuleCfgDto ruleCfgDto;
+    private final List<RuleFunction<? extends Class<?>>> subscribedFunctionRules = Collections.synchronizedList(new ArrayList<>());
 
-    @Getter
-    private ValidationMessageFactory messageFactory;
-    private final ValidatorServiceImpl validatorService;
-    private final AuditContextData auditContextData;
-
-    @Getter
-    private List<RuleFunction<? extends Class<?>>> subscribedFunctionRules = Collections.synchronizedList(new ArrayList<>());
-
-//    @Getter
-//    private List<Function<T, List<ValidationMessage>>> subribedValidators ; //= Collections.synchronizedList(new ArrayList<>());
-
-    public ValidationContextImpl(ValidationMessageFactory messageFactory, ValidatorServiceImpl validatorService, String initialRuleSetCode, LocalDate onDate) {
-        this.messageFactory = messageFactory;
-        this.validatorService = validatorService;
-        this.initialRuleSetCode = initialRuleSetCode;
-        this.initialOnDate = onDate != null ? onDate : LocalDate.now();
-        this.auditContextData = new AuditContextData();
+    public ValidationContextImpl(InternalValidationContext parent, BRuleCfgDto ruleCfgDto) {
+        super(parent);
+        this.ruleCfgDto = ruleCfgDto;
+        this.auditPoint = new AuditRuleApply(ruleCfgDto);
+        parent.getAuditPoint().addAuditPoint(auditPoint);
     }
 
 
+    public AuditPoint getAuditPoint() {
+        return this.auditPoint;
+    }
+
     public List<ValidationMessage> applyRuleSet(String ruleSetCode, ValidateObject validateObject) {
-        List<ValidationMessage> result = validatorService.applyRuleSet(this, ruleSetCode, validateObject);
+        List<ValidationMessage> result = getValidatorService().applyRuleSet(this, ruleSetCode, validateObject);
         return result != null ? result : new ArrayList<>();
     }
 
     @Override
     public <T> List<ValidationMessage> applyRule(Class<T> clazz, Function<T, List<ValidationMessage>> function) {
-        List<ValidationMessage> result = validatorService.applyNow(this, new RuleFunction<T>(clazz, function));
+        List<ValidationMessage> result = getValidatorService().applyNow(this, new RuleFunction<T>(clazz, function));
         return result != null ? result : new ArrayList<>();
-
     }
 
     @Override
@@ -101,26 +91,21 @@ public class ValidationContextImpl implements ValidationContext {
             this.subscribedFunctionRules.clear();
         }
         // applyNow for copy
-        List<ValidationMessage> result = validatorService.applyNow(this, functionRulesList);
+        List<ValidationMessage> result = getValidatorService().applyNow(this, functionRulesList);
 
         return result;
     }
 
 
-    public ValidationMessage createError(String ruleCode, String message) {
-        ValidationMessage msg = getMessageFactory().newInstance();
-        msg.setRuleCode(ruleCode);
-        msg.setMessage(message);
-        return msg;
+    public ValidationMessage createMessage() {
+        return getMessageFactory().prepareValidationMessage(ruleCfgDto);
     }
 
-    public ValidationMessage createMessage(BRuleCfgDto ruleCfg) {
-        return getMessageFactory().prepareValidationMessage(ruleCfg);
-    }
-
-    void addCheckPoint(String checkPointNAme, String value) {
-        auditContextData.addCheckPoint(checkPointNAme, value);
-    }
-
-
+//    @Override
+//    public ValidationMessage createError(String message) {
+//        ValidationMessage msg = createMessage();
+//        msg.setSeverity(ValidationMessageSeverity.ERROR);
+//        msg.setMessage(message);
+//        return msg;
+//    }
 }

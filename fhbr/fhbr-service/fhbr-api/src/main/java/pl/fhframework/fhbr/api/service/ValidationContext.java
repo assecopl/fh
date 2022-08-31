@@ -80,8 +80,10 @@ public interface ValidationContext {
 
     List<ValidationMessage> runSubscribedRules();
 
-    ValidationMessage createError(String ruleCode, String message);
+    ValidationMessage createError(String message);
 
     ValidationMessage createMessage(BRuleCfgDto ruleCfg);
+
+    void addCheckPoint(String checkPointNAme, String value);
 
 }

@@ -13,31 +13,21 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.rule;
+package pl.fhframework.fhbr.engine.context;
 
 import pl.fhframework.fhbr.api.service.ValidationContext;
-import pl.fhframework.fhbr.api.service.ValidationMessage;
-
-import java.util.ArrayList;
-import java.util.List;
+import pl.fhframework.fhbr.engine.ValidatorServiceImpl;
+import pl.fhframework.fhbr.engine.audit.AuditPoint;
 
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 26/08/2022
+ * @created 31/08/2022
  */
-public class R102_v1 implements R102 {
+public interface InternalValidationContext extends ValidationContext {
 
-    @Override
-    public List<ValidationMessage> execute(ValidationContext validationContext, int age, int shoeSizeNumber) {
-//        public List<ValidationMessage> execute(BRuleDto dto, ValidationContext validationContext, int age, int shoeSizeNumber) {
-//
-        List<ValidationMessage> msgList = new ArrayList<>();
+    AuditPoint getAuditPoint();
 
-        if (age > shoeSizeNumber) {
-            msgList.add(validationContext.createError("Age should be less than shoe size number (v1)"));
-        }
+    ValidatorServiceImpl getValidatorService();
 
-        return msgList;
-    }
 }
