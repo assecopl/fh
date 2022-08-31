@@ -36,6 +36,8 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
 @DesignerControl(defaultWidth = 2)
 public class Button extends FormElementWithConfirmationSupport implements TableComponent<Button>, Styleable, IHasBoundableLabel {
 
+    public static final String RECAPTCHA_BOT_ERROR_MESSAGE_KEY = "pl.fhframework.captcha.error";
+
     public static final String ATTR_LABEL = "label";
     public static final String ATTR_STYLE = "style";
     public static final String ATTR_ON_CLICK = "onClick";
@@ -81,8 +83,8 @@ public class Button extends FormElementWithConfirmationSupport implements TableC
     @Getter
     @Setter
     @XMLProperty()
-    @DocumentedComponentAttribute(defaultValue = "false")
-    @DesignerXMLProperty(functionalArea = SPECIFIC, priority = 78, allowedTypes = boolean.class)
+    @DocumentedComponentAttribute(defaultValue = "false", value = "Turn on/off Google Recaptcha v2 functionality. To use this option you have to set aplication parameters `fh.web.secure.caprcha.sitekey` and `fh.web.secure.caprcha.serverkey`.")
+    @DesignerXMLProperty(functionalArea = SPECIFIC, priority = 79, allowedTypes = boolean.class)
     private boolean reCAPTCHA = false;
 
     @Getter
@@ -137,7 +139,8 @@ public class Button extends FormElementWithConfirmationSupport implements TableC
                         }
                     }
                 }
-                this.getForm().getAbstractUseCase().getUserSession().getEventRegistry().fireNotificationEvent(NotificationEvent.Level.WARNING, "BOT!!!!!!!!!");
+                this.getForm().getAbstractUseCase().getUserSession().getEventRegistry().fireNotificationEvent(NotificationEvent.Level.WARNING,
+                        BasicControlsConfiguration.getInstance().getMessageService().getAllBundles().getMessage(RECAPTCHA_BOT_ERROR_MESSAGE_KEY));
                 return Optional.empty();
             } else {
                 return Optional.ofNullable(onClick);

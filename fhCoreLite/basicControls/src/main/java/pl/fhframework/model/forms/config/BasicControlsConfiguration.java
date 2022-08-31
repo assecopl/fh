@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import pl.fhframework.core.i18n.MessageService;
 import pl.fhframework.model.forms.attribute.HintType;
 
 import javax.annotation.PostConstruct;
@@ -40,6 +41,10 @@ public class BasicControlsConfiguration {
     @Autowired
     @Getter
     private RestTemplate restTemplate;
+
+    @Autowired
+    @Getter
+    private MessageService messageService;
 
     @PostConstruct
     void init () {
