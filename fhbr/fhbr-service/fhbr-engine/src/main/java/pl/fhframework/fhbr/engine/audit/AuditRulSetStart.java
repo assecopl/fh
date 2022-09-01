@@ -17,6 +17,8 @@ package pl.fhframework.fhbr.engine.audit;
 
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
@@ -26,14 +28,11 @@ import lombok.Getter;
 public class AuditRulSetStart extends AuditPoint {
 
     private final String ruleSetName;
-    private long duration;
+    private final LocalDateTime startTime = LocalDateTime.now();
 
     public AuditRulSetStart(String ruleSetName) {
         super("RuleStartStart");
         this.ruleSetName = ruleSetName;
     }
 
-    void finish() {
-        duration = System.nanoTime() - startNanoTime;
-    }
 }

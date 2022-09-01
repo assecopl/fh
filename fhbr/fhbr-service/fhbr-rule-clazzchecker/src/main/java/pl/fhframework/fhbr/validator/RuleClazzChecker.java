@@ -38,6 +38,7 @@ public class RuleClazzChecker extends AbstractRuleChecker {
     protected List<ValidationMessage> check(Object object, InternalValidationContext context, BRuleDto rule) throws Exception {
 
         List<ValidationMessage> validationMessages = new ArrayList<>();
+        ValidationContextImpl ruleContext = new ValidationContextImpl(context, rule.getConfig());
         try {
             Object ruleInstance = Class.forName(rule.getDefinition().getRuleClassName(), true, this.getClass().getClassLoader()).newInstance();
             List<ValidationMessage> checkResult = null;
@@ -45,12 +46,12 @@ public class RuleClazzChecker extends AbstractRuleChecker {
             if (ruleInstance instanceof SimpleRule) {
                 SimpleRule ruleChecker = (SimpleRule) ruleInstance;
                 if (!ruleChecker.isValid(object, context)) {
-                    validationMessages.add(new ValidationContextImpl(context, rule.getConfig()).getMessageFactory().prepareValidationMessage(rule.getConfig()));
+                    validationMessages.add(ruleContext.getMessageFactory().prepareValidationMessage(rule.getConfig()));
                 }
             } else {
                 ComplexRule ruleChecker = (ComplexRule) ruleInstance;
 
-                checkResult = ruleChecker.check(object, new ValidationContextImpl(context, rule.getConfig()), rule);
+                checkResult = ruleChecker.check(object, ruleContext, rule);
             }
 
             if (checkResult != null) {
@@ -63,6 +64,8 @@ public class RuleClazzChecker extends AbstractRuleChecker {
                     rule.getConfig().getBusinessRuleCode(),
                     rule.getId(), rule.getDefinition().getRuleExpression(), e);
             throw e;
+        } finally {
+            ruleContext.getAuditPoint().finish();
         }
         return validationMessages;
 

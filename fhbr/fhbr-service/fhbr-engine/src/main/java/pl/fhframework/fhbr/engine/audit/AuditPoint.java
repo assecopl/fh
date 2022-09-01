@@ -17,7 +17,6 @@ package pl.fhframework.fhbr.engine.audit;
 
 import lombok.Data;
 import lombok.Getter;
-import lombok.Synchronized;
 import pl.fhframework.fhbr.api.audit.AuditData;
 
 import java.util.Collections;
@@ -29,31 +28,35 @@ import java.util.List;
  * @version :  $, :  $
  * @created 25/08/2022
  */
-
+@Getter
 @Data
 public class AuditPoint implements AuditData {
 
-    @Getter
-    protected final long startNanoTime;
-
-    @Getter
+    private final long startNano;
+    private Long duration;
     private final String name;
-
     private List<AuditPoint> auditData;
 
     public AuditPoint(String name) {
         this.name = name;
-        this.startNanoTime = System.nanoTime();
+        this.startNano = System.nanoTime();
     }
 
-    public List<? extends AuditData> copyAuditData() {
+    public List<? extends AuditData> collectedAuditData() {
         return auditData != null ? Collections.unmodifiableList(auditData) : null;
     }
 
-    @Synchronized
+    public void finish() {
+        duration = System.nanoTime() - startNano;
+    }
+
     public void addAuditPoint(AuditPoint auditPoint) {
         if (auditData == null) {
-            auditData = Collections.synchronizedList(new LinkedList<AuditPoint>());
+            synchronized (this) {
+                if (auditData == null) {
+                    auditData = Collections.synchronizedList(new LinkedList<AuditPoint>());
+                }
+            }
         }
         auditData.add(auditPoint);
     }

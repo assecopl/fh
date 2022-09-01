@@ -28,19 +28,15 @@ import java.util.List;
 public class AuditRulSetApply extends AuditPoint {
 
     private final String ruleSetName;
-    private long duration;
-    List<String> ruleCodeList;
+    private List<String> foundRules;
 
     public AuditRulSetApply(String ruleSetName) {
         super("RuleSetApply");
         this.ruleSetName = ruleSetName;
     }
 
-    void findRules(List<String> ruleCodeList) {
-        this.ruleCodeList = ruleCodeList;
+    void setFoundRules(List<String> foundRules) {
+        this.foundRules = foundRules;
     }
 
-    void finish() {
-        duration = System.nanoTime() - startNanoTime;
-    }
 }

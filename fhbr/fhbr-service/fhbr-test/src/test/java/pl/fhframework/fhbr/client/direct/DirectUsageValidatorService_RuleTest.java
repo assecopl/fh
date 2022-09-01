@@ -30,6 +30,7 @@ import pl.fhframework.fhbr.api.service.ValidatorService;
 import pl.fhframework.fhbr.api.service.ValidatorServiceFactory;
 import pl.fhframework.fhbr.dao.InMemoryBussinesRuleDao;
 import pl.fhframework.fhbr.engine.ValidatorServiceFactoryImpl;
+import pl.fhframework.fhbr.engine.audit.AudtiPointHelper;
 import pl.fhframework.fhbr.example.TestObject;
 import pl.fhframework.fhbr.validator.RuleClazzCheckerFactory;
 
@@ -158,5 +159,7 @@ public class DirectUsageValidatorService_RuleTest {
 
 //        logger.info(validationResult.toString());
         logger.info("validationResult = " + new GsonBuilder().setPrettyPrinting().create().toJson(new JsonParser().parse(validationResult.toString())));
+
+        logger.info("auditData = " + AudtiPointHelper.toJson(validationResult.getAuditData(), true));
     }
 }
