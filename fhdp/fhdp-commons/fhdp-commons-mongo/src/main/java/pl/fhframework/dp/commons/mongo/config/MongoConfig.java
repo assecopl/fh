@@ -3,9 +3,13 @@ package pl.fhframework.dp.commons.mongo.config;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoClient;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.MongoDatabaseFactory;
+import org.springframework.data.mongodb.MongoTransactionManager;
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
 
 import java.util.ArrayList;
@@ -13,6 +17,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 @Configuration
+@Slf4j
 public class MongoConfig extends AbstractMongoClientConfiguration {
 
     @Value("${mongo.hostAndPort:localhost:27017}")
@@ -32,6 +37,12 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
         return super.mongoClient();
     }
 
+    @Bean
+    @ConditionalOnProperty(prefix = "mongo.transactionManager", name = "enabled", havingValue = "true", matchIfMissing = true)
+    MongoTransactionManager mongoTransactionManager(MongoDatabaseFactory dbFactory) {
+        log.info("***** Initiating MongoTransactionManager...");
+        return new MongoTransactionManager(dbFactory);
+    }
 
     @Override
     protected void configureClientSettings(MongoClientSettings.Builder builder) {
