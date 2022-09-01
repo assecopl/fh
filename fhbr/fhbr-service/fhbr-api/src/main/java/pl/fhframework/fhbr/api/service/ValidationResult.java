@@ -14,6 +14,9 @@
  */
 package pl.fhframework.fhbr.api.service;
 
+import lombok.Getter;
+import pl.fhframework.fhbr.api.audit.AuditData;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -30,7 +33,14 @@ public class ValidationResult {
 
     private List<ValidationMessage> validationMessages = Collections.synchronizedList(new LinkedList<ValidationMessage>());
 
+    @Getter
+    private AuditData auditData;
+
     public ValidationResult() {
+    }
+
+    public ValidationResult(AuditData auditData) {
+        this.auditData = auditData;
     }
 
     public ValidationResult(boolean valid, List<ValidationMessage> validationMessages) {

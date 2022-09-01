@@ -13,23 +13,23 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.api.audit;
+package pl.fhframework.fhbr.engine.audit;
 
-import java.util.List;
+import com.google.gson.GsonBuilder;
+import pl.fhframework.fhbr.api.audit.AuditData;
 
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 25/08/2022
+ * @created 01/09/2022
  */
+public class AudtiPointHelper {
 
-public interface AuditData {
-
-    String getName();
-
-    long getStartNano();
-
-    Long getDuration();
-
-    List<? extends AuditData> collectedAuditData();
+    public static String toJson(AuditData auditData, boolean preatyPriny) {
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        if (preatyPriny) {
+            gsonBuilder.setPrettyPrinting();
+        }
+        return gsonBuilder.create().toJson(auditData);
+    }
 }

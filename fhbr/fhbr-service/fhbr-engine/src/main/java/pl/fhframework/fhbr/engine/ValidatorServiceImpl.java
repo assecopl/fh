@@ -60,8 +60,8 @@ public class ValidatorServiceImpl implements ValidatorService {
     @Override
     public ValidationResult validate(String ruleSetCode, ValidateObject validateObject) {
 
-        ValidationResult validationResult = new ValidationResult();
         InternalValidationContext context = new DelegateValidationContextImpl(new MainValidationContextImpl(messageFactory, this, ruleSetCode, validateObject.getOnDate()));
+        ValidationResult validationResult = new ValidationResult(context.getAuditPoint());
 
         BRuleSetDto bRuleSetDto = bRuleSetDao.findRuleSet(ruleSetCode);
         if (bRuleSetDto == null) {
@@ -83,6 +83,8 @@ public class ValidatorServiceImpl implements ValidatorService {
 
         List<ValidationMessage> validationMessages = applyRuleSet(context, ruleSetCode, validateObject);
         rewriteValidationMessage(validationMessages, validationResult);
+
+        context.getAuditPoint().finish();
 
         return validationResult;
     }
@@ -169,7 +171,12 @@ public class ValidatorServiceImpl implements ValidatorService {
                 T rule = (T) ruleInstanceFactory.getRuleInstance(bRuleDto);
                 if (ruleFunction.isBiFunction()) {
                     //TODO: add validatorContext decorator ?
-                    return ruleFunction.getBiFunction().apply(new ValidationContextImpl(validationContext, bRuleDto.getConfig()), rule);
+                    ValidationContextImpl ruleContext = new ValidationContextImpl(validationContext, bRuleDto.getConfig());
+                    try {
+                        return ruleFunction.getBiFunction().apply(ruleContext, rule);
+                    } finally {
+                        ruleContext.getAuditPoint().finish();
+                    }
                 } else {
                     return ruleFunction.getFunction().apply(rule);
                 }
