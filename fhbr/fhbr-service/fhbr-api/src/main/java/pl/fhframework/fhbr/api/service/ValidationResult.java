@@ -14,6 +14,9 @@
  */
 package pl.fhframework.fhbr.api.service;
 
+import lombok.Getter;
+import pl.fhframework.fhbr.api.audit.AuditData;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -30,7 +33,14 @@ public class ValidationResult {
 
     private List<ValidationMessage> validationMessages = Collections.synchronizedList(new LinkedList<ValidationMessage>());
 
+    @Getter
+    private AuditData auditData;
+
     public ValidationResult() {
+    }
+
+    public ValidationResult(AuditData auditData) {
+        this.auditData = auditData;
     }
 
     public ValidationResult(boolean valid, List<ValidationMessage> validationMessages) {
@@ -40,16 +50,19 @@ public class ValidationResult {
         }
     }
 
-
+    /**
+     * Result of validation
+     *
+     * @return true - ok
+     * false - not ok (in default each message with severity above WARNING makes result invalid)
+     */
     public boolean getValid() {
         return valid;
     }
 
-
-    public void setValid(boolean status) {
+    protected void setValid(boolean status) {
         this.valid = status;
     }
-
 
     public List<ValidationMessage> getValidationResultMessages() {
         return Collections.unmodifiableList(validationMessages);
@@ -57,8 +70,7 @@ public class ValidationResult {
 
     public void addValidationMessage(ValidationMessage validationMessage) {
         if (validationMessage != null) {
-            if (ValidationMessageSeverity.ERROR.equals(validationMessage.getSeverity())
-                    || ValidationMessageSeverity.CRITICAL.equals(validationMessage.getSeverity())) {
+            if (ValidationMessageSeverity.isErrorOrAbove(validationMessage.getSeverity())) {
                 valid = false;
             }
             validationMessages.add(validationMessage);
@@ -70,7 +82,7 @@ public class ValidationResult {
         StringBuilder sb = new StringBuilder();
         sb.append("{ \"valid\": ").append(valid);
         sb
-                .append(", ")
+                .append(", \"validationMessages\": ")
                 .append(Arrays.toString(getValidationResultMessages().toArray()));
         return sb.append(" }").toString();
     }

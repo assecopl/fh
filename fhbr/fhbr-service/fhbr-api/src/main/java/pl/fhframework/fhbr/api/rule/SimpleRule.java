@@ -15,7 +15,7 @@
 
 package pl.fhframework.fhbr.api.rule;
 
-import pl.fhframework.fhbr.api.service.ValidateContext;
+import pl.fhframework.fhbr.api.service.ValidationContext;
 
 /**
  * @author Dariusz Skrudlik
@@ -24,6 +24,6 @@ import pl.fhframework.fhbr.api.service.ValidateContext;
  */
 public interface SimpleRule<O> {
 
-    boolean isValid(O object, ValidateContext context) throws Exception;
+    boolean isValid(O targetObject, ValidationContext context) throws Exception;
 
 }

@@ -17,18 +17,23 @@ package pl.fhframework.fhbr.engine;
 
 import org.apache.commons.lang3.StringUtils;
 import pl.fhframework.fhbr.api.checker.CheckerTypeService;
-import pl.fhframework.fhbr.api.dao.ModuleDao;
+import pl.fhframework.fhbr.api.dao.BRuleSetDao;
 import pl.fhframework.fhbr.api.dao.XsdRepositoryDao;
 import pl.fhframework.fhbr.api.exception.RuleValidationException;
 import pl.fhframework.fhbr.api.model.BRuleDto;
-import pl.fhframework.fhbr.api.model.ModuleDto;
+import pl.fhframework.fhbr.api.model.BRuleSetDto;
 import pl.fhframework.fhbr.api.service.*;
+import pl.fhframework.fhbr.engine.checker.RuleFunction;
+import pl.fhframework.fhbr.engine.context.DelegateValidationContextImpl;
+import pl.fhframework.fhbr.engine.context.InternalValidationContext;
+import pl.fhframework.fhbr.engine.context.MainValidationContextImpl;
+import pl.fhframework.fhbr.engine.factory.RuleInstanceFactoryImpl;
 import pl.fhframework.fhbr.validator.schema.SchemaValidatorHelper;
 import pl.fhframework.fhbr.validator.schema.xsd.resolver.DaoXsdResolverFactory;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -38,68 +43,155 @@ import java.util.stream.Collectors;
  */
 public class ValidatorServiceImpl implements ValidatorService {
 
-    private final ModuleDao moduleDao;
+    private final BRuleSetDao bRuleSetDao;
     private final XsdRepositoryDao xsdRepositoryDao;
     private final ValidationMessageFactory messageFactory;
     private final Map<String, CheckerTypeService> checkerTypeCollection;
+    private final RuleInstanceFactoryImpl ruleInstanceFactory = new RuleInstanceFactoryImpl();
 
-    public ValidatorServiceImpl(ValidationMessageFactory messageFactory, ModuleDao moduleDao, XsdRepositoryDao xsdRepositoryDao, Map<String, CheckerTypeService> checkerTypeCollection) {
+
+    public ValidatorServiceImpl(ValidationMessageFactory messageFactory, BRuleSetDao bRuleSetDao, XsdRepositoryDao xsdRepositoryDao, Map<String, CheckerTypeService> checkerTypeCollection) {
         this.messageFactory = messageFactory;
-        this.moduleDao = moduleDao;
+        this.bRuleSetDao = bRuleSetDao;
         this.xsdRepositoryDao = xsdRepositoryDao;
         this.checkerTypeCollection = checkerTypeCollection;
     }
 
     @Override
-    public ValidationResult validate(String moduleCode, String phase, ValidateObject validateObject, Map<String, Object> param) {
+    public ValidationResult validate(String ruleSetCode, ValidateObject validateObject) {
 
-        ValidationResult validationResult = new ValidationResult();
-        ValidateContext context = new ValidateContext(messageFactory, param);
+        InternalValidationContext context = new DelegateValidationContextImpl(new MainValidationContextImpl(messageFactory, this, ruleSetCode, validateObject.getOnDate()));
+        ValidationResult validationResult = new ValidationResult(context.getAuditPoint());
 
-        ModuleDto module = moduleDao.findModule(moduleCode, phase);
-        if (module == null) {
+        BRuleSetDto bRuleSetDto = bRuleSetDao.findRuleSet(ruleSetCode);
+        if (bRuleSetDto == null) {
             ValidationMessage m = messageFactory.newInstance();
-            m.setSeverity(ValidationMessageSeverity.ERROR);
-            m.setMessage("pl.fhframework.fhbr.message.error.unknownModuleCode");
+            m.setSeverity(ValidationMessageSeverity.CRITICAL);
+            m.setMessage("pl.fhframework.fhbr.message.error.unknownRuleSetCode");
             validationResult.addValidationMessage(m);
         }
-        if (module.isScheamaValidator()) {
-            new DaoXsdResolverFactory(xsdRepositoryDao, LocalDate.now());
+
+        if (bRuleSetDto.isSchemaValidator()) {
+            new DaoXsdResolverFactory(xsdRepositoryDao, context.getInitialOnDate());
             ValidationResult partialResult = new SchemaValidatorHelper(new DaoXsdResolverFactory(xsdRepositoryDao, LocalDate.now()), messageFactory)
-                    .validate(module.getNamespace(), (byte[]) validateObject.getObject());
-            rewriteValidationMessage(partialResult, validationResult);
+                    .validate(bRuleSetDto.getSchemaNamespace(), (byte[]) validateObject.getObject());
+            rewriteValidationMessage(partialResult.getValidationResultMessages(), validationResult);
             if (!validationResult.getValid()) {
                 return validationResult;
             }
         }
-        List<BRuleDto> rules = moduleDao.findRules(moduleCode, phase, true, validateObject.getOnDate());
 
-        rules.stream()
-                .filter(r -> StringUtils.isNotBlank(r.getCheckerType()))
-                .collect(Collectors.groupingBy(BRuleDto::getCheckerType))
-                .forEach((ruleType, ruleTypeLists) -> {
-                    CheckerTypeService validatorService = null;
+        List<ValidationMessage> validationMessages = applyRuleSet(context, ruleSetCode, validateObject);
+        rewriteValidationMessage(validationMessages, validationResult);
 
-                    try {
-                        validatorService = prepareCheckerTypeService(ruleType);
-                    } catch (Exception e) {
-                        throw new RuleValidationException("fhbr.exception.createRuleValidatorService", moduleCode, null, e);
-                    }
-
-                    ValidationResult partialResult = validatorService.validate(validateObject.getObject(), context, ruleTypeLists);
-                    rewriteValidationMessage(partialResult, validationResult);
-                });
+        context.getAuditPoint().finish();
 
         return validationResult;
+    }
 
+    /**
+     * Apply rule set on target object.
+     * Select rules by ruleSet/phase and execute verification with validateObject
+     *
+     * @param context
+     * @param ruleSetCode
+     * @param validateObject
+     * @return
+     */
+    public List<ValidationMessage> applyRuleSet(InternalValidationContext context, String ruleSetCode, ValidateObject validateObject) {
+        List<BRuleDto> rules = bRuleSetDao.findRuleSetRules(ruleSetCode, true, context.getInitialOnDate());
+        return applyRules(context, validateObject, rules);
+    }
+
+//    public List<ValidationMessage> applyRule(ValidationContext context, String ruleCode, String phase, ValidateObject validateObject) {
+//        List<BRuleDto> rules = BRuleSetDao.findRule(ruleCode, validateObject.getOnDate());
+//        return applyRules(context, validateObject, rules);
+//    }
+
+    List<ValidationMessage> applyRules(InternalValidationContext context, ValidateObject validateObject, List<BRuleDto> rules) {
+
+        List<ValidationMessage> validationMessages = Collections.synchronizedList(new LinkedList<>());
+
+        rules.stream()
+                .filter(r -> StringUtils.isNotBlank(r.getDefinition().getCheckerType()))
+                .collect(Collectors.groupingBy(bRuleDto -> bRuleDto.getDefinition().getCheckerType()))
+                .forEach((ruleType, ruleTypeLists) -> {
+                    CheckerTypeService checkerTypeService = null;
+
+                    try {
+                        checkerTypeService = prepareCheckerTypeService(ruleType);
+                    } catch (Exception e) {
+                        throw new RuleValidationException("fhbr.exception.createRuleValidatorService", null, null, e);
+                    }
+
+                    ValidationResult partialResult = checkerTypeService.validate(validateObject.getObject(), context, ruleTypeLists);
+                    validationMessages.addAll(partialResult.getValidationResultMessages());
+                });
+
+        return validationMessages;
+    }
+
+    @Override
+    public boolean canIRun(String businessRuleCode, LocalDate onDay) {
+        return bRuleSetDao.findActiveRule(businessRuleCode, onDay) != null;
+    }
+
+    public <T> List<ValidationMessage> applyNow(InternalValidationContext validationContext, List<RuleFunction<? extends Class<?>>> ruleFunctionList) {
+
+        List<ValidationMessage> result = Collections.synchronizedList(new ArrayList<>());
+        //group by businessRuleCode
+        //businessRuleCode => interface class. getSimpleName
+        Map<String, List<RuleFunction<? extends Class<?>>>> functionRuleMap = ruleFunctionList.stream().collect(Collectors.groupingBy(ruleFunction -> ruleFunction.getClazz().getSimpleName()));
+
+        //find rules configuration
+        List<BRuleDto> rules = bRuleSetDao.findActiveRules(new ArrayList<>(functionRuleMap.keySet()), validationContext.getInitialOnDate());
+
+        //TODO: group by priority and run parallel
+
+        rules.parallelStream().forEach(rule -> {
+            functionRuleMap.get(rule.getConfig().getBusinessRuleCode()).parallelStream().forEach(f -> {
+                result.addAll(applyNow(validationContext, rule, f).get());
+            });
+        });
+
+        return result;
+    }
+
+    //    public <T> List<ValidationMessage> applyNow(ValidationContext validationContext, Class<T> clazz, Function<T, List<ValidationMessage>> function) {
+    public <T> List<ValidationMessage> applyNow(InternalValidationContext validationContext, RuleFunction<T> ruleFunction) {
+        BRuleDto bRuleDto = bRuleSetDao.findActiveRule(ruleFunction.getClazz().getSimpleName(), validationContext.getInitialOnDate());
+
+        return applyNow(validationContext, bRuleDto, ruleFunction).get();
+    }
+
+    //    private <T> Supplier<List<ValidationMessage>> applyNow(ValidationContext validationContext, BRuleDto bRuleDto, Function<T, List<ValidationMessage>> function) {
+    private <T> Supplier<List<ValidationMessage>> applyNow(InternalValidationContext validationContext, BRuleDto bRuleDto, RuleFunction<T> ruleFunction) {
+        return () -> {
+            if (bRuleDto != null) {
+                T rule = (T) ruleInstanceFactory.getRuleInstance(bRuleDto);
+                if (ruleFunction.isBiFunction()) {
+                    //TODO: add validatorContext decorator ?
+                    ValidationContextImpl ruleContext = new ValidationContextImpl(validationContext, bRuleDto.getConfig());
+                    try {
+                        return ruleFunction.getBiFunction().apply(ruleContext, rule);
+                    } finally {
+                        ruleContext.getAuditPoint().finish();
+                    }
+                } else {
+                    return ruleFunction.getFunction().apply(rule);
+                }
+                //                return function.apply(rule, bRuleDto);
+            }
+            return Collections.emptyList();
+        };
     }
 
     private CheckerTypeService prepareCheckerTypeService(String checkerType) {
         return checkerTypeCollection.get(checkerType);
     }
 
-    private void rewriteValidationMessage(ValidationResult s, ValidationResult t) {
-        s.getValidationResultMessages()
+    private void rewriteValidationMessage(List<ValidationMessage> validationMessages, ValidationResult t) {
+        validationMessages
                 .stream().forEach(vm -> t.addValidationMessage(vm));
     }
 

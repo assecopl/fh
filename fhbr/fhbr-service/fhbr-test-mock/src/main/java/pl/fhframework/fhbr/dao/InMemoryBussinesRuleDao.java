@@ -15,37 +15,85 @@
 
 package pl.fhframework.fhbr.dao;
 
-import lombok.Getter;
-import pl.fhframework.fhbr.api.dao.ModuleDao;
+import pl.fhframework.fhbr.api.dao.BRuleSetDao;
 import pl.fhframework.fhbr.api.model.BRuleDto;
-import pl.fhframework.fhbr.api.model.ModuleDto;
+import pl.fhframework.fhbr.api.model.BRuleSetDto;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
  * @created 11/07/2022
  */
-public class InMemoryBussinesRuleDao implements ModuleDao {
+public class InMemoryBussinesRuleDao implements BRuleSetDao {
 
-    @Getter
-    private Map<String, List<BRuleDto>> storage = new HashMap<>();
-    @Getter
-    private Map<String, ModuleDto> modules = new HashMap<>();
+    private LinkedList<BRuleDto> rules = new LinkedList<>();
+    private Map<String, List<BRuleDto>> ruleSetsRules = new HashMap<>();
+    private Map<String, BRuleSetDto> ruleSets = new HashMap<>();
+
+    public BRuleSetDto createRuleSet(String ruleSetName) {
+        BRuleSetDto ruleSetDto = new BRuleSetDto();
+        ruleSets.put(ruleSetName, ruleSetDto);
+        ruleSetsRules.put(ruleSetName, new ArrayList<>());
+        return ruleSetDto;
+    }
+
+    public void addRule(BRuleDto ruleDto) {
+        rules.add(ruleDto);
+    }
+
+    public void linkRule(String ruleSetName, BRuleDto ruleDto) {
+        if (!rules.contains(ruleDto)) {
+            addRule(ruleDto);
+        }
+        if (!ruleSets.containsKey(ruleSetName)) {
+            createRuleSet(ruleSetName);
+        }
+        ruleSetsRules.get(ruleSetName).add(ruleDto);
+    }
+
 
     @Override
-    public List<BRuleDto> findRules(String code, String phase, boolean active, LocalDate onDate) {
-        return storage.containsKey(code) ? new ArrayList<>(storage.get(code)) : new ArrayList<>();
+    public List<BRuleDto> findRuleSetRules(String ruleSetCode, boolean active, LocalDate onDate) {
+        return ruleSetsRules.containsKey(ruleSetCode) ? new ArrayList<>(ruleSetsRules.get(ruleSetCode)) : new ArrayList<>();
     }
 
     @Override
-    public ModuleDto findModule(String moduleCode, String phase) {
-        return modules.get(moduleCode);
+    public BRuleSetDto findRuleSet(String ruleSetCode) {
+        return ruleSets.get(ruleSetCode);
+    }
+
+    @Override
+    public BRuleDto findActiveRule(String businessRuleCode, LocalDate onDate) {
+        HashSet<BRuleDto> result = new HashSet<>();
+
+        rules.stream().filter(
+                        ruleDto -> businessRuleCode.equals(ruleDto.getConfig().getBusinessRuleCode()) &&
+                                ruleDto.getConfig().isActive()
+                                && onDate != null && (
+                                (ruleDto.getConfig().getValidFrom() == null || (ruleDto.getConfig().getValidFrom() != null && (!ruleDto.getConfig().getValidFrom().isAfter(onDate)))) &&
+                                        (ruleDto.getConfig().getValidTo() == null || (ruleDto.getConfig().getValidTo() != null && (!onDate.isAfter(ruleDto.getConfig().getValidTo()))))
+                        ))
+                .forEach(ruleDto -> result.add(ruleDto));
+
+        //TODO: throw error if more than one
+
+        return result.isEmpty() ? null : result.iterator().next();
+    }
+
+    @Override
+    public List<BRuleDto> findActiveRules(List<String> businessRuleCodes, LocalDate onDate) {
+        List<BRuleDto> result = new ArrayList<>();
+        businessRuleCodes.stream().forEach(businessRuleCode ->
+        {
+            BRuleDto activeRule = findActiveRule(businessRuleCode, onDate);
+            if (activeRule != null) {
+                result.add(activeRule);
+            }
+        });
+        return result;
     }
 
 }

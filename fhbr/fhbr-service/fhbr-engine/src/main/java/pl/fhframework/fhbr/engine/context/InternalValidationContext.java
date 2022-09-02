@@ -13,26 +13,21 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.api.model;
+package pl.fhframework.fhbr.engine.context;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import pl.fhframework.fhbr.api.service.ValidationContext;
+import pl.fhframework.fhbr.engine.ValidatorServiceImpl;
+import pl.fhframework.fhbr.engine.audit.AuditPoint;
 
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 15/07/2022
+ * @created 31/08/2022
  */
-@Setter
-@Getter
-@Data
-public class ModuleDto {
+public interface InternalValidationContext extends ValidationContext {
 
-    private String code;
+    AuditPoint getAuditPoint();
 
-    private boolean scheamaValidator;
-    private String namespace;
+    ValidatorServiceImpl getValidatorService();
 
-    private boolean listValidator;
 }

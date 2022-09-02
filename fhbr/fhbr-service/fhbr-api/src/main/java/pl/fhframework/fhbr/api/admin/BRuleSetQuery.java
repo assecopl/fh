@@ -13,31 +13,12 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.api.exception;
-
-import lombok.Getter;
+package pl.fhframework.fhbr.api.admin;
 
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 06/07/2022
+ * @created 19/08/2022
  */
-@Getter
-public class RuleValidationException extends RuntimeException {
-
-    private String ruleSetCode;
-    private String ruleCode;
-
-    public RuleValidationException(String messageKey, String ruleSetCode, String ruleCode) {
-        super(messageKey);
-        this.ruleSetCode = ruleSetCode;
-        this.ruleCode = ruleCode;
-    }
-
-    public RuleValidationException(String messageKey, String ruleSetCode, String ruleCode, Throwable t) {
-        super(messageKey, t);
-        this.ruleSetCode = ruleSetCode;
-        this.ruleCode = ruleCode;
-    }
-
+public class BRuleSetQuery {
 }

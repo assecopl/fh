@@ -13,31 +13,32 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.api.exception;
+package pl.fhframework.fhbr.api.model;
 
+import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 06/07/2022
+ * @created 19/08/2022
  */
+@Setter
 @Getter
-public class RuleValidationException extends RuntimeException {
+@Data
+public class BRuleDefDto {
 
-    private String ruleSetCode;
-    private String ruleCode;
+    private String checkerType; // service type must be registered
 
-    public RuleValidationException(String messageKey, String ruleSetCode, String ruleCode) {
-        super(messageKey);
-        this.ruleSetCode = ruleSetCode;
-        this.ruleCode = ruleCode;
-    }
+    private String ruleClassName;
 
-    public RuleValidationException(String messageKey, String ruleSetCode, String ruleCode, Throwable t) {
-        super(messageKey, t);
-        this.ruleSetCode = ruleSetCode;
-        this.ruleCode = ruleCode;
-    }
+    private String description;
+
+    private String ruleExpression;
+
+    private String ruleSource;
+
+    private byte[] ruleByteCode;
 
 }

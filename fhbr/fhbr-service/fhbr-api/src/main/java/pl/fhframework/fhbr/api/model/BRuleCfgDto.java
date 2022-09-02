@@ -20,8 +20,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 /**
+ * Rule configuration.
+ *
  * @author Dariusz Skrudlik
  * @version :  $, :  $
  * @created 06/07/2022
@@ -29,11 +32,36 @@ import java.io.Serializable;
 @Setter
 @Getter
 @Data
-public class BRuleDto implements Serializable {
+public class BRuleCfgDto implements Serializable {
 
-    Long id; // ???
+    @Getter
+    private String ruleCode; //required, unique rule code - businessRuleCode + variant eg: R602_A
 
-    BRuleCfgDto config;
+    private String version; // on period defined by validFrom - validTo only one version with businessRuleCode is allowed
 
-    BRuleDefDto definition;
+    private String businessRuleCode; //eg: R602
+
+    private boolean active;
+
+    private String name;
+
+    private String messageKey;
+
+    private String message;
+
+    private String pointer;
+
+    private int callOrder; // lower order -> higher priority (first run)
+
+    private String severity;
+
+    private LocalDate validFrom; // start date of the period validity
+
+    private LocalDate validTo; // end date of the period validity
+
+    private boolean critical;
+
+    private String phase; //  phase eg. DEFAULT
+
+
 }

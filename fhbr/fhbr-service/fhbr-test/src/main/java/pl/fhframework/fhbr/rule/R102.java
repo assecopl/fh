@@ -13,31 +13,20 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.api.exception;
+package pl.fhframework.fhbr.rule;
 
-import lombok.Getter;
+import pl.fhframework.fhbr.api.service.ValidationContext;
+import pl.fhframework.fhbr.api.service.ValidationMessage;
+
+import java.util.List;
 
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 06/07/2022
+ * @created 26/08/2022
  */
-@Getter
-public class RuleValidationException extends RuntimeException {
+public interface R102 {
 
-    private String ruleSetCode;
-    private String ruleCode;
-
-    public RuleValidationException(String messageKey, String ruleSetCode, String ruleCode) {
-        super(messageKey);
-        this.ruleSetCode = ruleSetCode;
-        this.ruleCode = ruleCode;
-    }
-
-    public RuleValidationException(String messageKey, String ruleSetCode, String ruleCode, Throwable t) {
-        super(messageKey, t);
-        this.ruleSetCode = ruleSetCode;
-        this.ruleCode = ruleCode;
-    }
-
+        List<ValidationMessage> execute(ValidationContext validationContext, int age, int shoeSizeNumber);
+//        List<ValidationMessage> execute(BRuleDto dto, ValidationContext validationContext, int age, int shoeSizeNumber);
 }

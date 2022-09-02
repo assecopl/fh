@@ -13,31 +13,24 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.api.exception;
+package pl.fhframework.fhbr.api.admin;
 
-import lombok.Getter;
+import pl.fhframework.fhbr.api.dao.BRuleSetDao;
 
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 06/07/2022
+ * @created 19/08/2022
  */
-@Getter
-public class RuleValidationException extends RuntimeException {
+public interface AdminServiceFactory {
 
-    private String ruleSetCode;
-    private String ruleCode;
-
-    public RuleValidationException(String messageKey, String ruleSetCode, String ruleCode) {
-        super(messageKey);
-        this.ruleSetCode = ruleSetCode;
-        this.ruleCode = ruleCode;
-    }
-
-    public RuleValidationException(String messageKey, String ruleSetCode, String ruleCode, Throwable t) {
-        super(messageKey, t);
-        this.ruleSetCode = ruleSetCode;
-        this.ruleCode = ruleCode;
-    }
+    /**
+     * Dostęp do serwisu administraycjnego
+     *
+     * @param uid        - identyfikator użytkownika
+     * @param ruleSetDao -
+     * @return
+     */
+    AdminService newInstance(String uid, BRuleSetDao ruleSetDao);
 
 }

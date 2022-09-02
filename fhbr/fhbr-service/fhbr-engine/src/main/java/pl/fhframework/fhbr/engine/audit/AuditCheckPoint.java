@@ -13,31 +13,22 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.api.exception;
-
-import lombok.Getter;
+package pl.fhframework.fhbr.engine.audit;
 
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 06/07/2022
+ * @created 25/08/2022
  */
-@Getter
-public class RuleValidationException extends RuntimeException {
+public class AuditCheckPoint extends AuditPoint {
 
-    private String ruleSetCode;
-    private String ruleCode;
+    private final String checkPointName;
+    private final String value;
 
-    public RuleValidationException(String messageKey, String ruleSetCode, String ruleCode) {
-        super(messageKey);
-        this.ruleSetCode = ruleSetCode;
-        this.ruleCode = ruleCode;
-    }
-
-    public RuleValidationException(String messageKey, String ruleSetCode, String ruleCode, Throwable t) {
-        super(messageKey, t);
-        this.ruleSetCode = ruleSetCode;
-        this.ruleCode = ruleCode;
+    public AuditCheckPoint(String checkPointName, String value) {
+        super("CheckPoint");
+        this.checkPointName = checkPointName;
+        this.value = value;
     }
 
 }

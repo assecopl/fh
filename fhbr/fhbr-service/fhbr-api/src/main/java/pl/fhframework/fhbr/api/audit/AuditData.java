@@ -13,29 +13,23 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.api.service;
+package pl.fhframework.fhbr.api.audit;
 
-import lombok.Getter;
-
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 13/07/2022
+ * @created 25/08/2022
  */
-public class ValidateContext {
 
-    @Getter
-    private final Map<String, Object> property;
+public interface AuditData {
 
-    @Getter
-    protected ValidationMessageFactory messageFactory;
+    String getName();
 
-    public ValidateContext(ValidationMessageFactory messageFactory, Map<String, Object> property) {
-        this.messageFactory = messageFactory;
-        this.property = Collections.synchronizedMap(new HashMap<>(property));
-    }
+    long getStartNano();
+
+    Long getDuration();
+
+    List<? extends AuditData> collectedAuditData();
 }

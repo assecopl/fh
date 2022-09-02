@@ -17,7 +17,7 @@ package pl.fhframework.fhbr.engine;
 
 import pl.fhframework.fhbr.api.checker.CheckerTypeService;
 import pl.fhframework.fhbr.api.config.ValidatorServiceConfig;
-import pl.fhframework.fhbr.api.dao.ModuleDao;
+import pl.fhframework.fhbr.api.dao.BRuleSetDao;
 import pl.fhframework.fhbr.api.dao.XsdRepositoryDao;
 import pl.fhframework.fhbr.api.service.ValidationMessageFactory;
 import pl.fhframework.fhbr.api.service.ValidatorService;
@@ -47,7 +47,7 @@ public class ValidatorServiceFactoryImpl implements ValidatorServiceFactory {
                 checkerTypeCollection.put(type, checkerTypeServiceFactory.newInstance())
         );
         //prepare module dao
-        ModuleDao moduleDao = config.getModuleDaoFactory().newInstance();
+        BRuleSetDao bRuleSetDao = config.getModuleDaoFactory().newInstance();
 
         XsdRepositoryDao xsdRepositoryDao = null;
         if (config.getXsdRepositoryDaoFactory() != null) {
@@ -55,7 +55,7 @@ public class ValidatorServiceFactoryImpl implements ValidatorServiceFactory {
         }
 
         //create the validator service
-        return new ValidatorServiceImpl(messageFactory, moduleDao, xsdRepositoryDao, checkerTypeCollection);
+        return new ValidatorServiceImpl(messageFactory, bRuleSetDao, xsdRepositoryDao, checkerTypeCollection);
     }
 
 }

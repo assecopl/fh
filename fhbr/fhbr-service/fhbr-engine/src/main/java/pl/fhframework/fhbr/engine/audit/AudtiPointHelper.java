@@ -13,31 +13,23 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.api.exception;
+package pl.fhframework.fhbr.engine.audit;
 
-import lombok.Getter;
+import com.google.gson.GsonBuilder;
+import pl.fhframework.fhbr.api.audit.AuditData;
 
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 06/07/2022
+ * @created 01/09/2022
  */
-@Getter
-public class RuleValidationException extends RuntimeException {
+public class AudtiPointHelper {
 
-    private String ruleSetCode;
-    private String ruleCode;
-
-    public RuleValidationException(String messageKey, String ruleSetCode, String ruleCode) {
-        super(messageKey);
-        this.ruleSetCode = ruleSetCode;
-        this.ruleCode = ruleCode;
+    public static String toJson(AuditData auditData, boolean preatyPriny) {
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        if (preatyPriny) {
+            gsonBuilder.setPrettyPrinting();
+        }
+        return gsonBuilder.create().toJson(auditData);
     }
-
-    public RuleValidationException(String messageKey, String ruleSetCode, String ruleCode, Throwable t) {
-        super(messageKey, t);
-        this.ruleSetCode = ruleSetCode;
-        this.ruleCode = ruleCode;
-    }
-
 }
