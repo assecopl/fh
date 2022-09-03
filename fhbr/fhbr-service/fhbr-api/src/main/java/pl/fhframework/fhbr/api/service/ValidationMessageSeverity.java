@@ -29,4 +29,16 @@ public enum ValidationMessageSeverity {
         return severity != null && severity.ordinal() >= ValidationMessageSeverity.ERROR.ordinal();
     }
 
+    public static ValidationMessageSeverity fromString(String value) {
+        try {
+            if (value != null) {
+                return ValidationMessageSeverity.valueOf(value);
+            }
+        } catch (Exception ignore) {
+        }
+
+        return ERROR;
+    }
+
+
 }
