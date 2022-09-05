@@ -24,6 +24,15 @@ import java.time.LocalDate;
 
 /**
  * Rule configuration.
+ * <p>
+ * The ruleCode is unique identifier of the rule.
+ * The rule code must be unique for combination businessRuleCode + variant + version
+ * in general it should be created as e.g. businessRuleCode_variant_version
+ * <p>
+ * Each rule have the businessRuleCode witch define a whole group of rules that verify
+ * a given business rule in various periods of time.
+ * <p>
+ * Urgent: only one the rule with the same businessRuleCode can be valid for a given time interval (validFrom - validTo)
  *
  * @author Dariusz Skrudlik
  * @version :  $, :  $
@@ -35,7 +44,9 @@ import java.time.LocalDate;
 public class BRuleCfgDto implements Serializable {
 
     @Getter
-    private String ruleCode; //required, unique rule code - businessRuleCode + variant eg: R602_A
+    private String ruleCode; //required, unique rule code - businessRuleCode + variant eg: R602_A_ver_1
+
+    private String variant; // on period defined by validFrom - validTo only one version with businessRuleCode is allowed
 
     private String version; // on period defined by validFrom - validTo only one version with businessRuleCode is allowed
 
@@ -55,9 +66,9 @@ public class BRuleCfgDto implements Serializable {
 
     private String severity;
 
-    private LocalDate validFrom; // start date of the period validity
+    private LocalDate validFrom; // start date of the period validity (null means every time)
 
-    private LocalDate validTo; // end date of the period validity
+    private LocalDate validTo; // end date of the period validity (null means every time)
 
     private boolean critical;
 
