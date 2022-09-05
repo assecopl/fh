@@ -25,20 +25,19 @@ import pl.fhframework.fhbr.api.service.ValidationMessageSeverity;
 public class ValidationMessageImpl implements ValidationMessage {
 
     private String message; //message or message key
-    private ValidationMessageSeverity validationMessageSeverity;
+    private ValidationMessageSeverity severity; // default warning
     private String pointer;
     private String ruleCode;
 
-    public ValidationMessageImpl(ValidationMessageSeverity validationMessageSeverity, String message, String pointer) {
-        this.validationMessageSeverity = validationMessageSeverity;
+    public ValidationMessageImpl(ValidationMessageSeverity severity, String message, String pointer) {
         this.message = message;
         this.pointer = pointer;
+        this.setSeverity(severity);
     }
-
 
     public ValidationMessageImpl() {
+        this.setSeverity(ValidationMessageSeverity.WARNING);
     }
-
 
     @Override
     public String getMessage() {
@@ -54,13 +53,16 @@ public class ValidationMessageImpl implements ValidationMessage {
 
     @Override
     public ValidationMessageSeverity getSeverity() {
-        return validationMessageSeverity;
+        return severity;
     }
 
 
     @Override
     public void setSeverity(ValidationMessageSeverity severity) {
-        this.validationMessageSeverity = severity;
+        if (severity == null) {
+            throw new IllegalArgumentException("The message severity can't bu null");
+        }
+        this.severity = severity;
     }
 
 
@@ -88,8 +90,8 @@ public class ValidationMessageImpl implements ValidationMessage {
 
     public String toString() {
         StringBuilder sb = new StringBuilder().append("{");
-        if (validationMessageSeverity != null)
-            sb.append("\"severity\": \"").append(validationMessageSeverity).append("\"");
+        if (severity != null)
+            sb.append("\"severity\": \"").append(severity).append("\"");
         if (ruleCode != null)
             sb.append(sb.length() > 1 ? ", " : "").append("\"ruleCode\": \"").append(ruleCode).append("\"");
         ;

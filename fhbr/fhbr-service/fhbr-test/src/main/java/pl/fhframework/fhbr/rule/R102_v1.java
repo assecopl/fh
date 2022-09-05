@@ -13,26 +13,31 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.api.checker;
+package pl.fhframework.fhbr.rule;
 
-import pl.fhframework.fhbr.api.exception.RuleException;
-import pl.fhframework.fhbr.api.model.BRuleDto;
 import pl.fhframework.fhbr.api.service.ValidationContext;
-import pl.fhframework.fhbr.api.service.ValidationResult;
+import pl.fhframework.fhbr.api.service.ValidationMessage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Interface for the validation engine service of the definied type
- *
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 07/07/2022
+ * @created 26/08/2022
  */
-public interface CheckerTypeService<C extends ValidationContext> {
+public class R102_v1 implements R102 {
 
-//    void setValidationMessageFactory(ValidationMessageFactory validationMessageFactory);
+    @Override
+    public List<ValidationMessage> execute(ValidationContext validationContext, int age, int shoeSizeNumber) {
+//        public List<ValidationMessage> execute(BRuleDto dto, ValidationContext validationContext, int age, int shoeSizeNumber) {
+//
+        List<ValidationMessage> msgList = new ArrayList<>();
 
-    ValidationResult validate(Object object, C context, List<BRuleDto> rules) throws RuleException;
+        if (age > shoeSizeNumber) {
+            msgList.add(validationContext.createError("Age should be less than shoe size number (v1)"));
+        }
 
+        return msgList;
+    }
 }

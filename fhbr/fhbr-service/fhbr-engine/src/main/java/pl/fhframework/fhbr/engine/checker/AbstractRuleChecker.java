@@ -19,10 +19,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.fhframework.fhbr.api.checker.CheckerTypeService;
 import pl.fhframework.fhbr.api.config.ValidatorFeature;
+import pl.fhframework.fhbr.api.exception.RuleException;
+import pl.fhframework.fhbr.api.exception.ValidationException;
 import pl.fhframework.fhbr.api.model.BRuleDto;
-import pl.fhframework.fhbr.api.service.ValidateContext;
 import pl.fhframework.fhbr.api.service.ValidationMessage;
 import pl.fhframework.fhbr.api.service.ValidationResult;
+import pl.fhframework.fhbr.engine.context.InternalValidationContext;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -33,12 +35,12 @@ import java.util.List;
  * @version :  $, :  $
  * @created 08/07/2022
  */
-public abstract class AbstractRuleChecker implements CheckerTypeService {
+public abstract class AbstractRuleChecker implements CheckerTypeService<InternalValidationContext> {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
-    public ValidationResult validate(Object object, ValidateContext context, List<BRuleDto> rules) {
+    public ValidationResult validate(Object object, InternalValidationContext context, List<BRuleDto> rules) {
 
         ValidationResult validationResult = new ValidationResult();
         boolean trace = Boolean.parseBoolean(System.getProperty(ValidatorFeature.RULE_TRACE, "false"));
@@ -56,13 +58,16 @@ public abstract class AbstractRuleChecker implements CheckerTypeService {
                     validationResult.addValidationMessage(m);
                 });
             } catch (Exception e) {
-                throw new RuntimeException("Execution error '" + rule.getName() + "' : " + (rule.getBusinessKey() != null ? rule.getBusinessKey() : ""), e);
+                if (!(e instanceof ValidationException)) {
+                    e = new RuleException(rule.getConfig().getRuleCode(), rule.getDefinition().getRuleClassName(), e);
+                }
+                throw (ValidationException) e;
             } finally {
                 BigDecimal duration = new BigDecimal((System.nanoTime() - time) / (1000000.0)).setScale(1, RoundingMode.HALF_UP);
                 if (duration.longValue() > warn_duration) {
-                    logger.warn("{}: {}[ms]", rule.getRuleClass(), duration);
+                    logger.warn("{}: {}[ms]", rule.getDefinition().getRuleClassName(), duration);
                 } else if (trace) {
-                    logger.info("{}: {}[ms]", rule.getRuleClass(), duration);
+                    logger.info("{}: {}[ms]", rule.getDefinition().getRuleClassName(), duration);
                 }
             }
         }
@@ -79,6 +84,6 @@ public abstract class AbstractRuleChecker implements CheckerTypeService {
      * @return List<IValidationMessage> list of validation massages (not null)
      * @throws Exception
      */
-    protected abstract List<ValidationMessage> check(Object object, ValidateContext context, BRuleDto rule) throws Exception;
+    protected abstract List<ValidationMessage> check(Object object, InternalValidationContext context, BRuleDto rule) throws Exception;
 
 }

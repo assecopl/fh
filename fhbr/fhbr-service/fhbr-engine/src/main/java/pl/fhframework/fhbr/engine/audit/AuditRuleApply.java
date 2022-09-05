@@ -13,23 +13,21 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.api.dao;
+package pl.fhframework.fhbr.engine.audit;
 
-import pl.fhframework.fhbr.api.model.BRuleDto;
-import pl.fhframework.fhbr.api.model.ModuleDto;
-
-import java.time.LocalDate;
-import java.util.List;
+import pl.fhframework.fhbr.api.model.BRuleCfgDto;
 
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 06/07/2022
+ * @created 31/08/2022
  */
-public interface ModuleDao {
+public class AuditRuleApply extends AuditPoint {
 
-    List<BRuleDto> findRules(String code, String phase, boolean active, LocalDate onDate);
+    private final BRuleCfgDto ruleCfgDto;
 
-    ModuleDto findModule(String moduleCode, String phase);
-
+    public AuditRuleApply(BRuleCfgDto ruleCfgDto) {
+        super("RuleApply");
+        this.ruleCfgDto = ruleCfgDto;
+    }
 }

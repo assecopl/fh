@@ -13,26 +13,30 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.api.checker;
+package pl.fhframework.fhbr.rule;
 
-import pl.fhframework.fhbr.api.exception.RuleException;
-import pl.fhframework.fhbr.api.model.BRuleDto;
+import pl.fhframework.fhbr.api.rule.SimpleRule;
 import pl.fhframework.fhbr.api.service.ValidationContext;
-import pl.fhframework.fhbr.api.service.ValidationResult;
+import pl.fhframework.fhbr.example.TestObject;
 
-import java.util.List;
+import java.math.BigDecimal;
 
 /**
- * Interface for the validation engine service of the definied type
- *
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 07/07/2022
+ * @created 11/07/2022
  */
-public interface CheckerTypeService<C extends ValidationContext> {
+public class R101 implements SimpleRule<TestObject> {
 
-//    void setValidationMessageFactory(ValidationMessageFactory validationMessageFactory);
+    @Override
+    public boolean isValid(TestObject targetObject, ValidationContext context) throws Exception {
 
-    ValidationResult validate(Object object, C context, List<BRuleDto> rules) throws RuleException;
+        //IF active THEN amount must by greater than zero
+        return targetObject.getActive() != null && (!targetObject.getActive() ||
+                (targetObject.getActive() && targetObject.getAmount() != null
+                        && (targetObject.getAmount().compareTo(BigDecimal.ZERO) > 1)
+                )
+        );
+    }
 
 }

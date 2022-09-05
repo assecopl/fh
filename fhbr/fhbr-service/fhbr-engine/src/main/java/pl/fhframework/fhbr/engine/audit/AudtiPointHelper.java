@@ -13,26 +13,23 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.api.checker;
+package pl.fhframework.fhbr.engine.audit;
 
-import pl.fhframework.fhbr.api.exception.RuleException;
-import pl.fhframework.fhbr.api.model.BRuleDto;
-import pl.fhframework.fhbr.api.service.ValidationContext;
-import pl.fhframework.fhbr.api.service.ValidationResult;
-
-import java.util.List;
+import com.google.gson.GsonBuilder;
+import pl.fhframework.fhbr.api.audit.AuditData;
 
 /**
- * Interface for the validation engine service of the definied type
- *
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 07/07/2022
+ * @created 01/09/2022
  */
-public interface CheckerTypeService<C extends ValidationContext> {
+public class AudtiPointHelper {
 
-//    void setValidationMessageFactory(ValidationMessageFactory validationMessageFactory);
-
-    ValidationResult validate(Object object, C context, List<BRuleDto> rules) throws RuleException;
-
+    public static String toJson(AuditData auditData, boolean preatyPriny) {
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        if (preatyPriny) {
+            gsonBuilder.setPrettyPrinting();
+        }
+        return gsonBuilder.create().toJson(auditData);
+    }
 }

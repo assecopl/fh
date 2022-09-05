@@ -13,26 +13,29 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.api.checker;
+package pl.fhframework.fhbr.api.model;
 
-import pl.fhframework.fhbr.api.exception.RuleException;
-import pl.fhframework.fhbr.api.model.BRuleDto;
-import pl.fhframework.fhbr.api.service.ValidationContext;
-import pl.fhframework.fhbr.api.service.ValidationResult;
-
-import java.util.List;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
- * Interface for the validation engine service of the definied type
- *
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 07/07/2022
+ * @created 15/07/2022
  */
-public interface CheckerTypeService<C extends ValidationContext> {
+@Setter
+@Getter
+@Data
+public class BRuleSetDto {
 
-//    void setValidationMessageFactory(ValidationMessageFactory validationMessageFactory);
+    private String code; //unique rule set code
 
-    ValidationResult validate(Object object, C context, List<BRuleDto> rules) throws RuleException;
+    private String description; //
 
+    private boolean schemaValidator; // if tested object should be pre validate with schema validator
+
+    private String schemaNamespace; // target schema namespace for schema validation
+
+    private boolean listValidator; //  if tested object should be pre validate with list validator
 }

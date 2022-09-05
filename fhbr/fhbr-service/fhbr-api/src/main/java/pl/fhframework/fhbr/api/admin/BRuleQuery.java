@@ -13,26 +13,12 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.api.checker;
-
-import pl.fhframework.fhbr.api.exception.RuleException;
-import pl.fhframework.fhbr.api.model.BRuleDto;
-import pl.fhframework.fhbr.api.service.ValidationContext;
-import pl.fhframework.fhbr.api.service.ValidationResult;
-
-import java.util.List;
+package pl.fhframework.fhbr.api.admin;
 
 /**
- * Interface for the validation engine service of the definied type
- *
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 07/07/2022
+ * @created 19/08/2022
  */
-public interface CheckerTypeService<C extends ValidationContext> {
-
-//    void setValidationMessageFactory(ValidationMessageFactory validationMessageFactory);
-
-    ValidationResult validate(Object object, C context, List<BRuleDto> rules) throws RuleException;
-
+public class BRuleQuery {
 }

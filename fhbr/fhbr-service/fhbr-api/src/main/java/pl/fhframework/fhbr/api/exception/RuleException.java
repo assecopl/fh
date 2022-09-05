@@ -12,33 +12,31 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package pl.fhframework.fhbr.api.service;
+
+package pl.fhframework.fhbr.api.exception;
+
+import lombok.Getter;
 
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 05/07/2022
+ * @created 06/07/2022
  */
-public enum ValidationMessageSeverity {
-    CRITICAL, //critical
-    ERROR, //error
-    WARNING, //warning
-    INFORMATION; //info - ok
+@Getter
+public class RuleException extends ValidationException {
 
-    public static boolean isErrorOrAbove(ValidationMessageSeverity severity) {
-        return severity != null && severity.ordinal() >= ValidationMessageSeverity.ERROR.ordinal();
+    private static final String ruleExceptionMessageKey = "fhbr.exception.ruleException";
+
+    public RuleException(String ruleCode, Throwable t) {
+        this(ruleExceptionMessageKey, ruleCode, null, t);
     }
 
-    public static ValidationMessageSeverity fromString(String value) {
-        try {
-            if (value != null) {
-                return ValidationMessageSeverity.valueOf(value);
-            }
-        } catch (Exception ignore) {
-        }
-
-        return ERROR;
+    public RuleException(String ruleCode, String ruleClassName, Throwable t) {
+        this(ruleExceptionMessageKey, ruleCode, ruleClassName, t);
     }
 
+    public RuleException(String message, String ruleCode, String ruleClassName, Throwable t) {
+        super(message, ruleExceptionMessageKey, t, ruleCode, ruleClassName);
+    }
 
 }

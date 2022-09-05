@@ -13,26 +13,24 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.api.checker;
+package pl.fhframework.fhbr.api.admin;
 
-import pl.fhframework.fhbr.api.exception.RuleException;
-import pl.fhframework.fhbr.api.model.BRuleDto;
-import pl.fhframework.fhbr.api.service.ValidationContext;
-import pl.fhframework.fhbr.api.service.ValidationResult;
-
-import java.util.List;
+import pl.fhframework.fhbr.api.dao.BRuleSetDao;
 
 /**
- * Interface for the validation engine service of the definied type
- *
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 07/07/2022
+ * @created 19/08/2022
  */
-public interface CheckerTypeService<C extends ValidationContext> {
+public interface AdminServiceFactory {
 
-//    void setValidationMessageFactory(ValidationMessageFactory validationMessageFactory);
-
-    ValidationResult validate(Object object, C context, List<BRuleDto> rules) throws RuleException;
+    /**
+     * Dostęp do serwisu administraycjnego
+     *
+     * @param uid        - identyfikator użytkownika
+     * @param ruleSetDao -
+     * @return
+     */
+    AdminService newInstance(String uid, BRuleSetDao ruleSetDao);
 
 }

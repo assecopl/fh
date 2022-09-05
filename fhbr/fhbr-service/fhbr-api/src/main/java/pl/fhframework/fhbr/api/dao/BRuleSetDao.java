@@ -13,26 +13,37 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.api.checker;
+package pl.fhframework.fhbr.api.dao;
 
-import pl.fhframework.fhbr.api.exception.RuleException;
 import pl.fhframework.fhbr.api.model.BRuleDto;
-import pl.fhframework.fhbr.api.service.ValidationContext;
-import pl.fhframework.fhbr.api.service.ValidationResult;
+import pl.fhframework.fhbr.api.model.BRuleSetDto;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
- * Interface for the validation engine service of the definied type
+ * DAO for BRuleSet
  *
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 07/07/2022
+ * @created 06/07/2022
  */
-public interface CheckerTypeService<C extends ValidationContext> {
+public interface BRuleSetDao {
 
-//    void setValidationMessageFactory(ValidationMessageFactory validationMessageFactory);
+    BRuleSetDto findRuleSet(String ruleSetCode);
 
-    ValidationResult validate(Object object, C context, List<BRuleDto> rules) throws RuleException;
+    List<BRuleDto> findRuleSetRules(String ruleSetCode, boolean active, LocalDate onDate);
+
+
+    /**
+     * Find active rule on date
+     *
+     * @param businessRuleCode
+     * @param onDate
+     * @return
+     */
+    BRuleDto findActiveRule(String businessRuleCode, LocalDate onDate);
+
+    List<BRuleDto> findActiveRules(List<String> businessRuleCode, LocalDate onDate);
 
 }

@@ -13,26 +13,27 @@
  * governing permissions and limitations under the License.
  */
 
-package pl.fhframework.fhbr.api.model;
+package pl.fhframework.fhbr.api.exception;
 
-import lombok.Data;
 import lombok.Getter;
-import lombok.Setter;
 
 /**
  * @author Dariusz Skrudlik
  * @version :  $, :  $
- * @created 15/07/2022
+ * @created 06/07/2022
  */
-@Setter
 @Getter
-@Data
-public class ModuleDto {
+public class RuleCreationException extends RuleException {
 
-    private String code;
+    static final String messageKey = "fhbr.exception.ruleCreationException";
 
-    private boolean scheamaValidator;
-    private String namespace;
+    @Override
+    public String getLocalizedMessage() {
+        return RuleCreationException.messageKey;
+    }
 
-    private boolean listValidator;
+    public RuleCreationException(String ruleCode, Throwable t) {
+        super(RuleCreationException.messageKey, ruleCode, t);
+    }
+
 }
