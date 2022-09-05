@@ -19,7 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import pl.fhframework.fhbr.api.checker.CheckerTypeService;
 import pl.fhframework.fhbr.api.dao.BRuleSetDao;
 import pl.fhframework.fhbr.api.dao.XsdRepositoryDao;
-import pl.fhframework.fhbr.api.exception.RuleValidationException;
+import pl.fhframework.fhbr.api.exception.ValidationException;
 import pl.fhframework.fhbr.api.model.BRuleDto;
 import pl.fhframework.fhbr.api.model.BRuleSetDto;
 import pl.fhframework.fhbr.api.service.*;
@@ -63,28 +63,36 @@ public class ValidatorServiceImpl implements ValidatorService {
         InternalValidationContext context = new DelegateValidationContextImpl(new MainValidationContextImpl(messageFactory, this, ruleSetCode, validateObject.getOnDate()));
         ValidationResult validationResult = new ValidationResult(context.getAuditPoint());
 
-        BRuleSetDto bRuleSetDto = bRuleSetDao.findRuleSet(ruleSetCode);
-        if (bRuleSetDto == null) {
-            ValidationMessage m = messageFactory.newInstance();
-            m.setSeverity(ValidationMessageSeverity.CRITICAL);
-            m.setMessage("pl.fhframework.fhbr.message.error.unknownRuleSetCode");
-            validationResult.addValidationMessage(m);
-        }
-
-        if (bRuleSetDto.isSchemaValidator()) {
-            new DaoXsdResolverFactory(xsdRepositoryDao, context.getInitialOnDate());
-            ValidationResult partialResult = new SchemaValidatorHelper(new DaoXsdResolverFactory(xsdRepositoryDao, LocalDate.now()), messageFactory)
-                    .validate(bRuleSetDto.getSchemaNamespace(), (byte[]) validateObject.getObject());
-            rewriteValidationMessage(partialResult.getValidationResultMessages(), validationResult);
-            if (!validationResult.getValid()) {
-                return validationResult;
+        try {
+            BRuleSetDto bRuleSetDto = bRuleSetDao.findRuleSet(ruleSetCode);
+            if (bRuleSetDto == null) {
+                ValidationMessage m = messageFactory.newInstance();
+                m.setSeverity(ValidationMessageSeverity.CRITICAL);
+                m.setMessage("pl.fhframework.fhbr.message.error.unknownRuleSetCode");
+                validationResult.addValidationMessage(m);
             }
+
+            if (bRuleSetDto.isSchemaValidator()) {
+                new DaoXsdResolverFactory(xsdRepositoryDao, context.getInitialOnDate());
+                ValidationResult partialResult = new SchemaValidatorHelper(new DaoXsdResolverFactory(xsdRepositoryDao, LocalDate.now()), messageFactory)
+                        .validate(bRuleSetDto.getSchemaNamespace(), (byte[]) validateObject.getObject());
+                rewriteValidationMessage(partialResult.getValidationResultMessages(), validationResult);
+                if (!validationResult.getValid()) {
+                    return validationResult;
+                }
+            }
+
+            List<ValidationMessage> validationMessages = applyRuleSet(context, ruleSetCode, validateObject);
+            rewriteValidationMessage(validationMessages, validationResult);
+
+            context.getAuditPoint().finish();
+        } catch (Throwable e) {
+            if (!(e instanceof ValidationException)) {
+                e = new ValidationException(ruleSetCode, e);
+            }
+            ((ValidationException) e).logError();
+            throw (ValidationException) e;
         }
-
-        List<ValidationMessage> validationMessages = applyRuleSet(context, ruleSetCode, validateObject);
-        rewriteValidationMessage(validationMessages, validationResult);
-
-        context.getAuditPoint().finish();
 
         return validationResult;
     }
@@ -118,11 +126,7 @@ public class ValidatorServiceImpl implements ValidatorService {
                 .forEach((ruleType, ruleTypeLists) -> {
                     CheckerTypeService checkerTypeService = null;
 
-                    try {
-                        checkerTypeService = prepareCheckerTypeService(ruleType);
-                    } catch (Exception e) {
-                        throw new RuleValidationException("fhbr.exception.createRuleValidatorService", null, null, e);
-                    }
+                    checkerTypeService = prepareCheckerTypeService(ruleType);
 
                     ValidationResult partialResult = checkerTypeService.validate(validateObject.getObject(), context, ruleTypeLists);
                     validationMessages.addAll(partialResult.getValidationResultMessages());
@@ -170,7 +174,7 @@ public class ValidatorServiceImpl implements ValidatorService {
             if (bRuleDto != null) {
                 T rule = (T) ruleInstanceFactory.getRuleInstance(bRuleDto);
                 if (ruleFunction.isBiFunction()) {
-                    //TODO: add validatorContext decorator ?
+                    //add validatorContext decorator
                     ValidationContextImpl ruleContext = new ValidationContextImpl(validationContext, bRuleDto.getConfig());
                     try {
                         return ruleFunction.getBiFunction().apply(ruleContext, rule);
@@ -187,7 +191,11 @@ public class ValidatorServiceImpl implements ValidatorService {
     }
 
     private CheckerTypeService prepareCheckerTypeService(String checkerType) {
-        return checkerTypeCollection.get(checkerType);
+        try {
+            return checkerTypeCollection.get(checkerType);
+        } catch (Exception e) {
+            throw new ValidationException("fhbr.exception.prepareCheckerTypeService", e, checkerType);
+        }
     }
 
     private void rewriteValidationMessage(List<ValidationMessage> validationMessages, ValidationResult t) {

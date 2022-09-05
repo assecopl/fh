@@ -23,21 +23,17 @@ import lombok.Getter;
  * @created 06/07/2022
  */
 @Getter
-public class RuleValidationException extends RuntimeException {
+public class RuleCreationException extends RuleException {
 
-    private String ruleSetCode;
-    private String ruleCode;
+    static final String messageKey = "fhbr.exception.ruleCreationException";
 
-    public RuleValidationException(String messageKey, String ruleSetCode, String ruleCode) {
-        super(messageKey);
-        this.ruleSetCode = ruleSetCode;
-        this.ruleCode = ruleCode;
+    @Override
+    public String getLocalizedMessage() {
+        return RuleCreationException.messageKey;
     }
 
-    public RuleValidationException(String messageKey, String ruleSetCode, String ruleCode, Throwable t) {
-        super(messageKey, t);
-        this.ruleSetCode = ruleSetCode;
-        this.ruleCode = ruleCode;
+    public RuleCreationException(String ruleCode, Throwable t) {
+        super(RuleCreationException.messageKey, ruleCode, t);
     }
 
 }

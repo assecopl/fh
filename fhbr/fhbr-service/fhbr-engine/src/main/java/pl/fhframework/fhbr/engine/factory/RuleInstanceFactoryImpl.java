@@ -16,7 +16,8 @@
 package pl.fhframework.fhbr.engine.factory;
 
 import org.slf4j.LoggerFactory;
-import pl.fhframework.fhbr.api.exception.RuleValidationException;
+import pl.fhframework.fhbr.api.exception.RuleCreationException;
+import pl.fhframework.fhbr.api.exception.RuleException;
 import pl.fhframework.fhbr.api.model.BRuleDto;
 
 /**
@@ -26,17 +27,19 @@ import pl.fhframework.fhbr.api.model.BRuleDto;
  */
 public class RuleInstanceFactoryImpl {
 
-    public Object getRuleInstance(BRuleDto rule) throws RuleValidationException {
+    public Object getRuleInstance(BRuleDto rule) throws RuleException {
+        String ruleClassName = null;
+        String ruleCode = null;
         try {
-            Object ruleInstance = Class.forName(rule.getDefinition().getRuleClassName(), true, this.getClass().getClassLoader()).newInstance();
+            ruleCode = rule.getConfig().getRuleCode();
+            ruleClassName = rule.getDefinition().getRuleClassName();
+            Object ruleInstance = Class.forName(ruleClassName, true, this.getClass().getClassLoader()).newInstance();
 
             return ruleInstance;
         } catch (Exception e) {
-            LoggerFactory.getLogger(RuleInstanceFactoryImpl.class).error("Rule '{}' - {} [{}]: {} - error: {}",
-                    rule.getConfig().getName(),
-                    rule.getConfig().getBusinessRuleCode(),
-                    rule.getId(), rule.getDefinition().getRuleExpression(), e);
-            throw new RuleValidationException("fhbr.exception.createRuleValidatorService", null, rule.getConfig().getRuleCode(), e);
+            LoggerFactory.getLogger(RuleInstanceFactoryImpl.class).error("Rule creation error '{}', class name {} - error: {}",
+                    ruleCode, ruleClassName, e);
+            throw new RuleCreationException(ruleCode, e);
         }
     }
 }
