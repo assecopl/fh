@@ -15,7 +15,8 @@
 
 package pl.fhframework.fhbr.validator;
 
-import org.slf4j.LoggerFactory;
+import pl.fhframework.fhbr.api.exception.RuleException;
+import pl.fhframework.fhbr.api.exception.ValidationException;
 import pl.fhframework.fhbr.api.model.BRuleDto;
 import pl.fhframework.fhbr.api.rule.ComplexRule;
 import pl.fhframework.fhbr.api.rule.SimpleRule;
@@ -48,10 +49,11 @@ public class RuleClazzChecker extends AbstractRuleChecker {
                 if (!ruleChecker.isValid(object, context)) {
                     validationMessages.add(ruleContext.getMessageFactory().prepareValidationMessage(rule.getConfig()));
                 }
-            } else {
+            } else if (ruleInstance instanceof ComplexRule) {
                 ComplexRule ruleChecker = (ComplexRule) ruleInstance;
-
                 checkResult = ruleChecker.check(object, ruleContext, rule);
+            } else {
+                throw new ValidationException("fhbr.validation.unknownRuleType", "ruleType", object.getClass().getName());
             }
 
             if (checkResult != null) {
@@ -59,10 +61,9 @@ public class RuleClazzChecker extends AbstractRuleChecker {
             }
 
         } catch (Exception e) {
-            LoggerFactory.getLogger(RuleClazzChecker.class).error("Rule '{}' - {} [{}]: {} - error: {}",
-                    rule.getConfig().getName(),
-                    rule.getConfig().getBusinessRuleCode(),
-                    rule.getId(), rule.getDefinition().getRuleExpression(), e);
+            if (!(e instanceof ValidationException)) {
+                e = new RuleException(rule.getConfig().getRuleCode(), rule.getDefinition().getRuleClassName(), e);
+            }
             throw e;
         } finally {
             ruleContext.getAuditPoint().finish();

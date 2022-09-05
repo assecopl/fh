@@ -15,6 +15,7 @@
 
 package pl.fhframework.fhbr.api.checker;
 
+import pl.fhframework.fhbr.api.exception.RuleException;
 import pl.fhframework.fhbr.api.model.BRuleDto;
 import pl.fhframework.fhbr.api.service.ValidationContext;
 import pl.fhframework.fhbr.api.service.ValidationResult;
@@ -32,6 +33,6 @@ public interface CheckerTypeService<C extends ValidationContext> {
 
 //    void setValidationMessageFactory(ValidationMessageFactory validationMessageFactory);
 
-    ValidationResult validate(Object object, C context, List<BRuleDto> rules);
+    ValidationResult validate(Object object, C context, List<BRuleDto> rules) throws RuleException;
 
 }

@@ -16,9 +16,8 @@
 package pl.fhframework.fhbr.api.exception;
 
 import lombok.Getter;
-
-import java.util.HashMap;
-import java.util.Map;
+import org.slf4j.LoggerFactory;
+import pl.fhframework.fhbr.api.service.ValidatorService;
 
 /**
  * @author Dariusz Skrudlik
@@ -28,36 +27,52 @@ import java.util.Map;
 @Getter
 public class ValidationException extends RuntimeException {
 
-    private String msgKey;
-    private Map<String,String> msgProperties;
+    private final String messageKey;
 
-    public ValidationException(String message, String msgKey, Map<String,String> msgProperties) {
+    private final Object[] argArray;
+
+    private boolean logged = false;
+
+    @Override
+    public String getLocalizedMessage() {
+        return messageKey;
+    }
+
+    public ValidationException(String message, String... argArray) {
         super(message);
-        this.msgKey = msgKey;
-        this.msgProperties = msgProperties;
+        this.messageKey = "fhbr.exception.generalException";
+        this.argArray = argArray;
     }
 
-    public ValidationException(String message, String msgKey, Map<String,String> msgProperties, Throwable t) {
+    public ValidationException(String message, Throwable t, String... argArray) {
         super(message, t);
-        this.msgKey = msgKey;
-        this.msgProperties = msgProperties;
+        this.messageKey = "fhbr.exception.generalException";
+        this.argArray = argArray;
+        if (t != null && t instanceof ValidationException) {
+            logged = ((ValidationException) t).isLogged();
+        }
     }
 
-    public ValidationException(String msgKey, Map<String, String> msgProperties) {
-        this.msgKey = msgKey;
-        this.msgProperties = msgProperties;
+    public ValidationException(String messageKey, String message, Throwable t, String... argArray) {
+        super(message, t);
+        this.messageKey = messageKey;
+        this.argArray = argArray;
+        if (t != null && t instanceof ValidationException) {
+            logged = ((ValidationException) t).isLogged();
+        }
     }
 
-    public ValidationException(String msgKey, String key, String value) {
-        this.msgKey = msgKey;
-        this.msgProperties = new HashMap<>();
-        this.msgProperties.put(key, value);
+
+    private boolean isLogged() {
+        return logged || (this.getCause() != null && this.getCause() != this && this.getCause() instanceof ValidationException && ((ValidationException) this.getCause()).isLogged());
     }
 
-    public ValidationException(String msgKey, String key, String value, Throwable t) {
-        super(t);
-        this.msgKey = msgKey;
-        this.msgProperties = new HashMap<>();
-        this.msgProperties.put(key, value);
+    public void logError() {
+        if (!isLogged()) {
+            logged = true;
+            LoggerFactory.getLogger(ValidatorService.class).error("{} [args: {}]",
+                    this.getClass().getSimpleName(), argArray, this);
+        }
     }
+
 }

@@ -19,7 +19,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.fhframework.fhbr.api.checker.CheckerTypeService;
 import pl.fhframework.fhbr.api.config.ValidatorFeature;
-import pl.fhframework.fhbr.api.model.BRuleCfgDto;
+import pl.fhframework.fhbr.api.exception.RuleException;
+import pl.fhframework.fhbr.api.exception.ValidationException;
 import pl.fhframework.fhbr.api.model.BRuleDto;
 import pl.fhframework.fhbr.api.service.ValidationMessage;
 import pl.fhframework.fhbr.api.service.ValidationResult;
@@ -52,13 +53,15 @@ public abstract class AbstractRuleChecker implements CheckerTypeService<Internal
 
         for (BRuleDto rule : rules) {
             long time = System.nanoTime();
-            BRuleCfgDto ruleConfig = rule.getConfig();
             try {
                 check(object, context, rule).stream().forEach(m -> {
                     validationResult.addValidationMessage(m);
                 });
             } catch (Exception e) {
-                throw new RuntimeException("Execution error '" + ruleConfig.getName() + "' : " + ruleConfig.getRuleCode(), e);
+                if (!(e instanceof ValidationException)) {
+                    e = new RuleException(rule.getConfig().getRuleCode(), rule.getDefinition().getRuleClassName(), e);
+                }
+                throw (ValidationException) e;
             } finally {
                 BigDecimal duration = new BigDecimal((System.nanoTime() - time) / (1000000.0)).setScale(1, RoundingMode.HALF_UP);
                 if (duration.longValue() > warn_duration) {
