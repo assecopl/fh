@@ -66,10 +66,7 @@ public class ValidatorServiceImpl implements ValidatorService {
         try {
             BRuleSetDto bRuleSetDto = bRuleSetDao.findRuleSet(ruleSetCode);
             if (bRuleSetDto == null) {
-                ValidationMessage m = messageFactory.newInstance();
-                m.setSeverity(ValidationMessageSeverity.CRITICAL);
-                m.setMessage("pl.fhframework.fhbr.message.error.unknownRuleSetCode");
-                validationResult.addValidationMessage(m);
+                throw new ValidationException("fhbr.exception.unknownRuleSetCode", ruleSetCode);
             }
 
             if (bRuleSetDto.isSchemaValidator()) {
