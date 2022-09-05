@@ -21,6 +21,7 @@ import pl.fhframework.fhbr.engine.ValidatorServiceImpl;
 import pl.fhframework.fhbr.engine.audit.AuditPoint;
 import pl.fhframework.fhbr.engine.audit.AuditRulSetStart;
 
+import java.time.Clock;
 import java.time.LocalDate;
 
 /**
@@ -39,14 +40,17 @@ public class MainValidationContextImpl {
     @Getter
     private final ValidatorServiceImpl validatorService;
     @Getter
+    private final Clock clock;
+    @Getter
     private final AuditPoint auditPoint;
 
 
-    public MainValidationContextImpl(ValidationMessageFactory messageFactory, ValidatorServiceImpl validatorService, String initialRuleSetCode, LocalDate onDate) {
+    public MainValidationContextImpl(ValidationMessageFactory messageFactory, ValidatorServiceImpl validatorService, String initialRuleSetCode, LocalDate onDate, Clock clock) {
         this.messageFactory = messageFactory;
         this.validatorService = validatorService;
         this.initialRuleSetCode = initialRuleSetCode;
         this.initialOnDate = onDate != null ? onDate : LocalDate.now();
+        this.clock = clock;
         this.auditPoint = new AuditRulSetStart(initialRuleSetCode);
     }
 

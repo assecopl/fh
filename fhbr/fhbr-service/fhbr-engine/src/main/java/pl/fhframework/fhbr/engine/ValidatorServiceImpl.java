@@ -31,6 +31,7 @@ import pl.fhframework.fhbr.engine.factory.RuleInstanceFactoryImpl;
 import pl.fhframework.fhbr.validator.schema.SchemaValidatorHelper;
 import pl.fhframework.fhbr.validator.schema.xsd.resolver.DaoXsdResolverFactory;
 
+import java.time.Clock;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Supplier;
@@ -47,20 +48,24 @@ public class ValidatorServiceImpl implements ValidatorService {
     private final XsdRepositoryDao xsdRepositoryDao;
     private final ValidationMessageFactory messageFactory;
     private final Map<String, CheckerTypeService> checkerTypeCollection;
+    private final Clock internalClock;
     private final RuleInstanceFactoryImpl ruleInstanceFactory = new RuleInstanceFactoryImpl();
 
 
-    public ValidatorServiceImpl(ValidationMessageFactory messageFactory, BRuleSetDao bRuleSetDao, XsdRepositoryDao xsdRepositoryDao, Map<String, CheckerTypeService> checkerTypeCollection) {
+    public ValidatorServiceImpl(ValidationMessageFactory messageFactory, BRuleSetDao bRuleSetDao, XsdRepositoryDao xsdRepositoryDao, Map<String, CheckerTypeService> checkerTypeCollection, Clock clock) {
         this.messageFactory = messageFactory;
         this.bRuleSetDao = bRuleSetDao;
         this.xsdRepositoryDao = xsdRepositoryDao;
         this.checkerTypeCollection = checkerTypeCollection;
+        this.internalClock = clock;
     }
 
     @Override
     public ValidationResult validate(String ruleSetCode, ValidateObject validateObject) {
 
-        InternalValidationContext context = new DelegateValidationContextImpl(new MainValidationContextImpl(messageFactory, this, ruleSetCode, validateObject.getOnDate()));
+        InternalValidationContext context = new DelegateValidationContextImpl(
+                new MainValidationContextImpl(messageFactory, this, ruleSetCode, validateObject.getOnDate(), internalClock)
+        );
         ValidationResult validationResult = new ValidationResult(context.getAuditPoint());
 
         try {

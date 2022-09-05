@@ -21,6 +21,7 @@ import pl.fhframework.fhbr.engine.ValidatorServiceImpl;
 import pl.fhframework.fhbr.engine.audit.AuditCheckPoint;
 import pl.fhframework.fhbr.engine.audit.AuditPoint;
 
+import java.time.Clock;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.function.BiFunction;
@@ -57,6 +58,11 @@ public class DelegateValidationContextImpl implements InternalValidationContext 
     @Override
     public ValidationMessageFactory getMessageFactory() {
         return validationContext != null ? validationContext.getMessageFactory() : mainValidationContext.getMessageFactory();
+    }
+
+    @Override
+    public Clock getClock() {
+        return validationContext != null ? validationContext.getClock() : mainValidationContext.getClock();
     }
 
     public ValidatorServiceImpl getValidatorService() {

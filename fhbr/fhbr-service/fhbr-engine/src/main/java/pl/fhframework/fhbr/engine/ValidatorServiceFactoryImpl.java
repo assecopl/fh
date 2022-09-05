@@ -43,19 +43,36 @@ public class ValidatorServiceFactoryImpl implements ValidatorServiceFactory {
         //prepare registered checkers
         Map<String, CheckerTypeService> checkerTypeCollection = new HashMap<>();
 
-        config.getCheckerTypeRegistry().forEach((type, checkerTypeServiceFactory) ->
-                checkerTypeCollection.put(type, checkerTypeServiceFactory.newInstance())
+        config.getCheckerTypeRegistry().forEach((type, checkerTypeServiceFactory) -> {
+                    CheckerTypeService checkerTypeService = checkerTypeServiceFactory.newInstance();
+                    if (checkerTypeService == null) {
+                        throw new IllegalArgumentException("The checker factory '" + type + "' can't produced null object");
+                    }
+                    checkerTypeCollection.put(type, checkerTypeService);
+                }
         );
-        //prepare module dao
-        BRuleSetDao bRuleSetDao = config.getModuleDaoFactory().newInstance();
+//        if (checkerTypeCollection.isEmpty()) {
+//            throw new IllegalArgumentException("At lest one 'checkerType' must be registered");
+//        }
 
+        //prepare module dao
+        if (config.getModuleDaoFactory() == null) {
+            throw new IllegalArgumentException("The 'moduleDaoFactory' can't be null");
+        }
+        BRuleSetDao bRuleSetDao = config.getModuleDaoFactory().newInstance();
+        if (bRuleSetDao == null) {
+            throw new IllegalArgumentException("The moduleDao factory can't produced null object");
+        }
         XsdRepositoryDao xsdRepositoryDao = null;
         if (config.getXsdRepositoryDaoFactory() != null) {
             xsdRepositoryDao = config.getXsdRepositoryDaoFactory().newInstance();
+            if (bRuleSetDao == null) {
+                throw new IllegalArgumentException("The xsdRepositoryDao factory can't produced null object");
+            }
         }
 
         //create the validator service
-        return new ValidatorServiceImpl(messageFactory, bRuleSetDao, xsdRepositoryDao, checkerTypeCollection);
+        return new ValidatorServiceImpl(messageFactory, bRuleSetDao, xsdRepositoryDao, checkerTypeCollection, config.getClock());
     }
 
 }

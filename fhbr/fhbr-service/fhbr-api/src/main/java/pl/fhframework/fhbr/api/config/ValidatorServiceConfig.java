@@ -22,6 +22,7 @@ import pl.fhframework.fhbr.api.dao.XsdRepositoryDao;
 import pl.fhframework.fhbr.api.factory.Factory;
 import pl.fhframework.fhbr.api.service.ValidationMessageFactory;
 
+import java.time.Clock;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,14 +34,30 @@ import java.util.Map;
 public class ValidatorServiceConfig {
 
     @Getter
-    private Map<String, CheckerTypeServiceFactory> checkerTypeRegistry = new HashMap();
+    private final Map<String, CheckerTypeServiceFactory> checkerTypeRegistry = new HashMap();
 
     public ValidatorServiceConfig addCheckerTypeFactory(String checkerType, CheckerTypeServiceFactory checkerTypeServiceFactory) {
+        if (checkerType == null || checkerType.trim().length() == 0) {
+            throw new IllegalArgumentException("The 'checkerType' can't be empty or null");
+        }
+        if (checkerTypeServiceFactory == null) {
+            throw new IllegalArgumentException("The 'checkerTypeServiceFactory' can't be null");
+        }
         checkerTypeRegistry.put(checkerType, checkerTypeServiceFactory);
         return this;
     }
 
-    private Map<String, String> feature = new HashMap();
+    private final Map<String, String> feature = new HashMap();
+
+    public void setFeature(String featureKey, String featureValue) {
+        if (featureKey == null || featureKey.trim().length() == 0) {
+            throw new IllegalArgumentException("The 'featureKey' can't be empty or null");
+        }
+        if (featureValue == null || featureValue.trim().length() == 0) {
+            throw new IllegalArgumentException("The 'featureValue' can't be empty or null");
+        }
+        feature.put(featureKey, featureValue);
+    }
 
     @Setter
     @Getter
@@ -54,9 +71,13 @@ public class ValidatorServiceConfig {
     @Setter
     private ValidationMessageFactory messageFactory;
 
-    public void setFeature(String featureKey, String featureValue) {
-        feature.put(featureKey, featureValue);
+    @Getter
+    private Clock clock = Clock.systemDefaultZone();
+
+    public void setClock(Clock clock) {
+        if (clock == null) {
+            throw new IllegalArgumentException("The 'clock' can't be null");
+        }
+        this.clock = clock;
     }
-
-
 }

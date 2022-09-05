@@ -17,6 +17,7 @@ package pl.fhframework.fhbr.api.service;
 
 import pl.fhframework.fhbr.api.model.BRuleCfgDto;
 
+import java.time.Clock;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.function.BiFunction;
@@ -54,6 +55,13 @@ public interface ValidationContext {
      * @return
      */
     ValidationMessageFactory getMessageFactory();
+
+    /**
+     * Clock - represent time zone for current calidation service
+     *
+     * @return clock
+     */
+    Clock getClock();
 
     /**
      * Apply additional rule set during current validation process
