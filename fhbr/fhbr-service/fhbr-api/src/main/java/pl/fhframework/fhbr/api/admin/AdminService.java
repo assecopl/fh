@@ -15,7 +15,9 @@
 
 package pl.fhframework.fhbr.api.admin;
 
+import pl.fhframework.fhbr.api.exception.AlreadyExistsException;
 import pl.fhframework.fhbr.api.model.BRuleCfgDto;
+import pl.fhframework.fhbr.api.model.BRuleDefDto;
 import pl.fhframework.fhbr.api.model.BRuleSetDto;
 
 import java.util.List;
@@ -53,5 +55,38 @@ public interface AdminService {
      *
      * @param ruleSetDto
      */
-    void createRuleSet(BRuleSetDto ruleSetDto);
+    void createRuleSet(BRuleSetDto ruleSetDto) throws AlreadyExistsException;
+
+    void updateRuleSet(BRuleSetDto ruleSetDto);
+
+    /**
+     * Delete ruleSet and all links between that ruleSet and rules
+     *
+     * @param ruleSetCode - rule set code
+     * @return
+     */
+    boolean deleteRuleSet(String ruleSetCode);
+
+    /**
+     * Ling rule to rule set
+     *
+     * @param ruleSetCode - target rule set
+     * @param ruleCode    - rule code
+     * @return
+     */
+    boolean linkRule(String ruleSetCode, String ruleCode);
+
+    /**
+     * unlink rule from rule set
+     *
+     * @param ruleSetCode - rule set code
+     * @param ruleCode    - rule code (unique)
+     * @return true when link found and removed otherwise false
+     */
+    boolean unlinkRule(String ruleSetCode, String ruleCode);
+
+
+    void registerNewRule(BRuleCfgDto ruleCfgDto, BRuleDefDto ruleDefDto) throws AlreadyExistsException;
+
+
 }
