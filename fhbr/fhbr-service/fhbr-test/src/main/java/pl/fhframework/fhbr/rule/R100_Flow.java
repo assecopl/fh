@@ -41,8 +41,6 @@ public class R100_Flow implements ComplexRule<TestObject> {
 
 //                context.subscribeRule("R500", R500.prepare(targetObject.getActive(), targetObject.getAmount()))
 
-        context.subscribeRule(R102.class, r102 -> r102.execute(context, 5, 10));
-
         context.subscribeRule(R102.class, (contex, r102) -> r102.execute(contex, 5, 10));
 
         validationMessages.addAll(context.runSubscribedRules());

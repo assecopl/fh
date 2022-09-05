@@ -15,13 +15,10 @@
 
 package pl.fhframework.fhbr.api.service;
 
-import pl.fhframework.fhbr.api.model.BRuleCfgDto;
-
 import java.time.Clock;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 /**
  * Context for single validation request.
@@ -80,18 +77,52 @@ public interface ValidationContext {
      */
     List<ValidationMessage> applyRuleSet(String ruleSetCode, ValidateObject validateObject);
 
-    <T> List<ValidationMessage> applyRule(Class<T> clazz, Function<T, List<ValidationMessage>> function);
+    /**
+     * Apply rule - immediate run
+     *
+     * @param clazz    - rule interface class (wariant)
+     * @param function - execution delegate
+     * @param <T>      - rule interface type
+     * @return list of validation messages
+     */
+    <T> List<ValidationMessage> applyRule(Class<T> clazz, BiFunction<ValidationContext, T, List<ValidationMessage>> function);
 
-    <T> void subscribeRule(Class<T> clazz, Function<T, List<ValidationMessage>> function);
-
+    /**
+     * Subscribe rule for later (parallel) run
+     *
+     * @param clazz    - rule interface class (wariant)
+     * @param function - execution delegate
+     * @param <T>      - rule interface type
+     */
     <T> void subscribeRule(Class<T> clazz, BiFunction<ValidationContext, T, List<ValidationMessage>> function);
 
+    /**
+     * Run subscribed rules.
+     *
+     * @return list of validation messages
+     */
     List<ValidationMessage> runSubscribedRules();
 
+    /**
+     * Create error message according current context e.g rule
+     *
+     * @return new message
+     */
     ValidationMessage createError(String message);
 
-    ValidationMessage createMessage(BRuleCfgDto ruleCfg);
+    /**
+     * Create message according current context e.g rule
+     *
+     * @return new message
+     */
+    ValidationMessage createMessage();
 
+    /**
+     * Add check point to audit data
+     *
+     * @param checkPointNAme - check point name
+     * @param value          - audited value
+     */
     void addCheckPoint(String checkPointNAme, String value);
 
 }

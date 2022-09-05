@@ -19,6 +19,7 @@ import pl.fhframework.fhbr.api.model.BRuleCfgDto;
 import pl.fhframework.fhbr.api.service.ValidateObject;
 import pl.fhframework.fhbr.api.service.ValidationContext;
 import pl.fhframework.fhbr.api.service.ValidationMessage;
+import pl.fhframework.fhbr.api.service.ValidationMessageSeverity;
 import pl.fhframework.fhbr.engine.audit.AuditPoint;
 import pl.fhframework.fhbr.engine.audit.AuditRuleApply;
 import pl.fhframework.fhbr.engine.checker.RuleFunction;
@@ -29,7 +30,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 /**
  * Context for single validation request.
@@ -51,7 +51,6 @@ public class ValidationContextImpl extends DelegateValidationContextImpl {
         parent.getAuditPoint().addAuditPoint(auditPoint);
     }
 
-
     public AuditPoint getAuditPoint() {
         return this.auditPoint;
     }
@@ -62,17 +61,17 @@ public class ValidationContextImpl extends DelegateValidationContextImpl {
     }
 
     @Override
-    public <T> List<ValidationMessage> applyRule(Class<T> clazz, Function<T, List<ValidationMessage>> function) {
+    public <T> List<ValidationMessage> applyRule(Class<T> clazz, BiFunction<ValidationContext, T, List<ValidationMessage>> function) {
         List<ValidationMessage> result = getValidatorService().applyNow(this, new RuleFunction<T>(clazz, function));
         return result != null ? result : new ArrayList<>();
     }
 
-    @Override
-    public <T> void subscribeRule(Class<T> clazz, Function<T, List<ValidationMessage>> function) {
-        synchronized (this) {
-            subscribedFunctionRules.add(new RuleFunction(clazz, function));
-        }
-    }
+//    @Override
+//    public <T> void subscribeRule(Class<T> clazz, Function<T, List<ValidationMessage>> function) {
+//        synchronized (this) {
+//            subscribedFunctionRules.add(new RuleFunction(clazz, function));
+//        }
+//    }
 
     @Override
     public <T> void subscribeRule(Class<T> clazz, BiFunction<ValidationContext, T, List<ValidationMessage>> function) {
@@ -98,14 +97,14 @@ public class ValidationContextImpl extends DelegateValidationContextImpl {
 
 
     public ValidationMessage createMessage() {
-        return getMessageFactory().prepareValidationMessage(ruleCfgDto);
+        return getMessageFactory().prepareValidationMessage(this.ruleCfgDto);
     }
 
-//    @Override
-//    public ValidationMessage createError(String message) {
-//        ValidationMessage msg = createMessage();
-//        msg.setSeverity(ValidationMessageSeverity.ERROR);
-//        msg.setMessage(message);
-//        return msg;
-//    }
+    @Override
+    public ValidationMessage createError(String message) {
+        ValidationMessage msg = this.createMessage();
+        msg.setSeverity(ValidationMessageSeverity.ERROR);
+        msg.setMessage(message);
+        return msg;
+    }
 }

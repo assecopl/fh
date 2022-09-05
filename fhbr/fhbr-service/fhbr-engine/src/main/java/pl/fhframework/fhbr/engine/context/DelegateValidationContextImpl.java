@@ -15,7 +15,6 @@
 
 package pl.fhframework.fhbr.engine.context;
 
-import pl.fhframework.fhbr.api.model.BRuleCfgDto;
 import pl.fhframework.fhbr.api.service.*;
 import pl.fhframework.fhbr.engine.ValidatorServiceImpl;
 import pl.fhframework.fhbr.engine.audit.AuditCheckPoint;
@@ -25,7 +24,6 @@ import java.time.Clock;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 /**
  * @author Dariusz Skrudlik
@@ -94,12 +92,7 @@ public class DelegateValidationContextImpl implements InternalValidationContext 
     }
 
     @Override
-    public <T> List<ValidationMessage> applyRule(Class<T> clazz, Function<T, List<ValidationMessage>> function) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public <T> void subscribeRule(Class<T> clazz, Function<T, List<ValidationMessage>> function) {
+    public <T> List<ValidationMessage> applyRule(Class<T> clazz, BiFunction<ValidationContext, T, List<ValidationMessage>> function) {
         throw new UnsupportedOperationException();
     }
 
@@ -114,7 +107,7 @@ public class DelegateValidationContextImpl implements InternalValidationContext 
     }
 
     @Override
-    public ValidationMessage createMessage(BRuleCfgDto ruleCfg) {
+    public ValidationMessage createMessage() {
         throw new UnsupportedOperationException();
     }
 }

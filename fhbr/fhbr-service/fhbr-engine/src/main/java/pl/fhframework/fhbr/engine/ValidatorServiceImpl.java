@@ -175,18 +175,13 @@ public class ValidatorServiceImpl implements ValidatorService {
         return () -> {
             if (bRuleDto != null) {
                 T rule = (T) ruleInstanceFactory.getRuleInstance(bRuleDto);
-                if (ruleFunction.isBiFunction()) {
-                    //add validatorContext decorator
-                    ValidationContextImpl ruleContext = new ValidationContextImpl(validationContext, bRuleDto.getConfig());
-                    try {
-                        return ruleFunction.getBiFunction().apply(ruleContext, rule);
-                    } finally {
-                        ruleContext.getAuditPoint().finish();
-                    }
-                } else {
-                    return ruleFunction.getFunction().apply(rule);
+                //add validatorContext decorator
+                ValidationContextImpl ruleContext = new ValidationContextImpl(validationContext, bRuleDto.getConfig());
+                try {
+                    return ruleFunction.getBiFunction().apply(ruleContext, rule);
+                } finally {
+                    ruleContext.getAuditPoint().finish();
                 }
-                //                return function.apply(rule, bRuleDto);
             }
             return Collections.emptyList();
         };

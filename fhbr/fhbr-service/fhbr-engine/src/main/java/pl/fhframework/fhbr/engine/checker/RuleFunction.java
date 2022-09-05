@@ -20,7 +20,6 @@ import pl.fhframework.fhbr.api.service.ValidationMessage;
 
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 /**
  * @author Dariusz Skrudlik
@@ -30,13 +29,13 @@ import java.util.function.Function;
 public class RuleFunction<T> {
 
     private Class<T> clazz;
-    private Function<T, List<ValidationMessage>> function;
+    //    private Function<T, List<ValidationMessage>> function;
     private BiFunction<ValidationContext, T, List<ValidationMessage>> biFunction;
 
-    public RuleFunction(Class<T> clazz, Function<T, List<ValidationMessage>> function) {
-        this.clazz = clazz;
-        this.function = function;
-    }
+//    public RuleFunction(Class<T> clazz, Function<T, List<ValidationMessage>> function) {
+//        this.clazz = clazz;
+//        this.function = function;
+//    }
 
     public RuleFunction(Class<T> clazz, BiFunction<ValidationContext, T, List<ValidationMessage>> bifunction) {
         this.clazz = clazz;
@@ -47,13 +46,13 @@ public class RuleFunction<T> {
         return clazz;
     }
 
-    public Function<T, List<ValidationMessage>> getFunction() {
-        return function;
-    }
+//    public Function<T, List<ValidationMessage>> getFunction() {
+//        return function;
+//    }
 
-    public boolean isBiFunction() {
-        return biFunction != null;
-    }
+//    public boolean isBiFunction() {
+//        return biFunction != null;
+//    }
 
     public BiFunction<ValidationContext, T, List<ValidationMessage>> getBiFunction() {
         return biFunction;
