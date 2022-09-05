@@ -124,7 +124,7 @@ public interface AdminService {
      * @param ruleDefDto - rule definition
      * @return
      */
-    boolean updateBRuleDef(String ruleCode, BRuleDefDto ruleDefDto);
+    boolean updateRuleDef(String ruleCode, BRuleDefDto ruleDefDto);
 
     /**
      * Compilation rule (if applicable)

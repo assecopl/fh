@@ -30,20 +30,42 @@ import java.util.List;
  */
 public interface BRuleSetDao {
 
+    /**
+     * Find ruleSet.
+     *
+     * @param ruleSetCode - rule set code
+     * @return - ruleSet data or null if not exists
+     */
     BRuleSetDto findRuleSet(String ruleSetCode);
 
+    /**
+     * Find rules linked to rule set.
+     *
+     * @param ruleSetCode - rule set code
+     * @param active      - active rule (turn on)
+     * @param onDate      - on date between validFrom and validTo
+     * @return rules or empty list if not exists
+     */
     List<BRuleDto> findRuleSetRules(String ruleSetCode, boolean active, LocalDate onDate);
 
-
     /**
-     * Find active rule on date
+     * Find active/unique rule on date
      *
-     * @param businessRuleCode
-     * @param onDate
-     * @return
+     * @param businessRuleCode - business rule code
+     * @param onDate           - on date between validFrom and validTo
+     * @return - rule data or null
      */
     BRuleDto findActiveRule(String businessRuleCode, LocalDate onDate);
 
+    /**
+     * Find active rules on date.
+     * <p>
+     * Urgent: for the businessRuleCode only one rule can be active and returned
+     *
+     * @param businessRuleCode - business rule code
+     * @param onDate           -  rule with period defined by validFrom - validTo contains the onDate
+     * @return list of uniques rules
+     */
     List<BRuleDto> findActiveRules(List<String> businessRuleCode, LocalDate onDate);
 
 }
