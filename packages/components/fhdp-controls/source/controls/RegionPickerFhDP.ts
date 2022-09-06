@@ -44,10 +44,10 @@ class RegionPickerFhDP extends HTMLFormComponent implements LanguageChangeObserv
         try {
             ($.fn as any).vectorMap('get', 'mapObject')
         } catch {
-            require('jvectormap-next')($);
-            require('jquery-mousewheel')($);
-            ($.fn as any).vectorMap('addMap', 'world_mill', world_mill);
-            ($.fn as any).vectorMap('addMap', 'europe_mill', europe_mill);
+            // require('jvectormap-next')($);
+            // require('jquery-mousewheel')($);
+            // ($.fn as any).vectorMap('addMap', 'world_mill', world_mill);
+            // ($.fn as any).vectorMap('addMap', 'europe_mill', europe_mill);
         }
     }
 
