@@ -1,13 +1,15 @@
 {
   "name": "fhdp-extenders",
-  "version": "4.10.3-SNAPSHOT-1662380454832",
+  "version": "4.10.3-SNAPSHOT-1662453397909",
   "author": {
     "name": "Jakub Kosecki",
     "email": "j.kosecki@doittechnology.pl"
   },
-  "main": "Module.ts",
+  "main": "dist/Module.js",
   "types": "dist/Module.d.ts",
   "scripts": {
+    "prepublish": "node prepublish",
+    "postpublish": "node postpublish",
     "build": "tsc",
     "prepare": "yarn build",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -19,8 +21,8 @@
     "typescript": "3.5.3"
   },
   "dependencies": {
-    "fh-basic-controls": "4.10.3-SNAPSHOT-1662380454832",
-    "fh-forms-handler": "4.10.3-SNAPSHOT-1662380454832",
+    "fh-basic-controls": "4.10.3-SNAPSHOT-1662453397909",
+    "fh-forms-handler": "4.10.3-SNAPSHOT-1662453397909",
     "lodash": "4.17.21",
     "moment": "^2.24.0",
     "moment-timezone": "0.5.34"

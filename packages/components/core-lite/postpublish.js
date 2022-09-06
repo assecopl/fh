@@ -8,6 +8,8 @@ fs.writeFile(ORIG_PKG_PATH, pkgData, function (err) {
     if (err) throw err;
 });
 
+pkgData.main = 'Module.ts';
+
 fs.unlink(CACHED_PKG_PATH, function (err) {
     if (err) throw err;
 });
