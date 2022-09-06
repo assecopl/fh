@@ -37,6 +37,8 @@ public class BRuleDefDto {
 
     private String ruleExpression;
 
+    private boolean compilationRequired;
+
     private String ruleSource;
 
     private byte[] ruleByteCode;
