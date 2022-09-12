@@ -200,13 +200,13 @@ class TablePaged extends Table {
         label.id = labelId;
         label.classList.add('col-form-label');
         label.classList.add('sr-only');
-        label.setAttribute('for', tablePagedTool.id);
         if (tablePagedTool.type === 'select-one') {
             label.innerHTML = 'rowsPerPageSelector';
         } else if (tablePagedTool.classList.contains('table-pagination')) {
             label.innerHTML = 'pagination';
         }
         this.component.setAttribute('aria-describedby', labelId);
+        tablePagedTool.setAttribute('aria-label', label.textContent);
         toolContainer.appendChild(label);
     }
 
