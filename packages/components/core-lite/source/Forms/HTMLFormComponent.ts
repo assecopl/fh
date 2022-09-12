@@ -337,8 +337,9 @@ abstract class HTMLFormComponent extends FormComponent {
                 //Change tooltip trigger to click
                 tooltipOptions.trigger = this.hintTrigger || 'click hover';
                 //Create tooltip element
-                const ttip = document.createElement('button');
+                const ttip = document.createElement('span');
                 ttip.className = 'btn hint-ico-help fa';
+                ttip.setAttribute('tabindex', '0');
 
                 if(this.hintAriaLabel) {
                     ttip.setAttribute('aria-label', this.hintAriaLabel);
@@ -919,8 +920,6 @@ abstract class HTMLFormComponent extends FormComponent {
                 if (HTMLFormComponent.bootstrapColRegexp.test(width)) {
                     //In bootstrap 4 "co-xs-12" was replaced with "col-12" so we need to delete it from string.
                     wrapper.classList.remove('col-' + width.replace('xs-', '-'));
-                } else if (width == "auto") {
-                    wrapper.classList.remove('col-auto');
                 } else if (HTMLFormComponent.bootstrapColWidthRegexp.test(width)) {
                     wrapper.classList.remove('exactWidth');
                     wrapper.style.width = undefined;
@@ -934,8 +933,6 @@ abstract class HTMLFormComponent extends FormComponent {
             if (HTMLFormComponent.bootstrapColRegexp.test(width)) {
                 //In bootstrap 4 "co-xs-12" was replaced with "col-12" so we need to delete it from string.
                 wrapper.classList.add('col-' + width.replace('xs-', '-'));
-            } else if (width == "auto") {
-                wrapper.classList.add('col-auto');
             } else if (HTMLFormComponent.bootstrapColWidthRegexp.test(width)) {
                 wrapper.classList.add('exactWidth');
                 wrapper.style.width = width;
