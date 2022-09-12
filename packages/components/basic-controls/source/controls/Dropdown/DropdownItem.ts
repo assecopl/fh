@@ -28,15 +28,12 @@ class DropdownItem extends OutputLabel {
         this.hintElement = this.component;
 
         this.labelComponent = this.component;
-        this.labelComponent.id = label.id; // przeniesienie identyfikatora z utworzonej etykiety
 
         let element = document.createElement('a');
         element.classList.add('dropdown-item');
         element.id = this.id;
 
-        this.labelComponent.setAttribute('for', this.id);
         this.labelComponent.setAttribute('aria-label', this.fhml.resolveValueTextOrEmpty(this.componentObj.value));
-        element.setAttribute('aria-labeledby', this.labelComponent.id);
 
         if (this.url) {
             element.href = this.url;
