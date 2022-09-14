@@ -1,6 +1,6 @@
 {
   "name": "fhdp-extenders",
-  "version": "4.10.4-SNAPSHOT",
+  "version": "4.10.4-SNAPSHOT-1663158059635",
   "author": {
     "name": "Jakub Kosecki",
     "email": "j.kosecki@doittechnology.pl"
@@ -21,8 +21,8 @@
     "typescript": "3.5.3"
   },
   "dependencies": {
-    "fh-basic-controls": "4.10.4-SNAPSHOT",
-    "fh-forms-handler": "4.10.4-SNAPSHOT",
+    "fh-basic-controls": "4.10.4-SNAPSHOT-1663158059635",
+    "fh-forms-handler": "4.10.4-SNAPSHOT-1663158059635",
     "lodash": "4.17.21",
     "moment": "^2.24.0",
     "moment-timezone": "0.5.34"
