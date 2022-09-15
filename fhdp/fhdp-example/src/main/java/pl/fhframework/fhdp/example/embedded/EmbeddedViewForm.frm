@@ -17,12 +17,12 @@
         <Tab label="Map picker: world">
             <OutputLabel width="md-12" value="[code]&lt;RegionPickerFhDP map=&quot;world&quot; code=&quot;\{pickedCountryCode\}&quot; /&gt;[/code]" />
             <OutputLabel width="md-12" value="Selected contry code {pickedCountryCode}" />
-<!--            <RegionPickerFhDP map="world" code="{pickedCountryCode}"/>-->
+            <RegionPickerFhDP map="world" code="{pickedCountryCode}"/>
         </Tab>
         <Tab label="Map picker: europe">
             <OutputLabel width="md-12" value="[code]&lt;RegionPickerFhDP map=&quot;europe&quot; code=&quot;\{pickedCountryCode\}&quot; /&gt;[/code]" />
             <OutputLabel width="md-12" value="Selected contry code {pickedCountryCode}" />
-<!--            <RegionPickerFhDP map="europe" code="{pickedCountryCode}" />-->
+            <RegionPickerFhDP map="europe" code="{pickedCountryCode}" />
         </Tab>
     </TabContainer>
 </Form>
