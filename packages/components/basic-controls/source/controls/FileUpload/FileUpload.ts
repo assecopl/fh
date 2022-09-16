@@ -79,7 +79,7 @@ class FileUpload extends HTMLFormComponent {
 
             label.innerHTML = text;
 
-            this.inputFileButton.appendChild(label);
+            fileUpload.appendChild(label);
             this.labelElement = label;
         }
 
@@ -88,7 +88,7 @@ class FileUpload extends HTMLFormComponent {
             inputFile.multiple = true;
         }
         inputFile.name = 'file';
-        this.inputFileButton.appendChild(inputFile);
+        fileUpload.appendChild(inputFile);
 
         if (this.extensions) {
             let accept = '';
