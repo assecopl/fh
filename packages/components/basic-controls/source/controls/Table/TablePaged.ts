@@ -266,7 +266,7 @@ class TablePaged extends Table {
                 let sortedBy = this.sortedBy;
                 $('.parent-' + component.id).each(function () {
                     let element = $(this);
-                    if (element.attr('sorter') != sortedBy) {
+                    if (element.attr('data-sorter') != sortedBy) {
                         let icon = element.children();
                         icon.removeClass('fa-sort-amount-down');
                         icon.removeClass('sort-amount-down');
