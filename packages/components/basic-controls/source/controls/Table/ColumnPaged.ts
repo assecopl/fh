@@ -58,7 +58,7 @@ class ColumnPaged extends HTMLFormComponent {
         sorter.classList.add('clearfix');
         sorter.classList.add('sorter');
         sorter.classList.add('parent-' + parentObject.id);
-        sorter.setAttribute('sorter', columnObject.id);
+        sorter.dataset.sorter = columnObject.id;
         let icon = document.createElement('i');
         icon.classList.add('fa');
         icon.classList.add('fa-sort');
