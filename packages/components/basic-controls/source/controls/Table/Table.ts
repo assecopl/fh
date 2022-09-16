@@ -433,7 +433,7 @@ class Table extends TableWithKeyboardEvents {
 
             for (let i = this.visibleRows; i < this.minRows; i++) {
                 let rowData = {
-                    id: i,
+                    id: this.id + 'EmptyRow' + i,
                     mainId: i,
                     data: Array.apply(null, new Array(visibleColumnsCount)).map(function (a, b) {
                         return {
@@ -464,6 +464,10 @@ class Table extends TableWithKeyboardEvents {
 
     countVisibleColumns() {
         let result = 0;
+
+        if(this.accessibility == 'HIDDEN' && this.minRows > 0) {
+            return this.components.length;
+        }
 
         this.components.forEach(function (c: any) {
             if (c.componentObj != null && c.componentObj.type.startsWith('Column') && c.accessibility !== 'HIDDEN') {
