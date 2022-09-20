@@ -70,7 +70,7 @@ class FileUpload extends HTMLFormComponent {
             label.classList.add('control-label');
             label.classList.add('fileNames');
             label.classList.add('sr-only');
-            label.setAttribute('for', labelId);
+            label.setAttribute('for', inputFile.id);
 
             let text = this.fhml.removeHtmlTags(this.label);
             if (text.length > 0) {

@@ -960,16 +960,6 @@ abstract class HTMLFormComponent extends FormComponent {
             wrapper.classList.add('inline');
         }
 
-        //if (!skipLabel) {
-        //    let label = document.createElement('label');
-        //    label.classList.add('col-form-label');
-        //    // label.classList.add('card-title');
-        //    label.htmlFor = this.id;
-        //    label.innerHTML = this.fhml.resolveValueTextOrEmpty(this.componentObj.label);
-        //    wrapper.appendChild(label);
-        //    this.labelElement = label;
-        //}
-
         if (!skipLabel) {
 
             const labelValue = this.fhml.resolveValueTextOrEmpty(this.componentObj.label);
@@ -977,18 +967,18 @@ abstract class HTMLFormComponent extends FormComponent {
                 let label = document.createElement('label');
                 label.classList.add('col-form-label');
                 label.classList.add('align-items-end');
-                // label.classList.add('card-title');
                 label.innerHTML = labelValue;
                 label.id = this.id + "_label";
 
-                label.setAttribute('for', this.componentObj.id);
-                //this.component.setAttribute('aria-describedby', label.id);
+                if(!(this.componentObj.type == "TablePaged")){
+                    label.setAttribute('for', this.componentObj.id);
+                }
 
                 wrapper.appendChild(label);
                 this.labelElement = label;
 
                 if (!isInputElement) {
-                    this.component.setAttribute("aria-labelledby", label.id)
+                    this.component.setAttribute("aria-labelledby", label.id)   
                 } else {
                     label.htmlFor = this.id;
                 }
