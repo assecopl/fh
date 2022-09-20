@@ -970,7 +970,7 @@ abstract class HTMLFormComponent extends FormComponent {
                 label.innerHTML = labelValue;
                 label.id = this.id + "_label";
 
-                if(!(this.componentObj.type == "TablePaged")){
+                if(this.componentObj.type != "TablePaged" && this.componentObj.type != "Table"){
                     label.setAttribute('for', this.componentObj.id);
                 }
 
