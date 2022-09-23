@@ -28,6 +28,7 @@ import pl.fhframework.model.dto.ValueChange;
 import pl.fhframework.model.forms.designer.BindingExpressionDesignerPreviewProvider;
 import pl.fhframework.model.forms.provider.IComboDataProviderFhDP;
 import pl.fhframework.model.forms.provider.NameValue;
+import pl.fhframework.core.util.StringUtils;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -715,10 +716,10 @@ public class DictionaryComboFhDP extends ComboFhDP implements IGroupingComponent
     }
 
     private void dictionaryComboValidate(ValidateInput input) {
-        Object testValue = getValueFromProvider(input.getCode());
+        Object inputValue = getValueFromProvider(input.getCode());
         ValidateResult result = new ValidateResult();
         result.setId(input.getId());
-        if(testValue != null) {
+        if(inputValue != null || StringUtils.isNullOrEmpty(input.getCode())) {
             result.setResult(true);
         }
         String jsonResult = toJson(result);
