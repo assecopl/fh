@@ -10,7 +10,7 @@
     <parent>
         <groupId>pl.fhframework</groupId>
         <artifactId>fhCoreLite</artifactId>
-        <version>4.10.0.PL.4-SNAPSHOT</version>
+        <version>4.10.0.PL.4</version>
     </parent>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
