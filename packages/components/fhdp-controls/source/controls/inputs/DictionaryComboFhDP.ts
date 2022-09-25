@@ -446,6 +446,11 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
                         this.rows = newValue;
                         shouldRender = true;
                         break;
+                    case 'accessibility':
+                        if(this.accessibility != newValue && newValue == 'EDIT'){
+                            this.fireEvent('setGuuid', JSON.stringify({id: this.guuid}));
+                        }
+                        break;
                 }
             }.bind(this));
             if(shouldRender) {
