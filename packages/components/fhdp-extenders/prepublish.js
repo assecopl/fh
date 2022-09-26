@@ -2,14 +2,14 @@ const fs = require('fs');
 const path = require('path');
 const ORIG_PKG_PATH = path.resolve(__dirname, 'package.json');
 const CACHED_PKG_PATH = path.resolve(__dirname, 'cached-package.json');
-const pkgData = JSON.stringify(require(CACHED_PKG_PATH), null, 2) + '\n';
+const pkgData = require(ORIG_PKG_PATH);
 
-fs.writeFile(ORIG_PKG_PATH, pkgData, function (err) {
+fs.writeFile(CACHED_PKG_PATH, JSON.stringify(pkgData), function (err) {
     if (err) throw err;
 });
 
-pkgData.main = 'Module.ts';
+pkgData.main = 'dist/Module.js';
 
-fs.unlink(CACHED_PKG_PATH, function (err) {
+fs.writeFile(ORIG_PKG_PATH, JSON.stringify(pkgData, null, 2), function (err) {
     if (err) throw err;
 });

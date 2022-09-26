@@ -176,7 +176,6 @@ public class DictionaryComboFhDP extends ComboFhDP implements IGroupingComponent
     @JsonIgnore
     private String lastCodeSelected;
 
-
     public DictionaryComboFhDP(Form form) {
         super(form);
     }
@@ -513,6 +512,8 @@ public class DictionaryComboFhDP extends ComboFhDP implements IGroupingComponent
                     rawValue = newValue;
                     System.out.println("updateModel... changed rawValue: " + rawValue);
                     filterText = rawValue;
+                    boolean singleSearch = this.rawValue!=null && (!dirty || !getAvailability().equals(AccessibilityEnum.EDIT));
+                    search(singleSearch, true);
                 }
             }
 //            refreshView();
@@ -557,6 +558,7 @@ public class DictionaryComboFhDP extends ComboFhDP implements IGroupingComponent
         log.debug("updateRows. page: " + page);
         rows.clear();
         rows.addAll(pageModel.getPage().getContent());
+
     }
 
 //    private void changePage(Integer newPage, String valueToSearch) {
@@ -591,8 +593,9 @@ public class DictionaryComboFhDP extends ComboFhDP implements IGroupingComponent
         } else {
             pageModel = (PageModel) ReflectionUtils.run(this.getValuesPaged, this.dataProvider, allParamsList.toArray());
             updateRows(pageable);
-        }
 
+        }
+        searchPerformed = true;
 //        updateView();
     }
 

@@ -81,7 +81,9 @@ class InputDateFhDP extends InputTextFhDP implements LanguageChangeObserver {
             defaultDate: InputDateFhDP.isDateValid(this.rawValue, this.format)? this.rawValue : '',
             keepInvalid: true,
             tooltips: this.tooltipsI18n[this.i18n.selectedLanguage],
+            widgetParent : 'body'
         }
+
         this.setAvailableTimeRange();
     }
 

@@ -21,9 +21,13 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>pl.fhframework.fhbr</groupId>
     <artifactId>fhbr-bom</artifactId>
-    <version>4.10.3-SNAPSHOT</version>
+    <version>4.10.4-SNAPSHOT</version>
 
     <packaging>pom</packaging>
+
+    <name>FH BRule</name>
+    <description>FH Business rules handler</description>
+    <url>https://github.com/assecopl/fh</url>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

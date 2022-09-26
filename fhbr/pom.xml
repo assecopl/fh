@@ -22,7 +22,7 @@
     <groupId>pl.fhframework.fhbr</groupId>
     <artifactId>fhbr</artifactId>
     <packaging>pom</packaging>
-    <version>4.10.3-SNAPSHOT</version>
+    <version>4.10.4-SNAPSHOT</version>
     <modules>
         <module>fhbr-bom</module>
         <module>fhbr-service</module>
@@ -30,6 +30,8 @@
     </modules>
 
     <name>FH BRule</name>
+    <description>FH Business rules handler</description>
+    <url>https://github.com/assecopl/fh</url>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

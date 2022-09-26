@@ -1,6 +1,6 @@
 {
   "name": "fhdp-fh-starter",
-  "version": "4.10.3-SNAPSHOT-1660663331473",
+  "version": "4.10.4-SNAPSHOT-1664129655515",
   "author": {
     "name": "Jakub Kosecki",
     "email": "j.kosecki@doittechnology.pl"
@@ -9,6 +9,8 @@
   "main": "dist/Module.js",
   "types": "dist/Module.d.ts",
   "scripts": {
+    "prepublish": "node prepublish",
+    "postpublish": "node postpublish",
     "build": "tsc",
     "docgen": "npx typedoc ./FhApplication.ts",
     "prepare": "yarn build",
@@ -22,10 +24,10 @@
     "typescript": "3.9"
   },
   "dependencies": {
-    "fh-basic-controls": "4.10.3-SNAPSHOT-1660663331473",
-    "fh-charts-controls": "4.10.3-SNAPSHOT-1660663331473",
-    "fh-forms-handler": "4.10.3-SNAPSHOT-1660663331473",
-    "fhdp-controls": "4.10.3-SNAPSHOT-1660663331473",
-    "fhdp-extenders": "4.10.3-SNAPSHOT-1660663331473"
+    "fh-basic-controls": "4.10.4-SNAPSHOT-1664129655515",
+    "fh-charts-controls": "4.10.4-SNAPSHOT-1664129655515",
+    "fh-forms-handler": "4.10.4-SNAPSHOT-1664129655515",
+    "fhdp-controls": "4.10.4-SNAPSHOT-1664129655515",
+    "fhdp-extenders": "4.10.4-SNAPSHOT-1664129655515"
   }
 }
