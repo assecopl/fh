@@ -30,6 +30,8 @@
     </modules>
 
     <name>FH BRule</name>
+    <description>FH Business rules handler</description>
+    <url>https://github.com/assecopl/fh</url>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
