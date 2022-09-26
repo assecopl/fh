@@ -24,6 +24,7 @@ import java.time.Clock;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 /**
  * @author Dariusz Skrudlik
@@ -96,9 +97,20 @@ public class DelegateValidationContextImpl implements InternalValidationContext 
         throw new UnsupportedOperationException();
     }
 
+    @Deprecated
+    @Override
+    public <T> List<ValidationMessage> applyRule(Class<T> clazz, Function<T, List<ValidationMessage>> function) {
+        throw new RuntimeException("Metod has been removed. Use applyRule(Class<T>, BiFunction<ValidationContext, T, List<ValidationMessage>> instead!");
+    }
+
     @Override
     public <T> void subscribeRule(Class<T> clazz, BiFunction<ValidationContext, T, List<ValidationMessage>> function) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public <T> void subscribeRule(Class<T> clazz, Function<T, List<ValidationMessage>> function) {
+        throw new RuntimeException("Metod has been removed. Use subscribeRule(Class<T>, BiFunction<ValidationContext, T, List<ValidationMessage>> instead!");
     }
 
     @Override

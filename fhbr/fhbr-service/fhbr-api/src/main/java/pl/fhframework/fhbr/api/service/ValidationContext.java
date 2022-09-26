@@ -19,6 +19,7 @@ import java.time.Clock;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 /**
  * Context for single validation request.
@@ -87,6 +88,13 @@ public interface ValidationContext {
      */
     <T> List<ValidationMessage> applyRule(Class<T> clazz, BiFunction<ValidationContext, T, List<ValidationMessage>> function);
 
+
+    /**
+     * Not working - only for backward compatibility. Will be removed soon
+     */
+    @Deprecated
+    <T> List<ValidationMessage> applyRule(Class<T> clazz, Function<T, List<ValidationMessage>> function);
+
     /**
      * Subscribe rule for later (parallel) run
      *
@@ -96,6 +104,11 @@ public interface ValidationContext {
      */
     <T> void subscribeRule(Class<T> clazz, BiFunction<ValidationContext, T, List<ValidationMessage>> function);
 
+    /**
+     * Not working - only for backward compatibility. Will be removed soon
+     */
+    @Deprecated
+    <T> void subscribeRule(Class<T> clazz, Function<T, List<ValidationMessage>> function);
     /**
      * Run subscribed rules.
      *
