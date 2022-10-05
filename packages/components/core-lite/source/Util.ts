@@ -20,6 +20,11 @@ class Util {
     }
 
     public getPath(resource) {
+
+        if(!resource){
+            return "";
+        }
+
         if (resource.startsWith('http://') || resource.startsWith('https://') || resource.startsWith('data:')) {
             return resource;
         }
