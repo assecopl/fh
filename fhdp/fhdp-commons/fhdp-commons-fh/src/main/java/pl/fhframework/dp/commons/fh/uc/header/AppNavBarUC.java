@@ -65,7 +65,7 @@ public class AppNavBarUC extends FhdpBaseUC implements INavbar, ISystemUseCase {
     @Value("${translation.lt:true}")
     private boolean translationLT;
 
-    @Value("${translation.no:false}")
+    @Value("${translation.no:true}")
     private boolean translationNO;
 
     @Value("${fhdp.languageDropdown:true}")
@@ -274,6 +274,12 @@ public class AppNavBarUC extends FhdpBaseUC implements INavbar, ISystemUseCase {
     @Action
     public void setLanguageNo() {
         this.setLanguage(AppNavBarForm.Language.NO.getValue());
+    }
+
+    @Action
+    public void setViewkey() {
+
+        this.setLanguage(AppNavBarForm.Language.VIEWKEY.getValue());
     }
 
     private void setLanguage(String lang) {

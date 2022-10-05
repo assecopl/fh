@@ -8,6 +8,7 @@ import pl.fhframework.annotations.Action;
 import pl.fhframework.app.config.DefaultApplicationConfigurer;
 import pl.fhframework.app.config.FhNavbarConfiguration;
 import pl.fhframework.app.preferences.UserPreferencesUC;
+import pl.fhframework.core.i18n.MessageService;
 import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.core.rules.builtin.FhUserUtils;
 import pl.fhframework.core.security.model.IBusinessRole;
@@ -138,6 +139,11 @@ public class NavbarUC implements INavbar, ISystemUseCase, IUseCaseRefreshListene
     @Action
     public void setLanguageEnglish() {
         this.setLanguage(NavbarForm.Language.ENGLISH.getValue());
+    }
+
+    @Action
+    public void setLangViewKey() {
+        this.setLanguage(MessageService.viewKeyLocale.getLanguage());
     }
 
     private void setLanguage(String lang) {

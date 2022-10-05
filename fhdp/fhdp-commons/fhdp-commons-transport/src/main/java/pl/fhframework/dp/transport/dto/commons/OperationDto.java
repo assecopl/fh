@@ -8,13 +8,6 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-/**
- * Klasta transportowa do wykonywania operacji
- *
- * @author <a href="mailto:dariusz_skrudlik@javiko.pl">Dariusz Skrudlik</a>
- * @version :  $, :  $
- * @created 2019-05-31
- */
 @Getter
 @Setter
 public class OperationDto implements Serializable {

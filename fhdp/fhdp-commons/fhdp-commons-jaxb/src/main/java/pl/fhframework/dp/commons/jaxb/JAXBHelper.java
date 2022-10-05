@@ -13,14 +13,6 @@ import java.io.Reader;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * Source and target classess should be JAXB annotated.
- *
- * @author <a href="mailto:dariusz_skrudlik@javiko.pl">Dariusz Skrudlik</a>
- * @version $Revision: 3016 $, $Date: 2019-08-16 16:08:41 +0200 (pt., 16 sie
- * 2019) $
- * @created 09.05.2017
- */
 public class JAXBHelper {
 
     private static Logger log = org.slf4j.LoggerFactory.getLogger(JAXBHelper.class);

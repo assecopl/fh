@@ -1,12 +1,3 @@
-/*
- * BlindSSLSocketFactory.java
- * 
- * Prawa autorskie do oprogramowania i jego kodów źródłowych 
- * przysługują w pełnym zakresie wyłącznie SKG S.A.
- * 
- * All copyrights to software and its source code
- * belong fully and exclusively to SKG S.A.
- */
 package pl.fhframework.dp.commons.utils.net;
 
 import org.slf4j.Logger;
@@ -23,14 +14,6 @@ import java.net.UnknownHostException;
 import java.security.GeneralSecurityException;
 import java.security.cert.X509Certificate;
 
-/**
- * Custom SSL Socket factory class accept server certificate without verifying
- * it. Class can be used for establish secured connection to systems which use
- * self signed certificates.
- *
- * @author <a href="mailto:pawelk@skg.pl">Pawel Kasprzak</a>
- * @version $Revision: 43928 $, $Date: 2013-08-08 09:40:21 +0200 (Cz, 08 sie 2013) $
- */
 public class BlindSSLSocketFactory extends SSLSocketFactory {
 
     private static final Logger logger = LoggerFactory.getLogger(BlindSSLSocketFactory.class);

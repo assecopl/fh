@@ -1,15 +1,6 @@
-/*
- * ParserMessage.java
- *
- */
+
 package pl.fhframework.dp.commons.utils.xml;
 
-/**
- * ParserMessage
- *
- * @author dariuszs
- * @version $Revision: 865 $, $Date: 2010-03-25 08:01:44 +0100 (Cz, 25 mar 2010) $
- */
 public class ParserMessage {
 
     private String message;

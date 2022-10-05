@@ -30,7 +30,7 @@ class InputDateFhDP extends InputTextFhDP implements LanguageChangeObserver {
         "ru": InputTimestampFhDPRu
     };
 
-    /**
+    /*
      * Czy uzywac trybu scislego biblioteki momentjs
      * Na przykład  czy data 2016-12-24T00:00:00.000+00:00 będzie nieprawidłowa dla maski YYYY-MM-DD
      * @type {boolean}
@@ -81,11 +81,7 @@ class InputDateFhDP extends InputTextFhDP implements LanguageChangeObserver {
             defaultDate: InputDateFhDP.isDateValid(this.rawValue, this.format)? this.rawValue : '',
             keepInvalid: true,
             tooltips: this.tooltipsI18n[this.i18n.selectedLanguage],
-        }
-
-        if(this.getFormType() == 'STANDARD'){
-            //Move Widget presentation to body for standard forms.
-            this.dateTimePickerConfig["widgetParent"] = 'body';
+            widgetParent : 'body'
         }
 
         this.setAvailableTimeRange();
@@ -192,12 +188,11 @@ class InputDateFhDP extends InputTextFhDP implements LanguageChangeObserver {
 
     protected makePlaceholder(format: string) {
         if (this.accessibility == 'EDIT') {
-            format = format.replace(new RegExp('Y', 'g'), this.__('year_character').innerText).toLowerCase();
-            format = format.replace(new RegExp('M', 'g'), this.__('month_character').innerText).toLowerCase();
-            format = format.replace(new RegExp('D', 'g'), this.__('day_character').innerText).toLowerCase();
-            format = format.replace(new RegExp('H', 'g'), this.__('hour_character').innerText).toLowerCase();
-
-            return format;
+            format = format.replace(new RegExp('Y', 'g'), this.__('year_character').innerText);
+            format = format.replace(new RegExp('M', 'g'), this.__('month_character').innerText);
+            format = format.replace(new RegExp('D', 'g'), this.__('day_character').innerText);
+            format = format.replace(new RegExp('H', 'g'), this.__('hour_character').innerText);
+            return format.toLowerCase();
         } else {
             return '';
         }
