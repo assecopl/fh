@@ -300,6 +300,9 @@ abstract class HTMLFormComponent extends FormComponent {
             if (this.hintType === 'STATIC' || this.hintType == 'STATIC_POPOVER' || this.hintType == 'STATIC_POPOVER_LEFT') {
                 let tip = $(this.hintElement).attr('aria-describedby');
                 let tipElement = $('#' + tip);
+                if(!tipElement){
+                    tipElement = $(this.hintElement);
+                }
                 if (tipElement) {
                     if(this.hintType == 'STATIC_POPOVER' || this.hintType == 'STATIC_POPOVER_LEFT') {
                         tipElement.popover('hide');
@@ -391,8 +394,6 @@ abstract class HTMLFormComponent extends FormComponent {
                     const element = this.processStaticHintElement(ttip);
                     element ? element.classList.add('hint-static') : null;
                 }
-
-
             }
 
             if (this.hintType == 'STANDARD' || this.hintType == 'STATIC' || this.hintType == 'STATIC_LEFT') {
@@ -462,17 +463,30 @@ abstract class HTMLFormComponent extends FormComponent {
             if (this.hintType === 'STATIC' || this.hintType === 'STATIC_LEFT' || this.hintType == 'STATIC_POPOVER' || this.hintType == 'STATIC_POPOVER_LEFT') {
                 let tip = $(this.hintElement).attr('aria-describedby');
                 let tipElement = $('#' + tip);
-                if (tipElement) {
-                    if(this.hintType == 'STATIC_POPOVER' || this.hintType == 'STATIC_POPOVER_LEFT') {
+                if (tipElement.length) {
+                    if (this.hintType == 'STATIC_POPOVER' || this.hintType == 'STATIC_POPOVER_LEFT') {
                         tipElement.popover('hide');
                         tipElement.popover('disable');
                         tipElement.popover('dispose');
-                    } else {
+                    }
+                    else {
                         tipElement.tooltip('hide');
                         tipElement.tooltip('disable');
                         tipElement.tooltip('dispose');
                     }
-
+                    tipElement.remove();
+                } else {
+                    if (this.hintType == 'STATIC_POPOVER' || this.hintType == 'STATIC_POPOVER_LEFT') {
+                        $(this.hintElement).popover('hide');
+                        $(this.hintElement).popover('disable');
+                        $(this.hintElement).popover('dispose');
+                    }
+                    else {
+                        $(this.hintElement).tooltip('hide');
+                        $(this.hintElement).tooltip('disable');
+                        $(this.hintElement).tooltip('dispose');
+                    }
+                    $(this.hintElement).remove();
                 }
             }
             if (this.hintType == 'STANDARD_POPOVER' || this.hintType == 'STATIC_POPOVER' || this.hintType == 'STATIC_POPOVER_LEFT') {

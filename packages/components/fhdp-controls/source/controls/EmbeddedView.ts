@@ -69,6 +69,7 @@ class EmbeddedView extends HTMLFormComponent {
             else if (userAgent.indexOf("firefox") > -1) { return "firefox";}
             return userAgent;
 
+
     };
 
     getActiveXObject(name) {

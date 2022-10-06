@@ -8,18 +8,6 @@ import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
-/**
- * ParserErrorHandler
- *
- * @author dariuszs
- * @version $Revision: 7671 $, $Date: 2011-06-16 11:54:52 +0200 (Cz, 16 cze 2011) $
- *
- * Prawa autorskie do oprogramowania i jego kodów źródłowych
- * przysługują w pełnym zakresie wyłącznie SKG S.A.
- *
- * All copyrights to software and its source code
- * belong fully and exclusively to SKG S.A.
- */
 class ParserErrorHandler implements ErrorHandler {
 
     protected ParserResult result;

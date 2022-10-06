@@ -28,6 +28,7 @@ public class OperationStatusCheckForm extends Form<OperationStatusCheckForm.Mode
         private OperationStateResponseDto operationStateResponse = new OperationStateResponseDto();
         private OperationStepDto selectedStep;
         private boolean internal = false;
+        private int timerTimeout = 1;
 
         public Model() {
         }

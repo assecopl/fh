@@ -7,13 +7,6 @@ import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.UnsupportedCallbackException;
 import java.io.IOException;
 
-/**
- * Created with IntelliJ IDEA.
- * User: dariuszs
- * Date: 16.10.13
- * Time: 18:17
- * To change this template use File | Settings | File Templates.
- */
 public class KeystorePasswordCallback implements CallbackHandler {
 
     final String login;
