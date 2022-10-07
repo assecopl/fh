@@ -155,7 +155,7 @@ public class ValidatorServiceImpl implements ValidatorService {
         //TODO: group by priority and run parallel
 
         rules.parallelStream().forEach(rule -> {
-            functionRuleMap.get(rule.getConfig().getBusinessRuleCode()).parallelStream().forEach(f -> {
+            functionRuleMap.getOrDefault(rule.getConfig().getBusinessRuleCode(), Collections.emptyList()).parallelStream().forEach(f -> {
                 result.addAll(applyNow(validationContext, rule, f).get());
             });
         });
