@@ -1,6 +1,8 @@
+import {FormComponent} from "./FormComponent";
+
 class FormComponentKeySupport {
     private keyDefinitions: any[];
-    private formElement: any;
+    private formElement: FormComponent;
     private postponedKeyDownHandler: null;
     private keyToHandlerMap: {} | any;
 
@@ -95,7 +97,7 @@ class FormComponentKeySupport {
                     if (this.postponedKeyDownHandler.id != this.formElement.id) {
                         eventSuffix = '#' + this.postponedKeyDownHandler.id;
                     }
-                    this.formElement.fireEvent('onKeyEvent' + eventSuffix, this.postponedKeyDownHandler.onKeyEvent, event.originalEvent);
+                    this.formElement.fireEvent('onKeyEvent' + eventSuffix, this.postponedKeyDownHandler.onKeyEvent);
                     this.postponedKeyDownHandler = null;
                 }
             }
