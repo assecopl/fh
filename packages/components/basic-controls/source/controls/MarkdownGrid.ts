@@ -136,7 +136,7 @@ class MarkdownGrid extends HTMLFormComponent {
             }
 
             this.updateModel();
-            this.fireEvent('onChange', this.onChange, event);
+            this.fireEvent('onChange', this.onChange);
         }.bind(this));
 
         if(this.onFolderDoubleClick && val.directory) {
@@ -147,8 +147,8 @@ class MarkdownGrid extends HTMLFormComponent {
                 let selectedIndex = parseInt(selected.dataset.index);
                 this.selectedIndex = selectedIndex;
                 this.updateModel();
-                this.fireEvent('onChange', this.onChange, event);
-                this.fireEvent('onFolderDoubleClick', this.onFolderDoubleClick, event);
+                this.fireEvent('onChange', this.onChange);
+                this.fireEvent('onFolderDoubleClick', this.onFolderDoubleClick);
             }.bind(this));
         }
 
@@ -196,7 +196,7 @@ class MarkdownGrid extends HTMLFormComponent {
             }
 
             this.updateModel();
-            this.fireEvent('onChange', this.onChange, event);
+            this.fireEvent('onChange', this.onChange);
         }.bind(this));
 
         this.grid.appendChild(wrapper);

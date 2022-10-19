@@ -184,7 +184,7 @@ class InputText extends HTMLFormComponent {
                     this.input.value = '';
                     this.updateModel();
                     if (this.onChange) {
-                        this.fireEventWithLock('onChange', this.onChange, event);
+                        this.fireEventWithLock('onChange', this.onChange);
                     }
                     this.input.focus();
                 }

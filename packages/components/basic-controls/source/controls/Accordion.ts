@@ -91,7 +91,7 @@ class Accordion extends HTMLFormComponent {
                 }
                 this.activeGroup = button.dataset.index;
                 this.changesQueue.queueValueChange(this.activeGroup);
-                this.fireEvent('onGroupChange', this.onGroupChange, event);
+                this.fireEvent('onGroupChange', this.onGroupChange);
             }.bind(this));
         }
 

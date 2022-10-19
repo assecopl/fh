@@ -593,7 +593,7 @@ class Form extends HTMLFormComponent {
         button.classList.add('close');
         button.innerHTML = '&times;';
         button.addEventListener('click', function (event) {
-            this.fireEventWithLock('onManualModalClose', this.onManualModalClose, event);
+            this.fireEventWithLock('onManualModalClose', this.onManualModalClose);
         }.bind(this));
 
         return button;
