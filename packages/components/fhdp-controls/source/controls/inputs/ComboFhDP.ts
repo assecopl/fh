@@ -98,7 +98,7 @@ class ComboFhDP extends InputTextFhDP {
             }
             this.updateModel();
             if (this.onChange && (this.rawValue !== this.oldValue || this.multiselectRawValue !== this.multiselectOldValue)) {
-                this.fireEventWithLock('onChange', this.onChange, event);
+                this.fireEventWithLock('onChange', this.onChange);
                 this.changeToFired = false
             }
         }.bind(this));
@@ -127,7 +127,7 @@ class ComboFhDP extends InputTextFhDP {
                 }
                 this.updateModel();
                 if (this.onChange && (this.rawValue !== this.oldValue || this.multiselectRawValue !== this.multiselectOldValue || this.changeToFired)) {
-                    this.fireEventWithLock('onChange', this.onChange, event);
+                    this.fireEventWithLock('onChange', this.onChange);
                     this.changeToFired = false;
                 }
                 if (shouldBlur) {
@@ -257,7 +257,7 @@ class ComboFhDP extends InputTextFhDP {
 
                 if (this.accessibility === 'EDIT' && !this.blurEventWithoutChange && (this.changeToFired || this.rawValue !== this.oldValue || this.multiselectRawValue !== this.multiselectOldValue || this.forceSendSelectedIndex)) {
                     this.blurEvent = true;
-                    this.fireEventWithLock('onChange', this.onChange, event.originalEvent);
+                    this.fireEventWithLock('onChange', this.onChange);
                     this.changeToFired = false;
                 }
                 this.blurEventWithoutChange = false;
@@ -473,14 +473,14 @@ class ComboFhDP extends InputTextFhDP {
                     }
                     this.updateModel();
                     if (this.onChange && (this.rawValue !== this.oldValue || this.multiselectRawValue !== this.multiselectOldValue)) {
-                        this.fireEventWithLock('onChange', this.onChange, event);
+                        this.fireEventWithLock('onChange', this.onChange);
                         this.changeToFired = false
                     }
                     if (this.onEmptyValue) {
                         if (this._formId === 'FormPreview') {
                             this.fireEvent('onEmptyValue', this.onEmptyValue);
                         } else {
-                            this.fireEventWithLock('onEmptyValue', this.onEmptyValue, event);
+                            this.fireEventWithLock('onEmptyValue', this.onEmptyValue);
                         }
                     }
                 }
@@ -663,7 +663,7 @@ class ComboFhDP extends InputTextFhDP {
 
                     this.updateModel();
                     if (this.onChange && (this.rawValue !== this.oldValue || this.multiselectRawValue !== this.multiselectOldValue)) {
-                        this.fireEventWithLock('onChange', this.onChange, event);
+                        this.fireEventWithLock('onChange', this.onChange);
                         this.changeToFired = false
                     }
                     if (shouldBlur) {
