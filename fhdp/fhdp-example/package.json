@@ -1,6 +1,6 @@
 {
   "name": "example-module",
-  "version": "1.0.0-SNAPSHOT",
+  "version": "1.0.0",
   "main": "Module.ts",
   "private": true,
   "scripts": {
@@ -15,7 +15,6 @@
     "@babel/preset-env": "7.0.0",
     "@types/bootstrap": "^4.1.2",
     "@types/jquery": "^3.3.11",
-    "@types/jqueryui": "^1.12.4",
     "babel-loader": "8.0.2",
     "babel-plugin-transform-es2015-template-literals": "6.22.0",
     "compression-webpack-plugin": "6",
@@ -44,7 +43,7 @@
     "zlib": "^1.0.5"
   },
   "dependencies": {
-    "fhdp-charts": "^4.9.26-SNAPSHOT-1648656740663",
-    "fhdp-fh-starter": "^4.9.26-SNAPSHOT-1648656740663"
+    "fhdp-charts": "^4.10.0-PL-6",
+    "fhdp-fh-starter": "^4.10.0-PL-6"
   }
 }

@@ -69,8 +69,8 @@
                 <artifactId>frontend-maven-plugin</artifactId>
                 <version>1.6</version>
                 <configuration>
-                    <installDirectory>./../../packages</installDirectory>
-                    <workingDirectory>./../../packages</workingDirectory>
+                    <installDirectory>./../../packages/applications/default-application</installDirectory>
+                    <workingDirectory>./../../packages/applications/default-application</workingDirectory>
                 </configuration>
                 <executions>
                     <execution>
@@ -80,8 +80,38 @@
                             <goal>install-node-and-yarn</goal>
                         </goals>
                         <configuration>
-                            <nodeVersion>v12.16.2</nodeVersion>
+                            <nodeVersion>v12.22.0</nodeVersion>
                             <yarnVersion>v1.22.10</yarnVersion>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>yarn config</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>yarn</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>config set registry https://registry.yarnpkg.com</arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>yarn cache clean 1/2</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>yarn</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>cache clean</arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>yarn cache clean 2/2</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>yarn</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>--update-checksums</arguments>
                         </configuration>
                     </execution>
                     <execution>
@@ -92,14 +122,13 @@
                         </goals>
                     </execution>
                     <execution>
-                        <id>yarn lerna run build</id>
-                        <phase>generate-resources</phase>
+                        <id>yarn run build</id>
+                        <phase>compile</phase>
                         <goals>
                             <goal>yarn</goal>
                         </goals>
                         <configuration>
-                            <arguments>lerna run build</arguments>
-							<yarnInheritsProxyConfigFromMaven>false</yarnInheritsProxyConfigFromMaven>
+                            <arguments>run build --env.testReg=tak --env.envMode=${NODE_ENV}</arguments>
                         </configuration>
                     </execution>
                 </executions>

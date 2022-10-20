@@ -21,12 +21,7 @@ class InputTimestampFhDP extends InputDateFhDP implements LanguageChangeObserver
             defaultDate: InputDateFhDP.isDateValid(this.rawValue, this.format)? this.rawValue : '',
             keepInvalid: true,
             tooltips: this.tooltipsI18n[this.i18n.selectedLanguage],
-
-        }
-
-        if(this.getFormType() == 'STANDARD'){
-            //Move Widget presentation to body for standard forms.
-            this.dateTimePickerConfig["widgetParent"] = 'body';
+            widgetParent : 'body'
         }
 
         this.setAvailableTimeRange();

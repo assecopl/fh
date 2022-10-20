@@ -177,20 +177,19 @@ public class DictionaryComboFhDP extends ComboFhDP implements IGroupingComponent
     @JsonIgnore
     private String lastCodeSelected;
 
-
     public DictionaryComboFhDP(Form form) {
         super(form);
     }
 
     @Override
     public void init(){
-//        log.debug("init...");
         log.debug("Init...");
         super.init();
         try {
             AutowireHelper.autowire(this, eventRegistry);
             this.resolveDataProvider();
             this.resolveMethods();
+            this.resolveParameters();
 
             columns = dataProvider.getColumnDefinitions();
 //            pageModel = new PageModel<NameValue>(pageable -> initPageModel(pageable));
@@ -463,18 +462,6 @@ public class DictionaryComboFhDP extends ComboFhDP implements IGroupingComponent
         return l;
     }
 
-    public ElementChanges comboParameterModelRefreash() {
-        final ElementChanges elementChanges = super.updateView();
-        log.debug("comboParameterModelRefreash... page: " + page);
-//        if( !firstLoad) {
-//            this.processFiltering("");
-//            this.processFilterBinding(elementChanges, true);
-//            this.refreshView();
-//        }
-        return elementChanges;
-
-    }
-
     @Override
     public ElementChanges updateView() {
         log.debug("updateView... page: " + page);
@@ -526,6 +513,8 @@ public class DictionaryComboFhDP extends ComboFhDP implements IGroupingComponent
                     rawValue = newValue;
                     System.out.println("updateModel... changed rawValue: " + rawValue);
                     filterText = rawValue;
+                    boolean singleSearch = this.rawValue!=null && (!dirty || !getAvailability().equals(AccessibilityEnum.EDIT));
+                    search(singleSearch, true);
                 }
             }
 //            refreshView();
@@ -570,6 +559,7 @@ public class DictionaryComboFhDP extends ComboFhDP implements IGroupingComponent
         log.debug("updateRows. page: " + page);
         rows.clear();
         rows.addAll(pageModel.getPage().getContent());
+
     }
 
 //    private void changePage(Integer newPage, String valueToSearch) {
@@ -604,8 +594,9 @@ public class DictionaryComboFhDP extends ComboFhDP implements IGroupingComponent
         } else {
             pageModel = (PageModel) ReflectionUtils.run(this.getValuesPaged, this.dataProvider, allParamsList.toArray());
             updateRows(pageable);
-        }
 
+        }
+        searchPerformed = true;
 //        updateView();
     }
 
@@ -786,4 +777,14 @@ public class DictionaryComboFhDP extends ComboFhDP implements IGroupingComponent
         private String id;
         private boolean result = false;
     }
+
+
+    private void resolveParameters() {
+        if( this.getValuesParamsList.size() > 0){
+            this.getValuesParamsList.forEach(dictionaryComboParameter -> {
+                dictionaryComboParameter.resolveValue();
+            });
+        }
+    }
+
 }

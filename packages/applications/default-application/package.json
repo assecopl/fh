@@ -1,6 +1,6 @@
 {
   "name": "fh-application",
-  "version": "4.10.0-PL-4",
+  "version": "4.10.0-PL-6",
   "main": "Module.ts",
   "private": true,
   "scripts": {
@@ -10,6 +10,7 @@
     "dev-css-wrapped": "webpack --env.env=development --env.wrapped --progress --watch --display-error-details"
   },
   "devDependencies": {
+    "@types/node": "14.14.36",
     "@types/bootstrap": "4.3.1",
     "@types/jquery": "3.3.31",
     "@types/jqueryui": "1.12.10",
@@ -37,8 +38,9 @@
     "copyfiles": "2.1.1"
   },
   "dependencies": {
-    "fh-forms-handler": "4.10.0-PL-4",
-    "fh-basic-controls": "4.10.0-PL-4",
-    "fh-charts-controls": "4.10.0-PL-4"
+    "fh-forms-handler": "4.10.0-PL-6",
+    "fh-basic-controls": "4.10.0-PL-6",
+    "fh-charts-controls": "4.10.0-PL-6",
+    "fhdp-controls": "4.10.0-PL-6"
   }
 }

@@ -48,7 +48,6 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
         // this.dirty = this.componentObj.dirty;
         // console.log('dirty on create', this.componentObj.dirty)
         this.dirty = false;
-        console.log('-------------this.componentObj.language ---------------', this.componentObj.language )
         this.languageWrapped = this.componentObj.language || null;
         if (this.componentObj.valueFromChangedBinding) {
             this.valueFromChangedBinding = this.componentObj.valueFromChangedBinding;
@@ -58,6 +57,7 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
         }
 
         LanguageResiterer.getInstance(this.i18n).registerLanguags(this);
+
     }
 
     create() {
@@ -77,8 +77,6 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
         const id = `FhDP-dictionary-combo-${+new Date()}`;
         this.getInputGroupElement().id = id
         this.guuid = id;
-
-        this.fireEventWithLock('setGuuid', JSON.stringify({id: this.guuid}));
 
         this.getInputGroupElement().appendChild(self.divTooltip);
 
@@ -153,10 +151,13 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
         if (this.rawValue === undefined || this.rawValue === 'null' || this.rawValue === null || this.rawValue === '') {
             this.input.value = '';
         }
+        if(this.accessibility == 'EDIT') {
+            this.fireEvent('setGuuid', JSON.stringify({id: this.guuid}));
+        }
+
     }
 
     validated(result: boolean) {
-        console.log("validated mark dirty?", result)
         if (result) {
             this.unmarkDirty();
             this.clickInPopup = false;
@@ -189,13 +190,11 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
     }
 
     markDirty() {
-        console.log('mark dirty.')
         this.dirty = true;
         this.changesQueue.queueAttributeChange('dirty', this.dirty);
     }
 
     unmarkDirty() {
-        console.log('unmark dirty.')
         this.dirty = false;
         this.clickInPopup = false;
         this.changesQueue.queueAttributeChange('dirty', this.dirty);
@@ -203,7 +202,6 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
     }
 
     handleRawDataChange(ev) {
-        console.log('handleRawDataChange', ev);
         const content = ev.target.value;
         if (content === '') {
             this.rawValue = null;
@@ -215,7 +213,6 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
     }
 
     handleTextInputChange(ev) {
-        console.log('******* handleTextInputChange', ev)
 
         function isCtrlV(ev: any) {
             let code = ev.keycode || ev.which;
@@ -235,7 +232,6 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
         }
 
         if(isPrintableKey(ev) || isCtrlV(ev)) {
-            console.log('is printable!')
             this.markDirty();
             if (this._writingDebaunceTimer) {
                 clearTimeout(this._writingDebaunceTimer);
@@ -269,7 +265,6 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
     }
 
     handleTextInputBlur(ev) {
-        console.log('blur', this.dirty, this.clickInPopup)
         if (this.dirty && !this.clickInPopup) {
             if (ev.target.value === '' && this.rawValue) {
                 this.fireEventWithLock('recordSelected', null);
@@ -291,8 +286,6 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
 
     async renderPopup() {
         const handlePopupClose = (force?: boolean) => {
-            console.log('is dirty?', this.dirty);
-            console.log('is clickInPopup?', this.clickInPopup);
             if ((!this.dirty && !this.clickInPopup) || force) {
                 this.popupOpen = false;
                 this.renderPopup();
@@ -312,7 +305,6 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
             backgroundColor: this.popupColor,
             position: this.isSearch ? 'left' : 'right',
             fireChangePopupEvent: (attr: {name: string, arg: any}[], event?: string) => {
-                console.log('TEST', event, attr)
                 if (['nextPage', 'prevPage'].indexOf(event) > -1) {
                     this.clickInPopup = true;
                     this.pageChangeClicked = true;
@@ -326,9 +318,7 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
             handleClose: handlePopupClose,
             recordClick: (record: any) => {
                 this.clickInPopup = true;
-                console.log("Clicked record", this.input.value, record.value, this.input.value.startsWith(record.value))
                 if (this.dirty || this.input.value === '' || (this.input.value !== record.value && !this.input.value.startsWith(record.value))) {
-                    console.log('----- Clicked record', record)
                     this.input.value = record.value || '';
                     this.rawValue = record.value;
                     this.fireEventWithLock('recordSelected', record.value);
@@ -400,7 +390,6 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
 
     update(change) {
         super.update(change);
-        console.log("FhDP-update:", change);
         if (change.changedAttributes) {
             let shouldRender = false;
             $.each(change.changedAttributes, function (name, newValue) {
@@ -414,7 +403,6 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
                         shouldRender = true;
                         break;
                     case 'valueFromChangedBinding':
-                        console.log('valueFromChangedBinding', newValue)
                         if (newValue === 'null' || newValue === '') {
                             this.rawValue = null;
                             this.input.value = '';
@@ -459,6 +447,11 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
                     case 'rows':
                         this.rows = newValue;
                         shouldRender = true;
+                        break;
+                    case 'accessibility':
+                        if(this.accessibility != newValue && newValue == 'EDIT'){
+                            this.fireEvent('setGuuid', JSON.stringify({id: this.guuid}));
+                        }
                         break;
                 }
             }.bind(this));

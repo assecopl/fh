@@ -3,13 +3,7 @@ package pl.fhframework.dp.commons.model.entities;
 import java.io.Serializable;
 import java.util.Objects;
 
-/**
- * User: dariuszs
- * Date: 28.10.11
- * Time: 11:41
- *
- * @version $Revision: 1381 $, $Date: 2018-10-12 22:31:29 +0200 (Fri, 12 Oct 2018) $
- */
+
 public class SemaphorePK implements Serializable {
     private static final long serialVersionUID = 1;
 

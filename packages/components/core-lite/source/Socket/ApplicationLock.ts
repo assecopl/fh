@@ -2,7 +2,6 @@ import * as $ from 'jquery';
 import getDecorators from "inversify-inject-decorators";
 import 'bootstrap/js/dist/modal';
 import 'bootstrap/js/dist/tooltip';
-import 'jquery-ui/ui/widgets/dialog';
 import {injectable} from "inversify";
 import {I18n} from "../I18n/I18n";
 import {FhContainer} from "../FhContainer";
@@ -174,8 +173,8 @@ class ApplicationLock {
         if (typeof callback === 'function') {
             callback(content, data);
         }
-        $(dialog).dialog({modal: true, width: 600, closeOnEscape: withClose}).siblings('.ui-dialog-titlebar').remove();
-        $(dialog).dialog("moveToTop");
+
+        $(dialog).modal({backdrop: 'static', keyboard: false});
 
         return dialog;
     }
@@ -192,7 +191,8 @@ class ApplicationLock {
 
     public static closeErrorDialog(dialog: any): void {
         if (document.body.contains(dialog)) {
-            $(dialog).dialog("close");
+            $(dialog).modal("hide");
+            $(dialog).modal("dispose");
         }
     }
 

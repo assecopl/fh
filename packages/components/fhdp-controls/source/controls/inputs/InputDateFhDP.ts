@@ -80,12 +80,8 @@ class InputDateFhDP extends InputTextFhDP implements LanguageChangeObserver {
             format: this.format,
             defaultDate: InputDateFhDP.isDateValid(this.rawValue, this.format)? this.rawValue : '',
             keepInvalid: true,
-            tooltips: this.tooltipsI18n[this.i18n.selectedLanguage],
-        }
-
-        if(this.getFormType() == 'STANDARD'){
-            //Move Widget presentation to body for standard forms.
-            this.dateTimePickerConfig["widgetParent"] = 'body';
+            tooltips: this.tooltipsI18n[this.i18n.selectedLanguage] ? this.tooltipsI18n[this.i18n.selectedLanguage] : this.tooltipsI18n["en"],
+            widgetParent : 'body'
         }
 
         this.setAvailableTimeRange();
@@ -192,12 +188,11 @@ class InputDateFhDP extends InputTextFhDP implements LanguageChangeObserver {
 
     protected makePlaceholder(format: string) {
         if (this.accessibility == 'EDIT') {
-            format = format.replace(new RegExp('Y', 'g'), this.__('year_character').innerText).toLowerCase();
-            format = format.replace(new RegExp('M', 'g'), this.__('month_character').innerText).toLowerCase();
-            format = format.replace(new RegExp('D', 'g'), this.__('day_character').innerText).toLowerCase();
-            format = format.replace(new RegExp('H', 'g'), this.__('hour_character').innerText).toLowerCase();
-
-            return format;
+            format = format.replace(new RegExp('Y', 'g'), this.__('year_character').innerText);
+            format = format.replace(new RegExp('M', 'g'), this.__('month_character').innerText);
+            format = format.replace(new RegExp('D', 'g'), this.__('day_character').innerText);
+            format = format.replace(new RegExp('H', 'g'), this.__('hour_character').innerText);
+            return format.toLowerCase();
         } else {
             return '';
         }
@@ -298,7 +293,7 @@ class InputDateFhDP extends InputTextFhDP implements LanguageChangeObserver {
     languageChanged(code: string) {
         this.input.placeholder = this.makePlaceholder(this.format);
         (<any>$(this.inputGroupElement)).data("DateTimePicker").locale(this.i18n.selectedLanguage);
-        (<any>$(this.inputGroupElement)).data("DateTimePicker").tooltips(this.tooltipsI18n[this.i18n.selectedLanguage]);
+        (<any>$(this.inputGroupElement)).data("DateTimePicker").tooltips(this.tooltipsI18n[this.i18n.selectedLanguage] ? this.tooltipsI18n[this.i18n.selectedLanguage] : this.tooltipsI18n["en"]);
     }
 
     wrap(skipLabel, isInputElement) {

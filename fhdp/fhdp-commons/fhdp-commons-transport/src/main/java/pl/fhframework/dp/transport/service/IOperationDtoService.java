@@ -8,11 +8,6 @@ import pl.fhframework.dp.transport.dto.commons.OperationStateResponseDto;
 
 import java.util.HashMap;
 
-/**
- * @author <a href="mailto:dariusz_skrudlik@javiko.pl">Dariusz Skrudlik</a>
- * @version :  $, :  $
- * @created 2019-05-31
- */
 
 public interface IOperationDtoService<O extends OperationDto, R extends OperationResultBaseDto> {
 

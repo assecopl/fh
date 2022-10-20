@@ -16,6 +16,10 @@ public class GuidUtil {
     }
 
     public static String composeMessageId(String activityId, String processInstanceId) {
-        return (activityId.replace("Activity_", "") + "-" + processInstanceId).replace("-", "");
+        String actId = activityId.replace("Activity_", "");
+        if(actId.length() > 7) {
+            actId = actId.substring(0,7);
+        }
+        return (actId + "-" + processInstanceId).replace("-", "");
     }
 }

@@ -61,6 +61,37 @@ public abstract class ObjectDataComparatorBase<CHANGE, DTO> {
 			return (cf!=null && Arrays.asList(cf.ignore()).contains(ChangeTypeEnum.MODIFIED));
 		}
 	}
+	
+	public static abstract class PathInfo {
+		public abstract Object getObjectID(Object object, Long seqNo);
+		/**
+		 * Return null when default can be used
+		 * @return
+		 */
+		public abstract Comparator<Object> getComparator();
+		/**
+		 * 
+		 * Return null when you don't need special ponters
+		 * 
+		 * @param object
+		 * @param counter
+		 * @param xpath
+		 * 
+		 * @return
+		 */
+		public abstract String getPointer(ObjectDataInfo object, int counter, String xpath);
+	}
+	protected Map<String, PathInfo> registeredClasses = new HashMap<String, ObjectDataComparatorBase.PathInfo>();
+
+	public void registerPathInfo(String path, PathInfo classInfo) {
+		registeredClasses.put(path, classInfo);
+	}
+	
+	protected PathInfo getPathInfo(String path) {
+		String spath = path.replaceAll("\\[[0-9]*\\]", "");
+		return registeredClasses.get(spath);
+	}
+	
 
 	public List<CHANGE> compareDeclarationObjects(DTO before, DTO after, boolean recursive, String[] packagesToCompare) {
 		ObjectDataInfo obDataInfo = new ObjectDataInfo("/");
@@ -110,6 +141,7 @@ public abstract class ObjectDataComparatorBase<CHANGE, DTO> {
 		String rootName = obInfo.rootName;
 		String xPath = obInfo.xPath;
 		String xPathPrefix = getRootXpathPrefix() + xPath;
+		System.out.println(xPath);
 
 		List<CHANGE> changes = new LinkedList<>();
 
@@ -396,6 +428,83 @@ public abstract class ObjectDataComparatorBase<CHANGE, DTO> {
 		if (!oldIsEmpty && !newIsEmpty) {
 			Object t = checkObjCollection.iterator().next();
 		}
+		
+		//nowa funkcjonalność
+		PathInfo pi = getPathInfo(xPath);
+		if(pi!=null) {
+			Map<Object, Object> oldValues = new HashMap<Object, Object>();
+			Map<Object, Object> newValues = new HashMap<Object, Object>();
+			List<Object> keys = new ArrayList<Object>();
+			Long pos = 1L;
+			for(Object item : oldObjCollection) {
+				Object iID = pi.getObjectID(item, pos);
+				oldValues.put(iID, item);
+				keys.add(iID);
+				pos++;
+			}
+			pos = 1L;
+			for(Object item : newObjCollection) {
+				Object iID = pi.getObjectID(item, pos);
+				newValues.put(iID, item);
+				if(!keys.contains(iID)) {
+					keys.add(iID);
+				}
+				pos++;
+			}
+			
+			Comparator<Object> idComparator = new Comparator<Object>() {
+				
+				@Override
+				public int compare(Object firstId, Object secondId) {
+					int retValue = 0;
+					if (firstId != null && secondId != null){
+						if(firstId instanceof Integer && secondId instanceof Integer) {
+							Integer v1 = (Integer) firstId;
+							Integer v2 = (Integer) secondId;
+							retValue = v1.compareTo(v2);
+						} else if (firstId instanceof String && secondId instanceof String) {
+							String v1 = (String) firstId;
+							String v2 = (String) secondId;
+							retValue = v1.compareTo(v2);							
+						} else if (firstId instanceof Long && secondId instanceof Long) {
+							Long v1 = (Long) firstId;
+							Long v2 = (Long) secondId;
+							retValue = v1.compareTo(v2);	
+						}
+					} else if(firstId == null && secondId != null){
+						retValue = 1;
+					} else if(firstId != null){
+						retValue = -1;
+					} else {
+						retValue = -1;//0 eliminuje z listy
+					}
+					return retValue;
+				}
+			};			
+						
+			Iterator<Object> idIter = getIteratorForCompareObjectsCollection(keys, idComparator);
+			int counter = 0;
+			while (idIter.hasNext()) {
+				counter++;
+				Object currentId = idIter.next();
+
+				ObjectDataInfo newObjectDataInfo = new ObjectDataInfo(rootName);
+				newObjectDataInfo.recursive = obInfo.recursive;
+				newObjectDataInfo.packagesToCompare = obInfo.packagesToCompare;
+				newObjectDataInfo.before = oldValues.get(currentId);
+				newObjectDataInfo.after = newValues.get(currentId);
+				String pointer = pi.getPointer(newObjectDataInfo, counter, xPath);
+				if(pointer==null) {
+					pointer = String.valueOf(counter);
+				}
+				newObjectDataInfo.xPath = xPath + "[" + pointer + "]" + getXpathSeparator();
+
+				mergeCollections(changes, compareObject(newObjectDataInfo));
+			}			
+			
+			return changes;
+		}
+		
 
 		Comparator<Object> comparator = new Comparator<Object>() {
 
