@@ -52,7 +52,7 @@ public abstract class GenericBaseListUC<LIST, PARAMS, RESULT> extends FhdpBaseUC
 
     /**
      * Metoda ma zwrócić kwalifikowaną nazwę klasy formularza listy
-     * np. com.skg.vls.vlsi.module.list.ServiceDefinitionsList
+     * np. module.list.ServiceDefinitionsList
      *
      * @return
      */

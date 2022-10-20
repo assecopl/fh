@@ -1,5 +1,6 @@
 package pl.fhframework.core.i18n;
 
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -14,6 +15,7 @@ import pl.fhframework.core.util.StringUtils;
 import pl.fhframework.SessionManager;
 import pl.fhframework.UserSession;
 
+import javax.ejb.Local;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -28,12 +30,21 @@ public class MessageService {
 
     private static final String FH_CORE_MSG_BEAN_NAME = "fhCoreMessageSource";
     private static final String ENUM_KEY_PREFIX = "enum.";
+    public static final String LOCALE_VIEWKEY = "vk";
+    public static final String LOCALE_VIEWKEY_COUNTRY = "viewkey";
+
+    public static final Locale viewKeyLocale = new Locale(LOCALE_VIEWKEY, LOCALE_VIEWKEY_COUNTRY);
 
     @Autowired
     private ApplicationContext applicationContext;
 
     @Value("${fhframework.language.default:pl}")
     private String defaultLanguage;
+
+
+    @Value("${fhframework.language.viewRawKeyMode:false}")
+    @Setter
+    private Boolean viewRawKeyMode = false;
 
     /**
      * Creates specific message bundle with given bundleName.
@@ -92,6 +103,9 @@ public class MessageService {
          */
         public String getMessage(String key, Object[] args, Locale locale, String defaultMessage) {
             Locale foundLocale = getLanguageOrDefault(locale);
+            if(getUserLanguage() != null && getUserLanguage().getLanguage() == MessageService.LOCALE_VIEWKEY) {
+                return key;
+            }
             if (StringUtils.isNullOrEmpty(bundleName)) {
                 return tryFindFirstMessage(key, args, foundLocale, defaultMessage);
             } else {
@@ -112,7 +126,7 @@ public class MessageService {
          * @throws FhFrameworkException if bean with given bundle name is not found
          */
         public String getMessage(String key) {
-            return getMessage(key, null, getUserLanguage(), "Key: " + key + " not found");
+            return getMessage(key, null, getUserLanguage(), getDefaultMessage(key));
         }
 
         /**
@@ -139,7 +153,7 @@ public class MessageService {
          * @throws FhFrameworkException if bean with given bundle name is not found
          */
         public String getMessage(String key, Object[] args) {
-            return getMessage(key, args, getUserLanguage(), "Key: " + key + " not found");
+            return getMessage(key, args, getUserLanguage(), getDefaultMessage(key));
         }
 
         /**
@@ -213,6 +227,13 @@ public class MessageService {
                 return Locale.forLanguageTag(defaultLanguage);
             }
             return locale;
+        }
+
+        private String getDefaultMessage(String key) {
+            if(viewRawKeyMode || getUserLanguage() != null && getUserLanguage().getLanguage() == MessageService.LOCALE_VIEWKEY){
+                return key;
+            }
+            return "Key: " + key + " not found";
         }
 
     }

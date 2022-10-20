@@ -19,7 +19,9 @@ public class AppNavBarForm extends Form<AppNavBarForm.Model> {
         ENGLISH("en"),
         LITHUANIAN("lt"),
         POLISH("pl"),
-        NO("no");
+        NO("no"),
+
+        VIEWKEY("viewkey");
 
         private String value;
 

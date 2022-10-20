@@ -22,7 +22,6 @@ class InputTimestampFhDP extends InputDateFhDP implements LanguageChangeObserver
             keepInvalid: true,
             tooltips: this.tooltipsI18n[this.i18n.selectedLanguage],
             widgetParent : 'body'
-
         }
 
         this.setAvailableTimeRange();

@@ -25,7 +25,7 @@ public class XSLocalDateTimeWithOffsetAdapter extends XmlAdapter<String, LocalDa
 
     public XSLocalDateTimeWithOffsetAdapter() {
         String zone = System.getProperty("fhdp.timeZone", "Europe/Vilnius");
-        this.zone = ZoneId.of(zone); //lepiej gdyby była brana z systemu
+        this.zone = ZoneId.of(zone);
     }
 
     public XSLocalDateTimeWithOffsetAdapter(ZoneId zone) {

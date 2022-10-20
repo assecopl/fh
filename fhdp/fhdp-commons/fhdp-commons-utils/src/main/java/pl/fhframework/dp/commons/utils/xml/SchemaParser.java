@@ -1,7 +1,3 @@
-/*
- * SchemaParser.java
- *
- */
 package pl.fhframework.dp.commons.utils.xml;
 
 
@@ -16,12 +12,7 @@ import javax.xml.validation.Validator;
 import java.io.IOException;
 import java.io.InputStream;
 
-/**
- * SchemaParser
- *
- * @author dariuszs
- * @version $Revision: 7671 $, $Date: 2011-06-16 11:54:52 +0200 (Cz, 16 cze 2011) $
- */
+
 public class SchemaParser {
 
     private static final String xmldsigCoreSchema;

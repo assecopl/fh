@@ -12,10 +12,12 @@ import pl.fhframework.annotations.CompilationTraversable;
 import pl.fhframework.annotations.Control;
 import pl.fhframework.annotations.DocumentedComponent;
 import pl.fhframework.annotations.XMLProperty;
+import pl.fhframework.binding.ActionBinding;
 import pl.fhframework.core.FhCL;
 import pl.fhframework.core.FhException;
 import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.model.dto.ElementChanges;
+import pl.fhframework.model.dto.InMessageEventData;
 import pl.fhframework.model.forms.provider.IComboDataProvider;
 
 import java.lang.reflect.Method;
@@ -64,6 +66,9 @@ public class DictionaryCombo extends Combo implements IGroupingComponent<Diction
     @JsonIgnore
     private List<DictionaryComboParameter> getValueParamsList = new LinkedList<>();
 
+    private boolean initializing = false;
+    private boolean filterEnabled = false;
+
 
     public DictionaryCombo(Form form) {
         super(form);
@@ -76,6 +81,8 @@ public class DictionaryCombo extends Combo implements IGroupingComponent<Diction
         try {
             this.resolveDataProvider();
             this.resolveMethods();
+            this.resolveParameters();
+            this.initializing = true;
         } catch (Exception ex) {
             FhLogger.warn("DictionaryCombo: Provider not found.", ex);
         }
@@ -97,11 +104,7 @@ public class DictionaryCombo extends Combo implements IGroupingComponent<Diction
 
     @Override
     protected boolean processValuesBinding() {
-        boolean valuesChanged = false;
-        if (this.values.isEmpty()) {
-            valuesChanged = processValuesExternal(null);
-        }
-        return valuesChanged;
+        return true;
     }
 
     protected boolean processValuesExternal(String text) {
@@ -123,12 +126,14 @@ public class DictionaryCombo extends Combo implements IGroupingComponent<Diction
 
 
     protected void processFiltering(String text) {
-        filteredObjectValues.clear();
-        processValuesExternal(text);
-        Map<String, List<Object>> filtered = values.entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, p -> p.getValue().stream().collect(Collectors.toList())));
-        filteredObjectValues.putAll(filtered);
-        filterInvoked = true;
+        if(!initializing && this.filterEnabled) {
+            filteredObjectValues.clear();
+            processValuesExternal(text);
+            Map<String, List<Object>> filtered = values.entrySet().stream()
+                    .collect(Collectors.toMap(Map.Entry::getKey, p -> p.getValue().stream().collect(Collectors.toList())));
+            filteredObjectValues.putAll(filtered);
+            filterInvoked = true;
+        }
     }
 
     private void resolveMethods() {
@@ -143,6 +148,7 @@ public class DictionaryCombo extends Combo implements IGroupingComponent<Diction
                     Optional<DictionaryComboParameter> optionalDictComboParam = subcomponents.stream().filter(e -> Objects.equals(e.getName(), paramName)).findFirst();
                     if (optionalDictComboParam.isPresent()) {
                         DictionaryComboParameter dictComboParam = optionalDictComboParam.get();
+
                         this.getValuesParamsList.add(dictComboParam);
                     } else {
                         throw new FhException("No attribute for " + DictionaryComboParameter.class.getSimpleName() + " : " + paramName);
@@ -170,6 +176,35 @@ public class DictionaryCombo extends Combo implements IGroupingComponent<Diction
 
         }
     }
+
+    private void resolveParameters() {
+        if( this.getValuesParamsList.size() > 0){
+            this.getValuesParamsList.forEach(dictionaryComboParameter -> {
+                dictionaryComboParameter.resolveValue();
+            });
+        }
+    }
+
+    /**
+     * Function for geting actual values from DictionaryComboParameter based on its model bindings.
+     *
+     * @param dcp
+     * @return List<Object>
+     */
+    List<Object> getValuesFromDictionaryComboParameters(List<DictionaryComboParameter> dcp) {
+        List<Object> l = new LinkedList<>();
+        dcp.forEach(dictionaryComboParameter -> {
+            BindingResult br = dictionaryComboParameter.getModelBinding().getBindingResult();
+            if (br != null) {
+                l.add(br.getValue());
+            } else {
+                throw new FhException("No attribute for " + DictionaryComboParameter.class.getSimpleName() + " : " + dictionaryComboParameter.getName());
+            }
+        });
+
+        return l;
+    }
+
 
 
     /**
@@ -247,26 +282,6 @@ public class DictionaryCombo extends Combo implements IGroupingComponent<Diction
         return false;
     }
 
-    /**
-     * Function for geting actual values from DictionaryComboParameter based on its model bindings.
-     *
-     * @param dcp
-     * @return List<Object>
-     */
-    List<Object> getValuesFromDictionaryComboParameters(List<DictionaryComboParameter> dcp) {
-        List<Object> l = new LinkedList<>();
-        dcp.forEach(dictionaryComboParameter -> {
-            BindingResult br = dictionaryComboParameter.getModelBinding().getBindingResult();
-            if (br != null) {
-                l.add(br.getValue());
-            } else {
-                throw new FhException("No attribute for " + DictionaryComboParameter.class.getSimpleName() + " : " + dictionaryComboParameter.getName());
-            }
-        });
-
-        return l;
-    }
-
     public ElementChanges comboParameterModelRefreash() {
         final ElementChanges elementChanges = super.updateView();
         this.processFiltering("");
@@ -274,6 +289,54 @@ public class DictionaryCombo extends Combo implements IGroupingComponent<Diction
         this.refreshView();
         return elementChanges;
 
+    }
+
+
+    @Override
+    public ElementChanges updateView() {
+        final ElementChanges elementChanges = super.updateView();
+        boolean selectedBindingChanged = elementChanges.getChangedAttributes().containsKey(RAW_VALUE_ATTR);
+
+        if (freeTypingBinding != null) {
+            freeTyping = freeTypingBinding.resolveValueAndAddChanges(this, elementChanges, freeTyping, FREE_TYPING);
+        }
+        if (emptyValueBinding != null) {
+            emptyValue = emptyValueBinding.resolveValueAndAddChanges(this, elementChanges, emptyValue, EMPTY_VALUE_ATTR);
+        }
+        if (this.cleared) {
+            this.filterText = "";
+            updateFilterTextBinding();
+            processFiltering(this.filterText);
+        }
+        processFilterTextBinding(elementChanges);
+        setFilterFunction();
+        refreshAvailability(elementChanges);
+        boolean valuesChanged = (this.multiselect && languageChanged) || processValuesBinding();
+        if (selectedBindingChanged || valuesChanged ) {
+            processFiltering(this.filterText);
+        }
+        processFilterBinding(elementChanges, valuesChanged);
+        processLabelBinding(elementChanges);
+        processCursorBinding(this, elementChanges);
+
+        this.prepareComponentAfterValidation(elementChanges);
+
+        if (elementChanges.containsAnyChanges()) {
+            refreshView();
+        }
+        this.cleared = false;
+        this.languageChanged = false;
+        this.initializing = false;
+        this.filterEnabled = false;
+
+        return elementChanges;
+    }
+
+    @Override
+    public Optional<ActionBinding> getEventHandler(InMessageEventData eventData) {
+        //Only this component events allow to fire filtering.
+        this.filterEnabled = true;
+        return super.getEventHandler(eventData);
     }
 
 

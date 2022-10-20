@@ -18,7 +18,11 @@ class Anchor extends HTMLFormComponent {
         if (this.parent instanceof HTMLFormComponent) {
             this.container = this.parent.contentWrapper;
         } else {
+
             this.container = (<any>this.parent).container;
+
+
+
         }
 
         this.contentWrapper = this.container;

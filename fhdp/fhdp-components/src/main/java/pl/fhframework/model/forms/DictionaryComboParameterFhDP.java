@@ -53,23 +53,24 @@ public class DictionaryComboParameterFhDP extends FormElement implements Boundab
         }
 
 
-        @Override
-        protected ElementChanges updateView() {
-//            FhLogger.info("DictionaryComboParameterFhDP w updateView");
-            ElementChanges elementChanges = super.updateView();
-            if(modelBinding != null) {
-                BindingResult bindingResult = modelBinding.getBindingResult();
-                if (bindingResult != null) {
-                    String newLabelValue = this.convertValueToString(bindingResult.getValue());
-                    if (!areValuesTheSame(newLabelValue, value)) {
-                        DictionaryComboFhDP combo =((DictionaryComboFhDP) this.getGroupingParentComponent());
-                        this.value = newLabelValue;
-                        elementChanges = combo.comboParameterModelRefreash();
-                    }
-                }
+    @Override
+    protected ElementChanges updateView() {
+        ElementChanges elementChanges = super.updateView();
+        return elementChanges;
+    }
 
+    public String resolveValue() {
+        if(modelBinding != null) {
+            BindingResult bindingResult = modelBinding.getBindingResult();
+            if (bindingResult != null) {
+                String newLabelValue = this.convertValueToString(bindingResult.getValue());
+                if (!areValuesTheSame(newLabelValue, value)) {
+                    this.value = newLabelValue;
+                }
             }
-            return elementChanges;
+
         }
+        return this.value;
+    }
 
     }

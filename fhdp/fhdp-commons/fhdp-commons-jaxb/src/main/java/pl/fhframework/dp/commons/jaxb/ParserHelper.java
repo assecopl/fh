@@ -1,13 +1,4 @@
 package pl.fhframework.dp.commons.jaxb;
-/*
- * ParserHelper.java
- *
- * Prawa autorskie do oprogramowania i jego kodów źródłowych
- * przysługują w pełnym zakresie wyłącznie SKG S.A.
- *
- * All copyrights to software and its source code
- * belong fully and exclusively to SKG S.A.
- */
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -15,11 +6,6 @@ import org.slf4j.LoggerFactory;
 
 import java.nio.charset.Charset;
 
-/**
- * @author <a href="mailto:dariusz_skrudlik@skg.pl">Dariusz Skrudlik</a>
- * @version $Revision: 7534 $, $Date: 2011-06-09 12:37:40 +0200 (Cz, 09 cze 2011) $
- *          <p/>
- */
 public abstract class ParserHelper {
 
     private static final Logger log = LoggerFactory.getLogger(ParserHelper.class);
