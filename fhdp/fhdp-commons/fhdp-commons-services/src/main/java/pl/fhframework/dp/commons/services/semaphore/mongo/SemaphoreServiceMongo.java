@@ -7,6 +7,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -74,30 +75,30 @@ public class SemaphoreServiceMongo implements ISemaphoreService {
     	SemaphoreDto semaphore = mongoTemplate.findById(id, SemaphoreDto.class);        
         if(semaphore == null) {
         	SemaphoreDto nSemaphore = new SemaphoreDto(type, key, value, validityDate);
-        	//must be insert - should return error when other instance wrote it first 
-            mongoTemplate.insert(nSemaphore);
-			log.debug("***** *** lockSemaphore type: {} ;key: {}; value: {}, seconds: {}; result: {} ", type.name(), key, value, seconds, SemaphoreStatusEnum.ValidNew.name());
-            return SemaphoreStatusEnum.ValidNew;
-        }
-        
-        if(semaphore!=null && semaphore.getValue()!=null && !semaphore.getValue().equals(value)) {
+        	//must be insert - should return error when other instance wrote it first
+			result = SemaphoreStatusEnum.ValidNew;
+			try {
+				mongoTemplate.insert(nSemaphore);
+			} catch (DuplicateKeyException ex) {
+				result = SemaphoreStatusEnum.Invalid;
+			}
+        } else if(semaphore.getValue() != null && !semaphore.getValue().equals(value)) {
         	if(semaphore.getLockTime()!=null && semaphore.getLockTime().isAfter(currentDate)) {
-				log.debug("***** *** lockSemaphore type: {} ;key: {}; value: {}, seconds: {}; result: {} ", type.name(), key, value, seconds, SemaphoreStatusEnum.Invalid.name());
-        		return SemaphoreStatusEnum.Invalid;
+				result = SemaphoreStatusEnum.Invalid;
         	}
-        }
-
-        SemaphoreDto newestValue = mongoTemplate.update(SemaphoreDto.class)
-                .matching(query)
-                .apply(update)
-                .withOptions(FindAndModifyOptions.options().returnNew(true)) // Now return the newly updated document when updating
-                .findAndModifyValue();        
-        if(newestValue!=null) {
-        	result = SemaphoreStatusEnum.ValidNew;
-        	if(semaphore!=null && semaphore.getValue()!=null && semaphore.getValue().equals(value)) {
-        		result = SemaphoreStatusEnum.ValidProlonged;
-        	}
-        }
+        } else {
+			SemaphoreDto newestValue = mongoTemplate.update(SemaphoreDto.class)
+					.matching(query)
+					.apply(update)
+					.withOptions(FindAndModifyOptions.options().returnNew(true)) // Now return the newly updated document when updating
+					.findAndModifyValue();
+			if (newestValue != null) {
+				result = SemaphoreStatusEnum.ValidNew;
+				if (semaphore.getValue() != null && semaphore.getValue().equals(value)) {
+					result = SemaphoreStatusEnum.ValidProlonged;
+				}
+			}
+		}
 		log.debug("***** *** lockSemaphore type: {} ;key: {}; value: {}, seconds: {}; result: {} ", type.name(), key, value, seconds, result.name());
         return result;
     	
