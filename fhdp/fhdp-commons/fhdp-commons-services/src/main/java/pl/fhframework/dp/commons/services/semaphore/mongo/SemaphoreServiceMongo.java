@@ -76,11 +76,13 @@ public class SemaphoreServiceMongo implements ISemaphoreService {
         	SemaphoreDto nSemaphore = new SemaphoreDto(type, key, value, validityDate);
         	//must be insert - should return error when other instance wrote it first 
             mongoTemplate.insert(nSemaphore);
+			log.debug("***** *** lockSemaphore type: {} ;key: {}; value: {}, seconds: {}; result: {} ", type.name(), key, value, seconds, SemaphoreStatusEnum.ValidNew.name());
             return SemaphoreStatusEnum.ValidNew;
         }
         
         if(semaphore!=null && semaphore.getValue()!=null && !semaphore.getValue().equals(value)) {
         	if(semaphore.getLockTime()!=null && semaphore.getLockTime().isAfter(currentDate)) {
+				log.debug("***** *** lockSemaphore type: {} ;key: {}; value: {}, seconds: {}; result: {} ", type.name(), key, value, seconds, SemaphoreStatusEnum.Invalid.name());
         		return SemaphoreStatusEnum.Invalid;
         	}
         }
@@ -96,7 +98,7 @@ public class SemaphoreServiceMongo implements ISemaphoreService {
         		result = SemaphoreStatusEnum.ValidProlonged;
         	}
         }
-    	
+		log.debug("***** *** lockSemaphore type: {} ;key: {}; value: {}, seconds: {}; result: {} ", type.name(), key, value, seconds, result.name());
         return result;
     	
     }
