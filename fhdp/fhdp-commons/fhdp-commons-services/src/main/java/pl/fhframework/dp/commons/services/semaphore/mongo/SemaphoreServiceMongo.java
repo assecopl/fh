@@ -99,7 +99,7 @@ public class SemaphoreServiceMongo implements ISemaphoreService {
 				}
 			}
 		}
-		log.debug("***** *** lockSemaphore type: {} ;key: {}; value: {}, seconds: {}; result: {} ", type.name(), key, value, seconds, result.name());
+		log.debug("***** *** LockSemaphore type: {} ;key: {}; value: {}, seconds: {}; result: {} ", type.name(), key, value, seconds, result.name());
         return result;
     	
     }
