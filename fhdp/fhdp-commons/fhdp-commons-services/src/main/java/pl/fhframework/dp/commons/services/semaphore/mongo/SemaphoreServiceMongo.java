@@ -55,12 +55,15 @@ public class SemaphoreServiceMongo implements ISemaphoreService {
     }
 
 	private SemaphoreStatusEnum lockSemaphoreInternal(Enum type, String key, String value, int seconds) {
+		if(type == null || key == null || value == null) {
+			throw new RuntimeException("Incorrect semaphore parameters!");
+		}
 		LocalDateTime currentDate = fetchCurrentDate();
 		LocalDateTime validityDate = currentDate.plusSeconds(seconds);
 
 		String sType = type.name();
 		String id = sType + SemaphoreDto.SEPARATOR + key;
-		SemaphoreStatusEnum result = SemaphoreStatusEnum.Invalid;
+		SemaphoreStatusEnum result;
 
 		Criteria critID = Criteria.where("_id").is(id);
 		Criteria critValueNull = Criteria.where("value").exists(false);
@@ -88,20 +91,24 @@ public class SemaphoreServiceMongo implements ISemaphoreService {
 			} catch (DuplicateKeyException ex) {
 				result = SemaphoreStatusEnum.Invalid;
 			}
-		} else if(semaphore.getValue() != null && !semaphore.getValue().equals(value)) {
-			if(semaphore.getLockTime()!=null && semaphore.getLockTime().isAfter(currentDate)) {
-				result = SemaphoreStatusEnum.Invalid;
-			}
 		} else {
-			SemaphoreDto newestValue = mongoTemplate.update(SemaphoreDto.class)
-					.matching(query)
-					.apply(update)
-					.withOptions(FindAndModifyOptions.options().returnNew(true)) // Now return the newly updated document when updating
-					.findAndModifyValue();
-			if (newestValue != null) {
-				result = SemaphoreStatusEnum.ValidNew;
-				if (semaphore.getValue() != null && semaphore.getValue().equals(value)) {
-					result = SemaphoreStatusEnum.ValidProlonged;
+			if (!semaphore.getValue().equals(value)) {
+				if (semaphore.getLockTime() != null && semaphore.getLockTime().isAfter(currentDate)) {
+					result = SemaphoreStatusEnum.Invalid;
+				} else {
+					result = SemaphoreStatusEnum.ValidNew;
+				}
+			} else {
+				result = SemaphoreStatusEnum.ValidProlonged;
+			}
+			if(!result.equals(SemaphoreStatusEnum.Invalid)) {
+				SemaphoreDto newestValue = mongoTemplate.update(SemaphoreDto.class)
+						.matching(query)
+						.apply(update)
+						.withOptions(FindAndModifyOptions.options().returnNew(true)) // Now return the newly updated document when updating
+						.findAndModifyValue();
+				if (newestValue == null) {
+					result = SemaphoreStatusEnum.Invalid;
 				}
 			}
 		}
