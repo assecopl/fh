@@ -48,45 +48,51 @@ public class SemaphoreServiceMongo implements ISemaphoreService {
     @Override
     @Transactional
     public SemaphoreStatusEnum lockSemaphore(Enum type, String key, String value, int seconds) {
+		SemaphoreStatusEnum ret = lockSemaphoreInternal(type, key, value, seconds);
+		log.debug("***** *** LockSemaphore type: {} ;key: {}; value: {}, seconds: {}; result: {} ", type.name(), key, value, seconds, ret.name());
+        return ret;
     	
-        LocalDateTime currentDate = fetchCurrentDate();
-        LocalDateTime validityDate = currentDate.plusSeconds(seconds); 
-    	
-    	String sType = type.name();
-    	String id = sType + SemaphoreDto.SEPARATOR + key;
-    	SemaphoreStatusEnum result = SemaphoreStatusEnum.Invalid;
-    	
-    	Criteria critID = Criteria.where("_id").is(id);
-    	Criteria critValueNull = Criteria.where("value").exists(false);
-    	Criteria critValue = Criteria.where("value").is(value);
-    	Criteria critlockTime = Criteria.where("lockTime").lt(currentDate);
-    	Criteria crit = new Criteria().andOperator(
-    			critID,
-    			new Criteria().orOperator(
-    					critValueNull,
+    }
+
+	private SemaphoreStatusEnum lockSemaphoreInternal(Enum type, String key, String value, int seconds) {
+		LocalDateTime currentDate = fetchCurrentDate();
+		LocalDateTime validityDate = currentDate.plusSeconds(seconds);
+
+		String sType = type.name();
+		String id = sType + SemaphoreDto.SEPARATOR + key;
+		SemaphoreStatusEnum result = SemaphoreStatusEnum.Invalid;
+
+		Criteria critID = Criteria.where("_id").is(id);
+		Criteria critValueNull = Criteria.where("value").exists(false);
+		Criteria critValue = Criteria.where("value").is(value);
+		Criteria critlockTime = Criteria.where("lockTime").lt(currentDate);
+		Criteria crit = new Criteria().andOperator(
+				critID,
+				new Criteria().orOperator(
+						critValueNull,
 						critValue,
 						critlockTime
-    			)
-    	);
-        
-    	Query query = new Query(crit);
-        Update update = new Update().set("value", value).set("lockTime", validityDate);
-        
-    	SemaphoreDto semaphore = mongoTemplate.findById(id, SemaphoreDto.class);        
-        if(semaphore == null) {
-        	SemaphoreDto nSemaphore = new SemaphoreDto(type, key, value, validityDate);
-        	//must be insert - should return error when other instance wrote it first
+				)
+		);
+
+		Query query = new Query(crit);
+		Update update = new Update().set("value", value).set("lockTime", validityDate);
+
+		SemaphoreDto semaphore = mongoTemplate.findById(id, SemaphoreDto.class);
+		if(semaphore == null) {
+			SemaphoreDto nSemaphore = new SemaphoreDto(type, key, value, validityDate);
+			//must be insert - should return error when other instance wrote it first
 			result = SemaphoreStatusEnum.ValidNew;
 			try {
 				mongoTemplate.insert(nSemaphore);
 			} catch (DuplicateKeyException ex) {
 				result = SemaphoreStatusEnum.Invalid;
 			}
-        } else if(semaphore.getValue() != null && !semaphore.getValue().equals(value)) {
-        	if(semaphore.getLockTime()!=null && semaphore.getLockTime().isAfter(currentDate)) {
+		} else if(semaphore.getValue() != null && !semaphore.getValue().equals(value)) {
+			if(semaphore.getLockTime()!=null && semaphore.getLockTime().isAfter(currentDate)) {
 				result = SemaphoreStatusEnum.Invalid;
-        	}
-        } else {
+			}
+		} else {
 			SemaphoreDto newestValue = mongoTemplate.update(SemaphoreDto.class)
 					.matching(query)
 					.apply(update)
@@ -99,12 +105,10 @@ public class SemaphoreServiceMongo implements ISemaphoreService {
 				}
 			}
 		}
-		log.debug("***** *** LockSemaphore type: {} ;key: {}; value: {}, seconds: {}; result: {} ", type.name(), key, value, seconds, result.name());
-        return result;
-    	
-    }
+		return result;
+	}
 
-    /**
+	/**
      * Unlocking active semaphore.
      *
      * <p/>
@@ -117,57 +121,9 @@ public class SemaphoreServiceMongo implements ISemaphoreService {
     @Override
     @Transactional
     public SemaphoreStatusEnum unlockSemaphore(Enum type, String key, String value) {
-    	
-        LocalDateTime currentDate = fetchCurrentDate();
-    	
-    	String sType = type.name();
-    	String id = sType + SemaphoreDto.SEPARATOR + key;
-    	SemaphoreStatusEnum result = SemaphoreStatusEnum.Invalid;
-    	
-    	Criteria critID = Criteria.where("_id").is(id);
-    	Criteria critValueNull = Criteria.where("value").exists(false);
-    	Criteria critValue = Criteria.where("value").is(value);
-    	Criteria critlockTime = Criteria.where("lockTime").lt(currentDate);
-    	Criteria crit = new Criteria().andOperator(
-    			critID,
-    			new Criteria().orOperator(
-    					critValueNull,
-						critValue,
-						critlockTime
-    			)
-    	);
-        
-    	Query query = new Query(crit);
-        Update update = new Update().set("value", value).set("lockTime", currentDate);
-        
-    	SemaphoreDto semaphore = mongoTemplate.findById(id, SemaphoreDto.class);        
-        if(semaphore == null) {
-        	SemaphoreDto nSemaphore = new SemaphoreDto(type, key, value, currentDate);
-        	//must be insert - should return error when other instance wrote it first 
-            mongoTemplate.insert(nSemaphore);
-            return SemaphoreStatusEnum.ValidNew;
-        }
-        
-        if(semaphore!=null && semaphore.getValue()!=null && !semaphore.getValue().equals(value)) {
-        	if(semaphore.getLockTime()!=null && semaphore.getLockTime().isAfter(currentDate)) {
-        		return SemaphoreStatusEnum.Invalid;
-        	}
-        }
-
-        SemaphoreDto newestValue = mongoTemplate.update(SemaphoreDto.class)
-                .matching(query)
-                .apply(update)
-                .withOptions(FindAndModifyOptions.options().returnNew(true)) // Now return the newly updated document when updating
-                .findAndModifyValue();        
-        if(newestValue!=null) {
-        	result = SemaphoreStatusEnum.ValidNew;
-        	if(semaphore!=null && semaphore.getValue()!=null && semaphore.getValue().equals(value)) {
-        		result = SemaphoreStatusEnum.ValidProlonged;
-        	}
-        }
-    	
-        return result;
-    	
+		SemaphoreStatusEnum ret = lockSemaphoreInternal(type, key, value, 0);
+		log.debug("***** *** UnlockSemaphore type: {} ;key: {}; value: {}, result: {} ", type.name(), key, value, ret.name());
+		return ret;
     }
     
     public LocalDateTime fetchCurrentDate() {
