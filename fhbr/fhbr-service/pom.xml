@@ -32,6 +32,7 @@
         <module>fhbr-api</module>
         <module>fhbr-engine</module>
         <module>fhbr-schema-validator</module>
+        <module>fhbr-refdata-validator</module>
         <module>fhbr-rule-clazzchecker</module>
         <module>fhbr-test-mock</module>
         <module>fhbr-test</module>
