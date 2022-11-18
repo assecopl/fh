@@ -5,9 +5,9 @@
 
 package pl.fhframework.fhbr.validator.refdata.checker;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 
 public interface RefDataChecker {
-    public boolean isValid(String refDataCode, String value, LocalDateTime date);
+    public boolean isValid(String refDataCode, String value, LocalDate date);
 }

@@ -6,6 +6,7 @@ package pl.fhframework.fhbr.validator.refdata;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -40,13 +41,13 @@ import pl.fhframework.fhbr.validator.refdata.list.RefDataListBuilder;
 public class RefDataValidator {
 	private final static Logger log = LoggerFactory.getLogger(RefDataValidator.class);
 
-	RefDataValidationResult validationResult;
+//	RefDataValidationResult validationResult;
     private RefDataChecker refDataSource;
     private RefDataListBuilder refDataListBuilder;
     private String messageType;
     private byte[] messageContent;
     private Document xmlDocument;
-    private LocalDateTime date;
+    private LocalDate date;
     private XPathFactory xpathFactory = XPathFactory.newInstance();
     
     
@@ -54,20 +55,23 @@ public class RefDataValidator {
     
 
     public RefDataValidator(RefDataChecker refDataSource, RefDataListBuilder refDataListBuilder,
-    		String namespace, byte[] messageContent) {
+    		String namespace, byte[] messageContent, LocalDate date) {
 		super();
 		this.refDataSource = refDataSource;
 		this.refDataListBuilder = refDataListBuilder;
 		this.messageContent = messageContent;
 		this.messageType = namespace;
-
+		this.date = date;
+		if(this.date==null) {
+			this.date = LocalDate.now();
+		}
         try {
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			this.xmlDocument = db.parse(new ByteArrayInputStream(messageContent));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			throw new XmlParserException(e);
+			throw new XmlParserException(e.getMessage(), e);
 		} 
 		
 	}
@@ -76,24 +80,29 @@ public class RefDataValidator {
     
 
 	public RefDataValidator(RefDataChecker refDataSource, RefDataListBuilder refDataListBuilder, String messageType,
-			Document document, LocalDateTime date) {
+			Document document, LocalDate date) {
 		super();
 		this.refDataSource = refDataSource;
 		this.refDataListBuilder = refDataListBuilder;
 		this.messageType = messageType;
 		this.xmlDocument = document;
 		this.date = date;
+		if(this.date==null) {
+			this.date = LocalDate.now();
+		}
+		
 	}
 
 
 
 
-	public void validate() {
-        this.validate(null);
+	public RefDataValidationResult validate() {
+        return this.validate(null);
     }
 
-    public void validate(RefDataList refDataList) {
+    public RefDataValidationResult validate(RefDataList refDataList) {
 
+    	RefDataValidationResult validationResult = new RefDataValidationResult();
         String resultText = "";
         try {
              if (refDataList == null) {
@@ -155,16 +164,12 @@ public class RefDataValidator {
 
             }
 
-        }
-        catch (RefDataInaccessibilityRuntimeException e) {
-            log.error(">>>>>>>>[RefDataInaccessibilityRuntimeException]"+e.getMessage(),e );
-            validationResult.setResult(-3, e.getMessage());
-        }
-        catch (Throwable e) {
+        } catch (Throwable e) {
             log.error(">>>>>>>>[Throwable]"+ e.getMessage(),e );
             validationResult.setResult(-99, e.getMessage());
         }
 
+        return validationResult;
 
     }
 
@@ -246,17 +251,5 @@ public class RefDataValidator {
         }
         return null;
     }    
-    
-	public ValidationResult getValidationResult() {
-        return validationResult;
-    }
-
-    public void setRefDataListBuilder(RefDataListBuilder refDataListBuilder) {
-        this.refDataListBuilder = refDataListBuilder;
-    }
-
-    public RefDataListBuilder getRefDataListBuilder() {
-            return this.refDataListBuilder;
-      }
 
 }

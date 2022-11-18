@@ -19,21 +19,20 @@ package pl.fhframework.fhbr.api.exception;
 
 
 public class XmlParserException extends ValidationException {
-	
-	private static final String msg = "fhbr.exception.xmlParserException";
+
+	public XmlParserException(String messageKey, String message, Throwable t, String... argArray) {
+		super(messageKey, message, t, argArray);
+		// TODO Auto-generated constructor stub
+	}
+
+	public XmlParserException(String message, String... argArray) {
+		super(message, argArray);
+		// TODO Auto-generated constructor stub
+	}
 
 	public XmlParserException(String message, Throwable t, String... argArray) {
-		super(msg, message, t, argArray);
+		super(message, t, argArray);
+		// TODO Auto-generated constructor stub
 	}
-
-	public XmlParserException(String... argArray) {
-		super(msg, argArray);
-	}
-
-	public XmlParserException(Throwable t, String... argArray) {
-		super(msg, t, argArray);
-	}
-
-
 
 }
