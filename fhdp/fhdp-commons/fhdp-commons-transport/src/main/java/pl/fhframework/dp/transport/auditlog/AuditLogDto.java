@@ -67,6 +67,7 @@ public class AuditLogDto implements IPersistentObject<String> {
 
     public AuditLogDto(AuditLogTypeEnum type,
                        SeverityEnum severity,
+                       String operationGUID,
                        String category,
                        LocalDateTime eventTime,
                        String eventSubject,
@@ -79,6 +80,7 @@ public class AuditLogDto implements IPersistentObject<String> {
         this.eventSubject = eventSubject;
         this.comment = comment;
         this.repositoryMsgId = repositoryMsgId;
+        this.operationGUID = operationGUID;
     }
 
 }

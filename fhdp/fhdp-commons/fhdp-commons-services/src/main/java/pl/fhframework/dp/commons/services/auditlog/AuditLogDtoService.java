@@ -130,12 +130,14 @@ public class AuditLogDtoService extends GenericDtoService<String, AuditLogDto, A
     }
 
     public void logBusiness(SeverityEnum severity,
+                            String operationGUID,
                             String category,
                             String eventSubject,
                             String comment,
                             String repositoryMsgId){
         AuditLogDto dto = new AuditLogDto(AuditLogTypeEnum.business,
                 severity,
+                operationGUID,
                 category,
                 LocalDateTime.now(),
                 eventSubject,
