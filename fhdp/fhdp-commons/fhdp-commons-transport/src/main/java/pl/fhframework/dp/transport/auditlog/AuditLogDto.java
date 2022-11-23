@@ -33,6 +33,7 @@ public class AuditLogDto implements IPersistentObject<String> {
     @Field(type = FieldType.Date, format = DateFormat.custom, pattern = "uuuu-MM-dd'T'HH:mm:ss.SSSX")
     @ValueConverter(CustomZonedDateTimeConverter.class)
     private LocalDateTime endTime;
+    private String eventSubject;
     private String messageKey;
     private String comment;
     private String stepID;
@@ -40,6 +41,7 @@ public class AuditLogDto implements IPersistentObject<String> {
     private String operationGUID;
     private String userLogin;
     private Long docId;
+    private String repositoryMsgId;
 
     public AuditLogDto(AuditLogTypeEnum type,
                        SeverityEnum severity,
@@ -61,6 +63,22 @@ public class AuditLogDto implements IPersistentObject<String> {
         this.stepID = stepID;
         this.operationGUID = operationGUID;
         this.userLogin = userLogin;
+    }
+
+    public AuditLogDto(AuditLogTypeEnum type,
+                       SeverityEnum severity,
+                       String category,
+                       LocalDateTime eventTime,
+                       String eventSubject,
+                       String comment,
+                       String repositoryMsgId) {
+        this.type = type;
+        this.severity = severity;
+        this.category = category;
+        this.eventTime = eventTime;
+        this.eventSubject = eventSubject;
+        this.comment = comment;
+        this.repositoryMsgId = repositoryMsgId;
     }
 
 }
