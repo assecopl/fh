@@ -46,6 +46,7 @@ public class MenuElement {
         this.groupingElement = me.groupingElement;
         this.activityToken = me.activityToken;
         this.inputFactory = me.inputFactory;
+        this.availability = me.availability;
         children = new LinkedList<>();
     }
 
