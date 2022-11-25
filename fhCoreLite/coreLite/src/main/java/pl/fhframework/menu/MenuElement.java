@@ -2,9 +2,10 @@ package pl.fhframework.menu;
 
 import lombok.Getter;
 import lombok.Setter;
-import pl.fhframework.core.util.FhmlUtils;
 import pl.fhframework.SessionManager;
 import pl.fhframework.UserSession;
+import pl.fhframework.core.util.FhmlUtils;
+import pl.fhframework.model.forms.AvailabilityEnum;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -25,6 +26,7 @@ public class MenuElement {
     private List<MenuElement> children;
     private AtomicBoolean activityToken;
     private String inputFactory;
+    private AvailabilityEnum availability = AvailabilityEnum.EDIT;
 
     public MenuElement(String name, String key, String ref, String icon, boolean isGroupingElement, AtomicBoolean activityToken, String inputFactory) {
         this.name = name;
