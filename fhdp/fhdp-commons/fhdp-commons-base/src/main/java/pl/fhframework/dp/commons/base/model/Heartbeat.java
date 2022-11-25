@@ -1,6 +1,7 @@
 package pl.fhframework.dp.commons.base.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -11,10 +12,11 @@ import java.time.LocalDateTime;
  * @created 2019-07-25
  */
 @Getter @Setter
+@NoArgsConstructor
 public class Heartbeat {
-    private final long id;
-    private final String message;
-    private final String version;
+    private long id;
+    private String message;
+    private String version;
     private LocalDateTime callTime = LocalDateTime.now();
 
     public Heartbeat(long id, String message, String version) {
