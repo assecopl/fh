@@ -53,6 +53,8 @@ public class DictionaryComboFhDP extends ComboFhDP implements IGroupingComponent
     private static final String ATTR_ROWS = "rows";
     private static final String ATTR_COLUMNS = "columns";
     private static final String ATTR_PAGE = "page";
+
+    private static final String ATTR_TITLE = "title";
     private static final String ATTR_PAGES_COUNT = "pagesCount";
     private static final String VALUE_FOR_CHANGED_BINDING_ATTR = "valueFromChangedBinding";
 
@@ -480,6 +482,14 @@ public class DictionaryComboFhDP extends ComboFhDP implements IGroupingComponent
                 elementChange.getChangedAttributes().remove(ATTR_LAST_VALUE);
             }
         }
+        if(languageChanged == true){
+            List<Object> paramsList = new LinkedList<>();
+            paramsList.addAll(getValuesFromDictionaryComboParameters(this.getTitleParamsList));
+            title = (String) ReflectionUtils.run(this.getTitle, this.dataProvider, paramsList.toArray());
+            elementChange.addChange(ATTR_TITLE, title);
+            this.languageChanged = false;
+        }
+
         return elementChange;
     }
 
@@ -762,7 +772,6 @@ public class DictionaryComboFhDP extends ComboFhDP implements IGroupingComponent
         }
         languageChanged = true;
         super.onSessionLanguageChange(lang);
-        updateView();
     }
 
     @Getter @Setter
