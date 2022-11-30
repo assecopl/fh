@@ -20,7 +20,7 @@
     <parent>
         <artifactId>fhbr-client</artifactId>
         <groupId>pl.fhframework.fhbr</groupId>
-        <version>4.10.4-SNAPSHOT</version>
+        <version>4.10.5-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -50,7 +50,7 @@
 <!--        <dependency>-->
 <!--            <groupId>pl.fhframework.fhbr</groupId>-->
 <!--            <artifactId>fhbr-xsd</artifactId>-->
-<!--            <version>4.10.4-SNAPSHOT</version>-->
+<!--            <version>4.10.5-SNAPSHOT</version>-->
 <!--            <scope>test</scope>-->
 <!--        </dependency>-->
         <dependency>
