@@ -219,7 +219,7 @@ class SelectComboMenu extends InputText {
             this.input.focus();
             // @ts-ignore
             $(this.input).trigger({
-                type: 'keypress',
+                type: 'keydown',
                 which: 9
             });
             this.closeAutocomplete();
