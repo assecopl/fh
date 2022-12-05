@@ -7,6 +7,7 @@ import lombok.SneakyThrows;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
+import pl.fhframework.dp.commons.fh.helper.AESCypher;
 import pl.fhframework.dp.commons.fh.outline.*;
 
 import pl.fhframework.dp.commons.fh.uc.FhdpBaseUC;
@@ -40,7 +41,15 @@ import pl.fhframework.model.forms.Form;
 import pl.fhframework.validation.IValidationResults;
 import pl.fhframework.validation.ValidationPhase;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.xml.bind.JAXBException;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.*;
 
 @UseCase
@@ -282,9 +291,12 @@ public  abstract class BaseDocumentHandlingUC<MODEL extends BaseDocumentHandling
     }
 
     @Action(validate = false)
-    public void openPinup() {
+    public void openPinup() throws InvalidAlgorithmParameterException, NoSuchPaddingException,
+            IllegalBlockSizeException, NoSuchAlgorithmException, InvalidKeySpecException,
+            BadPaddingException, InvalidKeyException, UnsupportedEncodingException {
+        String id = AESCypher.encrypt(model.getPinupCypherPassword(), model.getDocId().toString());
         String url = model.getPinupUrl()
-            + "?id=" + model.getDocId()
+            + "?id=" + id
             + "&lng=" + getUserSession().getLanguage().toLanguageTag();
         eventRegistry.fireCustomActionEvent("openPinup", url);
     }
