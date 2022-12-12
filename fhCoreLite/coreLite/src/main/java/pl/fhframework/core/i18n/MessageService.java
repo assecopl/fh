@@ -16,9 +16,7 @@ import pl.fhframework.SessionManager;
 import pl.fhframework.UserSession;
 
 import javax.ejb.Local;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -202,17 +200,12 @@ public class MessageService {
             }
         }
 
+        private List<MessageSource> sortedCustomMessages;
         private String tryFindFirstMessage(String key, Object[] args, Locale locale, String defaultMessage) {
-            Map<String, MessageSource> beansOfType = applicationContext.getBeansOfType(MessageSource.class);
-
-            // todo: maybe think of some other way to reorder messages. But fh core message must be last to get message from.
-            // Tried to use hierarchy of MessagesSource, but not all implementations supports that.
-            List<MessageSource> customMessages = beansOfType.entrySet().stream()
-                    .filter(bean -> !bean.getKey().equals(FH_CORE_MSG_BEAN_NAME))
-                    .map(Map.Entry::getValue).collect(Collectors.toList());
-            customMessages.add(beansOfType.get(FH_CORE_MSG_BEAN_NAME));
-
-            for (MessageSource source : customMessages) {
+            if (sortedCustomMessages==null) {
+                sortedCustomMessages = calculateSortedCustomMessages();
+            }
+            for (MessageSource source : sortedCustomMessages) {
                 String message = source.getMessage(key, args, null, locale);
                 if (message != null) {
                     return message;
@@ -220,6 +213,19 @@ public class MessageService {
             }
             return defaultMessage;
         }
+
+        private List<MessageSource> calculateSortedCustomMessages(){
+            Map<String, MessageSource> beansOfType = applicationContext.getBeansOfType(MessageSource.class);
+
+            List<MessageSource> customMessages = beansOfType.entrySet().stream()
+                    .filter(bean -> !bean.getKey().equals(FH_CORE_MSG_BEAN_NAME))
+                    .map(Map.Entry::getValue).collect(Collectors.toList());
+            customMessages.add(beansOfType.get(FH_CORE_MSG_BEAN_NAME));
+
+            List<MessageSource> sortedCustomMessages = MessagesSourceComparator.getSortedMessages(customMessages);
+            return sortedCustomMessages;
+        }
+
 
         private Locale getLanguageOrDefault(Locale locale) {
             if (locale == null) {
