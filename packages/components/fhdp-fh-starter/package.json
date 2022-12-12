@@ -1,6 +1,6 @@
 {
   "name": "fhdp-fh-starter",
-  "version": "4.10.4",
+  "version": "4.10.401",
   "author": {
     "name": "Jakub Kosecki",
     "email": "j.kosecki@doittechnology.pl"
@@ -24,10 +24,10 @@
     "typescript": "3.9"
   },
   "dependencies": {
-    "fh-basic-controls": "4.10.4",
-    "fh-charts-controls": "4.10.4",
-    "fh-forms-handler": "4.10.4",
-    "fhdp-controls": "4.10.4",
-    "fhdp-extenders": "4.10.4"
+    "fh-basic-controls": "4.10.401",
+    "fh-charts-controls": "4.10.401",
+    "fh-forms-handler": "4.10.401",
+    "fhdp-controls": "4.10.401",
+    "fhdp-extenders": "4.10.401"
   }
 }
