@@ -1,6 +1,6 @@
 {
   "name": "example-module",
-  "version": "1.0.0-SNAPSHOT",
+  "version": "1.0.0",
   "main": "Module.ts",
   "private": true,
   "scripts": {
@@ -43,7 +43,7 @@
     "zlib": "^1.0.5"
   },
   "dependencies": {
-    "fhdp-charts": "^4.10.1-SNAPSHOT-1656081919982",
-    "fhdp-fh-starter": "^4.10.1-SNAPSHOT-1656081919982"
+    "fhdp-charts": "^4.10.4",
+    "fhdp-fh-starter": "^4.10.4"
   }
 }

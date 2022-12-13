@@ -5,7 +5,7 @@
     <parent>
         <artifactId>fhdp-commons</artifactId>
         <groupId>pl.fhframework.dp</groupId>
-        <version>4.10.2</version>
+        <version>4.10.4</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -56,6 +56,10 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
         </dependency>
     </dependencies>
 

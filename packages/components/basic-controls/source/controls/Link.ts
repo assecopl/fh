@@ -2,6 +2,8 @@ import {HTMLFormComponent} from "fh-forms-handler";
 
 class Link extends HTMLFormComponent {
     private stickedLabel: boolean;
+    private link:any;
+    private inner:any;
 
     constructor(componentObj: any, parent: HTMLFormComponent) {
         super(componentObj, parent);
@@ -60,6 +62,8 @@ class Link extends HTMLFormComponent {
         let additionalWrapper = document.createElement('div');
         additionalWrapper.classList.add('link-wrapper');
         additionalWrapper.appendChild(link);
+        this.link = link;
+        this.inner = inner;
         this.component = additionalWrapper;
         this.hintElement = this.component;
         this.wrap();
@@ -107,7 +111,19 @@ class Link extends HTMLFormComponent {
     update(change) {
         super.update(change);
         $.each(change.changedAttributes || [], function (name, newValue) {
-            // no special attributes supported
+            switch (name) {
+
+                case 'url':
+                    this.componentObj.url = newValue;
+                    this.link.href = this.processURL(this.util.getPath(this.componentObj.url));
+                    let isIcon = !!this.componentObj.icon;
+                    if (this.inner !== "") {
+                        this.link.innerHTML += this.inner;
+                    } else if (!isIcon) {
+                        this.link.innerHTML += this.link.href;
+                    }
+                    break;
+            }
         }.bind(this));
     };
 

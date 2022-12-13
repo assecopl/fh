@@ -16,7 +16,6 @@
         <Invisible when="sessionClock==false">sessionClock</Invisible>
     </AvailabilityConfiguration>
     <Row styleClasses="flex-nowrap">
-        <OutputLabel value="Dupa"></OutputLabel>
         <Dropdown width="md-2" label="{language}"
                   styleClasses="tray-button tray-button--text button"
                   id="languageDropdown" hint="{$.fhdp.menu.ui.navbar.toogleLanguage}">

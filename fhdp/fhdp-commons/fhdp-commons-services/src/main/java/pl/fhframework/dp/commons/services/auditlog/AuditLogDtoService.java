@@ -74,6 +74,16 @@ public class AuditLogDtoService extends GenericDtoService<String, AuditLogDto, A
         if(query.getUserLogin() != null) {
             builder.must(QueryBuilders.wildcardQuery("userLogin", query.getUserLogin() + "*"));
         }
+        if(query.getEventSubject() != null) {
+            builder.must(QueryBuilders.wildcardQuery("eventSubject", query.getEventSubject() + "*"));
+        }
+        if(query.getDocId() != null) {
+            builder.must(QueryBuilders.termQuery("docId.keyword", query.getDocId()));
+        }
+        if(query.getRepositoryMsgId() != null) {
+            builder.must(QueryBuilders.termsQuery("repositoryMsgId.keyword", query.getRepositoryMsgId()));
+        }
+
         LocalDateTime dateFrom = query.getEventTimeFrom();
         LocalDateTime dateTo = query.getEventTimeTo();
         if (dateFrom != null || dateTo != null) {
@@ -115,6 +125,24 @@ public class AuditLogDtoService extends GenericDtoService<String, AuditLogDto, A
                 operationGUID,
                 stepID,
                 userLogin);
+        persistDto(dto);
+
+    }
+
+    public void logBusiness(SeverityEnum severity,
+                            String operationGUID,
+                            String category,
+                            String eventSubject,
+                            String comment,
+                            String repositoryMsgId){
+        AuditLogDto dto = new AuditLogDto(AuditLogTypeEnum.business,
+                severity,
+                operationGUID,
+                category,
+                LocalDateTime.now(),
+                eventSubject,
+                comment,
+                repositoryMsgId);
         persistDto(dto);
 
     }
