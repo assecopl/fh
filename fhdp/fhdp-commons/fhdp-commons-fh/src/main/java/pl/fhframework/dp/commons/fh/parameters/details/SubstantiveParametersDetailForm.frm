@@ -102,7 +102,7 @@
             </PanelGroup>
             <PanelGroup width="md-12" label="{$.fhdp.parameters.property.description}">
                 <Row width="md-12">
-                    <OutputLabel inlineStyle="line-height: 1.5;" width="md-12" value="{selectedSubstantiveParametersDto.parameterDescriptions[0].description}"/>
+                    <OutputLabel inlineStyle="line-height: 1.5;" width="md-12" value="{FORM.getSelectedSelectedSubstantiveParameterTranslatedDescription()}"/>
                 </Row>
             </PanelGroup>
 
