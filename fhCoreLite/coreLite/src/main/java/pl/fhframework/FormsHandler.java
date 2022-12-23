@@ -117,8 +117,9 @@ public abstract class FormsHandler {
     public FormsHandler() {
         this.objectMapper = new ObjectMapper();
         formatXML(false);
+        FhLogger.info("Registering JavaTimeModule");
         objectMapper.registerModule(new JavaTimeModule());
-        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        ObjectMapper.findModules().forEach(module -> FhLogger.info("Registered ObjectMapper module: " + module.getModuleName()));
     }
 
     public void formatXML(boolean format) {
