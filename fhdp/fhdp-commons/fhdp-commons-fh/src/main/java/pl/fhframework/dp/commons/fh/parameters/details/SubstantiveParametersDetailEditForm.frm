@@ -67,6 +67,14 @@
             </Row>
             <Row width="md-12">
                 <Group width="md-12">
+                    <OutputLabel width="md-12" value="{$.fhdp.parameters.property.name}"/>
+                    <InputText width="md-12" value="{detailNameAndDescription.nameForSelectedLanguage}"/>
+                </Group>
+                <Group width="md-12">
+                    <OutputLabel width="md-12" value="{$.fhdp.parameters.property.description}"/>
+                    <InputText width="md-12" value="{detailNameAndDescription.description}"/>
+                </Group>
+                <Group width="md-12">
                     <OutputLabel width="md-12" value="{$.fhdp.parameters.property.value}"/>
                     <Group width="md-12">
                         <CheckBox label=" " width="md-1" value="{dto.value}"
