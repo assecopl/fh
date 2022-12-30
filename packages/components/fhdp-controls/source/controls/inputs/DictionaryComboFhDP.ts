@@ -6,6 +6,8 @@ import { ComboFhDP } from './ComboFhDP';
 import { DictionaryComboFhDPHelper } from '../helpers/DictionaryComboFhDPHelper';
 import { DictionaryComboFhDPPopperTable } from './DictionaryComboFhDPPopperTable';
 
+export type PaginationPlacement = "TOP" | "BOTTOM";
+
 class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
     private instance : any;
     private divTooltipId: any;
@@ -30,7 +32,7 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
     private clickInPopup: boolean = false;
 
     public guuid: string;
-
+    private paginationPlacement: PaginationPlacement;
 
     constructor(componentObj: any, parent: HTMLFormComponent) {
         super(componentObj, parent);
@@ -45,6 +47,7 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
         this.searchRequested = this.componentObj.searchRequested;
         this.pagesCount = this.componentObj.pagesCount;
         this.displayOnlyCode = this.componentObj.displayOnlyCode;
+        this.paginationPlacement = this.componentObj.paginationPlacement;
         // this.dirty = this.componentObj.dirty;
         // console.log('dirty on create', this.componentObj.dirty)
         this.dirty = false;
@@ -304,6 +307,7 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
             parent: this.getInputGroupElement(),
             backgroundColor: this.popupColor,
             position: this.isSearch ? 'left' : 'right',
+            paginationPlacement: this.paginationPlacement,
             fireChangePopupEvent: (attr: {name: string, arg: any}[], event?: string) => {
                 if (['nextPage', 'prevPage'].indexOf(event) > -1) {
                     this.clickInPopup = true;

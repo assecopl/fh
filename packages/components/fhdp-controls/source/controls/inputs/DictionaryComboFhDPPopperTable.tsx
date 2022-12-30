@@ -2,6 +2,7 @@ import {Placement} from '@popperjs/core';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import {usePopper} from 'react-popper';
+import { PaginationPlacement } from './DictionaryComboFhDP';
 
 interface Props {
     title: string;
@@ -19,6 +20,7 @@ interface Props {
     position?: 'left' | 'right';
     backgroundColor?: string;
     translate: any;
+    paginationPlacement: PaginationPlacement,
     clickInPopup: (arg: boolean) => void;
 }
 
@@ -38,7 +40,8 @@ export const DictionaryComboFhDPPopperTable: React.FC<Props> = (props: Props) =>
         readOnly,
         position,
         backgroundColor,
-        translate
+        translate,
+        paginationPlacement
     } = props;
     let {rows} = props;
     const popperElement = React.useRef(null);
@@ -114,11 +117,26 @@ export const DictionaryComboFhDPPopperTable: React.FC<Props> = (props: Props) =>
         )
     }
 
-    const generatePagination = () => {
-        console.log("generate pagination", page, totalPages);
-        if (page === -1 || totalPages <= 1) {
+    const generatePagination = (generate: boolean) => {
+        if (!generate || page === -1 || totalPages <= 1) {
             return (null);
         }
+
+        if(paginationPlacement === "BOTTOM") {
+            return (
+                <div style={styles.paginationBottom}>
+                    <span>{translate('page')}&nbsp;</span>
+                    <button onClick={() => {
+                        prevPage()
+                    }} style={styles.pageButtonBottom} disabled={page <= 0}>{'<'}</button>
+                    <span>&nbsp;{page + 1}&nbsp;{translate('of')}&nbsp;{totalPages}&nbsp;</span>
+                    <button onClick={() => {
+                        nextPage()
+                    }} style={styles.pageButtonBottom} disabled={page >= totalPages - 1}>{'>'}</button>
+                </div>
+            )
+        }
+
         return (
             <div style={styles.pagination}>
                 <button onClick={() => {
@@ -230,6 +248,16 @@ export const DictionaryComboFhDPPopperTable: React.FC<Props> = (props: Props) =>
         margin: '4px',
         padding: '0px',
     }
+
+    styles.pageButtonBottom = {
+        width: '20px',
+        height: '20px',
+        background: 'transparent',
+        color: '#000',
+        margin: '4px',
+        padding: '0px',
+        border: 'none'
+    }
     const shaderedBg = shadeColor(getComputedStyle(document.getElementById(hookElementId)).getPropertyValue('--color-bg-popup'), 0);
 
     styles.popper = {
@@ -321,6 +349,13 @@ export const DictionaryComboFhDPPopperTable: React.FC<Props> = (props: Props) =>
         left: '10px',
     }
 
+    styles.paginationBottom = {
+        marginRight: 'auto',
+        marginTop: 'auto',
+        marginBottom: 'auto',
+        padding: '0 10px'
+    }
+
     styles.closeBtn = {
         fontSize: 'var(--font-size-default)'
     }
@@ -350,13 +385,13 @@ export const DictionaryComboFhDPPopperTable: React.FC<Props> = (props: Props) =>
         //   console.log('node', node.id, node);
         //   // node.remove();
         // }
-        console.log('create portal')
+        const generate = paginationPlacement === "BOTTOM";
         return ReactDOM.createPortal((
             <div ref={popperElement} id={`dictionary-combo-popper-${+new Date()}`} className={'MuiPaper-root'}
                  style={{...styles.popper, ...popperDisplay}} {...attributes.popper} onClick={unlockClickInPopup}>
                 <div style={styles.header} onClick={unlockClickInPopup}>
                     <span dangerouslySetInnerHTML={{__html: title}} onClick={unlockClickInPopup}/>
-                    {generatePagination()}
+                    {generatePagination(!generate)}
                     <div style={styles.separator} onClick={unlockClickInPopup}/>
                     <span style={styles.closeBtn} onClick={() => handleClose(true)}><i className="fa fa-times"/></span>
                 </div>
@@ -373,6 +408,7 @@ export const DictionaryComboFhDPPopperTable: React.FC<Props> = (props: Props) =>
                         </tbody>
                     </table>
                 </div>
+                {generatePagination(generate)}
             </div>), document.getElementById('fh-layout-standard'), `dictionary-combo-popper-portal-key`);
     }
 

@@ -107,7 +107,7 @@
             </PanelGroup>
 
             <PanelGroup width="md-12" label="{$.fhdp.parameters.property.tags}">
-                <Row width="md-12">
+                <Row width="md-12" styleClasses="parameter-tag">
                     <Combo
                            width="md-4" emptyValue="true"
                            multiselect="true"

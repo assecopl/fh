@@ -26,17 +26,17 @@ import java.util.stream.Stream;
 public class SubstantiveParametersDetailEditFormUC implements IUseCaseOneInput<SubstantiveParametersDetailEditForm.Model, IUseCaseSaveCancelCallback<SubstantiveParametersDetailEditForm.Model>> {
 
     @Autowired
-    private MessageService messageService;
+    protected MessageService messageService;
 
     @Autowired
-    private EventRegistry eventRegistry;
+    protected EventRegistry eventRegistry;
 
     @Autowired
-    private SubstantiveParametersTagService substantiveParametersTagService;
+    protected SubstantiveParametersTagService substantiveParametersTagService;
 
-    private SubstantiveParametersDetailEditForm.Model model;
+    protected SubstantiveParametersDetailEditForm.Model model;
 
-    private SubstantiveParametersTagDtoQuery query;
+    protected SubstantiveParametersTagDtoQuery query;
 
     @Override
     public void start(SubstantiveParametersDetailEditForm.Model one) {
