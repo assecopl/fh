@@ -35,7 +35,7 @@ public class SubstantiveParametersListUC extends GenericListUC<SubstantiveParame
     private EventRegistry eventRegistry;
 
     @Autowired
-    private SubstantiveParametersService substantiveParametersService;
+    protected SubstantiveParametersService substantiveParametersService;
 
     @Autowired
     MessageService messageService;
@@ -43,7 +43,7 @@ public class SubstantiveParametersListUC extends GenericListUC<SubstantiveParame
     @Value("${fhdp.parameters.search.box.buttons:false}")
     private boolean isSearchBoxButtons;
 
-    private SubstantiveParametersListModel substantiveParametersListModel;
+    protected SubstantiveParametersListModel substantiveParametersListModel;
 
     private SearchTemplateBuilderModel searchTemplateBuilderModel;
 
