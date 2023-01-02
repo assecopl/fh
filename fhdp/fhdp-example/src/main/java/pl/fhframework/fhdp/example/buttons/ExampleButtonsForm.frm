@@ -18,4 +18,12 @@
         <TimerFhDP timeout="2000" onInterval="handleInterval()"/>
         <OutputLabel width="md-12" value="This is interval counter: {getInterText()}"/>
     </PanelGroup>
+
+    <PanelGroup label="Date">
+        <InputDate format="YYYY-MM-DD" id="date" label="Date" width="md-6" availability="VIEW" value="1000-03-11"/>
+        <InputTimestamp format="YYYY-MM-DD HH:mm" id="dateTime" label="Date with time" width="md-6" availability="VIEW" value="1000-03-11 00:00"/>
+        <InputDateFhDP format="YYYY-MM-DD" id="dateFhDp" label="FhDP date" width="md-6" availability="VIEW" value="1000-03-11"/>
+        <InputTimestampFhDP format="YYYY-MM-DD HH:mm" id="dateTimeFhDp" label="FhDP date with time" width="md-6" availability="VIEW" value="1000-03-11 00:00"/>
+    </PanelGroup>
+
 </Form>
