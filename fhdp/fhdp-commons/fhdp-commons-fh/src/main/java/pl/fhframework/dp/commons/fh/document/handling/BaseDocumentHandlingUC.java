@@ -35,6 +35,7 @@ import pl.fhframework.dp.commons.fh.outline.GroupTreeElement;
 import pl.fhframework.dp.commons.fh.outline.IndexedTreeElement;
 import pl.fhframework.dp.commons.fh.outline.OutlineService;
 import pl.fhframework.dp.commons.fh.outline.TreeElement;
+import pl.fhframework.dp.transport.service.IOperationDtoService;
 import pl.fhframework.event.EventRegistry;
 import pl.fhframework.event.dto.NotificationEvent;
 import pl.fhframework.model.forms.Form;
@@ -57,7 +58,7 @@ import java.util.*;
 public  abstract class BaseDocumentHandlingUC<MODEL extends BaseDocumentHandlingFormModel, C extends IGenericListOutputCallback, OUTLINE extends BaseDocumentHandlingOutlineForm<MODEL>> extends FhdpBaseUC
         implements IUseCase<C>, IUseCase18nListener {
 
-    @Value("${fhdp.timerTimeout:1}")
+    @Value("${fhdp.timerTimeout:1000}")
     protected int timerTimeout;
 
     protected static final String PENDING_OPERATION_TAB_ID = "pendingOperation";
@@ -187,9 +188,7 @@ public  abstract class BaseDocumentHandlingUC<MODEL extends BaseDocumentHandling
             form.addDynamicTab(tab);
             model.setActiveTabIndex(form.indexOfTab(tab));
             //Find operation handler
-            String operationName = getOperationCode() + AbstractDocumentHandler.OP_BEAN_SUFFIX;
-            operationName = TextUtils.decapitateFirstLetter(operationName);
-            BaseOperationHandler operationHandler = getContext().getBean(operationName, BaseOperationHandler.class);
+            BaseOperationHandler operationHandler = findOperationHandler();
             documentHandler.setOperationHandler(operationHandler);
             model.setTimerTimeout(this.timerTimeout);
             model.setActiveTabIndex(index);
@@ -197,6 +196,11 @@ public  abstract class BaseDocumentHandlingUC<MODEL extends BaseDocumentHandling
             model.setTimerTimeout(this.timerTimeout);
             model.setActiveTabIndex(form.indexOfTab(tab));
         }
+    }
+    protected BaseOperationHandler findOperationHandler(){
+        String operationName = getOperationCode() + AbstractDocumentHandler.OP_BEAN_SUFFIX;
+        operationName = TextUtils.decapitateFirstLetter(operationName);
+        return getContext().getBean(operationName, BaseOperationHandler.class);
     }
 
     /**
