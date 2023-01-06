@@ -240,7 +240,7 @@
                     <dependency>
                         <groupId>pl.fhframework</groupId>
                         <artifactId>fh-jboss-eap6.4-bom</artifactId>
-                        <version>4.10.4-SNAPSHOT</version>
+                        <version>${project.version}</version>
                         <scope>import</scope>
                         <type>pom</type>
                     </dependency>

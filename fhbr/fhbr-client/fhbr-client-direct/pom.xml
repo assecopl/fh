@@ -46,13 +46,6 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
         </dependency>
-
-<!--        <dependency>-->
-<!--            <groupId>pl.fhframework.fhbr</groupId>-->
-<!--            <artifactId>fhbr-xsd</artifactId>-->
-<!--            <version>4.10.4-SNAPSHOT</version>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>pl.fhframework.fhbr</groupId>
             <artifactId>fhbr-test-mock</artifactId>
