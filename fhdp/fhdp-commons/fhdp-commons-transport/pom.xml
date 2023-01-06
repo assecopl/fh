@@ -5,7 +5,7 @@
     <parent>
         <groupId>pl.fhframework.dp</groupId>
         <artifactId>fhdp-commons</artifactId>
-        <version>4.10.4.PL.1-SNAPSHOT</version>
+        <version>4.10.4.PL.1</version>
     </parent>
 
     <artifactId>fhdp-commons-transport</artifactId>
