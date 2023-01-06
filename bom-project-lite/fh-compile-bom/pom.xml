@@ -5,7 +5,7 @@
 
     <groupId>pl.fhframework</groupId>
     <artifactId>fh-compile-bom</artifactId>
-    <version>4.10.4.PL.1</version>
+    <version>4.10.4.PL.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>fh-compile-bom</name>
