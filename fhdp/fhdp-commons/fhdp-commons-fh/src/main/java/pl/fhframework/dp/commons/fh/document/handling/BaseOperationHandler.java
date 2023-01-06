@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import pl.fhframework.dp.commons.fh.utils.rest.facade.FacadeClientFactory;
 import pl.fhframework.dp.transport.dto.commons.OperationResultBaseDto;
 import pl.fhframework.dp.transport.dto.commons.OperationStateResponseDto;
+import pl.fhframework.dp.transport.service.IOperationDtoService;
 
 /**
  * @author <a href="mailto:jacek.borowiec@asseco.pl">Jacek Borowiec</a>

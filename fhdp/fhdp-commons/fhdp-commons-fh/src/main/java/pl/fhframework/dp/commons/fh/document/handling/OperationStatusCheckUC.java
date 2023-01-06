@@ -3,6 +3,7 @@ package pl.fhframework.dp.commons.fh.document.handling;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import pl.fhframework.dp.transport.dto.commons.OperationStateRequestDto;
 import pl.fhframework.dp.transport.dto.commons.OperationStateResponseDto;
 import pl.fhframework.dp.transport.dto.commons.OperationStepDto;
 import pl.fhframework.WebSocketContext;
@@ -49,9 +50,9 @@ public class OperationStatusCheckUC implements IUseCaseOneInput<OperationStatusC
     }
 
     @Action(validate = false)
-    private void checkTask() {
+    protected void checkTask() {
         FhLogger.debug("Calling service for operation ID {}...", model.getOperationGUID());
-        OperationStateResponseDto state = model.getDocumentHandler().checkOperationState(model.getOperationGUID());
+        OperationStateResponseDto state = this.checkOperationState(model);
         List<OperationStepDto> steps = state.getSteps();
         Collections.sort(steps);
         model.getOperationStateResponse().setSteps(steps);
@@ -61,6 +62,23 @@ public class OperationStatusCheckUC implements IUseCaseOneInput<OperationStatusC
             getActiveForm().refreshView();
             save();
         }
+    }
+
+    protected OperationStateResponseDto checkOperationState(OperationStatusCheckForm.Model model) {
+        IDocumentHandler documentHandler = model.getDocumentHandler();
+        if(documentHandler != null){
+            return documentHandler.checkOperationState(model.getOperationGUID());
+        }
+
+        return checkOperationStateByService(model);
+    }
+
+    protected OperationStateResponseDto checkOperationStateByService(OperationStatusCheckForm.Model model){
+        OperationStateRequestDto request = new OperationStateRequestDto();
+        request.setOperationId(model.getOperationGUID());
+        request.setDocId(model.getDocId());
+        request.setProcessId(model.getProcessId());
+        return model.getOperationDtoService().getOperationState(request);
     }
 
 }
