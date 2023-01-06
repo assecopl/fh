@@ -144,12 +144,12 @@
 
     <distributionManagement>
         <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <id>nexus-releases</id>
+            <url>http://172.25.107.188:8081/repository/sisc-snapshots/</url>
         </snapshotRepository>
         <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+            <id>nexus-releases</id>
+            <url>http://172.25.107.188:8081/repository/sisc-releases/</url>
         </repository>
     </distributionManagement>
 
