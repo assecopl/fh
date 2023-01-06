@@ -31,6 +31,7 @@
         <module>securityDataProvider-remote</module>
         <module>securityDataProvider-rest</module>
         <module>securityDataProvider-cached</module>
+        <module>securityDataProvider-ad</module>
         <module>permissionProvider-jdbc</module>
         <module>permissionProvider-rest</module>
         <module>permissionProvider-standalone</module>
