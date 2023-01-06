@@ -19,6 +19,14 @@ const meta: TagMetaType[] = [
         noContent: true
     },
     {
+        tag: 'hr/',
+        tagConstructor: (match, contents) => {
+            var hr = document.createElement('hr');
+            return hr.outerHTML;
+        },
+        noContent: true
+    },
+    {
         tag: 'className',
         tagConstructor: (match, classes, contents) => {
             var span = document.createElement('span');

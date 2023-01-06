@@ -25,6 +25,7 @@ import pl.fhframework.helper.AutowireHelper;
 import pl.fhframework.model.dto.ElementChanges;
 import pl.fhframework.model.dto.InMessageEventData;
 import pl.fhframework.model.dto.ValueChange;
+import pl.fhframework.model.forms.attribute.PaginationPlacement;
 import pl.fhframework.model.forms.designer.BindingExpressionDesignerPreviewProvider;
 import pl.fhframework.model.forms.provider.IComboDataProviderFhDP;
 import pl.fhframework.model.forms.provider.NameValue;
@@ -36,6 +37,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.CONTENT;
+import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.LOOK_AND_STYLE;
 
 /**
  * @author <a href="mailto:jacek.borowiec@asseco.pl">Jacek Borowiec</a>
@@ -56,6 +58,7 @@ public class DictionaryComboFhDP extends ComboFhDP implements IGroupingComponent
     private static final String ATTR_PAGE = "page";
     private static final String ATTR_PAGES_COUNT = "pagesCount";
     private static final String VALUE_FOR_CHANGED_BINDING_ATTR = "valueFromChangedBinding";
+    private static final String PAGINATION_PLACEMENT_ATTR = "paginationPlacement";
 
     @JsonIgnore
     @Autowired
@@ -176,6 +179,16 @@ public class DictionaryComboFhDP extends ComboFhDP implements IGroupingComponent
 
     @JsonIgnore
     private String lastCodeSelected;
+
+    /**
+     * Placement of the pagination for component
+     */
+    @Getter
+    @Setter
+    @XMLProperty(value = PAGINATION_PLACEMENT_ATTR)
+    @DesignerXMLProperty(functionalArea = LOOK_AND_STYLE, priority = 86)
+    @DocumentedComponentAttribute(defaultValue = "TOP", value = "Placement of the pagination for component. Available values: top, bottom. If value is not set then position will be chosen dynamically.")
+    private PaginationPlacement paginationPlacement;
 
     public DictionaryComboFhDP(Form form) {
         super(form);
