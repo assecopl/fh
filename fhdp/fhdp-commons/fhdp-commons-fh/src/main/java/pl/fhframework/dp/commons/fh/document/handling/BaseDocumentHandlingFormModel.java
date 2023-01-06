@@ -40,6 +40,8 @@ public abstract class BaseDocumentHandlingFormModel<DTO, DOC, SUBMODEL extends B
     private boolean previewMode = false;
     @Value("${fhdp.pinup.url:none}")
     private String pinupUrl;
+    @Value("${fhdp.pinup.password:none}")
+    private String pinupCypherPassword;
 
     private int activeOutlineTabIndex=0;
     private int activeTabIndex=0;

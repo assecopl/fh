@@ -25,4 +25,5 @@ public class AuditLogDtoQuery extends BaseDtoQuery {
     private String operationGUID;
     private String stepID;
     private String userLogin;
+    private String eventSubject;
 }
