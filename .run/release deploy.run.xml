@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="deploy release" type="MavenRunConfiguration" factoryName="Maven" folderName="release">
+  <configuration default="false" name="release deploy" type="MavenRunConfiguration" factoryName="Maven" folderName="release">
     <MavenSettings>
       <option name="myGeneralSettings" />
       <option name="myRunnerSettings" />
