@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fontFamilies>
+	<fontFamily name="Montserrat Black">
+		<normal><![CDATA[fonts/Montserrat/Montserrat-Black.ttf]]></normal>
+		<italic><![CDATA[fonts/Montserrat/Montserrat-BlackItalic.ttf]]></italic>
+		<pdfEncoding><![CDATA[Identity-H]]></pdfEncoding>
+	</fontFamily>
+	<fontFamily name="Montserrat">
+		<normal><![CDATA[fonts/Montserrat/Montserrat-Regular.ttf]]></normal>
+		<bold><![CDATA[fonts/Montserrat/Montserrat-Bold.ttf]]></bold>
+		<italic><![CDATA[fonts/Montserrat/Montserrat-Italic.ttf]]></italic>
+		<boldItalic><![CDATA[fonts/Montserrat/Montserrat-BoldItalic.ttf]]></boldItalic>
+		<pdfEncoding><![CDATA[Identity-H]]></pdfEncoding>
+	</fontFamily>
+	<fontFamily name="Montserrat Medium">
+		<normal><![CDATA[fonts/Montserrat/Montserrat-Medium.ttf]]></normal>
+		<italic><![CDATA[fonts/Montserrat/Montserrat-MediumItalic.ttf]]></italic>
+		<pdfEncoding><![CDATA[Identity-H]]></pdfEncoding>
+	</fontFamily>
+</fontFamilies>
