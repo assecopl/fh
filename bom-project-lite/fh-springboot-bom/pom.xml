@@ -39,29 +39,29 @@
             <dependency>
                 <groupId>pl.fhframework</groupId>
                 <artifactId>commons-bom</artifactId>
-                <version>4.10.4-SNAPSHOT</version>
+                <version>${project.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>pl.fhframework</groupId>
                 <artifactId>fhJpa-standalone</artifactId>
-                <version>4.10.4-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>pl.fhframework</groupId>
                 <artifactId>fhTomcat-config</artifactId>
-                <version>4.10.4-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>pl.fhframework</groupId>
                 <artifactId>cache-standalone</artifactId>
-                <version>4.10.4-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>pl.fhframework</groupId>
                 <artifactId>pubsub-standalone</artifactId>
-                <version>4.10.4-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
