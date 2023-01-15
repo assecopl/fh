@@ -21,7 +21,7 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import pl.fhframework.dp.commons.base.model.IPersistentObject;
-import pl.fhframework.dp.commons.els.config.ElasticSearchConfig;
+import pl.fhframework.dp.commons.els.config.ElasticSearchParams;
 import pl.fhframework.dp.commons.utils.conversion.BeanConversionUtil;
 import pl.fhframework.dp.transport.dto.commons.BaseDtoQuery;
 import pl.fhframework.dp.transport.service.IDtoService;
@@ -44,7 +44,7 @@ public abstract class GenericDtoService<ID,
         ENTITY> implements IDtoService<ID, DTO , LIST , QUERY> {
 
     @Autowired
-    ElasticSearchConfig elasticSearchConfig;
+    ElasticSearchParams elasticSearchParams;
     @Autowired
     protected ElasticsearchOperations elasticsearchTemplate;
     private Class<LIST> listClazz;
@@ -129,7 +129,7 @@ public abstract class GenericDtoService<ID,
         try {
             Method method = annotation.annotationType().getDeclaredMethod("indexName");
             String value = (String) method.invoke(annotation, (Object[])null);
-            return value.replace("#{@indexNamePrefix}", elasticSearchConfig.getIndexNamePrefix());
+            return value.replace("#{@indexNamePrefix}", elasticSearchParams.getIndexNamePrefix());
         } catch (Exception e) {
             log.error("{}{}", e.getMessage(), e);
         }
