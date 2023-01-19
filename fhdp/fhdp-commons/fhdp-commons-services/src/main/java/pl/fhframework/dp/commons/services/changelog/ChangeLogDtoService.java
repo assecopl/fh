@@ -32,6 +32,7 @@ public class ChangeLogDtoService extends GenericDtoService<String, ChangeLogDto,
     public List<ChangeLogDto> listDto(ChangeLogDtoQuery query) {
         if(query.getSortProperty() == null || "id".equals(query.getSortProperty())) {
             query.setSortProperty("changeTime");
+            query.setAscending(false);
         }
         return super.listDto(query);
     }
@@ -62,8 +63,15 @@ public class ChangeLogDtoService extends GenericDtoService<String, ChangeLogDto,
         return builder;
     }
 
-    public boolean isChangePerformed(String id) {
-        return changeLogESRepository.findById(id).isPresent();
+    public String getLastChangePerformed() {
+        ChangeLogDtoQuery query = new ChangeLogDtoQuery();
+        query.setSize(1);
+        List<ChangeLogDto> list = listDto(query);
+        if(list.isEmpty()) {
+            return null;
+        } else {
+            return list.get(0).getId();
+        }
     }
 
     public void registerChange( String id, String description) {
