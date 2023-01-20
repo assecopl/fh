@@ -66,9 +66,15 @@ public class SubstantiveParametersListUC extends GenericListUC<SubstantiveParame
 
     @Override
     protected void readData() {
-        SubstantiveParametersDtoQuery query = substantiveParametersListModel.getSearchModel().getQuery();
-        getListData().setList(substantiveParametersService.listDtoPaged(query));
-        getListData().setSearchTemplateBuilderModel(substantiveParametersListModel.getSearchTemplateBuilderModel());
+        try {
+            SubstantiveParametersDtoQuery query = substantiveParametersListModel.getSearchModel().getQuery();
+            getListData().setList(substantiveParametersService.listDtoPaged(query));
+            getListData().setSearchTemplateBuilderModel(substantiveParametersListModel.getSearchTemplateBuilderModel());
+        } catch (Exception e) {
+            e.printStackTrace();
+            FhLogger.error(e);
+            Messages.showErrorMessage(getUserSession(), "Błąd pobrania danych", e);
+        }
     }
 
     @Override
