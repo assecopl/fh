@@ -224,6 +224,7 @@ public  abstract class BaseDocumentHandlingUC<MODEL extends BaseDocumentHandling
         pendingOperationFormModel.getOperationStateResponse().setSteps(steps);
         pendingOperationFormModel.getOperationStateResponse().setFinished(state.isFinished());
         if(state.isFinished()) {
+            model.setActiveTabIndex(0);
             refreshView();
         }
     }
