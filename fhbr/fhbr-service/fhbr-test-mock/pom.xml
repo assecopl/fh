@@ -20,7 +20,7 @@
     <parent>
         <artifactId>fhbr-service</artifactId>
         <groupId>pl.fhframework.fhbr</groupId>
-        <version>4.10.4.PL.2</version>
+        <version>4.10.4.PL.3-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
