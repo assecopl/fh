@@ -62,10 +62,10 @@ public class ElasticSearchConfig extends ElasticsearchConfigurationSupport {
         return elasticSearchParams.client();
     }
 
-    //@Bean
-    //public ElasticsearchOperations elasticsearchTemplate(RestHighLevelClient elasticsearchClient) throws Exception{
-    //    return new ElasticsearchRestTemplate(elasticsearchClient);
-    //}
+    @Bean
+    public ElasticsearchOperations elasticsearchTemplate(RestHighLevelClient elasticsearchClient) throws Exception{
+        return new ElasticsearchRestTemplate(elasticsearchClient);
+    }
 
 
 //    @WritingConverter
