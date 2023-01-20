@@ -21,7 +21,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>pl.fhframework.fhbr</groupId>
     <artifactId>fhbr-bom</artifactId>
-    <version>4.10.4.PL.2-SNAPSHOT</version>
+    <version>4.10.4.PL.2</version>
 
     <packaging>pom</packaging>
 

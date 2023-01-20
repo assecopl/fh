@@ -21,7 +21,7 @@
     <parent>
         <groupId>pl.fhframework.fhbr</groupId>
         <artifactId>fhbr-bom</artifactId>
-        <version>4.10.4.PL.2-SNAPSHOT</version>
+        <version>4.10.4.PL.2</version>
         <relativePath>../fhbr-bom/pom.xml</relativePath>
     </parent>
     <artifactId>fhbr-service</artifactId>
