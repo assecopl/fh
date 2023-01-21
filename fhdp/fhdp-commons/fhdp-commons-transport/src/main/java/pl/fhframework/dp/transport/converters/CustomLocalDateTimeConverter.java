@@ -6,11 +6,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Konwerter do zostosowania w przypadku adnitacji
+ * Converter for adnotation
  * @Field(type = FieldType.Date, format = DateFormat.date_hour_minute_second_millis)
- * zamiast
+ * instead of currently used
  * @Field(type = FieldType.Date, format = DateFormat.custom, pattern = "uuuu-MM-dd'T'HH:mm:ss.SSSX")
- * które używa custom, a custom jest @Deprecated
+ * that current uses custom, but custom is @Deprecated and should be removed soon
  * {@link PropertyValueConverter}
  *
  */
