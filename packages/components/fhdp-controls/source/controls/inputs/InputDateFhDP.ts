@@ -30,7 +30,7 @@ class InputDateFhDP extends InputTextFhDP implements LanguageChangeObserver {
         "ru": InputTimestampFhDPRu
     };
 
-    /*
+    /**
      * Czy uzywac trybu scislego biblioteki momentjs
      * Na przykład  czy data 2016-12-24T00:00:00.000+00:00 będzie nieprawidłowa dla maski YYYY-MM-DD
      * @type {boolean}
@@ -80,7 +80,7 @@ class InputDateFhDP extends InputTextFhDP implements LanguageChangeObserver {
             format: this.format,
             defaultDate: InputDateFhDP.isDateValid(this.rawValue, this.format)? this.rawValue : '',
             keepInvalid: true,
-            tooltips: this.tooltipsI18n[this.i18n.selectedLanguage],
+            tooltips: this.tooltipsI18n[this.i18n.selectedLanguage] ? this.tooltipsI18n[this.i18n.selectedLanguage] : this.tooltipsI18n["en"],
             widgetParent : 'body'
         }
 
@@ -293,7 +293,7 @@ class InputDateFhDP extends InputTextFhDP implements LanguageChangeObserver {
     languageChanged(code: string) {
         this.input.placeholder = this.makePlaceholder(this.format);
         (<any>$(this.inputGroupElement)).data("DateTimePicker").locale(this.i18n.selectedLanguage);
-        (<any>$(this.inputGroupElement)).data("DateTimePicker").tooltips(this.tooltipsI18n[this.i18n.selectedLanguage]);
+        (<any>$(this.inputGroupElement)).data("DateTimePicker").tooltips(this.tooltipsI18n[this.i18n.selectedLanguage] ? this.tooltipsI18n[this.i18n.selectedLanguage] : this.tooltipsI18n["en"]);
     }
 
     wrap(skipLabel, isInputElement) {

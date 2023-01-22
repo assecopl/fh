@@ -12,7 +12,7 @@
     <parent>
         <groupId>pl.fhframework</groupId>
         <artifactId>fhFramework</artifactId>
-        <version>4.10.4-SNAPSHOT</version>
+        <version>4.10.4.PL.3-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -27,7 +27,7 @@
     <distributionManagement>
         <snapshotRepository>
             <id>nexus-releases</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <url>http://172.25.107.188:8081/repository/sisc-snapshots/</url>
         </snapshotRepository>
         <repository>
             <id>nexus-releases</id>

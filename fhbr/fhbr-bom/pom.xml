@@ -21,7 +21,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>pl.fhframework.fhbr</groupId>
     <artifactId>fhbr-bom</artifactId>
-    <version>4.10.4-SNAPSHOT</version>
+    <version>4.10.4.PL.3-SNAPSHOT</version>
 
     <packaging>pom</packaging>
 
@@ -144,12 +144,12 @@
 
     <distributionManagement>
         <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <id>nexus-releases</id>
+            <url>http://172.25.107.188:8081/repository/sisc-snapshots/</url>
         </snapshotRepository>
         <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+            <id>nexus-releases</id>
+            <url>http://172.25.107.188:8081/repository/sisc-releases/</url>
         </repository>
     </distributionManagement>
 

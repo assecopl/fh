@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>fhFramework</artifactId>
-	<version>4.10.4-SNAPSHOT</version>
+	<version>4.10.4.PL.3-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	
 	<name>FH</name>
@@ -13,7 +13,7 @@
 	<parent>
 		<groupId>pl.fhframework</groupId>
 		<artifactId>fh-compile-bom</artifactId>
-		<version>4.10.4-SNAPSHOT</version>
+		<version>4.10.4.PL.3-SNAPSHOT</version>
 		<relativePath>./bom-project-lite/fh-compile-bom</relativePath>
 	</parent>
 
@@ -170,36 +170,24 @@
                 <plugins>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-deploy-plugin</artifactId>
-						<version>2.8.2</version>
-						<configuration>
-							<skip>true</skip>
-						</configuration>
+						<artifactId>maven-source-plugin</artifactId>
+						<version>3.2.1</version>
+						<executions>
+							<execution>
+								<id>attach-sources</id>
+								<phase>package</phase>
+								<goals>
+									<goal>jar-no-fork</goal>
+								</goals>
+							</execution>
+						</executions>
 					</plugin>
-                    <plugin>
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.5.1</version>
-                        <executions>
-                            <execution>
-                                <id>default-deploy</id>
-                                <phase>deploy</phase>
-                                <goals>
-                                    <goal>deploy</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <serverId>nexus-releases</serverId>
-                            <nexusUrl>http://172.25.107.188:8081/</nexusUrl>
-                            <skipStaging>true</skipStaging>
-                        </configuration>
-                    </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.9</version>
+                        <version>3.4.0</version>
                         <configuration>
+							<doclint>none</doclint>
                             <tags>
                                 <tag>
                                     <name>summary</name>
@@ -236,15 +224,18 @@
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
+								<phase>package</phase>
                                 <goals>
                                     <goal>jar</goal>
                                 </goals>
-                                <configuration> <!-- add this to disable checking -->
-                                    <additionalparam>-Xdoclint:none</additionalparam>
-                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-deploy-plugin</artifactId>
+						<version>2.8.2</version>
+					</plugin>
                 </plugins>
             </build>
         </profile>

@@ -1,4 +1,4 @@
-﻿<project xmlns="http://maven.apache.org/POM/4.0.0"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
@@ -10,7 +10,7 @@
     <parent>
         <groupId>pl.fhframework</groupId>
         <artifactId>fh-boot-bom</artifactId>
-        <version>4.10.4-SNAPSHOT</version>
+        <version>4.10.4.PL.3-SNAPSHOT</version>
         <relativePath>../../bom-project-lite/fh-boot-bom</relativePath>
     </parent>
     <properties>
@@ -80,7 +80,7 @@
                             <goal>install-node-and-yarn</goal>
                         </goals>
                         <configuration>
-                            <nodeVersion>v12.16.2</nodeVersion>
+                            <nodeVersion>v12.22.0</nodeVersion>
                             <yarnVersion>v1.22.10</yarnVersion>
                         </configuration>
                     </execution>
