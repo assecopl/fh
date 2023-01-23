@@ -34,7 +34,6 @@ class XMLViewerFhDP extends HTMLFormComponent {
             $.each(change.changedAttributes, function (name, newValue) {
                 switch (name) {
                     case 'content':
-                        this.buildInnerHTML();
                         this.content = newValue;
                         this.renderXML();
                         break;
