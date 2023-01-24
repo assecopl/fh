@@ -266,11 +266,11 @@
     <distributionManagement>
         <snapshotRepository>
             <id>nexus-releases</id>
-            <url>http://172.25.107.188:8081/repository/sisc-snapshots/</url>
+            <url>http://10.5.0.230:8081/repository/sisc-snapshots/</url>
         </snapshotRepository>
         <repository>
             <id>nexus-releases</id>
-            <url>http://172.25.107.188:8081/repository/sisc-releases/</url>
+            <url>http://10.5.0.230:8081/repository/sisc-releases/</url>
         </repository>
     </distributionManagement>
 
