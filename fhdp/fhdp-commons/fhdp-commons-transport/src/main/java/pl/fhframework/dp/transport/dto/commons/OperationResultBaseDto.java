@@ -3,7 +3,6 @@ package pl.fhframework.dp.transport.dto.commons;
 import lombok.Getter;
 import lombok.Setter;
 
-
 import java.io.Serializable;
 
 @Getter @Setter
@@ -17,4 +16,5 @@ public class OperationResultBaseDto implements Serializable {
     private boolean ok = true;
     private Long resultCode; //1: Ok, 0: No action, <0: Error
     private String resultMessage;
+    private boolean displayOperationResult = false;
 }

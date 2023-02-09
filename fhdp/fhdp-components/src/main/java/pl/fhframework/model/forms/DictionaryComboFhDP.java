@@ -178,6 +178,8 @@ public class DictionaryComboFhDP extends ComboFhDP implements IGroupingComponent
     @JsonIgnore
     private String lastCodeSelected;
 
+    protected boolean noResult = false;
+
     public DictionaryComboFhDP(Form form) {
         super(form);
     }
@@ -433,9 +435,11 @@ public class DictionaryComboFhDP extends ComboFhDP implements IGroupingComponent
                             rawValue = null;
                         }
                     }
-                    System.out.println("processValueBinding. New rawValue: " + ((rawValue == null)?"real null":rawValue));
-                    elementChanges.addChange(VALUE_FOR_CHANGED_BINDING_ATTR, (rawValue == null)?"":rawValue);
-                    System.out.println("After processValueBinding. dirty: " + dirty);
+                    if(!this.searchPerformed) {
+                        System.out.println("processValueBinding. New rawValue: " + ((rawValue == null) ? "real null" : rawValue));
+                        elementChanges.addChange(VALUE_FOR_CHANGED_BINDING_ATTR, (rawValue == null) ? "" : rawValue);
+                        System.out.println("After processValueBinding. dirty: " + dirty);
+                    }
                     return true;
                 }
             }
@@ -475,6 +479,14 @@ public class DictionaryComboFhDP extends ComboFhDP implements IGroupingComponent
 
             columns = dataProvider.getColumnDefinitions();
             elementChange.addChange(ATTR_COLUMNS, columns);
+            if(this.noResult == true){
+                //Force model clean when there is no matching values found.
+                this.updateBindingForValue(null, getModelBinding(), getModelBinding().getBindingExpression(), this.getOptionalFormatter());
+                this.updateFilterTextBinding();
+                elementChange.addChange("searchRequested", this.filterText);
+//                elementChange.addChange(VALUE_FOR_CHANGED_BINDING_ATTR, this.filterText);
+                this.noResult = false;
+            }
         }
         if(currentLastValue != null) {
             Object lastValue = elementChange.getChangedAttributes().get(ATTR_LAST_VALUE);
@@ -552,8 +564,6 @@ public class DictionaryComboFhDP extends ComboFhDP implements IGroupingComponent
                     rawValue = dataProvider.getDisplayValue(selectedItem);
                 }
             }
-            System.out.println("After updateModel. dirty: " + dirty);
-            refreshView();
         }
         if(valueChange.hasAttributeChanged("dirty")){
             dirty = valueChange.getBooleanAttribute("dirty");
@@ -603,6 +613,9 @@ public class DictionaryComboFhDP extends ComboFhDP implements IGroupingComponent
         } else {
             pageModel = (PageModel) ReflectionUtils.run(this.getValuesPaged, this.dataProvider, allParamsList.toArray());
             updateRows(pageable);
+            if(this.pageModel.getPage().isEmpty()){
+                this.noResult = true;
+            }
 
         }
         searchPerformed = true;

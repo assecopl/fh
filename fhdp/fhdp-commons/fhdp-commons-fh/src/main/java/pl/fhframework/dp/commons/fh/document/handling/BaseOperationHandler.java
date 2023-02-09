@@ -2,6 +2,7 @@ package pl.fhframework.dp.commons.fh.document.handling;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.fhframework.dp.commons.fh.utils.rest.facade.FacadeClientFactory;
@@ -15,6 +16,7 @@ import pl.fhframework.dp.transport.dto.commons.OperationStateResponseDto;
  */
 @Service
 @Getter @Setter
+@Slf4j
 public abstract class BaseOperationHandler<UC extends BaseDocumentHandlingUC> {
     protected UC documentHandlingUC;
 
@@ -29,5 +31,15 @@ public abstract class BaseOperationHandler<UC extends BaseDocumentHandlingUC> {
 
     public OperationStateResponseDto checkOperationState(String operationId, Long docId, String processId) {
         return null;
+    }
+
+    /**
+     * Method for displaying results of asynchronous operation.
+     * Triggered by setting
+     * ret.setDisplayOperationResult(true);
+     * before calling returnOperationResult(ret) in operation handler.
+     */
+    public void displayOperationResult() {
+        log.warn("***** *** displayOperationResult not implemented!");
     }
 }

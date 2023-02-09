@@ -7,8 +7,15 @@ import lombok.SneakyThrows;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
+import pl.fhframework.WebSocketFormsHandler;
+import pl.fhframework.annotations.Action;
+import pl.fhframework.core.i18n.IUseCase18nListener;
+import pl.fhframework.core.i18n.MessageService;
+import pl.fhframework.core.logging.FhLogger;
+import pl.fhframework.core.uc.IUseCase;
+import pl.fhframework.core.uc.IUseCaseSaveCancelCallback;
+import pl.fhframework.core.uc.UseCase;
 import pl.fhframework.dp.commons.fh.outline.*;
-
 import pl.fhframework.dp.commons.fh.uc.FhdpBaseUC;
 import pl.fhframework.dp.commons.fh.uc.IGenericListOutputCallback;
 import pl.fhframework.dp.commons.fh.uc.header.AppSiderService;
@@ -17,23 +24,12 @@ import pl.fhframework.dp.commons.fh.uc.header.SideBarService;
 import pl.fhframework.dp.commons.fh.utils.FhUtils;
 import pl.fhframework.dp.commons.utils.xml.TextUtils;
 import pl.fhframework.dp.commons.validation.ValidatorProviderFhdp;
-
 import pl.fhframework.dp.transport.dto.commons.OperationResultBaseDto;
 import pl.fhframework.dp.transport.dto.commons.OperationStateResponseDto;
 import pl.fhframework.dp.transport.dto.commons.OperationStepDto;
 import pl.fhframework.dp.transport.dto.operations.OperationDtoQuery;
 import pl.fhframework.dp.transport.enums.IDocType;
 import pl.fhframework.dp.transport.enums.PerformerEnum;
-import pl.fhframework.WebSocketFormsHandler;
-import pl.fhframework.annotations.Action;
-import pl.fhframework.core.i18n.IUseCase18nListener;
-import pl.fhframework.core.i18n.MessageService;
-import pl.fhframework.core.logging.FhLogger;
-import pl.fhframework.core.uc.*;
-import pl.fhframework.dp.commons.fh.outline.GroupTreeElement;
-import pl.fhframework.dp.commons.fh.outline.IndexedTreeElement;
-import pl.fhframework.dp.commons.fh.outline.OutlineService;
-import pl.fhframework.dp.commons.fh.outline.TreeElement;
 import pl.fhframework.event.EventRegistry;
 import pl.fhframework.event.dto.NotificationEvent;
 import pl.fhframework.model.forms.Form;
@@ -41,7 +37,10 @@ import pl.fhframework.validation.IValidationResults;
 import pl.fhframework.validation.ValidationPhase;
 
 import javax.xml.bind.JAXBException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 @UseCase
 @Getter @Setter
@@ -517,6 +516,9 @@ public  abstract class BaseDocumentHandlingUC<MODEL extends BaseDocumentHandling
                         @Override
                         public void save(OperationStatusCheckForm.Model one) {
                             refreshView();
+                            if(result.isDisplayOperationResult()) {
+                                documentHandler.getOperationHandler().displayOperationResult();
+                            }
                         }
 
                         @Override

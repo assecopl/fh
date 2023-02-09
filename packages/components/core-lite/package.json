@@ -1,6 +1,6 @@
 {
   "name": "fh-forms-handler",
-  "version": "4.10.5-SNAPSHOT-1669889569967",
+  "version": "4.10.5-SNAPSHOT-1674764763653",
   "main": "Module.ts",
   "types": "dist/Module.d.ts",
   "description": "fh framework core for frontend",
