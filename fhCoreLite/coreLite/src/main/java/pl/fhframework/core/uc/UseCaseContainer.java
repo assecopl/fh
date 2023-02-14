@@ -1297,7 +1297,11 @@ public class UseCaseContainer implements Serializable {
     }
 
     public IUseCase getSystemUseCase(String containerId) {
-        return systemContainerForUseCase.get(containerId).getUseCase();
+        try {
+            return systemContainerForUseCase.get(containerId).getUseCase();
+        } catch (NullPointerException ex) {
+            return null;
+        }
     }
 
     private UseCaseContext<?, ?> getUseCaseContext(IUseCase useCase) {// we always work in actual PU context - this stack above. Maybe is redundant?
