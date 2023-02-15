@@ -22,6 +22,7 @@
 		<xs:attribute name="index" type="xs:string" use="optional"/>
 		<xs:attribute name="repeatForMode" type="xs:string" use="optional"/>
 		<xs:attribute name="repeatForGrouping" type="xs:string" use="optional"/>
+		<xs:attribute name="formModel" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="MappingsListCT">
 		<xs:sequence>
