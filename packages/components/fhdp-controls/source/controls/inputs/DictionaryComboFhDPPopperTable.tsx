@@ -266,7 +266,6 @@ export const DictionaryComboFhDPPopperTable: React.FC<Props> = (props: Props) =>
         minWidth: "400px",
         minHeight: "200px",
         maxWidth: '50vw',
-        width: `${columns.length * 100}px`,
         zIndex: 99999,
         display: 'none',
         alignItems: 'flex-end',
