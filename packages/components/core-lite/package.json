@@ -1,7 +1,7 @@
 {
   "name": "fh-forms-handler",
-  "version": "4.10.5-SNAPSHOT-1674764763653",
-  "main": "Module.ts",
+  "version": "4.10.5-SNAPSHOT-1676895024965",
+  "main": "dist/Module.js",
   "types": "dist/Module.d.ts",
   "description": "fh framework core for frontend",
   "author": "AssecoPL",
