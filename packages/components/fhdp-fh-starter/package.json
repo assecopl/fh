@@ -1,6 +1,6 @@
 {
   "name": "fhdp-fh-starter",
-  "version": "4.10.4-PL-1-SNAPSHOT-1668677861768",
+  "version": "4.10.4-PL-1-SNAPSHOT-1676971344949",
   "author": {
     "name": "Jakub Kosecki",
     "email": "j.kosecki@doittechnology.pl"
@@ -24,10 +24,10 @@
     "typescript": "3.9"
   },
   "dependencies": {
-    "fh-basic-controls": "4.10.4-PL-1-SNAPSHOT-1668677861768",
-    "fh-charts-controls": "4.10.4-PL-1-SNAPSHOT-1668677861768",
-    "fh-forms-handler": "4.10.4-PL-1-SNAPSHOT-1668677861768",
-    "fhdp-controls": "4.10.4-PL-1-SNAPSHOT-1668677861768",
-    "fhdp-extenders": "4.10.4-PL-1-SNAPSHOT-1668677861768"
+    "fh-basic-controls": "4.10.4-PL-1-SNAPSHOT-1676971344949",
+    "fh-charts-controls": "4.10.4-PL-1-SNAPSHOT-1676971344949",
+    "fh-forms-handler": "4.10.4-PL-1-SNAPSHOT-1676971344949",
+    "fhdp-controls": "4.10.4-PL-1-SNAPSHOT-1676971344949",
+    "fhdp-extenders": "4.10.4-PL-1-SNAPSHOT-1676971344949"
   }
 }
