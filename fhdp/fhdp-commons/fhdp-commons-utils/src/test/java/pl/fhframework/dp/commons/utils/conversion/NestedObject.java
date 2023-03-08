@@ -3,7 +3,10 @@ package pl.fhframework.dp.commons.utils.conversion;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Setter
@@ -49,6 +52,10 @@ public class NestedObject {
   private Long longObjTest;
   private Short shortObjTest;
   private BigInteger bigIntegerObjTest;
+  private BigDecimal bigDecimalObjTest;
+  private LocalDate localDateObjTest;
+  private LocalDateTime localDateTimeObjTest;
+  private TestEnum testEnumObjTest;
 
   private Boolean booleanObjEmptyTest;
   private Byte byteObjEmptyTest;
@@ -59,4 +66,9 @@ public class NestedObject {
   private Long longObjEmptyTest;
   private Short shortObjEmptyTest;
   private BigInteger bigIntegerObjEmptyTest;
+
+  private BigDecimal bigDecimalObjEmptyTest;
+  private LocalDate localDateEmptyObjTest;
+  private LocalDateTime localDateTimeEmptyObjTest;
+  private TestEnum testEnumEmptyObjTest;
 }
