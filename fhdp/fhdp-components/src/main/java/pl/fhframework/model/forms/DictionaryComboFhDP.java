@@ -429,6 +429,7 @@ public class DictionaryComboFhDP extends ComboFhDP implements IGroupingComponent
                             } else {
                                 rawValue = filterText;
                             }
+                            elementChanges.addChange(VALUE_FOR_CHANGED_BINDING_ATTR, (rawValue == null) ? "" : rawValue);
                         } else {
                             filterText = null;
                             selectedItem = null;

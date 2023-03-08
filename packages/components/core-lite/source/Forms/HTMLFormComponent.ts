@@ -460,9 +460,10 @@ abstract class HTMLFormComponent extends FormComponent {
 
     destroyHint() {
         if (this.hintElement && this.hintInitialized) {
+            let tip = $(this.hintElement).attr('aria-describedby');
+            let tipElement = $('#' + tip);
             if (this.hintType === 'STATIC' || this.hintType === 'STATIC_LEFT' || this.hintType == 'STATIC_POPOVER' || this.hintType == 'STATIC_POPOVER_LEFT') {
-                let tip = $(this.hintElement).attr('aria-describedby');
-                let tipElement = $('#' + tip);
+
                 if (tipElement.length) {
                     if (this.hintType == 'STATIC_POPOVER' || this.hintType == 'STATIC_POPOVER_LEFT') {
                         tipElement.popover('hide');
@@ -500,6 +501,11 @@ abstract class HTMLFormComponent extends FormComponent {
                 $(this.hintElement).tooltip('dispose');
             }
             this.hintInitialized = false;
+            if (tipElement.length) {
+                //Problems on FireFox - hint sometimes stays on site after page change.
+                //Just to make sure that tooltip will disappear.
+                tipElement.remove();
+            }
         }
     }
 
