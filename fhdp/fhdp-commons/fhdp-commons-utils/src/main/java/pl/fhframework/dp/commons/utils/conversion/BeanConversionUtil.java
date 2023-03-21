@@ -85,7 +85,13 @@ public class BeanConversionUtil {
         String decName = StringUtils.substringBefore(fullSenderIdPath, ".");
         String senderIdPath = fullSenderIdPath.substring(decName.length());
         senderIdPath = toLowerCaseAfterDot(senderIdPath);
-        return (String) PropertyUtils.getNestedProperty(msg, senderIdPath.substring(1));
+        String ret = null;
+        try {
+            ret = (String) PropertyUtils.getNestedProperty(msg, senderIdPath.substring(1));
+        } catch (Exception ex) {
+            log.error("Nested property error", ex);
+        }
+        return ret;
     }
 
     private static String toLowerCaseAfterDot(String xpath) {
