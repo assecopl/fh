@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.beanutils.NestedNullException;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -88,8 +89,8 @@ public class BeanConversionUtil {
         String ret = null;
         try {
             ret = (String) PropertyUtils.getNestedProperty(msg, senderIdPath.substring(1));
-        } catch (Exception ex) {
-            log.error("Nested property error", ex);
+        } catch (NestedNullException ex) {
+//            log.error("Nested property error", ex);
         }
         return ret;
     }
