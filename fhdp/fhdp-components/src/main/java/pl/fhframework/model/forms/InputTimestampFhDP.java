@@ -35,6 +35,8 @@ public class InputTimestampFhDP extends InputTimestamp{
     public static final String ATTR_IS_LAST_VALUE_ENABLED = "isLastValueEnabled";
     public static final String ATTR_ADDITIONAL_BUTTONS = "isAdditionalButtons";
     public static final String ATTR_AVAILABLE_TIME_RANGE = "availableTimeRange";
+    public static final String ATTR_CALENDAR_POSITION_VERTICAL = "calendarPositionVertical";
+    public static final String ATTR_CALENDAR_POSITION_HORIZONTAL = "calendarPositionHorizontal";
 
     @Getter
     private String lastValue;
@@ -53,6 +55,12 @@ public class InputTimestampFhDP extends InputTimestamp{
 
     @Getter
     private String availableTimeRange;
+
+    @Getter
+    private String calendarPositionVertical;
+
+    @Getter
+    private String calendarPositionHorizontal;
 
     @JsonIgnore
     @Getter
@@ -93,6 +101,22 @@ public class InputTimestampFhDP extends InputTimestamp{
     @DesignerXMLProperty(commonUse = true, previewValueProvider = BindingExpressionDesignerPreviewProvider.class, functionalArea = CONTENT)
     @DocumentedComponentAttribute(boundable = true, value = "Component source. Relative path to md file.")
     private ModelBinding hideCrossedModelBinding;
+
+    @JsonIgnore
+    @Getter
+    @Setter
+    @XMLProperty(required = true, value = ATTR_CALENDAR_POSITION_VERTICAL) //Powiązanie bindingu z property
+    @DesignerXMLProperty(commonUse = true, previewValueProvider = BindingExpressionDesignerPreviewProvider.class, functionalArea = CONTENT)
+    @DocumentedComponentAttribute(defaultValue = "auto", boundable = true, value = "Component source. Relative path to md file.")
+    private ModelBinding calendarPositionVerticalModelBinding;
+
+    @JsonIgnore
+    @Getter
+    @Setter
+    @XMLProperty(required = true, value = ATTR_CALENDAR_POSITION_HORIZONTAL) //Powiązanie bindingu z property
+    @DesignerXMLProperty(commonUse = true, previewValueProvider = BindingExpressionDesignerPreviewProvider.class, functionalArea = CONTENT)
+    @DocumentedComponentAttribute(defaultValue = "auto", boundable = true, value = "Component source. Relative path to md file.")
+    private ModelBinding calendarPositionHorizontalModelBinding;
 
 
     public InputTimestampFhDP(Form form) {
@@ -145,6 +169,24 @@ public class InputTimestampFhDP extends InputTimestamp{
             }
         }
 
+        if(calendarPositionVertical != null){
+            BindingResult bindingResult = calendarPositionVerticalModelBinding.getBindingResult();
+            if(bindingResult != null){
+                if(bindingResult.getValue() != null){
+                    this.calendarPositionVertical = convertValue(bindingResult.getValue(), String.class);
+                }
+            }
+        }
+
+        if(calendarPositionHorizontal != null){
+            BindingResult bindingResult = calendarPositionHorizontalModelBinding.getBindingResult();
+            if(bindingResult != null){
+                if(bindingResult.getValue() != null){
+                    this.calendarPositionHorizontal = convertValue(bindingResult.getValue(), String.class);
+                }
+            }
+        }
+
     }
     @Override
     public ElementChanges updateView() {
@@ -178,6 +220,14 @@ public class InputTimestampFhDP extends InputTimestamp{
             this.hideCrossed = newRaw;
             elementChange.addChange(ATTR_HIDE_CROSSED, this.hideCrossed);
 
+        }
+        if(calendarPositionVerticalModelBinding != null) {
+            BindingResult bindingResult = calendarPositionVerticalModelBinding.getBindingResult();
+            this.calendarPositionVertical = convertValue(bindingResult.getValue(), String.class);
+        }
+        if(calendarPositionHorizontalModelBinding != null) {
+            BindingResult bindingResult = calendarPositionHorizontalModelBinding.getBindingResult();
+            this.calendarPositionHorizontal = convertValue(bindingResult.getValue(), String.class);
         }
         return elementChange;
     }
