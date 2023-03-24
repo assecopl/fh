@@ -436,20 +436,24 @@ public abstract class ObjectDataComparatorBase<CHANGE, DTO> {
 			Map<Object, Object> newValues = new HashMap<Object, Object>();
 			List<Object> keys = new ArrayList<Object>();
 			Long pos = 1L;
-			for(Object item : oldObjCollection) {
-				Object iID = pi.getObjectID(item, pos);
-				oldValues.put(iID, item);
-				keys.add(iID);
-				pos++;
+			if(oldObjCollection!=null) {
+				for(Object item : oldObjCollection) {
+					Object iID = pi.getObjectID(item, pos);
+					oldValues.put(iID, item);
+					keys.add(iID);
+					pos++;
+				}
 			}
 			pos = 1L;
-			for(Object item : newObjCollection) {
-				Object iID = pi.getObjectID(item, pos);
-				newValues.put(iID, item);
-				if(!keys.contains(iID)) {
-					keys.add(iID);
+			if(newObjCollection!=null) {
+				for(Object item : newObjCollection) {
+					Object iID = pi.getObjectID(item, pos);
+					newValues.put(iID, item);
+					if(!keys.contains(iID)) {
+						keys.add(iID);
+					}
+					pos++;
 				}
-				pos++;
 			}
 			
 			Comparator<Object> idComparator = new Comparator<Object>() {
