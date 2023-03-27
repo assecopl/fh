@@ -79,10 +79,18 @@
                         <InputDate width="md-12" value="{dto.value}" requiredRegexBinding="{dto.pattern}" requiredRegexMessage="{$.fhdp.parameters.validation.message}"
                                    availability="{checkControlVisibility(dto.valueTypes, 'InputDate')}"/>
                         <Repeater collection="{dto.values}" iterator="row">
-                            <InputText width="md-10" value="{row.value}" requiredRegexBinding="{dto.pattern}" requiredRegexMessage="{$.fhdp.parameters.validation.message}"/>
+                            <InputText width="md-10" value="{row.value}" requiredRegexBinding="{dto.pattern}" requiredRegexMessage="{$.fhdp.parameters.validation.message}"
+                                       availability="{checkControlVisibility(dto.valueTypes, 'Repeater')}"
+                            />
                             <Button width="md-2" label="[icon='far fa-trash-alt']"
+                                    availability="{checkControlVisibility(dto.valueTypes, 'Repeater')}"
                                     styleClasses="pl-0 ml-0" style="primary" onClick="removeRepeater({row$rowNo})"/>
                         </Repeater>
+                        <SelectOneMenu width="md-12"
+                                       value="{dto.value}"
+                                       values="{dto.getFormattedCollectionValues()}"
+                                       onChange="-"
+                                       availability="{checkControlVisibility(dto.valueTypes, 'SelectOneMenu')}"/>
                     </Group>
                 </Group>
                 <Group width="md-12">

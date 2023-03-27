@@ -128,6 +128,12 @@ public class SubstantiveParametersListModel extends GenericListPagedModel<Substa
                 }
                 break;
             }
+            case ONE_OF: {
+                if (controlType.equals("SelectOneMenu")) {
+                    return DEFAULT_CONTROLS_STATE;
+                }
+                break;
+            }
         }
         return AccessibilityEnum.HIDDEN;
     }
@@ -165,5 +171,12 @@ public class SubstantiveParametersListModel extends GenericListPagedModel<Substa
         }
 
         return DEFAULT_CONTROLS_STATE;
+    }
+
+    public String formatRowValue(SubstantiveParametersDto row) {
+        if(row.getValueTypes() == SubstantiveParametersValueTypeEnum.COLLECTION) {
+            return String.join(", ", row.getFormattedCollectionValues());
+        }
+        return row.getValue();
     }
 }

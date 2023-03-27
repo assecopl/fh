@@ -88,8 +88,13 @@
                         <InputDate width="md-12" value="{selectedSubstantiveParametersDto.value}"
                                    availability="{checkControlVisibility(selectedSubstantiveParametersDto.valueTypes, 'InputDate')}"/>
                         <Repeater collection="{selectedSubstantiveParametersDto.values}" iterator="row">
-                            <InputText width="md-10" value="{row.value}" availability="VIEW"/>
+                            <InputText width="md-10" value="{row.value}" availability="{checkControlVisibility(selectedSubstantiveParametersDto.valueTypes, 'Repeater')}"/>
                         </Repeater>
+                        <SelectOneMenu width="md-12"
+                                       value="{selectedSubstantiveParametersDto.value}"
+                                       values="{selectedSubstantiveParametersDto.getFormattedCollectionValues()}"
+                                       onChange="-"
+                                       availability="{checkControlVisibility(selectedSubstantiveParametersDto.valueTypes, 'SelectOneMenu')}"/>
                     </Group>
                     <Group width="md-6">
                         <OutputLabel width="md-12" value="{$.fhdp.parameters.property.unit}"
