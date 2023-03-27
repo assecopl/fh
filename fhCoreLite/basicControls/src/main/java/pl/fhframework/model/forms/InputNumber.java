@@ -39,6 +39,13 @@ public class InputNumber extends BaseInputFieldWithKeySupport {
 
     @Getter
     @Setter
+    @XMLProperty
+    @DesignerXMLProperty(priority = 123, functionalArea = SPECIFIC)
+    @DocumentedComponentAttribute(value = "Defines how many digits can be used.")
+    private Integer maxLength;
+
+    @Getter
+    @Setter
     @XMLProperty(value = TEXTALIGN_ATTR)
     @DesignerXMLProperty(functionalArea = LOOK_AND_STYLE, priority = 98)
     @DocumentedComponentAttribute(defaultValue = "left", value = "Inner text align.")
