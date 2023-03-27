@@ -64,6 +64,12 @@ public class SubstantiveParametersDetailEditForm extends Form<SubstantiveParamet
                     }
                     break;
                 }
+                case ONE_OF: {
+                    if (controlType.equals("SelectOneMenu")) {
+                        return DEFAULT_CONTROLS_STATE;
+                    }
+                    break;
+                }
             }
             return AccessibilityEnum.HIDDEN;
         }

@@ -45,8 +45,7 @@
                                  inlineStyle="padding: 6px 10px;" availability="{checkScopeVisibility(row, 'warning')}"/>
                 </ColumnPaged>
                 <ColumnPaged label="{$.fhdp.parameters.property.value}" width="30" styleClasses="text-wrap" sortBy="value.keyword">
-                    <OutputLabel value="{row.getFormattedCollectionValues()}" width="md-12"/>
-                    <OutputLabel value="{row.value}" width="md-12"/>
+                    <OutputLabel value="{formatRowValue(row)}" width="md-12"/>
                 </ColumnPaged>
                 <ColumnPaged label="{$.fhdp.parameters.property.unit}" value="{row.unit}" width="10" sortBy="unit.keyword"/>
                 <ColumnPaged label="{$.fhdp.parameters.property.component}" value="{row.components}" width="7" sortBy="components.keyword"/>

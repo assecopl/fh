@@ -7,5 +7,6 @@ public enum SubstantiveParametersValueTypeEnum {
     DATE,
     DATETIME,
     BOOL,
-    COLLECTION
+    COLLECTION,
+    ONE_OF
 }
