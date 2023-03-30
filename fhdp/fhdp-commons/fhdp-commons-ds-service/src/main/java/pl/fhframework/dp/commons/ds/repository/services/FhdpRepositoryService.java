@@ -279,6 +279,11 @@ public class FhdpRepositoryService implements IRepositoryService {
 							HistoryDocumentContent historyDocumentContent = null;
 							RepositoryDocument doc = getDocumentDAO().getObject(request.getId());
 							HistoryRepositoryDocument hDoc = new HistoryRepositoryDocument(doc, hId);
+							//when content is updated
+							if(request.getContent()!=null) {
+								hDoc.setChangedContent(true);
+							}
+
 							String hdcId = hDoc.getHistoryContentId();
 //							doc.put("_id", hId);
 //							doc.put("documentId", request.getId());							
@@ -536,7 +541,7 @@ public class FhdpRepositoryService implements IRepositoryService {
 				doc.setModified(rd.getModified());
 				doc.setChangedContent(rd.isChangedContent());
 				
-				if(request.isWithContent() && rd.isChangedContent()) {
+				if(request.isWithContent() && (rd.isChangedContent()||request.isLatest())) {
 					DocumentContent content = hDokumentContentDAO.getObject(rd.getHistoryContentId());
 					doc.setContent(content.getContent());
 				}
