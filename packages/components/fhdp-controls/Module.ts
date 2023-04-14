@@ -26,6 +26,7 @@ import {HTMLRawViewFhDP} from "./source/controls/HTMLRawViewFhDP"
 import {CheckBoxFhDP} from './source/controls/inputs/CheckBoxFhDP';
 import {NotificationEventFhDP} from './source/controls/NotificationEventFhDP';
 import {XMLViewerFhDP} from './source/controls/XMLViewerFhDP';
+import {PageExistBroadcastFhDP} from './source/controls/PageExistBroadcastFhDP';
 import {RegionPickerFhDP} from './source/controls/RegionPickerFhDP';
 import * as pack from './package.json';
 import {MSReportsView} from './source/controls/MSReportsView';
@@ -207,6 +208,13 @@ class FhDPControls extends FhModule {
             .toFactory<XMLViewerFhDP>(() => {
                 return (componentObj: any, parent: any) => {
                     return new XMLViewerFhDP(componentObj, parent);
+                };
+            });
+
+        FhContainer.bind<(componentObj: any, parent: any) => PageExistBroadcastFhDP>("PageExistBroadcastFhDP")
+            .toFactory<PageExistBroadcastFhDP>(() => {
+                return (componentObj: any, parent: any) => {
+                    return new PageExistBroadcastFhDP(componentObj, parent);
                 };
             });
 
