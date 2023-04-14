@@ -6,6 +6,9 @@ class PanelHeaderFhDP extends HTMLFormComponent{
     private title: string = null;
     private onClick: any;
 
+    private div_title:HTMLDivElement;
+    private div_info:HTMLDivElement;
+
 
     constructor(componentObj: any, parent: HTMLFormComponent) {
         super(componentObj, parent);
@@ -53,6 +56,8 @@ class PanelHeaderFhDP extends HTMLFormComponent{
 
         header_div.appendChild(header_group_div);
 
+        this.div_title = div_title;
+        this.div_info = div_info;
         if(!!this.info) {
             div_info.innerText = this.info;
         }
@@ -121,10 +126,12 @@ class PanelHeaderFhDP extends HTMLFormComponent{
                     case 'title':
                         this.title = newValue;
                         this.component.title = this.title;
+                        this.div_title.innerText = this.title;
                         break;
                     case 'info':
                         this.info = newValue;
                         this.component.info = this.info;
+                        this.div_info.innerText = this.info;
                         break;
                 }
             }.bind(this));
