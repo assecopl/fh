@@ -391,6 +391,8 @@ public class FacadeServiceCtl implements IFacadeService {
                     String errorMessage = ex.getCause().getCause().getMessage();
                     if(errorMessage.contains("Key (tin, lrn)")) {
                         message += " - LRN and TIN";
+                    } else {
+                        message += " - " + ((ConstraintViolationException) ex.getCause()).getConstraintName();
                     }
                 }
             }
