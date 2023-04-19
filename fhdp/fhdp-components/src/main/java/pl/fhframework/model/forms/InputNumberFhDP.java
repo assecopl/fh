@@ -7,6 +7,7 @@ import pl.fhframework.BindingResult;
 import pl.fhframework.annotations.*;
 import pl.fhframework.binding.ModelBinding;
 import pl.fhframework.model.dto.ElementChanges;
+import pl.fhframework.model.dto.ValueChange;
 import pl.fhframework.model.forms.designer.BindingExpressionDesignerPreviewProvider;
 import pl.fhframework.model.forms.designer.InputFieldDesignerPreviewProvider;
 import pl.fhframework.model.forms.optimized.ColumnOptimized;
@@ -148,4 +149,23 @@ public class InputNumberFhDP extends InputNumber{
 
         return elementChange;
     }
+
+    @Override
+    public void updateModel(ValueChange valueChange) {
+        boolean isNumericRawValue = isNumeric(valueChange.getMainValue());
+        if(!isNumericRawValue) {
+            valueChange.getChangedAttributes().put(ValueChange.MAIN_VALUE_ATTRIBUTE, "");
+        }
+        super.updateModel(valueChange);
+    }
+
+    private boolean isNumeric(String strNum) {
+        try {
+            Double.parseDouble(strNum);
+            return true;
+        } catch (NumberFormatException | NullPointerException nfe) {
+            return false;
+        }
+    }
+
 }
