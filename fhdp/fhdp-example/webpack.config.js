@@ -37,7 +37,12 @@ module.exports = function (env) {
                     },
                     {
                         loader: "sass-loader",
-                        options: {}
+                        options: {
+                          implementation: require("sass"),
+                          sassOptions: {
+                            fiber: false,
+                          },
+                        }
                     }
                 ]
             }, {
