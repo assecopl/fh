@@ -1,13 +1,13 @@
 {
   "name": "fh-charts-controls",
-  "version": "4.10.4-PL-1-SNAPSHOT-1681456667090",
+  "version": "4.10.4-PL-1-SNAPSHOT-1681822005064",
   "main": "dist/Module.js",
   "types": "dist/Module.d.ts",
   "description": "fh framework charts controls",
   "author": "AssecoPL",
   "license": "Apache License 2.0",
   "scripts": {
-    "prepublish": "node prepublish",
+    "prepublishOnly": "node prepublish",
     "postpublish": "node postpublish",
     "build": "tsc && copyfiles ./source/styles/*.css source/Module.css ./dist",
     "prepare": "npm run build",
@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "chart.js": "2.9.4",
-    "fh-forms-handler": "4.10.4-PL-1-SNAPSHOT-1681456667090",
+    "fh-forms-handler": "4.10.4-PL-1-SNAPSHOT-1681822005064",
     "copyfiles": "2.4.1"
   }
 }

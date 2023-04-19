@@ -73,8 +73,8 @@ Supported params:
 class Runtime {
   constructor() {
     const nodeV = process.version.match(/^v(\d+)/)[1];
-    if (nodeV !== '12') {
-      throw new Error('Please use node js in version 12!');
+    if (nodeV !== '14') {
+      throw new Error('Please use node js in version 14!');
     }
   }
 

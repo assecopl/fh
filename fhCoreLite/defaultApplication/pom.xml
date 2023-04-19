@@ -80,8 +80,8 @@
                             <goal>install-node-and-yarn</goal>
                         </goals>
                         <configuration>
-                            <nodeVersion>v12.22.0</nodeVersion>
-                            <yarnVersion>v1.22.10</yarnVersion>
+                            <nodeVersion>v14.18.1</nodeVersion>
+                            <yarnVersion>v1.22.19</yarnVersion>
                         </configuration>
                     </execution>
                     <execution>
