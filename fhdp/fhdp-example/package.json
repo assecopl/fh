@@ -43,7 +43,7 @@
     "zlib": "^1.0.5"
   },
   "dependencies": {
-    "fhdp-charts": "^4.10.0-PL-6",
-    "fhdp-fh-starter": "^4.10.0-PL-6"
+    "fhdp-charts": "4.10.4-PL-1-SNAPSHOT-1681822005064",
+    "fhdp-fh-starter": "4.10.4-PL-1-SNAPSHOT-1681822005064"
   }
 }
