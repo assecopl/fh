@@ -1,6 +1,6 @@
 {
   "name": "fhdp-controls",
-  "version": "4.10.4-PL-1-SNAPSHOT-1681456667090",
+  "version": "4.10.4-PL-1-SNAPSHOT-1681822005064",
   "author": {
     "name": "Jakub Kosecki",
     "email": "j.kosecki@doittechnology.pl"
@@ -14,7 +14,7 @@
   "main": "dist/Module.js",
   "types": "dist/Module.d.ts",
   "scripts": {
-    "prepublish": "node prepublish",
+    "prepublishOnly": "node prepublish",
     "postpublish": "node postpublish",
     "build": "tsc && copyfiles ./source/external/** ./source/styles/css/*.css ./source/styles/external-css/*.css ./source/styles/img/*.png source/Module.css ./dist",
     "prepare": "yarn build",
@@ -25,6 +25,7 @@
     "@types/bootstrap": "4.3.1",
     "@types/highlight.js": "9.12.3",
     "@types/jquery": "3.3.31",
+    "@types/jqueryui": "1.12.10",
     "@types/marked": "0.6.5",
     "@types/node": "14.14.36",
     "@types/react-dom": "^16.9.8",
@@ -37,8 +38,8 @@
   "dependencies": {
     "@popperjs/core": "2.5.3",
     "bootstrap-table": "^1.17.1",
-    "fh-basic-controls": "4.10.4-PL-1-SNAPSHOT-1681456667090",
-    "fh-forms-handler": "4.10.4-PL-1-SNAPSHOT-1681456667090",
+    "fh-basic-controls": "4.10.4-PL-1-SNAPSHOT-1681822005064",
+    "fh-forms-handler": "4.10.4-PL-1-SNAPSHOT-1681822005064",
     "iso-639-1": "^2.1.4",
     "jquery-mousewheel": "^3.1.13",
     "jvectormap-next": "^3.1.1",

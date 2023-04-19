@@ -1,13 +1,13 @@
 {
   "name": "fh-forms-handler",
-  "version": "4.10.4-PL-1-SNAPSHOT-1681456667090",
+  "version": "4.10.4-PL-1-SNAPSHOT-1681822005064",
   "main": "dist/Module.js",
   "types": "dist/Module.d.ts",
   "description": "fh framework core for frontend",
   "author": "AssecoPL",
   "license": "Apache License 2.0",
   "scripts": {
-    "prepublish": "node prepublish",
+    "prepublishOnly": "node prepublish",
     "postpublish": "node postpublish",
     "build": "tsc && copyfiles ./source/Styles/*.css source/Module.css ./dist",
     "prepare": "npm run build",
@@ -16,6 +16,7 @@
   "devDependencies": {
     "@types/bootstrap": "4.3.1",
     "@types/jquery": "3.3.31",
+    "@types/jqueryui": "1.12.10",
     "@types/pako": "^1.0.3",
     "less": "3.9.0",
     "typescript": "3.5.3"
