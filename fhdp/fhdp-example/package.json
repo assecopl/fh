@@ -20,7 +20,6 @@
     "compression-webpack-plugin": "6",
     "css-loader": "^1.0.0",
     "element-closest-polyfill": "1.0.0",
-    "fibers": "^4.0.1",
     "file-loader": "^2.0.0",
     "imports-loader": "^0.8.0",
     "javascript-obfuscator": "2.10.4",
