@@ -1,30 +1,40 @@
 const Path = require('path');
 const Webpack = require('webpack');
-const Merge = require('webpack-merge');
+const {merge} = require('webpack-merge');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
-const CompressionPlugin = require("compression-webpack-plugin");
-const zlib = require("zlib");
-const WebpackObfuscator = require('webpack-obfuscator');
+const TerserPlugin = require('terser-webpack-plugin');
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
+const { StatsWriterPlugin } = require("webpack-stats-plugin");
+const { DuplicatesPlugin } = require("inspectpack/plugin");
+const WebpackBundleSizeAnalyzerPlugin = require('webpack-bundle-size-analyzer').WebpackBundleSizeAnalyzerPlugin;
+
 require("@babel/polyfill");
 
 module.exports = function (env) {
-    const isProductionMode = false;//env.envMode !== 'development';
-    const isTestReg = env.testReg === 'tak';
+    const isProductionMode = env.env === 'production';
     console.log(`This is a ${isProductionMode ? "production" : "development"} build`);
-    var entry = ['@babel/polyfill','./src/main/resources/static/Application.ts'];
+    const packagesVersion = process.env.npm_package_version;
+    console.log(`packagesVersion = ${packagesVersion}`);
+
+    var entry = ['@babel/polyfill', './src/main/resources/static/Application.ts'];
     let baseConfig = {
         entry: entry,
         mode: 'development',
-        devtool: 'source-map',
+        devtool: 'inline-source-map',
         output: {
-            path: Path.resolve('./target/classes/static'),
-            filename: 'fhApplication.bundle.js'
+            path: Path.resolve('./target/classes/META-INF/resources/lib'),
+            filename: '[name].js'
+            // filename: 'lib/singlewindow_'+packagesVersion+'.js'
+        },
+        stats: {
+            all:undefined,
+            source: true
         },
         module: {
             rules: [{
                 test: /\.(scss|css)$/,
+                exclude: /node_modules/,
                 use: [
                     MiniCssExtractPlugin.loader,
                     {
@@ -38,56 +48,58 @@ module.exports = function (env) {
                     {
                         loader: "sass-loader",
                         options: {
-                          implementation: require("sass"),
-                          sassOptions: {
-                            fiber: false,
-                          },
+                            implementation: require("sass"),
+                            sassOptions: {
+                              fiber: false,
+                            },
                         }
                     }
                 ]
             }, {
                 test: /\.ts(x?)$/,
-                // exclude: /node_modules/,
+                exclude: /node_modules/,
                 use: [{
                     loader: 'babel-loader'
                 }, {
-                    loader: 'ts-loader'
+                    loader: 'ts-loader',
+                    options:{allowTsInNodeModules: true}
                 }]
             }, {
                 test: /\.js$/,
                 exclude: /node_modules/,
-                use: [{
+                use: {
                     loader: 'babel-loader'
-                },
-//                { loader: 'obfuscator-loader', options: {/* options here */} }
-            ]
+                }
             }, {
                 test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'file-loader?name=./fonts/[name].[ext]'
+                type: 'asset'
             }, {
                 test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'file-loader?name=./fonts/[name].[ext]'
+                type: 'asset'
             }, {
                 test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'file-loader?name=./img/[name].[ext]'
+                type: 'asset'
             }, {
                 test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'file-loader?name=./img/[name].[ext]'
+                type: 'asset'
             }, {
                 test: /\.jpg$/,
-                use: ["file-loader?name=./img/[name].[ext]"]
+                type: 'asset'
             }, {
                 test: /\.png$/,
-                use: ["file-loader?name=./img/[name].[ext]"]
-            }, {
-                test: /jquery-mousewheel/,
-                loader: "imports-loader?define=>false&this=>window"
-            }]
+                type: 'asset'
+            }
+            ]
         },
         resolve: {
             extensions: ['.ts', '.tsx', '.js']
         },
-        plugins: isProductionMode ? [
+        plugins: [
+            new NodePolyfillPlugin(),
+            new StatsWriterPlugin({
+                filename: "../../../../../webpack_stats.json",
+                fields: null
+            }),
             new Webpack.ProvidePlugin({
                 $: 'jquery',
                 jQuery: 'jquery'
@@ -97,43 +109,74 @@ module.exports = function (env) {
                 ENV_IS: JSON.stringify(env)
             }),
             new MiniCssExtractPlugin({
-                filename: 'fhApplication.bundle.css'
+                filename: '[name].[chunkhash].bundle.css',
+                chunkFilename: '[id].[chunkhash].css'
+            
             }),
-//            new WebpackObfuscator ({
-//                    rotateStringArray: true
-//            }, [])
-        ] : [
-            new Webpack.ProvidePlugin({
-                $: 'jquery',
-                jQuery: 'jquery'
+            new DuplicatesPlugin({
+                // Emit compilation warning or error? (Default: `false`)
+                emitErrors: false,
+                // Handle all messages with handler function (`(report: string)`)
+                // Overrides `emitErrors` output.
+                emitHandler: undefined,
+                // List of packages that can be ignored. (Default: `[]`)
+                // - If a string, then a prefix match of `{$name}/` for each module.
+                // - If a regex, then `.test(pattern)` which means you should add slashes
+                //   where appropriate.
+                //
+                // **Note**: Uses posix paths for all matching (e.g., on windows `/` not `\`).
+                ignoredPackages: undefined,
+                // Display full duplicates information? (Default: `false`)
+                verbose: true
             }),
-            new Webpack.DefinePlugin({
-                ENV_IS_DEVELOPMENT: !isProductionMode,
-                ENV_IS: JSON.stringify(env)
-            }),
-            new MiniCssExtractPlugin({
-                filename: 'fhApplication.bundle.css'
-            })
-        ]
+            new WebpackBundleSizeAnalyzerPlugin('./../../../../../webpack_size.txt')
+        ],
+        // optimization: {
+        //     minimize: false,
+        //     splitChunks: {
+        //         cacheGroups: {
+        //             commons: {
+        //                 test: /[\\/]node_modules[\\/]/,
+        //                 // test(module) {
+        //                 //
+        //                 //     // Only node_modules are needed
+        //                 //     if (!module.context || !module.context.includes('node_modules')) {
+        //                 //         return false;
+        //                 //     }
+        //                 //     // But not node modules that contain these key words in the path
+        //                 //     if ([ 'pkwd-controls', 'pkwd-extenders', 'pkwd-charts', 'fh-basic-controls'].some(str => module.context.includes(str))) {
+        //                 //         return false;
+        //                 //     }
+        //                 //     console.log("Vendor included module "+ module.context)
+        //                 //     return true;
+        //                 // },
+        //                 name: 'vendors',
+        //                 chunks: 'all'
+        //             }
+        //         },
+        //     }
+        // }
     };
 
     if (isProductionMode) {
-        return Merge(baseConfig, {
+        delete baseConfig["devtool"];
+        baseConfig = merge(baseConfig, {
             mode: 'production',
-            devtool: 'nosources-source-map',
-            optimization: {
-                minimizer: [
-                    new UglifyJsPlugin({
-                        cache: true,
-                        parallel: true,
-                        sourceMap: true,
-                        extractComments: true
-                    })
-                ]
-            },
             plugins: [
                 new OptimizeCSSAssetsPlugin({})
-            ]
+            ],
+            optimization: {
+                minimize: true,
+                minimizer: [new TerserPlugin({
+                    // https://github.com/terser/terser#minify-options
+                    terserOptions: {
+                        toplevel: true,
+                        keep_classnames: true,
+                        keep_fnames: true,
+                    },
+                    exclude: /node_modules/
+                })],
+            },
         });
     }
 

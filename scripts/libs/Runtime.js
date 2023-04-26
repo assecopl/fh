@@ -53,6 +53,7 @@ Supported params:
 --snap - setup as snapshot
 --verbose - enables verbose log
 --dryRun - enables test build without publish
+--noPublish - disable publish process
   `,
 
   deployLocal: `
@@ -73,8 +74,8 @@ Supported params:
 class Runtime {
   constructor() {
     const nodeV = process.version.match(/^v(\d+)/)[1];
-    if (nodeV !== '14') {
-      throw new Error('Please use node js in version 14!');
+    if (nodeV !== '18') {
+      throw new Error('Please use node js in version 18!');
     }
   }
 
@@ -170,7 +171,9 @@ class Runtime {
         }
     
         utils.runProcess(`npm run build`, verbose);
-        utils.runProcess(`npm publish --force --tag ${tag} --registry ${address}`, verbose);
+        if (!params.has('noPublish')) {
+          utils.runProcess(`npm publish --force --tag ${tag} --registry ${address}`, verbose);
+        }
         utils.runProcess('rm -fr node_modules package-lock.json', verbose);
       }
     }

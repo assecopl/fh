@@ -4,13 +4,14 @@
     "target": "es5",
     "outDir": "build",
     "lib": ["es6", "dom"],
-    "types": ["reflect-metadata", "jquery", "bootstrap"],
+    "types": ["reflect-metadata", "jquery", "jqueryui", "bootstrap"],
     "module": "commonjs",
-    "baseUrl": "types",
+    "baseUrl": ".",
     "moduleResolution": "node",
     "declaration": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "noEmit": false,
     "skipLibCheck": true
   },
   "exclude": ["node_modules", "target", "build"]
