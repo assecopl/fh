@@ -3,7 +3,7 @@ package pl.fhframework.fhdp.example.lookup.provider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import pl.fhframework.fhdp.example.lookup.model.Country;
+import pl.fhframework.dp.transport.dto.commons.NameValueDto;
 import pl.fhframework.fhdp.example.lookup.rest.CountryApiResponse;
 import pl.fhframework.fhdp.example.lookup.rest.CountryEntity;
 import pl.fhframework.fhdp.example.lookup.rest.RestClient;
@@ -16,18 +16,19 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public class CountryLookupProvider implements IComboDataProviderFhDP<Country, String> {
+public class CountryNameValueLookupProvider implements IComboDataProviderFhDP<NameValueDto, String> {
 
     @Autowired
     RestClient restClient;
 
     @Override
-    public String getCode(Country element) {
-        return element.getCode();
+    public String getCode(NameValueDto element) {
+        if(element == null) return null;
+        else return element.getValue();
     }
 
     @Override
-    public String getDisplayValue(Country element) {
+    public String getDisplayValue(NameValueDto element) {
         return element.getName();
     }
 
@@ -42,29 +43,31 @@ public class CountryLookupProvider implements IComboDataProviderFhDP<Country, St
     @Override
     public List<NameValue> getColumnDefinitions() {
         List<NameValue> columns = new ArrayList<>();
-        columns.add(new NameValue("Code", "code"));
+        columns.add(new NameValue("Code", "value"));
         columns.add(new NameValue("Name", "name"));
-        columns.add(new NameValue("Region", "region"));
         return columns;
     }
 
     @Override
-    public String getSrcKey(Country element) {
+    public String getSrcKey(NameValueDto element) {
         if(element == null) return null;
-        return element.getCode();
+        return element.getValue();
     }
 
-    public PageModel<Country> getValuesPaged(String text, Pageable pageable) {
-        CountryApiResponse result = restClient.listCountries(text);
-        List<Country> countries = getCountries(result);
-        return new CountryPagedTableSource(countries).createPagedModel(pageable);
+    public PageModel<NameValueDto> getValuesPaged(String text, Pageable pageable) {
+        List<NameValueDto> countries = new ArrayList<>();
+        if(text.length() > 2) {
+            CountryApiResponse result = restClient.listCountries(text);
+            countries = getCountries(result);
+        }
+        return new CountryNameValuePagedTableSource(countries).createPagedModel(pageable);
     }
 
-    public Country getValue(String code) {
+    public NameValueDto getValue(String code) {
         CountryApiResponse result = restClient.listCountries(code);
         if(result.getData() != null && result.getData().containsKey(code)) {
             CountryEntity entity = result.getData().get(code);
-            return new Country(code, entity.getCountry(), entity.getRegion());
+            return new NameValueDto(code, entity.getCountry());
         } else {
             return null;
         }
@@ -74,13 +77,15 @@ public class CountryLookupProvider implements IComboDataProviderFhDP<Country, St
         return "Countries";
     }
 
-    private List<Country> getCountries(CountryApiResponse result) {
-        List<Country> ret = new ArrayList<>();
-        Set<String> countryCodes = result.getData().keySet();
-        for (String code: countryCodes) {
-            CountryEntity entity = result.getData().get(code);
-            Country country = new Country(code, entity.getCountry(), entity.getRegion());
-            ret.add(country);
+    private List<NameValueDto> getCountries(CountryApiResponse result) {
+        List<NameValueDto> ret = new ArrayList<>();
+        if(result.getData() != null) {
+            Set<String> countryCodes = result.getData().keySet();
+            for (String code : countryCodes) {
+                CountryEntity entity = result.getData().get(code);
+                NameValueDto country = new NameValueDto(code, entity.getCountry());
+                ret.add(country);
+            }
         }
         return ret;
     }

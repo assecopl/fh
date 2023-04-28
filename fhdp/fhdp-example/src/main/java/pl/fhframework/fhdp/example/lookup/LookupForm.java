@@ -10,6 +10,7 @@ public class LookupForm extends Form<LookupForm.Model> {
     @Setter
     public static class Model {
         private String countryCode;
+        private String countryCodeNameValue;
     }
 
     public LookupForm() {
