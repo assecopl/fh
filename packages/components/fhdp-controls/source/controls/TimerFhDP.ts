@@ -11,9 +11,9 @@ class TimerFhDP extends  HTMLFormComponent{
         super(componentObj, parent);
 
         console.log("TimerFhDP log", componentObj);
-        console.log(this.componentObj.timeout, !isNaN(this.componentObj.timeout), new Number(this.componentObj.timeout) > 500);
-        if (this.componentObj.timeout && !isNaN(this.componentObj.timeout) && new Number(this.componentObj.timeout) > 500) {
-            this.timeout = new Number(this.componentObj.timeout);
+        console.log(this.componentObj.timeout, !isNaN(this.componentObj.timeout), Number.parseInt(this.componentObj.timeout) > 500);
+        if (this.componentObj.timeout && !isNaN(this.componentObj.timeout) && Number.parseInt(this.componentObj.timeout) > 500) {
+            this.timeout = Number.parseInt(this.componentObj.timeout);
             this._interval = setInterval(this.onIntervalEvent.bind(this), this.timeout);
         }
         this.onInterval = this.componentObj.onInterval;

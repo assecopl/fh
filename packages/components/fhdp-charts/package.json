@@ -23,12 +23,12 @@
     "@types/marked": "0.6.5",
     "@types/node": "14.14.36",
     "imports-loader": "0.8.0",
-    "less": "3.9.0",
-    "sass": "1.6.2",
-    "typescript": "3.5.3"
+    "less": "4.1.3",
+    "sass": "1.62.1",
+    "typescript": "5.0.4"
   },
   "dependencies": {
-    "canvas": "^2.8.0",
+    "canvas": "2.11.2",
     "fh-basic-controls": "4.10.5-SNAPSHOT-1681725619489",
     "fh-forms-handler": "4.10.5-SNAPSHOT-1681725619489",
     "konva": "8.4.2"

@@ -108,7 +108,7 @@ export class Portal {
           let isSearchClosest = false;
           let zIndex;
           let version;
-          if (v !== undefined && Number(v) !== NaN && Number(v) >= this.MIN_VERSION && Number(v) <= this.MAX_VERSION) {
+          if (v !== undefined && !isNaN(Number.parseInt(v)) && Number.parseInt(v) >= this.MIN_VERSION && Number.parseInt(v) <= this.MAX_VERSION) {
             version = Number(v);
           } else {
             version = this.MAX_VERSION;

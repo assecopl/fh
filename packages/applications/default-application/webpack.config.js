@@ -1,13 +1,13 @@
 /**
  * Main configuration file for webpack .
  * */
-
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 const Path = require('path');
 const Webpack = require('webpack');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const PostCssWrapper = require('postcss-wrapper-loader');
 require('@babel/polyfill');
-const Merge = require('webpack-merge');
+const { merge } = require('webpack-merge');
 
 
 /**
@@ -31,54 +31,42 @@ module.exports = function (cmdEnv) {
         module: {
             rules: [{
                 test: /\.css$/,
-//                exclude: [/node_modules/, /dist/, /build/],
-                use: [{
-                    loader: MiniCssExtractPlugin.loader,
-                    options: {}
-                }, {
-                    loader: 'css-loader'
-                }]
+                use: [MiniCssExtractPlugin.loader,  'css-loader']
             }, {
-                test: /\.(d.)?tsx?$/,
-                // exclude: [/node_modules/, /dist/, /build/],
-                use: [{
-                    loader: 'babel-loader'
-                }, {
-                    loader: 'ts-loader'
+                test: /\.ts$/,
+                exclude: /node_modules/,
+                use: ['babel-loader', {
+                    loader: 'ts-loader',
+                    options:{allowTsInNodeModules: true}
                 }]
             }, {
                 test: /\.js$/,
-                exclude: [/node_modules/, /dist/, /build/],
-                use: {
-                    loader: 'babel-loader'
-                }
+                use: ['babel-loader']
             }, {
                 test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'url-loader?limit=10000&mimetype=application/font-woff'
+                type: 'asset'
             }, {
                 test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'url-loader?limit=10000&mimetype=application/octet-stream'
+                type: 'asset'
             }, {
                 test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'file-loader'
+                type: 'asset'
             }, {
                 test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'url-loader?limit=10000&mimetype=image/svg+xml'
+                type: 'asset'
             }, {
                 test: /\.jpg$/,
-                use: ["file-loader"]
+                type: 'asset'
             }, {
                 test: /\.png$/,
-                use: ["url-loader?mimetype=image/png"]
-            }, {
-                test: /jquery-mousewheel/,
-                loader: "imports-loader?define=>false&this=>window"
+                type: 'asset'
             }]
         },
         resolve: {
             extensions: ['.ts', '.tsx', '.js']
         },
         plugins: [
+            new NodePolyfillPlugin(),
             new Webpack.ProvidePlugin({
                 $: 'jquery',
                 jQuery: 'jquery'
@@ -98,7 +86,7 @@ module.exports = function (cmdEnv) {
      */
     if(cmdEnv.wrapped == 'true') {
         console.log("Adding wrapping css logic" , cmdEnv.wrapped);
-        baseConfig =  Merge(baseConfig, {
+        baseConfig =  merge(baseConfig, {
             plugins :[
                 new PostCssWrapper('fhApplication.bundle.css', '#fhApplication')
             ]

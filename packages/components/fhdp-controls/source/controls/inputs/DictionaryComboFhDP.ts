@@ -1,7 +1,7 @@
 import {createElement} from 'react';
 import * as ReactDOM from 'react-dom';
 import {HTMLFormComponent, LanguageChangeObserver} from 'fh-forms-handler';
-import {LanguageResiterer} from '../helpers/LanguageResigerer';
+import {LanguageResiterer} from './../helpers/LanguageResigerer';
 import { ComboFhDP } from './ComboFhDP';
 import { DictionaryComboFhDPHelper } from '../helpers/DictionaryComboFhDPHelper';
 import { DictionaryComboFhDPPopperTable } from './DictionaryComboFhDPPopperTable';

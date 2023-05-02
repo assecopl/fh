@@ -18,13 +18,13 @@
     "@types/bootstrap": "4.3.1",
     "@types/jquery": "3.3.31",
     "@types/node": "14.14.36",
-    "typescript": "3.5.3"
+    "typescript": "5.0.4"
   },
   "dependencies": {
     "fh-basic-controls": "4.10.5-SNAPSHOT-1681725619489",
     "fh-forms-handler": "4.10.5-SNAPSHOT-1681725619489",
     "lodash": "4.17.21",
-    "moment": "^2.24.0",
+    "moment": "2.29.4",
     "moment-timezone": "0.5.34"
   }
 }
