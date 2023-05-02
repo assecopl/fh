@@ -1,15 +1,11 @@
 {
   "name": "root",
   "private": true,
-  "devDependencies": {
-    "lerna": "4.0.0"
-  },
-  "resolutions": {
-    "konva" : "8.4.2"
-  },
   "workspaces": [
     "components/*",
     "applications/*"
   ],
-  "main": "Module.ts"
+  "devDependencies": {
+    "lerna": "^6.6.1"
+  }
 }

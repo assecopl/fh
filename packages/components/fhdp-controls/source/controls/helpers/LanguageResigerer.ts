@@ -17,7 +17,7 @@ export class LanguageResiterer {
       const file = `${instance.constructor.name}.${lang}`;
       try {
         if (instance.constructor.name) {
-          const translation = await import(`../inputs/i18n/${file}`);
+          const translation = await import(`../inputs/i18n/${file}.js`);
           console.log('-----------', translation)
           if (this._i18n) {
             const keys = Object.keys(translation);
