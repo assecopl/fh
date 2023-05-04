@@ -43,7 +43,11 @@
     "webpack-merge": "5.8.0",
     "webpack-obfuscator": "3.5.1",
     "zlib": "1.0.5",
-    "node-polyfill-webpack-plugin": "2.0.1"
+    "node-polyfill-webpack-plugin": "2.0.1",
+    "inspectpack": "4.7.1",
+    "webpack-stats-plugin" : "1.1.1",
+    "terser-webpack-plugin": "5.3.7",
+    "webpack-bundle-size-analyzer" : "3.1.0"
   },
   "dependencies": {
     "fhdp-charts": "^4.10.5-SNAPSHOT",

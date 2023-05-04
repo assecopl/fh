@@ -8,6 +8,9 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const PostCssWrapper = require('postcss-wrapper-loader');
 require('@babel/polyfill');
 const { merge } = require('webpack-merge');
+const { DuplicatesPlugin } = require("inspectpack/plugin");
+const { StatsWriterPlugin } = require("webpack-stats-plugin");
+const WebpackBundleSizeAnalyzerPlugin = require('webpack-bundle-size-analyzer').WebpackBundleSizeAnalyzerPlugin;
 
 
 /**
@@ -77,8 +80,19 @@ module.exports = function (cmdEnv) {
         resolve: {
             extensions: ['.ts', '.tsx', '.js']
         },
+        stats: {
+            all:undefined,
+            source: true
+        },
         plugins: [
             new NodePolyfillPlugin(),
+            // Relative paths work(to output path), but absolute paths do not currently.
+            new WebpackBundleSizeAnalyzerPlugin('./webpack_size.txt'),
+            new StatsWriterPlugin({
+                // Relative paths work(to output path), but absolute paths do not currently.
+                filename: "./webpack_stats.json",
+                fields: null
+            }),
             new Webpack.ProvidePlugin({
                 $: 'jquery',
                 jQuery: 'jquery'
@@ -89,8 +103,27 @@ module.exports = function (cmdEnv) {
             }),
             new MiniCssExtractPlugin({
                 filename: 'fhApplication.bundle.css'
-            })
-        ]
+            }),
+            new DuplicatesPlugin({
+                // Emit compilation warning or error? (Default: `false`)
+                emitErrors: false,
+                // Handle all messages with handler function (`(report: string)`)
+                // Overrides `emitErrors` output.
+                emitHandler: undefined,
+                // List of packages that can be ignored. (Default: `[]`)
+                // - If a string, then a prefix match of `{$name}/` for each module.
+                // - If a regex, then `.test(pattern)` which means you should add slashes
+                //   where appropriate.
+                //
+                // **Note**: Uses posix paths for all matching (e.g., on windows `/` not `\`).
+                ignoredPackages: undefined,
+                // Display full duplicates information? (Default: `false`)
+                verbose: true
+            }),
+        ],
+        optimization: {
+            minimize: false,
+        }
     };
 
     /**

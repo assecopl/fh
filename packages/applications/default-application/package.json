@@ -4,7 +4,7 @@
   "main": "Module.ts",
   "private": true,
   "scripts": {
-    "build": "webpack --env env=development --env wrapped=false --progress",
+    "build": "webpack --env env=production --env wrapped=false --progress",
     "dev": "webpack --env env=development --env wrapped=false --progress --watch",
     "build-css-wrapped": "webpack --env env=production --env wrapped --progress",
     "dev-css-wrapped": "webpack --env env=development --env wrapped --progress --watch"
@@ -40,7 +40,11 @@
     "webpack-merge": "5.8.0",
     "postcss-wrapper-loader": "1.0.2",
     "copyfiles": "2.4.1",
-    "node-polyfill-webpack-plugin": "2.0.1"
+    "node-polyfill-webpack-plugin": "2.0.1",
+    "inspectpack": "4.7.1",
+    "webpack-stats-plugin" : "1.1.1",
+    "terser-webpack-plugin": "5.3.7",
+    "webpack-bundle-size-analyzer": "3.1.0"
   },
   "dependencies": {
     "fh-forms-handler": "4.10.5-SNAPSHOT-1681725619489",
