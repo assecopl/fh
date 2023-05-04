@@ -9,6 +9,10 @@
     "build-css-wrapped": "webpack --env env=production --env wrapped --progress",
     "dev-css-wrapped": "webpack --env env=development --env wrapped --progress --watch"
   },
+  "engines": {
+    "npm": ">=9.0.0 <10.0.0",
+    "node": ">=18.0.0 <19.0.0"
+  },
   "devDependencies": {
     "@types/node": "18.16.3",
     "@types/bootstrap": "4.3.1",

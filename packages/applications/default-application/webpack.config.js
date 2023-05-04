@@ -60,6 +60,18 @@ module.exports = function (cmdEnv) {
             }, {
                 test: /\.png$/,
                 type: 'asset'
+            },{
+                test: /jquery-mousewheel/,
+                use: [
+                    {
+                        loader: "imports-loader",
+                        options: {
+                            wrapper:"window",
+                            additionalCode:
+                                "var define = false; /* Disable AMD for misbehaving libraries */",
+                        },
+                    },
+                ]
             }]
         },
         resolve: {

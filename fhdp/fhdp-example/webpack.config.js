@@ -3,15 +3,12 @@ const Webpack = require('webpack');
 const Merge = require('webpack-merge');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
-const CompressionPlugin = require("compression-webpack-plugin");
-const zlib = require("zlib");
-const WebpackObfuscator = require('webpack-obfuscator');
 require("@babel/polyfill");
 
 module.exports = function (env) {
     const isProductionMode = false;//env.envMode !== 'development';
-    const isTestReg = env.testReg === 'tak';
     console.log(`This is a ${isProductionMode ? "production" : "development"} build`);
     var entry = ['@babel/polyfill','./src/main/resources/static/Application.ts'];
     let baseConfig = {
@@ -27,77 +24,57 @@ module.exports = function (env) {
                 test: /\.(scss|css)$/,
                 use: [
                     MiniCssExtractPlugin.loader,
-                    {
-                        loader: "css-loader",
-                        options: {
-                            minimize: {
-                                safe: true
-                            }
-                        }
-                    },
-                    {
-                        loader: "sass-loader",
-                        options: {}
-                    }
+                    "css-loader",
+                    "sass-loader"
                 ]
             }, {
                 test: /\.ts(x?)$/,
-                // exclude: /node_modules/,
-                use: [{
-                    loader: 'babel-loader'
-                }, {
-                    loader: 'ts-loader'
+                exclude: /node_modules/,
+                use: ['babel-loader', {
+                    loader: 'ts-loader',
+                    options:{allowTsInNodeModules: true}
                 }]
             }, {
                 test: /\.js$/,
-                exclude: /node_modules/,
-                use: [{
-                    loader: 'babel-loader'
-                },
-//                { loader: 'obfuscator-loader', options: {/* options here */} }
+                use: ['babel-loader',
             ]
             }, {
                 test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'file-loader?name=./fonts/[name].[ext]'
+                type: 'asset'
             }, {
                 test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'file-loader?name=./fonts/[name].[ext]'
+                type: 'asset'
             }, {
                 test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'file-loader?name=./img/[name].[ext]'
+                type: 'asset'
             }, {
                 test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'file-loader?name=./img/[name].[ext]'
+                type: 'asset'
             }, {
                 test: /\.jpg$/,
-                use: ["file-loader?name=./img/[name].[ext]"]
+                type: 'asset'
             }, {
                 test: /\.png$/,
-                use: ["file-loader?name=./img/[name].[ext]"]
+                type: 'asset'
             }, {
                 test: /jquery-mousewheel/,
-                loader: "imports-loader?define=>false&this=>window"
+                use: [
+                    {
+                        loader: "imports-loader",
+                        options: {
+                           wrapper:"window",
+                            additionalCode:
+                                "var define = false; /* Disable AMD for misbehaving libraries */",
+                        },
+                    },
+                ]
             }]
         },
         resolve: {
             extensions: ['.ts', '.tsx', '.js']
         },
-        plugins: isProductionMode ? [
-            new Webpack.ProvidePlugin({
-                $: 'jquery',
-                jQuery: 'jquery'
-            }),
-            new Webpack.DefinePlugin({
-                ENV_IS_DEVELOPMENT: !isProductionMode,
-                ENV_IS: JSON.stringify(env)
-            }),
-            new MiniCssExtractPlugin({
-                filename: 'fhApplication.bundle.css'
-            }),
-//            new WebpackObfuscator ({
-//                    rotateStringArray: true
-//            }, [])
-        ] : [
+        plugins: [
+            new NodePolyfillPlugin(),
             new Webpack.ProvidePlugin({
                 $: 'jquery',
                 jQuery: 'jquery'
