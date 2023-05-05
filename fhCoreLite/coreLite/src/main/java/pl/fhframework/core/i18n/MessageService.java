@@ -11,6 +11,7 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.stereotype.Service;
 
 import pl.fhframework.core.FhFrameworkException;
+import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.core.util.StringUtils;
 import pl.fhframework.SessionManager;
 import pl.fhframework.UserSession;
@@ -239,7 +240,9 @@ public class MessageService {
             if(viewRawKeyMode || getUserLanguage() != null && getUserLanguage().getLanguage() == MessageService.LOCALE_VIEWKEY){
                 return key;
             }
-            return "Key: " + key + " not found";
+            String msg = "Key: " + key + " not found";
+            FhLogger.warn(msg);
+            return msg;
         }
 
     }
