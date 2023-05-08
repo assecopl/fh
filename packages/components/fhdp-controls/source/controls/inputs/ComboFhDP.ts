@@ -38,6 +38,8 @@ class ComboFhDP extends InputTextFhDP {
 
     private cursorPositionOnLastSpecialKey: any;
 
+    protected isTableMode: boolean;
+
     //Is focus on dropdown element. For IE11 click on srcoll problem.
     private autocompleterFocus:boolean = false;
 
@@ -63,21 +65,32 @@ class ComboFhDP extends InputTextFhDP {
         this.freeTyping = this.componentObj.freeTyping;
         this.multiselect = this.componentObj.multiselect;
         this.multiselectRawValue = this.componentObj.multiselectRawValue;
+        this.isTableMode = this.componentObj.isTableMode;
     }
 
-    create() {
-        let input = document.createElement('input');
-        this.input = input;
-        input.id = this.id;
+    private createInput(): HTMLInputElement | HTMLSpanElement {
+        if(!!this.isTableMode) {
+            const input = document.createElement('span');
+            input.textContent = this.rawValue;
+            return input;
+        }
+        const input = document.createElement('input');
         input.type = 'text';
         input.value = this.rawValue;
         input.autocomplete = 'off';
-        ['fc', 'form-control'].forEach(function (cssClass) {
-            input.classList.add(cssClass);
-        });
         if (this.placeholder) {
             input.placeholder = this.placeholder;
         }
+        return input;
+    }
+
+    create() {
+        let input = this.createInput();
+        this.input = input;
+        input.id = this.id;
+        ['fc', 'form-control'].forEach(function (cssClass) {
+            input.classList.add(cssClass);
+        });
 
         this.setCursorPositionToInput(this.lastCursorPosition);
 
