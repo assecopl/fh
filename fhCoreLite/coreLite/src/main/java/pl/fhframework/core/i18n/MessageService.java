@@ -212,6 +212,7 @@ public class MessageService {
                     return message;
                 }
             }
+            FhLogger.warn(defaultMessage);
             return defaultMessage;
         }
 
@@ -240,9 +241,7 @@ public class MessageService {
             if(viewRawKeyMode || getUserLanguage() != null && getUserLanguage().getLanguage() == MessageService.LOCALE_VIEWKEY){
                 return key;
             }
-            String msg = "Key: " + key + " not found";
-            FhLogger.warn(msg);
-            return msg;
+            return "Key: " + key + " not found";
         }
 
     }
