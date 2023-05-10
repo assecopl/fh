@@ -253,7 +253,7 @@ export const DictionaryComboFhDPPopperTable: React.FC<Props> = (props: Props) =>
         width: '20px',
         height: '20px',
         background: 'transparent',
-        color: '#000',
+        color: 'var(--color-black)',
         margin: '4px',
         padding: '0px',
         border: 'none'
