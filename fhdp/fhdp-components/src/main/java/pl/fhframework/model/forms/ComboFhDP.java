@@ -24,6 +24,7 @@ public class ComboFhDP extends Combo {
     public static final String ATTR_HIDE_CROSSED = "hideCrossed";
     public static final String ATTR_NEW_VALUE_TEXT = "newValueText";
     public static final String ATTR_IS_LAST_VALUE_ENABLED = "isLastValueEnabled";
+    public static final String ATTR_IS_TABLE_MODE = "isTableMode";
 
     @Getter
     private String lastValue;
@@ -32,6 +33,8 @@ public class ComboFhDP extends Combo {
     private String newValueText;
     @Getter
     private Boolean isLastValueEnabled;
+    @Getter
+    private Boolean isTableMode;
 
     @JsonIgnore
     @Getter
@@ -48,6 +51,14 @@ public class ComboFhDP extends Combo {
     @DesignerXMLProperty(commonUse = true, previewValueProvider = BindingExpressionDesignerPreviewProvider.class, functionalArea = CONTENT)
     @DocumentedComponentAttribute(boundable = true, value = "Display only code, there will be no method invoke from provider.")
     private ModelBinding<Boolean> isLastValueEnabledModelBinding;
+
+    @JsonIgnore
+    @Getter
+    @Setter
+    @XMLProperty(required = true, value = ATTR_IS_TABLE_MODE)
+    @DesignerXMLProperty(commonUse = true, previewValueProvider = BindingExpressionDesignerPreviewProvider.class, functionalArea = CONTENT)
+    @DocumentedComponentAttribute(boundable = true, value = "Use textarea instead of input. Text wrapping for table.")
+    private ModelBinding<Boolean> isTableModeModelBinding;
 
     @JsonIgnore
     @Getter
@@ -96,6 +107,14 @@ public class ComboFhDP extends Combo {
                 }
             }
         }
+        if (isTableMode != null) {
+            BindingResult bidingResult = isTableModeModelBinding.getBindingResult();
+            if (bidingResult != null) {
+                if (bidingResult.getValue() != null) {
+                    this.isTableMode = convertValue(bidingResult.getValue(), Boolean.class);
+                }
+            }
+        }
         if(hideCrossed != null){
             BindingResult bindingResult = hideCrossedModelBinding.getBindingResult();
             if(bindingResult != null){
@@ -120,6 +139,10 @@ public class ComboFhDP extends Combo {
         if(isLastValueEnabledModelBinding != null) {
             BindingResult bindingResult = isLastValueEnabledModelBinding.getBindingResult();
             this.isLastValueEnabled = convertValue(bindingResult.getValue(), Boolean.class);
+        }
+        if(isTableModeModelBinding != null) {
+            BindingResult bindingResult = isTableModeModelBinding.getBindingResult();
+            this.isTableMode = convertValue(bindingResult.getValue(), Boolean.class);
         }
         if (lastValueModelBinding != null) {
             BindingResult bindingResult = lastValueModelBinding.getBindingResult();

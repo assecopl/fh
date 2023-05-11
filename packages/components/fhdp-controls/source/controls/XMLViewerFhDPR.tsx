@@ -122,5 +122,10 @@ export const XMLViewerFhDPR: React.FC<Props> = (props: Props) => {
     if (error) {
       return <>{printError(error, rawXml)}</>
     }
-    return (<XMLViewer collapsible={true} theme={{attributeValueColor: 'var(--color-black)', textColor: 'var(--color-black)'}} xml={xml}/>)
+    return (
+        <XMLViewer
+            collapsible={true}
+            theme={{attributeValueColor: 'var(--color-black)', textColor: 'var(--color-black)', separatorColor: 'var(--color-black)' }}
+            xml={xml}
+        />)
 }

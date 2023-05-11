@@ -1,12 +1,11 @@
 package pl.fhframework.dp.commons.fh.helper;
 
+import org.springframework.web.util.UriUtils;
+
 import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -35,23 +34,23 @@ public class AESCypher {
         return secret;
     }
 
-    private static String encodeURLValue(String value) throws UnsupportedEncodingException {
-        return URLEncoder.encode(value, StandardCharsets.UTF_8.toString());
+    private static String encodeURLValue(String value) {
+        return UriUtils.encode(value, StandardCharsets.UTF_8.toString());
     }
 
-    private static String decodeURLValue(String value) throws UnsupportedEncodingException {
-        return URLDecoder.decode(value, StandardCharsets.UTF_8.toString());
+    private static String decodeURLValue(String value) {
+        return UriUtils.decode(value, StandardCharsets.UTF_8.toString());
     }
 
     public static String encrypt(String password, String text) throws InvalidAlgorithmParameterException,
             NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, InvalidKeySpecException,
-            BadPaddingException, InvalidKeyException, UnsupportedEncodingException {
+            BadPaddingException, InvalidKeyException {
         return AESCypher.encrypt(password, text, true);
     }
 
     public static String encrypt(String password, String text, boolean asUrlEncoded) throws NoSuchAlgorithmException, InvalidKeySpecException,
             NoSuchPaddingException, InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException,
-            BadPaddingException, UnsupportedEncodingException {
+            BadPaddingException {
         String now = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date());
         SecretKey key = AESCypher.getKeyFromPassword(password, now);
         IvParameterSpec iv = generateIv();
@@ -69,13 +68,13 @@ public class AESCypher {
 
     public static String decrypt(String password, String encryptedText) throws InvalidAlgorithmParameterException,
             NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException,
-            InvalidKeySpecException, InvalidKeyException, UnsupportedEncodingException {
+            InvalidKeySpecException, InvalidKeyException {
         return AESCypher.decrypt(password, encryptedText, true);
     }
 
     public static String decrypt(String password, String encryptedText, boolean asUrlEncoded) throws NoSuchPaddingException,
             NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException,
-            BadPaddingException, IllegalBlockSizeException, InvalidKeySpecException, UnsupportedEncodingException {
+            BadPaddingException, IllegalBlockSizeException, InvalidKeySpecException {
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         String encryptedRaw = encryptedText;
         if (asUrlEncoded) {
