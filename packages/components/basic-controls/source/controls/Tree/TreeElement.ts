@@ -2,9 +2,9 @@ import {HTMLFormComponent} from "fh-forms-handler";
 import {Tree} from "./Tree";
 
 class TreeElement extends HTMLFormComponent {
-    private readonly label: string;
+    private label: string;
     private readonly onIconClick: any;
-    private readonly nextLevelExpandable: any;
+    private nextLevelExpandable: any;
     private techIconElement: HTMLSpanElement;
     private iconElement: HTMLSpanElement;
     private collapsed: boolean;
@@ -13,11 +13,10 @@ class TreeElement extends HTMLFormComponent {
     private currentTechIconClasses: any;
     private currentIconClasses: any;
     private icons: any;
-    private readonly selectable: any;
-    private readonly icon: any;
+    private selectable: any;
+    private icon: any;
     private selected: boolean;
     private spanWithLabel: any;
-    public parent: TreeElement;
     private ul: any;
 
     constructor(componentObj: any, parent: HTMLFormComponent) {
@@ -183,6 +182,7 @@ class TreeElement extends HTMLFormComponent {
                     case 'collapsed':
                         this.collapsed = change.changedAttributes.collapsed;
                         this.updateTreeCollapsed();
+                        this.updateTechIcon();
                         break;
                     case 'selected':
                         if (change.changedAttributes.selected) {
@@ -415,6 +415,12 @@ class TreeElement extends HTMLFormComponent {
             }
         }
     }
+
+
+    public get parent(): TreeElement {
+        return <TreeElement>this._parent;
+    }
+
 }
 
 export {TreeElement};

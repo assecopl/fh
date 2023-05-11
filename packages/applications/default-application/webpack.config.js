@@ -1,13 +1,16 @@
 /**
  * Main configuration file for webpack .
  * */
-
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 const Path = require('path');
 const Webpack = require('webpack');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const PostCssWrapper = require('postcss-wrapper-loader');
 require('@babel/polyfill');
-const Merge = require('webpack-merge');
+const { merge } = require('webpack-merge');
+const { DuplicatesPlugin } = require("inspectpack/plugin");
+const { StatsWriterPlugin } = require("webpack-stats-plugin");
+const WebpackBundleSizeAnalyzerPlugin = require('webpack-bundle-size-analyzer').WebpackBundleSizeAnalyzerPlugin;
 
 
 /**
@@ -31,54 +34,65 @@ module.exports = function (cmdEnv) {
         module: {
             rules: [{
                 test: /\.css$/,
-//                exclude: [/node_modules/, /dist/, /build/],
-                use: [{
-                    loader: MiniCssExtractPlugin.loader,
-                    options: {}
-                }, {
-                    loader: 'css-loader'
-                }]
+                use: [MiniCssExtractPlugin.loader,  'css-loader']
             }, {
-                test: /\.(d.)?tsx?$/,
-                // exclude: [/node_modules/, /dist/, /build/],
-                use: [{
-                    loader: 'babel-loader'
-                }, {
-                    loader: 'ts-loader'
+                test: /\.ts$/,
+                exclude: /node_modules/,
+                use: ['babel-loader', {
+                    loader: 'ts-loader',
+                    options:{allowTsInNodeModules: true}
                 }]
             }, {
                 test: /\.js$/,
-                exclude: [/node_modules/, /dist/, /build/],
-                use: {
-                    loader: 'babel-loader'
-                }
+                use: ['babel-loader']
             }, {
                 test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'url-loader?limit=10000&mimetype=application/font-woff'
+                type: 'asset'
             }, {
                 test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'url-loader?limit=10000&mimetype=application/octet-stream'
+                type: 'asset'
             }, {
                 test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'file-loader'
+                type: 'asset'
             }, {
                 test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'url-loader?limit=10000&mimetype=image/svg+xml'
+                type: 'asset'
             }, {
                 test: /\.jpg$/,
-                use: ["file-loader"]
+                type: 'asset'
             }, {
                 test: /\.png$/,
-                use: ["url-loader?mimetype=image/png"]
-            }, {
+                type: 'asset'
+            },{
                 test: /jquery-mousewheel/,
-                loader: "imports-loader?define=>false&this=>window"
+                use: [
+                    {
+                        loader: "imports-loader",
+                        options: {
+                            wrapper:"window",
+                            additionalCode:
+                                "var define = false; /* Disable AMD for misbehaving libraries */",
+                        },
+                    },
+                ]
             }]
         },
         resolve: {
             extensions: ['.ts', '.tsx', '.js']
         },
+        stats: {
+            all:undefined,
+            source: true
+        },
         plugins: [
+            new NodePolyfillPlugin(),
+            // Relative paths work(to output path), but absolute paths do not currently.
+            new WebpackBundleSizeAnalyzerPlugin('./webpack_size.txt'),
+            new StatsWriterPlugin({
+                // Relative paths work(to output path), but absolute paths do not currently.
+                filename: "./webpack_stats.json",
+                fields: null
+            }),
             new Webpack.ProvidePlugin({
                 $: 'jquery',
                 jQuery: 'jquery'
@@ -89,8 +103,27 @@ module.exports = function (cmdEnv) {
             }),
             new MiniCssExtractPlugin({
                 filename: 'fhApplication.bundle.css'
-            })
-        ]
+            }),
+            new DuplicatesPlugin({
+                // Emit compilation warning or error? (Default: `false`)
+                emitErrors: false,
+                // Handle all messages with handler function (`(report: string)`)
+                // Overrides `emitErrors` output.
+                emitHandler: undefined,
+                // List of packages that can be ignored. (Default: `[]`)
+                // - If a string, then a prefix match of `{$name}/` for each module.
+                // - If a regex, then `.test(pattern)` which means you should add slashes
+                //   where appropriate.
+                //
+                // **Note**: Uses posix paths for all matching (e.g., on windows `/` not `\`).
+                ignoredPackages: undefined,
+                // Display full duplicates information? (Default: `false`)
+                verbose: true
+            }),
+        ],
+        optimization: {
+            minimize: false,
+        }
     };
 
     /**
@@ -98,7 +131,7 @@ module.exports = function (cmdEnv) {
      */
     if(cmdEnv.wrapped == 'true') {
         console.log("Adding wrapping css logic" , cmdEnv.wrapped);
-        baseConfig =  Merge(baseConfig, {
+        baseConfig =  merge(baseConfig, {
             plugins :[
                 new PostCssWrapper('fhApplication.bundle.css', '#fhApplication')
             ]

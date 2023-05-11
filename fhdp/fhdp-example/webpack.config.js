@@ -1,75 +1,49 @@
 const Path = require('path');
 const Webpack = require('webpack');
-const {merge} = require('webpack-merge');
+const Merge = require('webpack-merge');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
-const TerserPlugin = require('terser-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
-const { StatsWriterPlugin } = require("webpack-stats-plugin");
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+require("@babel/polyfill");
 const { DuplicatesPlugin } = require("inspectpack/plugin");
+const { StatsWriterPlugin } = require("webpack-stats-plugin");
+const TerserPlugin = require('terser-webpack-plugin');
 const WebpackBundleSizeAnalyzerPlugin = require('webpack-bundle-size-analyzer').WebpackBundleSizeAnalyzerPlugin;
 
-require("@babel/polyfill");
+
 
 module.exports = function (env) {
-    const isProductionMode = env.env === 'production';
+    const isProductionMode = false;//env.envMode !== 'development';
     console.log(`This is a ${isProductionMode ? "production" : "development"} build`);
-    const packagesVersion = process.env.npm_package_version;
-    console.log(`packagesVersion = ${packagesVersion}`);
-
-    var entry = ['@babel/polyfill', './src/main/resources/static/Application.ts'];
+    var entry = ['@babel/polyfill','./src/main/resources/static/Application.ts'];
     let baseConfig = {
         entry: entry,
         mode: 'development',
-        devtool: 'inline-source-map',
+        devtool: 'source-map',
         output: {
-            path: Path.resolve('./target/classes/META-INF/resources/lib'),
-            filename: '[name].js'
-            // filename: 'lib/singlewindow_'+packagesVersion+'.js'
-        },
-        stats: {
-            all:undefined,
-            source: true
+            path: Path.resolve('./target/classes/static'),
+            filename: 'fhApplication.bundle.js'
         },
         module: {
             rules: [{
                 test: /\.(scss|css)$/,
-                exclude: /node_modules/,
                 use: [
                     MiniCssExtractPlugin.loader,
-                    {
-                        loader: "css-loader",
-                        options: {
-                            minimize: {
-                                safe: true
-                            }
-                        }
-                    },
-                    {
-                        loader: "sass-loader",
-                        options: {
-                            implementation: require("sass"),
-                            sassOptions: {
-                              fiber: false,
-                            },
-                        }
-                    }
+                    "css-loader",
+                    "sass-loader"
                 ]
             }, {
                 test: /\.ts(x?)$/,
                 exclude: /node_modules/,
-                use: [{
-                    loader: 'babel-loader'
-                }, {
+                use: ['babel-loader', {
                     loader: 'ts-loader',
                     options:{allowTsInNodeModules: true}
                 }]
             }, {
                 test: /\.js$/,
-                exclude: /node_modules/,
-                use: {
-                    loader: 'babel-loader'
-                }
+                use: ['babel-loader',
+            ]
             }, {
                 test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
                 type: 'asset'
@@ -88,16 +62,34 @@ module.exports = function (env) {
             }, {
                 test: /\.png$/,
                 type: 'asset'
-            }
-            ]
+            }, {
+                test: /jquery-mousewheel/,
+                use: [
+                    {
+                        loader: "imports-loader",
+                        options: {
+                           wrapper:"window",
+                            additionalCode:
+                                "var define = false; /* Disable AMD for misbehaving libraries */",
+                        },
+                    },
+                ]
+            }]
         },
         resolve: {
             extensions: ['.ts', '.tsx', '.js']
         },
+        stats: {
+            all:undefined,
+            source: true
+        },
         plugins: [
             new NodePolyfillPlugin(),
+            // Relative paths work(to output path), but absolute paths do not currently.
+            new WebpackBundleSizeAnalyzerPlugin('../../../webpack_size.txt'),
             new StatsWriterPlugin({
-                filename: "../../../../../webpack_stats.json",
+                // Relative paths work(to output path), but absolute paths do not currently.
+                filename: "../../../webpack_stats.json",
                 fields: null
             }),
             new Webpack.ProvidePlugin({
@@ -109,9 +101,7 @@ module.exports = function (env) {
                 ENV_IS: JSON.stringify(env)
             }),
             new MiniCssExtractPlugin({
-                filename: '[name].[chunkhash].bundle.css',
-                chunkFilename: '[id].[chunkhash].css'
-            
+                filename: 'fhApplication.bundle.css'
             }),
             new DuplicatesPlugin({
                 // Emit compilation warning or error? (Default: `false`)
@@ -129,39 +119,16 @@ module.exports = function (env) {
                 // Display full duplicates information? (Default: `false`)
                 verbose: true
             }),
-            new WebpackBundleSizeAnalyzerPlugin('./../../../../../webpack_size.txt')
         ],
-        // optimization: {
-        //     minimize: false,
-        //     splitChunks: {
-        //         cacheGroups: {
-        //             commons: {
-        //                 test: /[\\/]node_modules[\\/]/,
-        //                 // test(module) {
-        //                 //
-        //                 //     // Only node_modules are needed
-        //                 //     if (!module.context || !module.context.includes('node_modules')) {
-        //                 //         return false;
-        //                 //     }
-        //                 //     // But not node modules that contain these key words in the path
-        //                 //     if ([ 'pkwd-controls', 'pkwd-extenders', 'pkwd-charts', 'fh-basic-controls'].some(str => module.context.includes(str))) {
-        //                 //         return false;
-        //                 //     }
-        //                 //     console.log("Vendor included module "+ module.context)
-        //                 //     return true;
-        //                 // },
-        //                 name: 'vendors',
-        //                 chunks: 'all'
-        //             }
-        //         },
-        //     }
-        // }
+        optimization: {
+            minimize: false,
+        }
     };
 
     if (isProductionMode) {
-        delete baseConfig["devtool"];
-        baseConfig = merge(baseConfig, {
+        return Merge(baseConfig, {
             mode: 'production',
+            devtool: 'nosources-source-map',
             plugins: [
                 new OptimizeCSSAssetsPlugin({})
             ],
@@ -174,9 +141,8 @@ module.exports = function (env) {
                         keep_classnames: true,
                         keep_fnames: true,
                     },
-                    exclude: /node_modules/
                 })],
-            },
+            }
         });
     }
 

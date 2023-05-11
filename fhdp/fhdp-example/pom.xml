@@ -5,7 +5,7 @@
     <parent>
         <groupId>pl.fhframework</groupId>
         <artifactId>fh-boot-bom</artifactId>
-        <version>4.10.4-SNAPSHOT</version>
+        <version>4.10.5-SNAPSHOT</version>
         <relativePath>../../bom-project-lite/fh-boot-bom</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -13,7 +13,7 @@
     <artifactId>fhdp-example</artifactId>
 
     <properties>
-        <fh.version>4.10.0.PL.3</fh.version>
+        <fh.version>4.10.5-SNAPSHOT</fh.version>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
@@ -123,7 +123,7 @@
                         </goals>
                         <configuration>
                             <nodeVersion>v18.16.0</nodeVersion>
-                            <yarnVersion>v1.22.19</yarnVersion>
+                            <yarnVersion>v1.22.10</yarnVersion>
                         </configuration>
                     </execution>
                     <execution>
@@ -134,16 +134,6 @@
                         </goals>
                         <configuration>
                             <arguments>config set registry https://registry.yarnpkg.com</arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>yarn install node-gyp</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>yarn</goal>
-                        </goals>
-                        <configuration>
-                            <arguments>global add node-gyp</arguments>
                         </configuration>
                     </execution>
                     <execution>
@@ -200,7 +190,7 @@
                             <goal>yarn</goal>
                         </goals>
                         <configuration>
-                            <arguments>run build --env.testReg=tak --env.envMode=${NODE_ENV}</arguments>
+                            <arguments>run build --env envMode=${NODE_ENV}</arguments>
                         </configuration>
                     </execution>
                 </executions>

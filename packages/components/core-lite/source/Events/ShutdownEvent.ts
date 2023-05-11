@@ -43,7 +43,7 @@ class ShutdownEvent extends BaseEvent {
                 this.i18n.__('message'),
                 this.i18n.__('button'),
             'btn-danger',
-            function() { location.reload(true); }
+            function() { location.reload(); }
             );
         }
     }

@@ -25,8 +25,8 @@ abstract class FormComponent {
 
     private _id: string;
     protected _formId: string;
-    private _parent: FormComponent = null;
-    private _componentObj: any;
+    protected _parent: FormComponent = null;
+    protected _componentObj: any;
 
     protected components: FormComponent[];
     protected nonVisualComponents: FormComponent[];

@@ -142,7 +142,7 @@ class Combo extends InputText {
                 this.input.focus();
                 // @ts-ignore
                 $(this.input).trigger({
-                    type: 'keypress',
+                    type: 'keydown',
                     which: 9
                 });
             }else if (keyCode == 27) {

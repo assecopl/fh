@@ -406,6 +406,8 @@ class InputTextFhDP extends HTMLFormComponent {
 
             //create custom definitions
             let customDefs = this.createCustomDefinitionSymbols();
+
+            //@ts-ignore
             if (customDefs != {}) {
                 options.definitions = customDefs;
             }
