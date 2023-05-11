@@ -5,7 +5,7 @@
 	<parent>
 		<artifactId>fhdp-commons</artifactId>
 		<groupId>pl.fhframework.dp</groupId>
-		<version>4.10.5-SNAPSHOT</version>
+		<version>4.10.5.PL-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>fhdp-commons-prints-fonts</artifactId>
