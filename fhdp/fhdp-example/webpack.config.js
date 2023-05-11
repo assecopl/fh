@@ -28,10 +28,18 @@ module.exports = function (env) {
         module: {
             rules: [{
                 test: /\.(scss|css)$/,
-                use: [
+                 use: [
                     MiniCssExtractPlugin.loader,
                     "css-loader",
-                    "sass-loader"
+                    {
+                        loader: "sass-loader",
+                        options: {
+                          implementation: require("sass"),
+                          sassOptions: {
+                            fiber: false,
+                          },
+                        }
+                    }
                 ]
             }, {
                 test: /\.ts(x?)$/,

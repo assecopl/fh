@@ -30,7 +30,7 @@
     "less-loader": "11.1.0",
     "mini-css-extract-plugin": "2.7.5",
     "node-polyfill-webpack-plugin": "2.0.1",
-    "node-sass": "8.0.0",
+    "sass": "^1.22.10",
     "obfuscator-loader": "1.1.2",
     "optimize-css-assets-webpack-plugin": "6.0.1",
     "postcss-wrapper-loader": "1.0.2",
