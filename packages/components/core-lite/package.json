@@ -1,13 +1,13 @@
 {
   "name": "fh-forms-handler",
-  "version": "4.10.5-SNAPSHOT-1681725619489",
+  "version": "4.10.5-NODE18-SNAPSHOT-1681725619489",
   "main": "dist/Module.js",
   "types": "dist/Module.d.ts",
   "description": "fh framework core for frontend",
   "author": "AssecoPL",
   "license": "Apache License 2.0",
   "scripts": {
-    "prepublish": "node prepublish",
+    "prepublishOnly": "node prepublish",
     "postpublish": "node postpublish",
     "build": "tsc && copyfiles ./source/Styles/*.css source/Module.css ./dist",
     "prepare": "npm run build",

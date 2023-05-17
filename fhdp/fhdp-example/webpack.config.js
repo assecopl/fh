@@ -2,7 +2,6 @@ const Path = require('path');
 const Webpack = require('webpack');
 const Merge = require('webpack-merge');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 require("@babel/polyfill");
@@ -31,7 +30,13 @@ module.exports = function (env) {
                 use: [
                     MiniCssExtractPlugin.loader,
                     "css-loader",
-                    "sass-loader"
+                    {
+                        loader: "sass-loader",
+                        options: {
+                            // Prefer `dart-sass`
+                            implementation: require("sass"),
+                        },
+                    }
                 ]
             }, {
                 test: /\.ts(x?)$/,
@@ -46,22 +51,40 @@ module.exports = function (env) {
             ]
             }, {
                 test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
-                type: 'asset'
+                type: 'asset/resource',
+                generator : {
+                    filename : './fonts/[name][ext]',
+                }
             }, {
                 test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-                type: 'asset'
+                type: 'asset/resource',
+                generator : {
+                    filename : './fonts/[name][ext]',
+                }
             }, {
                 test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-                type: 'asset'
+                type: 'asset/resource',
+                generator : {
+                    filename : './fonts/[name][ext]',
+                }
             }, {
                 test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-                type: 'asset'
+                type: 'asset/resource',
+                generator : {
+                    filename : './img/[name][ext]',
+                }
             }, {
                 test: /\.jpg$/,
-                type: 'asset'
+                type: 'asset/resource',
+                generator : {
+                    filename : './img/[name][ext]',
+                }
             }, {
                 test: /\.png$/,
-                type: 'asset'
+                type: 'asset/resource',
+                generator : {
+                    filename : './img/[name][ext]',
+                }
             }, {
                 test: /jquery-mousewheel/,
                 use: [

@@ -1,6 +1,6 @@
 {
   "name": "fhdp-controls",
-  "version": "4.10.5-SNAPSHOT-1681725619489",
+  "version": "4.10.5-NODE18-SNAPSHOT-1681725619489",
   "author": {
     "name": "Jakub Kosecki",
     "email": "j.kosecki@doittechnology.pl"
@@ -14,7 +14,7 @@
   "main": "dist/Module.js",
   "types": "dist/Module.d.ts",
   "scripts": {
-    "prepublish": "node prepublish",
+    "prepublishOnly": "node prepublish",
     "postpublish": "node postpublish",
     "build": "tsc && copyfiles ./source/external/** ./source/styles/css/*.css ./source/styles/external-css/*.css ./source/styles/img/*.png source/Module.css ./dist",
     "prepare": "yarn build",
@@ -37,14 +37,14 @@
   "dependencies": {
     "@popperjs/core": "2.5.3",
     "bootstrap-table": "1.21.4",
-    "fh-basic-controls": "4.10.5-SNAPSHOT-1681725619489",
-    "fh-forms-handler": "4.10.5-SNAPSHOT-1681725619489",
+    "fh-basic-controls": "4.10.5-NODE18-SNAPSHOT-1681725619489",
+    "fh-forms-handler": "4.10.5-NODE18-SNAPSHOT-1681725619489",
     "iso-639-1": "2.1.15",
     "jquery-mousewheel": "3.1.13",
     "jvectormap-next": "3.1.1",
     "lodash": "4.17.21",
     "moment": "2.29.4",
-    "moment-timezone": "0.5.27",
+    "moment-timezone": "0.5.43",
     "react": "16.14.0",
     "react-dom": "16.14.0",
     "react-popper": "2.3.0",

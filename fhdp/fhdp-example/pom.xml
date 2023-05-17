@@ -190,7 +190,7 @@
                             <goal>yarn</goal>
                         </goals>
                         <configuration>
-                            <arguments>run build --env.testReg=tak --env.envMode=${NODE_ENV}</arguments>
+                            <arguments>run build --env envMode=${NODE_ENV}</arguments>
                         </configuration>
                     </execution>
                 </executions>

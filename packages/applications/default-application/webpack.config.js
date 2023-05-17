@@ -47,22 +47,40 @@ module.exports = function (cmdEnv) {
                 use: ['babel-loader']
             }, {
                 test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
-                type: 'asset'
+                type: 'asset/resource',
+                generator : {
+                    filename : './fonts/[name][ext]',
+                }
             }, {
                 test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-                type: 'asset'
+                type: 'asset/resource',
+                generator : {
+                    filename : './fonts/[name][ext]',
+                }
             }, {
                 test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-                type: 'asset'
+                type: 'asset/resource',
+                generator : {
+                    filename : './fonts/[name][ext]',
+                }
             }, {
                 test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-                type: 'asset'
+                type: 'asset/resource',
+                generator : {
+                    filename : './img/[name][ext]',
+                }
             }, {
                 test: /\.jpg$/,
-                type: 'asset'
+                type: 'asset/resource',
+                generator : {
+                    filename : './img/[name][ext]',
+                }
             }, {
                 test: /\.png$/,
-                type: 'asset'
+                type: 'asset/resource',
+                generator : {
+                    filename : './img/[name][ext]',
+                }
             },{
                 test: /jquery-mousewheel/,
                 use: [
