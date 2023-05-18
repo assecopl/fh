@@ -1,24 +1,8 @@
 {
   "pkgs": [
-    "fh-application",
-    "fh-basic-controls",
-    "fh-charts-controls",
-    "fh-forms-handler",
-    "fhdp-charts",
-    "fhdp-charts",
-    "fhdp-controls",
-    "fhdp-controls",
-    "fhdp-extenders",
     "fhdp-fh-starter"
   ],
   "dirs": [
-    "../packages/components/core-lite/",
-    "../packages/components/basic-controls/",
-    "../packages/components/charts-controls/",
-    "../packages/applications/default-application/",
-    "../packages/components/fhdp-charts/",
-    "../packages/components/fhdp-controls/",
-    "../packages/components/fhdp-extenders/",
     "../packages/components/fhdp-fh-starter/"
   ]
 
