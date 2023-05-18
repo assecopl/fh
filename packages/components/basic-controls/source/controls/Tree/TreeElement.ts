@@ -183,6 +183,7 @@ class TreeElement extends HTMLFormComponent {
                     case 'collapsed':
                         this.collapsed = change.changedAttributes.collapsed;
                         this.updateTreeCollapsed();
+                        this.updateTechIcon();
                         break;
                     case 'selected':
                         if (change.changedAttributes.selected) {

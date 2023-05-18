@@ -12,6 +12,8 @@ public class TreeElement<T> {
     private String label;
     private String icon;
     private boolean highlighted = false;
+    private Boolean collapsed = true;
+    private Object contextObject;
     private T obj;
 
     private List<TreeElement<T>> children = new ArrayList<>();

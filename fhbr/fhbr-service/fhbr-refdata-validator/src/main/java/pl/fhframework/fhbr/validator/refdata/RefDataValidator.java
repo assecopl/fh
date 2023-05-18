@@ -185,7 +185,7 @@ public class RefDataValidator {
 //          throw new ToolException("Invalid node type '" +node.getNodeType()+ "'");
       String xpath = "";
       if (node.getNodeType() == Node.ATTRIBUTE_NODE) {
-          xpath = "/@" + node.getNodeName();
+          xpath = "/@" + getNodeName(node);
           node = ((Attr)node).getOwnerElement();
       }
       do {
@@ -199,13 +199,13 @@ public class RefDataValidator {
                   try {
                           long sTime, eTime;
                           //sTime = System.currentTimeMillis();
-                      NodeList nodeList = selectNodeList(node, "preceding-sibling::" + node.getNodeName() );
+                      NodeList nodeList = selectNodeList(node, "preceding-sibling::" + getNodeName(node) );
                       //eTime = System.currentTimeMillis();
                       //System.out.println("selectNodeList time: " + (eTime - sTime)/1000.0 + " [s]" );
                       if (nodeList != null) pos += nodeList.getLength();
 
                       //sTime = System.currentTimeMillis();
-                      //XPathAPI.eval(node, "count(preceding-sibling::" + node.getNodeName() +")");
+                      //XPathAPI.eval(node, "count(preceding-sibling::" + getNodeName(node) +")");
                       //eTime = System.currentTimeMillis();
                       //System.out.println("selectNodeList time2: " + (eTime - sTime)/1000.0 + " [s]" );
 
@@ -214,12 +214,12 @@ public class RefDataValidator {
                 	  ex.printStackTrace();
                   }
 
-                      pathParts.put(node, "/" + node.getNodeName() + "[" + pos + "]");
+                      pathParts.put(node, "/" + getNodeName(node) + "[" + pos + "]");
 //                      if (log.isDebugEnabled()) log.debug("caching part for node: " + pathParts.get(node));
                   //if (pos > 1) {
-                      xpath = "/" + node.getNodeName() + "[" + pos + "]" + xpath;
+                      xpath = "/" + getNodeName(node) + "[" + pos + "]" + xpath;
                   /*} else {
-                      xpath = "/" + node.getNodeName() + xpath;
+                      xpath = "/" + getNodeName(node) + xpath;
                   }*/
               }
               node = node.getParentNode();
@@ -230,7 +230,18 @@ public class RefDataValidator {
       return xpath;
 	}
     
-    public static final String getNodeValue(Node node) {
+    private String getNodeName(Node node) {
+    	String nodeName = node.getNodeName();
+    	if(nodeName.contains(":")) {
+    		return nodeName.substring(nodeName.indexOf(":")+1);
+    	}
+    	return nodeName;
+	}
+
+
+
+
+	public static final String getNodeValue(Node node) {
         if (node != null) {
             switch (node.getNodeType()) {
                 case Node.ELEMENT_NODE:

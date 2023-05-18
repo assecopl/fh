@@ -1810,6 +1810,7 @@
         <xs:attribute type="xs:string" name="label"/>
         <xs:attribute type="xs:string" name="icon"/>
         <xs:attribute type="xs:string" name="url"/>
+        <xs:attribute type="xs:string" name="collapsed" default="true"/>
         <xs:attribute type="xs:string" name="onLabelClick"/>
         <xs:attribute type="xs:string" name="onIconClick"/>
     </xs:complexType>

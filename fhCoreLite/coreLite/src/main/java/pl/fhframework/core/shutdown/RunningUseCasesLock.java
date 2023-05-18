@@ -36,7 +36,7 @@ public class RunningUseCasesLock {
     }
 
     private boolean anySessionRunsUseCase() {
-        long activeSessionsCount = new ArrayList<>(sessionRepository.getUserSessions().values()).stream()
+        long activeSessionsCount = new ArrayList<>(sessionRepository.getAllUserSessions()).stream()
                 .filter(UserSession::hasRunningUseCases)
                 .count();
         if (activeSessionsCount != lastActiveSessionsCount) {

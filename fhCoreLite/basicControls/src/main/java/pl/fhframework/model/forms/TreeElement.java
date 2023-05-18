@@ -27,7 +27,7 @@ import java.util.Optional;
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.BEHAVIOR;
 
 @Control(parents = {Tree.class}, canBeDesigned = true)
-public class TreeElement extends GroupingComponent<TreeElement> implements IHasBoundableLabel, IChangeableByClient {
+public class TreeElement extends GroupingComponent<TreeElement> implements IHasBoundableLabel, IChangeableByClient, Boundable {
 
     private static final String ATTR_ICON = "icon";
     private static final String ATTR_URL = "url";
@@ -77,6 +77,13 @@ public class TreeElement extends GroupingComponent<TreeElement> implements IHasB
     @XMLProperty(value = ATTR_ON_ICON_CLICK)
     private ActionBinding onIconClick;
 
+
+    @JsonIgnore
+    @Getter
+    @Setter
+    @XMLProperty(value = ATTR_COLLAPSED)
+    @DesignerXMLProperty(functionalArea = BEHAVIOR)
+    private ModelBinding<Boolean> collapsedModelBinding;
     @Getter
     private boolean collapsed = true;
 
@@ -181,6 +188,9 @@ public class TreeElement extends GroupingComponent<TreeElement> implements IHasB
         if (valueChange.hasAttributeChanged(ATTR_COLLAPSED)) {
             this.wasCollapsed = this.collapsed;
             this.collapsed = valueChange.getBooleanAttribute(ATTR_COLLAPSED);
+            if(collapsedModelBinding !=null && collapsedModelBinding.getBindingResult() != null) {
+                this.updateBindingForValue(collapsed, collapsedModelBinding, collapsedModelBinding.getBindingExpression());
+            }
         }
     }
 
@@ -228,6 +238,17 @@ public class TreeElement extends GroupingComponent<TreeElement> implements IHasB
         if (wasCollapsed != collapsed) {
             wasCollapsed = collapsed;
             elementChanges.addChange(ATTR_COLLAPSED, this.collapsed);
+        } else {
+            if (collapsedModelBinding != null) {
+                BindingResult<Boolean> bindingResult = collapsedModelBinding.getBindingResult();
+                if (bindingResult != null) {
+                    Boolean newLabelValue = bindingResult.getValue();
+                    if (newLabelValue!= null && !areValuesTheSame(newLabelValue, collapsed)) {
+                        this.collapsed = newLabelValue;
+                        elementChanges.addChange(ATTR_COLLAPSED, this.collapsed);
+                    }
+                }
+            }
         }
 
         Boolean newNextLevelExpandable;

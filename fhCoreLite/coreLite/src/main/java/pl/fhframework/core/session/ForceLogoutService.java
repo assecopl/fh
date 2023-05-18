@@ -30,7 +30,7 @@ public class ForceLogoutService {
 
     @Autowired
     private UserSessionRepository userSessionRepository;
-    
+
     public boolean forceLogoutByUsername(String username, ForcedLogoutEvent.Reason reason) {
         for (UserSession session : findUserSessionsByUsername(username)) {
             forceLogout(session, reason);
@@ -84,7 +84,7 @@ public class ForceLogoutService {
     }
 
     private UserSession findUserSessionByConversationId(String sessionConversationUniqueId) {
-        for (UserSession userSession : userSessionRepository.getUserSessions().values()) {
+        for (UserSession userSession : userSessionRepository.getAllUserSessions()) {
             if (userSession.getConversationUniqueId().equals(sessionConversationUniqueId)) {
                 return userSession;
             }
@@ -93,7 +93,7 @@ public class ForceLogoutService {
     }
 
     private Collection<UserSession> findUserSessionsByUsername(String username) {
-        return userSessionRepository.getUserSessions().values().stream()
+        return userSessionRepository.getAllUserSessions().stream()
                 .filter(s -> s.getSystemUser().getLogin().equals(username))
                 .collect(Collectors.toList());
     }

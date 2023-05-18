@@ -22,7 +22,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
 
 @Control(parents = {TreeFhDP.class}, canBeDesigned = true)
 @CompilationNotSupportedIterable
-public class TreeElementFhDP extends GroupingComponent<TreeElementFhDP> implements IHasBoundableLabel, IChangeableByClient {
+public class TreeElementFhDP extends GroupingComponent<TreeElementFhDP> implements IHasBoundableLabel, IChangeableByClient, Boundable {
 
     private static final String ATTR_ICON = "icon";
     private static final String ATTR_URL = "url";
@@ -104,6 +104,12 @@ public class TreeElementFhDP extends GroupingComponent<TreeElementFhDP> implemen
     @XMLProperty(value = ATTR_ON_ICON_CLICK)
     private ActionBinding onIconClick;
 
+    @JsonIgnore
+    @Getter
+    @Setter
+    @XMLProperty(value = ATTR_COLLAPSED)
+    @DesignerXMLProperty(functionalArea = BEHAVIOR)
+    private ModelBinding<Boolean> collapsedModelBinding;
     @Getter
     private boolean collapsed = true;
 
@@ -216,6 +222,9 @@ public class TreeElementFhDP extends GroupingComponent<TreeElementFhDP> implemen
         if (valueChange.hasAttributeChanged(ATTR_COLLAPSED)) {
             this.wasCollapsed = this.collapsed;
             this.collapsed = valueChange.getBooleanAttribute(ATTR_COLLAPSED);
+            if(collapsedModelBinding !=null && collapsedModelBinding.getBindingResult() != null) {
+                this.updateBindingForValue(collapsed, collapsedModelBinding, collapsedModelBinding.getBindingExpression());
+            }
         }
     }
 
@@ -296,6 +305,17 @@ public class TreeElementFhDP extends GroupingComponent<TreeElementFhDP> implemen
         if (wasCollapsed != collapsed) {
             wasCollapsed = collapsed;
             elementChanges.addChange(ATTR_COLLAPSED, this.collapsed);
+        } else {
+            if (collapsedModelBinding != null) {
+                BindingResult<Boolean> bindingResult = collapsedModelBinding.getBindingResult();
+                if (bindingResult != null) {
+                    Boolean newLabelValue = bindingResult.getValue();
+                    if (newLabelValue!= null && !areValuesTheSame(newLabelValue, collapsed)) {
+                        this.collapsed = newLabelValue;
+                        elementChanges.addChange(ATTR_COLLAPSED, this.collapsed);
+                    }
+                }
+            }
         }
 
         Boolean newNextLevelExpandable;

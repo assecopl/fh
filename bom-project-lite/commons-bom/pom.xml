@@ -5,7 +5,7 @@
 
     <groupId>pl.fhframework</groupId>
     <artifactId>commons-bom</artifactId>
-    <version>4.10.4</version>
+    <version>4.10.5</version>
     <packaging>pom</packaging>
 
     <name>commons-bom</name>
@@ -226,6 +226,7 @@
                             <serverId>ossrh</serverId>
                             <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                             <autoReleaseAfterClose>false</autoReleaseAfterClose>
+                            <stagingProgressTimeoutMinutes>7</stagingProgressTimeoutMinutes>
                         </configuration>
                     </plugin>
                     <plugin>

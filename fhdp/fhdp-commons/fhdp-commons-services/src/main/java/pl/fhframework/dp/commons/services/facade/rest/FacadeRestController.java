@@ -10,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import pl.fhframework.dp.commons.base.model.Heartbeat;
 import pl.fhframework.dp.commons.rest.*;
-import pl.fhframework.dp.commons.rest.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,7 +26,7 @@ public class FacadeRestController {
 
     final IFacadeService facadeServiceCtl;
 
-    @Value("${build.branch}")
+    @Value("${build.version}")
     private String version;
 
     private static final String template = "Hello, %s!";

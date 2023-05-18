@@ -37,6 +37,8 @@ public interface IDocumentHandler<MODEL extends BaseDocumentHandlingFormModel, D
 
     void setOperationHandler(BaseOperationHandler operationHandler);
 
+    BaseOperationHandler getOperationHandler();
+
     void refreshEntity(Long id);
 
     default String getListLoaderClassName() {return null;}

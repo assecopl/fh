@@ -86,7 +86,7 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
 
         this.display();
         document.getElementById(this.input.id).addEventListener('change', this.handleRawDataChange.bind(this));
-        document.getElementById(this.input.id).addEventListener('keypress', this.handleTextInputChange.bind(this));
+        document.getElementById(this.input.id).addEventListener('keydown', this.handleTextInputChange.bind(this));
         this.input.addEventListener('blur', this.handleTextInputBlur.bind(this));
 
         if(iconSearch != null){
@@ -98,15 +98,15 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
                 }
             })
         }
-        this.input.addEventListener('keypress', (ev) => {
-            if (ev.key === "Enter") {
-                this.changesQueue.queueAttributeChange('searchRequested', true);
-                if (!this.popupOpen) {
-                    this.popupOpen = true;
-                }
-                this.isSearch = true;
-                this.fireEvent('onClickSearchIcon', 'search');
-            }
+        this.input.addEventListener('keydown', (ev) => {
+            // if (ev.key === "Enter") {
+            //     this.changesQueue.queueAttributeChange('searchRequested', true);
+            //     if (!this.popupOpen) {
+            //         this.popupOpen = true;
+            //     }
+            //     this.isSearch = true;
+            //     this.fireEvent('onClickSearchIcon', 'search');
+            // }
 
             if (ev.key === "Escape") {
                 this.changesQueue.queueAttributeChange('searchRequested', true);
@@ -161,7 +161,6 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
             this.unmarkDirty();
             this.clickInPopup = false;
             this.popupOpen = false;
-            this.renderPopup();
 
             this.fireEventWithLock('recordSelected', this.rawValue);
             if(window['handlePopupClose']) {
@@ -182,9 +181,6 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
                 this.crateTooltip($("div.search-icon", this.getInputGroupElement())[0]);
             }
             this.getInputGroupElement().style.border = 'solid red 1px';
-            this.defferFunction(() => {
-                document.getElementById(this.input.id).focus();
-            });
         }
     }
 

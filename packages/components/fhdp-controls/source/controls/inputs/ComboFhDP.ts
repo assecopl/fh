@@ -135,11 +135,7 @@ class ComboFhDP extends InputTextFhDP {
                     this.input.blur(); // must be after onChange
                 }
                 this.input.focus();
-                // @ts-ignore
-                $(this.input).trigger({
-                    type: 'keypress',
-                    which: 9
-                });
+
             } else {
                 let move = 0;
                 switch (keyCode) {

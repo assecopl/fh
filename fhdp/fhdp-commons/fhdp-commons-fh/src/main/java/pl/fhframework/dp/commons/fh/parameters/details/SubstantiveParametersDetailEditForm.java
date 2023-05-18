@@ -2,12 +2,12 @@ package pl.fhframework.dp.commons.fh.parameters.details;
 
 import lombok.Getter;
 import lombok.Setter;
+import pl.fhframework.dp.commons.fh.parameters.SubstantiveParametersDetailNameAndDescription;
 import pl.fhframework.dp.transport.dto.parameters.SubstantiveParametersDto;
 import pl.fhframework.dp.transport.dto.parameters.SubstantiveParametersValueTypeEnum;
 import pl.fhframework.model.forms.AccessibilityEnum;
 import pl.fhframework.model.forms.Form;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -24,6 +24,7 @@ public class SubstantiveParametersDetailEditForm extends Form<SubstantiveParamet
         private String title;
         private String performButtonLabel;
         private List<String> substantiveParametersTagList;
+        private SubstantiveParametersDetailNameAndDescription detailNameAndDescription = new SubstantiveParametersDetailNameAndDescription(() -> dto);
         private boolean isAddTagClicked;
         private String name;
 

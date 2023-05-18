@@ -213,7 +213,7 @@ class SelectComboMenuFhDP extends InputTextFhDP {
             this.input.focus();
             // @ts-ignore
             $(this.input).trigger({
-                type: 'keypress',
+                type: 'keydown',
                 which: 9
             });
             this.closeAutocomplete();

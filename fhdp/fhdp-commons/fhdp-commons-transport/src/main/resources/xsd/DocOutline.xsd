@@ -16,6 +16,15 @@
 		<xs:attribute name="label" type="xs:string" use="required"/>
 		<xs:attribute name="hint" type="xs:string" use="optional"/>
 		<xs:attribute name="form" type="xs:string" use="optional"/>
+		<xs:attribute name="formRootPackage" type="xs:string" use="optional"/>
+		<xs:attribute name="repeatFor" type="xs:string" use="optional"/>
+		<xs:attribute name="selected" type="xs:string" use="optional"/>
+		<xs:attribute name="index" type="xs:string" use="optional"/>
+		<xs:attribute name="repeatForMode" type="xs:string" use="optional"/>
+		<xs:attribute name="repeatForGrouping" type="xs:string" use="optional"/>
+		<xs:attribute name="formModel" type="xs:string" use="optional"/>
+		<xs:attribute name="breadcrumbParents" type="xs:string" use="optional"/>
+		<xs:attribute name="breadcrumbLabel" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="MappingsListCT">
 		<xs:sequence>

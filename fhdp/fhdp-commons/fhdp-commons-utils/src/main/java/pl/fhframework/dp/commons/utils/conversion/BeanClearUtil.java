@@ -47,9 +47,6 @@ public class BeanClearUtil {
     Field[] fields =  object.getClass().getDeclaredFields();
     for (Field field: fields) {
       field.setAccessible(true);
-      if(field.getType().equals(LocalDateTime.class)) continue;
-      if(field.getType().equals(LocalDate.class)) continue;
-      if(field.getType().equals(BigDecimal.class)) continue;
       if(field.getType().isEnum()) continue;
       if(field.getType().isArray()) continue;
       /**
@@ -274,6 +271,9 @@ public class BeanClearUtil {
         put(FieldTypes.SHORT_OBJ, Short.class);
         put(FieldTypes.BIGINTEGER, BigInteger.class);
         put(FieldTypes.STRING, String.class);
+        put(FieldTypes.BIGDECIMAL, BigDecimal.class);
+        put(FieldTypes.LOCALDATE, LocalDate.class);
+        put(FieldTypes.LOCALDATETIME, LocalDateTime.class);
       }};
 
   private enum FieldTypes {
@@ -295,6 +295,10 @@ public class BeanClearUtil {
     SHORT_OBJ,
     BIGINTEGER,
     STRING,
+    BIGDECIMAL,
+    LOCALDATE,
+    LOCALDATETIME,
+    ENUM
   }
 
   /**

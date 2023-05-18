@@ -12,6 +12,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
 import pl.fhframework.dp.commons.fh.document.list.searchtemplate.SearchTemplateBuilderModel;
 import pl.fhframework.dp.commons.fh.model.GenericListPagedModel;
+import pl.fhframework.dp.commons.fh.parameters.SubstantiveParametersDetailNameAndDescription;
 import pl.fhframework.dp.transport.dto.parameters.SubstantiveParametersDto;
 import pl.fhframework.dp.transport.dto.parameters.SubstantiveParametersDtoQuery;
 import pl.fhframework.dp.transport.dto.parameters.SubstantiveParametersUnit;
@@ -73,6 +74,7 @@ public class SubstantiveParametersListModel extends GenericListPagedModel<Substa
     private String appContext;
     private SubstantiveParametersDto lastStoredSubstantiveParametersDto;
     private LocalDate referenceDate = LocalDate.now();
+    private SubstantiveParametersDetailNameAndDescription detailNameAndDescription = new SubstantiveParametersDetailNameAndDescription(this::getSelectedSubstantiveParametersDto);
 
     private SubstantiveParametersDto selectedSubstantiveParametersDto;
 

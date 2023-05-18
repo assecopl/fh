@@ -36,6 +36,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class UserSession extends Session {
 
+    public static final String FH_SESSION_ID = "fh_session_id";
+
     private static final int ERROR_INFORMATION_LIMIT = 10;
 
     @Getter
@@ -72,6 +74,9 @@ public class UserSession extends Session {
     // original session id - ChangeSessionIdAuthenticationStrategy is called after logging in
     private String httpSessionOrgId;
 
+    // fh session id - ChangeSessionIdAuthenticationStrategy is called after logging in
+    private String fhSessionId;
+
     /**
      * Optional authentication propagated from a remote cloud server.
      */
@@ -92,11 +97,24 @@ public class UserSession extends Session {
 
     private RuntimeException exception;
 
-    private Integer sustainTimeOutMinutesOverride;
 
-    public UserSession(SystemUser systemUser, UserSessionDescription description) {
+    /**
+     * Ip address with port.
+     * Usually is derived from UserSessionDescription (@see UserSession constructor)
+     * Could be delivered by other components by HttpSession attribute (@See ClientAddressProvider.HTTP_SESSION_KEY_NAME).
+     */
+    private final String clientAddress;
+
+    public UserSession(SystemUser systemUser, UserSessionDescription description, HttpSession httpSession) {
         super(description);
         setSystemUser(systemUser);
+        setHttpSession(httpSession);
+        String fhSessionId = (String) httpSession.getAttribute(FH_SESSION_ID);
+        if (fhSessionId==null){
+            fhSessionId = httpSession.getId();
+        }
+        setFhSessionId(fhSessionId);
+        clientAddress = ClientAddressProvider.getClientAddress(httpSession, description);
     }
 
     @PostConstruct
@@ -106,6 +124,7 @@ public class UserSession extends Session {
 
     void handleEvent(InMessageEventData eventData) {
         useCaseContainer.handleEvent(eventData);
+        refreshLastUsageTime();
     }
 
     public void runUseCase(String useCaseQualifiedClassName) {
@@ -126,8 +145,8 @@ public class UserSession extends Session {
 
     public void logState() {
         FhLogger.info(this.getClass(), "Session State: "
-                + "\n   stackPU {}"
-                + "\n   form: {}",
+                        + "\n   stackPU {}"
+                        + "\n   form: {}",
                 useCaseContainer.logState(),
                 useCaseContainer.getFormsContainer().logState());
         if (!getUseCaseRequestContext().getFormsToHide().isEmpty())
@@ -252,5 +271,40 @@ public class UserSession extends Session {
         else {
             httpSessionOrgId = null;
         }
+    }
+
+    private long lastUsageMoment = System.currentTimeMillis();
+    private void refreshLastUsageTime() {
+        lastUsageMoment = System.currentTimeMillis();
+    }
+
+    public boolean hasNotBeenUsedIn(long amountOfTimeSinceLastUsageInMillis) {
+        return  getHowLongIsUnusedInMillis() >amountOfTimeSinceLastUsageInMillis;
+    }
+
+    public long getHowLongIsUnusedInMillis(){
+        return System.currentTimeMillis() - lastUsageMoment;
+    }
+
+    public void removeAllValuesBeforeSessionRemove(){
+        this.useCaseContainer = null;
+        this.useCaseRequestContext = null;
+        this.actionContext = null;
+        this.uploadFileIndexes = null;
+        this.downloadFileIndexes = null;
+        this.awaitingErrorInformations = null;
+        this.errorInformationProcessors = null;
+        this.formsHandler = null;
+        this.applicationContext = null;
+        this.eventRegistry = null;
+        //this.httpSession = null;
+        //this.httpSessionOrgId = null;
+        //this.fhSessionId = null;
+        this.attributes = null;
+        this.cloudServersSessionIds = null;
+        this.resourcesUrlPrefix = null;
+        this.propagatedAuthentication = null;
+        this.validationResults = null;
+        this.exception = null;
     }
 }

@@ -47,7 +47,7 @@
                 <Row width="md-12">
                     <Group width="md-6">
                         <OutputLabel width="md-12" value="{$.fhdp.parameters.property.name}"/>
-                        <OutputLabel width="md-12" value="{selectedSubstantiveParametersDto.parameterNames[0].name}"
+                        <OutputLabel width="md-12" value="{detailNameAndDescription.nameForSelectedLanguage}"
                                      styleClasses="font-weight-bold"/>
                     </Group>
                     <Group width="md-6">
@@ -102,7 +102,7 @@
             </PanelGroup>
             <PanelGroup width="md-12" label="{$.fhdp.parameters.property.description}">
                 <Row width="md-12">
-                    <OutputLabel inlineStyle="line-height: 1.5;" width="md-12" value="{selectedSubstantiveParametersDto.parameterDescriptions[0].description}"/>
+                    <OutputLabel inlineStyle="line-height: 1.5;" width="md-12" value="{detailNameAndDescription.description}"/>
                 </Row>
             </PanelGroup>
 

@@ -3,7 +3,7 @@
     <parent>
         <artifactId>bom</artifactId>
         <groupId>pl.fhframework.dp</groupId>
-        <version>4.10.4</version>
+        <version>4.10.5</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>fhdp-bom</artifactId>
@@ -557,6 +557,7 @@
                             <serverId>ossrh</serverId>
                             <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                             <autoReleaseAfterClose>false</autoReleaseAfterClose>
+                            <stagingProgressTimeoutMinutes>7</stagingProgressTimeoutMinutes>
                         </configuration>
                     </plugin>
                     <plugin>

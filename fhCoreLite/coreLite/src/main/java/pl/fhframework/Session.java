@@ -89,4 +89,13 @@ public abstract class Session {
             this.maxInactivityMinutes = maxInactivityMinutes;
         }
     }
+
+    /**
+     * Resolved client address
+     *
+     * @return Full client address with port
+     */
+    public String getClientAddress() {
+        return ClientAddressProvider.getClientAddress(description);
+    }
 }

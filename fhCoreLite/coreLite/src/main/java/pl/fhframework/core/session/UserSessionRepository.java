@@ -10,11 +10,11 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 import pl.fhframework.UserSession;
-import pl.fhframework.WebSocketSessionManager;
 import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.core.security.model.SessionInfo;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 import java.net.InetAddress;
@@ -29,42 +29,44 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
 
     @Getter
     private Map<String, UserSession> userSessions = new ConcurrentHashMap<>();
+    @Getter
     private Map<String, UserSession> userSessionsByConversationId = new ConcurrentHashMap<>();
     private Map<Integer, UserSession> userSessionsHash = new ConcurrentHashMap<>();
     private Set<Consumer<UserSession>> userSessionDestroyedListeners = new HashSet<>();
     private Set<Consumer<UserSession>> userSessionKeepAliveListeners = new HashSet<>();
 
-    @Autowired
-    private ApplicationContext applicationContext;
-    @Autowired
+    private final ApplicationContext applicationContext;
     private final SessionInfoCache sessionInfoCache;
-    @Autowired
-    private SessionInfoAPIClient sessionInfoAPIClient;
-
-    @Value("${fhframework.managementApi.enabled:false}")
-    private boolean managementApiEnabled;
+    private SessionInfoService sessionInfoService;
 
     @Value("${server.port}")
     private int serverPort;
     @Value("${fh.session.info.protocol:http}")
     private String sessionInfoProtocol;
-    @Value("${fh.ws.closed.inactive_session_max_time:5}")
-    private int sustainTimeOutMinutes;
+
+    /**
+     * A flag that switch between spring scheduling and manual (by thread) implementation of cron.
+     */
+    @Value("${fh.session.force_clear_session_data_after_session_removal:false}")
+    private boolean forceClearSessionDataAfterSessionRemoval;
 
     private String nodeUrl;
-
-
 
     @PostConstruct
     public void init() {
         ((WebApplicationContext) applicationContext).getServletContext().addListener(this);
     }
 
+    @Autowired
+    public void setSessionInfoService(SessionInfoService sessionInfoService) {
+        this.sessionInfoService = sessionInfoService;
+    }
+
+    @Autowired
+    private LeakedSessionRemoverCron leakedSessionRemoverCron;
 
     @Override
     public synchronized void onApplicationEvent(ContextRefreshedEvent event) {
-        WebSocketSessionManager.setSustainTimeout(sustainTimeOutMinutes * 60);
-
         // register node in cache
         nodeUrl = generateNodeUrl();
         int iter = 0;
@@ -111,11 +113,15 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
         putSessionInfo(httpSessionId, userSession);
     }
 
-    public void removeUserSession(String httpSessionId) {
+    public boolean removeUserSession(String httpSessionId) {
         UserSession userSession = userSessions.remove(httpSessionId);
         userSessionsHash.remove(System.identityHashCode(userSession.getHttpSession()));
         userSessionsByConversationId.remove(userSession.getConversationUniqueId());
         removeSessionInfo(httpSessionId);
+        if (forceClearSessionDataAfterSessionRemoval) {
+            userSession.removeAllValuesBeforeSessionRemove();
+        }
+        return userSession!=null;
     }
 
     private synchronized void putSessionInfo(String httpSessionId, UserSession userSession) {
@@ -139,10 +145,10 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
     private String generateNodeUrl() {
         try {
             return String.format(
-                "%s://%s:%s/",
-                sessionInfoProtocol,
-                InetAddress.getLocalHost().getHostAddress(),
-                serverPort
+                    "%s://%s:%s/",
+                    sessionInfoProtocol,
+                    InetAddress.getLocalHost().getHostAddress(),
+                    serverPort
             );
         } catch (UnknownHostException e) {
             FhLogger.errorSuppressed(e);
@@ -154,22 +160,13 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
         Map<String, SessionInfo> sessions = new ConcurrentHashMap<>();
         Set<String> nodes = sessionInfoCache.getNodes();
         for (String node : nodes) {
-            if (isNodeActive(node)) {
+            if (sessionInfoService.isNodeActive(node)) {
                 sessions.putAll(sessionInfoCache.getSessionsInfoForNode(node));
             } /*else {
                 removeNodeFromCache(node);
             }*/
         }
         return sessions;
-    }
-
-    /** Returns whether given node is active */
-    public boolean isNodeActive(String nodeUrl) {
-        if (managementApiEnabled) {
-            return sessionInfoAPIClient.isNodeActive(nodeUrl);
-        } else {
-            return true; // only local user sessions
-        }
     }
 
     private synchronized void removeNodeFromCache(String node) {
@@ -179,18 +176,23 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
         sessionInfoCache.evictSessionsInfoForNode(node);
     }
 
-    public UserSession getUserSession(String httpSessionId) {
-        return userSessions.get(httpSessionId);
+    public UserSession getUserSession(HttpSession httpSession) {
+        return userSessions.get(httpSession.getId());
     }
 
     @Override
     public void sessionCreated(HttpSessionEvent httpSessionEvent) {
-        // ignore
+        // ChangeSessionIdAuthenticationStrategy silently modify session id after security filter, remove old userSession
+        HttpSession session = httpSessionEvent.getSession();
+        if (session.getAttribute(UserSession.FH_SESSION_ID) == null) {
+            session.setAttribute(UserSession.FH_SESSION_ID, session.getId());
+        }
+        leakedSessionRemoverCron.startManualScheduler();
     }
 
     @Override
     public void sessionDestroyed(HttpSessionEvent httpSessionEvent) {
-        onSessionExpired(httpSessionEvent.getSession().getId());
+        onSessionExpired(httpSessionEvent.getSession());
     }
 
     public void onSessionKeepAlive(String conversationId) {
@@ -202,17 +204,57 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
         }
     }
 
-    private void onSessionExpired(String sessionId) {
-        UserSession session = userSessions.get(sessionId);
+    private void onSessionExpired(HttpSession httpSession) {
+        UserSession session = getUserSession(httpSession);
         if (session != null) {
             try {
                 for (Consumer<UserSession> listener : userSessionDestroyedListeners) {
                     listener.accept(session);
                 }
             } finally {
-                removeUserSession(sessionId);
+                boolean response = removeUserSession(httpSession.getId());
+
+                if (response) {
+                    FhLogger.info("Removed expired session for {}.", getUserLogin(session), session.getFhSessionId(), httpSession.getId());
+                }else{
+                    FhLogger.error("Unsuccessful attempt to delete the session for {}", getUserLogin(session));
+                }
             }
         }
+        leakedSessionRemoverCron.cleanupLeakedSessions();
+    }
+
+    public Set<UserSession> getAllUserSessions(){
+        return new HashSet<>(userSessions.values());
+    }
+
+    protected Map<String, UserSession> getUserSessionsByFhId(){
+        return Collections.unmodifiableMap(this.userSessions);
+    }
+
+
+    protected UserSession getUserSessionByFhId(String fhId) {
+        return this.userSessions.get(fhId);
+    }
+
+    protected int getNoOfSessions(){
+        return userSessions.size();
+    }
+
+    public static String getUserLogin(UserSession userSession){
+        try{
+            return userSession.getSystemUser().getLogin();
+        }catch (Exception ex){
+            return "unkwnon user";
+        }
+    }
+
+    public UserSession getUserSession(String httpSessionId) {
+        return userSessions.get(httpSessionId);
+    }
+
+    public void removeUserSession(HttpSession httpSession){
+        onSessionExpired(httpSession);
     }
 
 }
