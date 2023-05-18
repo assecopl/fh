@@ -22,7 +22,7 @@
     <groupId>pl.fhframework.fhbr</groupId>
     <artifactId>fhbr</artifactId>
     <packaging>pom</packaging>
-    <version>4.10.5</version>
+    <version>4.10.6-SNAPSHOT</version>
     <modules>
         <module>fhbr-bom</module>
         <module>fhbr-service</module>

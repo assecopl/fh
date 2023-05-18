@@ -53,6 +53,7 @@ Supported params:
 --snap - setup as snapshot
 --verbose - enables verbose log
 --dryRun - enables test build without publish
+--noPublish - disable publish process
   `,
 
   deployLocal: `
@@ -62,7 +63,7 @@ Supported params:
 --verbose - enables verbose log
   `,
 
-  clearLocalRegistry: `
+    clearLocalRegistry: `
 This command clears local registry.
 Supported params: 
 --verbose - enables verbose log
@@ -70,15 +71,28 @@ Supported params:
 
 }
 
-class Runtime {
-  constructor() {
-    const nodeV = process.version.match(/^v(\d+)/)[1];
-    if (nodeV !== '12') {
-      throw new Error('Please use node js in version 12!');
+const _switchLerna = (disable) => {
+    console.log('cwd', process.cwd());
+    const disabledPath = '../packages/disabled-package.json';
+    const enabledPath = '../packages/package.json';
+    const isDisabled = fs.existsSync(disabledPath);
+    console.log(isDisabled, disable)
+    if (isDisabled && !disable) {
+        fs.renameSync(disabledPath, enabledPath);
+    } else if (!isDisabled && disable) {
+        fs.renameSync(enabledPath, disabledPath);
     }
-  }
+}
 
-  _run(processName='help', params) {
+class Runtime {
+    constructor() {
+        const nodeV = process.version.match(/^v(\d+)/)[1];
+        if (nodeV !== '18') {
+            throw new Error('Please use node js in version 18!');
+        }
+    }
+
+    _run(processName = 'help', params) {
     const fn = this[processName];
     if (fn) {
       if (params.has('help')) {
@@ -93,115 +107,125 @@ class Runtime {
     console.log(helpTable[pName]);
   }
 
-  deploy(params) {
-    const MAIN_PATH = process.cwd();
-    const FH_DIRS = packages_list.dirs;
-    const FH_PACKAGES = packages_list.pkgs;
-    const snapId = +new Date();
-    let address = 'https://registry.npmjs.org/';
-    if (params.has('address')) {
-      if (utils.validURL(params.get('address'))) {
-        address = params.get('address');
-      } else {
-        console.error(`Address ${params.get('address')} is invalid!`);
-        return;
-      }
-    }
 
-    let fhVer = params.get('fhVer');
-    const isProd = params.has('prod');
-    let isSnapshot = params.has('snap');
-    const verbose =  params.has('verbose');
-    if (!isProd && !isSnapshot) {
-      isSnapshot = true;
-    }
+    deploy(params) {
+        _switchLerna(true);
+        try {
+            const MAIN_PATH = process.cwd();
+            const FH_DIRS = packages_list.dirs;
+            const FH_PACKAGES = packages_list.pkgs;
+            const snapId = +new Date();
+            let address = 'https://registry.npmjs.org/';
+            if (params.has('address')) {
+                if (utils.validURL(params.get('address'))) {
+                    address = params.get('address');
+                } else {
+                    console.error(`Address ${params.get('address')} is invalid!`);
+                    return;
+                }
+            }
 
-    if (isProd) {
-      if (!fhVer) {
-        const cPack = JSON.parse(fs.readFileSync(`${process.cwd()}/${FH_DIRS[0]}package.json`));
-        fhVer = cPack.version.split('-')[0];
-      }
-    }
+            let fhVer = params.get('fhVer');
+            const isProd = params.has('prod');
+            let isSnapshot = params.has('snap');
+            const verbose = params.has('verbose');
+            if (!isProd && !isSnapshot) {
+                isSnapshot = true;
+            }
 
-    if (isSnapshot) {
-      if (!fhVer) {
-        const cPack = JSON.parse(fs.readFileSync(`${process.cwd()}/${FH_DIRS[0]}package.json`));
-        console.log(cPack);
-        fhVer = cPack.version.split('-')[0];
-      }
-      fhVer = `${fhVer}-SNAPSHOT-${snapId}`;
-    }
+            if (isProd) {
+                if (!fhVer) {
+                    const cPack = JSON.parse(fs.readFileSync(`${process.cwd()}/${FH_DIRS[0]}package.json`));
+                    fhVer = cPack.version.split('-')[0];
+                }
+            }
 
-    let shouldPublish = true;
-    if (params.has('dryRun')) {
-      shouldPublish = false;
-    }
+            if (isSnapshot) {
+                if (!fhVer) {
+                    const cPack = JSON.parse(fs.readFileSync(`${process.cwd()}/${FH_DIRS[0]}package.json`));
+                    console.log(cPack);
+                    fhVer = cPack.version.split('-')[0];
+                }
+                fhVer = `${fhVer}-SNAPSHOT-${snapId}`;
+            }
 
-    const publishProcess = (path, onlyUpdate) => {
-      process.chdir(pth.join(MAIN_PATH, path));
-      const name = path.split(pth.sep).splice(-2, 1);
-      console.log('\n\n-----------------------------------------------')
-      console.log(`${`-- deploing: ${name} ${fhVer}`.padEnd(45, ' ')}--`)
-      console.log('-----------------------------------------------\n\n')
-      let pack;
-      if (fhVer) {
-        pack = JSON.parse(fs.readFileSync('package.json'));
-        pack.version = fhVer;
-        if (pack.publishConfig && pack.publishConfig.registry) {
-          pack.publishConfig.registry = address;
+            let shouldPublish = true;
+            if (params.has('dryRun')) {
+                shouldPublish = false;
+            }
+
+            const publishProcess = (path, onlyUpdate) => {
+                process.chdir(pth.join(MAIN_PATH, path));
+                const name = path.split(pth.sep).splice(-2, 1);
+                console.log('\n\n-----------------------------------------------')
+                console.log(`${`-- deploing: ${name} ${fhVer}`.padEnd(45, ' ')}--`)
+                console.log('-----------------------------------------------\n\n')
+                let pack;
+                if (fhVer) {
+                    pack = JSON.parse(fs.readFileSync('package.json'));
+                    pack.version = fhVer;
+                    if (pack.publishConfig && pack.publishConfig.registry) {
+                        pack.publishConfig.registry = address;
+                    }
+                    for (const dep of Object.keys(pack.dependencies)) {
+                        if (FH_PACKAGES.includes(dep)) {
+                            pack.dependencies[dep] = fhVer;
+                        }
+                    }
+                    fs.writeFileSync('package.json', JSON.stringify(pack, null, 2));
+                }
+                utils.runProcess('rm -fr node_modules package-lock.json', verbose);
+                if (shouldPublish && !onlyUpdate) {
+                    console.log(process.cwd())
+                    utils.runProcess(`npm install --registry ${address}`, verbose);
+
+                    let tag;
+                    if (isSnapshot) {
+                        tag = 'next';
+                    } else if (isProd) {
+                        tag = 'latest';
+                    }
+
+                    utils.runProcess(`npm run build`, verbose);
+                    if (!params.has('noPublish')) {
+                        utils.runProcess(`npm publish --force --tag ${tag} --registry ${address}`, verbose);
+                    }
+                    utils.runProcess('rm -fr node_modules package-lock.json', verbose);
+                }
+            }
+
+            const searchForFile = (mainDir, packageFiles) => {
+                fs.readdirSync(mainDir).forEach(file => {
+                    if (file === 'node_modules' || file === 'target') {
+                        return;
+                    }
+                    if (file === 'package.json') {
+                        // console.log(pth.join(mainDir, file))
+                        packageFiles.push(pth.join(mainDir, file));
+                    } else {
+                        const fPath = pth.join(mainDir, file);
+                        if (fs.statSync(fPath).isDirectory()) {
+                            searchForFile(fPath, packageFiles);
+                        }
+                    }
+                })
+                return packageFiles;
+            }
+
+            const SKIP_PUBLISH_FH_DIRS = [
+                '../packages/applications/default-application/'
+            ]
+
+            for (const path of FH_DIRS) {
+                publishProcess(path, SKIP_PUBLISH_FH_DIRS.includes(path));
+            }
+
+            console.log(`NEW FH VERSION: ${fhVer}`);
+        } catch (e) {
+            console.error(e);
+        } finally {
+            _switchLerna(false);
         }
-        for (const dep of Object.keys(pack.dependencies)) {
-          if (FH_PACKAGES.includes(dep)) {
-            pack.dependencies[dep] = fhVer;
-          }
-        }
-        fs.writeFileSync('package.json', JSON.stringify(pack, null, 2));
-      }
-      utils.runProcess('rm -fr node_modules package-lock.json', verbose);
-      if (shouldPublish && !onlyUpdate) {
-        console.log(process.cwd())
-        utils.runProcess(`npm install --registry ${address}`, verbose);
-        
-        let tag;
-        if (isSnapshot) {
-          tag = 'next';
-        } else if (isProd) {
-          tag = 'latest';
-        }
-    
-        utils.runProcess(`npm run build`, verbose);
-        utils.runProcess(`npm publish --force --tag ${tag} --registry ${address}`, verbose);
-        utils.runProcess('rm -fr node_modules package-lock.json', verbose);
-      }
-    }
-
-    const searchForFile = (mainDir, packageFiles) => {
-      fs.readdirSync(mainDir).forEach(file => {
-        if (file === 'node_modules' || file === 'target') {
-          return;
-        }
-        if (file === 'package.json') {
-          // console.log(pth.join(mainDir, file))
-          packageFiles.push(pth.join(mainDir, file));
-        } else {
-          const fPath = pth.join(mainDir, file);
-          if (fs.statSync(fPath).isDirectory()) {
-            searchForFile(fPath, packageFiles);
-          }
-        }
-      })
-      return packageFiles;
-    }
-
-    const SKIP_PUBLISH_FH_DIRS = [
-      '../packages/applications/default-application/'
-    ]
-
-    for (const path of FH_DIRS) {
-      publishProcess(path, SKIP_PUBLISH_FH_DIRS.includes(path));
-    }
-
-    console.log(`NEW FH VERSION: ${fhVer}`);
   }
 
   async switchToLocal(params) {

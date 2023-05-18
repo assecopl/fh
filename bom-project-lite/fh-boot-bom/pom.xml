@@ -11,7 +11,7 @@
 
     <groupId>pl.fhframework</groupId>
     <artifactId>fh-boot-bom</artifactId>
-    <version>4.10.5</version>
+    <version>4.10.6-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>fh-boot</name>
