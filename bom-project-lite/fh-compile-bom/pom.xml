@@ -5,7 +5,7 @@
 
     <groupId>pl.fhframework</groupId>
     <artifactId>fh-compile-bom</artifactId>
-    <version>4.10.5-SNAPSHOT</version>
+    <version>4.10.5</version>
     <packaging>pom</packaging>
 
     <name>fh-compile-bom</name>
@@ -168,6 +168,7 @@
                             <serverId>ossrh</serverId>
                             <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                             <autoReleaseAfterClose>false</autoReleaseAfterClose>
+                            <stagingProgressTimeoutMinutes>7</stagingProgressTimeoutMinutes>
                         </configuration>
                     </plugin>
                     <plugin>
