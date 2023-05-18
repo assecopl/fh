@@ -56,7 +56,7 @@ public class CountryNameValueLookupProvider implements IComboDataProviderFhDP<Na
 
     public PageModel<NameValueDto> getValuesPaged(String text, Pageable pageable) {
         List<NameValueDto> countries = new ArrayList<>();
-        if(text.length() > 2) {
+        if(text != null && text.length() > 0) {
             CountryApiResponse result = restClient.listCountries(text);
             countries = getCountries(result);
         }

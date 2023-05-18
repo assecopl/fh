@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 import pl.fhframework.dp.commons.base.exception.AppMsgRuntimeException;
 
+import java.util.HashMap;
+
 @Service
 @Slf4j
 public class RestClient {
@@ -16,17 +18,23 @@ public class RestClient {
 
 
     public CountryApiResponse listCountries(String txt) throws AppMsgRuntimeException {
-        String uri = UriComponentsBuilder
-                .fromUriString(url)
-                .pathSegment("countries")
-                .queryParam("q", txt)
-                .queryParam("limit", "1000")
-                .queryParam("pretty", "true")
-                .encode()
-                .toUriString();
-        ResponseEntity<CountryApiResponse> ret = RestTemplateConfig.
-                restTemplate.getForEntity(uri, CountryApiResponse.class);
-        return ret.getBody();
+        try {
+            String uri = UriComponentsBuilder
+                    .fromUriString(url)
+                    .pathSegment("countries")
+                    .queryParam("q", txt)
+                    .queryParam("limit", "1000")
+                    .queryParam("pretty", "true")
+                    .encode()
+                    .toUriString();
+            ResponseEntity<CountryApiResponse> ret = RestTemplateConfig.
+                    restTemplate.getForEntity(uri, CountryApiResponse.class);
+            return ret.getBody();
+        } catch (Exception ex) {
+            CountryApiResponse ret = new CountryApiResponse();
+            ret.setData(new HashMap<>());
+            return ret;
+        }
     }
 
 
