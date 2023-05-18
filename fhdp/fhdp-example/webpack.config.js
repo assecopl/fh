@@ -33,9 +33,11 @@ module.exports = function (env) {
                     {
                         loader: "sass-loader",
                         options: {
-                            // Prefer `dart-sass`
                             implementation: require("sass"),
-                        },
+                            sassOptions: {
+                                fiber: false,
+                            },
+                        }
                     }
                 ]
             }, {
