@@ -5,8 +5,6 @@
     "fh-charts-controls",
     "fh-forms-handler",
     "fhdp-charts",
-    "fhdp-charts",
-    "fhdp-controls",
     "fhdp-controls",
     "fhdp-extenders",
     "fhdp-fh-starter"
@@ -21,5 +19,4 @@
     "../packages/components/fhdp-extenders/",
     "../packages/components/fhdp-fh-starter/"
   ]
-
 }

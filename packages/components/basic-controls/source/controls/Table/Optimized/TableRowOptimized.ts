@@ -3,7 +3,6 @@ import {TableOptimized} from "./TableOptimized";
 import {TableRow} from "../TableRow";
 
 class TableRowOptimized extends TableRow {
-    readonly parent: TableOptimized;
     // private onRowClick:any = null;
     // private selectable:boolean = true;
 

@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>fhFramework</artifactId>
-	<version>4.10.5-SNAPSHOT</version>
+	<version>4.10.6-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	
 	<name>FH</name>
@@ -13,7 +13,7 @@
 	<parent>
 		<groupId>pl.fhframework</groupId>
 		<artifactId>fh-compile-bom</artifactId>
-		<version>4.10.5-SNAPSHOT</version>
+        <version>4.10.6-SNAPSHOT</version>
 		<relativePath>./bom-project-lite/fh-compile-bom</relativePath>
 	</parent>
 
@@ -142,6 +142,7 @@
 							<serverId>ossrh</serverId>
 							<nexusUrl>https://oss.sonatype.org/</nexusUrl>
 							<autoReleaseAfterClose>false</autoReleaseAfterClose>
+                            <stagingProgressTimeoutMinutes>7</stagingProgressTimeoutMinutes>
 						</configuration>
 					</plugin>
 					<plugin>

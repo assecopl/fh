@@ -10,7 +10,7 @@
     <parent>
         <groupId>pl.fhframework</groupId>
         <artifactId>fh-boot-bom</artifactId>
-        <version>4.10.5-SNAPSHOT</version>
+        <version>4.10.6-SNAPSHOT</version>
         <relativePath>../../bom-project-lite/fh-boot-bom</relativePath>
     </parent>
     <properties>
@@ -204,6 +204,7 @@
                             <serverId>ossrh</serverId>
                             <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                             <autoReleaseAfterClose>false</autoReleaseAfterClose>
+                            <stagingProgressTimeoutMinutes>7</stagingProgressTimeoutMinutes>
                         </configuration>
                     </plugin>
                     <plugin>

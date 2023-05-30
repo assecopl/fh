@@ -11,6 +11,7 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.stereotype.Service;
 
 import pl.fhframework.core.FhFrameworkException;
+import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.core.util.StringUtils;
 import pl.fhframework.SessionManager;
 import pl.fhframework.UserSession;
@@ -211,6 +212,8 @@ public class MessageService {
                     return message;
                 }
             }
+            //Log key not found.
+            FhLogger.warn(defaultMessage);
             return defaultMessage;
         }
 

@@ -21,7 +21,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>pl.fhframework.fhbr</groupId>
     <artifactId>fhbr-bom</artifactId>
-    <version>4.10.5-SNAPSHOT</version>
+    <version>4.10.6-SNAPSHOT</version>
 
     <packaging>pom</packaging>
 
@@ -231,6 +231,7 @@
                             <serverId>ossrh</serverId>
                             <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                             <autoReleaseAfterClose>false</autoReleaseAfterClose>
+                            <stagingProgressTimeoutMinutes>7</stagingProgressTimeoutMinutes>
                         </configuration>
                     </plugin>
                     <plugin>

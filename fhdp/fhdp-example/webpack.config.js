@@ -2,18 +2,19 @@ const Path = require('path');
 const Webpack = require('webpack');
 const Merge = require('webpack-merge');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
-const CompressionPlugin = require("compression-webpack-plugin");
-const zlib = require("zlib");
-const WebpackObfuscator = require('webpack-obfuscator');
 require("@babel/polyfill");
+const {DuplicatesPlugin} = require("inspectpack/plugin");
+const {StatsWriterPlugin} = require("webpack-stats-plugin");
+const TerserPlugin = require('terser-webpack-plugin');
+const WebpackBundleSizeAnalyzerPlugin = require('webpack-bundle-size-analyzer').WebpackBundleSizeAnalyzerPlugin;
+
 
 module.exports = function (env) {
     const isProductionMode = false;//env.envMode !== 'development';
-    const isTestReg = env.testReg === 'tak';
     console.log(`This is a ${isProductionMode ? "production" : "development"} build`);
-    var entry = ['@babel/polyfill','./src/main/resources/static/Application.ts'];
+    var entry = ['@babel/polyfill', './src/main/resources/static/Application.ts'];
     let baseConfig = {
         entry: entry,
         mode: 'development',
@@ -27,62 +28,94 @@ module.exports = function (env) {
                 test: /\.(scss|css)$/,
                 use: [
                     MiniCssExtractPlugin.loader,
-                    {
-                        loader: "css-loader",
-                        options: {
-                            minimize: {
-                                safe: true
-                            }
-                        }
-                    },
+                    "css-loader",
                     {
                         loader: "sass-loader",
-                        options: {}
+                        options: {
+                            implementation: require("sass"),
+                            sassOptions: {
+                                fiber: false,
+                            },
+                        }
                     }
                 ]
             }, {
                 test: /\.ts(x?)$/,
-                // exclude: /node_modules/,
-                use: [{
-                    loader: 'babel-loader'
-                }, {
-                    loader: 'ts-loader'
+                exclude: /node_modules/,
+                use: ['babel-loader', {
+                    loader: 'ts-loader',
+                    options: {allowTsInNodeModules: true}
                 }]
             }, {
                 test: /\.js$/,
-                exclude: /node_modules/,
-                use: [{
-                    loader: 'babel-loader'
-                },
-//                { loader: 'obfuscator-loader', options: {/* options here */} }
-            ]
+                use: ['babel-loader',
+                ]
             }, {
                 test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'file-loader?name=./fonts/[name].[ext]'
+                type: 'asset/resource',
+                generator: {
+                    filename: './fonts/[name][ext]',
+                }
             }, {
                 test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'file-loader?name=./fonts/[name].[ext]'
+                type: 'asset/resource',
+                generator: {
+                    filename: './fonts/[name][ext]',
+                }
             }, {
                 test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'file-loader?name=./img/[name].[ext]'
+                type: 'asset/resource',
+                generator: {
+                    filename: './fonts/[name][ext]',
+                }
             }, {
                 test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'file-loader?name=./img/[name].[ext]'
+                type: 'asset/resource',
+                generator: {
+                    filename: './img/[name][ext]',
+                }
             }, {
                 test: /\.jpg$/,
-                use: ["file-loader?name=./img/[name].[ext]"]
+                type: 'asset/resource',
+                generator: {
+                    filename: './img/[name][ext]',
+                }
             }, {
                 test: /\.png$/,
-                use: ["file-loader?name=./img/[name].[ext]"]
+                type: 'asset/resource',
+                generator: {
+                    filename: './img/[name][ext]',
+                }
             }, {
                 test: /jquery-mousewheel/,
-                loader: "imports-loader?define=>false&this=>window"
+                use: [
+                    {
+                        loader: "imports-loader",
+                        options: {
+                            wrapper: "window",
+                            additionalCode:
+                                "var define = false; /* Disable AMD for misbehaving libraries */",
+                        },
+                    },
+                ]
             }]
         },
         resolve: {
             extensions: ['.ts', '.tsx', '.js']
         },
-        plugins: isProductionMode ? [
+        stats: {
+            all: undefined,
+            source: true
+        },
+        plugins: [
+            new NodePolyfillPlugin(),
+            // Relative paths work(to output path), but absolute paths do not currently.
+            new WebpackBundleSizeAnalyzerPlugin('../../../webpack_size.txt'),
+            new StatsWriterPlugin({
+                // Relative paths work(to output path), but absolute paths do not currently.
+                filename: "../../../webpack_stats.json",
+                fields: null
+            }),
             new Webpack.ProvidePlugin({
                 $: 'jquery',
                 jQuery: 'jquery'
@@ -94,41 +127,46 @@ module.exports = function (env) {
             new MiniCssExtractPlugin({
                 filename: 'fhApplication.bundle.css'
             }),
-//            new WebpackObfuscator ({
-//                    rotateStringArray: true
-//            }, [])
-        ] : [
-            new Webpack.ProvidePlugin({
-                $: 'jquery',
-                jQuery: 'jquery'
+            new DuplicatesPlugin({
+                // Emit compilation warning or error? (Default: `false`)
+                emitErrors: false,
+                // Handle all messages with handler function (`(report: string)`)
+                // Overrides `emitErrors` output.
+                emitHandler: undefined,
+                // List of packages that can be ignored. (Default: `[]`)
+                // - If a string, then a prefix match of `{$name}/` for each module.
+                // - If a regex, then `.test(pattern)` which means you should add slashes
+                //   where appropriate.
+                //
+                // **Note**: Uses posix paths for all matching (e.g., on windows `/` not `\`).
+                ignoredPackages: undefined,
+                // Display full duplicates information? (Default: `false`)
+                verbose: true
             }),
-            new Webpack.DefinePlugin({
-                ENV_IS_DEVELOPMENT: !isProductionMode,
-                ENV_IS: JSON.stringify(env)
-            }),
-            new MiniCssExtractPlugin({
-                filename: 'fhApplication.bundle.css'
-            })
-        ]
+        ],
+        optimization: {
+            minimize: false,
+        }
     };
 
     if (isProductionMode) {
         return Merge(baseConfig, {
             mode: 'production',
             devtool: 'nosources-source-map',
-            optimization: {
-                minimizer: [
-                    new UglifyJsPlugin({
-                        cache: true,
-                        parallel: true,
-                        sourceMap: true,
-                        extractComments: true
-                    })
-                ]
-            },
             plugins: [
                 new OptimizeCSSAssetsPlugin({})
-            ]
+            ],
+            optimization: {
+                minimize: true,
+                minimizer: [new TerserPlugin({
+                    // https://github.com/terser/terser#minify-options
+                    terserOptions: {
+                        toplevel: true,
+                        keep_classnames: true,
+                        keep_fnames: true,
+                    },
+                })],
+            }
         });
     }
 

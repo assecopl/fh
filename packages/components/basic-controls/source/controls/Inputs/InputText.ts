@@ -339,6 +339,8 @@ class InputText extends HTMLFormComponent {
 
             //create custom definitions
             let customDefs = this.createCustomDefinitionSymbols();
+
+            //@ts-ignore TODO error TS2839: This condition will always return 'true' since JavaScript compares objects by reference, not value.
             if (customDefs != {}) {
                 options.definitions = customDefs;
             }
