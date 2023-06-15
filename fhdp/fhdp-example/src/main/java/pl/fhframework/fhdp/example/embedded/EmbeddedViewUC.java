@@ -9,7 +9,7 @@ import pl.fhframework.core.uc.url.UseCaseWithUrl;
 import pl.fhframework.event.EventRegistry;
 
 @UseCase
-@UseCaseWithUrl(alias = "sample-uc")
+@UseCaseWithUrl(alias = "embedded")
 public class EmbeddedViewUC implements IInitialUseCase {
 //    @Autowired
 //    private ExampleAppMessageHelper messageHelper;
