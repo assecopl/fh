@@ -1,0 +1,582 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.15.0.final using JasperReports Library version 6.5.1  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="INF0001" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Error" uuid="b4ce69f4-3a5b-4df1-8afe-ee4c149ee803">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter "/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="469"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="521"/>
+        <property name="net.sf.jasperreports.default.pdf.font.name" value="Times New Roman"/>
+	<subDataset name="Ostrzezenia" uuid="ebbb8017-8db2-4bde-8faf-70bef30d81b8">
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="szprot\adapters\INF0001_DataAdapter.xml"/>
+		<queryString language="xPath">
+			<![CDATA[/*[local-name()='PrintData']/*[local-name()='printAdditionalData']/*[local-name()='warning']]]>
+		</queryString>
+		<field name="warning_1" class="java.lang.String">
+			<property name="net.sf.jasperreports.xpath.field.expression" value="."/>
+			<fieldDescription><![CDATA[.]]></fieldDescription>
+		</field>
+	</subDataset>
+	<queryString language="xPath">
+		<![CDATA[/*[local-name()='PrintData']]]>
+	</queryString>
+	<field name="organWydajacy" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression" value="@organWydajacy"/>
+		<fieldDescription><![CDATA[@organWydajacy]]></fieldDescription>
+	</field>
+	<field name="creationTime" class="java.util.Date">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='PrintData']/*[local-name()='documentData']/*[local-name()='creationTime']]]>
+		</property>
+		<fieldDescription><![CDATA[documentData/creationTime]]></fieldDescription>
+	</field>
+	<field name="nazwaPodmiotu" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='PrintData']/*[local-name()='caseStructureData']/*/*[local-name()='Podmiot']/@nazwaPelna]]>
+		</property>
+		<fieldDescription><![CDATA[caseStructureData/ns2:WRP0001/ns2:Podmiot/@nazwaPodmiotu]]></fieldDescription>
+	</field>
+	<field name="lrn" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='PrintData']/*[local-name()='documentData']/*[local-name()='lrn']]]>
+		</property>
+		<fieldDescription><![CDATA[documentData/lrn]]></fieldDescription>
+	</field>
+	<field name="refNo" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='PrintData']/*[local-name()='caseData']/*[local-name()='refNo']]]>
+		</property>
+		<fieldDescription><![CDATA[caseData/refNo]]></fieldDescription>
+	</field>
+	<field name="handlingUser" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='PrintData']/*[local-name()='caseData']/*[local-name()='handlingUserName']]]>
+		</property>
+		<fieldDescription><![CDATA[caseData/handlingUser]]></fieldDescription>
+	</field>
+	<field name="trescWezwania" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='PrintData']/*[local-name()='currentTaskStructureData']/*[local-name()='INF0001_WEZWANIE']/@trescWezwania]]>
+		</property>
+		<fieldDescription><![CDATA[currentTaskStructureData/ns4:BP110_WER_WEZW/@trescWezwania]]></fieldDescription>
+	</field>
+	<field name="imie" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='PrintData']/*[local-name()='caseStructureData']/*/*[local-name()='Podmiot']/*[local-name()='ImieNazwisko']/@imie]]>
+		</property>
+		<fieldDescription><![CDATA[caseStructureData/ns2:WRP0001/ns2:Podmiot/ns3:ImieNazwisko/@imie]]></fieldDescription>
+	</field>
+	<field name="nazwisko" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='PrintData']/*[local-name()='caseStructureData']/*/*[local-name()='Podmiot']/*[local-name()='ImieNazwisko']/@nazwisko]]>
+		</property>
+		<fieldDescription><![CDATA[caseStructureData/ns2:WRP0001/ns2:Podmiot/ns3:ImieNazwisko/@nazwisko]]></fieldDescription>
+	</field>
+	<field name="kodPocztowy_1" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='PrintData']/*[local-name()='caseStructureData']/*/*[local-name()='Adres' and @rodzajKod='3']/@kodPocztowy]]>
+		</property>
+		<fieldDescription><![CDATA[caseStructureData/ns2:WRP0001/ns2:Adres/@kodPocztowy]]></fieldDescription>
+	</field>
+	<field name="miejscowoscNazwa_1" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='PrintData']/*[local-name()='caseStructureData']/*/*[local-name()='Adres' and @rodzajKod='3']/@miejscowoscNazwa]]>
+		</property>
+		<fieldDescription><![CDATA[caseStructureData/ns2:WRP0001/ns2:Adres/@miejscowoscNazwa]]></fieldDescription>
+	</field>
+	<field name="nrDomu_1" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='PrintData']/*[local-name()='caseStructureData']/*/*[local-name()='Adres' and @rodzajKod='3']/@nrDomu]]>
+		</property>
+		<fieldDescription><![CDATA[caseStructureData/ns2:WRP0001/ns2:Adres/@nrDomu]]></fieldDescription>
+	</field>
+	<field name="nrLokalu_1" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='PrintData']/*[local-name()='caseStructureData']/*/*[local-name()='Adres' and @rodzajKod='3']/@nrLokalu]]>
+		</property>
+		<fieldDescription><![CDATA[caseStructureData/ns2:WRP0001/ns2:Adres/@nrLokalu]]></fieldDescription>
+	</field>
+	<field name="ulicaNazwa_1" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='PrintData']/*[local-name()='caseStructureData']/*/*[local-name()='Adres' and @rodzajKod='3']/@ulicaNazwa]]>
+		</property>
+		<fieldDescription><![CDATA[caseStructureData/ns2:WRP0001/ns2:Adres/@ulicaNazwa]]></fieldDescription>
+	</field>
+	<field name="structureCode" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='PrintData']/*[local-name()='caseStructureData']/*[local-name()='structureCode']]]>
+		</property>
+		<fieldDescription><![CDATA[caseStructureData/structureCode]]></fieldDescription>
+	</field>
+	<field name="imie_2" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='PrintData']/*[local-name()='caseStructureData']/*/*[local-name()='OsobaFizyczna']/@imie]]>
+		</property>
+		<fieldDescription><![CDATA[caseStructureData/ns3:WRR0001/ns2:OsobaFizyczna/@imie]]></fieldDescription>
+	</field>
+	<field name="nazwisko_2" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='PrintData']/*[local-name()='caseStructureData']/*/*[local-name()='OsobaFizyczna']/@nazwisko]]>
+		</property>
+		<fieldDescription><![CDATA[caseStructureData/ns3:WRR0001/ns2:OsobaFizyczna/@nazwisko]]></fieldDescription>
+	</field>
+	<field name="kodPocztowy_2" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='PrintData']/*[local-name()='caseStructureData']/*/*[local-name()='Adres' and @rodzajKod='3']/@kodPocztowy]]>
+		</property>
+		<fieldDescription><![CDATA[caseStructureData/ns3:WRR0001/ns2:Adres/@kodPocztowy]]></fieldDescription>
+	</field>
+	<field name="miejscowoscNazwa_2" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='PrintData']/*[local-name()='caseStructureData']/*/*[local-name()='Adres' and @rodzajKod='3']/@miejscowoscNazwa]]>
+		</property>
+		<fieldDescription><![CDATA[caseStructureData/ns3:WRR0001/ns2:Adres/@miejscowoscNazwa]]></fieldDescription>
+	</field>
+	<field name="nrDomu_2" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='PrintData']/*[local-name()='caseStructureData']/*/*[local-name()='Adres' and @rodzajKod='3']/@nrDomu]]>
+		</property>
+		<fieldDescription><![CDATA[caseStructureData/ns3:WRR0001/ns2:Adres/@nrDomu]]></fieldDescription>
+	</field>
+	<field name="ulicaNazwa_2" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='PrintData']/*[local-name()='caseStructureData']/*/*[local-name()='Adres' and @rodzajKod='3']/@ulicaNazwa]]>
+		</property>
+		<fieldDescription><![CDATA[caseStructureData/ns3:WRR0001/ns2:Adres/@ulicaNazwa]]></fieldDescription>
+	</field>
+	<field name="nrLokalu_2" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='PrintData']/*[local-name()='caseStructureData']/*/*[local-name()='Adres' and @rodzajKod='3']/@nrLokalu]]>
+		</property>
+		<fieldDescription><![CDATA[caseStructureData/ns3:WRR0001/ns2:Adres/@nrLokalu]]></fieldDescription>
+	</field>
+	<field name="warning" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='PrintData']/*[local-name()='printAdditionalData']/*[local-name()='warning']]]>
+		</property>
+		<fieldDescription><![CDATA[printAdditionalData/warning]]></fieldDescription>
+	</field>
+	<field name="imieWnioskodawcy" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='PrintData']/*[local-name()='caseStructureData']/*/*[local-name()='Wnioskodawca']/@imie]]>
+		</property>
+		<fieldDescription><![CDATA[caseStructureData/WRP0003/Wnioskodawca/@imie]]></fieldDescription>
+	</field>
+	<field name="nazwiskoWnioskodawcy" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='PrintData']/*[local-name()='caseStructureData']/*/*[local-name()='Wnioskodawca']/@nazwisko]]>
+		</property>
+		<fieldDescription><![CDATA[caseStructureData/WRP0003/Wnioskodawca/@nazwisko]]></fieldDescription>
+	</field>
+	<field name="nazwaPelnaWPE" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='PrintData']/*[local-name()='caseStructureData']/*/*[local-name()='Reprezentowany']/@nazwaPelna]]>
+		</property>
+		<fieldDescription><![CDATA[caseStructureData/WPE0001/Reprezentowany/@nazwaPelna]]></fieldDescription>
+	</field>
+	<field name="nazwaSkroconaWPE" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='PrintData']/*[local-name()='caseStructureData']/*/*[local-name()='Reprezentowany']/@nazwaSkrocona]]>
+		</property>
+		<fieldDescription><![CDATA[caseStructureData/WPE0001/Reprezentowany/@nazwaSkrocona]]></fieldDescription>
+	</field>
+	<field name="nipWPE" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='PrintData']/*[local-name()='caseStructureData']/*/*[local-name()='Reprezentowany']/@nip]]>
+		</property>
+		<fieldDescription><![CDATA[caseStructureData/WPE0001/Reprezentowany/@nip]]></fieldDescription>
+	</field>
+	<field name="nazwaPelnaWREX" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='PrintData']/*[local-name()='caseStructureData']/*[local-name()='WREX001']/*[local-name()='Podmiot']/@nazwaPelna]]>
+		</property>
+		<fieldDescription><![CDATA[caseStructureData/WREX001/Podmiot/@nazwaPelna]]></fieldDescription>
+	</field>
+	<field name="nazwaSkroconaWREX" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='PrintData']/*[local-name()='caseStructureData']/*[local-name()='WREX001']/*[local-name()='Podmiot']/@nazwaSkrocona]]>
+		</property>
+		<fieldDescription><![CDATA[caseStructureData/WREX001/Podmiot/@nazwaSkrocona]]></fieldDescription>
+	</field>
+	<field name="nipWREX" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='PrintData']/*[local-name()='caseStructureData']/*[local-name()='WREX001']/*[local-name()='Podmiot']/@nip]]>
+		</property>
+		<fieldDescription><![CDATA[caseStructureData/WREX001/Podmiot/@nip]]></fieldDescription>
+	</field>
+	<field name="nrDomuWREX" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='PrintData']/*[local-name()='caseStructureData']/*[local-name()='WREX001']/*[local-name()='Adres']/@nrDomu]]>
+		</property>
+		<fieldDescription><![CDATA[caseStructureData/WREX001/Adres/@nrDomu]]></fieldDescription>
+	</field>
+	<field name="miejscowoscNazwaWREX" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='PrintData']/*[local-name()='caseStructureData']/*[local-name()='WREX001']/*[local-name()='Adres']/@miejscowoscNazwa]]>
+		</property>
+		<fieldDescription><![CDATA[caseStructureData/WREX001/Adres/@miejscowoscNazwa]]></fieldDescription>
+	</field>
+	<field name="kodPocztowyWREX" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='PrintData']/*[local-name()='caseStructureData']/*[local-name()='WREX001']/*[local-name()='Adres']/@kodPocztowy]]>
+		</property>
+		<fieldDescription><![CDATA[caseStructureData/WREX001/Adres/@kodPocztowy]]></fieldDescription>
+	</field>
+	<field name="ulicaNazwaWREX" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='PrintData']/*[local-name()='caseStructureData']/*[local-name()='WREX001']/*[local-name()='Adres']/@ulicaNazwa]]>
+		</property>
+		<fieldDescription><![CDATA[caseStructureData/WREX001/Adres/@ulicaNazwa]]></fieldDescription>
+	</field>
+	<field name="nrLokaluWREX" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='PrintData']/*[local-name()='caseStructureData']/*[local-name()='WREX001']/*[local-name()='Adres']/@nrLokalu]]>
+		</property>
+		<fieldDescription><![CDATA[caseStructureData/WREX001/Adres/@nrLokalu]]></fieldDescription>
+	</field>
+	<variable name="data2" class="java.lang.String">
+		<variableExpression><![CDATA[japis.tools.date.DateHelper.dateToString($F{creationTime},"d MMMM yyyy")]]></variableExpression>
+		<initialValueExpression><![CDATA[japis.tools.date.DateHelper.dateToString($F{creationTime},"d MMMM yyyy")]]></initialValueExpression>
+	</variable>
+	<variable name="zmianaTekstu" class="java.lang.String">
+		<variableExpression><![CDATA[$F{trescWezwania}]]></variableExpression>
+		<initialValueExpression><![CDATA[$F{trescWezwania}]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="105" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<staticText>
+				<reportElement x="15" y="52" width="199" height="45" uuid="b404e60d-ec5d-4b4b-b1cf-2e7a2cabb215">
+					<printWhenExpression><![CDATA[$V{REPORT_COUNT}==0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" pdfFontName="Times New Roman" isBold="true" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="AtLeast"/>
+				</textElement>
+				<text><![CDATA[DYREKTOR
+IZBY ADMINISTRACJI SKARBOWEJ
+W POZNANIU]]></text>
+			</staticText>
+			<image>
+				<reportElement x="92" y="2" width="50" height="50" uuid="bdaa9399-90b0-46f8-8e00-e285fa1d6921">
+					<printWhenExpression><![CDATA[$V{REPORT_COUNT}==0]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[new java.io.ByteArrayInputStream(org.apache.commons.codec.binary.Base64.decodeBase64("/9j/4AAQSkZJRgABAQEAYABgAAD/4QAiRXhpZgAATU0AKgAAAAgAAQESAAMAAAABAAEAAAAAAAD/2wBDAAIBAQIBAQICAgICAgICAwUDAwMDAwYEBAMFBwYHBwcGBwcICQsJCAgKCAcHCg0KCgsMDAwMBwkODw0MDgsMDAz/2wBDAQICAgMDAwYDAwYMCAcIDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAz/wAARCAIAAgADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDLooor8XP4DCiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACpLO0kv7uKCFd0sziNFzjLE4A5qOtHwh/yNml/9fcX/AKGKzrTcKcpromz0cnwkMVj6GFqXUZzjF23tKSTtvrr2PnP/AIed/A3/AKHj/wAo2of/ABivY/h98QND+K/gix8R+G9W0/W9F1EMIri0nWTy3XG6KVQd0MqgqxikCuFdGKgOpP5y/wDBMj4+6Z8Evh18YrXUv2VtN/aObxZpltpNlqV7p5uV8E3DpdbJkZbSd1kl5YBJIGP2Y4Y7cr9RfsEfAPxd+x3/AMEov2pvEXiXdovi7UNF0jxV4Vso7uG6bS/sd79je6uYlZkjlkXU3jSGZS4WORnRAYWf77HcNYGhQqy9o1KMVKN2rNt2cbWTbtrdaddUmfuObeEeVWjhcvxTjiZzUYxqSi072s3yw5ktX0bVttVf6Qor5v8A+CePjr4o/tE6DoPjz4heKNH0X4Z+GtB8S3+tfYtO83WfEH2CxvLuO5MflCFUEiLCqwyRE/ZH3rlhI0HwY0r9rH9vz9mv4oftHfC//hXPg/4W/CIzC98P3Nx5t5qiWdut1cBWlikaSVbdkeRvMtkcsfJRT8i+RLhnEqc4c0fcXNJ3doxezel9d0km0t0ro+RwfhFm+KnKGHrUpWlyXUpNOoknKC9y/NFNN3SWqSbaaX0vRXjfhz9qPxJ8Rv8Agkv42/aY8O+CrG71Xwr4kg8J6hoscdzNpujSTRiSTUmIlEv2VFkhSJGkLCaZfNZ0iP2jy/8AZ+/avbUvip8NYtL+PHhH4rjxNp8c3irwv4n8MTeD5tFuJPlksrC9iDx3N0gLeU7Eo8giHkzBmjp0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ooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAorzv8AaV/aV0n9m7wCtytrJ4k8ca5cR6b4T8LQQyyTa5eSHaGfy8MLeMlN6o3myNJFEm3zGmh67wFYeJtM8EaRD4ym0GbxUtnEdUOjFms45yoLRqzMwZkJ2O6MYmdXaMmMoa7J4KpDDrEyslJ2S6vzt26HuV+H8VRyynmtWyhUk4xTfvSsneSX8qas3fdrSzTNaiiiuM8MKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooA898O/sv+E9E/aF174nXMGoa54q1i0jtLaXVL6W4j0TascZe0GQVJijMW2QyIkcrqioNm30Kiitq2Iq1mnVd7Ky9D0MwzXF46UZYuo5uKUVfolskFFFFYnnhRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFAH/2Q==".getBytes()))]]></imageExpression>
+				<hyperlinkTooltipExpression><![CDATA["Logo orła"]]></hyperlinkTooltipExpression>
+			</image>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement key="" stretchType="ContainerBottom" mode="Transparent" x="280" y="2" width="268" height="30" uuid="ae724c00-5463-4f7b-99a8-f2656fb71bb2"/>
+				<box topPadding="0" rightPadding="0"/>
+				<textElement textAlignment="Right">
+					<font fontName="Times New Roman" pdfFontName="Times New Roman" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Poznań, "+($F{creationTime}!=null?$V{data2} + " r.":"")]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="87" splitType="Stretch">
+			<printWhenExpression><![CDATA[$F{structureCode}.equals("WRP0001") || $F{structureCode}.equals("WRP0002") || $F{structureCode}.equals("WRP0003")]]></printWhenExpression>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="316" y="23" width="244" height="20" uuid="77e9f683-e6c9-4232-a517-9d068d90a51c"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" pdfFontName="Times New Roman" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nazwaPodmiotu}!=null?$F{nazwaPodmiotu}:($F{imie}!=null?$F{imie}+" ":"")+($F{nazwisko}!=null?$F{nazwisko}:"")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" x="316" y="45" width="244" height="20" uuid="8ae3fb93-bea8-418b-bf26-d50c726843ec"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" pdfFontName="Times New Roman" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{ulicaNazwa_1}!=null ?$F{ulicaNazwa_1} : "") + " "  + ($F{nrDomu_1}!=null ? $F{nrDomu_1}: "")+($F{nrLokalu_1}!=null? ($F{nrLokalu_1}.equals("")? "" : "/"+ $F{nrLokalu_1}):"")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="17" y="20" width="299" height="20" uuid="adaad754-bd69-4fb0-810b-db921a6b46f9"/>
+				<textElement>
+					<font fontName="Times New Roman" pdfFontName="Times New Roman" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Numer dokumentu: " + ($F{lrn}!=null?$F{lrn}:"")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" x="17" y="42" width="299" height="22" uuid="61f2899e-3ad4-404d-bec0-b4b82a189bba"/>
+				<textElement>
+					<font fontName="Times New Roman" pdfFontName="Times New Roman" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Numer sprawy: " + ($F{refNo}!=null?$F{refNo}:"")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" x="316" y="67" width="244" height="20" uuid="4e23dff6-1cc4-42a1-9b43-97fd21eb46b8"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" pdfFontName="Times New Roman" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{kodPocztowy_1}!=null ? $F{kodPocztowy_1} : "")+" "+($F{miejscowoscNazwa_1} !=null ? $F{miejscowoscNazwa_1} : "")]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="100">
+			<printWhenExpression><![CDATA[$F{structureCode}.equals("WRR0001") || $F{structureCode}.equals("WRR0002") || $F{structureCode}.equals("WRR0003")]]></printWhenExpression>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="316" y="23" width="244" height="20" uuid="df2691f7-eebc-4622-afb5-8b5cf360494d"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" pdfFontName="Times New Roman" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{imie_2}!=null?$F{imie_2}+" ":"") +($F{nazwisko_2}!=null?$F{nazwisko_2}:"")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" x="17" y="42" width="299" height="22" uuid="20dadaec-23e4-4ab3-be60-f63832b806fc"/>
+				<textElement>
+					<font fontName="Times New Roman" pdfFontName="Times New Roman" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Numer sprawy: " + ($F{refNo}!=null?$F{refNo}:"")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" x="316" y="45" width="244" height="20" uuid="93940e91-67df-4f26-bbba-ce744d9fc12d"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" pdfFontName="Times New Roman" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{ulicaNazwa_2}!=null ?$F{ulicaNazwa_2} : "") + " "  + ($F{nrDomu_2}!=null ? $F{nrDomu_2}: "")+($F{nrLokalu_2}!=null? ($F{nrLokalu_2}.equals("")? "" : "/"+ $F{nrLokalu_2}):"")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="17" y="20" width="299" height="20" uuid="ffa2e07e-059f-42e1-bc64-b11401acd91b"/>
+				<textElement>
+					<font fontName="Times New Roman" pdfFontName="Times New Roman" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Numer dokumentu: " + ($F{lrn}!=null?$F{lrn}:"")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" x="316" y="67" width="244" height="20" uuid="9382f6c4-ac09-4809-ac37-220b71df31d4"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" pdfFontName="Times New Roman" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{kodPocztowy_2}!=null ? $F{kodPocztowy_2} : "")+" "+($F{miejscowoscNazwa_2} !=null ? $F{miejscowoscNazwa_2} : "")]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="68">
+			<printWhenExpression><![CDATA[$F{structureCode}.equals("WPE0001")]]></printWhenExpression>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="17" y="20" width="299" height="20" uuid="f9807e7f-5e99-4698-955f-2fe099015678"/>
+				<textElement>
+					<font fontName="Times New Roman" pdfFontName="Times New Roman" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Numer dokumentu: " + ($F{lrn}!=null?$F{lrn}:"")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" x="17" y="42" width="299" height="22" uuid="4aa8ec28-4e02-4b63-9b66-aee359a9810d"/>
+				<textElement>
+					<font fontName="Times New Roman" pdfFontName="Times New Roman" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Numer sprawy: " + ($F{refNo}!=null?$F{refNo}:"")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="316" y="23" width="244" height="20" uuid="96310251-53bf-4bbc-a034-bb803279eba8"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" pdfFontName="Times New Roman" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{nazwaPelnaWPE}!=null?$F{nazwaPelnaWPE}:
+	($F{nazwaSkroconaWPE}!=null?$F{nazwaSkroconaWPE}:""))]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="100">
+			<printWhenExpression><![CDATA[$F{structureCode}.equals("WREX001")]]></printWhenExpression>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" x="316" y="45" width="244" height="20" uuid="1c367d3c-5c3a-4921-840a-d7d085fd26c3"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" pdfFontName="Times New Roman" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{ulicaNazwaWREX}!=null ?$F{ulicaNazwaWREX} : "") + " "  + ($F{nrDomuWREX}!=null ? $F{nrDomuWREX}: "")+($F{nrLokaluWREX}!=null? ($F{nrLokaluWREX}.equals("")? "" : "/"+ $F{nrLokaluWREX}):"")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="316" y="23" width="244" height="20" uuid="ab99d7e5-b7fe-4fa4-aea9-2d3d35f11881"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" pdfFontName="Times New Roman" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{nazwaPelnaWREX}!=null?$F{nazwaPelnaWREX}:
+	($F{nazwaSkroconaWREX}!=null?$F{nazwaSkroconaWREX}:""))]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" x="17" y="42" width="299" height="22" uuid="73822a89-6a0e-4498-980e-122e8f3b8399"/>
+				<textElement>
+					<font fontName="Times New Roman" pdfFontName="Times New Roman" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Numer sprawy: " + ($F{refNo}!=null?$F{refNo}:"")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="17" y="20" width="299" height="20" uuid="fa261d30-f137-4c6f-9e55-0e25853d96e7"/>
+				<textElement>
+					<font fontName="Times New Roman" pdfFontName="Times New Roman" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Numer dokumentu: " + ($F{lrn}!=null?$F{lrn}:"")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" x="316" y="67" width="244" height="20" uuid="b0d42bea-915b-4460-9722-fcd7a3ae087f"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" pdfFontName="Times New Roman" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{kodPocztowy_2}!=null ? $F{kodPocztowy_2} : "")+" "+($F{miejscowoscNazwa_2} !=null ? $F{miejscowoscNazwa_2} : "")]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="139">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="30" y="60" width="490" height="20" uuid="e47b2f72-88df-44a7-b178-6ea27bb7498f"/>
+				<textElement markup="html">
+					<font fontName="Times New Roman" pdfFontName="Times New Roman" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{trescWezwania}!=null?$V{zmianaTekstu}:"")]]></textFieldExpression>
+			</textField>
+			<textField bookmarkLevel="2">
+				<reportElement positionType="Float" x="30" y="92" width="465" height="17" uuid="bd1b6f6c-e890-40da-bec9-0a7908fc73db"/>
+				<textElement>
+					<font fontName="Times New Roman" pdfFontName="Times New Roman" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{warning}!=null?"Dodatkowe Informacje: ":""]]></textFieldExpression>
+				<anchorNameExpression><![CDATA["Informacje dodatkowe"]]></anchorNameExpression>
+			</textField>
+			<componentElement>
+				<reportElement positionType="Float" x="30" y="112" width="465" height="20" uuid="04633d56-280c-49d7-bf5d-224522cba779"/>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+					<datasetRun subDataset="Ostrzezenia" uuid="ed16d7a1-c593-498a-97fc-b7a8e4e3b431">
+						<datasetParameter name="XML_DATA_DOCUMENT">
+							<datasetParameterExpression><![CDATA[$P{XML_DATA_DOCUMENT}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="XML_NUMBER_PATTERN">
+							<datasetParameterExpression><![CDATA[$P{XML_NUMBER_PATTERN}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="XML_INPUT_STREAM">
+							<datasetParameterExpression><![CDATA[$P{XML_INPUT_STREAM}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="XML_FILE">
+							<datasetParameterExpression><![CDATA[$P{XML_FILE}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="net.sf.jasperreports.xml.source">
+							<datasetParameterExpression><![CDATA[$P{net.sf.jasperreports.xml.source}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="XML_DATE_PATTERN">
+							<datasetParameterExpression><![CDATA[$P{XML_DATE_PATTERN}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="XML_LOCALE">
+							<datasetParameterExpression><![CDATA[$P{XML_LOCALE}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="XML_TIME_ZONE">
+							<datasetParameterExpression><![CDATA[$P{XML_TIME_ZONE}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:listContents height="20" width="465">
+						<textField isStretchWithOverflow="true">
+							<reportElement x="30" y="0" width="435" height="20" uuid="f1d83434-4a3d-4cbc-9617-faf342d4e924"/>
+							<textElement>
+								<font fontName="Times New Roman" pdfFontName="Times New Roman" pdfEncoding="Identity-H"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{warning_1}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="0" y="0" width="30" height="20" uuid="d86dd6cb-402c-4ee6-ad68-b523e8fecf7e"/>
+							<textElement>
+								<font fontName="Times New Roman" pdfFontName="Times New Roman" pdfEncoding="Identity-H"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{REPORT_COUNT}+") "]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+			<textField>
+				<reportElement x="50" y="10" width="464" height="30" uuid="430c38af-f1fc-4bf2-8af1-9149ace89290">
+					<property name="net.sf.jasperreports.export.pdf.tag.h1" value="full"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" pdfFontName="Times New Roman" size="16" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Informacja"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="130">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<staticText>
+				<reportElement x="40" y="70" width="60" height="20" uuid="b44f60cd-5cb0-4082-af01-bf5b866dfc35"/>
+				<textElement>
+					<font fontName="Times New Roman" pdfFontName="Times New Roman" isUnderline="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Otrzymują:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="40" y="91" width="340" height="20" uuid="da6866fd-4c60-4753-97af-d7727f6ff5bd"/>
+				<textElement>
+					<font fontName="Times New Roman" pdfFontName="Times New Roman" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[2. a/a]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" bookmarkLevel="2">
+				<reportElement x="40" y="84" width="340" height="16" uuid="ef62bf55-6e76-4416-859f-f5fe3b24a413"/>
+				<textElement>
+					<font fontName="Times New Roman" pdfFontName="Times New Roman" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["1. "
++($F{imieWnioskodawcy}!=null?$F{imieWnioskodawcy}+" ":($F{imie}!=null?$F{imie}+" ":""))
++($F{nazwiskoWnioskodawcy}!=null?$F{nazwiskoWnioskodawcy}:($F{nazwisko}!=null?$F{nazwisko}:""))]]></textFieldExpression>
+				<anchorNameExpression><![CDATA["Otrzymują"]]></anchorNameExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" bookmarkLevel="2">
+				<reportElement x="320" y="7" width="228" height="35" uuid="e320e6bf-01e1-4fe2-a2f3-f398581e76b1"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" pdfFontName="Times New Roman" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Z upoważnienia \nDyrektora Izby Administracji Skarbowej \nw Poznaniu\n"]]></textFieldExpression>
+				<anchorNameExpression><![CDATA["Podpisujący"]]></anchorNameExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" x="320" y="43" width="228" height="30" uuid="d853aab2-92f0-4a03-bcf6-72395069bc65"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" pdfFontName="Times New Roman" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{handlingUser}!=null?$F{handlingUser}:"")]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="75" splitType="Stretch">
+			<line>
+				<reportElement x="10" y="34" width="535" height="1" uuid="cccc0c86-1cd1-4376-af58-5af18d76e5ce"/>
+			</line>
+			<staticText>
+				<reportElement x="440" y="37" width="110" height="20" uuid="9c2d0401-492f-471c-937a-57753abde246"/>
+				<textElement>
+					<font fontName="Times New Roman" pdfFontName="Times New Roman" size="8" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[www.poznan.apodatkowa.gov.pl]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="37" width="310" height="20" uuid="598fb831-1f39-4e31-8410-f0096e6d8a2a"/>
+				<textElement>
+					<font fontName="Times New Roman" pdfFontName="Times New Roman" size="8" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Plac Cyryla Ratajskiego 5, 61-726 Poznań | tel.: +48618586100 | fax.: +48618522224]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="57" width="306" height="18" uuid="c3896510-281f-4c5d-8bc7-1846ae951f58"/>
+				<textElement>
+					<font fontName="Times New Roman" pdfFontName="Times New Roman" size="8" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[e-mail: is@mofnet.gov.pl]]></text>
+			</staticText>
+			<image scaleImage="RealSize">
+				<reportElement x="13" y="5" width="50" height="50" uuid="35e18c73-fbb6-40aa-93fe-ed68fdcbb520"/>
+				<imageExpression><![CDATA[new java.io.ByteArrayInputStream(org.apache.commons.codec.binary.Base64.decodeBase64("/9j/4AAQSkZJRgABAQEAYABgAAD/4QAiRXhpZgAATU0AKgAAAAgAAQESAAMAAAABAAEAAAAAAAD/2wBDAAIBAQIBAQICAgICAgICAwUDAwMDAwYEBAMFBwYHBwcGBwcICQsJCAgKCAcHCg0KCgsMDAwMBwkODw0MDgsMDAz/2wBDAQICAgMDAwYDAwYMCAcIDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAz/wAARCAIAAgADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDLooor8XP4DCiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACpLO0kv7uKCFd0sziNFzjLE4A5qOtHwh/yNml/9fcX/AKGKzrTcKcpromz0cnwkMVj6GFqXUZzjF23tKSTtvrr2PnP/AIed/A3/AKHj/wAo2of/ABivY/h98QND+K/gix8R+G9W0/W9F1EMIri0nWTy3XG6KVQd0MqgqxikCuFdGKgOpP5y/wDBMj4+6Z8Evh18YrXUv2VtN/aObxZpltpNlqV7p5uV8E3DpdbJkZbSd1kl5YBJIGP2Y4Y7cr9RfsEfAPxd+x3/AMEov2pvEXiXdovi7UNF0jxV4Vso7uG6bS/sd79je6uYlZkjlkXU3jSGZS4WORnRAYWf77HcNYGhQqy9o1KMVKN2rNt2cbWTbtrdaddUmfuObeEeVWjhcvxTjiZzUYxqSi072s3yw5ktX0bVttVf6Qor5v8A+CePjr4o/tE6DoPjz4heKNH0X4Z+GtB8S3+tfYtO83WfEH2CxvLuO5MflCFUEiLCqwyRE/ZH3rlhI0HwY0r9rH9vz9mv4oftHfC//hXPg/4W/CIzC98P3Nx5t5qiWdut1cBWlikaSVbdkeRvMtkcsfJRT8i+RLhnEqc4c0fcXNJ3doxezel9d0km0t0ro+RwfhFm+KnKGHrUpWlyXUpNOoknKC9y/NFNN3SWqSbaaX0vRXjfhz9qPxJ8Rv8Agkv42/aY8O+CrG71Xwr4kg8J6hoscdzNpujSTRiSTUmIlEv2VFkhSJGkLCaZfNZ0iP2jy/8AZ+/avbUvip8NYtL+PHhH4rjxNp8c3irwv4n8MTeD5tFuJPlksrC9iDx3N0gLeU7Eo8giHkzBmjp0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ooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAorzv8AaV/aV0n9m7wCtytrJ4k8ca5cR6b4T8LQQyyTa5eSHaGfy8MLeMlN6o3myNJFEm3zGmh67wFYeJtM8EaRD4ym0GbxUtnEdUOjFms45yoLRqzMwZkJ2O6MYmdXaMmMoa7J4KpDDrEyslJ2S6vzt26HuV+H8VRyynmtWyhUk4xTfvSsneSX8qas3fdrSzTNaiiiuM8MKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooA898O/sv+E9E/aF174nXMGoa54q1i0jtLaXVL6W4j0TascZe0GQVJijMW2QyIkcrqioNm30Kiitq2Iq1mnVd7Ky9D0MwzXF46UZYuo5uKUVfolskFFFFYnnhRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFAH/2Q==".getBytes()))]]></imageExpression>
+				<hyperlinkTooltipExpression><![CDATA["Logo KAS"]]></hyperlinkTooltipExpression>
+			</image>
+		</band>
+	</pageFooter>
+</jasperReport>
