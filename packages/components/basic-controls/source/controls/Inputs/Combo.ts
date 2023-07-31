@@ -141,10 +141,10 @@ class Combo extends InputText {
                 }
                 this.input.focus();
                 // @ts-ignore
-                $(this.input).trigger({
-                    type: 'keydown',
-                    which: 9
-                });
+                // $(this.input).trigger({
+                //     type: 'keydown',
+                //     which: 9
+                // });
             }else if (keyCode == 27) {
 
             } else {

@@ -268,7 +268,7 @@ class Table extends TableWithKeyboardEvents {
             // @ts-ignore
             row.component.style.cursor = 'pointer';
             row.htmlElement.addEventListener('click', function (e) {
-                this.onRowClickEvent(e, row.mainId)
+                this.onRowClickEvent(e, row.mainId, this.silent)
             }.bind(this));
         }
         if (this.onRowDoubleClick) {
@@ -361,7 +361,7 @@ class Table extends TableWithKeyboardEvents {
         row.contentWrapper = null;
         row.container = null;
         row.htmlElement.removeEventListener('click', function (e) {
-            this.onRowClickEvent(e, row.mainId)
+            this.onRowClickEvent(e, row.mainId, this.silent)
         }.bind(this));
 
         $(row.htmlElement).unbind().remove();

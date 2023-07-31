@@ -1,6 +1,6 @@
 const Path = require('path');
 const Webpack = require('webpack');
-const Merge = require('webpack-merge');
+const {merge} = require('webpack-merge');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
@@ -12,7 +12,7 @@ const WebpackBundleSizeAnalyzerPlugin = require('webpack-bundle-size-analyzer').
 
 
 module.exports = function (env) {
-    const isProductionMode = false;//env.envMode !== 'development';
+    const isProductionMode = true;//env.envMode !== 'development';
     console.log(`This is a ${isProductionMode ? "production" : "development"} build`);
     var entry = ['@babel/polyfill', './src/main/resources/static/Application.ts'];
     let baseConfig = {
@@ -150,7 +150,7 @@ module.exports = function (env) {
     };
 
     if (isProductionMode) {
-        return Merge(baseConfig, {
+        return merge(baseConfig, {
             mode: 'production',
             devtool: 'nosources-source-map',
             plugins: [

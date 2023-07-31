@@ -24,17 +24,18 @@
             th:attrappend="src=${@environment.getProperty('fh.application.js.url') != null}?@{__${@environment.getProperty('fh.application.js.url')}__?version=@@buildNumber@@}"></script>
 </head>
 
-<body>
-<div  id="fh-layout-standard" class="fh-layout-div">
+<body th:class="${(@WCAGService.isHighContrast()?@WCAGService.getCssClassForContrast():'') + ' ' + (@WCAGService.isFontSize2()?@WCAGService.getCssClassForSize2():'') + ' ' + (@WCAGService.isFontSize4()?@WCAGService.getCssClassForSize4():'')}">
+<div id="fh-layout-standard" class="fh-layout-div">
     <!--        <div id="${state}" th:insert="@{'fragments/' + ${state}} :: layout">-->
-    <div  th:replace="@{'layouts/standard'} :: layout">
+    <div th:replace="@{'layouts/standard'} :: layout">
         <!-- Here goes templates for layouts -->
         <p>This section should disapear as it will be replaced by Thymeleaf</p>
     </div>
 </div>
-<div th:each='state : ${(@environment.getProperty("fhframework.layout.templates")).split(",")}' th:id="${'fh-layout-' + state}" class="fh-layout-div d-none">
-<!--        <div id="${state}" th:insert="@{'fragments/' + ${state}} :: layout">-->
-        <div  th:replace="@{'layouts/' + ${#strings.toLowerCase(state)}} :: layout">
+<div th:each='state : ${(@environment.getProperty("fhframework.layout.templates")).split(",")}'
+     th:id="${'fh-layout-' + state}" class="fh-layout-div d-none">
+    <!--        <div id="${state}" th:insert="@{'fragments/' + ${state}} :: layout">-->
+    <div th:replace="@{'layouts/' + ${#strings.toLowerCase(state)}} :: layout">
             <!-- Here goes templates for layouts -->
             <p>This section should disapear as it will be replace by Thymeleaf</p>
         </div>
