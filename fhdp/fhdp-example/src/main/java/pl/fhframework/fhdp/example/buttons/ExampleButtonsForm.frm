@@ -7,7 +7,8 @@
 
     </Row>
     <Row>
-        <Button id="buttonCode6_1" width="md-4" label="Button without defined style" onClick="testError"/>
+        <Button  id="buttonCode6_1" width="md-4" label="Button without defined style" onClick="testError"/>
+
         <Button id="buttonCode6_2" width="md-2" label="Default" style="default" onClick="xxx"/>
     </Row>
     <Row width="md-6">
@@ -17,6 +18,9 @@
     <Row width="md-6">
         <Button id="buttonCode6_5" width="md-3" label="Info" style="info" onClick="test"/>
         <Button id="buttonCode6_6" width="md-3" label="Warning" style="warning" onClick="test"/>
+    </Row>
+    <Row width="md-6">
+        <Button id="buttonCode6_8" width="md-3" label="Buuton with recaptcha" reCAPTCHA="true"  onClick="test"/>
     </Row>
     <Button id="buttonCode6_7" label="Danger" style="danger" onClick="test"/>
     <PanelGroup label="TimerFhDP">
