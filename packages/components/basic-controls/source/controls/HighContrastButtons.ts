@@ -24,7 +24,6 @@ class HighContrastButtons extends HTMLFormComponent {
         group.classList.add('fc');
         group.classList.add('fh-high-contrast-group');
 
-        group.classList.add('mb-3');
         group.setAttribute('role', 'group');
 
         if (this.label) {
@@ -105,7 +104,7 @@ class HighContrastButtons extends HTMLFormComponent {
                 }
                 this.changesQueue.queueValueChange(this.activeButton);
                 if (!component.onClick) {
-                    this.fireEvent('onButtonChange', this.onButtonChange, event);
+                    this.fireEvent('onButtonChange', this.onButtonChange);
                 }
             }.bind(this));
 

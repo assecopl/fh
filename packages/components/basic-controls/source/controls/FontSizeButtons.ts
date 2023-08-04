@@ -25,8 +25,6 @@ class FontSizeButtons extends HTMLFormComponent {
         group.id = this.id;
         group.classList.add('fc');
         group.classList.add('fh-font-size-group');
-
-        group.classList.add('mb-3');
         group.setAttribute('role', 'group');
 
         if (this.label) {
@@ -112,7 +110,7 @@ class FontSizeButtons extends HTMLFormComponent {
                 }
                 this.changesQueue.queueValueChange(this.activeButton);
                 if (!component.onClick) {
-                    this.fireEvent('onButtonChange', this.onButtonChange, event);
+                    this.fireEvent('onButtonChange', this.onButtonChange);
                 }
             }.bind(this));
 
