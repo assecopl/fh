@@ -25,39 +25,72 @@ public class WCAGService {
     public String cssClassForSize4;
 
     public void setHighContrast() {
-        LinkedHashMap<String, Object> map = new LinkedHashMap<>();
-        map.put("fh-high-contrast", Boolean.TRUE);
-        SessionManager.getUserSession().setAttributes(map);
+        if (SessionManager.getUserSession() != null) {
+            if (SessionManager.getUserSession().getAttributes() != null) {
+                SessionManager.getUserSession().getAttributes().put("fh-high-contrast", Boolean.TRUE);
+            } else {
+                LinkedHashMap<String, Object> map = new LinkedHashMap<>();
+                map.put("fh-high-contrast", Boolean.TRUE);
+                SessionManager.getUserSession().setAttributes(map);
+            }
+        }
     }
 
     public void setFontSize2() {
-        LinkedHashMap<String, Object> map = new LinkedHashMap<>();
-        map.put("fh-size-2x", Boolean.TRUE);
-        SessionManager.getUserSession().setAttributes(map);
+        if (SessionManager.getUserSession() != null) {
+            if (SessionManager.getUserSession().getAttributes() != null) {
+                SessionManager.getUserSession().getAttributes().put("fh-size-2x", Boolean.TRUE);
+            } else {
+                LinkedHashMap<String, Object> map = new LinkedHashMap<>();
+                map.put("fh-size-2x", Boolean.TRUE);
+                SessionManager.getUserSession().setAttributes(map);
+            }
+        }
+
+
     }
 
     public void setFontSize4() {
-        LinkedHashMap<String, Object> map = new LinkedHashMap<>();
-        map.put("fh-size-4x", Boolean.TRUE);
-        SessionManager.getUserSession().setAttributes(map);
-    }
-
-    public void setNormalContrast() {
-        LinkedHashMap<String, Object> map = new LinkedHashMap<>();
-        map.put("fh-size-4x", Boolean.FALSE);
-        map.put("fh-size-2x", Boolean.FALSE);
-        SessionManager.getUserSession().setAttributes(map);
+        if (SessionManager.getUserSession() != null) {
+            if (SessionManager.getUserSession().getAttributes() != null) {
+                SessionManager.getUserSession().getAttributes().put("fh-size-4x", Boolean.TRUE);
+            } else {
+                LinkedHashMap<String, Object> map = new LinkedHashMap<>();
+                map.put("fh-size-4x", Boolean.TRUE);
+                SessionManager.getUserSession().setAttributes(map);
+            }
+        }
     }
 
     public void setNormalFontSize() {
-        LinkedHashMap<String, Object> map = new LinkedHashMap<>();
-        map.put("fh-high-contrast", Boolean.FALSE);
-        SessionManager.getUserSession().setAttributes(map);
+        if (SessionManager.getUserSession() != null) {
+            if (SessionManager.getUserSession().getAttributes() != null) {
+                SessionManager.getUserSession().getAttributes().put("fh-size-4x", Boolean.FALSE);
+                SessionManager.getUserSession().getAttributes().put("fh-size-2x", Boolean.FALSE);
+            } else {
+                LinkedHashMap<String, Object> map = new LinkedHashMap<>();
+                map.put("fh-size-4x", Boolean.FALSE);
+                map.put("fh-size-2x", Boolean.FALSE);
+                SessionManager.getUserSession().setAttributes(map);
+            }
+        }
+    }
+
+    public void setNormalContrast() {
+        if (SessionManager.getUserSession() != null) {
+            if (SessionManager.getUserSession().getAttributes() != null) {
+                SessionManager.getUserSession().getAttributes().put("fh-high-contrast", Boolean.FALSE);
+            } else {
+                LinkedHashMap<String, Object> map = new LinkedHashMap<>();
+                map.put("fh-high-contrast", Boolean.FALSE);
+                SessionManager.getUserSession().setAttributes(map);
+            }
+        }
     }
 
     public Boolean isHighContrast() {
 
-        if (SessionManager.getUserSession() != null) {
+        if (SessionManager.getUserSession() != null && SessionManager.getUserSession().getAttributes() != null) {
             Boolean isHighContrast = (Boolean) SessionManager.getUserSession().getAttributes().get("fh-high-contrast");
             return Boolean.TRUE.equals(isHighContrast);
         } else {
@@ -66,7 +99,7 @@ public class WCAGService {
     }
 
     public Boolean isFontSize2() {
-        if (SessionManager.getUserSession() != null) {
+        if (SessionManager.getUserSession() != null && SessionManager.getUserSession().getAttributes() != null) {
             Boolean isHighContrast = (Boolean) SessionManager.getUserSession().getAttributes().get("fh-size-2x");
             return Boolean.TRUE.equals(isHighContrast);
         } else {
@@ -75,7 +108,7 @@ public class WCAGService {
     }
 
     public Boolean isFontSize4() {
-        if (SessionManager.getUserSession() != null) {
+        if (SessionManager.getUserSession() != null && SessionManager.getUserSession().getAttributes() != null) {
             Boolean isHighContrast = (Boolean) SessionManager.getUserSession().getAttributes().get("fh-size-4x");
             return Boolean.TRUE.equals(isHighContrast);
         } else {
