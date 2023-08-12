@@ -345,6 +345,10 @@ abstract class HTMLFormComponent extends FormComponent {
                     ttip.setAttribute('aria-label', this.hintAriaLabel);
                 } else {
                     ttip.setAttribute('aria-haspopup', 'true');
+                    const sr_only = document.createElement('span');
+                    sr_only.classList.add("sr-only")
+                    sr_only.innerHTML = hintParsed;
+                    ttip.appendChild(sr_only);
                 }
                 this.hintElement = ttip;
                 if (this.inputGroupElement && this.hintInputGroup) {
