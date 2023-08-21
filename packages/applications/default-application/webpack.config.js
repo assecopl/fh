@@ -28,7 +28,7 @@ module.exports = function (cmdEnv) {
         entry: ['@babel/polyfill', './Module.ts'],
         mode: 'development',
         output: {
-            path: Path.resolve('./../../../fhdp/fhdp-example/target/classes/static'),
+            path: Path.resolve('./../../../fhCoreLite/defaultApplication/target/classes/static'),
             filename: 'fhApplication.bundle.js'
         },
         module: {
