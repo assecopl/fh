@@ -40,7 +40,7 @@ public class WebSocketFormsHandler extends FormsHandler {
     /**
      * A flag that marks if the session must be removed immediately after websocket disconnect.
      */
-    @Value("${fh.session.remove_session_immediately_after_websocket_close:true}")
+    @Value("${fh.session.remove_session_immediately_after_websocket_close:false}")
     private boolean removeSessionImmediately;
 
     @Autowired
