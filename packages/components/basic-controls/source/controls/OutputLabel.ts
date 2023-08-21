@@ -59,7 +59,7 @@ class OutputLabel extends HTMLFormComponent {
         if (this.onClick) {
             label.addEventListener('click', function(event) {
                 event.stopPropagation();
-                this.fireEventWithLock('onClick', this.onClick, event);
+                this.fireEventWithLock('onClick', this.onClick);
                 event.target.blur();
             }.bind(this));
         }

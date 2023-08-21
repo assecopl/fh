@@ -98,7 +98,7 @@ class PanelGroup extends HTMLFormComponent {
             heading.addEventListener('click', function (event) {
                 this.toggleCollapse();
                 if (this.onToggle) {
-                    this.fireEvent('onToggle', this.onToggle, event);
+                    this.fireEvent('onToggle', this.onToggle);
                 }
             }.bind(this));
         }

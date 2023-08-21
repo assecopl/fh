@@ -138,19 +138,19 @@ abstract class FormComponent {
 
     /* Fire event to backend */
 
-    public fireEvent(eventType, actionName) {
-        this.fireEventImpl(eventType, actionName, false);
+    public fireEvent(eventType, actionName, params = undefined) {
+        this.fireEventImpl(eventType, actionName, false, params);
     };
 
     /* Fire event to backend and lock application */
 
-    protected fireEventWithLock(eventType, actionName) {
-        this.fireEventImpl(eventType, actionName, true);
+    protected fireEventWithLock(eventType, actionName, params = undefined) {
+        this.fireEventImpl(eventType, actionName, true, params);
     };
 
     /* Fire event to backend */
 
-    protected fireEventImpl(eventType, actionName, doLock) {
+    protected fireEventImpl(eventType, actionName, doLock, params = undefined) {
         if (this.destroyed) {
             return;
         }
@@ -167,7 +167,7 @@ abstract class FormComponent {
             deferedEvent.deferred.resolve();
         }
 
-        var success = this.formsManager.fireEvent(eventType, actionName, this.formId, this.id, deferedEvent, doLock);
+        var success = this.formsManager.fireEvent(eventType, actionName, this.formId, this.id, deferedEvent, doLock, params);
         if (!success) {
             this.formsManager.eventQueue.pop();
         }

@@ -1,0 +1,37 @@
+.fh-high-contrast-group {
+
+}
+
+.text-contrast {
+    color: #ff0;
+}
+
+.fh-high-contrast-group .fh-high-contrast-btn-high {
+    color: #ff0;
+    border-color: #ff0;
+}
+
+.fh-high-contrast {
+    background: black !important;
+}
+
+.fh-high-contrast * {
+    background: black !important;
+    color: #ff0 !important;
+    border-color: #ff0 !important;
+}
+
+.fh-high-contrast button.btn:not(.btn-default, .btn-link,.hint-ico-help), .fh-high-contrast .btn:not(.btn-default, .btn-link,.hint-ico-help) {
+    background: #ff0 !important;
+    color: black !important;
+    border-color: #ff0 !important;
+}
+
+.fh-high-contrast.hint-ico-help {
+
+}
+
+.fh-high-contrast .fh-high-contrast-btn-normal {
+    border-color: transparent !important;
+    color: white !important;
+}

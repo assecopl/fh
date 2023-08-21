@@ -4,21 +4,23 @@ package pl.fhframework.model.forms;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
 import org.springframework.util.StringUtils;
+import org.springframework.web.client.RestTemplate;
 import pl.fhframework.BindingResult;
 import pl.fhframework.annotations.*;
 import pl.fhframework.binding.*;
 import pl.fhframework.core.forms.IHasBoundableLabel;
+import pl.fhframework.event.dto.NotificationEvent;
 import pl.fhframework.model.dto.ElementChanges;
 import pl.fhframework.model.dto.InMessageEventData;
+import pl.fhframework.model.forms.config.BasicControlsConfiguration;
 import pl.fhframework.model.forms.designer.BindingExpressionDesignerPreviewProvider;
 import pl.fhframework.model.forms.designer.ButtonStyleFixedValuesProvider;
 import pl.fhframework.model.forms.optimized.ColumnOptimized;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.*;
 
@@ -33,6 +35,8 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
 @DocumentedComponent(category = DocumentedComponent.Category.BUTTONS_AND_OTHER, documentationExample = true, value = "Button which represents HTML input", icon = "fa fa-square")
 @DesignerControl(defaultWidth = 2)
 public class Button extends FormElementWithConfirmationSupport implements TableComponent<Button>, Styleable, IHasBoundableLabel {
+
+    public static final String RECAPTCHA_BOT_ERROR_MESSAGE_KEY = "pl.fhframework.captcha.error";
 
     public static final String ATTR_LABEL = "label";
     public static final String ATTR_STYLE = "style";
@@ -75,6 +79,26 @@ public class Button extends FormElementWithConfirmationSupport implements TableC
     @DesignerXMLProperty(functionalArea = LOOK_AND_STYLE, priority = 77, fixedValuesProvider = ButtonStyleFixedValuesProvider.class)
     private ModelBinding styleModelBinding;
 
+
+    @Getter
+    @Setter
+    @XMLProperty()
+    @DocumentedComponentAttribute(defaultValue = "false", value = "Turn on/off Google Recaptcha v2 functionality. To use this option you have to set aplication parameters `fh.web.secure.caprcha.sitekey` and `fh.web.secure.caprcha.serverkey`.")
+    @DesignerXMLProperty(functionalArea = SPECIFIC, priority = 79, allowedTypes = boolean.class)
+    private boolean reCAPTCHA = false;
+
+    @Getter
+    @Setter
+    private String captchaSiteKey = null;
+
+    @Getter
+    @Setter
+    @JsonIgnore
+    private String captchaServerKey = null;
+
+
+    private Boolean captchaResponse = null;
+
     public Button(Form form) {
         super(form);
     }
@@ -83,6 +107,10 @@ public class Button extends FormElementWithConfirmationSupport implements TableC
     public void init() {
         super.init();
         calculateAndSetDefaultSize();
+        if (this.reCAPTCHA == true) {
+            this.setCaptchaSiteKey(BasicControlsConfiguration.getInstance().getCaptchaSiteKey());
+            this.setCaptchaServerKey(BasicControlsConfiguration.getInstance().getCaptchaServerKey());
+        }
     }
 
     private void calculateAndSetDefaultSize() {
@@ -99,7 +127,25 @@ public class Button extends FormElementWithConfirmationSupport implements TableC
     @Override
     public Optional<ActionBinding> getEventHandler(InMessageEventData eventData) {
         if (eventData.getEventType().equals(ATTR_ON_CLICK)) {
-            return Optional.ofNullable(onClick);
+            if(this.reCAPTCHA) {
+                if(this.captchaResponse != null){
+                    return this.captchaResponse ? Optional.ofNullable(onClick) : Optional.empty();
+                } else {
+                    if (eventData.getParams().size() > 0) {
+                        //TODO Token verify
+                        String token = eventData.getParams().get(0).toString();
+                        if (this.verifyCaptchaToken(token)) {
+                            return Optional.ofNullable(onClick);
+                        }
+                    }
+                    this.captchaResponse = false;
+                    this.getForm().getAbstractUseCase().getUserSession().getEventRegistry().fireNotificationEvent(NotificationEvent.Level.WARNING,
+                            BasicControlsConfiguration.getInstance().getMessageService().getAllBundles().getMessage(RECAPTCHA_BOT_ERROR_MESSAGE_KEY));
+                    return Optional.empty();
+                }
+            } else {
+                return Optional.ofNullable(onClick);
+            }
         } else {
             return super.getEventHandler(eventData);
         }
@@ -121,6 +167,7 @@ public class Button extends FormElementWithConfirmationSupport implements TableC
                 refreshView();
             }
         }
+        this.captchaResponse = null;
         return elementChanges;
     }
 
@@ -164,4 +211,38 @@ public class Button extends FormElementWithConfirmationSupport implements TableC
     public void setOnClick(ActionBinding onClick) {
         this.onClick = onClick;
     }
+
+    public boolean verifyCaptchaToken(String token) {
+        String url = "https://www.google.com/recaptcha/api/siteverify?secret={secret}&response={response}";
+
+        // create headers
+        HttpHeaders headers = new HttpHeaders();
+        // set `content-type` header
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        // set `accept` header
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+
+        // create a map for post parameters
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("secret", this.getCaptchaServerKey());
+        map.put("response", token);
+
+        // build the request
+        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(map, headers);
+
+        // send POST request
+        ResponseEntity<LinkedHashMap> response = BasicControlsConfiguration.getInstance().getRestTemplate().postForEntity(url, entity, LinkedHashMap.class, map);
+
+        // check response status code
+        if (response.getStatusCode() == HttpStatus.OK) {
+            this.captchaResponse = (Boolean) response.getBody().get("success");
+            return (boolean) response.getBody().get("success");
+        } else {
+            this.captchaResponse = false;
+            return false;
+        }
+    }
+
+
 }

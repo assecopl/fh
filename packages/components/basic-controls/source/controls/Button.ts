@@ -1,9 +1,15 @@
 import {HTMLFormComponent} from "fh-forms-handler";
 import {AdditionalButton} from "fh-forms-handler";
+//TODO fix import - import only when needed (move to index.html)
+// import '../external/google_recaptchav3_api';
+
 
 class Button extends HTMLFormComponent {
     private readonly style: any;
     private readonly onClick: any;
+
+    private reCAPTCHA: boolean;
+    private readonly captchaSiteKey: string;
 
     private ButtonPL = {
         "button_icon": "Ikona"
@@ -18,6 +24,9 @@ class Button extends HTMLFormComponent {
         this.style = this.componentObj.style;
         this.onClick = this.componentObj.onClick;
 
+        this.reCAPTCHA = this.componentObj.reCAPTCHA;
+        this.captchaSiteKey = this.componentObj.captchaSiteKey;
+
 
         this.i18n.registerStrings('pl', this.ButtonPL);
         this.i18n.registerStrings('en', this.ButtonEN);
@@ -25,6 +34,9 @@ class Button extends HTMLFormComponent {
 
     create() {
         let label = this.componentObj.label;
+
+
+
 
         let button = document.createElement('button');
         button.id = this.id;
@@ -43,6 +55,10 @@ class Button extends HTMLFormComponent {
                 //Fill with icon default string.
                 button.setAttribute("aria-label", this.i18n.__("button_icon"));
             }
+        }
+
+        if(this.reCAPTCHA && !this.captchaSiteKey) {
+            label = "Site key not provided"
         }
 
         button.innerHTML = label;
@@ -74,6 +90,34 @@ class Button extends HTMLFormComponent {
             this.component.disabled = false;
         }
 
+        if(this.reCAPTCHA) {
+            let captchaDiv = document.createElement('div');
+            captchaDiv.id = this.id + "_captcha"
+            // captchaDiv.dataset.sitekey = this.captchaSiteKey;
+            // captchaDiv.dataset.callback = this.onClickEvent.bind(this);
+            captchaDiv.dataset.size = "invisible";
+            this.htmlElement.append(captchaDiv);
+            try {
+                // @ts-ignore
+                grecaptcha.render(captchaDiv, {
+                    'size': 'invisible',
+                    'sitekey': this.captchaSiteKey,
+                    'callback': function (token) {
+                        // Add your logic to submit to your backend server here.
+                        this.fireEventWithLock('onClick', this.onClick, [token]);
+                        // @ts-ignore
+                        grecaptcha.reset();
+                    }.bind(this)
+                });
+            } catch (e) {
+                console.warn(e);
+                console.warn("There were problem with grecaptcha!! Check if api.js was loaded.");
+                this.reCAPTCHA = false;
+            }
+
+
+        }
+
     };
 
     onClickEvent(event) {
@@ -81,7 +125,18 @@ class Button extends HTMLFormComponent {
         if (this._formId === 'FormPreview') {
             this.fireEvent('onClick', this.onClick);
         } else {
-            this.fireEventWithLock('onClick', this.onClick);
+            if(this.reCAPTCHA) {
+                // @ts-ignore
+                const a = grecaptcha.getResponse();
+                if(a){
+                    this.fireEventWithLock('onClick', this.onClick, [a]);
+                } else {
+                    // @ts-ignore
+                    grecaptcha.execute();
+                }
+            } else {
+                this.fireEventWithLock('onClick', this.onClick);
+            }
         }
         event.target.blur();
     }

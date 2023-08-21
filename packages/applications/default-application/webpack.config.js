@@ -36,7 +36,7 @@ module.exports = function (cmdEnv) {
                 test: /\.css$/,
                 use: [MiniCssExtractPlugin.loader, 'css-loader']
             }, {
-                test: /\.ts$/,
+                test: /\.ts(x?)$/,
                 exclude: /node_modules/,
                 use: ['babel-loader', {
                     loader: 'ts-loader',

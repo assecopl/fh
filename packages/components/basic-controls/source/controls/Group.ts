@@ -21,7 +21,7 @@ class Group extends HTMLFormComponent {
         if (this.onClick) {
             group.addEventListener('click', function (event) {
                 event.stopPropagation();
-                this.fireEventWithLock('onClick', this.onClick, event);
+                this.fireEventWithLock('onClick', this.onClick);
             }.bind(this));
         }
 

@@ -42,11 +42,11 @@
     "webpack": "5.82.0",
     "webpack-bundle-size-analyzer": "3.1.0",
     "webpack-cli": "5.0.2",
-    "webpack-merge": "5.8.0",
+    "webpack-merge": "5.9.0",
     "webpack-stats-plugin": "1.1.1"
   },
   "dependencies": {
-    "fhdp-charts": "4.10.6-SNAPSHOT-1684413133909",
-    "fhdp-fh-starter": "4.10.6-SNAPSHOT-1684413133909"
+    "fhdp-charts": "4.10.6-SNAPSHOT-1692607374799",
+    "fhdp-fh-starter": "4.10.6-SNAPSHOT-1692607374799"
   }
 }

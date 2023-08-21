@@ -51,7 +51,7 @@ class OptionsListElement extends HTMLFormComponent {
             if (this.onIconClick) {
                 icon.addEventListener('click', function (event) {
                     event.stopPropagation();
-                    this.fireEventWithLock('onIconClick', this.onIconClick, event);
+                    this.fireEventWithLock('onIconClick', this.onIconClick);
                 }.bind(this));
             }
 

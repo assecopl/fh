@@ -99,7 +99,7 @@ class Combo extends InputText {
             }
             this.updateModel();
             if (this.onChange && (this.rawValue !== this.oldValue || this.multiselectRawValue !== this.multiselectOldValue)) {
-                this.fireEventWithLock('onChange', this.onChange, event);
+                this.fireEventWithLock('onChange', this.onChange);
                 this.changeToFired = false
             }
         }.bind(this));
@@ -132,7 +132,7 @@ class Combo extends InputText {
                 }
                 this.updateModel();
                 if (this.onChange && (this.rawValue !== this.oldValue || this.multiselectRawValue !== this.multiselectOldValue || this.changeToFired)) {
-                    this.fireEventWithLock('onChange', this.onChange, event);
+                    this.fireEventWithLock('onChange', this.onChange);
                     this.changeToFired = false;
                 }
                 if (shouldBlur) {
@@ -141,10 +141,10 @@ class Combo extends InputText {
                 }
                 this.input.focus();
                 // @ts-ignore
-                $(this.input).trigger({
-                    type: 'keydown',
-                    which: 9
-                });
+                // $(this.input).trigger({
+                //     type: 'keydown',
+                //     which: 9
+                // });
             }else if (keyCode == 27) {
 
             } else {
@@ -479,14 +479,14 @@ class Combo extends InputText {
                     }
                     this.updateModel();
                     if (this.onChange && (this.rawValue !== this.oldValue || this.multiselectRawValue !== this.multiselectOldValue)) {
-                        this.fireEventWithLock('onChange', this.onChange, event);
+                        this.fireEventWithLock('onChange', this.onChange);
                         this.changeToFired = false
                     }
                     if (this.onEmptyValue) {
                         if (this._formId === 'FormPreview') {
                             this.fireEvent('onEmptyValue', this.onEmptyValue);
                         } else {
-                            this.fireEventWithLock('onEmptyValue', this.onEmptyValue, event);
+                            this.fireEventWithLock('onEmptyValue', this.onEmptyValue);
                         }
                     }
                 }
@@ -665,7 +665,7 @@ class Combo extends InputText {
 
                     this.updateModel();
                     if (this.onChange && (this.rawValue !== this.oldValue || this.multiselectRawValue !== this.multiselectOldValue)) {
-                        this.fireEventWithLock('onChange', this.onChange, event);
+                        this.fireEventWithLock('onChange', this.onChange);
                         this.changeToFired = false
                     }
                     if (shouldBlur) {

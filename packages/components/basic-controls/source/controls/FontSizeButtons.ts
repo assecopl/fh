@@ -3,36 +3,41 @@ import {Dropdown} from "./Dropdown/Dropdown";
 import {Button} from "./Button";
 import {AdditionalButton} from "fh-forms-handler";
 
-class ButtonGroup extends HTMLFormComponent {
+class FontSizeButtons extends HTMLFormComponent {
     private activeButton: any;
     private onButtonChange: any;
-    private margin: boolean;
+    private cssClass2: string;
+    private cssClass4: string;
+    private label: string;
 
     constructor(componentObj: any, parent: HTMLFormComponent) {
         super(componentObj, parent);
 
         this.activeButton = this.componentObj.activeButton;
         this.onButtonChange = this.componentObj.onButtonChange;
-        this.margin = this.componentObj.margin || false;
+        this.cssClass2 = this.componentObj.cssClass2 || "";
+        this.cssClass4 = this.componentObj.cssClass4 || "";
+        this.label = this.componentObj.label || "";
     }
 
     create() {
         var group = document.createElement('div');
         group.id = this.id;
         group.classList.add('fc');
-        group.classList.add('buttonGroup');
-        group.classList.add('btn-group');
-        group.classList.add('mb-3');
-        group.setAttribute('role','group');
+        group.classList.add('fh-font-size-group');
+        group.setAttribute('role', 'group');
 
-        if (this.margin == true) {
-            group.classList.add('margin');
+        if (this.label) {
+            var label = document.createElement('label');
+            label.innerText = this.i18n.__(this.label);
+            label.classList.add("mr-2")
+            this.labelElement = label;
+            group.appendChild(label);
         }
 
         this.component = group;
         this.htmlElement = this.component;
         this.wrap(true);
-        this.handlemarginAndPAddingStyles();
         this.display();
 
         if (this.componentObj.subelements) {
@@ -61,6 +66,18 @@ class ButtonGroup extends HTMLFormComponent {
                     }
                     if (this.activeButton > -1) {
                         this.components[newValue].component.classList.add('active');
+                    }
+                    if (this.activeButton == 1) {
+                        document.body.classList.add(this.cssClass2);
+                        document.body.classList.remove(this.cssClass4);
+                    } else if (this.activeButton == 2) {
+                        document.body.classList.add(this.cssClass4);
+                        document.body.classList.remove(this.cssClass2);
+                    } else {
+                        if (document.body.classList) {
+                            document.body.classList.remove(this.cssClass2);
+                            document.body.classList.remove(this.cssClass4);
+                        }
                     }
                     break;
             }
@@ -125,4 +142,4 @@ class ButtonGroup extends HTMLFormComponent {
     }
 }
 
-export {ButtonGroup}
+export {FontSizeButtons}
