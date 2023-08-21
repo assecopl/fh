@@ -31,6 +31,7 @@ class FontSizeButtons extends HTMLFormComponent {
             var label = document.createElement('label');
             label.innerText = this.i18n.__(this.label);
             label.classList.add("mr-2")
+            this.labelElement = label;
             group.appendChild(label);
         }
 
