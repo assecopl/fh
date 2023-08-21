@@ -29,7 +29,7 @@ public class CountryNameValueLookupProvider implements IComboDataProviderFhDP<Na
 
     @Override
     public String getDisplayValue(NameValueDto element) {
-        return element.getName();
+        return element.getValue() + ": " + element.getName();
     }
 
     @Override
