@@ -12,11 +12,28 @@
         <Button label="{$.fh.docs.event.redirect_logout_user}" onClick="logout()" id="_Form_PanelGroup_Button1"/>
         <Button label="{$.fh.docs.event.redirect_open_google.com_in_new_window}" width="md-4" onClick="openGoogleInNewWindow()" id="_Form_PanelGroup_Button2"/>
         <PanelGroup width="md-12" label="{$.fh.docs.event.form_code}" id="_Form_PanelGroup_PanelGroup1">
-            <InputText width="md-12" id="code1" rowsCount="2" label="{$.fh.docs.event.use_case_code}" value="&lt;Button label=&quot;Logout user&quot; onClick=&quot;logout()&quot;/&gt;&lt;Button label=&quot;Open google.com&quot; onClick=&quot;openGoogleInNewWindow()&quot;/&gt;"/>
+            <InputText width="md-12" id="code1" rowsCount="2" label="{$.fh.docs.event.use_case_code}" value="&lt;Button label=&quot;Logout user&quot; onClick=&quot;logout()&quot;/&gt;
+&lt;Button label=&quot;Open google.com&quot; onClick=&quot;openGoogleInNewWindow()&quot;/&gt;"/>
         </PanelGroup>
 
         <PanelGroup width="md-12" label="{$.fh.docs.event.java_code}" id="_Form_PanelGroup_PanelGroup2">
-            <InputText width="md-12" id="code2" rowsCount="11" label="{$.fh.docs.event.use_case_code}" value="    @Autowired    private EventRegistry eventRegistry;    @Action    private void logout()\{        eventRegistry.fireRedirectEvent(&quot;/logout&quot;, false);    \}    @Action    private void openGoogleInNewWindow()\{        eventRegistry.fireRedirectEvent(&quot;http://www.google.com/&quot;, true);    \}"/>
+            <InputText width="md-12" id="code2" rowsCount="12" label="{$.fh.docs.event.use_case_code}" >
+                <![CDATA[![ESCAPE[
+@Autowired
+private EventRegistry eventRegistry;
+
+@Action
+private void logout() {
+    eventRegistry.fireRedirectEvent("/logout", false);
+}
+
+@Action
+private void openGoogleInNewWindow() {
+    eventRegistry.fireRedirectEvent("http://www.google.com/", true);
+}
+
+            ]]]]>
+            </InputText>
         </PanelGroup>
     </PanelGroup>
 </Form>

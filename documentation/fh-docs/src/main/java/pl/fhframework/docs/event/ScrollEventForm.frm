@@ -17,28 +17,30 @@
             </PanelGroup>
             <PanelGroup width="md-12" label="{$.fh.docs.event.java_code}" id="_Form_TabContainer_Tab1_PanelGroup2">
                 <InputText width="md-12" id="code2" height="700" rowsCount="17" label="{$.fh.docs.event.use_case_code}">
-                    <![CDATA[![ESCAPE[  @Autowired
-    private EventRegistry eventRegistry;
+                    <![CDATA[![ESCAPE[
+@Autowired
+private EventRegistry eventRegistry;
 
-    @Override
-    public void start() {
-        showForm(ScrollEventForm.class, new ScrollEventModel());
-    }
+@Override
+public void start() {
+    showForm(ScrollEventForm.class, new ScrollEventModel());
+}
 
-    @Action
-    private void fireScrollDown(ViewEvent<ScrollEventForm> event){
-        eventRegistry.fireScrollEvent("inputTextFocus1");
-    }
+@Action
+private void fireScrollDown(ViewEvent<ScrollEventForm> event){
+    eventRegistry.fireScrollEvent("inputTextFocus1");
+}
 
-    @Action
-    private void fireScrollUp(ViewEvent<ScrollEventForm> event){
-        eventRegistry.fireScrollEvent("inputTextFocus2");
-    }
+@Action
+private void fireScrollUp(ViewEvent<ScrollEventForm> event){
+    eventRegistry.fireScrollEvent("inputTextFocus2");
+}
 
-    @Action
-    private void fireScrollTo(ViewEvent<ScrollEventForm> event){
-        eventRegistry.fireScrollEvent("inputTextFocus3");
-    }]]]]>
+@Action
+private void fireScrollTo(ViewEvent<ScrollEventForm> event){
+    eventRegistry.fireScrollEvent("inputTextFocus3");
+}
+    ]]]]>
                 </InputText>
             </PanelGroup>
             <Button id="Button2" label="{$.fh.docs.event.scroll_to_button} 1" onClick="fireScrollUp()"/>

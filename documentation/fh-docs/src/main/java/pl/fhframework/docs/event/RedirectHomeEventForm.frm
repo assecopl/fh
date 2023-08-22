@@ -14,7 +14,17 @@
         </PanelGroup>
 
         <PanelGroup width="md-12" label="{$.fh.docs.event.java_code}" id="_Form_PanelGroup_PanelGroup2">
-            <InputText width="md-12" id="code2" rowsCount="6" label="{$.fh.docs.event.use_case_code}" value="    @Autowired    private EventRegistry eventRegistry;    @Action    private void home()\{        eventRegistry.fireRedirectHomeEvent();\}"/>
+            <InputText width="md-12" id="code2" rowsCount="7" label="{$.fh.docs.event.use_case_code}" >
+                <![CDATA[![ESCAPE[
+@Autowired
+private EventRegistry eventRegistry;
+
+@Action
+private void home() {
+    eventRegistry.fireRedirectHomeEvent();
+}
+                ]]]]>
+            </InputText>
         </PanelGroup>
     </PanelGroup>
 </Form>

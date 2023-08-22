@@ -10,7 +10,7 @@
         <OutputLabel width="md-12" value="{$.fh.docs.event.custom_action_name_is_a_function_name}." id="_Form_PanelGroup_OutputLabel"/>
         <PanelGroup width="md-12" label="{$.fh.docs.event.custom_javascript_example}" id="_Form_PanelGroup_PanelGroup1">
             <InputText width="md-12" id="code1" rowsCount="7">
-                <![CDATA[![ESCAPE[CustomActions.callbacks['menuBoczne'] = function() {
+                <![CDATA[![ESCAPE[CustomActions.callbacks['toggleMenu'] = function() {
         $('.menu-toggle').on('click', function(event) {
             FormsManager.toggleMenu();
         });
@@ -24,9 +24,9 @@
 
     @Override
     public void start() {
-        eventRegistry.fireCustomActionEvent("menuBoczne");
+        eventRegistry.fireCustomActionEvent("toggleMenu");
     }
-};]]]]>
+]]]]>
             </InputText>
         </PanelGroup>
 

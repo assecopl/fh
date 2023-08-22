@@ -7,7 +7,7 @@
         </ReadOnly>
     </AvailabilityConfiguration>
 
-    <LocaleBundle basename="docsMessageSource" var="msg"/>
+    <LocaleBundle basename="fhDocsMessageSource" var="msg"/>
 
     <PanelGroup id="_Form_PanelGroup1">
         <OutputLabel width="md-12" value="{$.fh.docs.i18n_project_can_use_spring_internationalization}" id="_Form_PanelGroup1_OutputLabel1"/>
@@ -16,7 +16,7 @@
 
         <InputText width="md-12" id="basicCodeExample" rowsCount="2" label="{$.fh.docs.i18n_code_example_looks_like_this}">
             <![CDATA[![ESCAPE[
-<LocaleBundle basename="docsMessageSource" var="msg"/>
+<LocaleBundle basename="fhDocsMessageSource" var="msg"/>
 <OutputLabel width="md-12" value="{$msg.fh.docs.welcome.info}"/>]]]]>
         </InputText>
 
@@ -34,7 +34,7 @@
         </Group>
         <Group width="md-6" id="_Form_PanelGroup2_Group2">
             <InputText width="md-12" id="staticCodeExample" label="{$.fh.docs.i18n_code_example_looks_like_this}" rowsCount="3">
-                <![CDATA[![ESCAPE[<LocaleBundle basename="docsMessageSource" var="msg"/>
+                <![CDATA[![ESCAPE[<LocaleBundle basename="fhDocsMessageSource" var="msg"/>
 <OutputLabel width="md-12" value="Static value - {$.fh.docs.welcome.info}"/>
 <OutputLabel width="md-12" value="{$msg.fh.docs.welcome.info}"/>]]]]>
             </InputText>

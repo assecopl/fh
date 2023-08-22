@@ -13,11 +13,37 @@
         <Button label="{$.fh.docs.event.file_download_by_form_element_binding}" onClick="downloadByBinding(this)" id="_Form_PanelGroup_Button2"/>
         <Button label="{$.fh.docs.event.file_download_by_iresourced_form_element}" onClick="downloadByFormElement(this)" id="_Form_PanelGroup_Button3"/>
         <PanelGroup width="md-12" label="{$.fh.docs.event.form_code}" id="_Form_PanelGroup_PanelGroup1">
-            <InputText width="md-12" id="code1" rowsCount="4" label="{$.fh.docs.event.use_case_code}" value="&lt;FileUpload id=&quot;fileUploadId1&quot; file=&quot;\{modelBindingResource\}&quot; label=&quot;Upload file&quot; onUpload=&quot;-&quot; maxSize=&quot;3145728&quot;/&gt;&lt;Button label=&quot;Download by resource&quot; onClick=&quot;downloadByResource(this)&quot;/&gt;&lt;Button label=&quot;Download by form element binding&quot; onClick=&quot;downloadByBinding(this)&quot;/&gt;&lt;Button label=&quot;Download by IResourced form element&quot; onClick=&quot;downloadByFormElement(this)&quot;/&gt;"/>
+            <InputText width="md-12" id="code1" rowsCount="4" label="{$.fh.docs.event.use_case_code}" value="&lt;FileUpload id=&quot;fileUploadId1&quot; file=&quot;\{modelBindingResource\}&quot; label=&quot;Upload file&quot; onUpload=&quot;-&quot; maxSize=&quot;3145728&quot;/&gt;
+&lt;Button label=&quot;Download by resource&quot; onClick=&quot;downloadByResource(this)&quot;/&gt;
+&lt;Button label=&quot;Download by form element binding&quot; onClick=&quot;downloadByBinding(this)&quot;/&gt;
+&lt;Button label=&quot;Download by IResourced form element&quot; onClick=&quot;downloadByFormElement(this)&quot;/&gt;"/>
         </PanelGroup>
 
         <PanelGroup width="md-12" label="{$.fh.docs.event.java_code}" id="_Form_PanelGroup_PanelGroup2">
-            <InputText width="md-12" id="code2" rowsCount="21" label="{$.fh.docs.event.use_case_code}" value="   @Autowired    private EventRegistry eventRegistry;   @Action    private void downloadByResource(ViewEvent&lt;FileDownloadEventModel&gt; event) \{        final FileDownloadEventModel model = event.getSourceForm().getModel();        //below resource does not have to be bound to model, it is only example        final Resource resource = model.getModelBindingResource();        eventRegistry.fireDownloadEvent(resource);    \}    @Action    private void downloadByBinding(ViewEvent&lt;FileDownloadEventModel&gt; event) \{       eventRegistry.fireDownloadEventByBinding(event.getSourceObject(), &quot;modelBindingResource&quot;);    \}    @Action    private void downloadByFormElement(ViewEvent&lt;FileDownloadEventModel&gt; event)\{        eventRegistry.fireDownloadEvent(event.getSourceForm().getFormElement(&quot;fileUploadId1&quot;));    \}"/>
+            <InputText width="md-12" id="code2" rowsCount="21" label="{$.fh.docs.event.use_case_code}">
+                <![CDATA[![ESCAPE[
+@Autowired
+private EventRegistry eventRegistry;
+
+@Action
+private void downloadByResource(ViewEvent<FileDownloadEventModel> event) {
+    final FileDownloadEventModel model = event.getSourceForm().getModel();
+    //below resource does not have to be bound to model, it is only example
+    final Resource resource = model.getModelBindingResource();
+    eventRegistry.fireDownloadEvent(resource);
+}
+
+@Action
+private void downloadByBinding(ViewEvent<FileDownloadEventModel> event) {
+    eventRegistry.fireDownloadEventByBinding(event.getSourceObject(), "modelBindingResource");
+}
+
+@Action
+private void downloadByFormElement(ViewEvent<FileDownloadEventMode> event){
+    eventRegistry.fireDownloadEvent(event.getSourceForm().getFormElement("fileUploadId1"));
+}
+                ]]]]>
+            </InputText>
         </PanelGroup>
 
     </PanelGroup>
