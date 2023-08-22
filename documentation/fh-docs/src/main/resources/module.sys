@@ -1,0 +1,4 @@
+<subsystem name="docs" label="Documentation" productLabel="Documentation" productUUID="0d4e165b-16e0-4da3-b6e3-7ef42987da1a" basePackage="pl.fhframework.docs">
+    <systemFunctionsMapper ref="pl.fhframework.docs.SystemFunctionsMapper"/>
+    <lifecycleListener class="pl.fhframework.docs.event.DocsSubsystemLifecycleListener"/>
+</subsystem>

@@ -31,14 +31,19 @@
     </dependencyManagement>
     <dependencies>
         <dependency>
+            <groupId>pl.fhframework</groupId>
+            <artifactId>fh-docs</artifactId>
+            <version>${fh.version}</version>
+        </dependency>
+        <dependency>
             <groupId>pl.fhframework.dp</groupId>
             <artifactId>fhdp-commons-fh-lite</artifactId>
-            <version>${project.version}</version>
+            <version>${fh.version}</version>
         </dependency>
         <dependency>
             <groupId>pl.fhframework.dp</groupId>
             <artifactId>fhdp-components</artifactId>
-            <version>${project.version}</version>
+            <version>${fh.version}</version>
         </dependency>
         <dependency>
             <groupId>pl.fhframework</groupId>

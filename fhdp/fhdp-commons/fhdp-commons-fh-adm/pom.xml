@@ -75,7 +75,6 @@
                                         <include name="**/*.duc" />
                                         <include name="**/*.dmo" />
                                         <include name="**/*.dru" />
-                                        <include name="**/*.srv" />
                                         <include name="menu.xml" />
                                         <include name="module.xml" />
                                     </fileset>

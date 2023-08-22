@@ -26,6 +26,16 @@
             <version>${fh.version}</version>
         </dependency>
         <dependency>
+            <groupId>pl.fhframework</groupId>
+            <artifactId>fh-compiler</artifactId>
+            <version>${fh.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>pl.fhframework</groupId>
+            <artifactId>fh-docs</artifactId>
+            <version>${fh.version}</version>
+        </dependency>
+        <dependency>
             <groupId>pl.fhframework.core.security.permission</groupId>
             <artifactId>permissionProvider-jdbc</artifactId>
             <version>${fh.version}</version>

@@ -31,6 +31,7 @@
         <module>example</module>
         <module>fh-compiler</module>
         <module>fhbr</module>
+		<module>documentation</module>
     </modules>
 	
 	<licenses>
