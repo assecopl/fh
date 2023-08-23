@@ -68,15 +68,15 @@ class FontSizeButtons extends HTMLFormComponent {
                         this.components[newValue].component.classList.add('active');
                     }
                     if (this.activeButton == 1) {
-                        document.body.classList.add(this.cssClass2);
-                        document.body.classList.remove(this.cssClass4);
+                        document.documentElement.classList.add(this.cssClass2);
+                        document.documentElement.classList.remove(this.cssClass4);
                     } else if (this.activeButton == 2) {
-                        document.body.classList.add(this.cssClass4);
-                        document.body.classList.remove(this.cssClass2);
+                        document.documentElement.classList.add(this.cssClass4);
+                        document.documentElement.classList.remove(this.cssClass2);
                     } else {
-                        if (document.body.classList) {
-                            document.body.classList.remove(this.cssClass2);
-                            document.body.classList.remove(this.cssClass4);
+                        if (document.documentElement.classList) {
+                            document.documentElement.classList.remove(this.cssClass2);
+                            document.documentElement.classList.remove(this.cssClass4);
                         }
                     }
                     break;
@@ -103,12 +103,10 @@ class FontSizeButtons extends HTMLFormComponent {
                 if (currentActive) {
                     currentActive.classList.remove('active');
                 }
-                if (currentActive === event.target) {
-                    this.activeButton = -1;
-                } else {
-                    this.activeButton = event.target.dataset.index;
+
+                this.activeButton = event.target.dataset.index;
                     event.target.classList.add('active');
-                }
+
                 this.changesQueue.queueValueChange(this.activeButton);
                 if (!component.onClick) {
                     this.fireEvent('onButtonChange', this.onButtonChange);

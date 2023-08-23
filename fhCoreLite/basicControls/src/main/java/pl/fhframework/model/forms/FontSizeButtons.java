@@ -102,17 +102,6 @@ public class FontSizeButtons extends GroupingComponent<Component> implements Bou
         String newValue = valueChange.getMainValue();
         int newActiveButton = Integer.parseInt(newValue);
         Boolean isHighContrast = WCAGService.isHighContrast();
-        if (WCAGService != null) {
-            Boolean isFontSize2 = WCAGService.isFontSize2();
-            Boolean isFontSize4 = WCAGService.isFontSize4();
-            if (isFontSize2) {
-                this.activeButton = 1;
-            } else if (isFontSize4) {
-                this.activeButton = 2;
-            } else {
-                this.activeButton = 0;
-            }
-        }
         if (newActiveButton != this.activeButton) {
             this.activeButton = newActiveButton;
             this.updateBindingForValue(newActiveButton, activeButtonBinding, activeButton);
@@ -122,6 +111,17 @@ public class FontSizeButtons extends GroupingComponent<Component> implements Bou
                 WCAGService.setFontSize4();
             } else {
                 WCAGService.setNormalFontSize();
+            }
+        }
+        if (WCAGService != null) {
+            Boolean isFontSize2 = WCAGService.isFontSize2();
+            Boolean isFontSize4 = WCAGService.isFontSize4();
+            if (isFontSize2) {
+                this.activeButton = 1;
+            } else if (isFontSize4) {
+                this.activeButton = 2;
+            } else {
+                this.activeButton = 0;
             }
         }
     }
