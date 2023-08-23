@@ -30,6 +30,7 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
     private clickInPopup: boolean = false;
 
     public guuid: string;
+    public popperId: string;
 
 
     constructor(componentObj: any, parent: HTMLFormComponent) {
@@ -58,10 +59,240 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
 
         LanguageResiterer.getInstance(this.i18n).registerLanguags(this);
 
+        this.popperId = "dictionary-combo-popper-" + Date.now();
+
     }
 
     create() {
-        super.create();
+        let input = document.createElement('input');
+        this.input = input;
+        input.id = this.id;
+        input.type = 'text';
+        input.value = this.rawValue;
+        input.autocomplete = 'off';
+        ['fc', 'form-control'].forEach(function (cssClass) {
+            input.classList.add(cssClass);
+        });
+        if (this.placeholder) {
+            input.placeholder = this.placeholder;
+        }
+
+        this.keySupport.addKeyEventListeners(input);
+
+        input.addEventListener('input', function () {
+            this.selectedIndexGroup = null;
+            this.selectedIndex = null;
+            this.removedIndex = null;
+            this.updateModel();
+        }.bind(this));
+        $(input).on('paste', function (event) {
+
+            event.stopPropagation();
+            if (this.accessibility !== 'EDIT') {
+                return;
+            }
+            this.updateModel();
+            if (this.onChange && (this.rawValue !== this.oldValue || this.multiselectRawValue !== this.multiselectOldValue)) {
+                this.fireEventWithLock('onChange', this.onChange);
+                this.changeToFired = false
+            }
+        }.bind(this));
+        // $(input).on('keydown', function (event) {
+        //
+        //     if (this.accessibility !== 'EDIT') {
+        //         return;
+        //     }
+        //     let keyCode = event.which;
+        //     let options = this.autocompleter.querySelectorAll('li:not(.dropdown-header)');
+        //     if (keyCode === 9 || keyCode === 13) {
+        //         let shouldBlur = false;
+        //         if (this.highlighted != null) {
+        //             shouldBlur = true;
+        //             let element = options[this.highlighted].firstChild;
+        //             this.selectedIndexGroup = element.dataset.group;
+        //             this.selectedIndex = parseInt(element.dataset.index);
+        //             this.forceSendSelectedIndex = true;
+        //             const val = this.values[this.selectedIndexGroup][this.selectedIndex];
+        //             if (val) {
+        //                 this.input.value = val.displayAsTarget ? val.targetValue : val.displayedValue;
+        //             }
+        //             if (element.dataset.targetCursorPosition !== undefined) {
+        //                 this.setCursorPositionToInput(parseInt(element.dataset.targetCursorPosition));
+        //                 shouldBlur = false;
+        //             }
+        //         }
+        //         this.updateModel();
+        //         if (this.onChange && (this.rawValue !== this.oldValue || this.multiselectRawValue !== this.multiselectOldValue || this.changeToFired)) {
+        //             this.fireEventWithLock('onChange', this.onChange);
+        //             this.changeToFired = false;
+        //         }
+        //         if (shouldBlur) {
+        //             this.blurEventWithoutChange = true;
+        //             this.input.blur(); // must be after onChange
+        //             this.input.focus();
+        //         }
+        //
+        //
+        //     } else {
+        //         let move = 0;
+        //         switch (keyCode) {
+        //             case 40: // down arrow
+        //                 move = 1;
+        //                 break;
+        //             case 38: // up arrow
+        //                 move = -1;
+        //                 break;
+        //         }
+        //         if ((keyCode === 40 || keyCode === 38) && !this.autocompleter.classList.contains('isEmpty')) {
+        //             let current = options[this.highlighted];
+        //             if (current) {
+        //                 current.classList.remove('selected');
+        //             }
+        //             if (this.highlighted === null) {
+        //                 if (move === 1) {
+        //                     this.highlighted = 0;
+        //                 } else {
+        //                     this.highlighted = options.length - 1;
+        //                 }
+        //             } else {
+        //                 this.highlighted = this.highlighted + move;
+        //             }
+        //             if (this.highlighted <= 0) {
+        //                 this.highlighted = this.highlighted + options.length;
+        //             }
+        //             this.highlighted = this.highlighted % options.length;
+        //             options[this.highlighted].classList.add('selected');
+        //             this.autocompleter.scrollTop = options[this.highlighted].offsetTop;
+        //         }
+        //         if (this.multiselect && keyCode == 8 && $(this.input).val() === '' && this.tagslist.length > 0) {
+        //             event.preventDefault();
+        //             var lastTag = this.tagslist[this.tagslist.length - 1];
+        //             this.removeTag(encodeURI(lastTag), {});
+        //             $(this.input).trigger('focus');
+        //             this.openAutocomplete();
+        //         }
+        //     }
+        // }.bind(this));
+        if (this.onInput) {
+            input.addEventListener('input', function () {
+
+                if (this.accessibility === 'EDIT') {
+                    if (!this.openOnFocus) {
+                        this.openAutocomplete();
+                    }
+                    this.onInputEvent();
+                }
+            }.bind(this));
+        }
+        // let specialKeyCapture = function (fireEvent, event) {
+        //     if (event.ctrlKey && event.which === 32 && this.accessibility === 'EDIT') {
+        //         event.stopPropagation();
+        //         event.preventDefault();
+        //
+        //         let doubleSepcialKey = this.onDblSpecialKey && this.input && this.input.value == this.rawValueOnLatSpecialKey && this.input.selectionStart == this.cursorPositionOnLastSpecialKey;
+        //         if (fireEvent) {
+        //             if (!doubleSepcialKey) {
+        //                 this.openAutocomplete();
+        //                 this.rawValueOnLatSpecialKey = this.input.value;
+        //                 this.cursorPositionOnLastSpecialKey = this.input.selectionStart;
+        //                 if (this.onSpecialKey) {
+        //                     this.fireEventWithLock('onSpecialKey', this.onSpecialKey);
+        //                 }
+        //             } else if (doubleSepcialKey) {
+        //                 this.rawValueOnLatSpecialKey = null;
+        //                 this.cursorPositionOnLastSpecialKey = null;
+        //                 if (this.onDblSpecialKey) {
+        //                     this.changeToFired = false;
+        //                     this.fireEventWithLock('onDblSpecialKey', this.onDblSpecialKey);
+        //                 }
+        //             }
+        //         }
+        //     }
+        // };
+        // if (this.onSpecialKey || this.onDblSpecialKey) {
+        //     input.addEventListener('keyup', specialKeyCapture.bind(this, true)); // firing event
+        //     input.addEventListener('keydown', specialKeyCapture.bind(this, false)); // not firing event, just stop propagation
+        //     input.addEventListener('input', specialKeyCapture.bind(this, false)); // not firing event, just stop propagation
+        // }
+
+        input.addEventListener('focus', function () {
+
+            if (this.accessibility === 'EDIT') {
+                this.onInputEvent();
+                if (this.openOnFocus) {
+                    this.openAutocomplete();
+                }
+                this.autocompleterFocus = false;
+
+            }
+        }.bind(this));
+        input.addEventListener('blur', function (event) {
+
+            //For IE11. Check if event was fired by action on dropdown element.
+            if (!this.autocompleterFocus) {
+                this.closeAutocomplete();
+
+                if (this.multiselect) {
+                    this.addTag(this.input.value);
+                }
+            } else {
+                //IE11 Put back focus on input.
+                // this.input.focus();
+                this.autocompleterFocus = false;
+                return false;
+            }
+
+
+        }.bind(this));
+        if (this.onChange) {
+
+            $(input).on('blur', function (event) {
+
+                if (this.accessibility === 'EDIT' && !this.blurEventWithoutChange && (this.changeToFired || this.rawValue !== this.oldValue || this.multiselectRawValue !== this.multiselectOldValue || this.forceSendSelectedIndex)) {
+                    this.blurEvent = true;
+                    this.fireEventWithLock('onChange', this.onChange);
+                    this.changeToFired = false;
+                }
+                this.blurEventWithoutChange = false;
+            }.bind(this));
+        }
+
+
+        let autocompleter = document.createElement('ul');
+        ['autocompleter', 'dropdown-menu', 'fc', 'combo'].forEach(function (cssClass) {
+            autocompleter.classList.add(cssClass);
+        });
+        autocompleter.id = this.id + '_autocompleter';
+
+
+        this.autocompleter = autocompleter;
+
+        this.component = this.input;
+        this.focusableComponent = input;
+        this.hintElement = this.component;
+
+        this.wrap(false, true);
+        this.createIcon();
+
+
+        this.createClearButton();
+        this.setRequiredField(false);
+
+        this.inputGroupElement.appendChild(autocompleter);
+        this.addStyles();
+        this.display();
+        if (this.isLastValueEnabled !== false) {
+            this.createLastValueElement();
+        }
+
+        if (this.component.classList.contains('servicesListControl')) {
+            this.htmlElement.classList.add('servicesListControlWrapper');
+        }
+
+
+        this.setValues(this.values);
+
+
         let self = this;
 
         let inputGroup = this.getInputGroupElement();
@@ -99,14 +330,17 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
             })
         }
         this.input.addEventListener('keydown', (ev) => {
-            // if (ev.key === "Enter") {
-            //     this.changesQueue.queueAttributeChange('searchRequested', true);
-            //     if (!this.popupOpen) {
-            //         this.popupOpen = true;
-            //     }
-            //     this.isSearch = true;
-            //     this.fireEvent('onClickSearchIcon', 'search');
-            // }
+
+            let code = ev.keycode || ev.which;
+            if (code == 9 && this.popupOpen) { //Tab
+                ev.preventDefault();
+                ev.stopPropagation();
+                const popper = $("#" + this.popperId);
+                const focusableElement = popper.find('button:not([disabled])').first();
+                setTimeout(function () {
+                    focusableElement.focus();
+                }, 1);
+            }
 
             if (ev.key === "Escape") {
                 this.changesQueue.queueAttributeChange('searchRequested', true);
@@ -172,13 +406,17 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
                 this.clickInPopup = false;
                 this.pageChangeClicked = false;
             } else {
-                this.changesQueue.queueAttributeChange('searchRequested', true);
-                if (!this.popupOpen) {
-                    this.popupOpen = true;
-                }
-                this.isSearch = true;
-                this.fireEvent('onClickSearchIcon', 'search');
-                this.crateTooltip($("div.search-icon", this.getInputGroupElement())[0]);
+                /**
+                 * Threre is no need on always open popup when it doeasn't pass validation.
+                 */
+
+                // this.changesQueue.queueAttributeChange('searchRequested', true);
+                // if (!this.popupOpen) {
+                //     this.popupOpen = true;
+                // }
+                // this.isSearch = true;
+                // this.fireEvent('onClickSearchIcon', 'search');
+                // this.crateTooltip($("div.search-icon", this.getInputGroupElement())[0]);
             }
             this.getInputGroupElement().style.border = 'solid red 1px';
         }
@@ -253,6 +491,7 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
                 this._writingDebaunceTimer = setTimeout(openSearch, 800);
             }
         }
+
     }
 
     private setClickInPopup = (arg: boolean = true) => {
@@ -281,9 +520,12 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
 
     async renderPopup() {
         const handlePopupClose = (force?: boolean) => {
-            if ((!this.dirty && !this.clickInPopup) || force) {
-                this.popupOpen = false;
-                this.renderPopup();
+            if (this.popupOpen || force) {
+                if ((!this.dirty && !this.clickInPopup) || force) {
+                    this.popupOpen = false;
+                    this.renderPopup();
+                    this.input.focus();
+                }
             }
         }
         window['handlePopupClose'] = handlePopupClose;
@@ -322,10 +564,13 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
                 } else if (!this.dirty && (this.input.value === record.value || this.input.value.startsWith(record.value))) {
                     handlePopupClose(true);
                 }
+                this.input.focus();
                 this.unmarkDirty();
             },
             clickInPopup: this.setClickInPopup,
             translate: (string: string, args?: any, code?: string) => this.i18n.translateString(string, args, code || this.languageWrapped),
+            popperId: this.popperId,
+            parentInput: this.input
         }), this.divTooltip);
         this.clickInPopup = false;
     }
@@ -391,11 +636,15 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
                 switch (name) {
                     case 'language':
                         this.languageWrapped = newValue;
-                        shouldRender = true;
+                        if (this.popupOpen) {
+                            shouldRender = true;
+                        }
                         break;
                     case 'columns':
                         this.columns = newValue;
-                        shouldRender = true;
+                        if (this.popupOpen) {
+                            shouldRender = true;
+                        }
                         break;
                     case 'valueFromChangedBinding':
                         if (newValue === 'null' || newValue === '') {
@@ -421,18 +670,24 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
                         break;
                     case 'title':
                         this.title = this.fhml.resolveValueTextOrEmpty(newValue);
-                        shouldRender = true;
+                        if (this.popupOpen) {
+                            shouldRender = true;
+                        }
                         break
                     case 'displayedComponentId':
                         this.displayedComponentId = newValue;
                         break;
                     case 'pagesCount':
                         this.pagesCount = newValue;
-                        shouldRender = true;
+                        if (this.popupOpen) {
+                            shouldRender = true;
+                        }
                         break;
                     case 'page':
                         this.page = newValue;
-                        shouldRender = true;
+                        if (this.popupOpen) {
+                            shouldRender = true;
+                        }
                         break;
                     case 'searchRequested':
                         this.searchRequested = newValue;
@@ -440,10 +695,12 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
                         break;
                     case 'rows':
                         this.rows = newValue;
-                        shouldRender = true;
+                        if (this.popupOpen) {
+                            shouldRender = true;
+                        }
                         break;
                     case 'accessibility':
-                        if(this.accessibility != newValue && newValue == 'EDIT'){
+                        if (this.accessibility != newValue && newValue == 'EDIT') {
                             this.fireEvent('setGuuid', JSON.stringify({id: this.guuid}));
                         }
                         break;

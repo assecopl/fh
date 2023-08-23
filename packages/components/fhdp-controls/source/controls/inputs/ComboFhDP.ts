@@ -10,8 +10,8 @@ class ComboFhDP extends InputTextFhDP {
 
     protected values: any;
     protected autocompleter: any;
-    private selectedIndexGroup: any;
-    private selectedIndex: any;
+    protected selectedIndexGroup: any;
+    protected selectedIndex: any;
     private removedIndex: any;
     private highlighted: any;
     private forceSendSelectedIndex: any;
@@ -110,8 +110,9 @@ class ComboFhDP extends InputTextFhDP {
             let keyCode = event.which;
             let options = this.autocompleter.querySelectorAll('li:not(.dropdown-header)');
             if (keyCode === 9 || keyCode === 13) {
-                let shouldBlur = true;
+                let shouldBlur = false;
                 if (this.highlighted != null) {
+                    shouldBlur = true;
                     let element = options[this.highlighted].firstChild;
                     this.selectedIndexGroup = element.dataset.group;
                     this.selectedIndex = parseInt(element.dataset.index);
@@ -133,8 +134,9 @@ class ComboFhDP extends InputTextFhDP {
                 if (shouldBlur) {
                     this.blurEventWithoutChange = true;
                     this.input.blur(); // must be after onChange
+                    this.input.focus();
                 }
-                this.input.focus();
+
 
             } else {
                 let move = 0;

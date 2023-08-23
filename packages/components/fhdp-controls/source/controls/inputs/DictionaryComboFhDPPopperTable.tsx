@@ -2,6 +2,7 @@ import {Placement} from '@popperjs/core';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import {usePopper} from 'react-popper';
+import {event} from "jquery";
 
 interface Props {
     title: string;
@@ -20,6 +21,8 @@ interface Props {
     backgroundColor?: string;
     translate: any;
     clickInPopup: (arg: boolean) => void;
+    popperId: string;
+    parentInput: HTMLInputElement;
 }
 
 export const DictionaryComboFhDPPopperTable: React.FC<Props> = (props: Props) => {
@@ -38,7 +41,9 @@ export const DictionaryComboFhDPPopperTable: React.FC<Props> = (props: Props) =>
         readOnly,
         position,
         backgroundColor,
-        translate
+        translate,
+        popperId,
+        parentInput
     } = props;
     let {rows} = props;
     const popperElement = React.useRef(null);
@@ -64,8 +69,11 @@ export const DictionaryComboFhDPPopperTable: React.FC<Props> = (props: Props) =>
 
     const generateRow = (row: any, columns: Array<{ title: string, field: string }>, key: string | number) => {
         return (
-            <tr key={`tr-${key}`} onMouseEnter={rowMouseEnter} onMouseLeave={rowMouseLeave}
-                onClick={handleRowClick(row)}>
+
+            <tr key={`tr-${key}`} onMouseEnter={rowMouseEnter} onMouseLeave={rowMouseLeave} tabIndex={0}
+                id={`tr-${key}`}
+                onClick={handleRowClick(row)}
+                onKeyDown={(event) => handleTrKeyPress(event, row, rows.length == Number.parseInt(key.toString()) + 1)}>
                 {columns.map((column: any, index: number) => <td key={`td-${index}`}
                                                                  style={styles.td}>{row[column.field]}</td>)}
             </tr>
@@ -95,6 +103,59 @@ export const DictionaryComboFhDPPopperTable: React.FC<Props> = (props: Props) =>
         }
     }
 
+    const handleTrKeyPress = (ev: any, rowData: any, isLast: boolean) => {
+        // console.log('Clicked tr krepress', recordClick, readOnly, isLast)
+        let code = ev.keycode || ev.which;
+        if (code == 13) { //Enter
+            if (recordClick && !readOnly) {
+                ev.preventDefault();
+                ev.stopPropagation();
+                recordClick(rowData);
+            }
+        }
+        if (code == 27) { //escape
+            handleClose(true);
+        }
+
+        if (code == 9 && isLast) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            parentInput.focus();
+        }
+    }
+
+    const handleNextPageKeyPress = (ev: any) => {
+        console.log('Clicked handleNextPageKeyPress');
+        let code = ev.keycode || ev.which;
+        if (code == 13) { //Enter
+            nextPage();
+        }
+        if (code == 27) { //escape
+            handleClose(true);
+        }
+    }
+
+    const handlePrevPageKeyPress = (ev: any) => {
+        let code = ev.keycode || ev.which;
+        if (code == 13) { //Enter
+            prevPage();
+        }
+        if (code == 27) { //escape
+            handleClose(true);
+        }
+    }
+
+    const handleEnterKeyPress = (ev: any) => {
+        let code = ev.keycode || ev.which;
+        if (code == 13) { //Enter
+            ev.target.click();
+        }
+        if (code == 27) { //escape
+            handleClose(true);
+        }
+    }
+
+
     const rowMouseEnter = (ev: React.MouseEvent<HTMLElement>) => {
         if (!readOnly) {
             const shadered = shadeColor(getComputedStyle(document.getElementById(hookElementId)).getPropertyValue('--color-combo-fhdp'), 0);
@@ -121,11 +182,11 @@ export const DictionaryComboFhDPPopperTable: React.FC<Props> = (props: Props) =>
         }
         return (
             <div style={styles.pagination}>
-                <button onClick={() => {
+                <button onKeyDown={(event) => handlePrevPageKeyPress(event)} onClick={() => {
                     prevPage()
                 }} style={styles.pageButton} disabled={page <= 0}>{'<'}</button>
                 <span>&nbsp;{page + 1}&nbsp;{translate('of')}&nbsp;{totalPages}&nbsp;</span>
-                <button onClick={() => {
+                <button onKeyDown={(event) => handleNextPageKeyPress(event)} onClick={() => {
                     nextPage()
                 }} style={styles.pageButton} disabled={page >= totalPages - 1}>{'>'}</button>
             </div>
@@ -322,7 +383,9 @@ export const DictionaryComboFhDPPopperTable: React.FC<Props> = (props: Props) =>
     }
 
     styles.closeBtn = {
-        fontSize: 'var(--font-size-default)'
+        fontSize: 'var(--font-size-default)',
+        paddingLeft: "2px",
+        paddingRight: "2px"
     }
 
     styles.emptyRows = {
@@ -352,13 +415,14 @@ export const DictionaryComboFhDPPopperTable: React.FC<Props> = (props: Props) =>
         // }
         console.log('create portal')
         return ReactDOM.createPortal((
-            <div ref={popperElement} id={`dictionary-combo-popper-${+new Date()}`} className={'MuiPaper-root'}
+            <div ref={popperElement} id={popperId} className={'MuiPaper-root'}
                  style={{...styles.popper, ...popperDisplay}} {...attributes.popper} onClick={unlockClickInPopup}>
                 <div style={styles.header} onClick={unlockClickInPopup}>
                     <span dangerouslySetInnerHTML={{__html: title}} onClick={unlockClickInPopup}/>
                     {generatePagination()}
                     <div style={styles.separator} onClick={unlockClickInPopup}/>
-                    <span style={styles.closeBtn} onClick={() => handleClose(true)}><i className="fa fa-times"/></span>
+                    <span tabIndex={0} onKeyDown={(event) => handleEnterKeyPress(event)} style={styles.closeBtn}
+                          onClick={() => handleClose(true)}><i className="fa fa-times"/></span>
                 </div>
                 <div className={'pol'} style={styles.content}>
                     <table style={styles.table} className="table-striped">

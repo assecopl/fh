@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Form xmlns="http://fh.asseco.com/form/1.0" container="mainForm" formType="STANDARD">
-    <PanelHeaderFhDP title="Lookup fields" onClick="close" width="md-12" />
+<Form xmlns="http://fh.asseco.com/form/fhdp/1.0" container="mainForm" formType="STANDARD">
+    <PanelHeaderFhDP title="Lookup fields" onClick="close" width="md-12"/>
 
 
-<!--    <DictionaryComboFhDP id="dcCountry"-->
-<!--                         emptyValue="true"-->
-<!--                         width="md-4"-->
-<!--                         label="Country"-->
-<!--                         required="true"-->
-<!--                         onChange="-"-->
-<!--                         hint="test hint" hintType="STATIC"-->
+    <!--    <DictionaryComboFhDP id="dcCountry"-->
+    <!--                         emptyValue="true"-->
+    <!--                         width="md-4"-->
+    <!--                         label="Country"-->
+    <!--                         required="true"-->
+    <!--                         onChange="-"-->
+    <!--                         hint="test hint" hintType="STATIC"-->
 <!--                         dispalyOnlyCode="false"-->
 <!--                         value="{countryCode}"-->
 <!--                         provider="pl.fhframework.fhdp.example.lookup.provider.CountryLookupProvider"-->
@@ -23,5 +23,16 @@
                          dispalyOnlyCode="false"
                          value="{countryCodeNameValue}"
                          provider="pl.fhframework.fhdp.example.lookup.provider.CountryNameValueLookupProvider"
-                         icon="fas fa-search" />
+                         icon="fas fa-search"/>
+    <DictionaryCombo
+            emptyValue="true"
+            width="md-4"
+            label="Country by NameValueDto(DictionaryCombo)"
+            required="true"
+            onChange="-"
+            value="{countryCodeNameValue}"
+            provider="pl.fhframework.fhdp.example.lookup.provider.CountryLookupSimpleProvider"
+            icon="fas fa-search"/>
+
+    <Spacer width="md-12" height="500px"/>
 </Form>
