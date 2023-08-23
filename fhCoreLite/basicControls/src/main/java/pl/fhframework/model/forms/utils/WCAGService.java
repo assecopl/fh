@@ -40,6 +40,8 @@ public class WCAGService {
         if (SessionManager.getUserSession() != null) {
             if (SessionManager.getUserSession().getAttributes() != null) {
                 SessionManager.getUserSession().getAttributes().put("fh-size-2x", Boolean.TRUE);
+                SessionManager.getUserSession().getAttributes().put("fh-size-4x", Boolean.FALSE);
+
             } else {
                 LinkedHashMap<String, Object> map = new LinkedHashMap<>();
                 map.put("fh-size-2x", Boolean.TRUE);
@@ -53,6 +55,7 @@ public class WCAGService {
     public void setFontSize4() {
         if (SessionManager.getUserSession() != null) {
             if (SessionManager.getUserSession().getAttributes() != null) {
+                SessionManager.getUserSession().getAttributes().put("fh-size-2x", Boolean.FALSE);
                 SessionManager.getUserSession().getAttributes().put("fh-size-4x", Boolean.TRUE);
             } else {
                 LinkedHashMap<String, Object> map = new LinkedHashMap<>();
