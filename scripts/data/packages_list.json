@@ -14,8 +14,8 @@
     "../packages/components/basic-controls/",
     "../packages/components/charts-controls/",
     "../packages/applications/default-application/",
-    "../packages/components/fhdp-charts/",
     "../packages/components/fhdp-controls/",
+    "../packages/components/fhdp-charts/",
     "../packages/components/fhdp-extenders/",
     "../packages/components/fhdp-fh-starter/"
   ]
