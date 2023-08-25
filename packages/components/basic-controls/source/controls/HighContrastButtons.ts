@@ -9,6 +9,7 @@ class HighContrastButtons extends HTMLFormComponent {
     private cssClass: string;
     private label: string;
 
+
     constructor(componentObj: any, parent: HTMLFormComponent) {
         super(componentObj, parent);
 
@@ -67,10 +68,12 @@ class HighContrastButtons extends HTMLFormComponent {
                         this.components[newValue].component.classList.add('active');
                     }
                     if (this.activeButton == 1) {
-                        document.body.classList.add(this.cssClass);
+                        this.wcagUtil.turnOnHighContrast(this.cssClass);
                     } else {
                         if (document.body.classList) {
-                            document.body.classList.remove(this.cssClass);
+                            this.wcagUtil.turnOffHighContrast()
+                            // document.body.classList.remove(this.cssClass);
+                            // localStorage.setItem("fh-high-contrast", "false");
                         }
                     }
                     break;

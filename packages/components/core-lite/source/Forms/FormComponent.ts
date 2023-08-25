@@ -5,6 +5,7 @@ import {FH} from "../Socket/FH";
 import {Util} from "../Util";
 import {Form} from "./Form";
 import {FhContainer} from "../FhContainer";
+import {WCAGUtil} from "../WCAGUtil";
 
 let { lazyInject } = getDecorators(FhContainer);
 
@@ -17,6 +18,9 @@ abstract class FormComponent {
 
     @lazyInject("Util")
     protected util: Util;
+
+    @lazyInject("WCAGUtil")
+    protected wcagUtil: WCAGUtil;
 
     @lazyInject("FormComponentChangesQueue")
     protected changesQueue: FormComponentChangesQueue;

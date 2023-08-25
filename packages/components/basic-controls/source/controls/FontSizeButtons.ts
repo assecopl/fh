@@ -68,15 +68,18 @@ class FontSizeButtons extends HTMLFormComponent {
                         this.components[newValue].component.classList.add('active');
                     }
                     if (this.activeButton == 1) {
-                        document.documentElement.classList.add(this.cssClass2);
-                        document.documentElement.classList.remove(this.cssClass4);
+                        this.wcagUtil.turnOn2xFontSize(this.cssClass2);
+                        // document.documentElement.classList.add(this.cssClass2);
+                        // document.documentElement.classList.remove(this.cssClass4);
                     } else if (this.activeButton == 2) {
-                        document.documentElement.classList.add(this.cssClass4);
-                        document.documentElement.classList.remove(this.cssClass2);
+                        this.wcagUtil.turnOn4xFontSize(this.cssClass4);
+                        // document.documentElement.classList.add(this.cssClass4);
+                        // document.documentElement.classList.remove(this.cssClass2);
                     } else {
                         if (document.documentElement.classList) {
-                            document.documentElement.classList.remove(this.cssClass2);
-                            document.documentElement.classList.remove(this.cssClass4);
+                            this.wcagUtil.turnOnNormalFontSize(this.cssClass2, this.cssClass4);
+                            // document.documentElement.classList.remove(this.cssClass2);
+                            // document.documentElement.classList.remove(this.cssClass4);
                         }
                     }
                     break;

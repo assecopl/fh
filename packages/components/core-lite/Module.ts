@@ -7,6 +7,7 @@ import {FormsManager} from './source/Socket/FormsManager';
 import {FH} from './source/Socket/FH';
 import {I18n} from './source/I18n/I18n';
 import {Util} from "./source/Util";
+import {WCAGUtil} from "./source/WCAGUtil";
 import {FHML} from "./source/FHML";
 
 import {DataToClientEvent} from './source/Events/DataToClientEvent';
@@ -44,13 +45,20 @@ import {LayoutHandler} from "./source/LayoutHandler";
 import {ChatEvent} from "./source/Events/ChatEvent"
 import {ScrollEvent} from "./source/Events/ScrollEvent";
 import {ChatListEvent} from "./source/Events/ChatListEvent";
+import getDecorators from "inversify-inject-decorators";
 
+let {lazyInject} = getDecorators(FhContainer);
 
 class FormsHandler extends FhModule {
+
+    @lazyInject("WCAGUtil")
+    protected wcagUtil: WCAGUtil;
+
     protected registerComponents() {
         FhContainer.bind<I18n>('I18n').to(I18n).inSingletonScope();
 
         FhContainer.bind<Util>('Util').to(Util).inSingletonScope();
+        FhContainer.bind<WCAGUtil>('WCAGUtil').to(WCAGUtil).inSingletonScope();
         FhContainer.bind<LayoutHandler>('LayoutHandler').to(LayoutHandler).inSingletonScope();
         FhContainer.bind<FormsManager>('FormsManager').to(FormsManager).inSingletonScope();
         FhContainer.bind<SocketHandler>('SocketHandler').to(SocketHandler).inSingletonScope();
@@ -101,12 +109,18 @@ class FormsHandler extends FhModule {
 
         FhContainer.bind<ServiceManagerUtil>('ServiceManagerUtil').to(ServiceManagerUtil).inSingletonScope();
     }
+
+    public init() {
+        this.registerComponents();
+        this.wcagUtil.initWCAG();
+    }
 }
 
 export {
     I18n,
     FormsManager,
     Util,
+    WCAGUtil,
     FH,
     ApplicationLock,
     Connector,

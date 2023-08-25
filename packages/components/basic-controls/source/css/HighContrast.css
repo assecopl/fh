@@ -458,20 +458,20 @@
 }
 
 .fh-high-contrast ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-    color: white;
+    color: yellow;
     opacity: 1; /* Firefox */
 }
 
 .fh-high-contrast :-ms-input-placeholder { /* Internet Explorer 10-11 */
-    color: white;
+    color: yellow;
 }
 
 .fh-high-contrast ::-ms-input-placeholder { /* Microsoft Edge */
-    color: white;
+    color: yellow;
 }
 
 .fh-high-contrast .dropdown-menu, .fh-high-contrast .fhml-code {
-    background-color: black;
+    background-color: black !important;
 }
 
 .fh-high-contrast .bg-dark {
@@ -521,4 +521,8 @@
 .fh-high-contrast .bootstrap-datetimepicker-widget .timepicker-picker .table-condensed > tr > td > a > span.fa-arrow-up:before,
 .fh-high-contrast .bootstrap-datetimepicker-widget .timepicker-picker .table-condensed > tr > td > a > span.fa-arrow-down:before {
     color: #ff0 !important;
+}
+
+.fh-high-contrast .modal-content {
+    background-color: black !important;
 }

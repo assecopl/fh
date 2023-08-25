@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import pl.fhframework.SessionManager;
+import pl.fhframework.events.ActionContext;
 
 import java.util.*;
 
@@ -37,6 +38,7 @@ public class WCAGService {
     }
 
     public void setFontSize2() {
+
         if (SessionManager.getUserSession() != null) {
             if (SessionManager.getUserSession().getAttributes() != null) {
                 SessionManager.getUserSession().getAttributes().put("fh-size-2x", Boolean.TRUE);
