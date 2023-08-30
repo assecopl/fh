@@ -97,11 +97,11 @@ class HighContrastButtons extends HTMLFormComponent {
 
             component.component.addEventListener('click', function (event) {
                 var currentActive = this.component.querySelector('.active');
-                if (currentActive) {
-                    currentActive.classList.remove('active');
-                }
+                // if (currentActive) {
+                //     currentActive.classList.remove('active');
+                // }
                 if (currentActive === event.target) {
-                    this.activeButton = -1;
+                    // this.activeButton = -1;
                 } else {
                     this.activeButton = event.target.dataset.index;
                     event.target.classList.add('active');
