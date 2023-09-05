@@ -1,6 +1,7 @@
-import 'fh-basic-controls/dist/source/external/bootstrap-datetimepicker.min.js';
+import 'fh-basic-controls/source/external/bootstrap-datetimepicker.min.js';
 import {InputDateFhDP} from "./InputDateFhDP";
 import {FhContainer, HTMLFormComponent, LanguageChangeObserver} from "fh-forms-handler";
+import {InputDate} from "fh-basic-controls";
 
 class InputTimestampFhDP extends InputDateFhDP implements LanguageChangeObserver {
 
@@ -95,6 +96,20 @@ class InputTimestampFhDP extends InputDateFhDP implements LanguageChangeObserver
     inputBlurEvent() {
         this.input.value = InputDateFhDP.toDateOrLeave(this.input.value, this.format, this.format);
         this.updateModel();
+        //Reinitialize for keyboard support. Don;t know why but
+        let component = (<any>$(this.inputGroupElement));
+        let data = component.data("DateTimePicker");
+        if (data != null) data.destroy();
+        // this.initTimestampDefaults();
+        (<any>$(this.inputGroupElement)).datetimepicker({
+            locale: this.i18n.selectedLanguage,
+            useStrict: true,
+            format: this.format,
+            // allowInputToggle: true,
+            defaultDate: InputDateFhDP.isDateValid(this.rawValue, this.format) ? this.rawValue : '',
+            keepInvalid: true
+        });
+
         $(this.inputGroupElement).data("DateTimePicker").date(
             InputDateFhDP.toDateOrLeave(this.rawValue, this.backendFormat, this.format));
     }
