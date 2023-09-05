@@ -10,20 +10,20 @@
     <!--                         required="true"-->
     <!--                         onChange="-"-->
     <!--                         hint="test hint" hintType="STATIC"-->
-<!--                         dispalyOnlyCode="false"-->
-<!--                         value="{countryCode}"-->
-<!--                         provider="pl.fhframework.fhdp.example.lookup.provider.CountryLookupProvider"-->
-<!--                         icon="fas fa-search" />-->
-    <DictionaryComboFhDP id="dcCountryNameValue"
-                         emptyValue="true"
-                         width="md-4"
-                         label="Country by NameValueDto"
-                         required="true"
-                         onChange="-"
-                         dispalyOnlyCode="false"
-                         value="{countryCodeNameValue}"
-                         provider="pl.fhframework.fhdp.example.lookup.provider.CountryNameValueLookupProvider"
-                         icon="fas fa-search"/>
+    <!--                         dispalyOnlyCode="false"-->
+    <!--                         value="{countryCode}"-->
+    <!--                         provider="pl.fhframework.fhdp.example.lookup.provider.CountryLookupProvider"-->
+    <!--                         icon="fas fa-search" />-->
+    <!--    <DictionaryComboFhDP id="dcCountryNameValue"-->
+    <!--                         emptyValue="true"-->
+    <!--                         width="md-4"-->
+    <!--                         label="Country by NameValueDto"-->
+    <!--                         required="true"-->
+    <!--                         onChange="-"-->
+    <!--                         dispalyOnlyCode="false"-->
+    <!--                         value="{countryCodeNameValue}"-->
+    <!--                         provider="pl.fhframework.fhdp.example.lookup.provider.CountryNameValueLookupProvider"-->
+    <!--                         icon="fas fa-search"/>-->
     <DictionaryCombo
             emptyValue="true"
             width="md-4"

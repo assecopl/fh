@@ -23,7 +23,7 @@
         <Button id="buttonCode6_8" width="md-3" label="Buuton with recaptcha" reCAPTCHA="true"  onClick="test"/>
     </Row>
     <Button id="buttonCode6_7" label="Danger" style="danger" onClick="test"/>
-    <PanelGroup label="TimerFhDP">
+    <PanelGroup label="TimerFhDP" collapsible="true">
         <!--        <TimerFhDP timeout="2000" onInterval="handleInterval()"/>-->
         <OutputLabel width="md-12" value="This is interval counter: {getInterText()}"/>
     </PanelGroup>
