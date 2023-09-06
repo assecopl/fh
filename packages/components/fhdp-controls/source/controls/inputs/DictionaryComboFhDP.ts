@@ -341,6 +341,15 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
                     focusableElement.focus();
                 }, 1);
             }
+            if (code == 40 && !this.popupOpen) { //Arrow down
+                ev.preventDefault();
+                ev.stopPropagation();
+                this.popupOpen = true;
+                this.isSearch = true;
+                this.fireEvent('onClickSearchIcon', 'search');
+                this.renderPopup();
+
+            }
 
             if (ev.key === "Escape") {
                 this.changesQueue.queueAttributeChange('searchRequested', true);
