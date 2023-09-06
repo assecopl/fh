@@ -336,7 +336,7 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
                 ev.preventDefault();
                 ev.stopPropagation();
                 const popper = $("#" + this.popperId);
-                const focusableElement = popper.find('button:not([disabled])').first();
+                const focusableElement = popper.find('button:not([disabled]),span[tabindex=0]').first();
                 setTimeout(function () {
                     focusableElement.focus();
                 }, 1);
