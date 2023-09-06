@@ -1,4 +1,5 @@
-import 'fh-basic-controls/source/external/bootstrap-datetimepicker.min.js';
+import 'fh-basic-controls/dist/source/external/bootstrap-datetimepicker.min.js';
+
 import {InputDateFhDP} from "./InputDateFhDP";
 import {FhContainer, HTMLFormComponent, LanguageChangeObserver} from "fh-forms-handler";
 import {InputDate} from "fh-basic-controls";
