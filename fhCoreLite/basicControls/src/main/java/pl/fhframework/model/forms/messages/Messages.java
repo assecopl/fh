@@ -164,6 +164,8 @@ public class Messages implements IMessages {
                 .withSeverityLevel(severity)
                 .build();
 
+        dialog.setFocusFirstElement(true);
+        dialog.setBlockFocusForModal(true);
         dialog.showDialog();
 
         return dialog;
@@ -223,7 +225,8 @@ public class Messages implements IMessages {
         closeButton.setOnClick(new AdHocActionBinding(actionName + THIS_FOR_ACTION_NAME, dialog, dialog)); // FormElement.runAction workaround
         dialog.addSubcomponent(closeButton);
         usecaseWrapper.setActionViewEvent(actionName, Messages::close);
-
+        dialog.setFocusFirstElement(true);
+        dialog.setBlockFocusForModal(true);
         dialog.configure(usecaseWrapper, null);
         usecaseWrapper.showForm(dialog, false);
 
@@ -330,6 +333,8 @@ public class Messages implements IMessages {
                 .withButtonAction(ActionButton.getClose(messageService.getAllBundles().getMessage(CoreKeysMessages.DIALOG_BTN_NO, "No")));
 
         MessagePopup confirmDialog = confirmDialogBuilder.build();
+        confirmDialog.setFocusFirstElement(true);
+        confirmDialog.setBlockFocusForModal(true);
         confirmDialog.showDialog();
 
         return confirmDialog;
@@ -382,7 +387,8 @@ public class Messages implements IMessages {
 
         dialog.addSubcomponent(closeButton);
         usecaseWrapper.setActionViewEvent(actionName, Messages::close);
-
+        dialog.setFocusFirstElement(true);
+        dialog.setBlockFocusForModal(true);
         dialog.configure(usecaseWrapper, null);
         usecaseWrapper.showForm(dialog, false);
 
