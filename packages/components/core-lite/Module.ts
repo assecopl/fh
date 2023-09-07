@@ -46,6 +46,8 @@ import {ChatEvent} from "./source/Events/ChatEvent"
 import {ScrollEvent} from "./source/Events/ScrollEvent";
 import {ChatListEvent} from "./source/Events/ChatListEvent";
 import getDecorators from "inversify-inject-decorators";
+import {TranslationsPl} from "./source/I18n/translations.pl";
+import {TranslationsEn} from "./source/I18n/translations.en";
 
 let {lazyInject} = getDecorators(FhContainer);
 
@@ -113,6 +115,10 @@ class FormsHandler extends FhModule {
     public init() {
         this.registerComponents();
         this.wcagUtil.initWCAG();
+
+        let i18n = FhContainer.get<I18n>('I18n');
+        i18n.registerStrings('pl', TranslationsPl);
+        i18n.registerStrings('en', TranslationsEn);
     }
 }
 

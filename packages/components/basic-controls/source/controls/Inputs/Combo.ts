@@ -461,6 +461,12 @@ class Combo extends InputText {
             let icon = document.createElement('i');
             icon.classList.add('fa');
             icon.classList.add('fa-times');
+            button.ariaLabel = this.i18n.__("fh.clear.input");
+            let sronly = document.createElement('span');
+            sronly.classList.add('sr-only');
+            sronly.innerText = this.i18n.__("fh.clear.input")
+
+            button.appendChild(sronly);
 
             button.addEventListener('click', function (event) {
                 if (this.accessibility === 'EDIT') {
@@ -773,9 +779,15 @@ class Combo extends InputText {
 
         if (value.length > 0 && tagslist.indexOf(value) == -1) {
             if (options.noCheck || this.freeTyping || this.containsValue(value)) {
+                let b = $('<button>', {class: 'tag-remove', title: this.i18n.__("fh.delete") + " " + value});
+                let sronly = document.createElement('span');
+
+                b.click(() => this.removeTag(encodeURI(value), {}))
+
+
                 $('<span>', {class: 'tag btn btn-outline-secondary'}).append(
                     $('<span>', {class: 'tag-text'}).text(value),
-                    $('<button>', {class: 'tag-remove'}).click(() => this.removeTag(encodeURI(value), {}))
+                    b
                 ).insertBefore('#' + id);
 
                 tagslist.push(value);

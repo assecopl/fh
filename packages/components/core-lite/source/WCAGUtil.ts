@@ -7,6 +7,7 @@ declare const $: any;
 @injectable()
 class WCAGUtil {
 
+    public fireFocusOnReturn: boolean = false;
 
     constructor() {
     }
@@ -107,6 +108,18 @@ class WCAGUtil {
             return true;
         }
         return false;
+    }
+
+    setLastFocusedElementId(id: string, formId: string) {
+        localStorage.setItem("fh-last-focus-id", id);
+        localStorage.setItem("fh-last-focus-form-id", formId);
+    }
+
+    getLastFocusedElementId() {
+        return {
+            id: localStorage.getItem("fh-last-focus-id"), formId:
+                localStorage.getItem("fh-last-focus-form-id")
+        }
     }
 
 

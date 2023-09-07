@@ -398,6 +398,11 @@ abstract class HTMLFormComponent extends FormComponent {
 
             if (this.hintType == 'STANDARD' || this.hintType == 'STATIC' || this.hintType == 'STATIC_LEFT') {
                 $(this.hintElement).tooltip(tooltipOptions);
+                if (this.hintAriaLabel) {
+                    this.hintElement.setAttribute('aria-label', this.hintAriaLabel);
+                } else {
+                    this.hintElement.setAttribute('aria-label', hintParsed);
+                }
                 this.hintElement.classList.add("fh-tooltip");
                 this.hintInitialized = true;
             }

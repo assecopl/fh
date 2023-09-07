@@ -4,7 +4,8 @@ import * as $ from 'jquery';
 import {FhContainer} from "../FhContainer";
 import {LayoutHandler} from "../LayoutHandler";
 import getDecorators from "inversify-inject-decorators";
-import * as focusTrap  from 'focus-trap';
+import * as focusTrap from 'focus-trap';
+import {WCAGUtil} from "../WCAGUtil";
 
 let {lazyInject} = getDecorators(FhContainer);
 
@@ -13,6 +14,9 @@ class Form extends HTMLFormComponent {
 
     @lazyInject('LayoutHandler')
     private layoutHandler: LayoutHandler;
+
+    @lazyInject('WCAGUtil')
+    wcagUtil: WCAGUtil;
 
     public formType: string;
     private drag: any;
@@ -30,11 +34,13 @@ class Form extends HTMLFormComponent {
     private windowListenerMouseUp: any;
     private modalDeferred;
     protected headingTypeValue: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" = null;
-    protected blockFocusForModal:boolean = false;
+    protected blockFocusForModal: boolean = false;
 
-    protected afterInitActions:Array<any> = [];
+    protected afterInitActions: Array<any> = [];
 
-    protected focusTrap:focusTrap.FocusTrap = null;
+    protected focusTrap: focusTrap.FocusTrap = null;
+
+    protected lastFocusedElementId: any = null;
 
     constructor(formObj: any, parent: any = null) {
         super(formObj, parent);
@@ -130,6 +136,21 @@ class Form extends HTMLFormComponent {
         var form = this.buildForm();
 
         this.htmlElement = form;
+
+
+        if (this.formType != 'MODAL' && this.formType != 'MODAL_OVERFLOW') {
+            this.htmlElement.addEventListener('keydown', (event) => {
+                console.log(event.target);
+                try {
+                    this.lastFocusedElementId = event.target.id;
+                    this.wcagUtil.setLastFocusedElementId(event.target.id, this.formId)
+                    console.log(event.target.id, this.formId);
+                } catch (e) {
+                    console.log(event.target);
+                }
+            })
+        }
+
         this.component = this.htmlElement;
 
         if (this.formType === 'STANDARD') {
@@ -188,12 +209,18 @@ class Form extends HTMLFormComponent {
                     try {
                         if (this.focusTrap) {
                             this.focusTrap.deactivate();
+
                         }
                     } catch (e) {
                         console.info(e);
                     }
                 }.bind(this))
             }
+
+
+            $(this.htmlElement).on('shown.bs.modal', function (e) {
+                this.wcagUtil.fireFocusOnReturn = true;
+            }.bind(this))
         } else {
             this.renderSubcomponents();
             this.focusFirstActiveInputElement();
@@ -293,6 +320,21 @@ class Form extends HTMLFormComponent {
                 switch (name) {
                     case 'state':
                         this.state = newValue;
+                        if (this.state == 'ACTIVE') {
+                            if (this.wcagUtil.fireFocusOnReturn) {
+                                const data = this.wcagUtil.getLastFocusedElementId();
+                                if (data.formId == this.formId) {
+                                    const component = document.getElementById(data.id);
+                                    if (component) {
+                                        component.focus();
+                                        this.wcagUtil.fireFocusOnReturn = false;
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    case 'accessibility':
+
                         break;
                 }
             }.bind(this));
@@ -591,6 +633,7 @@ class Form extends HTMLFormComponent {
         var button = document.createElement('button');
         button.type = 'button';
         button.classList.add('close');
+        button.title = this.i18n.__("fh.close.form")
         button.innerHTML = '&times;';
         button.addEventListener('click', function (event) {
             this.fireEventWithLock('onManualModalClose', this.onManualModalClose);

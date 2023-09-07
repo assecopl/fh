@@ -53,6 +53,7 @@ class PanelFhDP extends HTMLFormComponent{
 
         let button = document.createElement('button');
         button.classList.add('panel-option');
+        button.title = this.i18n.__("fh.close") + ":" + this.title;
 
         if (this.onClick) {
             console.log('add event listener');
