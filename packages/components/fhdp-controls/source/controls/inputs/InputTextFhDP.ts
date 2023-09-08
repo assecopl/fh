@@ -629,11 +629,18 @@ class InputTextFhDP extends HTMLFormComponent {
                 oldValueElement[0].classList.remove('hide-old-value');
             }
 
-            if(this.hideCrossed == "true"){
+            if (this.hideCrossed == "true") {
                 oldValueElement[0].classList.add('input-old-value-remove-line');
             } else {
                 oldValueElement[0].classList.remove('input-old-value-remove-line');
             }
+        }
+    }
+
+    setRequiredField(isRequired) {
+        super.setRequiredField(isRequired);
+        if (this.input) {
+            this.input.ariaRequired = isRequired;
         }
     }
 }

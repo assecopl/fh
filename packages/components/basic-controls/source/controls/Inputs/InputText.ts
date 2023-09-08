@@ -557,6 +557,15 @@ class InputText extends HTMLFormComponent {
 
         super.render();
     }
+
+    setRequiredField(isRequired) {
+        super.setRequiredField(isRequired);
+        if (this.input) {
+            this.input.ariaRequired = isRequired;
+        }
+    }
+
+
 }
 
 export {InputText};
