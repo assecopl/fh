@@ -267,6 +267,7 @@ class Table extends TableWithKeyboardEvents {
         if (this.selectable && this.onRowClick) {
             // @ts-ignore
             row.component.style.cursor = 'pointer';
+            row.htmlElement.tabIndex = "0";
             row.htmlElement.addEventListener('click', function (e) {
                 this.onRowClickEvent(e, row.mainId, this.silent)
             }.bind(this));
