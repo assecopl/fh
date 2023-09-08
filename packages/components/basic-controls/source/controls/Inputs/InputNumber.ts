@@ -273,7 +273,7 @@ class InputNumber extends HTMLFormComponent {
     setRequiredField(isRequired) {
         super.setRequiredField(isRequired);
         if (this.input) {
-            this.input.ariaRequired = isRequired;
+            this.input.setAttribute("aria-required", "" + isRequired);
         }
     }
 }
