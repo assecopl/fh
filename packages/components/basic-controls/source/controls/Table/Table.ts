@@ -271,6 +271,11 @@ class Table extends TableWithKeyboardEvents {
             row.htmlElement.addEventListener('click', function (e) {
                 this.onRowClickEvent(e, row.mainId, this.silent)
             }.bind(this));
+            row.htmlElement.addEventListener('keydown', function (e) {
+                if (e.which == 13) {
+                    this.onRowClickEvent(e, row.mainId, this.silent);
+                }
+            }.bind(this));
         }
         if (this.onRowDoubleClick) {
             // @ts-ignore
