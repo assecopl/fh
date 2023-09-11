@@ -53,7 +53,7 @@ abstract class HTMLFormComponent extends FormComponent {
     protected oldValue: any;
     protected components: HTMLFormComponent[];
     private readonly push: boolean;
-    private static bootstrapColRegexp: RegExp = /^(xs|sm|md|lg|xl)-([1-9]|1[0-2])$/i;
+    private static bootstrapColRegexp: RegExp = /^((xs|sm|md|lg|xl)|(xs|sm|md|lg|xl)(-([1-9]|1[0-2]|(auto))))$/i;
     private static bootstrapColWidthRegexp: RegExp = /^\d+(px|%)$/i;
     private static bootstrapColSeparateCahrsRegexp: RegExp = /(,|;|\|\/|\|)/g;
     protected focusableComponent: HTMLElement;
