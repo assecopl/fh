@@ -1,6 +1,6 @@
 {
   "name": "fh-application",
-  "version": "4.8.18-SNAPSHOT-1691831225781",
+  "version": "4.8.16-SNAPSHOT-1694608388321",
   "main": "Module.ts",
   "private": true,
   "scripts": {
@@ -36,8 +36,8 @@
     "postcss-wrapper-loader": "1.0.1"
   },
   "dependencies": {
-    "fh-forms-handler": "4.8.18-SNAPSHOT-1691831225781",
-    "fh-basic-controls": "4.8.18-SNAPSHOT-1691831225781",
-    "fh-charts-controls": "4.8.18-SNAPSHOT-1691831225781"
+    "fh-forms-handler": "4.8.16-SNAPSHOT-1694608388321",
+    "fh-basic-controls": "4.8.16-SNAPSHOT-1694608388321",
+    "fh-charts-controls": "4.8.16-SNAPSHOT-1694608388321"
   }
 }
