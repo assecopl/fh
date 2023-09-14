@@ -54,9 +54,8 @@ class TableCell extends HTMLFormComponent {
         } else {
             row = document.createElement('div');
         }
-        row.classList.add('pl-2');
-        row.classList.add('pr-2');
         row.classList.add('row');
+        row.classList.add('mx-0');
         cell.appendChild(row);
 
         this.component = cell;
