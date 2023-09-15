@@ -160,11 +160,11 @@ thead.tableFloatingHeaderOriginal > tr th {
 .fc.table thead .table-heading th.sortable .btn-th {
     position: relative;
     padding: 0.75rem;
-    font-size: 100%;
     background: transparent;
-    display: inline;
+    display: inline-block;
     width: 100%;
     text-align: inherit;
+    border: 0;
 }
 
 .fc-table-disabled td * {
