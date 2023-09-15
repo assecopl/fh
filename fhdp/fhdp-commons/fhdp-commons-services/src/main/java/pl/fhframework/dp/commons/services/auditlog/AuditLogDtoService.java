@@ -308,6 +308,26 @@ public class AuditLogDtoService extends GenericDtoService<String, AuditLogDto, A
         dto.setDocId(docId);
         persistDto(dto);
     }
+    public void logTechnicalInfo(
+            String category,
+            String messageKey,
+            String comment,
+            String processId,
+            String operationGuid,
+            String repositoryMessageId){
+        AuditLogDto dto = new AuditLogDto(AuditLogTypeEnum.technical,
+                SeverityEnum.info,
+                category,
+                LocalDateTime.now(),
+                messageKey,
+                comment,
+                processId,
+                operationGuid,
+                null,
+                null);
+        dto.setRepositoryMsgId(repositoryMessageId);
+        persistDto(dto);
+    }
 
     public void logTechnicalError(
             String category,
