@@ -347,7 +347,7 @@ abstract class HTMLFormComponent extends FormComponent {
                     ttip.setAttribute('aria-haspopup', 'true');
                     const sr_only = document.createElement('span');
                     sr_only.classList.add("sr-only")
-                    sr_only.innerHTML = hintParsed;
+                    sr_only.innerHTML = (this.hintTitle ? this.hintTitle + ": " : "") + hintParsed;
                     ttip.appendChild(sr_only);
                 }
                 this.hintElement = ttip;
@@ -909,6 +909,7 @@ abstract class HTMLFormComponent extends FormComponent {
     }
 
     enableStyleClasses() {
+
         if (this.styleClasses.length && this.styleClasses[0] != '') {
             this.styleClasses.forEach(function (cssClass) {
                 if (cssClass) {
