@@ -15,6 +15,8 @@
 
 package pl.fhframework.fhbr.engine.audit;
 
+import lombok.Getter;
+import lombok.Setter;
 import pl.fhframework.fhbr.api.model.BRuleCfgDto;
 
 /**
@@ -22,6 +24,7 @@ import pl.fhframework.fhbr.api.model.BRuleCfgDto;
  * @version :  $, :  $
  * @created 31/08/2022
  */
+@Getter
 public class AuditRuleApply extends AuditPoint {
 
     private final BRuleCfgDto ruleCfgDto;
