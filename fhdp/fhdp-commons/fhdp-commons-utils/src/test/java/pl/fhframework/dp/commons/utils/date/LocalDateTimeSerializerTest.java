@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import static org.junit.Assert.*;
 
@@ -34,5 +35,14 @@ public class LocalDateTimeSerializerTest {
         LocalDateTimeDeserializer deserializer = new LocalDateTimeDeserializer();
         LocalDateTime date = deserializer.convert(ret);
         log.info("Date: {}", date);
+    }
+
+    @Test
+    public void testDuration() {
+        LocalDateTime startTime = LocalDateTime.now();
+        LocalDateTime endTime = startTime.plusNanos(250000000);
+        long diff = ChronoUnit.MILLIS.between(startTime, endTime);
+        float duration = (float) diff / 1000;
+        log.info("Diff: {}", diff);
     }
 }

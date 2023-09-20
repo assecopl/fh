@@ -68,7 +68,7 @@ public class OperationStepDtoService extends GenericDtoService<String, Operation
         } else {
             dto.setFinished(LocalDateTime.now());
             if(dto.getStarted() != null && dto.getFinished() != null) {
-                long diff = ChronoUnit.NANOS.between(dto.getStarted(), dto.getFinished());
+                long diff = ChronoUnit.MILLIS.between(dto.getStarted(), dto.getFinished());
                 dto.setDuration((float) diff /1000);
             }
             persistDto(dto);
