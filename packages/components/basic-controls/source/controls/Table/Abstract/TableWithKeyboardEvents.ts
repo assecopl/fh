@@ -56,7 +56,7 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
     public tableKeyupEvent(e) {
         this.ctrlIsPressed = false;
         this.shiftIsPressed = false;
-        if (e.which == 9 && $(document.activeElement).is(":input")) {
+        if (e.which == 9 && $(document.activeElement).is("input:not([type='checkbox'])")) {
             let parent = $(document.activeElement).parents('tbody tr:not(.emptyRow)');
             if (parent && parent.length > 0) {
                 // @ts-ignore

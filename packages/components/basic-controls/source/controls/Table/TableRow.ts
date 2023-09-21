@@ -10,6 +10,8 @@ class TableRow extends HTMLFormComponent {
 
     public isHighlighted: boolean = false;
 
+    public checkbox = null;
+
     constructor(componentObj: any, parent: Table) {
         super(componentObj, parent);
 
