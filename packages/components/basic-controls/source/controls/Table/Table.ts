@@ -706,6 +706,31 @@ class Table extends TableWithKeyboardEvents {
                     this.fireEventWithLock('onChange', this.onRowClick, event);
                 }
             }.bind(this));
+            cell.addEventListener('keydown', function (event) {
+                if (event.which == 13) {
+                    event.stopPropagation();
+                    if (this.accessibility != 'EDIT') return;
+
+                    let element = event.target;
+                    if (event.currentTarget != null) {
+                        element = event.currentTarget;
+                    }
+                    element.firstChild.checked = !element.firstChild.checked;
+
+                    this.selectAllRows(element.firstChild.checked);
+
+                    this.changesQueue.queueValueChange(this.rawValue);
+                    if (!this.onRowClick || this.onRowClick === '-') {
+                        this.highlightSelectedRows();
+                    }
+
+                    if (this._formId === 'FormPreview') {
+                        this.fireEvent('onRowClick', this.onRowClick);
+                    } else {
+                        this.fireEventWithLock('onRowClick', this.onRowClick);
+                    }
+                }
+            }.bind(this));
         }
 
         this.contentWrapper.appendChild(cell);
