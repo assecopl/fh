@@ -22,6 +22,8 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
 
     protected silent: boolean = false;
 
+    protected selectionCheckboxes: any;
+
     constructor(componentObj: any, parent: HTMLFormComponent) {
         super(componentObj, parent);
 
