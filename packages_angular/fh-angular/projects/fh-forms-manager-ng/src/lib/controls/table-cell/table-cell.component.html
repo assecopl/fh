@@ -1,0 +1,13 @@
+<td availabilityHtmlElement [class.text-center]="horizontalAlign == 'CENTER'"
+    [class.text-right]="horizontalAlign == 'RIGHT'">
+    <ng-content *ngIf="!value"></ng-content>
+    <ng-container *ngIf="value">
+        <ng-container *ngIf="formatter != null">
+            <div>{{ formatter.fromModel(value) | mask: formatter.pattern:formatter.thousandSeparator}}</div>
+        </ng-container>
+        <ng-container *ngIf="formatter == null">
+            <div [innerHTML]="(value | ewopml)">{{(value | ewopml) }}</div>
+        </ng-container>
+    </ng-container>
+</td>
+

@@ -1,0 +1,13 @@
+:host {
+  &.repeater-selectable, &.repeater-clickable {
+    cursor: pointer;
+  }
+
+  &.bg-primary {
+    ::ng-deep {
+      .ewopml-tag-icon {
+        color: white !important;
+      }
+    }
+  }
+}

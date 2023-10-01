@@ -1,0 +1,17 @@
+#wave_sidebar_container + body {
+
+  #sidebar {
+    left: 380px;
+  }
+
+  .ewop-standard-layout #content {
+    width: calc(100% - 660px);
+  }
+
+  app-navbar {
+    nav {
+      left: 380px;
+    }
+  }
+
+}

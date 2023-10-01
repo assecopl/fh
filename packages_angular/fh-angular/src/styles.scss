@@ -1,0 +1,236 @@
+/* You can add global styles to this file, and also import other style files */
+@import "../node_modules/bootstrap/scss/functions";
+@import "../node_modules/bootstrap/scss/variables";
+@import "../node_modules/bootstrap/scss/bootstrap";
+@import "../node_modules/bootstrap/scss/bootstrap-grid";
+@import "../node_modules/@fortawesome/fontawesome-free/css/all.min.css";
+
+//Custom Fonts
+@import "./assets/fonts";
+@import "./assets/fonts/icomoon-v1.0/style";
+@import "./assets/icons";
+
+//Custom styles
+@import "./assets/checkboxes";
+@import "./assets/input_groups";
+
+//Custom sytyles for WAVE Web Accessibility Evaluation Tool
+@import "./assets/wave";
+
+
+//TODO Gdzie powinny się znaleźć globalne style , w ng-default-app ?? Prawdopodobnie tam
+.pointer {
+  cursor: pointer;
+}
+
+.text-xs {
+  font-size: 0.5rem;
+}
+
+
+.text-small {
+  font-size: 0.875rem;
+}
+
+.align-left {
+  margin-right: auto;
+}
+
+.align-right {
+  margin-left: auto;
+}
+
+//
+//.nav-tabs {
+//  border-bottom: $nav-tabs-border-width solid $nav-tabs-border-color;
+//
+//  .nav-link {
+//    margin-bottom: -$nav-tabs-border-width;
+//    border: $nav-tabs-border-width solid transparent;
+//    color: black;
+//    @include border-top-radius($nav-tabs-border-radius);
+//
+//    @include hover-focus() {
+//      border-color: $nav-tabs-link-hover-border-color;
+//  }
+//
+//    &.disabled {
+//      color: $nav-link-disabled-color;
+//      background-color: transparent;
+//      border-color: transparent;
+//  }
+//}
+//
+//  .nav-link.active,
+//  .nav-item.show .nav-link {
+//    color: $nav-tabs-link-active-color;
+//    background-color: $nav-tabs-link-active-bg;
+//    border: none $nav-tabs-link-active-border-color;
+//    border-bottom: 2px solid;
+//    font-weight: 700;
+//    border-bottom-color: $primary;
+//}
+//}
+//
+//
+//.table thead th {
+//  font-size: 0.875rem;
+//  color: #717171;
+//  border-top: none;
+//  border-bottom: none !important;
+//  font-weight: 400;
+//}
+//
+//ewop-table-cell ewop-output-label.mb-3 {
+//  margin-bottom: 0 !important;
+//  padding-left: 0 !important;
+//}
+//
+//ewop-table-cell ewop-button.pb-0.pt-0 button {
+//  padding-top: 0;
+//  padding-bottom: 0;
+//}
+//
+//ewop-table-row.table-primary ewop-table-cell button span {
+//  color: white !important;
+//}
+//
+//ewop-table-row.table-primary ewop-table-cell button:hover span {
+//  color: $primary !important;
+//}
+//
+//.card-header {
+//  font-size: 1.25rem;
+//  font-weight: 700;
+//  color: #212121;
+//  margin: 0 1rem;
+//  padding-left: 0 !important;
+//}
+//
+//.col-form-label {
+//  font-size: 0.875rem !important;
+//}
+//
+//.table-primary, .table-primary > th, .table-primary > td {
+//  background-color: $primary !important;
+//  color: white;
+//}
+//
+//.navbar-light .navbar-nav .nav-link {
+//  color: $primary !important;
+//}
+//
+//.group-spacer {
+//  display: none;
+//}
+//
+//.sidebarHidden .group-spacer {
+//  display: block;
+//}
+//
+//.danePoprawne i,
+//.danePoprawneWybrane i,
+//.daneBledne i,
+//.daneBledneWybrane i {
+//  margin-left: -5px;
+//}
+//
+//.danePoprawneWybrane,
+//.daneBledneWybrane {
+//  background-color: $primary;
+//}
+//
+//#PanelGroup_gen_1784 table thead,
+//#PanelGroup_gen_1785 table thead {
+//  display: none;
+//}
+//
+//#PanelGroup_gen_1784 table tbody td,
+//#PanelGroup_gen_1784 table tbody ewop-output-label,
+//#PanelGroup_gen_1785 table tbody td,
+//#PanelGroup_gen_1785 table tbody ewop-output-label {
+//  padding-left: 0 !important;
+//  padding-right: 0 !important;
+//}
+//
+//#PanelGroup_gen_1785, #PanelGroup_gen_1784, #rolePanel, #uprawnieniaPanel {
+//  height: 100%;
+//}
+//
+//.btn-secondary-disabled {
+//  background-color: #C7C7C7;
+//  color: white;
+//}
+//
+//.position-absolute {
+//  position: absolute!important;
+//}
+//
+//ewop-form#FormularzNowegoWnioskuFRM ewop-row[ng-reflect-inner-id='row_lista_spraw'] ewop-repeater {
+//  flex: 0 0 25%;
+//  max-width: 25%;
+//}
+//
+//ewop-button.plr-5 button {
+//  padding-left: 3rem!important;
+//  padding-right: 3rem!important;
+//}
+//
+//#FormularzNowegoWnioskuFRM .position-absolute {
+//  z-index: 1000;
+//}
+//
+///*klasa coby załatać problem z dodawaniem kropki po komunikat%rowNo*/
+//.dodaj-kropke-za::after {
+//  content: ".";
+//}
+///*klasa coby załatać problem z dodawaniem nawiasami po komunikat%rowNo*/
+//.dodaj-nawias-za::after {
+//  content: ")";
+//}
+///*klasa dla formatowania nazwy załacznika*/
+//.white-space-pre-line {
+//  white-space: pre-line;
+//}
+//ddpzestrzeczfinfrm_siafr00038 ewop-repeater.bg-primary i.ewopml-tag-icon:before,
+//dopizestrzeczfinfrm_siafr00023 ewop-repeater.bg-primary i.ewopml-tag-icon:before,
+//{
+//color: #fff!important;
+//}
+//ewop-table-row.table-primary ewop-table-cell button.btn-link:hover span {
+//  color: white!important;
+//  text-decoration: underline;
+//}
+//.toast-body {
+//  word-break: break-all;
+//}
+//ngb-datepicker {
+//  z-index: 1002!important;
+//}
+//.govpl__portal-name {
+//  min-width: 350px;
+//}
+//.ewop-hidden {
+//  display: none!important;
+//}
+//
+//.form-control-disabled {
+//  background-color: $input-disabled-bg;
+//}
+//
+//.h-f {
+//  height: fit-content!important;
+//}
+//.mb-f-0 {
+//  margin-bottom: 0!important;
+//}
+//ewop-dictionary-view.form-control2 div span {
+//  min-height: $input-height;
+//  height: auto !important;
+//  @extend .form-control;
+//  @extend .form-control-disabled;
+//}
+//.mlm-30 {
+//  margin-left: -30px;
+//}
+

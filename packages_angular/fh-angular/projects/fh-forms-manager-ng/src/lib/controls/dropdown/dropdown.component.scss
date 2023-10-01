@@ -1,0 +1,19 @@
+:host {
+  &.dropdown {
+    margin-bottom: 1em;
+  }
+
+  .dropdown-menu {
+    margin: 2px 15px;
+  }
+
+  ::ng-deep {
+    button:hover {
+      .ewopml, .ewopml:before {
+        color: white !important;
+      }
+    }
+  }
+}
+
+

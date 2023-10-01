@@ -1,0 +1,5 @@
+<div class="row mb-2" [ngClass]="rowStyleClasses" availabilityHtmlElement>
+  <ng-container *ngFor="let element of subelements">
+    <fh-dynamic-component [data]="element"></fh-dynamic-component>
+  </ng-container>
+</div>

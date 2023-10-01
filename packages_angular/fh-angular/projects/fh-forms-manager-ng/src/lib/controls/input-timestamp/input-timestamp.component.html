@@ -1,0 +1,29 @@
+<div class="input-timestamp-component" [ngStyle]="styles">
+    <ewop-input-label [inputId]="id" [label]="label" [labelPosition]="labelPosition" [labelSize]="labelSize">
+        <ng-container *ngIf="control">
+            <ewop-input-group buttonAriaLabel="Wybierz {{label}}" [inputId]="id" [iconText]="iconText"
+                              [class.ewop-disabled]="control.disabled" [icon]="icon" [iconAlignment]="iconAlignment"
+                              (onClick)="d.toggle()" [availabilityHtmlElement]="elementRef" [required]="required">
+                <input #focusElement [id]="innerId" availabilityControl type="text" ngbTooltip="{{hint}}"
+                       [placement]="hintPlacement.toLowerCase()"
+                       [triggers]="hintTrigger.toLowerCase()"
+                       class="form-control {{(control?.invalid && control?.touched?'is-invalid':'')}}"
+                       [placeholder]="format"
+                       [name]="name"
+                       [formControl]="control"
+                       ngbDatepicker #d="ngbDatepicker" [footerTemplate]="t"
+                       (dateSelect)="onDateSelect($event)">
+                <ng-template #t>
+                    <div class="text-center pl-1 ngb-footer">
+                        <ngb-timepicker [ngModel]="ewopDateTimeAdapter.tmpDate"
+                                        (ngModelChange)="timeChangeEvent($event)" class="ngb-timepicker" size="small"
+                                        [seconds]="false"
+                        ></ngb-timepicker>
+                    </div>
+                </ng-template>
+            </ewop-input-group>
+        </ng-container>
+
+    </ewop-input-label>
+
+</div>

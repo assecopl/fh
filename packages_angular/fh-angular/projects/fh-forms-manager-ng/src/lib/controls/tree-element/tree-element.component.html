@@ -1,0 +1,15 @@
+<li (click)="processTreeElementClick()" availabilityHtmlElement>
+    <a [routerLink]="null" [ngClass]="{'pl-3' : expandableNode, 'text-underline' : selected } ">
+        <ng-container *ngIf="expandableNode && collapsed">
+            <div class="caretWrapper">
+                <span class="fa fa-caret-right"></span>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="expandableNode && !collapsed">
+            <div class="caretWrapper">
+                <span class="fa fa-caret-down"></span>
+            </div>
+        </ng-container>
+        <span class="outputLabel">{{ label }}</span>
+    </a>
+</li>

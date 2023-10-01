@@ -1,0 +1,56 @@
+<ewop-input-label [inputId]="id" [label]="label" [labelPosition]="labelPosition" [labelSize]="labelSize">
+    <ng-container *ngIf="inputType == inputTypeEnum.textarea">
+        <ng-container *ngIf="control">
+            <ng-container *ngIf="!rowsCountAuto">
+                <ewop-input-group [iconText]="iconText" [class.ewop-disabled]="control.disabled" [icon]="icon"
+                                  [iconAlignment]="iconAlignment" [required]="required">
+
+    <textarea #focusElement availabilityControl [id]="innerId" [style.height]="styles.height" [rows]="rowsCount"
+              class="form-control {{(control?.invalid && control?.touched?'is-invalid':'')}}"
+              [formControl]="control "
+              [name]="name" [maxlength]="maxLength"
+              [placeholder]="placeholder" [style.resize]="resize"
+              [availabilityHtmlElement]="elementRef" [attr.aria-label]="ariaLabel"></textarea>
+                </ewop-input-group>
+            </ng-container>
+            <ng-container *ngIf="rowsCountAuto">
+                <ewop-input-group [iconText]="iconText" [class.ewop-disabled]="control.disabled" [icon]="icon"
+                                  [iconAlignment]="iconAlignment" [required]="required">
+
+    <textarea #focusElement availabilityControl autosize [id]="innerId" [style.height]="styles.height"
+              [rows]="rowsCount"
+              class="form-control {{(control?.invalid && control?.touched?'is-invalid':'')}}"
+              [formControl]="control "
+              [name]="name" [maxlength]="maxLength"
+              [placeholder]="placeholder" [style.resize]="resize"
+              [availabilityHtmlElement]="elementRef" [attr.aria-label]="ariaLabel"></textarea>
+                </ewop-input-group>
+            </ng-container>
+        </ng-container>
+        <ng-container *ngIf="!control">
+    <textarea #focusElement [id]="innerId" [style.height]="styles.height" [rows]="rowsCount" [name]="innerId"
+              class="form-control"
+              [placeholder]="placeholder" [style.resize]="resize" [attr.aria-label]="ariaLabel">{{value}}
+    </textarea>
+        </ng-container>
+
+    </ng-container>
+    <ng-container *ngIf="inputType !== inputTypeEnum.textarea">
+        <ng-container *ngIf="control">
+            <ewop-input-group [iconText]="iconText" [class.ewop-disabled]="control.disabled" [icon]="icon"
+                              [iconAlignment]="iconAlignment" [required]="required">
+                <input #focusElement [id]="innerId"
+                       [type]="inputType"
+                       [name]="name"
+                       class="form-control {{(control?.invalid && control?.touched?'is-invalid':'')}}"
+                       [formControl]="control"
+                       [placeholder]="placeholder" [maxlength]="maxLength"
+                       [mask]="formatter?.pattern"
+                       [patterns]="formatter?.customPatterns ? formatter.customPatterns : null"
+                       [clearIfNotMatch]="false"
+                       availabilityControl [availabilityHtmlElement]="elementRef" [attr.aria-label]="ariaLabel"
+                />
+            </ewop-input-group>
+        </ng-container>
+    </ng-container>
+</ewop-input-label>

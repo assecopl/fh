@@ -1,0 +1,23 @@
+<ng-template #content>
+    <ng-content></ng-content>
+</ng-template>
+
+<div class="row" *ngIf="labelPosition == 'LEFT' || labelPosition == 'RIGHT'">
+    <label *ngIf="label && labelPosition == 'LEFT'" [for]="inputId"
+           [ngStyle]="isFixedSize ? {flex: '0 0 '+labelSize, maxWidth:labelSize} : {flex: '0 0 '+labelSizeNumber+'%', maxWidth:labelSizeNumber+'%'}"
+           class="col-md-4 label col-form-label">{{label}}</label>
+    <div [ngStyle]="isFixedSize ? {flex: '0 0 calc(100% - '+labelSize+')', maxWidth: 'calc(100% - '+labelSize+')'} : {flex: '0 0 '+ (100 - labelSizeNumber)+'%', maxWidth: 100-labelSizeNumber+'%'}"
+         class="col-md-8">
+        <ng-container *ngTemplateOutlet="content"></ng-container>
+    </div>
+    <label *ngIf="label && labelPosition == 'RIGHT'" [for]="inputId"
+           [ngStyle]="isFixedSize ? {flex: '0 0 '+labelSize, maxWidth:labelSize} : {flex: '0 0 '+labelSize+'%', maxWidth:labelSizeNumber+'%'}"
+           class="col-md-4 label col-form-label">{{label}}</label>
+</div>
+
+<ng-container *ngIf="labelPosition == 'UP' || labelPosition == 'DOWN'">
+    <label *ngIf="label && labelPosition == 'UP'" [for]="inputId" [innerHTML]="labelHtml"
+           class="col-form-label">{{label}}</label>
+    <ng-container *ngTemplateOutlet="content"></ng-container>
+    <label *ngIf="label && labelPosition == 'DOWN' " [for]="inputId" class="col-form-label">{{label}}</label>
+</ng-container>

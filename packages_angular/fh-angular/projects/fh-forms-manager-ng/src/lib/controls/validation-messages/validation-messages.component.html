@@ -1,0 +1,10 @@
+<ng-container *ngIf="errors.length > 0">
+    <div [class]="getBootstrapLevel()">
+        <div class="mb-3" *ngFor="let error of errors">
+      <span class="mb-0 pointer"
+            (click)="error.knwonEwopCompoment && error.knwonEwopCompoment.focus ? error.knwonEwopCompoment.focus() : false">
+        {{ error.message}}
+      </span>
+        </div>
+    </div>
+</ng-container>

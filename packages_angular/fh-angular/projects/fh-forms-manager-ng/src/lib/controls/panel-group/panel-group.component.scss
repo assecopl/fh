@@ -1,0 +1,69 @@
+:host {
+  display: block;
+
+  .borderHidden {
+    border: none;
+  }
+
+  ::ng-deep {
+    .collapsible {
+      cursor: pointer;
+
+      &:not(.isCollapsed) {
+        border-bottom: 0px solid white;
+
+        &.card-header {
+          .ewopml-small {
+            height: 0px;
+            visibility: hidden;
+            display: none;
+          }
+        }
+      }
+    }
+  }
+
+  .card-body {
+    min-height: 1px;
+    max-height: 5000px;
+    opacity: 1;
+    visibility: visible;
+    transition: max-height 0.3s, opacity 0.3s, visibility 0.3s, padding-top 0.5s;
+
+    &.collapsed {
+      //display: none;
+      min-height: 0px;
+      max-height: 0px;
+      overflow: hidden;
+      padding-top: 0px;
+      padding-bottom: 0px;
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+
+  ::ng-deep {
+    .card-header {
+      .fc.wrapper {
+        margin-bottom: 0px !important;
+      }
+
+      .ewopml-small {
+        display: inline-block;
+        white-space: nowrap;
+        width: 90%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        position: relative;
+
+
+      }
+    }
+  }
+
+}
+
+
+
+
+

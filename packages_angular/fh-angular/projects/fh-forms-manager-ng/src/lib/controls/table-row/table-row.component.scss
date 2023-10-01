@@ -1,0 +1,17 @@
+:host {
+  display: table-row;
+}
+
+::ng-deep {
+  .table-primary {
+    ewop-table-cell {
+      &.text-muted {
+        color: white !important;
+      }
+
+      .ewopml, .ewopml-tag-icon:before, i.ewopml:before {
+        color: white !important;
+      }
+    }
+  }
+}

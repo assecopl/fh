@@ -3,14 +3,17 @@ import {BrowserModule} from '@angular/platform-browser';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-
+import {FhFormsManagerNgModule} from "fh-forms-manager-ng";
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 @NgModule({
     declarations: [
         AppComponent
     ],
     imports: [
+        NgbModule,
         BrowserModule,
-        AppRoutingModule
+        AppRoutingModule,
+        FhFormsManagerNgModule
     ],
     providers: [],
     bootstrap: [AppComponent]

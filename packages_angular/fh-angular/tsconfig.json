@@ -2,16 +2,20 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "rootDir": ".",
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
+    "typeRoots": [
+      "node_modules/@types"
+    ],
     "paths": {
       "fh-basic-controls-ng": [
         "dist/fh-basic-controls-ng"
       ],
       "fh-forms-manager-ng": [
-        "dist/fh-forms-manager-ng"
+        "projects/fh-forms-manager-ng/src/public-api.ts"
       ]
     },
     "noImplicitOverride": true,
@@ -19,8 +23,12 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
+    "noImplicitAny": false,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
     "declaration": false,
     "downlevelIteration": true,
+    "strictNullChecks": false,
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,

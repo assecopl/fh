@@ -1,0 +1,24 @@
+<ng-container *ngIf="hint else dropdown">
+  <span ngbTooltip="{{ hint }}" [placement]="hintPlacement.toLowerCase()" [triggers]="hintTrigger.toLowerCase()">
+    <ng-container *ngTemplateOutlet="dropdown"></ng-container>
+  </span>
+</ng-container>
+
+<ng-template #dropdown>
+    <div ngbDropdown>
+        <button [id]="id" availabilityHtmlElement class="btn btn-block dropdown-toggle btn-{{bootstrapStyle}}"
+                ngbDropdownToggle type="button" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false">
+            <ng-container *ngTemplateOutlet="contentTemplate"></ng-container>
+        </button>
+        <div id="{{id}}ngbDropdownMenu" ngbDropdownMenu>
+            <div class="row">
+                <ng-content></ng-content>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #contentTemplate>
+    <span *ngIf="label" [innerHTML]="label | ewopml"></span>
+</ng-template>

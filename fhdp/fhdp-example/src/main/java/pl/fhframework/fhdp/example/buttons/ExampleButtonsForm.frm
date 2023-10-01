@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Form xmlns="http://fh.asseco.com/form/1.0" container="mainForm" formType="STANDARD" modalSize="REGULAR">
-    <PanelHeaderFhDP title="Buttons" info="Example" onClick="close" width="md-12"/>
+    <!--    <PanelHeaderFhDP title="Buttons" info="Example" onClick="close" width="md-12"/>-->
     <Row>
         <HighContrastButtons label="contrast" width="md-12"/>
         <FontSizeButtons label="Font sizes" width="md-12"/>

@@ -1,0 +1,189 @@
+@import "variables";
+
+@font-face {
+  font-family: '#{$icomoon-font-family}';
+  src: url('#{$icomoon-font-path}/#{$icomoon-font-family}.eot?za11u');
+  src: url('#{$icomoon-font-path}/#{$icomoon-font-family}.eot?za11u#iefix') format('embedded-opentype'),
+  url('#{$icomoon-font-path}/#{$icomoon-font-family}.ttf?za11u') format('truetype'),
+  url('#{$icomoon-font-path}/#{$icomoon-font-family}.woff?za11u') format('woff'),
+  url('#{$icomoon-font-path}/#{$icomoon-font-family}.svg?za11u##{$icomoon-font-family}') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+.icon-ewop {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: '#{$icomoon-font-family}' !important;
+  speak: never;
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  vertical-align: middle;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-ewop-attachment-big {
+  &:before {
+    content: $icon-ewop-attachment-big;
+  }
+}
+
+.icon-ewop-back {
+  &:before {
+    content: $icon-ewop-back;
+    color: #0a54a3;
+  }
+}
+
+.icon-ewop-bell {
+  &:before {
+    content: $icon-ewop-bell;
+    color: #0a54a3;
+  }
+}
+
+.icon-ewop-calendar {
+  &:before {
+    content: $icon-ewop-calendar;
+    color: #0a54a3;
+  }
+}
+
+.icon-ewop-document-message {
+  &:before {
+    content: $icon-ewop-document-message;
+    color: #0a54a3;
+  }
+}
+
+.icon-ewop-down {
+  &:before {
+    content: $icon-ewop-down;
+    color: #0a54a3;
+  }
+}
+
+.icon-ewop-download {
+  &:before {
+    content: $icon-ewop-download;
+    color: #0a54a3;
+  }
+}
+
+.icon-ewop-error-big {
+  &:before {
+    content: $icon-ewop-error-big;
+    color: #d32743;
+  }
+}
+
+.icon-ewop-file-document {
+  &:before {
+    content: $icon-ewop-file-document;
+    color: #0a54a3;
+  }
+}
+
+.icon-ewop-help {
+  &:before {
+    content: $icon-ewop-help;
+    color: #0a54a3;
+  }
+}
+
+.icon-ewop-helpewop--1, .icon-ewop-helpewop {
+  &:before {
+    content: $icon-ewop-helpewop--1;
+    color: #0a54a3;
+  }
+}
+
+.icon-ewop-home {
+  &:before {
+    content: $icon-ewop-home;
+  }
+}
+
+.icon-ewop-input-clear {
+  &:before {
+    content: $icon-ewop-input_clearewop-path1;
+    color: rgb(10, 84, 163);
+    opacity: 0.1;
+  }
+}
+
+.icon-ewop-input-clear-alt {
+  &:before {
+    content: $icon-ewop-input_clearewop-path2;
+    //margin-left: -1em;
+    font-size: 150%;
+    color: rgb(10, 84, 163);
+  }
+}
+
+.icon-ewop-logout {
+  &:before {
+    content: $icon-ewop-logout;
+    color: #0a54a3;
+  }
+}
+
+.icon-ewop-messages {
+  &:before {
+    content: $icon-ewop-messages;
+    color: #0a54a3;
+  }
+}
+
+.icon-ewop-more {
+  &:before {
+    content: $icon-ewop-more;
+    color: #c6c6c6;
+  }
+}
+
+.icon-ewop-person {
+  &:before {
+    content: $icon-ewop-person;
+    color: #0a54a3;
+  }
+}
+
+.icon-ewop-print {
+  &:before {
+    content: $icon-ewop-print;
+    color: #0a54a3;
+  }
+}
+
+.icon-ewop-settings {
+  &:before {
+    content: $icon-ewop-settings;
+    color: #0a54a3;
+  }
+}
+
+.icon-ewop-small-arrow-right {
+  &:before {
+    content: $icon-ewop-small_arrow_right;
+  }
+}
+
+.icon-ewop-up {
+  &:before {
+    content: $icon-ewop-up;
+    color: #0a54a3;
+  }
+}
+
+
+.label {
+  font-size: 0.875rem;
+}

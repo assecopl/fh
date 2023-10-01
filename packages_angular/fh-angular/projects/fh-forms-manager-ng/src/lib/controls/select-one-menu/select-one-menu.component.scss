@@ -1,0 +1,30 @@
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+
+:host {
+
+  select {
+    -moz-appearance: none; /* Firefox */
+    -webkit-appearance: none; /* Safari and Chrome */
+    appearance: none;
+
+    &.form-control:invalid {
+
+      //background-position: right $input-height-inner-quarter center;
+      background-position: right add($input-line-height * .25em, $input-padding-y / .5) center;
+    }
+
+    background-image: url('/assets/img/svg/icons/down.svg');
+    background-position-y: center;
+    background-position-x: calc(100% - 5px);
+    background-repeat: no-repeat;
+
+  }
+
+  &.input-required {
+    select {
+      background-position-x: calc(100% - 30px);
+    }
+  }
+}
+

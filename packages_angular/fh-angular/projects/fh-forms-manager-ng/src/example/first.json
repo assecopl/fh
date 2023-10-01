@@ -1,0 +1,365 @@
+{
+  "command": "Set",
+  "openForm": [
+    {
+      "id": "ExampleButtonsForm_V11_gen_4",
+      "invisible": false,
+      "label": "Przyciski",
+      "push": false,
+      "hintType": "STANDARD",
+      "blocked": false,
+      "hideHeader": false,
+      "focusFirstElement": true,
+      "layout": "VERTICAL",
+      "modal": false,
+      "formType": "STANDARD",
+      "modalSize": "REGULAR",
+      "viewMode": "NORMAL",
+      "fromCloud": false,
+      "designMode": false,
+      "container": "mainForm",
+      "effectiveFormType": "STANDARD",
+      "type": "ExampleButtonsForm_V11",
+      "designDeletable": true,
+      "accessibility": "EDIT",
+      "subelements": [
+        {
+          "id": "Row_gen_5",
+          "invisible": false,
+          "push": false,
+          "hintType": "STANDARD",
+          "type": "Row",
+          "designDeletable": true,
+          "accessibility": "EDIT",
+          "subelements": [
+            {
+              "id": "HighContrastButtons_gen_6",
+              "invisible": false,
+              "push": false,
+              "width": "md-12",
+              "hintType": "STANDARD",
+              "label": "contrast",
+              "activeButton": 0,
+              "cssClass": "fh-high-contrast",
+              "type": "HighContrastButtons",
+              "designDeletable": true,
+              "accessibility": "EDIT",
+              "subelements": [
+                {
+                  "id": "Button_gen_14",
+                  "invisible": false,
+                  "push": false,
+                  "width": "md-3",
+                  "styleClasses": "border, mr-2, fh-high-contrast-btn-normal",
+                  "hintType": "STANDARD",
+                  "ariaLabel": "Turn off high contrast",
+                  "label": "A",
+                  "style": "default",
+                  "reCAPTCHA": false,
+                  "type": "Button",
+                  "designDeletable": true,
+                  "accessibility": "EDIT"
+                },
+                {
+                  "id": "Button_gen_15",
+                  "invisible": false,
+                  "push": false,
+                  "width": "md-3",
+                  "styleClasses": "mr-2, fh-high-contrast-btn-high",
+                  "hintType": "STANDARD",
+                  "ariaLabel": "Turn on high contrast",
+                  "label": "A",
+                  "style": "dark",
+                  "reCAPTCHA": false,
+                  "type": "Button",
+                  "designDeletable": true,
+                  "accessibility": "EDIT"
+                }
+              ]
+            },
+            {
+              "id": "FontSizeButtons_gen_7",
+              "invisible": false,
+              "push": false,
+              "width": "md-12",
+              "hintType": "STANDARD",
+              "label": "Font sizes",
+              "activeButton": 0,
+              "cssClass2": "fh-size-2x",
+              "cssClass4": "fh-size-4x",
+              "type": "FontSizeButtons",
+              "designDeletable": true,
+              "accessibility": "EDIT",
+              "subelements": [
+                {
+                  "id": "Button_gen_16",
+                  "invisible": false,
+                  "push": false,
+                  "width": "md-3",
+                  "styleClasses": "border, mr-2, fh-font-size-btn-normal",
+                  "hintType": "STANDARD",
+                  "ariaLabel": "Enable normal text size",
+                  "label": "A",
+                  "style": "default",
+                  "reCAPTCHA": false,
+                  "type": "Button",
+                  "designDeletable": true,
+                  "accessibility": "EDIT"
+                },
+                {
+                  "id": "Button_gen_17",
+                  "invisible": false,
+                  "push": false,
+                  "width": "md-3",
+                  "styleClasses": "border, mr-2, fh-font-size-btn-2",
+                  "hintType": "STANDARD",
+                  "ariaLabel": "Enable Text Zoom",
+                  "label": "A",
+                  "style": "default",
+                  "reCAPTCHA": false,
+                  "type": "Button",
+                  "designDeletable": true,
+                  "accessibility": "EDIT"
+                },
+                {
+                  "id": "Button_gen_18",
+                  "invisible": false,
+                  "push": false,
+                  "width": "md-3",
+                  "styleClasses": "border, mr-2, fh-font-size-btn-4",
+                  "hintType": "STANDARD",
+                  "ariaLabel": "Enable 2x text magnification",
+                  "label": "A",
+                  "style": "default",
+                  "reCAPTCHA": false,
+                  "type": "Button",
+                  "designDeletable": true,
+                  "accessibility": "EDIT"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "Row_gen_8",
+          "invisible": false,
+          "push": false,
+          "hintType": "STANDARD",
+          "type": "Row",
+          "designDeletable": true,
+          "accessibility": "EDIT",
+          "subelements": [
+            {
+              "id": "buttonCode6_1",
+              "invisible": false,
+              "push": false,
+              "width": "md-4",
+              "hintType": "STANDARD",
+              "onClick": "testError",
+              "label": "Button without defined style",
+              "style": "primary",
+              "reCAPTCHA": false,
+              "type": "Button",
+              "designDeletable": true,
+              "accessibility": "EDIT"
+            },
+            {
+              "id": "buttonCode6_2",
+              "invisible": false,
+              "push": false,
+              "width": "md-2",
+              "hintType": "STANDARD",
+              "onClick": "xxx",
+              "label": "Default",
+              "style": "default",
+              "reCAPTCHA": false,
+              "type": "Button",
+              "designDeletable": true,
+              "accessibility": "EDIT"
+            }
+          ]
+        },
+        {
+          "id": "Row_gen_9",
+          "invisible": false,
+          "push": false,
+          "width": "md-6",
+          "hintType": "STANDARD",
+          "type": "Row",
+          "designDeletable": true,
+          "accessibility": "EDIT",
+          "subelements": [
+            {
+              "id": "buttonCode6_3",
+              "invisible": false,
+              "push": false,
+              "width": "md-3",
+              "hintType": "STANDARD",
+              "onClick": "test",
+              "label": "Primary",
+              "style": "primary",
+              "reCAPTCHA": false,
+              "type": "Button",
+              "designDeletable": true,
+              "accessibility": "EDIT"
+            },
+            {
+              "id": "buttonCode6_4",
+              "invisible": false,
+              "push": false,
+              "width": "md-3",
+              "hintType": "STANDARD",
+              "onClick": "test",
+              "label": "Success",
+              "style": "success",
+              "reCAPTCHA": false,
+              "type": "Button",
+              "designDeletable": true,
+              "accessibility": "EDIT"
+            }
+          ]
+        },
+        {
+          "id": "Row_gen_10",
+          "invisible": false,
+          "push": false,
+          "width": "md-6",
+          "hintType": "STANDARD",
+          "type": "Row",
+          "designDeletable": true,
+          "accessibility": "EDIT",
+          "subelements": [
+            {
+              "id": "buttonCode6_5",
+              "invisible": false,
+              "push": false,
+              "width": "md-3",
+              "hintType": "STANDARD",
+              "onClick": "test",
+              "label": "Info",
+              "style": "info",
+              "reCAPTCHA": false,
+              "type": "Button",
+              "designDeletable": true,
+              "accessibility": "EDIT"
+            },
+            {
+              "id": "buttonCode6_6",
+              "invisible": false,
+              "push": false,
+              "width": "md-3",
+              "hintType": "STANDARD",
+              "onClick": "test",
+              "label": "Warning",
+              "style": "warning",
+              "reCAPTCHA": false,
+              "type": "Button",
+              "designDeletable": true,
+              "accessibility": "EDIT"
+            }
+          ]
+        },
+        {
+          "id": "Row_gen_11",
+          "invisible": false,
+          "push": false,
+          "width": "md-6",
+          "hintType": "STANDARD",
+          "type": "Row",
+          "designDeletable": true,
+          "accessibility": "EDIT",
+          "subelements": [
+            {
+              "id": "buttonCode6_8",
+              "invisible": false,
+              "push": false,
+              "width": "md-3",
+              "hintType": "STANDARD",
+              "onClick": "test",
+              "label": "Buuton with recaptcha",
+              "style": "primary",
+              "reCAPTCHA": true,
+              "captchaSiteKey": "6LeGybwhAAAAAB-SdNlqkHcmtOzv3UNjmBhy73eX",
+              "type": "Button",
+              "designDeletable": true,
+              "accessibility": "EDIT"
+            }
+          ]
+        },
+        {
+          "id": "buttonCode6_7",
+          "invisible": false,
+          "push": false,
+          "width": "md-3",
+          "hintType": "STANDARD",
+          "onClick": "test",
+          "label": "Danger",
+          "style": "danger",
+          "reCAPTCHA": false,
+          "type": "Button",
+          "designDeletable": true,
+          "accessibility": "EDIT"
+        },
+        {
+          "id": "PanelGroup_gen_12",
+          "invisible": false,
+          "push": false,
+          "hintType": "STANDARD",
+          "label": "TimerFhDP",
+          "collapsible": true,
+          "borderVisible": false,
+          "collapsed": false,
+          "iconOpened": "fa-arrow-down",
+          "iconClosed": "fa-arrow-up",
+          "type": "PanelGroup",
+          "designDeletable": true,
+          "accessibility": "EDIT",
+          "subelements": [
+            {
+              "id": "OutputLabel_gen_13",
+              "invisible": false,
+              "push": false,
+              "width": "md-12",
+              "hintType": "STANDARD",
+              "iconAlignment": "BEFORE",
+              "value": "This is interval counter: 0",
+              "type": "OutputLabel",
+              "designDeletable": true,
+              "accessibility": "EDIT"
+            }
+          ]
+        }
+      ],
+      "state": "ACTIVE"
+    }
+  ],
+  "layout": "standard",
+  "changes": [
+    {
+      "formId": "menuFormInner",
+      "formElementId": "menuTreeElement[0][1]",
+      "changedAttributes": {
+        "label": "[b]Buttons & timer[/b]",
+        "collapsed": false
+      }
+    }
+  ],
+  "events": [
+    {
+      "type": "RedirectEvent",
+      "uuid": "2e24f9c7-b52c-4a87-ab5a-170ee43121e2",
+      "url": "#buttons",
+      "newWindow": false,
+      "closeable": false
+    },
+    {
+      "type": "SessionTimeoutEvent",
+      "data": {
+        "now": 1695815165.251,
+        "lastEventTimestamp": 1695816365.251,
+        "counterElementId": "sessionCounter",
+        "maxInactivityMinutes": 20
+      }
+    }
+  ]
+}
