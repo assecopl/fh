@@ -39,7 +39,7 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
         if (this.selectable && this.onRowClick) {
             this.table.addEventListener('keydown', this.tableKeydownEvent.bind(this));
             this.table.addEventListener('keyup', this.tableKeyupEvent.bind(this));
-            this.table.role = "grid"
+            this.table.setAttribute('role', "grid");
 
         }
         this.bindKeyboardEvents();
