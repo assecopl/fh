@@ -11,7 +11,6 @@ import {
 } from '@angular/core';
 import {EwopHTMLElementC} from '../../models/componentClasses/EwopHTMLElementC';
 import {BootstrapWidthEnum} from '../../models/enums/BootstrapWidthEnum';
-import {EwopAvailabilityDirective} from "@ewop/ng-availability";
 import {EwopComponent} from "../../models/componentClasses/EwopComponent";
 import {RepeaterComponent} from "../repeater/repeater.component";
 
@@ -23,7 +22,7 @@ import {RepeaterComponent} from "../repeater/repeater.component";
         /**
          * Inicjalizujemy dyrektywę dostępności aby zbudoać hierarchię elementów i dać możliwość zarządzania dostępnością
          */
-        EwopAvailabilityDirective,
+      // EwopAvailabilityDirective,
         /**
          * Dodajemy deklaracje klasy ogólnej aby wstrzykiwanie i odnajdowanie komponentów wewnątrz siebie było możliwe.
          * Dzięki temu budujemy hierarchię kontrolek Ewop.
@@ -33,7 +32,7 @@ import {RepeaterComponent} from "../repeater/repeater.component";
 })
 export class GroupComponent extends EwopHTMLElementC implements OnInit {
 
-    constructor(public injector: Injector,
+  constructor(public override injector: Injector,
                 @Optional() @Host() @SkipSelf() parentEwopComponent: EwopComponent) {
         super(injector, parentEwopComponent);
 
@@ -58,14 +57,14 @@ export class GroupComponent extends EwopHTMLElementC implements OnInit {
         return classMap; //Clear Host classes.
     }
 
-    ngOnInit() {
+  override ngOnInit() {
         super.ngOnInit();
         //Pass external ID to availability processor
         // this.ewopAvailabilityDirective.ngOnInit();
         // this.ewopAvailabilityDirective.id = this.id;
     }
 
-    ngOnChanges(changes: SimpleChanges) {
+  override ngOnChanges(changes: SimpleChanges) {
         super.ngOnChanges(changes);
     }
 }

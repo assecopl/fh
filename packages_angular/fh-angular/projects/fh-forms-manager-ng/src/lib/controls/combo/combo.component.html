@@ -21,7 +21,7 @@
                            [formControl]="control">
 
                     <ng-template ng-option-tmp ng-label-tmp let-item="item" let-index="index" let-search="searchTerm">
-                        <span [innerHTML]=" inputFormatter(item) | ewopml "></span>
+                      <span [innerHTML]=" inputFormatter(item) | fhml "></span>
                     </ng-template>
                 </ng-select>
             </ewop-input-group>

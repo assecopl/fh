@@ -14,19 +14,18 @@ import {
     SkipSelf
 } from '@angular/core';
 import {EwopHTMLElementC} from '../../models/componentClasses/EwopHTMLElementC';
-import {EwopAvailabilityDirective} from "@ewop/ng-availability";
 import {EwopComponent} from "../../models/componentClasses/EwopComponent";
 import {BootstrapWidthEnum} from "../../models/enums/BootstrapWidthEnum";
 
 @Component({
-    selector: 'ewop-repeater',
+  selector: 'fh-repeater',
     templateUrl: './repeater.component.html',
     styleUrls: ['./repeater.component.scss'],
     providers: [
         /**
          * Inicjalizujemy dyrektywę dostępności aby zbudoać hierarchię elementów i dać możliwość zarządzania dostępnością
          */
-        EwopAvailabilityDirective,
+      // EwopAvailabilityDirective,
         /**
          * Dodajemy deklaracje klasy ogólnej aby wstrzykiwanie i odnajdowanie komponentów wewnątrz siebie było możliwe.
          * Dzięki temu budujemy hierarchię kontrolek Ewop.
@@ -58,7 +57,7 @@ export class RepeaterComponent extends EwopHTMLElementC implements OnInit {
     public collection: any[] | any = [];
 
     @Output()
-    public click: EventEmitter<any> = new EventEmitter<any>();
+    public override click: EventEmitter<any> = new EventEmitter<any>();
 
     @Output()
     public dbclick: EventEmitter<any> = new EventEmitter<any>();
@@ -87,19 +86,19 @@ export class RepeaterComponent extends EwopHTMLElementC implements OnInit {
     public selectable: boolean = false;
 
     @HostBinding('class.repeater-clickable')
-    public pointer: boolean = false;
+    public override pointer: boolean = false;
 
     @Input()
     public element: any;
 
-    constructor(public injector: Injector,
+  constructor(public override injector: Injector,
                 @Optional() @Host() @SkipSelf() parentEwopComponent: EwopComponent) {
         super(injector, parentEwopComponent);
         this.mb3 = false;
 
     }
 
-    ngOnInit() {
+  override ngOnInit() {
         super.ngOnInit();
 
 
@@ -139,7 +138,7 @@ export class RepeaterComponent extends EwopHTMLElementC implements OnInit {
 
     }
 
-    ngOnChanges(changes: SimpleChanges) {
+  override ngOnChanges(changes: SimpleChanges) {
         super.ngOnChanges(changes);
         if (this.selectedChange.observers.length > 0) {
             this.selectable = true;

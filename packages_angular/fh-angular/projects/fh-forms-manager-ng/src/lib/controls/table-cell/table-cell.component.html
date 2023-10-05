@@ -6,7 +6,7 @@
             <div>{{ formatter.fromModel(value) | mask: formatter.pattern:formatter.thousandSeparator}}</div>
         </ng-container>
         <ng-container *ngIf="formatter == null">
-            <div [innerHTML]="(value | ewopml)">{{(value | ewopml) }}</div>
+          <div [innerHTML]="(value | fhml)">{{(value | fhml) }}</div>
         </ng-container>
     </ng-container>
 </td>

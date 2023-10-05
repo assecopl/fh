@@ -22,7 +22,7 @@ import {EwopComponent} from "./EwopComponent";
 export abstract class GroupingComponentC<T extends EwopHTMLElementC> extends EwopHTMLElementC implements OnInit, OnChanges, AfterContentInit {
 
 
-    constructor(public injector: Injector,
+  constructor(public override injector: Injector,
                 @Optional() @Host() @SkipSelf() parentEwopComponent: EwopComponent) {
         super(injector, parentEwopComponent);
     }
@@ -42,12 +42,12 @@ export abstract class GroupingComponentC<T extends EwopHTMLElementC> extends Ewo
      */
     public _subcomponents: T[] = [];
 
-    public abstract updateSubcomponent: (subcomponent: T, index: number) => void = null;
+  public abstract updateSubcomponent: (subcomponent: T, index: number) => void;
 
 
     public abstract getSubcomponentInstance(): new (...args: any[]) => T
 
-    public ngAfterContentInit(): void {
+  public override ngAfterContentInit(): void {
         if (this._subcomponents.length === 0) {
             //If components array was not fill programaticaly then we get it from QueryList.
             this._subcomponents = this.subcomponents.toArray();
@@ -56,17 +56,17 @@ export abstract class GroupingComponentC<T extends EwopHTMLElementC> extends Ewo
     }
 
     //Now we can access subcomponents
-    public ngOnInit(): void {
+  public override ngOnInit(): void {
         super.ngOnInit();
 
-        this.childEwopComponents.forEach((c) => {
-            if (c instanceof this.getSubcomponentInstance()) {
-                this._subcomponents.push(c);
-                if (this.availabilityDirective._myAvailability) {
-                    c.availabilityDirective._myAvailability = this.availabilityDirective._myAvailability
-                }
-            }
-        })
+    // this.childEwopComponents.forEach((c) => {
+    //     if (c instanceof this.getSubcomponentInstance()) {
+    //         this._subcomponents.push(c);
+    //         if (this.availabilityDirective._myAvailability) {
+    //             c.availabilityDirective._myAvailability = this.availabilityDirective._myAvailability
+    //         }
+    //     }
+    // })
 
     }
 
@@ -86,7 +86,7 @@ export abstract class GroupingComponentC<T extends EwopHTMLElementC> extends Ewo
         return this._subcomponents[index];
     }
 
-    ngOnChanges(changes: SimpleChanges) {
+  override ngOnChanges(changes: SimpleChanges) {
         super.ngOnChanges(changes);
     }
 

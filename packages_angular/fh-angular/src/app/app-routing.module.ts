@@ -3,7 +3,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {FhFormsManagerNgComponent} from "projects/fh-forms-manager-ng/src/lib/fh-forms-manager-ng.component";
 
 const routes: Routes = [
-    {path: 'poc', component: FhFormsManagerNgComponent}
+  {path: '/', component: FhFormsManagerNgComponent}
 ];
 
 @NgModule({

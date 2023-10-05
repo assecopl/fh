@@ -42,7 +42,8 @@
     "tslib": "2.3.0",
     "zone.js": "0.13.0",
     "@popperjs/core": "2.11.8",
-    "@angular/localize": "16.0.0"
+    "@angular/localize": "16.0.0",
+    "jquery": "3.6.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^16.0.0",

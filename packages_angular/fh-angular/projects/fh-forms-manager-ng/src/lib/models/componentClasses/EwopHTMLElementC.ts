@@ -180,9 +180,9 @@ export class EwopHTMLElementC extends EwopComponent implements OnInit, AfterView
   @HostBinding('class.pointer')
   public pointer: boolean = false;
 
-  constructor(public injector: Injector,
+  constructor(public override injector: Injector,
               @Optional() @Host() @SkipSelf() parentEwopComponent: EwopComponent) {
-    super(parentEwopComponent);
+    super(injector, parentEwopComponent);
     this.elementRef = this.injector.get(ElementRef, null);
     // this.availabilityDirective = this.injector.get(EwopAvailabilityDirective, null);
 

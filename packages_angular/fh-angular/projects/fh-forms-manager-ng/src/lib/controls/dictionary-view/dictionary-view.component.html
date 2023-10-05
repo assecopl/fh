@@ -75,7 +75,7 @@
         <ng-container *ngIf="formatter == null">
       <span [class.text-center]="horizontalAlign == 'CENTER'"
             [class.text-right]="horizontalAlign == 'RIGHT'"
-            [innerHTML]="(value | ewopml)">{{(value | ewopml) }}</span>
+            [innerHTML]="(value | fhml)">{{(value | fhml) }}</span>
         </ng-container>
     </ng-container>
     <i *ngIf="icon && iconAlignment == 'AFTER'" class="ml-2 {{ icon }}"></i>

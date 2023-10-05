@@ -166,7 +166,7 @@
 //  position: absolute!important;
 //}
 //
-//ewop-form#FormularzNowegoWnioskuFRM ewop-row[ng-reflect-inner-id='row_lista_spraw'] ewop-repeater {
+//ewop-form#FormularzNowegoWnioskuFRM ewop-row[ng-reflect-inner-id='row_lista_spraw'] fh-repeater {
 //  flex: 0 0 25%;
 //  max-width: 25%;
 //}
@@ -192,8 +192,8 @@
 //.white-space-pre-line {
 //  white-space: pre-line;
 //}
-//ddpzestrzeczfinfrm_siafr00038 ewop-repeater.bg-primary i.ewopml-tag-icon:before,
-//dopizestrzeczfinfrm_siafr00023 ewop-repeater.bg-primary i.ewopml-tag-icon:before,
+//ddpzestrzeczfinfrm_siafr00038 fh-repeater.bg-primary i.ewopml-tag-icon:before,
+//dopizestrzeczfinfrm_siafr00023 fh-repeater.bg-primary i.ewopml-tag-icon:before,
 //{
 //color: #fff!important;
 //}

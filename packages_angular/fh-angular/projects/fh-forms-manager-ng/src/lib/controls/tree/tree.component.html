@@ -1,16 +1,29 @@
+<!--<ul *ngIf="collapsedTree || treeElementTemplate == null" availabilityHtmlElement>-->
+<!--    <ng-container *ngFor="let e of subelements; let i = index;">-->
+<!--        <fh-tree-element (click)="setSelected(e)" [id]="e.id+'_'+i" width="md-12" [selected]="selected == e"-->
+<!--                           (treeElement)="processCollapsed($event)"-->
+<!--                           [expandableNode]="e[relation]?.length > 0"-->
+<!--                           [label]=" e[treeElementTemplate ? treeElementTemplate.label.replace(iterator+'.', ''): treeElement.label.replace(iterator+'.', '')]"></fh-tree-element>-->
+<!--        <ng-container *ngIf="e[relation]?.length > 0">-->
+<!--            <fh-tree [selected]="selected" (selectedChange)="setSelected($event)" [iterator]="iterator"-->
+<!--                       [collapsedTree]="activeElements[e.id+'_'+i] == false" [collection]="e[relation]"-->
+<!--                       [relation]="relation"-->
+<!--                       [treeElementTemplate]="treeElementTemplate ? treeElementTemplate : treeElement">-->
+<!--            </fh-tree>-->
+<!--        </ng-container>-->
+<!--    </ng-container>-->
+<!--</ul>-->
 <ul *ngIf="collapsedTree || treeElementTemplate == null" availabilityHtmlElement>
-    <ng-container *ngFor="let e of collection; let i = index;">
-        <ewop-tree-element (click)="setSelected(e)" [id]="e.id+'_'+i" width="md-12" [selected]="selected == e"
-                           (treeElement)="processCollapsed($event)"
-                           [expandableNode]="e[relation]?.length > 0"
-                           [label]=" e[treeElementTemplate ? treeElementTemplate.label.replace(iterator+'.', ''): treeElement.label.replace(iterator+'.', '')]"></ewop-tree-element>
-        <ng-container *ngIf="e[relation]?.length > 0">
-            <ewop-tree [selected]="selected" (selectedChange)="setSelected($event)" [iterator]="iterator"
-                       [collapsedTree]="activeElements[e.id+'_'+i] == false" [collection]="e[relation]"
-                       [relation]="relation"
-                       [treeElementTemplate]="treeElementTemplate ? treeElementTemplate : treeElement">
-            </ewop-tree>
+  <ng-container *ngFor="let e of subelements">
+    <fh-tree-element [formId]="formId" [id]="e.id" width="md-12" [selected]="selected == e"
+                     (treeElement)="processCollapsed($event)"
+                     [expandableNode]="e.subelements?.length > 0"
+                     [label]="e.label"></fh-tree-element>
+    <ng-container *ngIf="e.subelements?.length > 0">
+      <fh-tree [formId]="formId" [selected]="selected" (selectedChange)="setSelected($event)"
+               [collapsedTree]="activeElements[e.id] == false" [subelements]="e.subelements"
+               [treeElementTemplate]="treeElementTemplate ? treeElementTemplate : treeElement">
+      </fh-tree>
         </ng-container>
     </ng-container>
 </ul>
-

@@ -13,12 +13,14 @@
         </button>
         <div id="{{id}}ngbDropdownMenu" ngbDropdownMenu>
             <div class="row">
-                <ng-content></ng-content>
+              <ng-container *ngFor="let element of subelements">
+                <fh-dynamic-component [data]="element" [formId]="formId"></fh-dynamic-component>
+              </ng-container>
             </div>
         </div>
     </div>
 </ng-template>
 
 <ng-template #contentTemplate>
-    <span *ngIf="label" [innerHTML]="label | ewopml"></span>
+  <span *ngIf="label" [innerHTML]="label | fhml"></span>
 </ng-template>

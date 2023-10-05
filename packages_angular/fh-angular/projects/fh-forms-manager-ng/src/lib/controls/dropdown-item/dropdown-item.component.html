@@ -1,4 +1,4 @@
-<a [id]="id" ngbDropdownItem #dropItem (click)="onClick()" [availabilityHtmlElement]="elementRef" tabindex="0"
+<a [id]="id" ngbDropdownItem #dropItem (click)="onClick()" tabindex="0"
    (keydown.enter)="$event?.stopPropagation();$event?.preventDefault();dropItem.click();">
     <ng-container *ngIf="icon && iconAlignment == 'BEFORE'">
         <i class="{{ icon }}"> </i>

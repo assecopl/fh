@@ -12,8 +12,8 @@ export class SocketHandlerService {
     public context: string = 'socketForms'
 
     constructor(private util: Util) {
-        // this.activeConnector = new ConnectorService("ws://localhost:8090/fhdp-demo-app/socketForms")
-        // this.connectors.push(this.activeConnector);
+      this.activeConnector = new ConnectorService("ws://localhost:8090/fhdp-demo-app/socketForms")
+      this.connectors.push(this.activeConnector);
     }
 
 

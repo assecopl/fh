@@ -1,5 +1,5 @@
 <ng-container *ngIf="headingType == 'H1'">
-    <h1 [ngStyle]="styles" [availabilityHtmlElement]="elementRef">
+  <h1 [ngStyle]="styles">
         <ng-container *ngIf="hint else outputLabel">
     <span ngbTooltip="{{ hint }}" [placement]="hintPlacement.toLowerCase()" [triggers]="hintTrigger.toLowerCase()">
       <ng-container *ngTemplateOutlet="outputLabel"></ng-container>
@@ -8,7 +8,7 @@
     </h1>
 </ng-container>
 <ng-container *ngIf="headingType == 'H2'">
-    <h2 [ngStyle]="styles" [availabilityHtmlElement]="elementRef">
+  <h2 [ngStyle]="styles">
         <ng-container *ngIf="hint else outputLabel">
     <span ngbTooltip="{{ hint }}" [placement]="hintPlacement.toLowerCase()" [triggers]="hintTrigger.toLowerCase()">
       <ng-container *ngTemplateOutlet="outputLabel"></ng-container>
@@ -17,7 +17,7 @@
     </h2>
 </ng-container>
 <ng-container *ngIf="headingType == 'H3'">
-    <h3 [ngStyle]="styles" [availabilityHtmlElement]="elementRef">
+  <h3 [ngStyle]="styles">
         <ng-container *ngIf="hint else outputLabel">
     <span ngbTooltip="{{ hint }}" [placement]="hintPlacement.toLowerCase()" [triggers]="hintTrigger.toLowerCase()">
       <ng-container *ngTemplateOutlet="outputLabel"></ng-container>
@@ -26,7 +26,7 @@
     </h3>
 </ng-container>
 <ng-container *ngIf="headingType == 'H4'">
-    <h4 [ngStyle]="styles" [availabilityHtmlElement]="elementRef">
+  <h4 [ngStyle]="styles">
         <ng-container *ngIf="hint else outputLabel">
     <span ngbTooltip="{{ hint }}" [placement]="hintPlacement.toLowerCase()" [triggers]="hintTrigger.toLowerCase()">
       <ng-container *ngTemplateOutlet="outputLabel"></ng-container>
@@ -35,7 +35,7 @@
     </h4>
 </ng-container>
 <ng-container *ngIf="headingType == 'H5'">
-    <h5 [ngStyle]="styles" [availabilityHtmlElement]="elementRef">
+  <h5 [ngStyle]="styles">
         <ng-container *ngIf="hint else outputLabel">
     <span ngbTooltip="{{ hint }}" [placement]="hintPlacement.toLowerCase()" [triggers]="hintTrigger.toLowerCase()">
       <ng-container *ngTemplateOutlet="outputLabel"></ng-container>
@@ -44,7 +44,7 @@
     </h5>
 </ng-container>
 <ng-container *ngIf="headingType == 'H6'">
-    <h6 [ngStyle]="styles" [availabilityHtmlElement]="elementRef">
+  <h6 [ngStyle]="styles">
         <ng-container *ngIf="hint else outputLabel">
     <span ngbTooltip="{{ hint }}" [placement]="hintPlacement.toLowerCase()" [triggers]="hintTrigger.toLowerCase()">
       <ng-container *ngTemplateOutlet="outputLabel"></ng-container>
@@ -53,7 +53,7 @@
     </h6>
 </ng-container>
 <ng-container *ngIf="headingType == 'Default' || headingType == 'Auto'">
-    <div [ngStyle]="styles" [availabilityHtmlElement]="elementRef">
+  <div [ngStyle]="styles">
         <ng-container *ngIf="hint else outputLabel">
     <span ngbTooltip="{{ hint }}" [placement]="hintPlacement.toLowerCase()" [triggers]="hintTrigger.toLowerCase()">
       <ng-container *ngTemplateOutlet="outputLabel"></ng-container>
@@ -69,10 +69,10 @@
     </ng-container>
     <ng-container *ngIf="value !== undefined && value !== null">
         <ng-container *ngIf="formatter != null">
-            <span>{{ formatter.fromModel(value) | mask: formatter.pattern:formatter.thousandSeparator}}</span>
+          <span>{{value}}</span>
         </ng-container>
         <ng-container *ngIf="formatter == null">
-            <span [innerHTML]="(value | ewopml)">{{(value | ewopml) }}</span>
+          <span [innerHTML]="(value | fhml)">{{(value | fhml) }}</span>
         </ng-container>
     </ng-container>
     <i *ngIf="icon && iconAlignment == 'AFTER'" class="ml-2 {{ icon }}"></i>

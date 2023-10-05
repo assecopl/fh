@@ -12,7 +12,7 @@ export class FhMLService {
 
     constructor(private sanitizer: DomSanitizer) {
         this.supportedTags = [];
-        this.escapedMap = { // not escaping ' = / as they are EWOPML input and output characters
+      this.escapedMap = { // not escaping ' = / as they are fhml input and output characters
             '&': '&amp;',
             '<': '&lt;',
             '>': '&gt;',
@@ -22,8 +22,8 @@ export class FhMLService {
 
         this.registerTag('b', function (match, contents) {
             const span = document.createElement('span');
-            span.classList.add('ewopml');
-            span.classList.add('ewopml-tag-b');
+          span.classList.add('fhml');
+          span.classList.add('fhml-tag-b');
 
             span.innerHTML = contents;
 
@@ -31,8 +31,8 @@ export class FhMLService {
         });
         this.registerTag('i', function (match, contents) {
             const span = document.createElement('span');
-            span.classList.add('ewopml');
-            span.classList.add('ewopml-tag-i');
+          span.classList.add('fhml');
+          span.classList.add('fhml-tag-i');
 
             span.innerHTML = contents;
 
@@ -40,8 +40,8 @@ export class FhMLService {
         });
         this.registerTag('u', function (match, contents) {
             const span = document.createElement('span');
-            span.classList.add('ewopml');
-            span.classList.add('ewopml-tag-u');
+          span.classList.add('fhml');
+          span.classList.add('fhml-tag-u');
 
             span.innerHTML = contents;
 
@@ -49,8 +49,8 @@ export class FhMLService {
         });
         this.registerTag('lt', function (match, contents) {
             const span = document.createElement('span');
-            span.classList.add('ewopml');
-            span.classList.add('ewopml-tag-lt');
+          span.classList.add('fhml');
+          span.classList.add('fhml-tag-lt');
 
             span.innerHTML = contents;
 
@@ -58,8 +58,8 @@ export class FhMLService {
         });
         this.registerTag('size', function (match, size, contents) {
             const span = document.createElement('span');
-            span.classList.add('ewopml');
-            span.classList.add('ewopml-tag-size');
+          span.classList.add('fhml');
+          span.classList.add('fhml-tag-size');
             span.style.fontSize = size + 'px';
 
             span.innerHTML = contents;
@@ -68,8 +68,8 @@ export class FhMLService {
         }, '([0-9]+)');
         this.registerTag('color', function (match, color, contents) {
             const span = document.createElement('span');
-            span.classList.add('ewopml');
-            span.classList.add('ewopml-tag-color');
+          span.classList.add('fhml');
+          span.classList.add('fhml-tag-color');
             span.style.color = color;
 
             span.innerHTML = contents;
@@ -78,8 +78,8 @@ export class FhMLService {
         }, '(#?[a-z0-9]+)');
         this.registerTag('icon', function (match, iconName) {
             const icon = document.createElement('i');
-            icon.classList.add('ewopml');
-            icon.classList.add('ewopml-tag-icon');
+          icon.classList.add('fhml');
+          icon.classList.add('fhml-tag-icon');
             iconName.split(' ').forEach(function (cssClass) {
                 icon.classList.add(cssClass);
             });
@@ -95,7 +95,7 @@ export class FhMLService {
                 tagConstructor: (match, contents) => {
 
                     var ul = document.createElement('sup');
-                    ul.classList.add('ewopml-sup');
+                  ul.classList.add('fhml-sup');
                     ul.innerHTML = contents;
 
                     return ul.outerHTML;
@@ -108,7 +108,7 @@ export class FhMLService {
                 tagConstructor: (match, contents) => {
 
                     var ul = document.createElement('h1');
-                    ul.classList.add('ewopml-h1');
+                  ul.classList.add('fhml-h1');
                     ul.innerHTML = contents;
 
                     return ul.outerHTML;
@@ -121,7 +121,7 @@ export class FhMLService {
                 tagConstructor: (match, contents) => {
 
                     var ul = document.createElement('h2');
-                    ul.classList.add('ewopml-h2');
+                  ul.classList.add('fhml-h2');
                     ul.innerHTML = contents;
 
                     return ul.outerHTML;
@@ -134,7 +134,7 @@ export class FhMLService {
                 tagConstructor: (match, contents) => {
 
                     var ul = document.createElement('h3');
-                    ul.classList.add('ewopml-h3');
+                  ul.classList.add('fhml-h3');
                     ul.innerHTML = contents;
 
                     return ul.outerHTML;
@@ -147,7 +147,7 @@ export class FhMLService {
                 tagConstructor: (match, contents) => {
 
                     var ul = document.createElement('h4');
-                    ul.classList.add('ewopml-h4');
+                  ul.classList.add('fhml-h4');
                     ul.innerHTML = contents;
 
                     return ul.outerHTML;
@@ -160,7 +160,7 @@ export class FhMLService {
                 tagConstructor: (match, contents) => {
 
                     var ul = document.createElement('h5');
-                    ul.classList.add('ewopml-h5');
+                  ul.classList.add('fhml-h5');
                     ul.innerHTML = contents;
 
                     return ul.outerHTML;
@@ -173,7 +173,7 @@ export class FhMLService {
                 tagConstructor: (match, contents) => {
 
                     var ul = document.createElement('h6');
-                    ul.classList.add('ewopml-h6');
+                  ul.classList.add('fhml-h6');
                     ul.innerHTML = contents;
 
                     return ul.outerHTML;
@@ -323,7 +323,7 @@ export class FhMLService {
                 tagConstructor: (match, contents) => {
 
                     var blockquote = document.createElement('footer');
-                    blockquote.classList.add('ewopml');
+                  blockquote.classList.add('fhml');
                     blockquote.classList.add('blockquote-footer')
 
                     blockquote.innerHTML = contents;
@@ -340,8 +340,8 @@ export class FhMLService {
                 tagConstructor: (match, contents) => {
 
                     var small = document.createElement('small');
-                    small.classList.add('ewopml');
-                    small.classList.add('ewopml-small')
+                  small.classList.add('fhml');
+                  small.classList.add('fhml-small')
                     small.innerHTML = contents;
 
                     return small.outerHTML;
@@ -357,7 +357,7 @@ export class FhMLService {
                 tagConstructor: (match, contents) => {
 
                     var ul = document.createElement('ul');
-                    ul.classList.add('ewopml');
+                  ul.classList.add('fhml');
                     ul.innerHTML = contents;
 
                     return ul.outerHTML;
@@ -370,7 +370,7 @@ export class FhMLService {
                 tag: 'li',
                 tagConstructor: (match, contents) => {
                     var li = document.createElement('li');
-                    li.classList.add('ewopml');
+                  li.classList.add('fhml');
                     li.innerHTML = contents;
                     return li.outerHTML;
                 },
@@ -398,9 +398,9 @@ export class FhMLService {
                 tagConstructor: (match, contents) => {
 
                     var span = document.createElement('span');
-                    span.classList.add('ewopml');
+                  span.classList.add('fhml');
                     span.classList.add('highlight');
-                    span.classList.add('ewopml-code');
+                  span.classList.add('fhml-code');
                     span.classList.add('p-2');
                     span.style.background = '#dcdce5';
                     span.style.display = 'inline-block'

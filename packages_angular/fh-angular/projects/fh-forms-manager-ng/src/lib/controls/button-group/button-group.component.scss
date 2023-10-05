@@ -10,25 +10,25 @@
   // Prevent double borders when buttons are next to each other
   > ewop-button:not(:first-child) > .btn,
   > ewop-button-group .btn-group:not(:first-child),
-  > ewop-repeater:not(:first-child) > ewop-button > .btn {
+  > fh-repeater:not(:first-child) > ewop-button > .btn {
     margin-left: -$btn-border-width;
   }
 
   // Reset rounded corners
   > ewop-button:not(:last-child):not(.dropdown-toggle) > .btn,
   > ewop-button-group .btn-group:not(:last-child) > .btn,
-  > ewop-repeater:not(:last-child) > ewop-button:not(.dropdown-toggle) > .btn {
+  > fh-repeater:not(:last-child) > ewop-button:not(.dropdown-toggle) > .btn {
     @include border-right-radius(0);
   }
 
   > ewop-button:not(:first-child) > .btn,
   > ewop-button-group .btn-group:not(:first-child) > .btn,
-  > ewop-repeater:not(:first-child) > ewop-button > .btn {
+  > fh-repeater:not(:first-child) > ewop-button > .btn {
     @include border-left-radius(0);
   }
 
   > ewop-button,
-  > ewop-repeater > ewop-button {
+  > fh-repeater > ewop-button {
     position: relative;
     -ms-flex: 1 1 auto;
     flex: 1 1 auto;
@@ -43,7 +43,7 @@
 
   &.breadcrumb {
     .breadcrumb-item + .breadcrumb-item::before,
-    ewop-repeater + ewop-repeater ewop-button.breadcrumb-item::before {
+    fh-repeater + fh-repeater ewop-button.breadcrumb-item::before {
       display: inline-block;
       padding-right: 0.5rem;
       font-family: "Font Awesome 5 Free";
@@ -56,7 +56,7 @@
       position: relative;
     }
 
-    ewop-repeater + ewop-repeater > div.row {
+    fh-repeater + fh-repeater > div.row {
       margin-left: -8px !important;
     }
   }

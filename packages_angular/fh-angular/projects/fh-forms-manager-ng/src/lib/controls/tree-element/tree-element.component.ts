@@ -11,18 +11,17 @@ import {
     SkipSelf, TemplateRef, ViewChild
 } from '@angular/core';
 import {EwopHTMLElementC} from "../../models/componentClasses/EwopHTMLElementC";
-import {EwopAvailabilityDirective} from "@ewop/ng-availability";
 import {EwopComponent} from "../../models/componentClasses/EwopComponent";
 
 @Component({
-    selector: 'ewop-tree-element',
+  selector: 'fh-tree-element',
     templateUrl: './tree-element.component.html',
     styleUrls: ['./tree-element.component.scss'],
     providers: [
         /**
          * Inicjalizujemy dyrektywę dostępności aby zbudoać hierarchię elementów i dać możliwość zarządzania dostępnością
          */
-        EwopAvailabilityDirective,
+      // EwopAvailabilityDirective,
         /**
          * Dodajemy deklaracje klasy ogólnej aby wstrzykiwanie i odnajdowanie komponentów wewnątrz siebie było możliwe.
          * Dzięki temu budujemy hierarchię kontrolek Ewop.
@@ -37,7 +36,7 @@ export class TreeElementComponent extends EwopHTMLElementC implements OnInit {
     public pl3: boolean = true;
 
     //@Override bottom margin.
-    mb3 = false;
+  override mb3 = false;
 
     @Input()
     icon: string;
@@ -64,7 +63,7 @@ export class TreeElementComponent extends EwopHTMLElementC implements OnInit {
         this.collapsed = true;
     }
 
-    ngOnInit(): void {
+  override ngOnInit(): void {
         super.ngOnInit();
         //Override width, this component shuld't have width set.
         this.hostWidth = "";
@@ -78,6 +77,23 @@ export class TreeElementComponent extends EwopHTMLElementC implements OnInit {
         }
 
         this.treeElement.emit({id: this.id, collpased: this.collapsed});
+      this.fireEventWithLock('onLabelClick', "onLabelClick");
     }
+
+  labelClicked(event) {
+    event.stopPropagation();
+
+    // if (this.nextLevelExpandable) {
+    // this.changesQueue.queueAttributeChange('collapsed', this.collapsed);
+    // } else {
+    this.selected = !this.selected;
+    // this.changesQueue.queueAttributeChange('selected', this.selected);
+    // }
+
+    // if (this.onLabelClick) {
+    this.fireEventWithLock('onLabelClick', "onLabelClick");
+    // }
+    return false;
+  };
 
 }

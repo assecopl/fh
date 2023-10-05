@@ -12,16 +12,10 @@ import {
 } from '@angular/core';
 import {EwopHTMLElementC} from '../../models/componentClasses/EwopHTMLElementC';
 import {BootstrapWidthEnum} from '../../models/enums/BootstrapWidthEnum';
-import {DocumentedComponent, EwopML} from '@ewop/ng-core';
 import {IconAligmentType} from '../../models/CommonTypes';
-import {EwopAvailabilityDirective} from "@ewop/ng-availability";
 import {EwopComponent} from "../../models/componentClasses/EwopComponent";
+import {FhMLService} from "projects/fh-forms-manager-ng/src/lib/service/fh-ml.service";
 
-@DocumentedComponent({
-    category: DocumentedComponent.Category.INPUTS_AND_VALIDATION,
-    value: "Label component is responsible for displaying value.",
-    icon: "fa fa-font"
-})
 @Component({
     selector: 'ewop-output-label',
     templateUrl: './output-label.component.html',
@@ -30,7 +24,6 @@ import {EwopComponent} from "../../models/componentClasses/EwopComponent";
         /**
          * Inicjalizujemy dyrektywę dostępności aby zbudoać hierarchię elementów i dać możliwość zarządzania dostępnością
          */
-        EwopAvailabilityDirective,
         /**
          * Dodajemy deklaracje klasy ogólnej aby wstrzykiwanie i odnajdowanie komponentów wewnątrz siebie było możliwe.
          * Dzięki temu budujemy hierarchię kontrolek Ewop.
@@ -40,7 +33,7 @@ import {EwopComponent} from "../../models/componentClasses/EwopComponent";
 })
 export class OutputLabelComponent extends EwopHTMLElementC implements OnInit {
 
-    public width: string = BootstrapWidthEnum.MD2;
+  public override width: string = BootstrapWidthEnum.MD2;
 
     @Input()
     public value: any;
@@ -62,10 +55,10 @@ export class OutputLabelComponent extends EwopHTMLElementC implements OnInit {
     public headingType: "H1" | "H2" | "H3" | "H4" | "H5" | "H6" | "Default" | "Auto" = "Default";
 
     @Output()
-    public click: EventEmitter<any> = new EventEmitter<any>();
+    public override click: EventEmitter<any> = new EventEmitter<any>();
 
     @HostBinding('attr.tabindex')
-    public tabindex: number = null;
+    public override tabindex: number = null;
 
     @HostListener('keydown.enter', ['$event']) onEnterHandler(event: KeyboardEvent) {
         if (this.click?.observers.length > 0) {
@@ -77,15 +70,15 @@ export class OutputLabelComponent extends EwopHTMLElementC implements OnInit {
     }
 
 
-    constructor(public injector: Injector,
+  constructor(public override injector: Injector,
                 @Optional() @Host() @SkipSelf() parentEwopComponent: EwopComponent) {
         super(injector, parentEwopComponent)
     }
 
-    ngOnInit() {
+  override ngOnInit() {
         super.ngOnInit();
 
-        let ewopml = this.injector.get(EwopML);
+    let ewopml = this.injector.get(FhMLService);
 
         this.processTextAlign();
         if (this.click?.observers.length > 0) {
@@ -111,7 +104,7 @@ export class OutputLabelComponent extends EwopHTMLElementC implements OnInit {
         }
     }
 
-    ngOnChanges(changes: SimpleChanges) {
+  override ngOnChanges(changes: SimpleChanges) {
         super.ngOnChanges(changes);
     }
 

@@ -24,18 +24,8 @@ import {
 import {EwopHTMLElementC} from './EwopHTMLElementC';
 import {InputTypeEnum} from '../enums/InputTypeEnum';
 import {IconAligmentType} from '../CommonTypes'; //  Unused becouse of compiler problem
-import {
-    EwopContainer,
-    EwopValidators,
-    IValidatedComponent,
-    TypeUtils,
-    ValidationUtils,
-    EwopFormControl,
-    EwopNotificationService, ValidationResults, EwopFormatterService, EwopFormatter
-} from "@ewop/ng-core";
 import {EwopComponent} from "./EwopComponent";
 import {FormComponent} from '../../controls/form/form.component';
-import {AvailabilityEnum} from "@ewop/ng-availability";
 import Big from "big.js";
 
 /**
@@ -44,14 +34,14 @@ import Big from "big.js";
  *
  */
 @Directive()
-export class EwopReactiveInputC extends EwopHTMLElementC implements OnInit, OnChanges, IValidatedComponent {
+export class EwopReactiveInputC extends EwopHTMLElementC implements OnInit, OnChanges {
 
     public controlContainer: ControlContainer; //FormGroupDirective used to register control.
-    public ewopNotificationService: EwopNotificationService; //FormGroupDirective used to register control.
-    public validationHandler: ValidationResults;
+  // public ewopNotificationService: EwopNotificationService; //FormGroupDirective used to register control.
+  // public validationHandler: ValidationResults;
 
     @Input()
-    public control: EwopFormControl = null;
+    public control: any = null;
 
     public form: FormGroup | any;
     public iForm: FormComponent;
@@ -126,7 +116,7 @@ export class EwopReactiveInputC extends EwopHTMLElementC implements OnInit, OnCh
      * @param injector
      * @param parentEwopComponent
      */
-    constructor(public injector: Injector,
+    constructor(public override injector: Injector,
                 @Optional() @Host() @SkipSelf() parentEwopComponent: EwopComponent,
                 iForm: any) {
         super(injector, parentEwopComponent);
@@ -138,21 +128,21 @@ export class EwopReactiveInputC extends EwopHTMLElementC implements OnInit, OnCh
         return [() => null];
     }
 
-    ngOnInit(): void {
+  override ngOnInit(): void {
         super.ngOnInit();
         /**
          * Pobieram nadrzędny kontener kontrolek, wstrzyknięty z elementu hosta-a
          */
         this.controlContainer = this.injector.get(ControlContainer, null);
-        this.ewopNotificationService = this.injector.get(EwopNotificationService, null);
-        this.validationHandler = this.injector.get(ValidationResults, null);
+    // this.ewopNotificationService = this.injector.get(EwopNotificationService, null);
+    // this.validationHandler = this.injector.get(ValidationResults, null);
 
 
-        if (this.controlContainer) {
-            //Control can be pass as input.
-            this.control = this.control ? this.control : this.controlContainer.control.get(this.name) as EwopFormControl;
-            this.resolveFormControl();
-        }
+    // if (this.controlContainer) {
+    //     //Control can be pass as input.
+    //     this.control = this.control ? this.control : this.controlContainer.control.get(this.name) as EwopFormControl;
+    //     this.resolveFormControl();
+    // }
 
         this.processAriaLabel();
 
@@ -241,22 +231,22 @@ export class EwopReactiveInputC extends EwopHTMLElementC implements OnInit, OnCh
         }
 
         let disabled = false;
-        if (this.availabilityDirective) {
-            if (this.availabilityDirective.calculateAvailability() != AvailabilityEnum.EDIT) {
-                disabled = true;
-            }
-        }
+      // if (this.availabilityDirective) {
+      //     if (this.availabilityDirective.calculateAvailability() != AvailabilityEnum.EDIT) {
+      //         disabled = true;
+      //     }
+      // }
 
-        const formControl: EwopFormControl = new EwopFormControl({value: v, disabled: disabled}, {
-            // modelToControlValidator musi być zawsze pierwszy!!
-            validators: [EwopValidators.modelToControlValidator(this),
-                ...ValidationUtils.resolveStandradValidators(this),
-                ...this.addCustomValidators()],
-            updateOn: updateOn
-        });
+      // const formControl: EwopFormControl = new EwopFormControl({value: v, disabled: disabled}, {
+      //     // modelToControlValidator musi być zawsze pierwszy!!
+      //     validators: [EwopValidators.modelToControlValidator(this),
+      //         ...ValidationUtils.resolveStandradValidators(this),
+      //         ...this.addCustomValidators()],
+      //     updateOn: updateOn
+      // });
 
-        formControl.componentReference = this;
-        formControl.componentId = this.id;
+      // formControl.componentReference = this;
+      // formControl.componentId = this.id;
 
         return formControl;
     }

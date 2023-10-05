@@ -15,16 +15,11 @@ import {
 } from '@angular/core';
 import {EwopHTMLElementC} from '../../models/componentClasses/EwopHTMLElementC';
 import {BootstrapWidthEnum} from '../../models/enums/BootstrapWidthEnum';
-import {DocumentedComponent, EwopML} from "@ewop/ng-core";
-import {EwopAvailabilityDirective} from "@ewop/ng-availability";
 import {EwopComponent} from "../../models/componentClasses/EwopComponent";
 import {DomSanitizer} from "@angular/platform-browser";
+import {FhMLService} from "projects/fh-forms-manager-ng/src/lib/service/fh-ml.service";
 
-@DocumentedComponent({
-    category: DocumentedComponent.Category.ARRANGEMENT,
-    value: "PanelGroup component is responsible for grouping subelements with optional panel-header",
-    icon: "fa fa-object-group"
-})
+
 @Component({
     selector: 'ewop-panel-group',
     templateUrl: './panel-group.component.html',
@@ -33,7 +28,6 @@ import {DomSanitizer} from "@angular/platform-browser";
         /**
          * Inicjalizujemy dyrektywę dostępności aby zbudoać hierarchię elementów i dać możliwość zarządzania dostępnością
          */
-        EwopAvailabilityDirective,
         /**
          * Dodajemy deklaracje klasy ogólnej aby wstrzykiwanie i odnajdowanie komponentów wewnątrz siebie było możliwe.
          * Dzięki temu budujemy hierarchię kontrolek Ewop.
@@ -43,7 +37,7 @@ import {DomSanitizer} from "@angular/platform-browser";
 })
 export class PanelGroupComponent extends EwopHTMLElementC implements OnInit {
 
-    width: string = BootstrapWidthEnum.MD12;
+  override width: string = BootstrapWidthEnum.MD12;
 
     public accordion: boolean = false;
 
@@ -65,22 +59,22 @@ export class PanelGroupComponent extends EwopHTMLElementC implements OnInit {
     @Input() public customHeader: boolean = false;
 
     @HostBinding('class.mb-3')
-    public mb3: boolean = true;
+    public override mb3: boolean = true;
     @HostBinding('class.card')
     public hostCard: boolean = false;
 
 
     @Output() panelToggle = new EventEmitter<{ id: string, collapsed: boolean }>();
 
-    constructor(public injector: Injector,
+  constructor(public override injector: Injector,
                 @Optional() @Host() @SkipSelf() parentEwopComponent: EwopComponent, private sanitizer: DomSanitizer) {
         super(injector, parentEwopComponent);
 
     }
 
-    ngOnInit() {
+  override ngOnInit() {
         super.ngOnInit();
-        let ewopml = this.injector.get(EwopML);
+    let ewopml = this.injector.get(FhMLService);
         this.label = ewopml.transform(this.label);
         this.processCollapsible();
 
@@ -120,7 +114,7 @@ export class PanelGroupComponent extends EwopHTMLElementC implements OnInit {
     }
 
 
-    public ngOnChanges(changes: SimpleChanges) {
+  public override ngOnChanges(changes: SimpleChanges) {
         super.ngOnChanges(changes);
     }
 

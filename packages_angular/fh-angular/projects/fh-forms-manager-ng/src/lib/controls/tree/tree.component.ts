@@ -1,33 +1,32 @@
 import {
-    AfterContentInit,
-    AfterViewInit,
-    Component, ContentChild,
-    ContentChildren, EventEmitter,
-    forwardRef, Host,
+  Component,
+  ContentChild,
+  EventEmitter,
+  forwardRef,
+  Host,
     Injector,
-    Input, OnChanges,
+  Input,
+  OnChanges,
     OnInit,
-    Optional, Output,
-    QueryList,
-    SimpleChanges, SkipSelf, TemplateRef
+  Optional,
+  Output,
+  SimpleChanges,
+  SkipSelf
 } from '@angular/core';
-import {GroupingComponentC} from "../../models/componentClasses/GroupingComponentC";
 import {TreeElementComponent} from "../tree-element/tree-element.component";
 import {BootstrapWidthEnum} from "../../models/enums/BootstrapWidthEnum";
-import {EwopAvailabilityDirective} from "@ewop/ng-availability";
 import {EwopComponent} from "../../models/componentClasses/EwopComponent";
 import {EwopHTMLElementC} from "../../models/componentClasses/EwopHTMLElementC";
-import {valueReferenceToExpression} from "@angular/compiler-cli/src/ngtsc/annotations/src/util";
 
 @Component({
-    selector: 'ewop-tree',
+  selector: 'fh-tree',
     templateUrl: './tree.component.html',
     styleUrls: ['./tree.component.scss'],
     providers: [
         /**
          * Inicjalizujemy dyrektywę dostępności aby zbudoać hierarchię elementów i dać możliwość zarządzania dostępnością
          */
-        EwopAvailabilityDirective,
+      // EwopAvailabilityDirective,
         /**
          * Dodajemy deklaracje klasy ogólnej aby wstrzykiwanie i odnajdowanie komponentów wewnątrz siebie było możliwe.
          * Dzięki temu budujemy hierarchię kontrolek Ewop.
@@ -72,11 +71,11 @@ export class TreeComponent extends EwopHTMLElementC implements OnInit, OnChanges
     }
 
 
-    ngOnInit(): void {
+  override ngOnInit(): void {
         super.ngOnInit();
     }
 
-    ngOnChanges(changes: SimpleChanges) {
+  override ngOnChanges(changes: SimpleChanges) {
         super.ngOnChanges(changes);
     }
 

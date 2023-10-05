@@ -3,7 +3,7 @@ import {
     AfterViewInit,
     Directive,
     EventEmitter,
-    Host,
+  Host, Injector,
     Input,
     OnInit,
     Optional, QueryList,
@@ -11,7 +11,8 @@ import {
     ViewChild, ViewChildren,
     ViewContainerRef
 } from '@angular/core';
-import {FormComponent} from "projects/fh-forms-manager-ng/src/lib/controls/form/form.component";
+import {FormsManagerService} from "../../forms-manager.service";
+import * as $ from 'jquery';
 
 /**
  * Klasa odpowiedzialna za budowę drzewa komponentów EWOP
@@ -27,10 +28,15 @@ export class EwopComponent implements OnInit, AfterViewInit, AfterContentInit {
         return this.innerId;
     }
 
+  @Input()
+  public formId = null;
+
     @Input()
     public ariaLabel: string = null;
 
     public searchId: string = '';
+
+  protected formsManager: FormsManagerService;
 
     /**
      * For Input(EwopReactiveInputC) components this parameter is used as modelBinding parameter.
@@ -41,7 +47,7 @@ export class EwopComponent implements OnInit, AfterViewInit, AfterContentInit {
     public parentEwopComponent: EwopComponent = null;
     public childEwopComponents: EwopComponent[] = [];
 
-    constructor(@Optional() @Host() @SkipSelf() parentEwopComponent: EwopComponent) {
+  constructor(public injector: Injector, @Optional() @Host() @SkipSelf() parentEwopComponent: EwopComponent) {
         // super();
         this.innerId = this.constructor.name + '_' + ((Math.random() * 10000000000)).toFixed();
         this.name = this.innerId; //Prevent null/empty names - it must be set to prevent getting wrong control value for input-s without names.
@@ -49,6 +55,7 @@ export class EwopComponent implements OnInit, AfterViewInit, AfterContentInit {
         if (this.parentEwopComponent) {
             this.parentEwopComponent.childEwopComponents.push(this);
         }
+    this.formsManager = this.injector.get(FormsManagerService, null);
     }
 
     public findEwopComponent(id: string): EwopComponent {
@@ -96,8 +103,8 @@ export class EwopComponent implements OnInit, AfterViewInit, AfterContentInit {
     public ngOnInit(): void {
         // super.ngOnInit();
         //Ucinamy
-        const searchIds = this.id.split("_iteratorIndex_")
-        this.searchId = searchIds[0];
+      // const searchIds = this.id.split("_iteratorIndex_")
+      // this.searchId = searchIds[0];
 
     }
 
@@ -110,6 +117,48 @@ export class EwopComponent implements OnInit, AfterViewInit, AfterContentInit {
     ngAfterViewInit(): void {
 
     }
+
+  /* Fire event to backend */
+
+  public fireEvent(eventType, actionName, params = undefined) {
+    this.fireEventImpl(eventType, actionName, false, params);
+  };
+
+  /* Fire event to backend and lock application */
+
+  protected fireEventWithLock(eventType, actionName, params = undefined) {
+    this.fireEventImpl(eventType, actionName, true, params);
+  };
+
+  protected destroyed: boolean;
+
+  /* Fire event to backend */
+
+  protected fireEventImpl(eventType, actionName, doLock, params = undefined) {
+    if (this.destroyed) {
+      return;
+    }
+
+
+    var deferedEvent = {
+      component: this,
+      deferred: $.Deferred()
+    };
+
+    this.formsManager.eventQueue.push(deferedEvent);
+    if (this.formsManager.eventQueue.length == 1) {
+      deferedEvent.deferred.resolve();
+    }
+
+    var success = this.formsManager.fireEvent(eventType, actionName, this.formId, this.id, deferedEvent, doLock, params);
+    if (!success) {
+      this.formsManager.eventQueue.pop();
+    }
+  };
+
+  // protected fireHttpMultiPartEvent(eventType, actionName, url, data: FormData) {
+  //     return this.formsManager.fireHttpMultiPartEvent(eventType, actionName, this.formId, this.id, url, data);
+  // };
 
 }
 

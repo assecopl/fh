@@ -9,6 +9,7 @@
     "@angular/platform-browser-dynamic": "^16.0.0"
   },
   "dependencies": {
+    "jquery": "3.6.1",
     "tslib": "2.3.0",
     "moment": "^2.27.0",
     "rxjs": "^6.5.5",

@@ -8,18 +8,17 @@ import {
 } from '@angular/core';
 import {EwopHTMLElementC} from '../../models/componentClasses/EwopHTMLElementC';
 import {IconAligmentType} from "../../models/CommonTypes";
-import {EwopAvailabilityDirective} from "@ewop/ng-availability";
 import {EwopComponent} from "../../models/componentClasses/EwopComponent";
 
 @Component({
-    selector: 'ewop-dropdown-item',
+  selector: 'fh-dropdown-item',
     templateUrl: './dropdown-item.component.html',
     styleUrls: ['./dropdown-item.component.scss'],
     providers: [
         /**
          * Inicjalizujemy dyrektywę dostępności aby zbudoać hierarchię elementów i dać możliwość zarządzania dostępnością
          */
-        EwopAvailabilityDirective,
+      // EwopAvailabilityDirective,
         /**
          * Dodajemy deklaracje klasy ogólnej aby wstrzykiwanie i odnajdowanie komponentów wewnątrz siebie było możliwe.
          * Dzięki temu budujemy hierarchię kontrolek Ewop.
@@ -41,13 +40,13 @@ export class DropdownItemComponent extends EwopHTMLElementC implements OnInit {
     @Input()
     public url: string;
 
-    mb3 = false;
+  override mb3 = false;
 
-    constructor(public injector: Injector, @Optional() @Host() @SkipSelf() parentEwopComponent: EwopComponent) {
+  constructor(public override injector: Injector, @Optional() @Host() @SkipSelf() parentEwopComponent: EwopComponent) {
         super(injector, parentEwopComponent);
     }
 
-    ngOnInit() {
+  override ngOnInit() {
         super.ngOnInit();
     }
 
@@ -58,7 +57,7 @@ export class DropdownItemComponent extends EwopHTMLElementC implements OnInit {
         this.selectedButton.emit(this);
     }
 
-    ngOnChanges(changes: SimpleChanges) {
+  override ngOnChanges(changes: SimpleChanges) {
         super.ngOnChanges(changes);
     }
 }

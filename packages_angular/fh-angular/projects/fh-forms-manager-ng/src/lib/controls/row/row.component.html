@@ -1,5 +1,5 @@
-<div class="row mb-2" [ngClass]="rowStyleClasses" availabilityHtmlElement>
+<div class="row mb-2" [ngClass]="rowStyleClasses">
   <ng-container *ngFor="let element of subelements">
-    <fh-dynamic-component [data]="element"></fh-dynamic-component>
+    <fh-dynamic-component [data]="element" [formId]="formId"></fh-dynamic-component>
   </ng-container>
 </div>

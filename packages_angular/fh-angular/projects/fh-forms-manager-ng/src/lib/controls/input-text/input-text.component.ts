@@ -13,18 +13,11 @@ import {
 } from '@angular/core';
 import {InputTypeEnum} from '../../models/enums/InputTypeEnum';
 import {EwopReactiveInputC} from '../../models/componentClasses/EwopReactiveInputC';
-import {DocumentedComponent, EwopFormatter} from '@ewop/ng-core';
-import {EwopAvailabilityDirective} from "@ewop/ng-availability";
 import {BootstrapWidthEnum} from "./../../models/enums/BootstrapWidthEnum";
 import {EwopComponent} from "../../models/componentClasses/EwopComponent";
 import {FormComponent} from '../form/form.component';
 
-@DocumentedComponent({
-    category: DocumentedComponent.Category.INPUTS_AND_VALIDATION,
-    value: "InputText component is responsible for displaying simple field, where user can write some data" +
-        " plus label representing this field.",
-    icon: "fa fa-edit"
-})
+
 @Component({
     selector: 'ewop-input-text',
     templateUrl: './input-text.component.html',
@@ -33,7 +26,6 @@ import {FormComponent} from '../form/form.component';
         /**
          * Inicjalizujemy dyrektywę dostępności aby zbudoać hierarchię elementów i dać możliwość zarządzania dostępnością
          */
-        EwopAvailabilityDirective,
         /**
          * Dodajemy deklaracje klasy ogólnej aby wstrzykiwanie i odnajdowanie komponentów wewnątrz siebie było możliwe.
          * Dzięki temu budujemy hierarchię kontrolek Ewop.
@@ -43,7 +35,7 @@ import {FormComponent} from '../form/form.component';
 })
 export class InputTextComponent extends EwopReactiveInputC implements OnInit {
 
-    public width = BootstrapWidthEnum.MD3;
+  public override width = BootstrapWidthEnum.MD3;
 
     @Input('mask')
     public pattern: string = null;
@@ -65,27 +57,27 @@ export class InputTextComponent extends EwopReactiveInputC implements OnInit {
 
     @ViewChild('inputRef', {static: false}) inputRef: ElementRef = null;
 
-    constructor(public injector: Injector,
+  constructor(public override injector: Injector,
                 @Optional() @Host() @SkipSelf() parentEwopComponent: EwopComponent,
                 @Optional() @Host() @SkipSelf() iForm: FormComponent
     ) {
         super(injector, parentEwopComponent, iForm);
     }
 
-    ngOnInit() {
+  override ngOnInit() {
         super.ngOnInit();
         if (this.height || this.rowsCount > 1 || this.rowsCountAuto) {
             this.inputType = InputTypeEnum.textarea;
         }
 
-        if (this.pattern) {
-            // this.pattern = this.pattern.replace("M", "G");
-            this.formatter = new EwopFormatter(this.pattern, null)
-        }
+    // if (this.pattern) {
+    //     // this.pattern = this.pattern.replace("M", "G");
+    //     this.formatter = new EwopFormatter(this.pattern, null)
+    // }
 
     }
 
-    ngOnChanges(changes: SimpleChanges) {
+  override ngOnChanges(changes: SimpleChanges) {
         super.ngOnChanges(changes);
     }
 
