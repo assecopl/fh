@@ -17,15 +17,15 @@ public class WCAGService {
     @Getter
     public String cssClassForContrast;
 
-    @Value("${fh.web.highContrast.cssClass:fh-size-2x}")
+    @Value("${fh.web.fontSize2x.cssClass:fh-size-2x}")
     @Getter
     public String cssClassForSize2;
 
-    @Value("${fh.web.highContrast.cssClass:fh-size-4x}")
+    @Value("${fh.web.fontSize4x.cssClass:fh-size-4x}")
     @Getter
     public String cssClassForSize4;
 
-    @Value("${fh.web.highContrast.cssClass:fh-images-hidden}")
+    @Value("${fh.web.imagesHidden.cssClass:fh-images-hidden}")
     @Getter
     public String cssClassForImagesHidden;
 
