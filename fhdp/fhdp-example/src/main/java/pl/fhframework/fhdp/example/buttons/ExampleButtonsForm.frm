@@ -4,7 +4,7 @@
     <Row>
         <HighContrastButtons label="contrast" width="md-12"/>
         <FontSizeButtons label="Font sizes" width="md-12"/>
-
+        <ImagesSwitchButtons label="Images:" width="md-12" styleClasses="contrastImageButtons"/>
     </Row>
     <Row>
         <Button  id="buttonCode6_1" width="md-4" label="Button without defined style" onClick="testError"/>

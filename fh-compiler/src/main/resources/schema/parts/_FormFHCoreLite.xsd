@@ -325,6 +325,15 @@
         <xs:attribute type="xs:string" name="label"/>
     </xs:complexType>
 
+    <xs:complexType name="ImagesSwitchButtonsType" mixed="true">
+        <xs:choice maxOccurs="2" minOccurs="0">
+            <xs:element type="ButtonType" name="Button"/>
+        </xs:choice>
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="activeButton"/>
+        <xs:attribute type="xs:string" name="label"/>
+    </xs:complexType>
+
     <xs:complexType name="FontSizeButtonsType" mixed="true">
         <xs:choice maxOccurs="2" minOccurs="0">
             <xs:element type="ButtonType" name="Button"/>
@@ -846,6 +855,7 @@
             <xs:element type="ButtonType" name="Button"/>
             <xs:element type="ButtonGroupType" name="ButtonGroup"/>
             <xs:element type="HighContrastButtonsType" name="HighContrastButtons"/>
+            <xs:element type="ImagesSwitchButtonsType" name="ImagesSwitchButtons"/>
             <xs:element type="FontSizeButtonsType" name="FontSizeButtons"/>
             <xs:element type="InputTextType" name="InputText"/>
             <xs:element type="OutputLabelType" name="OutputLabel"/>
@@ -903,6 +913,7 @@
             <xs:element type="ButtonType" name="Button"/>
             <xs:element type="ButtonGroupType" name="ButtonGroup"/>
             <xs:element type="HighContrastButtonsType" name="HighContrastButtons"/>
+            <xs:element type="ImagesSwitchButtonsType" name="ImagesSwitchButtons"/>
             <xs:element type="FontSizeButtonsType" name="FontSizeButtons"/>
             <xs:element type="InputTextType" name="InputText"/>
             <xs:element type="OutputLabelType" name="OutputLabel"/>
@@ -957,6 +968,7 @@
             <xs:element type="ButtonType" name="Button"/>
             <xs:element type="ButtonGroupType" name="ButtonGroup"/>
             <xs:element type="HighContrastButtonsType" name="HighContrastButtons"/>
+            <xs:element type="ImagesSwitchButtonsType" name="ImagesSwitchButtons"/>
             <xs:element type="FontSizeButtonsType" name="FontSizeButtons"/>
             <xs:element type="InputTextType" name="InputText"/>
             <xs:element type="OutputLabelType" name="OutputLabel"/>
@@ -1360,6 +1372,7 @@
             <xs:element type="ButtonType" name="Button"/>
             <xs:element type="ButtonGroupType" name="ButtonGroup"/>
             <xs:element type="HighContrastButtonsType" name="HighContrastButtons"/>
+            <xs:element type="ImagesSwitchButtonsType" name="ImagesSwitchButtons"/>
             <xs:element type="FontSizeButtonsType" name="FontSizeButtons"/>
             <xs:element type="DropdownType" name="Dropdown"/>
             <xs:element type="InputTextType" name="InputText"/>
@@ -1422,6 +1435,7 @@
             <xs:element type="ButtonType" name="Button"/>
             <xs:element type="ButtonGroupType" name="ButtonGroup"/>
             <xs:element type="HighContrastButtonsType" name="HighContrastButtons"/>
+            <xs:element type="ImagesSwitchButtonsType" name="ImagesSwitchButtons"/>
             <xs:element type="FontSizeButtonsType" name="FontSizeButtons"/>
             <xs:element type="DropdownType" name="Dropdown"/>
             <xs:element type="InputTextType" name="InputText"/>
@@ -1613,6 +1627,7 @@
             <xs:element type="ButtonType" name="Button"/>
             <xs:element type="ButtonGroupType" name="ButtonGroup"/>
             <xs:element type="HighContrastButtonsType" name="HighContrastButtons"/>
+            <xs:element type="ImagesSwitchButtonsType" name="ImagesSwitchButtons"/>
             <xs:element type="FontSizeButtonsType" name="FontSizeButtons"/>
             <xs:element type="InputTextType" name="InputText"/>
             <xs:element type="OutputLabelType" name="OutputLabel"/>
@@ -1866,6 +1881,7 @@
             <xs:element type="ButtonType" name="Button"/>
             <xs:element type="ButtonGroupType" name="ButtonGroup"/>
             <xs:element type="HighContrastButtonsType" name="HighContrastButtons"/>
+            <xs:element type="ImagesSwitchButtonsType" name="ImagesSwitchButtons"/>
             <xs:element type="FontSizeButtonsType" name="FontSizeButtons"/>
             <xs:element type="InputTextType" name="InputText"/>
             <xs:element type="OutputLabelType" name="OutputLabel"/>
