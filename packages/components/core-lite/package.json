@@ -30,7 +30,7 @@
     "copyfiles": "2.4.1",
     "@fortawesome/fontawesome-free": "5.15.3",
     "js-cookie": "2.2.1",
-    "focus-trap": "5.1.0",
+    "focus-trap": "7.5.3",
     "pako": "2.1.0"
   }
 }

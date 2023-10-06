@@ -23,6 +23,7 @@ interface Props {
     clickInPopup: (arg: boolean) => void;
     popperId: string;
     parentInput: HTMLInputElement;
+    container: HTMLElement;
 }
 
 export const DictionaryComboFhDPPopperTable: React.FC<Props> = (props: Props) => {
@@ -43,7 +44,8 @@ export const DictionaryComboFhDPPopperTable: React.FC<Props> = (props: Props) =>
         backgroundColor,
         translate,
         popperId,
-        parentInput
+        parentInput,
+        container
     } = props;
     let {rows} = props;
     const popperElement = React.useRef(null);
@@ -413,7 +415,7 @@ export const DictionaryComboFhDPPopperTable: React.FC<Props> = (props: Props) =>
         //   console.log('node', node.id, node);
         //   // node.remove();
         // }
-        console.log('create portal')
+
         return ReactDOM.createPortal((
             <div ref={popperElement} id={popperId} className={'MuiPaper-root'}
                  style={{...styles.popper, ...popperDisplay}} {...attributes.popper} onClick={unlockClickInPopup}>
@@ -437,7 +439,7 @@ export const DictionaryComboFhDPPopperTable: React.FC<Props> = (props: Props) =>
                         </tbody>
                     </table>
                 </div>
-            </div>), document.getElementById('fh-layout-standard'), `dictionary-combo-popper-portal-key`);
+            </div>), container ? container : document.body, `dictionary-combo-popper-portal-key`);
     }
 
     return (

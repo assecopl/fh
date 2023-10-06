@@ -538,6 +538,7 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
             }
         }
         window['handlePopupClose'] = handlePopupClose;
+        const formContainer = this.getFormFocusTrapElement();
         ReactDOM.render(createElement(DictionaryComboFhDPPopperTable, {
             title: this.title,
             columns: this.columns,
@@ -579,7 +580,8 @@ class DictionaryComboFhDP extends ComboFhDP implements LanguageChangeObserver {
             clickInPopup: this.setClickInPopup,
             translate: (string: string, args?: any, code?: string) => this.i18n.translateString(string, args, code || this.languageWrapped),
             popperId: this.popperId,
-            parentInput: this.input
+            parentInput: this.input,
+            container: formContainer
         }), this.divTooltip);
         this.clickInPopup = false;
     }

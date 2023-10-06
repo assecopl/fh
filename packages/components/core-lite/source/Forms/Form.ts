@@ -38,7 +38,7 @@ class Form extends HTMLFormComponent {
 
     protected afterInitActions: Array<any> = [];
 
-    protected focusTrap: focusTrap.FocusTrap = null;
+    public focusTrap: focusTrap.FocusTrap = null;
 
     protected lastFocusedElementId: any = null;
 
@@ -191,7 +191,7 @@ class Form extends HTMLFormComponent {
                     try {
                         if (this.htmlElement) {
                             // @ts-ignore
-                            this.focusTrap = focusTrap(this.htmlElement, {});
+                            this.focusTrap = focusTrap.createFocusTrap(this.htmlElement, {});
                             this.focusTrap.activate();
                         }
                     } catch (e) {

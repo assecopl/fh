@@ -393,7 +393,7 @@ abstract class FormComponent {
      * Returns form that component is display on
      * @returns {any}
      */
-    private getForm() : Form {
+    protected getForm(): Form {
         let form: any = this;
         while (form.parent != null) {
             form = form.parent;
@@ -408,6 +408,15 @@ abstract class FormComponent {
 
     protected getFormType(): string {
         return this.getForm().formType;
+    }
+
+    protected getFormFocusTrapElement(): HTMLElement | null {
+        const form = this.getForm();
+        return form.focusTrap ? form.htmlElement : null;
+    }
+
+    protected isFormFocusTrap(): boolean {
+        return this.getForm().focusTrap != null;
     }
 
     protected isFormActive(): boolean {

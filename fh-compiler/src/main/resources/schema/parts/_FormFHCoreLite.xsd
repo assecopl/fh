@@ -88,6 +88,7 @@
         <xs:attribute type="FormPossibleTypes" name="formType" default="STANDARD"/>
         <xs:attribute type="FormModalPossibleSizes" name="modalSize" default="REGULAR"/>
         <xs:attribute type="xs:boolean" name="hideHeader"/>
+        <xs:attribute type="xs:boolean" name="blockFocusForModal"/>
         <xs:attribute type="HeadingMode" name="headingType"/>
         <xs:attribute type="xs:integer" name="modalMaxHeight"/>
         <xs:attribute type="xs:boolean" name="focusFirstElement" default="true"/>
