@@ -5,10 +5,14 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.fhframework.annotations.*;
+import pl.fhframework.binding.CompiledBinding;
 import pl.fhframework.binding.ModelBinding;
 import pl.fhframework.binding.StaticBinding;
 import pl.fhframework.core.forms.IHasBoundableLabel;
+import pl.fhframework.core.generator.CompiledClassesHelper;
 import pl.fhframework.core.i18n.MessageService;
+import pl.fhframework.events.I18nFormElement;
+import pl.fhframework.format.FhConversionService;
 import pl.fhframework.helper.AutowireHelper;
 import pl.fhframework.model.dto.ElementChanges;
 import pl.fhframework.model.dto.ValueChange;
@@ -24,7 +28,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
 @TemplateControl(tagName = "fh-high-contrast-buttons")
 @Control(parents = {PanelGroup.class, Tab.class, Row.class, Form.class, Repeater.class, Group.class}, invalidParents = {Table.class}, canBeDesigned = true)
 @DocumentedComponent(category = DocumentedComponent.Category.BUTTONS_AND_OTHER, documentationExample = true, value = "PanelGroup component responsible for the grouping of buttons.", icon = "fa fa-square")
-public class HighContrastButtons extends GroupingComponent<Component> implements Boundable, IChangeableByClient, CompactLayout, IDesignerEventListener, IHasBoundableLabel {
+public class HighContrastButtons extends GroupingComponent<Component> implements Boundable, IChangeableByClient, CompactLayout, IDesignerEventListener, IHasBoundableLabel, I18nFormElement {
 
     private static final String ATTR_ACTIVE_BUTTON = "activeButton";
     private static final String ATTR_CSS_CLASS = "cssClass";
@@ -64,6 +68,11 @@ public class HighContrastButtons extends GroupingComponent<Component> implements
 
     @Autowired
     @JsonIgnore
+    @Getter
+    private FhConversionService conversionService;
+
+    @Autowired
+    @JsonIgnore
     MessageService messageService;
 
     @Getter
@@ -74,10 +83,14 @@ public class HighContrastButtons extends GroupingComponent<Component> implements
 
     private boolean buttonAdded = false;
 
+    private Button button1 = null;
+    private Button button2 = null;
+
     public HighContrastButtons(Form form) {
         super(form);
         AutowireHelper.autowire(this, WCAGService);
         AutowireHelper.autowire(this, messageService);
+        AutowireHelper.autowire(this, conversionService);
 
         if (WCAGService != null) {
             Boolean isHighContrast = WCAGService.isHighContrast();
@@ -171,12 +184,38 @@ public class HighContrastButtons extends GroupingComponent<Component> implements
         }
     }
 
+
+    private String getNormalLabelModelBinding() {
+        try {
+            return this.messageService.getAllBundles().getMessage("pl.fhframework.model.forms.highContrastButtons.normal");
+        } catch (NullPointerException var2) {
+            if (CompiledClassesHelper.isLocalNullPointerException(var2, this.getForm().getClass().getName(), "getNormalLabelModelBinding")) {
+                return null;
+            } else {
+                throw var2;
+            }
+        }
+    }
+
+
+    private String getNormalAriaLabelModelBinding() {
+        try {
+            return this.messageService.getAllBundles().getMessage("pl.fhframework.model.forms.highContrastButtons.normal.ariaLabel");
+        } catch (NullPointerException var2) {
+            if (CompiledClassesHelper.isLocalNullPointerException(var2, this.getForm().getClass().getName(), "getNormalLabelModelBinding")) {
+                return null;
+            } else {
+                throw var2;
+            }
+        }
+    }
+
     private Button createNormalButton() {
-        String msg = messageService.getAllBundles().getMessage("pl.fhframework.model.forms.highContrastButtons.normal");
-        String msgAria = messageService.getAllBundles().getMessage("pl.fhframework.model.forms.highContrastButtons.normal.ariaLabel");
+//        String msg = messageService.getAllBundles().getMessage("pl.fhframework.model.forms.highContrastButtons.normal");
+//        String msgAria = messageService.getAllBundles().getMessage("pl.fhframework.model.forms.highContrastButtons.normal.ariaLabel");
         Button button = new Button(getForm());
-        button.setLabelModelBinding(new StaticBinding<>(msg));
-        button.setAriaLabelBinding(new StaticBinding<>(msgAria));
+        button.setLabelModelBinding(new CompiledBinding("{$.pl.fhframework.model.forms.highContrastButtons.normal}", (String) null, String.class, this::getConversionService, this::getNormalLabelModelBinding, (CompiledBinding.ValueSetter) null));
+        button.setAriaLabelBinding(new CompiledBinding("{$.pl.fhframework.model.forms.highContrastButtons.normal.ariaLabel}", (String) null, String.class, this::getConversionService, this::getNormalAriaLabelModelBinding, (CompiledBinding.ValueSetter) null));
         button.setStyleModelBinding(new StaticBinding<>(Styleable.Style.DEFAULT.toValue()));
         button.setStyleClasses("border, mr-2, fh-high-contrast-btn-normal");
         button.setGroupingParentComponent(this);
@@ -184,16 +223,49 @@ public class HighContrastButtons extends GroupingComponent<Component> implements
         return button;
     }
 
+    private String getContrastLabelModelBinding() {
+        try {
+            return this.messageService.getAllBundles().getMessage("pl.fhframework.model.forms.highContrastButtons.hightContrast");
+        } catch (NullPointerException var2) {
+            if (CompiledClassesHelper.isLocalNullPointerException(var2, this.getForm().getClass().getName(), "getNormalLabelModelBinding")) {
+                return null;
+            } else {
+                throw var2;
+            }
+        }
+    }
+
+
+    private String getContrastAriaLabelModelBinding() {
+        try {
+            return this.messageService.getAllBundles().getMessage("pl.fhframework.model.forms.highContrastButtons.hightContrast.ariaLabel");
+        } catch (NullPointerException var2) {
+            if (CompiledClassesHelper.isLocalNullPointerException(var2, this.getForm().getClass().getName(), "getNormalLabelModelBinding")) {
+                return null;
+            } else {
+                throw var2;
+            }
+        }
+    }
+
     private Button createHighContrastButton() {
-        String msg = messageService.getAllBundles().getMessage("pl.fhframework.model.forms.highContrastButtons.hightContrast");
-        String msgAria = messageService.getAllBundles().getMessage("pl.fhframework.model.forms.highContrastButtons.hightContrast.ariaLabel");
+//        String msg = messageService.getAllBundles().getMessage("pl.fhframework.model.forms.highContrastButtons.hightContrast");
+//        String msgAria = messageService.getAllBundles().getMessage("pl.fhframework.model.forms.highContrastButtons.hightContrast.ariaLabel");
         Button button = new Button(getForm());
-        button.setLabelModelBinding(new StaticBinding<>(msg));
-        button.setAriaLabelBinding(new StaticBinding<>(msgAria));
+        button.setLabelModelBinding(new CompiledBinding("{$.pl.fhframework.model.forms.highContrastButtons.hightContrast}", (String) null, String.class, this::getConversionService, this::getContrastLabelModelBinding, (CompiledBinding.ValueSetter) null));
+        button.setAriaLabelBinding(new CompiledBinding("{$.pl.fhframework.model.forms.highContrastButtons.hightContrast.ariaLabel}", (String) null, String.class, this::getConversionService, this::getContrastAriaLabelModelBinding, (CompiledBinding.ValueSetter) null));
         button.setStyleModelBinding(new StaticBinding<>(Styleable.Style.DARK.toValue()));
         button.setStyleClasses("mr-2, fh-high-contrast-btn-high");
         button.setGroupingParentComponent(this);
+
         button.init();
         return button;
+    }
+
+    @Override
+    public void onSessionLanguageChange(String lang) {
+
+
+        refreshView();
     }
 }

@@ -81,8 +81,8 @@ class InputDateFhDP extends InputTextFhDP implements LanguageChangeObserver {
             defaultDate: InputDateFhDP.isDateValid(this.rawValue, this.format)? this.rawValue : '',
             keepInvalid: true,
             tooltips: this.tooltipsI18n[this.i18n.selectedLanguage] ? this.tooltipsI18n[this.i18n.selectedLanguage] : this.tooltipsI18n["en"],
-            widgetParent : 'body'
         }
+
 
         this.setAvailableTimeRange();
     }
@@ -132,6 +132,10 @@ class InputDateFhDP extends InputTextFhDP implements LanguageChangeObserver {
         this.createAddon();
 
         this.inputGroupElement.classList.add('date');
+        if (!this.isFormFocusTrap()) {
+            //Move Widget presentation to body for standard forms.
+            this.dateTimePickerConfig["widgetParent"] = 'body';
+        }
         (<any>$(this.inputGroupElement)).datetimepicker(this.dateTimePickerConfig);
 
         this.lastValue = InputDateFhDP.toDateOrLeave(this.lastValue, this.backendFormat, this.format);

@@ -5,10 +5,13 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.fhframework.annotations.*;
+import pl.fhframework.binding.CompiledBinding;
 import pl.fhframework.binding.ModelBinding;
 import pl.fhframework.binding.StaticBinding;
 import pl.fhframework.core.forms.IHasBoundableLabel;
+import pl.fhframework.core.generator.CompiledClassesHelper;
 import pl.fhframework.core.i18n.MessageService;
+import pl.fhframework.format.FhConversionService;
 import pl.fhframework.helper.AutowireHelper;
 import pl.fhframework.model.dto.ElementChanges;
 import pl.fhframework.model.dto.ValueChange;
@@ -31,6 +34,11 @@ public class ImagesSwitchButtons extends  GroupingComponent<Component> implement
     @Autowired
     @JsonIgnore
     pl.fhframework.model.forms.utils.WCAGService WCAGService;
+
+    @Autowired
+    @JsonIgnore
+    @Getter
+    private FhConversionService conversionService;
 
     @Autowired
     @JsonIgnore
@@ -67,6 +75,7 @@ public class ImagesSwitchButtons extends  GroupingComponent<Component> implement
 
         AutowireHelper.autowire(this, WCAGService);
         AutowireHelper.autowire(this, messageService);
+        AutowireHelper.autowire(this, conversionService);
 
         if (WCAGService != null) {
             Boolean isImagesHidden = WCAGService.isImagesHidden();
@@ -136,13 +145,38 @@ public class ImagesSwitchButtons extends  GroupingComponent<Component> implement
         }
     }
 
+    private String getShowLabelModelBinding() {
+        try {
+            return this.messageService.getAllBundles().getMessage("pl.fhframework.model.forms.hiddenImageButtons.show");
+        } catch (NullPointerException var2) {
+            if (CompiledClassesHelper.isLocalNullPointerException(var2, this.getForm().getClass().getName(), "getNormalLabelModelBinding")) {
+                return null;
+            } else {
+                throw var2;
+            }
+        }
+    }
+
+
+    private String getShowAriaLabelModelBinding() {
+        try {
+            return this.messageService.getAllBundles().getMessage("pl.fhframework.model.forms.hiddenImageButtons.show.ariaLabel");
+        } catch (NullPointerException var2) {
+            if (CompiledClassesHelper.isLocalNullPointerException(var2, this.getForm().getClass().getName(), "getNormalLabelModelBinding")) {
+                return null;
+            } else {
+                throw var2;
+            }
+        }
+    }
+
     private Button createShowButton() {
-        String msg = messageService.getAllBundles().getMessage("pl.fhframework.model.forms.hiddenImageButtons.show");
-        String msgAria = messageService.getAllBundles().getMessage("pl.fhframework.model.forms.hiddenImageButtons.show.ariaLabel");
+//        String msg = messageService.getAllBundles().getMessage("pl.fhframework.model.forms.hiddenImageButtons.show");
+//        String msgAria = messageService.getAllBundles().getMessage("pl.fhframework.model.forms.hiddenImageButtons.show.ariaLabel");
         Button button = new Button(getForm());
 
-        button.setLabelModelBinding(new StaticBinding(msg));
-        button.setAriaLabelBinding(new StaticBinding(msgAria));
+        button.setLabelModelBinding(new CompiledBinding("{$.pl.fhframework.model.forms.hiddenImageButtons.show}", (String) null, String.class, this::getConversionService, this::getShowLabelModelBinding, (CompiledBinding.ValueSetter) null));
+        button.setAriaLabelBinding(new CompiledBinding("{$.pl.fhframework.model.forms.hiddenImageButtons.show.ariaLabel}", (String) null, String.class, this::getConversionService, this::getShowAriaLabelModelBinding, (CompiledBinding.ValueSetter) null));
         button.setStyleModelBinding(new StaticBinding<>(Styleable.Style.DEFAULT.toValue()));
         button.setStyleClasses("border, mr-2, fh-images-switch-btn-normal");
         button.setGroupingParentComponent(this);
@@ -151,13 +185,39 @@ public class ImagesSwitchButtons extends  GroupingComponent<Component> implement
         return button;
     }
 
+    private String getHideLabelModelBinding() {
+        try {
+            return this.messageService.getAllBundles().getMessage("pl.fhframework.model.forms.hiddenImageButtons.hide");
+        } catch (NullPointerException var2) {
+            if (CompiledClassesHelper.isLocalNullPointerException(var2, this.getForm().getClass().getName(), "getNormalLabelModelBinding")) {
+                return null;
+            } else {
+                throw var2;
+            }
+        }
+    }
+
+
+    private String getHideAriaLabelModelBinding() {
+        try {
+            return this.messageService.getAllBundles().getMessage("pl.fhframework.model.forms.hiddenImageButtons.hide.ariaLabel");
+        } catch (NullPointerException var2) {
+            if (CompiledClassesHelper.isLocalNullPointerException(var2, this.getForm().getClass().getName(), "getNormalLabelModelBinding")) {
+                return null;
+            } else {
+                throw var2;
+            }
+        }
+    }
+
     private Button createHideButton() {
-        String msg = messageService.getAllBundles().getMessage("pl.fhframework.model.forms.hiddenImageButtons.hide");
-        String msgAria = messageService.getAllBundles().getMessage("pl.fhframework.model.forms.hiddenImageButtons.hide.ariaLabel");
+//        String msg = messageService.getAllBundles().getMessage("pl.fhframework.model.forms.hiddenImageButtons.hide");
+//        String msgAria = messageService.getAllBundles().getMessage("pl.fhframework.model.forms.hiddenImageButtons.hide.ariaLabel");
         Button button = new Button(getForm());
 
-        button.setLabelModelBinding(new StaticBinding(msg));
-        button.setAriaLabelBinding(new StaticBinding(msgAria));
+        button.setLabelModelBinding(new CompiledBinding("{$.pl.fhframework.model.forms.hiddenImageButtons.hide}", (String) null, String.class, this::getConversionService, this::getHideLabelModelBinding, (CompiledBinding.ValueSetter) null));
+        button.setAriaLabelBinding(new CompiledBinding("{$.pl.fhframework.model.forms.hiddenImageButtons.hide.ariaLabel}", (String) null, String.class, this::getConversionService, this::getHideAriaLabelModelBinding, (CompiledBinding.ValueSetter) null));
+
         button.setStyleModelBinding(new StaticBinding<>(Styleable.Style.DEFAULT.toValue()));
         button.setStyleClasses("border, mr-2, fh-images-switch-btn-hidden");
         button.setGroupingParentComponent(this);

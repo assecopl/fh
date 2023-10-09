@@ -34,7 +34,7 @@ class Form extends HTMLFormComponent {
     private windowListenerMouseUp: any;
     private modalDeferred;
     protected headingTypeValue: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" = null;
-    protected blockFocusForModal: boolean = false;
+    public blockFocusForModal: boolean = false;
 
     protected afterInitActions: Array<any> = [];
 
