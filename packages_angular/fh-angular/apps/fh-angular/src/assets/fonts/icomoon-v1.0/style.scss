@@ -1,0 +1,189 @@
+@import 'variables';
+
+@font-face {
+  font-family: '#{$icomoon-font-family}';
+  src: url('#{$icomoon-font-path}/#{$icomoon-font-family}.eot?za11u');
+  src: url('#{$icomoon-font-path}/#{$icomoon-font-family}.eot?za11u#iefix') format('embedded-opentype'),
+  url('#{$icomoon-font-path}/#{$icomoon-font-family}.ttf?za11u') format('truetype'),
+  url('#{$icomoon-font-path}/#{$icomoon-font-family}.woff?za11u') format('woff'),
+  url('#{$icomoon-font-path}/#{$icomoon-font-family}.svg?za11u##{$icomoon-font-family}') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+.icon-fhng {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: '#{$icomoon-font-family}' !important;
+  speak: never;
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  vertical-align: middle;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-fhng-attachment-big {
+  &:before {
+    content: $icon-fhng-attachment-big;
+  }
+}
+
+.icon-fhng-back {
+  &:before {
+    content: $icon-fhng-back;
+    color: #0a54a3;
+  }
+}
+
+.icon-fhng-bell {
+  &:before {
+    content: $icon-fhng-bell;
+    color: #0a54a3;
+  }
+}
+
+.icon-fhng-calendar {
+  &:before {
+    content: $icon-fhng-calendar;
+    color: #0a54a3;
+  }
+}
+
+.icon-fhng-document-message {
+  &:before {
+    content: $icon-fhng-document-message;
+    color: #0a54a3;
+  }
+}
+
+.icon-fhng-down {
+  &:before {
+    content: $icon-fhng-down;
+    color: #0a54a3;
+  }
+}
+
+.icon-fhng-download {
+  &:before {
+    content: $icon-fhng-download;
+    color: #0a54a3;
+  }
+}
+
+.icon-fhng-error-big {
+  &:before {
+    content: $icon-fhng-error-big;
+    color: #d32743;
+  }
+}
+
+.icon-fhng-file-document {
+  &:before {
+    content: $icon-fhng-file-document;
+    color: #0a54a3;
+  }
+}
+
+.icon-fhng-help {
+  &:before {
+    content: $icon-fhng-help;
+    color: #0a54a3;
+  }
+}
+
+.icon-fhng-helpfhng--1,
+.icon-fhng-helpfhng {
+  &:before {
+    content: $icon-fhng-helpfhng--1;
+    color: #0a54a3;
+  }
+}
+
+.icon-fhng-home {
+  &:before {
+    content: $icon-fhng-home;
+  }
+}
+
+.icon-fhng-input-clear {
+  &:before {
+    content: $icon-fhng-input_clearfhng-path1;
+    color: rgb(10, 84, 163);
+    opacity: 0.1;
+  }
+}
+
+.icon-fhng-input-clear-alt {
+  &:before {
+    content: $icon-fhng-input_clearfhng-path2;
+    //margin-left: -1em;
+    font-size: 150%;
+    color: rgb(10, 84, 163);
+  }
+}
+
+.icon-fhng-logout {
+  &:before {
+    content: $icon-fhng-logout;
+    color: #0a54a3;
+  }
+}
+
+.icon-fhng-messages {
+  &:before {
+    content: $icon-fhng-messages;
+    color: #0a54a3;
+  }
+}
+
+.icon-fhng-more {
+  &:before {
+    content: $icon-fhng-more;
+    color: #c6c6c6;
+  }
+}
+
+.icon-fhng-person {
+  &:before {
+    content: $icon-fhng-person;
+    color: #0a54a3;
+  }
+}
+
+.icon-fhng-print {
+  &:before {
+    content: $icon-fhng-print;
+    color: #0a54a3;
+  }
+}
+
+.icon-fhng-settings {
+  &:before {
+    content: $icon-fhng-settings;
+    color: #0a54a3;
+  }
+}
+
+.icon-fhng-small-arrow-right {
+  &:before {
+    content: $icon-fhng-small_arrow_right;
+  }
+}
+
+.icon-fhng-up {
+  &:before {
+    content: $icon-fhng-up;
+    color: #0a54a3;
+  }
+}
+
+.label {
+  font-size: 0.875rem;
+}

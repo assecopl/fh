@@ -1,0 +1,134 @@
+@font-face {
+  font-family: 'icomoon';
+  src: url('fonts/icomoon.eot?za11u');
+  src: url('fonts/icomoon.eot?za11u#iefix') format('embedded-opentype'),
+  url('fonts/icomoon.ttf?za11u') format('truetype'),
+  url('fonts/icomoon.woff?za11u') format('woff'),
+  url('fonts/icomoon.svg?za11u#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+.icon {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-attachment-bigfhng:before {
+  content: '\e900';
+}
+
+.icon-backfhng:before {
+  content: '\e901';
+  color: #0a54a3;
+}
+
+.icon-bellfhng:before {
+  content: '\e902';
+  color: #0a54a3;
+}
+
+.icon-calendarfhng:before {
+  content: '\e903';
+}
+
+.icon-document-messagefhng:before {
+  content: '\e904';
+  color: #0a54a3;
+}
+
+.icon-downfhng:before {
+  content: '\e905';
+  color: #0a54a3;
+}
+
+.icon-downloadfhng:before {
+  content: '\e906';
+  color: #0a54a3;
+}
+
+.icon-error-bigfhng:before {
+  content: '\e907';
+  color: #d32743;
+}
+
+.icon-file-documentfhng:before {
+  content: '\e908';
+  color: #0a54a3;
+}
+
+.icon-helpfhng:before {
+  content: '\e909';
+  color: #0a54a3;
+}
+
+.icon-helpfhng--1:before {
+  content: '\e90a';
+  color: #0a54a3;
+}
+
+.icon-homefhng:before {
+  content: '\e90b';
+}
+
+.icon-input_clearfhng .path1:before {
+  content: '\e90c';
+  color: rgb(10, 84, 163);
+  opacity: 0.1;
+}
+
+.icon-input_clearfhng .path2:before {
+  content: '\e90d';
+  margin-left: -1em;
+  color: rgb(10, 84, 163);
+}
+
+.icon-logoutfhng:before {
+  content: '\e90e';
+  color: #0a54a3;
+}
+
+.icon-messagesfhng:before {
+  content: '\e90f';
+  color: #0a54a3;
+}
+
+.icon-morefhng:before {
+  content: '\e910';
+  color: #c6c6c6;
+}
+
+.icon-personfhng:before {
+  content: '\e911';
+  color: #0a54a3;
+}
+
+.icon-printfhng:before {
+  content: '\e912';
+  color: #0a54a3;
+}
+
+.icon-settingsfhng:before {
+  content: '\e913';
+  color: #0a54a3;
+}
+
+.icon-small_arrow_rightfhng:before {
+  content: '\e914';
+}
+
+.icon-upfhng:before {
+  content: '\e915';
+  color: #0a54a3;
+}

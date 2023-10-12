@@ -1,0 +1,26 @@
+<ng-container *ngIf="formType == 'STANDARD'">
+  <div class="card border-0">
+    <div *ngIf="label && !hideHeader" class="card-header">
+      <span [innerHTML]="label"></span>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <ng-container *ngFor="let element of subelements">
+          <fh-dynamic-component
+            [data]="element"
+            [formId]="formId"
+          ></fh-dynamic-component>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="formType == 'HEADER'">
+  <ng-container *ngFor="let element of subelements">
+    <fh-dynamic-component
+      [data]="element"
+      [formId]="formId"
+    ></fh-dynamic-component>
+  </ng-container>
+</ng-container>

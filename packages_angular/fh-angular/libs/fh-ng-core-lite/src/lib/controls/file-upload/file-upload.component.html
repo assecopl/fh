@@ -1,0 +1,12 @@
+<ng-container *ngIf="control">
+  <fhng-file-upload-accessor
+    #file
+    type="file"
+    [multiple]="multiple"
+    [maxSize]="maxSize"
+    [extensions]="extensions"
+    [formControl]="control"
+    [label]="label"
+    (change)="change($event)"
+  ></fhng-file-upload-accessor>
+</ng-container>

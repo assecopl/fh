@@ -1,0 +1,56 @@
+<ng-container *ngIf="hint; else combo">
+  <span
+    ngbTooltip="{{ hint }}"
+    [placement]="hintPlacement.toLowerCase()"
+    [triggers]="hintTrigger.toLowerCase()"
+  >
+    <ng-container *ngTemplateOutlet="combo"></ng-container>
+  </span>
+</ng-container>
+
+<ng-template #combo>
+  <fhng-input-label
+    [inputId]="id"
+    [label]="label"
+    [labelPosition]="labelPosition"
+    [labelSize]="labelSize"
+  >
+    <ng-container *ngIf="control">
+      <fhng-input-group
+        [iconText]="iconText"
+        [class.fhng-disabled]="control.disabled"
+        [class.fhng-disabled]="control.disabled"
+        [icon]="icon"
+        [iconAlignment]="iconAlignment"
+        [required]="required"
+      >
+        <ng-select
+          #focusElement
+          [id]="innerId"
+          [availabilityHtmlElement]="elementRef"
+          availabilityControl
+          class="form-control {{ required ? 'ng-select-required' : '' }} {{
+            control?.invalid && control?.touched ? 'is-invalid' : ''
+          }}"
+          [items]="values"
+          [searchFn]="filterFunction"
+          [labelForId]="id"
+          [multiple]="multiple"
+          [placeholder]="placeholder"
+          [readonly]="disabled"
+          [formControl]="control"
+        >
+          <ng-template
+            ng-option-tmp
+            ng-label-tmp
+            let-item="item"
+            let-index="index"
+            let-search="searchTerm"
+          >
+            <span [innerHTML]="inputFormatter(item) | fhml"></span>
+          </ng-template>
+        </ng-select>
+      </fhng-input-group>
+    </ng-container>
+  </fhng-input-label>
+</ng-template>

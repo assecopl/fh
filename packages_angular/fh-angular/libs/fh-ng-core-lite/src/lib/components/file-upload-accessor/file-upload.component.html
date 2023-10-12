@@ -1,0 +1,16 @@
+<button
+  (click)="file.click()"
+  class="btn btn-block btn-primary btn-{{ width }}"
+  [ngStyle]="styles"
+  availabilityHtmlElement
+  [innerHTML]="label"
+></button>
+<input
+  #file
+  class="file-input"
+  type="file"
+  [accept]="extensions"
+  [attr.aria-label]="label"
+  [multiple]="multiple"
+  class="d-none"
+/>

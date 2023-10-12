@@ -1,0 +1,17 @@
+.input-group {
+  &.has-append {
+    input {
+      padding-right: 2rem;
+      border-radius: 0.1875rem;
+      //border-right: 1px solid transparent;
+    }
+  }
+
+  &.has-prepend {
+    input {
+      padding-left: 2rem;
+      border-radius: 0.1875rem;
+      //border-right: 1px solid transparent;
+    }
+  }
+}

@@ -1,0 +1,73 @@
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+
+:host {
+  display: block;
+
+  ::ng-deep {
+    .bg-danger.toast {
+      .toast-header {
+        background-color: $danger;
+        color: $light;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        //background-clip: padding-box;
+        button {
+          color: $light;
+          opacity: 0.9;
+        }
+      }
+    }
+
+    .bg-success.toast {
+      .toast-header {
+        background-color: $success;
+        color: $light;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        //background-clip: padding-box;
+        button {
+          color: $light;
+          opacity: 0.9;
+        }
+      }
+    }
+
+    .bg-info.toast {
+      .toast-header {
+        background-color: $info;
+        color: $light;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        //background-clip: padding-box;
+        button {
+          color: $light;
+          opacity: 0.9;
+        }
+      }
+    }
+
+    .bg-warning.toast {
+      .toast-header {
+        background-color: $warning;
+        color: $light;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        //background-clip: padding-box;
+        button {
+          color: $light;
+          opacity: 0.9;
+        }
+      }
+    }
+  }
+}
+
+div.toastContainer {
+  position: fixed;
+  top: 15px;
+  right: 30px;
+  z-index: 1200;
+}
+
+.toast {
+  margin-bottom: 0.5em;
+  z-index: 1200;
+  opacity: 0.9;
+}

@@ -1,0 +1,15 @@
+<div [availabilityHtmlElement]>
+  <label class="col-form-label"
+  >{{ label }}
+    <span *ngIf="required" class="required">*</span>
+  </label>
+  <fhng-radio-option
+    [availability]="availabilityDirective._myAvailability"
+    *ngFor="let one of values"
+    [(value)]="value"
+    [control]="control"
+    [name]="groupName ? groupName : name"
+    [label]="one"
+    [targetValue]="one"
+  ></fhng-radio-option>
+</div>

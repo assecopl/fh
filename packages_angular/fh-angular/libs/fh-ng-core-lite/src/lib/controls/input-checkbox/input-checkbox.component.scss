@@ -1,0 +1,33 @@
+:host {
+  .form-check {
+  }
+
+  input[type='checkbox'] {
+    //&:before {
+    //  position: relative;
+    //  display: block;
+    //  width: 20px;
+    //  height: 20px;
+    //  border: 2px solid #B7B7B7;
+    //  content: "";
+    //  background: #FFF;
+    //  border-radius: 4px;
+    //  top: -3px;
+    //  left: 0px;
+    //}
+    //
+    //&:not(:disabled):hover:before {
+    //  border-color: #0A54A3;
+    //}
+    //
+    //&:checked:before {
+    //  background: #0A54A3;
+    //  // Base64 from checkbox_mark.png
+    //  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAMCAYAAACEJVa/AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAABOSURBVHgBrdBBCgAgCERRb54362hTVIsQE0f62+KhihQDoNipVLqAlbBZYNb+ANndwgnMg9LA+dAiCNkbvCCwR3SgTgEBxAEBxAEOlAIGI/YnphW2HU8AAAAASUVORK5CYII=');
+    //  background-repeat: no-repeat;
+    //  background-size: contain;
+    //  background-position: center center;
+    //  border-color: #0A54A3;
+    //}
+  }
+}

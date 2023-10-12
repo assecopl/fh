@@ -1,0 +1,79 @@
+<label class="col-form-label" *ngIf="label">{{ label }}</label>
+<table class="table table-paged">
+  <!--  Simple HTEAD - one row-->
+  <ng-content select="thead"></ng-content>
+  <ng-content select="tbody"></ng-content>
+
+  <!-- Dodatkowe tr dokładamy poza tbody - przeglądarki nie powinny mieć z tym problemu  -->
+  <ng-container *ngIf="minRows > collection?.length">
+    <tr
+      *ngFor="
+        let i of [].constructor(minRows - (collection ? collection?.length : 0))
+      "
+    >
+      <td *ngFor="let a of [].constructor(columnsArray?.length)">&nbsp;</td>
+    </tr>
+  </ng-container>
+</table>
+
+<div *ngIf="pageable && collection?.totalElements > 0" class="row">
+  <div class="col-auto mr-auto">
+    <div class="row align-items-center justify-content-start">
+      <div class="col-auto">
+        <select
+          aria-label="Ilość rekordów na stronie"
+          class="custom-select"
+          style="width: auto"
+          [(ngModel)]="collection.pageSize"
+          (ngModelChange)="pageSizeChange.emit(collection)"
+        >
+          <option [ngValue]="5">5</option>
+          <option [ngValue]="10">10</option>
+          <option [ngValue]="20">20</option>
+          <option [ngValue]="25">25</option>
+        </select>
+      </div>
+      <div class="col small">Rekordów na stronie</div>
+    </div>
+  </div>
+  <div class="col-auto">
+    <div class="row align-items-center justify-content-end">
+      <div class="col-auto small">
+        <!--        TODO TRANSLATE Library -->
+        Rekordy
+        {{
+        collection.pageNumber > 0
+          ? collection.pageSize * collection.pageNumber + 1
+          : 1
+        }}
+        -
+        {{
+        collection.pageSize * (collection.pageNumber + 1) >
+        collection.totalElements
+          ? collection.totalElements
+          : collection.pageSize * (collection.pageNumber + 1)
+        }}
+        z {{ collection.totalElements }}
+      </div>
+      <div class="col-auto">
+        <ngb-pagination
+          class="mb-0"
+          [collectionSize]="collection.totalElements"
+          [(page)]="pageNumber"
+          [pageSize]="collection.pageSize"
+          (pageChange)="onPageChange()"
+        >
+        </ngb-pagination>
+      </div>
+    </div>
+  </div>
+</div>
+<fhng-button
+  *ngIf="csvExport"
+  [id]="'csvBtn'"
+  bootstrapStyle="link"
+  width="md-1"
+  horizontalAlign="RIGHT"
+  (click)="onExportCsv()"
+>[icon='fas fa-download'] CSV
+</fhng-button>

@@ -1,6 +1,0 @@
-<th [availabilityHtmlElement]="elementRef" (click)="sort()" [class.text-center]="horizontalAlign == 'CENTER'"
-    [class.text-right]="horizontalAlign == 'RIGHT'">
-    {{label}} <i *ngIf="sortBy"
-                 class="{{getDirection() == null ? 'fa fa-sort' : (getDirection() == 0 ? 'fa fa-sort-amount-down' : 'fa fa-sort-amount-up')}}"></i>
-</th>
-

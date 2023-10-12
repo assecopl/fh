@@ -1,0 +1,40 @@
+<div class="toastContainer">
+  <ngb-toast
+    #t
+    class="toast"
+    *ngFor="let toast of toasts"
+    [class]="toast.classname"
+    [header]="toast.header"
+    [autohide]="toast.delay > 0"
+    [delay]="toast.delay"
+    (click)="t.hide()"
+    (hide)="onDispose(toast)"
+  >{{ toast.body }}</ngb-toast
+  >
+</div>
+<div class="toastContainer" style="bottom: 15px; top: auto">
+  <ng-container *ngFor="let toast of downloadToasts | keyvalue">
+    <ngb-toast
+      *ngIf="toast.value.show"
+      class="toast {{ toast.value.classname }}"
+      [autohide]="false"
+    >
+      <p>
+        {{ toast.value.header ? toast.value.header : 'Pobieram:' }}
+        <b>{{ toast.value.body }}</b>
+      </p>
+      <div class="row">
+        <div class="col pt-2">
+          <ngb-progressbar
+            height="5px"
+            type="secondary"
+            [value]="toast.value.progress"
+          ></ngb-progressbar>
+        </div>
+        <div class="col-auto" style="min-width: 30px">
+          {{ toast.value.progress }}%
+        </div>
+      </div>
+    </ngb-toast>
+  </ng-container>
+</div>

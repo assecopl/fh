@@ -1,0 +1,62 @@
+<ng-container *ngIf="hint; else inputNumber">
+  <span
+    ngbTooltip="{{ hint }}"
+    [placement]="hintPlacement.toLowerCase()"
+    [triggers]="hintTrigger.toLowerCase()"
+  >
+    <ng-container *ngTemplateOutlet="inputNumber"></ng-container>
+  </span>
+</ng-container>
+<ng-template #inputNumber>
+  <fhng-input-label
+    [inputId]="id"
+    [label]="label"
+    [labelPosition]="labelPosition"
+    [labelSize]="labelSize"
+  >
+    <ng-container *ngIf="control">
+      <fhng-input-group
+        [iconText]="iconText"
+        [class.fhng-disabled]="control.disabled"
+        [icon]="icon"
+        [iconAlignment]="iconAlignment"
+        [required]="required"
+      >
+        <input
+          #focusElement
+          [id]="innerId"
+          availabilityControl
+          [availabilityHtmlElement]="elementRef"
+          type="text"
+          class="form-control {{
+            control?.invalid && control?.touched ? 'is-invalid' : ''
+          }} {{ textAlign == 'RIGHT' ? 'text-right' : '' }} {{
+            textAlign == 'CENTER' ? 'text-center' : ''
+          }}"
+          [formControl]="control"
+          [attr.aria-label]="!label && ariaLabel ? ariaLabel : null"
+          [placeholder]="placeholder"
+          [allowNegativeNumbers]="allowNegativeNumbers"
+          [name]="name"
+          [mask]="formatter?.pattern"
+          separatorLimit="{{
+            maxIntigerDigits
+              ? [].constructor(maxIntigerDigits + 1).join('1')
+              : formatter?.separatorLimit
+          }}"
+          thousandSeparator="{{ formatter?.thousandSeparator }}"
+        />
+      </fhng-input-group>
+    </ng-container>
+    <ng-container *ngIf="!control">
+      <input
+        [id]="innerId"
+        [attr.aria-label]="!label && ariaLabel ? ariaLabel : null"
+        type="text"
+        class="form-control"
+        [placeholder]="placeholder"
+        [value]="value"
+      />
+    </ng-container>
+  </fhng-input-label>
+</ng-template>

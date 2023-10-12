@@ -1,0 +1,52 @@
+<div class="form-check">
+  <ng-container *ngIf="name; else singleRadioOption">
+    <input
+      #focusElement
+      availabilityControl
+      [id]="innerId"
+      [attr.aria-label]="!label ? ariaLabel : null"
+      [type]="inputType"
+      [name]="name ? name : name"
+      class="form-check-input {{
+        control?.invalid && control?.touched ? 'is-invalid' : ''
+      }}"
+      [value]="targetValue"
+      [formControl]="control"
+      (change)="updateControlValue($event)"
+      [checked]="value == targetValue"
+    />
+    <label
+      *ngIf="label"
+      (click)="focusElement.click()"
+      [attr.for]="innerId"
+      [id]="innerId + '_label'"
+      class="form-check-label"
+    >{{ label }}
+      <span *ngIf="required" class="required">* </span>
+    </label>
+  </ng-container>
+</div>
+
+<ng-template #singleRadioOption>
+  <input
+    [attr.for]="innerId"
+    #focusElement
+    availabilityControl
+    [id]="innerId"
+    [type]="inputType"
+    [attr.aria-label]="!label ? ariaLabel : null"
+    class="form-check-input"
+    [value]="targetValue"
+    [formControl]="control"
+    [name]="name ? name : name"
+    (change)="updateControlValue($event)"
+  />
+  <label
+    *ngIf="label"
+    (click)="focusElement.click()"
+    [id]="innerId + '_label'"
+    class="form-check-label"
+  >{{ label }}
+    <span *ngIf="required" class="required">*</span>
+  </label>
+</ng-template>

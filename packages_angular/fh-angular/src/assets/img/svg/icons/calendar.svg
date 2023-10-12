@@ -1,7 +1,0 @@
-<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <g id="icons/calendar">
-        <path id="Vector"
-              d="M16.427 3V7M8.427 3V7M4.427 11H20.427M6.427 5H18.427C19.5316 5 20.427 5.89543 20.427 7V19C20.427 20.1046 19.5316 21 18.427 21H6.427C5.32243 21 4.427 20.1046 4.427 19V7C4.427 5.89543 5.32243 5 6.427 5ZM8.427 15H10.427V17H8.427V15Z"
-              stroke="#0A54A3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </g>
-</svg>

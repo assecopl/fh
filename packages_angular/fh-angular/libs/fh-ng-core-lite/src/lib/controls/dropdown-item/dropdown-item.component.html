@@ -1,0 +1,20 @@
+<a
+  [id]="id"
+  ngbDropdownItem
+  #dropItem
+  (click)="onClick()"
+  tabindex="0"
+  (keydown.enter)="
+    $event?.stopPropagation(); $event?.preventDefault(); dropItem.click()
+  "
+>
+  <ng-container *ngIf="icon && iconAlignment == 'BEFORE'">
+    <i class="{{ icon }}"> </i>
+  </ng-container>
+  <ng-container *ngIf="label">
+    <span [innerHTML]="label"> {{ label }}</span>
+  </ng-container>
+  <ng-container *ngIf="icon && iconAlignment == 'AFTER'">
+    <i class="{{ icon }}"> </i>
+  </ng-container>
+</a>
