@@ -107,6 +107,7 @@ import {AbstractDynamicLoadComponent} from './AbstractDynamicLoadComponent';
         </div>
       </div>
     </div>
+    <fhng-application-lock></fhng-application-lock>
   `,
   styles: [],
 })

@@ -1,17 +1,17 @@
 import {Component, Host, Injector, Input, OnChanges, OnInit, Optional, SimpleChanges, SkipSelf,} from '@angular/core';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
-import {FhngBackdropService} from '@fhng/ng-core';
+import {ApplicationLockService} from '../../service/application-lock.service';
 
 @Component({
-  selector: 'fhng-backdrop',
-  templateUrl: './backdrop.component.html',
-  styleUrls: ['./backdrop.component.scss'],
+  selector: 'fhng-application-lock',
+  templateUrl: './application-lock.component.html',
+  styleUrls: ['./application-lock.component.scss'],
 })
-export class BackdropComponent implements OnInit, OnChanges {
+export class ApplicationLockComponent implements OnInit, OnChanges {
   constructor(
     public injector: Injector,
     @Optional() @Host() @SkipSelf() parentFhngComponent: FhngComponent,
-    private backdrop: FhngBackdropService
+    private backdrop: ApplicationLockService
   ) {
   }
 
