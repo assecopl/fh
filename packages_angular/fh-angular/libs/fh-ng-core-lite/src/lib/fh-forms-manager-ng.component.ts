@@ -1,6 +1,15 @@
 import {AfterViewInit, Component, Input, OnDestroy, OnInit,} from '@angular/core';
 import {FormsManagerService} from './forms-manager.service';
 import {AbstractDynamicLoadComponent} from './AbstractDynamicLoadComponent';
+import {i18nService} from "./service/i18n.service";
+import {ApplicationLockEN} from "./I18n/ApplicationLock.en";
+import {ApplicationLockPL} from "./I18n/ApplicationLock.pl";
+import {ConnectorEN} from "./I18n/Connector.en";
+import {ConnectorPL} from "./I18n/Connector.pl";
+import {FormsManagerEN} from "./I18n/FormsManager.en";
+import {FormsManagerPL} from "./I18n/FormsManager.pl";
+import {TranslationsEn} from "./I18n/translations.en";
+import {TranslationsPl} from "./I18n/translations.pl";
 
 @Component({
   selector: 'fh-forms-manager-ng',
@@ -123,8 +132,22 @@ export class FhFormsManagerNgComponent
 
   // @ViewChild('dynamicComponentContainer', {static: true,read: ViewContainerRef})
   // public adHost3!:ViewContainerRef;
-  constructor(private fm: FormsManagerService) {
+  constructor(private fm: FormsManagerService, private i18n: i18nService) {
     super();
+    /**
+     * Register default translations strings for module.
+     */
+    i18n.registerStrings('en', ApplicationLockEN);
+    i18n.registerStrings('pl', ApplicationLockPL);
+    i18n.registerStrings('en', ConnectorEN);
+    i18n.registerStrings('pl', ConnectorPL);
+    i18n.registerStrings('en', FormsManagerEN);
+    i18n.registerStrings('pl', FormsManagerPL);
+    i18n.registerStrings('en', TranslationsEn);
+    i18n.registerStrings('pl', TranslationsPl);
+
+
+
     this.fm.init();
     this.fm.response.subscribe((value) => {
       value.openForm.forEach((form) => {
