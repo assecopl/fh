@@ -16,6 +16,11 @@ class WCAGUtil {
         if (this.isHighContrastActive()) {
             this.turnOnHighContrast();
         }
+
+        if (this.isImagesHiddenActive()) {
+            this.turnOnImagesHidden()
+        }
+
         if (this.is4xFontSizeActive()) {
             this.turnOn4xFontSize()
         } else if (this.is2xFontSizeActive()) {
@@ -43,6 +48,36 @@ class WCAGUtil {
         }
         localStorage.setItem("fh-high-contrast", "");
 
+    }
+
+    isImagesHiddenActive() {
+        const imageShow = localStorage.getItem("fh-images-hidden");
+
+        if (imageShow) {
+            return true;
+        }
+
+        return false;
+    }
+    turnOnImagesHidden(cssClass: string = null) {
+        if (cssClass == null) {
+            cssClass = localStorage.getItem("fh-images-hidden");
+        }
+        if (cssClass) {
+            document.body.classList.add(cssClass);
+            localStorage.setItem("fh-images-hidden", cssClass);
+        }
+    }
+
+    turnOffImagesHidden(cssClass: string = null) {
+        if (cssClass == null) {
+            cssClass = localStorage.getItem("fh-images-hidden");
+        }
+
+        if (cssClass) {
+            document.body.classList.remove(cssClass);
+        }
+        localStorage.setItem("fh-images-hidden", "");
     }
 
     isHighContrastActive() {

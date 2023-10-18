@@ -17,13 +17,17 @@ public class WCAGService {
     @Getter
     public String cssClassForContrast;
 
-    @Value("${fh.web.highContrast.cssClass:fh-size-2x}")
+    @Value("${fh.web.fontSize2x.cssClass:fh-size-2x}")
     @Getter
     public String cssClassForSize2;
 
-    @Value("${fh.web.highContrast.cssClass:fh-size-4x}")
+    @Value("${fh.web.fontSize4x.cssClass:fh-size-4x}")
     @Getter
     public String cssClassForSize4;
+
+    @Value("${fh.web.imagesHidden.cssClass:fh-images-hidden}")
+    @Getter
+    public String cssClassForImagesHidden;
 
     public void setHighContrast() {
         if (SessionManager.getUserSession() != null) {
@@ -93,11 +97,44 @@ public class WCAGService {
         }
     }
 
+    public void setImagesHidden() {
+        if (SessionManager.getUserSession() != null) {
+            if (SessionManager.getUserSession().getAttributes() != null) {
+                SessionManager.getUserSession().getAttributes().put("fh-images-hidden", Boolean.TRUE);
+            } else {
+                LinkedHashMap<String, Object> map = new LinkedHashMap<>();
+                map.put("fh-images-hidden", Boolean.TRUE);
+                SessionManager.getUserSession().setAttributes(map);
+            }
+        }
+    }
+
+    public void setImagesShow() {
+        if (SessionManager.getUserSession() != null) {
+            if (SessionManager.getUserSession().getAttributes() != null) {
+                SessionManager.getUserSession().getAttributes().put("fh-images-hidden", Boolean.FALSE);
+            } else {
+                LinkedHashMap<String, Object> map = new LinkedHashMap<>();
+                map.put("fh-images-hidden", Boolean.FALSE);
+                SessionManager.getUserSession().setAttributes(map);
+            }
+        }
+    }
+
     public Boolean isHighContrast() {
 
         if (SessionManager.getUserSession() != null && SessionManager.getUserSession().getAttributes() != null) {
             Boolean isHighContrast = (Boolean) SessionManager.getUserSession().getAttributes().get("fh-high-contrast");
             return Boolean.TRUE.equals(isHighContrast);
+        } else {
+            return Boolean.FALSE;
+        }
+    }
+
+    public Boolean isImagesHidden () {
+        if (SessionManager.getUserSession() != null && SessionManager.getUserSession().getAttributes() != null) {
+            Boolean isImagesHidden = (Boolean) SessionManager.getUserSession().getAttributes().get("fh-images-hidden");
+            return Boolean.TRUE.equals(isImagesHidden);
         } else {
             return Boolean.FALSE;
         }

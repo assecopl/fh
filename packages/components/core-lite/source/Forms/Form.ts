@@ -34,11 +34,11 @@ class Form extends HTMLFormComponent {
     private windowListenerMouseUp: any;
     private modalDeferred;
     protected headingTypeValue: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" = null;
-    protected blockFocusForModal: boolean = false;
+    public blockFocusForModal: boolean = false;
 
     protected afterInitActions: Array<any> = [];
 
-    protected focusTrap: focusTrap.FocusTrap = null;
+    public focusTrap: focusTrap.FocusTrap = null;
 
     protected lastFocusedElementId: any = null;
 
@@ -191,7 +191,7 @@ class Form extends HTMLFormComponent {
                     try {
                         if (this.htmlElement) {
                             // @ts-ignore
-                            this.focusTrap = focusTrap(this.htmlElement, {});
+                            this.focusTrap = focusTrap.createFocusTrap(this.htmlElement, {});
                             this.focusTrap.activate();
                         }
                     } catch (e) {
