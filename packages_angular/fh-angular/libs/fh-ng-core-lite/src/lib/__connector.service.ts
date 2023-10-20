@@ -1,7 +1,10 @@
 import * as Pako from 'pako';
 import {SocketOutputCommands} from './enum/SocketOutputCommands';
 
-export class ConnectorService {
+/**
+ * @deprecated The method should not be used
+ */
+export class __connectorService {
   private target: string;
   private reconnectCallback: any;
   private openCallback: any;

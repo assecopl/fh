@@ -10,8 +10,8 @@ import {
   Optional,
   SkipSelf,
 } from '@angular/core';
-import {FormsManagerService} from '../../forms-manager.service';
 import * as $ from 'jquery';
+import {FormsManager} from "../../Socket/FormsManager";
 
 /**
  * Klasa odpowiedzialna za budowę drzewa komponentów FHNG
@@ -34,7 +34,7 @@ export class FhngComponent implements OnInit, AfterViewInit, AfterContentInit {
 
   public searchId: string = '';
 
-  protected formsManager: FormsManagerService;
+    protected formsManager: FormsManager;
 
   /**
    * For Input(FhngReactiveInputC) components this parameter is used as modelBinding parameter.
@@ -57,7 +57,7 @@ export class FhngComponent implements OnInit, AfterViewInit, AfterContentInit {
     if (this.parentFhngComponent) {
       this.parentFhngComponent.childFhngComponents.push(this);
     }
-    this.formsManager = this.injector.get(FormsManagerService, null);
+      this.formsManager = this.injector.get(FormsManager, null);
   }
 
   public findFhngComponent(id: string): FhngComponent {

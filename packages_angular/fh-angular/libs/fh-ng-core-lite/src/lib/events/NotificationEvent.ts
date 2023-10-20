@@ -1,5 +1,5 @@
-import {BaseEvent} from 'projects/fh-forms-manager-ng/src/lib/events/BaseEvent';
 import 'bootstrap/js/dist/toast';
+import {BaseEvent} from './BaseEvent';
 
 export class NotificationEvent extends BaseEvent {
   constructor() {

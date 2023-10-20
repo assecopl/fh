@@ -1,24 +1,27 @@
 import {Injectable} from '@angular/core';
-import {ConnectorService} from './connector.service';
+import {__connectorService} from './__connector.service';
 import {Util} from './service/Util';
 
+/**
+ * @deprecated The method should not be used
+ */
 @Injectable({
   providedIn: 'root',
 })
-export class SocketHandlerService {
+export class __socketHandlerService {
   public connectionId: string | null = null;
-  private connectors: ConnectorService[] = [];
-  public activeConnector: ConnectorService;
+    private connectors: __connectorService[] = [];
+    public activeConnector: __connectorService;
   public context: string = 'socketForms';
 
   constructor(private util: Util) {
-    this.activeConnector = new ConnectorService(
+      this.activeConnector = new __connectorService(
       'ws://localhost:8090/fhdp-demo-app/socketForms'
     );
     this.connectors.push(this.activeConnector);
   }
 
-  public addConnector(connector: ConnectorService) {
+    public addConnector(connector: __connectorService) {
     this.connectors.push(connector);
   }
 

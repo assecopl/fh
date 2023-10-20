@@ -4,7 +4,7 @@ import {LanguageChangeObserver} from './LanguageChangeObserver';
 @Injectable({
   providedIn: 'root',
 })
-export class i18nService {
+export class I18nService {
   constructor() {
   }
 

@@ -17,6 +17,7 @@ import {RepeaterComponent} from './controls/repeater/repeater.component';
 import {OutputLabelComponent} from './controls/output-label/output-label.component';
 import {PanelGroupComponent} from "./controls/panel-group/panel-group.component";
 import {ApplicationLockComponent} from "./components/backdrop/application-lock.component";
+import {NotificationsComponent} from "./components/notifications/notifications-component";
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import {ApplicationLockComponent} from "./components/backdrop/application-lock.c
     OutputLabelComponent,
     PanelGroupComponent,
     ApplicationLockComponent,
+      NotificationsComponent
   ],
   imports: [CommonModule, NgbModule],
   exports: [
@@ -50,7 +52,8 @@ import {ApplicationLockComponent} from "./components/backdrop/application-lock.c
     DropdownItemComponent,
     TreeElementComponent,
     OutputLabelComponent,
-    PanelGroupComponent
+      PanelGroupComponent,
+      NotificationsComponent
   ],
 })
 export class FhNgCoreLiteModule {

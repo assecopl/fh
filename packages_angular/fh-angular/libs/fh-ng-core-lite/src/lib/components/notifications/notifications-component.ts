@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Host, Injector, Input, OnInit, Optional, Output, SkipSelf,} from '@angular/core';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
-import {FhngNotificationService} from '@fhng/ng-core';
+import {NotificationService} from '../../service/Notification';
 
 @Component({
   selector: 'fhng-notifications',
@@ -11,7 +11,7 @@ export class NotificationsComponent implements OnInit {
   constructor(
     public injector: Injector,
     @Optional() @Host() @SkipSelf() parentFhngComponent: FhngComponent,
-    public notification: FhngNotificationService
+    public notification: NotificationService
   ) {
   }
 

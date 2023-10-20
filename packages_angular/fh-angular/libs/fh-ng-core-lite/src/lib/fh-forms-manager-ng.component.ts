@@ -1,7 +1,6 @@
 import {AfterViewInit, Component, Input, OnDestroy, OnInit,} from '@angular/core';
-import {FormsManagerService} from './forms-manager.service';
 import {AbstractDynamicLoadComponent} from './AbstractDynamicLoadComponent';
-import {i18nService} from "./service/i18n.service";
+import {I18nService} from "./service/i18n.service";
 import {ApplicationLockEN} from "./I18n/ApplicationLock.en";
 import {ApplicationLockPL} from "./I18n/ApplicationLock.pl";
 import {ConnectorEN} from "./I18n/Connector.en";
@@ -10,6 +9,9 @@ import {FormsManagerEN} from "./I18n/FormsManager.en";
 import {FormsManagerPL} from "./I18n/FormsManager.pl";
 import {TranslationsEn} from "./I18n/translations.en";
 import {TranslationsPl} from "./I18n/translations.pl";
+import {ShutdownEventPL} from './I18n/ShutdownEvent.pl';
+import {ShutdownEventEN} from './I18n/ShutdownEvent.en';
+import {FormsManager} from "./Socket/FormsManager";
 
 @Component({
   selector: 'fh-forms-manager-ng',
@@ -132,29 +134,30 @@ export class FhFormsManagerNgComponent
 
   // @ViewChild('dynamicComponentContainer', {static: true,read: ViewContainerRef})
   // public adHost3!:ViewContainerRef;
-  constructor(private fm: FormsManagerService, private i18n: i18nService) {
+  constructor(private fm: FormsManager, private i18n: I18nService) {
     super();
     /**
      * Register default translations strings for module.
      */
     i18n.registerStrings('en', ApplicationLockEN);
     i18n.registerStrings('pl', ApplicationLockPL);
-    i18n.registerStrings('en', ConnectorEN);
-    i18n.registerStrings('pl', ConnectorPL);
+    i18n.registerStrings('en', ConnectorEN, true);
+    i18n.registerStrings('pl', ConnectorPL, true);
     i18n.registerStrings('en', FormsManagerEN);
     i18n.registerStrings('pl', FormsManagerPL);
     i18n.registerStrings('en', TranslationsEn);
     i18n.registerStrings('pl', TranslationsPl);
+    i18n.registerStrings('pl', ShutdownEventPL);
+    i18n.registerStrings('en', ShutdownEventEN);
 
 
-
-    this.fm.init();
-    this.fm.response.subscribe((value) => {
-      value.openForm.forEach((form) => {
+    // this.fm.init();
+    this.fm.openedFormsSubject.subscribe((form) => {
+      // value.forEach((form) => {
         if (form.container == 'menuForm') this.menuForm = form;
         if (form.container == 'navbarForm') this.navbarForm = form;
         if (form.container == 'mainForm') this.mainForm = form;
-      });
+      // });
     });
 
     // first.openForm.forEach((form) => {
