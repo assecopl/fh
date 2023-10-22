@@ -19,6 +19,7 @@ import {PanelGroupComponent} from "./controls/panel-group/panel-group.component"
 import {ApplicationLockComponent} from "./components/backdrop/application-lock.component";
 import {NotificationsComponent} from "./components/notifications/notifications-component";
 
+
 @NgModule({
   declarations: [
     FhMLService,

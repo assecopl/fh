@@ -8,7 +8,7 @@
     [autohide]="toast.delay > 0"
     [delay]="toast.delay"
     (click)="t.hide()"
-    (hide)="onDispose(toast)"
+    (hide)="removeToast(toast)"
   >{{ toast.body }}</ngb-toast
   >
 </div>

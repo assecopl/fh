@@ -48,11 +48,11 @@ export class NotificationService {
     }
 
 
-    private createToast(body: string, classname: string, header: string = null, delay: number = 5000) {
+  private createToast(body: string, classname: string, header: string = null, delay: number = 10000) {
         this.toastsObserable.next({
             body: body,
             classname: classname,
-            delay: delay && delay >= 0 ? delay : 5000,
+          delay: delay && delay >= 0 ? delay : 10000,
             header: header
         });
     }

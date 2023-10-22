@@ -61,9 +61,13 @@
 
 div.toastContainer {
   position: fixed;
-  top: 15px;
-  right: 30px;
+  bottom: 15px;
+  right: 50%;
+  //margin-right: -50%;
   z-index: 1200;
+  width: 350px;
+  max-width: 100%;
+  margin-right: -175px;
 }
 
 .toast {
