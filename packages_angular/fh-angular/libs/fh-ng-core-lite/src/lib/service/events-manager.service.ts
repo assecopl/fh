@@ -2,6 +2,9 @@ import {Injectable, inject} from '@angular/core';
 import {BaseEvent} from "../events/BaseEvent";
 import {NotificationEvent} from "../events/NotificationEvent";
 import {NotificationService} from "./Notification";
+import {SessionTimeoutEvent} from "../events/SessionTimeoutEvent";
+import {CustomActionEvent} from '../events/CustomActionEvent';
+import {LanguageChangeEvent} from "../events/LanguageChangeEvent";
 
 declare var contextRoot: string;
 declare var fhBaseUrl: string;
@@ -14,12 +17,19 @@ class EventsManager {
 
   private notificationService: NotificationService = inject(NotificationService);
 
+
   protected events: {
     [index: string]: BaseEvent;
   } = {}
 
-  constructor() {
-    this.registerEvent(new NotificationEvent());
+  constructor(private sessionTimeoutEvent: SessionTimeoutEvent,
+              private notificationEvent: NotificationEvent,
+              private customActionEvent: CustomActionEvent,
+              private languageChangeEvent: LanguageChangeEvent) {
+    this.registerEvent(sessionTimeoutEvent);
+    this.registerEvent(notificationEvent);
+    this.registerEvent(customActionEvent);
+    this.registerEvent(languageChangeEvent);
   }
 
   public registerEvent(event: BaseEvent): void {

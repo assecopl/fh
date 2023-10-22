@@ -3,16 +3,16 @@ import {BaseEvent} from './BaseEvent';
 import * as $ from 'jquery';
 import {NotificationService} from "../service/Notification"; //TODO remove Jquery
 import {Injectable, inject} from '@angular/core';
+import {EventsManager} from "../service/events-manager.service";
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({providedIn: 'root'})
 export class NotificationEvent extends BaseEvent {
 
   private notificationService: NotificationService = inject(NotificationService);
   constructor() {
     super();
   }
+
 
   public fire(data: any): void {
     this.createToast(data);

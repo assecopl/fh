@@ -18,6 +18,13 @@ import {OutputLabelComponent} from './controls/output-label/output-label.compone
 import {PanelGroupComponent} from "./controls/panel-group/panel-group.component";
 import {ApplicationLockComponent} from "./components/backdrop/application-lock.component";
 import {NotificationsComponent} from "./components/notifications/notifications-component";
+import {BaseEvent} from "./events/BaseEvent";
+import {LanguageChangeEvent} from "./events/LanguageChangeEvent";
+import {NotificationEvent} from "./events/NotificationEvent";
+import {SessionTimeoutEvent} from "./events/SessionTimeoutEvent";
+import {CustomActionEvent} from "./events/CustomActionEvent";
+import {CustomActionsManager} from "./service/custom-actions-manager.service";
+import {EventsManager} from "./service/events-manager.service";
 
 
 @NgModule({
@@ -40,6 +47,13 @@ import {NotificationsComponent} from "./components/notifications/notifications-c
     ApplicationLockComponent,
       NotificationsComponent
   ],
+  providers: [
+    CustomActionsManager,
+    EventsManager,
+    LanguageChangeEvent,
+    NotificationEvent,
+    SessionTimeoutEvent,
+    CustomActionEvent],
   imports: [CommonModule, NgbModule],
   exports: [
     FhFormsManagerNgComponent,
