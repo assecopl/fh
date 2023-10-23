@@ -57,14 +57,14 @@ class FormsHandler extends FhModule {
     protected wcagUtil: WCAGUtil;
 
     protected registerComponents() {
-        FhContainer.bind<I18n>('I18n').to(I18n).inSingletonScope();
+        FhContainer.bind<I18n>('I18n').to(I18n).inSingletonScope(); //Added to Angular
 
-        FhContainer.bind<Util>('Util').to(Util).inSingletonScope();
-        FhContainer.bind<WCAGUtil>('WCAGUtil').to(WCAGUtil).inSingletonScope();
-        FhContainer.bind<LayoutHandler>('LayoutHandler').to(LayoutHandler).inSingletonScope();
+        FhContainer.bind<Util>('Util').to(Util).inSingletonScope(); // Added to ANgular
+        FhContainer.bind<WCAGUtil>('WCAGUtil').to(WCAGUtil).inSingletonScope(); // Added to ANgular
+        FhContainer.bind<LayoutHandler>('LayoutHandler').to(LayoutHandler).inSingletonScope(); // Not right now
         FhContainer.bind<FormsManager>('FormsManager').to(FormsManager).inSingletonScope();
         FhContainer.bind<SocketHandler>('SocketHandler').to(SocketHandler).inSingletonScope();
-        FhContainer.bind<ApplicationLock>('ApplicationLock').to(ApplicationLock).inSingletonScope();
+        FhContainer.bind<ApplicationLock>('ApplicationLock').to(ApplicationLock).inSingletonScope(); // Added to ANgular
         FhContainer.bind<FH>('FH').to(FH).inSingletonScope();
 
         FhContainer.bind<(target: string, reconnectCallback: () => void, openCallback: () => void) => Connector>("Connector")
@@ -92,7 +92,7 @@ class FormsHandler extends FhModule {
         FhContainer.bind<BaseEvent>('Events.ChatEvent').to(ChatEvent).inRequestScope();
         FhContainer.bind<BaseEvent>('Events.ChatListEvent').to(ChatListEvent).inRequestScope();
         FhContainer.bind<CustomActions>('CustomActions').to(CustomActions).inSingletonScope();
-        FhContainer.bind<FHML>('FHML').to(FHML).inSingletonScope();
+        FhContainer.bind<FHML>('FHML').to(FHML).inSingletonScope(); // Added to ANgular
         FhContainer.bind<FormComponentChangesQueue>('FormComponentChangesQueue').to(FormComponentChangesQueue).inRequestScope();
 
         FhContainer.bind<(componentObj: any, formElement: any) => FormComponentKeySupport>("FormComponentKeySupport")

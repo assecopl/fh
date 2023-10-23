@@ -119,6 +119,7 @@ import {FormsManager} from "./Socket/FormsManager";
       </div>
     </div>
     <fhng-application-lock></fhng-application-lock>
+    <fhng-notifications></fhng-notifications>
   `,
   styles: [],
 })

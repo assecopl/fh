@@ -23,6 +23,10 @@ export class NotificationsComponent implements OnInit {
   @Input()
   public toasts: any[] = [];
 
+  public removeToast(toast: any): void {
+    this.toasts = this.toasts.filter(t => t !== toast);
+  }
+
   onDispose(toast: any) {
     this.onToastDispose.emit(toast);
   }
@@ -30,6 +34,10 @@ export class NotificationsComponent implements OnInit {
   ngOnInit(): void {
     this.notification.filesObserable.subscribe((c) => {
       this.downloadToasts = c;
+    });
+    this.toasts = [];
+    this.notification.toastsObserable.subscribe(c => {
+      this.toasts.push(c);
     });
   }
 }

@@ -8,7 +8,9 @@ import {Injectable, Injector, inject} from "@angular/core";
 import {Util} from "../service/Util";
 import {SocketHandler} from "./SocketHandler";
 import {Subject} from "rxjs";
-import {NotificationEvent} from "../events/NotificationEvent";
+import {NotificationService} from "../service/Notification";
+import {EventsManager} from "../service/events-manager.service";
+import {BaseEvent} from "../events/BaseEvent";
 
 // declare const ENV_IS_DEVELOPMENT: boolean;
 
@@ -28,6 +30,9 @@ class FormsManager {
     private socketHandler: SocketHandler = inject(SocketHandler);
     // @lazyInject('LayoutHandler')
     // private layoutHandler: LayoutHandler;
+
+  private notificationService: NotificationService = inject(NotificationService);
+  private eventsManager: EventsManager = inject(EventsManager);
 
     public duringShutdown: boolean = false;
     private openedForms: any[] = [];
@@ -150,7 +155,9 @@ class FormsManager {
         }
         eventList.forEach((eventObj) => {
             let type = eventObj.type;
-            let event = this.injector.get('Events.' + type, null); // sprawdzić czy po stringu znajdzie, jeżeli nie - zdefiniować InejctionToken dla każdego eventu.
+          // let event = this.injector.get('Events.' + type, null); // sprawdzić czy po stringu znajdzie, jeżeli nie - zdefiniować InejctionToken dla każdego eventu.
+
+          let event: BaseEvent = this.eventsManager.getEvent(type);
 
             if (event && typeof event.fire === 'function') {
                 event.fire(eventObj);
@@ -221,11 +228,12 @@ class FormsManager {
         let serviceType = eventType === null && formId == null;
 
         if (this.pendingRequestsCount > 0) {
-            let event = new NotificationEvent();
-            event.fire({
-                level: 'warning',
-                message: this.i18n.__("request pending")
-            });
+          // let event = new NotificationEvent();
+          // event.fire({
+          //     level: 'warning',
+          //     message: this.i18n.__("request pending")
+          // });
+          this.notificationService.showWarning(this.i18n.__("request pending"))
             return false;
         }
 
