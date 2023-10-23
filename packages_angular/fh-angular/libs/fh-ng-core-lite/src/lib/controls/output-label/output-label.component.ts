@@ -18,6 +18,7 @@ import {BootstrapWidthEnum} from '../../models/enums/BootstrapWidthEnum';
 import {IconAligmentType} from '../../models/CommonTypes';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
 import {FhMLService} from '../../service/fh-ml.service';
+import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
 
 @Component({
   selector: 'fhng-output-label',
@@ -42,13 +43,6 @@ export class OutputLabelComponent extends FhngHTMLElementC implements OnInit {
 
   @Input()
   public value: any;
-
-  //TODO Move Icon to mixin class ??
-  @Input()
-  public icon: string;
-
-  @Input()
-  public iconAlignment: IconAligmentType = 'BEFORE';
 
   @HostBinding('class.justify-content-end')
   justifyContentRight: boolean = false;
@@ -119,7 +113,13 @@ export class OutputLabelComponent extends FhngHTMLElementC implements OnInit {
     }
   }
 
-  override ngOnChanges(changes: SimpleChanges) {
+  public override ngOnChanges(changes: SimpleChanges) {
     super.ngOnChanges(changes);
+  }
+
+  public override mapAttributes(data: IDataAttributes) {
+    super.mapAttributes(data);
+    this.value = data.value;
+    console.log('OutputLabelComponent:map', data, this)
   }
 }

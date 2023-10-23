@@ -4,6 +4,7 @@ import {
   EventEmitter,
   forwardRef,
   Host,
+  HostBinding,
   Injector,
   Input,
   OnChanges,
@@ -12,6 +13,7 @@ import {
   Output,
   SimpleChanges,
   SkipSelf,
+  ViewEncapsulation,
 } from '@angular/core';
 import {TreeElementComponent} from '../tree-element/tree-element.component';
 import {BootstrapWidthEnum} from '../../models/enums/BootstrapWidthEnum';
@@ -19,7 +21,7 @@ import {FhngComponent} from '../../models/componentClasses/FhngComponent';
 import {FhngHTMLElementC} from '../../models/componentClasses/FhngHTMLElementC';
 
 @Component({
-  selector: 'fh-tree',
+  selector: '[fh-tree]',
   templateUrl: './tree.component.html',
   styleUrls: ['./tree.component.scss'],
   providers: [
@@ -32,7 +34,7 @@ import {FhngHTMLElementC} from '../../models/componentClasses/FhngHTMLElementC';
      * Dzięki temu budujemy hierarchię kontrolek Fhng.
      */
     {provide: FhngComponent, useExisting: forwardRef(() => TreeComponent)},
-  ],
+  ]
 })
 export class TreeComponent
   extends FhngHTMLElementC
@@ -54,6 +56,9 @@ export class TreeComponent
   @Input()
   public treeElementTemplate: TreeElementComponent = null;
 
+  @Input()
+  public child: boolean = false;
+
   @ContentChild(TreeElementComponent)
   treeElement: TreeElementComponent;
 
@@ -62,6 +67,11 @@ export class TreeComponent
 
   @Output()
   public selectedChange: EventEmitter<any> = new EventEmitter<any>();
+
+  @HostBinding('class.d-none')
+  private get hostDNoneClassDisplay () {
+    return !this.collapsedTree && this.treeElementTemplate !== null;
+  }
 
   constructor(
     injector: Injector,
@@ -81,11 +91,22 @@ export class TreeComponent
     super.ngOnChanges(changes);
   }
 
-  public processCollapsed(element: { id: string; collpased: boolean }) {
-    this.activeElements[element.id] = element.collpased;
+  public processCollapsed(element: any) {
+    this.activeElements[element.id] = !element.collpased;
   }
 
   public setSelected(element: any) {
     this.selectedChange.emit(element);
+  }
+
+  public override mapAttributes(data: any) {
+    super.mapAttributes(data);
+
+    this.collapsedTree = data.expanded;
+    // this.collection = this.data.collection;
+    // this.relation = this.data.relation;
+    // this.iterator = this.data.iterator;
+    // this.treeElementTemplate = this.data.treeElementTemplate;
+    // this.selected = this.data.selected;
   }
 }

@@ -21,7 +21,7 @@ import {FhngComponent} from '../../models/componentClasses/FhngComponent';
 import {BootstrapWidthEnum} from './../../models/enums/BootstrapWidthEnum';
 
 @Component({
-  selector: 'fh-dropdown',
+  selector: '[fh-dropdown]',
   templateUrl: './dropdown.component.html',
   styleUrls: ['./dropdown.component.scss'],
   providers: [
@@ -55,9 +55,6 @@ export class DropdownComponent
   @HostBinding('class.dropdown')
   public dropdown: boolean;
 
-  @Input()
-  public bootstrapStyle: string;
-
   constructor(
     public override injector: Injector,
     @Optional() @Host() @SkipSelf() parentFhngComponent: FhngComponent
@@ -87,5 +84,12 @@ export class DropdownComponent
 
   override ngOnChanges(changes: SimpleChanges) {
     super.ngOnChanges(changes);
+  }
+
+  public override mapAttributes(data: any) {
+    super.mapAttributes(data);
+    this.label = data.label;
+
+    console.log('Dropdown:mapAttributes', data);
   }
 }

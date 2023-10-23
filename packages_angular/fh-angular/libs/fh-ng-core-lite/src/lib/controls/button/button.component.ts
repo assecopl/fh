@@ -44,8 +44,6 @@ import {FhMLService} from '../../service/fh-ml.service';
 export class ButtonComponent
   extends FhngHTMLElementC
   implements OnInit, OnDestroy, OnChanges, AfterViewInit {
-  @Input() // 'style' has conflict with html attribute
-  public bootstrapStyle: string; // Wyniesc na interferjs / klase abstrakcyjną lub coś jeszcze wykmbinować
 
   @Input()
   public active: boolean;
@@ -56,7 +54,8 @@ export class ButtonComponent
   @Input()
   public disabled: boolean;
 
-  @ViewChild('content') someInput: ElementRef;
+  @ViewChild('content')
+  public someInput: ElementRef;
 
   @Output()
   public selectedButton: EventEmitter<ButtonComponent> =
@@ -66,7 +65,6 @@ export class ButtonComponent
 
   constructor(
     public override injector: Injector,
-    private fhngml: FhMLService,
     @Optional() @Host() @SkipSelf() parentFhngComponent: FhngComponent,
     @Optional()
     @Host()
@@ -114,8 +112,6 @@ export class ButtonComponent
     this.selectedButton.emit(this);
   }
 
-  ngOn;
-
   ngOnDestroy(): void {
     if (
       this.parentButtonGroupComponent &&
@@ -123,5 +119,10 @@ export class ButtonComponent
     ) {
       // this.parentButtonGroupComponent.buttonSubcomponents.removeElement(this);
     }
+  }
+
+  public override mapAttributes(data: any) {
+    super.mapAttributes(data);
+    this.label = data.label;
   }
 }

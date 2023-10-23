@@ -1,4 +1,4 @@
-import {Component, forwardRef, HostBinding, Injector, Input, OnChanges, OnInit, SimpleChanges,} from '@angular/core';
+import {Component, forwardRef, HostBinding, Injector, Input, OnChanges, OnInit, SimpleChanges, ElementRef} from '@angular/core';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
 
 @Component({
@@ -22,7 +22,10 @@ export class FormComponent extends FhngComponent implements OnInit, OnChanges {
   @HostBinding('class.form-header')
   header: boolean = false;
 
-  constructor(public override injector: Injector) {
+  constructor(
+    public override injector: Injector,
+    private _elementRef: ElementRef<HTMLElement>
+  ) {
     super(injector, null);
   }
 
@@ -31,6 +34,9 @@ export class FormComponent extends FhngComponent implements OnInit, OnChanges {
     if (this.formType == 'HEADER') {
       this.header = true;
     }
+
+    this._elementRef.nativeElement.classList.add('fc');
+    this._elementRef.nativeElement.classList.add('tree');
   }
 
   ngOnChanges(changes: SimpleChanges): void {

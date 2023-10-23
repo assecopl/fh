@@ -17,10 +17,13 @@
 </ng-container>
 
 <ng-container *ngIf="formType == 'HEADER'">
-  <ng-container *ngFor="let element of subelements">
-    <fh-dynamic-component
-      [data]="element"
-      [formId]="formId"
-    ></fh-dynamic-component>
-  </ng-container>
+  <div id="navbarFormInner">
+    <div id="navbar-main">
+      <fh-dynamic-component
+        *ngFor="let element of subelements"
+        [data]="element"
+        [formId]="formId"
+      ></fh-dynamic-component>
+    </div>
+  </div>
 </ng-container>

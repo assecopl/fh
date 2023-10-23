@@ -8,15 +8,15 @@
     position: relative;
     margin-left: 0.5rem;
 
-    &:before {
-      content: '';
-      display: block;
-      width: 0;
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      border-left: 1px solid;
-    }
+    //&:before {
+    //  content: '';
+    //  display: block;
+    //  width: 0;
+    //  position: absolute;
+    //  top: 0;
+    //  bottom: 0;
+    //  left: 0;
+    //  border-left: 1px solid;
+    //}
   }
 }

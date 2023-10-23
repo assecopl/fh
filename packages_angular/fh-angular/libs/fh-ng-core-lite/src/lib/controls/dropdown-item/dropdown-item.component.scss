@@ -1,4 +1,7 @@
 :host {
   display: block;
-  padding: 0.5em;
+
+  a {
+    cursor: pointer;
+  }
 }

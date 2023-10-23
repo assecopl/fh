@@ -3,7 +3,7 @@ import {
   EventEmitter,
   forwardRef,
   Host,
-  HostBinding,
+  HostBinding, HostListener,
   Injector,
   Input,
   OnInit,
@@ -15,7 +15,7 @@ import {FhngHTMLElementC} from '../../models/componentClasses/FhngHTMLElementC';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
 
 @Component({
-  selector: 'fh-tree-element',
+  selector: '[fh-tree-element]',
   templateUrl: './tree-element.component.html',
   styleUrls: ['./tree-element.component.scss'],
   providers: [
@@ -41,11 +41,9 @@ export class TreeElementComponent extends FhngHTMLElementC implements OnInit {
   override mb3 = false;
 
   @Input()
-  icon: string;
-
-  @Input()
   children: any;
 
+  @HostBinding('class.text-underline')
   @Input()
   expandableNode: boolean = false;
 
@@ -73,7 +71,7 @@ export class TreeElementComponent extends FhngHTMLElementC implements OnInit {
     this.hostWidth = '';
   }
 
-  processTreeElementClick(): void {
+  public processTreeElementClick(): void {
     if (this.expandableNode && this.collapsed) {
       this.collapsed = false;
     } else if (this.expandableNode && !this.collapsed) {

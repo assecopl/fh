@@ -1,0 +1,105 @@
+.fc {
+  &.tree {
+    .list-group {
+      padding: 0;
+      list-style: none;
+      text-align: left;
+    }
+
+    .treeNode {
+      position: relative;
+    }
+
+    .treeNode .treeNodeBody {
+      cursor: pointer;
+    }
+
+    .treeNode > .row {
+      padding: 5px 0;
+      margin-right: 0;
+    }
+
+    .treeNode > .row > div {
+      padding-right: 0;
+      padding-left: 0;
+    }
+
+    .treeNode .form-group {
+      margin-bottom: 0;
+    }
+
+    .treeNode .list-group {
+      margin: 0 0 0 10px;
+    }
+
+    .treeNode .list-group.hidden {
+      display: none;
+    }
+
+    .treeNode .icon {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 5px;
+    }
+
+    .treeNode.selected > .row .outputLabel {
+      text-decoration: underline;
+    }
+  }
+}
+
+.fc.form.modal.show {
+  overflow-y: scroll;
+  word-break: break-word
+}
+
+.fc.outputLabel {
+  padding: .5rem 0
+}
+
+.fc.outputLabel i {
+  margin-right: 5px
+}
+
+.fc.outputLabel.hasHeight {
+  display: inline-block
+}
+
+.fc.tree.treelines .treeNode > .row {
+  padding: 0px;
+}
+
+.fc.tree.treelines .treeNode > .row > div {
+  padding-left: 20px;
+}
+
+.fc.tree.treelines,
+.fc.tree.treelines ul {
+  margin: 0 0 0 0em; /* indentation */
+  padding: 0;
+  list-style: none;
+  position: relative;
+}
+
+.fc.tree.treelines ul {
+  margin-left: .5em
+}
+
+/* (indentation/2) */
+
+.fc.tree.treelines:before,
+.fc.tree.treelines ul:before {
+  content: "";
+  display: block;
+  width: 0;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  border-left: 1px solid;
+}
+
+
+/*.treeNodeBody div.fc.outputLabel {*/
+/*display: inline-block;*/
+/*}*/

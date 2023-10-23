@@ -2,7 +2,7 @@ import {
   Component,
   EventEmitter,
   forwardRef,
-  Host,
+  Host, HostBinding,
   Injector,
   Input,
   OnInit,
@@ -12,7 +12,6 @@ import {
   SkipSelf,
 } from '@angular/core';
 import {FhngHTMLElementC} from '../../models/componentClasses/FhngHTMLElementC';
-import {IconAligmentType} from '../../models/CommonTypes';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
 
 @Component({
@@ -35,12 +34,6 @@ import {FhngComponent} from '../../models/componentClasses/FhngComponent';
   ],
 })
 export class DropdownItemComponent extends FhngHTMLElementC implements OnInit {
-  @Input()
-  public icon: string;
-
-  @Input()
-  public iconAlignment: IconAligmentType;
-
   @Output()
   public selectedButton: EventEmitter<DropdownItemComponent> =
     new EventEmitter<DropdownItemComponent>();
@@ -49,6 +42,16 @@ export class DropdownItemComponent extends FhngHTMLElementC implements OnInit {
   public url: string;
 
   override mb3 = false;
+
+  @HostBinding('class.fc-editable')
+  public get isEditable (): boolean {
+    return this.accessibility == 'EDIT';
+  }
+
+  @HostBinding('class.d-none')
+  public get isHidden (): boolean {
+    return this.accessibility == 'HIDDEN';
+  }
 
   constructor(
     public override injector: Injector,

@@ -118,4 +118,10 @@ export class PanelGroupComponent extends FhngHTMLElementC implements OnInit {
   public override ngOnChanges(changes: SimpleChanges) {
     super.ngOnChanges(changes);
   }
+
+  public override mapAttributes(data: any) {
+    super.mapAttributes(data);
+
+    this.label = data.label;
+  }
 }

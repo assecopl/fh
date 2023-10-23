@@ -1,25 +1,26 @@
-<ng-container *ngIf="breadcrumb">
-  <ng-container *ngIf="!active; else contentTemplate">
-    <btn
-      #focusElement
-      [id]="id"
-      class="{{ active ? 'active' : '' }} btn-link"
-      [ngStyle]="styles"
-      [class.active]="active"
-      availabilityHtmlElement
-    >
-      <ng-container *ngTemplateOutlet="contentTemplate"></ng-container>
-    </btn>
-  </ng-container>
-</ng-container>
-<ng-container *ngIf="!breadcrumb">
+<!--<ng-container *ngIf="breadcrumb">-->
+<!--  <ng-container *ngIf="!active; else contentTemplate">-->
+<!--    <btn-->
+<!--      #focusElement-->
+<!--      [id]="id"-->
+<!--      class="{{ active ? 'active' : '' }} btn-link"-->
+<!--      [ngStyle]="styles"-->
+<!--      [class.active]="active"-->
+<!--      availabilityHtmlElement-->
+<!--    >-->
+<!--      <ng-container *ngTemplateOutlet="contentTemplate"></ng-container>-->
+<!--    </btn>-->
+<!--  </ng-container>-->
+<!--</ng-container>-->
+
+<ng-container>
   <button
     #focusElement
+    class="btn btn-{{ bootstrapStyle }}"
     [id]="id"
-    class="btn btn-{{ bootstrapStyle }} {{ active ? 'active' : '' }}"
     [ngStyle]="styles"
-    [class.active]="active"
-    availabilityHtmlElement
+    [ngClass]="{'active': active}"
+    [innerHTML]="label"
   >
     <ng-container *ngTemplateOutlet="contentTemplate"></ng-container>
   </button>

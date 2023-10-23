@@ -1,20 +1,21 @@
 <a
-  [id]="id"
   ngbDropdownItem
-  #dropItem
-  (click)="onClick()"
   tabindex="0"
-  (keydown.enter)="
-    $event?.stopPropagation(); $event?.preventDefault(); dropItem.click()
-  "
+  #dropItem
+  [id]="id"
+  [attr.aria-labelledby]="id + '_label'"
+  (click)="onClick()"
+  (keydown.enter)="$event?.stopPropagation(); $event?.preventDefault(); dropItem.click()"
 >
-  <ng-container *ngIf="icon && iconAlignment == 'BEFORE'">
-    <i class="{{ icon }}"> </i>
-  </ng-container>
-  <ng-container *ngIf="label">
-    <span [innerHTML]="label"> {{ label }}</span>
-  </ng-container>
-  <ng-container *ngIf="icon && iconAlignment == 'AFTER'">
-    <i class="{{ icon }}"> </i>
-  </ng-container>
+  <span class="fc outputLabel" >
+    <ng-container *ngIf="icon && iconAlignment === 'BEFORE'">
+      <i class="fa-fw {{ icon }}"> </i>
+    </ng-container>
+    <ng-container *ngIf="label">
+      <span [id]="id + '_label'" [attr.for]="id" [innerHTML]="label"> {{ label }}</span>
+    </ng-container>
+    <ng-container *ngIf="icon && iconAlignment === 'AFTER'">
+      <i class="fa-fw {{ icon }}"> </i>
+    </ng-container>
+  </span>
 </a>

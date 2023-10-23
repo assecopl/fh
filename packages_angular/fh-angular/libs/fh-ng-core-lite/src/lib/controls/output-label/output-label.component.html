@@ -77,7 +77,7 @@
   </h6>
 </ng-container>
 <ng-container *ngIf="headingType == 'Default' || headingType == 'Auto'">
-  <div [ngStyle]="styles">
+<!--  <div [ngStyle]="styles">-->
     <ng-container *ngIf="hint; else outputLabel">
       <span
         ngbTooltip="{{ hint }}"
@@ -87,24 +87,28 @@
         <ng-container *ngTemplateOutlet="outputLabel"></ng-container>
       </span>
     </ng-container>
-  </div>
+<!--  </div>-->
 </ng-container>
 
 <ng-template #outputLabel>
-  <i
-    *ngIf="icon && (iconAlignment == 'BEFORE' || !iconAlignment)"
-    class="mr-2 {{ icon }}"
-  ></i>
-  <ng-container *ngIf="value === undefined || value === null">
-    <ng-content></ng-content>
-  </ng-container>
-  <ng-container *ngIf="value !== undefined && value !== null">
-    <ng-container *ngIf="formatter != null">
-      <span>{{ value }}</span>
+  <span
+    class="fc outputLabel"
+    [id]="id"
+    [innerHTML]="value | fhml"
+    [ngClass]="{'fc-editable': this.accessibility === 'EDIT', 'd-none': this.accessibility === 'HIDDEN'}"
+    [ngStyle]="styles">
+    <i
+      *ngIf="icon && (iconAlignment == 'BEFORE' || !iconAlignment)"
+      class="mr-2 {{ icon }}"
+    ></i>
+    <ng-container *ngIf="value === undefined || value === null">
+      <ng-content></ng-content>
     </ng-container>
-    <ng-container *ngIf="formatter == null">
-      <span [innerHTML]="value | fhml">{{ value | fhml }}</span>
+    <ng-container *ngIf="value !== undefined && value !== null">
+      <ng-container>
+        {{ value | fhml }}
+      </ng-container>
     </ng-container>
-  </ng-container>
-  <i *ngIf="icon && iconAlignment == 'AFTER'" class="ml-2 {{ icon }}"></i>
+    <i *ngIf="icon && iconAlignment == 'AFTER'" class="ml-2 {{ icon }}"></i>
+  </span>
 </ng-template>

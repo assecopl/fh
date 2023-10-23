@@ -20,13 +20,22 @@ import {isNumber} from 'util';
 import {FhngComponent} from './FhngComponent';
 import {SafeStyle} from '@angular/platform-browser';
 import {FhMLService} from '../../service/fh-ml.service';
+import {IDataAttributes} from "../interfaces/IDataAttributes";
+import {Accessibility, IconAligmentType, StyleUnit} from "../CommonTypes";
+import {STYLE_UNIT} from "../enums/StyleUnitEnum";
 
 @Directive()
 export class FhngHTMLElementC
   extends FhngComponent
   implements OnInit, AfterViewInit, AfterContentInit, OnChanges {
+
+  public static STYLE_UNIT: StyleUnit = STYLE_UNIT.PX;
+
   @HostBinding('attr.tabindex')
   public tabindex: number = null;
+
+  @Input()
+  public accessibility: Accessibility;
 
   // public availabilityDirective: FhngAvailabilityDirective;
   // public availabilityEnum:any = AvailabilityEnum;
@@ -43,15 +52,18 @@ export class FhngHTMLElementC
   // }
 
   @Input()
+  public bootstrapStyle: any;
+
+  @Input()
   public hiddenElementsTakeUpSpace: boolean = false;
 
+  @Input()
+  public icon: string = null;
+
+  @Input()
+  public iconAlignment: IconAligmentType;
+
   public elementRef: ElementRef;
-
-  private styleUnit: '%' | 'px' | 'em' | 'rem' = 'px';
-
-  /**
-   * Standard inputs for HTMLElement
-   */
 
   @Input()
   public label: string = '';
@@ -60,36 +72,30 @@ export class FhngHTMLElementC
   public labelPosition: 'UP' | 'DOWN' | 'LEFT' | 'RIGHT' = 'UP';
 
   @Input()
-  public set height(value: string) {
-    //TODO Mayby move this setter to decorator
-    this.processStyleWithUnit('height', value);
-  }
-
-  @Input()
   public horizontalAlign: 'LEFT' | 'CENTER' | 'RIGHT';
 
   @HostBinding('class.align-self-left')
-  alignLeft: boolean;
+  public alignLeft: boolean;
 
   @HostBinding('class.text-center')
   @HostBinding('class.align-self-center')
-  alignCenter: boolean;
+  public alignCenter: boolean;
 
   @HostBinding('class.text-right')
   @HostBinding('class.align-self-right')
-  alignRight: boolean;
+  public alignRight: boolean;
 
   @Input()
   public verticalAlign: 'TOP' | 'MIDDLE' | 'BOTTOM';
 
   @HostBinding('class.align-self-start')
-  valignTop: boolean;
+  public valignTop: boolean;
 
   @HostBinding('class.align-self-middle')
-  valignMiddle: boolean;
+  public valignMiddle: boolean;
 
   @HostBinding('class.align-self-end')
-  valignBottom: boolean;
+  public valignBottom: boolean;
 
   @Input()
   public hint: any;
@@ -103,6 +109,46 @@ export class FhngHTMLElementC
 
   @Input()
   public title: string = '';
+
+  //Style object fo ngStyle.
+  public styles: SafeStyle & any = {};
+
+  /**
+   * Parametr width jest domyśłnym parametrem komponentu angularowego, przychwytujemy go aby obsłużyć
+   * logikę ustawiania klas typowych dla bootstrapa.
+   */
+  public width: string = 'md-12';
+
+  @HostBinding('class')
+  @Input()
+  public hostWidth: string = '';
+
+  @HostBinding('style')
+  public hostStyle: SafeStyle & any = {};
+
+  @HostBinding('class.mb-2')
+  public mb3 = true;
+
+  @Input('formatter')
+  public formatterName: string = null;
+  // public formatter:FhngFormatter = null;
+  public formatter: any = null;
+  // public formatterService:FhngFormatterService = null;
+  public formatterService: any = null;
+
+  @Output()
+  public click: EventEmitter<any> = new EventEmitter<any>();
+
+  @HostBinding('class.pointer')
+  public pointer: boolean = false;
+
+  @HostBinding('class.fc')
+  public fcClass: boolean = true;
+
+  @HostBinding('class.wrapper')
+  public wrapperClas: boolean = true;
+
+  /* Setters and Getters*/
 
   @Input()
   public set marginTop(value: string) {
@@ -145,42 +191,16 @@ export class FhngHTMLElementC
     this.processStyleWithUnit('paddingRight', value);
   }
 
-  //Style object fo ngStyle.
-  public styles: SafeStyle & any = {};
-
-  /**
-   * Parametr width jest domyśłnym parametrem komponentu angularowego, przychwytujemy go aby obsłużyć
-   * logikę ustawiania klas typowych dla bootstrapa.
-   */
-  public width: string = 'md-12';
-
-  @Input('width')
-  public set _width(value: string) {
-    this.processWidth(value, true);
+  @Input()
+  public set height(value: string) {
+    //TODO Mayby move this setter to decorator
+    this.processStyleWithUnit('height', value);
   }
 
-  @HostBinding('class')
-  @Input()
-  hostWidth: string = '';
-
-  @HostBinding('style')
-  hostStyle: SafeStyle & any = {};
-
-  @HostBinding('class.mb-2')
-  mb3 = true;
-
-  @Input('formatter')
-  public formatterName: string = null;
-  // public formatter:FhngFormatter = null;
-  public formatter: any = null;
-  // public formatterService:FhngFormatterService = null;
-  public formatterService: any = null;
-
-  @Output()
-  public click: EventEmitter<any> = new EventEmitter<any>();
-
-  @HostBinding('class.pointer')
-  public pointer: boolean = false;
+  @Input('width')
+  public set setWidth(value: string) {
+    this.processWidth(value, true);
+  }
 
   constructor(
     public override injector: Injector,
@@ -224,7 +244,7 @@ export class FhngHTMLElementC
     //   }
     // }
 
-    this.processWidth(this._width);
+    this.processWidth(this.setWidth);
     this.processHorizontalAlign();
     this.processVerticalAlign();
 
@@ -263,13 +283,13 @@ export class FhngHTMLElementC
           value == 'fit' //width Relative width of the viewport
         ) {
           //Set host element width to auto to fit its content.
-          this.hostWidth += 'col-auto fc wrapper exactWidth';
+          this.hostWidth += 'col-auto exactWidth';
           //Set inner element styles to exact width;
           if (value != 'fit') {
             this.processStyleWithUnit('width', value);
           }
         } else if (value == 'auto') {
-          this.hostWidth += 'col fc wrapper';
+          this.hostWidth += 'col';
         } else {
           //Host works with bootstrap width classes.
           const widths = value.replace(/ /g, '').split(',');
@@ -283,7 +303,7 @@ export class FhngHTMLElementC
     let v = null;
     if (val) {
       v = isNumber(val) ? val : val.replace(/px|%|em|rem|pt/gi, '');
-      this.styles[name + '.' + this.styleUnit] = v;
+      this.styles[name + '.' + FhngHTMLElementC.STYLE_UNIT] = v;
     }
     return v;
   }
@@ -341,5 +361,35 @@ export class FhngHTMLElementC
         console.warn('Element ' + this.id + ' is not focusable');
       }
     }
+  }
+
+  public mapAttributes (data: IDataAttributes): void {
+    this.accessibility = data.accessibility;
+    this.bootstrapStyle = data.style;
+    this.formId = data.formId;
+    this.icon = data.icon;
+    this.innerId = data.id;
+    this.label = data.value;
+    this.title = data.title;
+    this.subelements = data.subelements;
+    this.width = data.width;
+    this.iconAlignment = data.iconAlignment;
+    this.styles = this._convertInlineStylesToSafeStyle(data.inlineStyle);
+  }
+
+  private _convertInlineStylesToSafeStyle (inlineStyle: string): SafeStyle {
+    let _safeStyle: SafeStyle = {};
+
+    for (let style of (inlineStyle || '').split(';').filter(item => !!(item))) {
+      let _property = style.split(':');
+
+      if (_property[0] && _property[1]) {
+        _safeStyle[_property[0]] = _property[1];
+      }
+    }
+
+    console.log('_safeStyle', _safeStyle);
+
+    return _safeStyle;
   }
 }
