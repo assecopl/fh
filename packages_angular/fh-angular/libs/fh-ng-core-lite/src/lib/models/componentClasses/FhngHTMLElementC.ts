@@ -199,7 +199,7 @@ export class FhngHTMLElementC
 
   @Input('width')
   public set setWidth(value: string) {
-    this.processWidth(value, true);
+    // this.processWidth(value, true);
   }
 
   constructor(
@@ -244,7 +244,7 @@ export class FhngHTMLElementC
     //   }
     // }
 
-    this.processWidth(this.setWidth);
+    // this.processWidth(this.setWidth);
     this.processHorizontalAlign();
     this.processVerticalAlign();
 
@@ -267,37 +267,7 @@ export class FhngHTMLElementC
   /**
    * Obsługa szerokości bootstrapowych
    */
-  public processWidth(value: string, force: boolean = false) {
-    if (this.hostWidth.length === 0 || force) {
-      if (!value) {
-        value = this.width;
-      }
 
-      if (value) {
-        this.width = value;
-
-        if (
-          value.indexOf('px') >= 0 || //pixel width
-          value.indexOf('%') >= 0 || //procent widths
-          value.indexOf('vw') >= 0 || //width Relative width of the viewport
-          value == 'fit' //width Relative width of the viewport
-        ) {
-          //Set host element width to auto to fit its content.
-          this.hostWidth += 'col-auto exactWidth';
-          //Set inner element styles to exact width;
-          if (value != 'fit') {
-            this.processStyleWithUnit('width', value);
-          }
-        } else if (value == 'auto') {
-          this.hostWidth += 'col';
-        } else {
-          //Host works with bootstrap width classes.
-          const widths = value.replace(/ /g, '').split(',');
-          this.hostWidth += ' col-' + widths.join(' col-');
-        }
-      }
-    }
-  }
 
   processStyleWithUnit(name: string, val: string) {
     let v = null;
@@ -348,6 +318,38 @@ export class FhngHTMLElementC
     }
   }
 
+  public processWidth(value: string, force: boolean = false) {
+    if (this.hostWidth.length === 0 || force) {
+      if (!value) {
+        value = this.width;
+      }
+
+      if (value) {
+        this.width = value;
+
+        if (
+          value.indexOf('px') >= 0 || //pixel width
+          value.indexOf('%') >= 0 || //procent widths
+          value.indexOf('vw') >= 0 || //width Relative width of the viewport
+          value == 'fit' //width Relative width of the viewport
+        ) {
+          //Set host element width to auto to fit its content.
+          this.hostWidth += 'col-auto exactWidth';
+          //Set inner element styles to exact width;
+          if (value != 'fit') {
+            this.processStyleWithUnit('width', value);
+          }
+        } else if (value == 'auto') {
+          this.hostWidth += 'col';
+        } else {
+          //Host works with bootstrap width classes.
+          const widths = value.replace(/ /g, '').split(',');
+          this.hostWidth += ' col-' + widths.join(' col-');
+        }
+      }
+    }
+  }
+
   /**
    * Component Focus logic
    */
@@ -372,7 +374,7 @@ export class FhngHTMLElementC
     this.label = data.value;
     this.title = data.title;
     this.subelements = data.subelements;
-    this.width = data.width;
+    // this.width = data.width;
     this.iconAlignment = data.iconAlignment;
     this.styles = this._convertInlineStylesToSafeStyle(data.inlineStyle);
   }
@@ -387,8 +389,6 @@ export class FhngHTMLElementC
         _safeStyle[_property[0]] = _property[1];
       }
     }
-
-    console.log('_safeStyle', _safeStyle);
 
     return _safeStyle;
   }

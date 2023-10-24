@@ -123,6 +123,7 @@ export class ButtonComponent
 
   public override mapAttributes(data: any) {
     super.mapAttributes(data);
+
     this.label = data.label;
   }
 }

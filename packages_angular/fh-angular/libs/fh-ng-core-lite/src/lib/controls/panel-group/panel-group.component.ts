@@ -37,32 +37,45 @@ import {FhMLService} from '../../service/fh-ml.service';
   ],
 })
 export class PanelGroupComponent extends FhngHTMLElementC implements OnInit {
-  override width: string = BootstrapWidthEnum.MD12;
+  public override width: string = BootstrapWidthEnum.MD12;
 
   public accordion: boolean = false;
 
-  @Input() collapsed: boolean = false;
-  @Input() collapsible: boolean = false;
-  @Input() borderVisible: boolean = false;
-  @Input() public iconOpened: string = 'fa-chevron-down';
-  @Input() public iconClosed: string = 'fa-chevron-up';
+  @Input()
+  public collapsed: boolean = false;
+
+  @Input()
+  public collapsible: boolean = false;
+
+  @Input()
+  public borderVisible: boolean = false;
+
+  @Input()
+  public iconOpened: string = 'fa-chevron-down';
+
+  @Input()
+  public iconClosed: string = 'fa-chevron-up';
 
   @Output()
   public headerClick: EventEmitter<boolean> = new EventEmitter<boolean>();
+
   public isHeaderCLickUsed: boolean = false;
 
   /**
    * If set to true panel-group will fill its header with specific component from its content.
    * Simply add css class ("panel-header") to component which you want to be placed inside header.
    */
-  @Input() public customHeader: boolean = false;
+  @Input()
+  public customHeader: boolean = false;
 
   @HostBinding('class.mb-3')
   public override mb3: boolean = true;
+
   @HostBinding('class.card')
   public hostCard: boolean = false;
 
-  @Output() panelToggle = new EventEmitter<{
+  @Output()
+  public panelToggle = new EventEmitter<{
     id: string;
     collapsed: boolean;
   }>();
@@ -86,6 +99,10 @@ export class PanelGroupComponent extends FhngHTMLElementC implements OnInit {
      * we can check if there is any observer/subsribers.
      */
     this.isHeaderCLickUsed = this.headerClick.observers.length > 0;
+
+    if (this.width) {
+      this.processWidth(this.width);
+    }
   }
 
   processCollapsible(): void {
@@ -123,5 +140,7 @@ export class PanelGroupComponent extends FhngHTMLElementC implements OnInit {
     super.mapAttributes(data);
 
     this.label = data.label;
+
+    console.log('PanelGroup', data);
   }
 }

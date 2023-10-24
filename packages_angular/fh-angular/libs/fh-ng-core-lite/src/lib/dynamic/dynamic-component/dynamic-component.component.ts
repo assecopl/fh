@@ -72,11 +72,9 @@ export class DynamicComponentComponent
       if (this.data.type === 'TreeElement') {
         componentRef =
           viewContainerRef.createComponent<TreeElementComponent>(TreeElementComponent);
-        console.log('treeElement:data', this.data);
       } else if (this.data.type === 'Tree') {
         componentRef =
           viewContainerRef.createComponent<TreeComponent>(TreeComponent);
-        console.log('tree:data', this.data);
       } else if (this.data.type === 'DropdownItem') {
         componentRef =
           viewContainerRef.createComponent<DropdownItemComponent>(DropdownItemComponent);
@@ -84,7 +82,6 @@ export class DynamicComponentComponent
         componentRef =
           viewContainerRef.createComponent<DropdownComponent>(DropdownComponent);
       } else if (this.data.type === 'Button') {
-        console.log('Dynamic:Button', this.data);
         componentRef =
           viewContainerRef.createComponent<ButtonComponent>(ButtonComponent);
       } else if (this.data.type === 'Row') {
@@ -121,6 +118,7 @@ export class DynamicComponentComponent
   override ngOnInit(): void {
     if (this.data.width) {
       this.width = this.data.width;
+      this.processWidth(this.width);
     }
     super.ngOnInit();
     this.loadComponent();
@@ -137,4 +135,5 @@ export class DynamicComponentComponent
 
   override ngAfterViewInit(): void {
   }
+
 }
