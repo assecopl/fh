@@ -119,7 +119,7 @@ export class FhngReactiveInputC
    */
   constructor(
     public override injector: Injector,
-    @Optional() @Host() @SkipSelf() parentFhngComponent: FhngComponent,
+    @Optional() @SkipSelf() parentFhngComponent: FhngComponent,
     iForm: any
   ) {
     super(injector, parentFhngComponent);

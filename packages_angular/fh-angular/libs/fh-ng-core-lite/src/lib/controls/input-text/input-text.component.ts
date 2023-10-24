@@ -60,8 +60,8 @@ export class InputTextComponent extends FhngReactiveInputC implements OnInit {
 
   constructor(
     public override injector: Injector,
-    @Optional() @Host() @SkipSelf() parentFhngComponent: FhngComponent,
-    @Optional() @Host() @SkipSelf() iForm: FormComponent
+    @Optional() @SkipSelf() parentFhngComponent: FhngComponent,
+    @Optional() @SkipSelf() iForm: FormComponent
   ) {
     super(injector, parentFhngComponent, iForm);
   }

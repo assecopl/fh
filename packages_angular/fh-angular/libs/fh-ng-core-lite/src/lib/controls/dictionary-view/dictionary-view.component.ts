@@ -53,7 +53,7 @@ export class DictionaryViewComponent
   constructor(
     public injector: Injector,
     private config: NgSelectConfig,
-    @Optional() @Host() @SkipSelf() parentFhngComponent: FhngComponent,
+    @Optional() @SkipSelf() parentFhngComponent: FhngComponent,
     protected dictionaryProvider: IDictionaryProvider<any, any>
   ) {
     super(injector, parentFhngComponent);

@@ -3,7 +3,6 @@ import {
   AfterViewInit,
   Directive,
   EventEmitter,
-  Host,
   Injector,
   Input,
   OnInit,
@@ -12,6 +11,7 @@ import {
 } from '@angular/core';
 import * as $ from 'jquery';
 import {FormsManager} from "../../Socket/FormsManager";
+import {DynamicComponent} from "../../dynamic/dynamic-component/dynamic.component";
 
 /**
  * Klasa odpowiedzialna za budowę drzewa komponentów FHNG
@@ -34,7 +34,7 @@ export class FhngComponent implements OnInit, AfterViewInit, AfterContentInit {
 
   public searchId: string = '';
 
-    protected formsManager: FormsManager;
+  protected formsManager: FormsManager;
 
   /**
    * For Input(FhngReactiveInputC) components this parameter is used as modelBinding parameter.
@@ -45,9 +45,11 @@ export class FhngComponent implements OnInit, AfterViewInit, AfterContentInit {
   public parentFhngComponent: FhngComponent = null;
   public childFhngComponents: FhngComponent[] = [];
 
+  public wrapperComponent: DynamicComponent | any = null;
+
   constructor(
     public injector: Injector,
-    @Optional() @Host() @SkipSelf() parentFhngComponent: FhngComponent
+    @Optional() @SkipSelf() parentFhngComponent: FhngComponent
   ) {
     // super();
     this.innerId =
@@ -57,7 +59,10 @@ export class FhngComponent implements OnInit, AfterViewInit, AfterContentInit {
     if (this.parentFhngComponent) {
       this.parentFhngComponent.childFhngComponents.push(this);
     }
-      this.formsManager = this.injector.get(FormsManager, null);
+    this.formsManager = this.injector.get(FormsManager, null);
+    if (parentFhngComponent && parentFhngComponent.constructor.name == "DynamicComponent") {
+      this.wrapperComponent = parentFhngComponent;
+    }
   }
 
   public findFhngComponent(id: string): FhngComponent {

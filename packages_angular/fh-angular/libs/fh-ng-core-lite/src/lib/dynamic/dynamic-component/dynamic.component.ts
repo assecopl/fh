@@ -5,6 +5,7 @@ import {
   AfterViewInit,
   Component,
   Host,
+  HostBinding,
   Injector,
   Input,
   OnDestroy,
@@ -13,6 +14,7 @@ import {
   SkipSelf,
   ViewChild,
   ViewContainerRef,
+  forwardRef,
 } from '@angular/core';
 import {FormComponent} from '../../controls/form/form.component';
 import {RowComponent} from '../../controls/row/row.component';
@@ -32,31 +34,53 @@ import {DropdownComponent} from '../../controls/dropdown/dropdown.component';
 
 @Component({
   selector: 'fh-dynamic-component',
-  templateUrl: './dynamic-component.component.html',
-  styleUrls: ['./dynamic-component.component.css'],
+  templateUrl: './dynamic.component.html',
+  styleUrls: ['./dynamic.component.css'],
+  providers: [
+    /**
+     * Dodajemy deklaracje klasy ogólnej aby wstrzykiwanie i odnajdowanie komponentów wewnątrz siebie było możliwe.
+     * Dzięki temu budujemy hierarchię kontrolek Fhng.
+     */
+    {
+      provide: FhngComponent,
+      useExisting: forwardRef(() => DynamicComponent),
+    },
+  ],
 })
-export class DynamicComponentComponent
+export class DynamicComponent
   extends FhngHTMLElementC
   implements OnInit,
-    OnDestroy,
-    AfterViewInit,
-    AfterContentInit,
-    AfterViewChecked,
-    AfterContentChecked {
+    OnDestroy {
   @Input() data: any = {};
 
   @ViewChild('adHost', {static: true, read: ViewContainerRef})
   public adHost!: ViewContainerRef;
 
+
+  @HostBinding('class')
+  @Input()
+  public hostWidth: string = '';
+
+  @Input('width')
+  public set setWidth(value: string) {
+    this.processWidth(value, true);
+  }
+
+  @HostBinding('class.form-group')
+  @Input()
+  public cssFormGroup: boolean = false;
+
   constructor(
     public override injector: Injector,
-    @Optional() @Host() @SkipSelf() parentFhngComponent: FhngComponent
+    @Optional() @SkipSelf() parentFhngComponent: FhngComponent
   ) {
     super(injector, parentFhngComponent);
 
     this.width = BootstrapWidthEnum.MD12;
+    this.w100 = false;
     this.mb3 = false;
   }
+
 
   public loadComponent() {
     const viewContainerRef = this.adHost;
@@ -110,30 +134,51 @@ export class DynamicComponentComponent
     if (componentRef && componentRef.instance && componentRef.instance.mapAttributes) {
       componentRef.instance.mapAttributes(this.data);
     }
+
+    //TODO Czesc atrybutuow bedzie mapowana bezposrednio na dynamic-component
+    this.width = this.data.width ? this.data.width : componentRef.instance.width;
+    this.processWidth(this.width);
   }
 
   ngOnDestroy(): void {
   }
 
   override ngOnInit(): void {
-    if (this.data.width) {
-      this.width = this.data.width;
-      this.processWidth(this.width);
-    }
     super.ngOnInit();
     this.loadComponent();
   }
 
-  ngAfterContentChecked(): void {
+  public processWidth(value: string, force: boolean = false) {
+    if (this.hostWidth.length === 0 || force) {
+      if (!value) {
+        value = this.width;
+      }
+
+      if (value) {
+        this.width = value;
+
+        if (
+          value.indexOf('px') >= 0 || //pixel width
+          value.indexOf('%') >= 0 || //procent widths
+          value.indexOf('vw') >= 0 || //width Relative width of the viewport
+          value == 'fit' //width Relative width of the viewport
+        ) {
+          //Set host element width to auto to fit its content.
+          this.hostWidth += 'col-auto exactWidth';
+          //Set inner element styles to exact width;
+          if (value != 'fit') {
+            this.processStyleWithUnit('width', value);
+          }
+        } else if (value == 'auto') {
+          this.hostWidth += 'col';
+        } else {
+          //Host works with bootstrap width classes.
+          const widths = value.replace(/ /g, '').split(',');
+          this.hostWidth += ' col-' + widths.join(' col-');
+        }
+      }
+    }
   }
 
-  override ngAfterContentInit(): void {
-  }
-
-  ngAfterViewChecked(): void {
-  }
-
-  override ngAfterViewInit(): void {
-  }
 
 }

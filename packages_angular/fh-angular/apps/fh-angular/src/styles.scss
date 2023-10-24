@@ -1,33 +1,33 @@
 /* You can add global styles to this file, and also import other style files */
 @import 'bootstrap/scss/functions';
 @import 'bootstrap/scss/variables';
-@import 'bootstrap/scss/maps';
 @import 'bootstrap/scss/mixins';
 @import 'bootstrap/scss/utilities';
+@import './assets/bootstrap_override.css';
 
-$utilities: map-merge(
-    $utilities, (
-    "margin-start": map-merge(
-        map-get($utilities, "margin-start"),
-        ( class: ml ),
-    ),
-    "margin-end": map-merge(
-        map-get($utilities, "margin-start"),
-        ( class: mr ),
-    ),
-    "padding-start": map-merge(
-        map-get($utilities, "padding-start"),
-        ( class: pl ),
-    ),
-    "padding-end": map-merge(
-        map-get($utilities, "padding-start"),
-        ( class: pr ),
-    ),
-  )
-);
+//$utilities: map-merge(
+//    $utilities, (
+//    "margin-start": map-merge(
+//        map-get($utilities, "margin-start"),
+//        ( class: ml ),
+//    ),
+//    "margin-end": map-merge(
+//        map-get($utilities, "margin-start"),
+//        ( class: mr ),
+//    ),
+//    "padding-start": map-merge(
+//        map-get($utilities, "padding-start"),
+//        ( class: pl ),
+//    ),
+//    "padding-end": map-merge(
+//        map-get($utilities, "padding-start"),
+//        ( class: pr ),
+//    ),
+//  )
+//);
 
 @import 'bootstrap/scss/bootstrap';
-@import 'bootstrap/scss/bootstrap-grid';
+//@import 'bootstrap/scss/bootstrap-grid';
 @import '@fortawesome/fontawesome-free/css/all.min.css';
 
 //Custom Fonts

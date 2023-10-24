@@ -65,7 +65,7 @@ export class ButtonComponent
 
   constructor(
     public override injector: Injector,
-    @Optional() @Host() @SkipSelf() parentFhngComponent: FhngComponent,
+    @Optional() @SkipSelf() parentFhngComponent: FhngComponent,
     @Optional()
     @Host()
     @SkipSelf()
@@ -73,7 +73,12 @@ export class ButtonComponent
   ) {
     super(injector, parentFhngComponent);
 
-    this.width = BootstrapWidthEnum.MD2;
+    if (this.wrapperComponent) {
+      this.wrapperComponent.cssFormGroup = true;
+      this.wrapperComponent.width = BootstrapWidthEnum.MD2;
+    }
+
+
     this.bootstrapStyle = BootstrapStyleEnum.PRIMARY;
     if (this.parentButtonGroupComponent) {
       this.parentButtonGroupComponent.buttonSubcomponents.push(this);

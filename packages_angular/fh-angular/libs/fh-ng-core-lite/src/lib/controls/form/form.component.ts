@@ -19,7 +19,7 @@ export class FormComponent extends FhngComponent implements OnInit, OnChanges {
   @Input() public hideHeader: boolean = false;
   @Input() public formType: string = 'STANDARD';
 
-  @HostBinding('class.form-header')
+  @HostBinding('class.navbar-nav')
   header: boolean = false;
 
   constructor(
@@ -35,8 +35,8 @@ export class FormComponent extends FhngComponent implements OnInit, OnChanges {
       this.header = true;
     }
 
-    this._elementRef.nativeElement.classList.add('fc');
-    this._elementRef.nativeElement.classList.add('tree');
+    // this._elementRef.nativeElement.classList.add('fc');
+    // this._elementRef.nativeElement.classList.add('tree');
   }
 
   ngOnChanges(changes: SimpleChanges): void {

@@ -57,7 +57,7 @@ export class TreeElementComponent extends FhngHTMLElementC implements OnInit {
 
   constructor(
     injector: Injector,
-    @Optional() @Host() @SkipSelf() parentFhngComponent: FhngComponent
+    @Optional() @SkipSelf() parentFhngComponent: FhngComponent
   ) {
     super(injector, parentFhngComponent);
 
@@ -67,8 +67,6 @@ export class TreeElementComponent extends FhngHTMLElementC implements OnInit {
 
   override ngOnInit(): void {
     super.ngOnInit();
-    //Override width, this component shuld't have width set.
-    this.hostWidth = '';
   }
 
   public processTreeElementClick(): void {

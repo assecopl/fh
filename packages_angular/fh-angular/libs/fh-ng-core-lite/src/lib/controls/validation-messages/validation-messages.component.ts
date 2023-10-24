@@ -48,7 +48,7 @@ export class ValidationMessagesComponent
 
   constructor(
     public injector: Injector,
-    @Host() @SkipSelf() private iForm: FormComponent,
+    @SkipSelf() private iForm: FormComponent,
     public validationHandler: ValidationResults
   ) {
     super(injector, null);

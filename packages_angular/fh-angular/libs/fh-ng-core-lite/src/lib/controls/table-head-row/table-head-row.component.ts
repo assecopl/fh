@@ -49,8 +49,8 @@ export class TableHeadRowComponent
   constructor(
     public readonly elementRef: ElementRef,
     public injector: Injector,
-    @Optional() @Host() @SkipSelf() public tableRef: TableComponentRef,
-    @Optional() @Host() @SkipSelf() public parentFhngComponent: FhngComponent
+    @Optional() @SkipSelf() public tableRef: TableComponentRef,
+    @Optional() @SkipSelf() public parentFhngComponent: FhngComponent
   ) {
     super(injector, parentFhngComponent);
   }

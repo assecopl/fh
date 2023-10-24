@@ -57,8 +57,8 @@ export class DictionaryComponent
   constructor(
     public injector: Injector,
     private config: NgSelectConfig,
-    @Optional() @Host() @SkipSelf() parentFhngComponent: FhngComponent,
-    @Optional() @Host() @SkipSelf() iForm: IForm<any>,
+    @Optional() @SkipSelf() parentFhngComponent: FhngComponent,
+    @Optional() @SkipSelf() iForm: IForm<any>,
     protected dictionaryProvider: IDictionaryProvider<any, any>
   ) {
     super(injector, parentFhngComponent, iForm);

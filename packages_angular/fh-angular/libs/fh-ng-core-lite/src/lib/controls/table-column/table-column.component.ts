@@ -51,7 +51,7 @@ export class TableColumnComponent
     public readonly elementRef: ElementRef<HTMLElement>,
     public injector: Injector,
     private table: TableComponentRef,
-    @Optional() @Host() @SkipSelf() parentFhngComponent: FhngComponent
+    @Optional() @SkipSelf() parentFhngComponent: FhngComponent
   ) {
     super(elementRef, injector, parentFhngComponent);
     if (table) {

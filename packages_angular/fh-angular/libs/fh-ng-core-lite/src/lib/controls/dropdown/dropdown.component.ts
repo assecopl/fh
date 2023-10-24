@@ -19,16 +19,13 @@ import {DropdownItemComponent} from '../dropdown-item/dropdown-item.component';
 import {BootstrapStyleEnum} from '../../models/enums/BootstrapStyleEnum';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
 import {BootstrapWidthEnum} from './../../models/enums/BootstrapWidthEnum';
+import {DynamicComponent} from "../../dynamic/dynamic-component/dynamic.component";
 
 @Component({
   selector: '[fh-dropdown]',
   templateUrl: './dropdown.component.html',
   styleUrls: ['./dropdown.component.scss'],
   providers: [
-    /**
-     * Inicjalizujemy dyrektywę dostępności aby zbudoać hierarchię elementów i dać możliwość zarządzania dostępnością
-     */
-    // FhngAvailabilityDirective,
     /**
      * Dodajemy deklaracje klasy ogólnej aby wstrzykiwanie i odnajdowanie komponentów wewnątrz siebie było możliwe.
      * Dzięki temu budujemy hierarchię kontrolek Fhng.
@@ -42,7 +39,7 @@ import {BootstrapWidthEnum} from './../../models/enums/BootstrapWidthEnum';
 export class DropdownComponent
   extends GroupingComponentC<DropdownItemComponent>
   implements OnInit, AfterContentInit, OnChanges {
-  public override width: string = BootstrapWidthEnum.MD3;
+  public override width: string = BootstrapWidthEnum.MD2;
 
   public updateSubcomponent = null;
 
@@ -57,9 +54,12 @@ export class DropdownComponent
 
   constructor(
     public override injector: Injector,
-    @Optional() @Host() @SkipSelf() parentFhngComponent: FhngComponent
+    @Optional() @SkipSelf() parentFhngComponent: FhngComponent
   ) {
     super(injector, parentFhngComponent);
+    if (this.wrapperComponent) {
+      this.wrapperComponent.cssFormGroup = true;
+    }
   }
 
   override ngOnInit(): void {
@@ -71,6 +71,8 @@ export class DropdownComponent
       : BootstrapStyleEnum.PRIMARY;
     this.dropdown = true;
     this.showItems = false;
+
+
   }
 
   public getSubcomponentInstance(): new (

@@ -10,7 +10,7 @@ import {NotificationService} from '../../service/Notification';
 export class NotificationsComponent implements OnInit {
   constructor(
     public injector: Injector,
-    @Optional() @Host() @SkipSelf() parentFhngComponent: FhngComponent,
+    @Optional() @SkipSelf() parentFhngComponent: FhngComponent,
     public notification: NotificationService
   ) {
   }

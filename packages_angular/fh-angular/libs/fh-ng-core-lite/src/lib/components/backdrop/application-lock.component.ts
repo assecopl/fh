@@ -10,7 +10,7 @@ import {ApplicationLockService} from '../../service/application-lock.service';
 export class ApplicationLockComponent implements OnInit, OnChanges {
   constructor(
     public injector: Injector,
-    @Optional() @Host() @SkipSelf() parentFhngComponent: FhngComponent,
+    @Optional() @SkipSelf() parentFhngComponent: FhngComponent,
     private backdrop: ApplicationLockService
   ) {
   }

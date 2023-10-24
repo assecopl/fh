@@ -93,7 +93,7 @@ export class RepeaterComponent extends FhngHTMLElementC implements OnInit {
 
   constructor(
     public override injector: Injector,
-    @Optional() @Host() @SkipSelf() parentFhngComponent: FhngComponent
+    @Optional() @SkipSelf() parentFhngComponent: FhngComponent
   ) {
     super(injector, parentFhngComponent);
     this.mb3 = false;
@@ -110,7 +110,7 @@ export class RepeaterComponent extends FhngHTMLElementC implements OnInit {
         this.width != this.childFhngComponents[0]['width']
       )
         // this._width = this.childFhngComponents[0]["width"]
-        this.hostWidth = this.childFhngComponents[0]['hostWidth'];
+        // this.hostWidth = this.childFhngComponents[0]['hostWidth'];
       this.childFhngComponents.forEach((c) => {
         c['hostWidth'] = 'col-12';
       });

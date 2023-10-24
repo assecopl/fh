@@ -79,7 +79,7 @@ export class OutputLabelComponent extends FhngHTMLElementC implements OnInit {
 
   constructor(
     public override injector: Injector,
-    @Optional() @Host() @SkipSelf() parentFhngComponent: FhngComponent
+    @Optional() @SkipSelf() parentFhngComponent: FhngComponent
   ) {
     super(injector, parentFhngComponent);
   }

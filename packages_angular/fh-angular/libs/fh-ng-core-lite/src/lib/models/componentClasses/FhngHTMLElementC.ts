@@ -31,6 +31,19 @@ export class FhngHTMLElementC
 
   public static STYLE_UNIT: StyleUnit = STYLE_UNIT.PX;
 
+  /**
+   * Parametr width jest domyśłnym parametrem komponentu angularowego, przychwytujemy go aby obsłużyć
+   * logikę ustawiania klas typowych dla bootstrapa.
+   */
+  @Input()
+  public width: string;
+
+  @HostBinding('class.w-100')
+  @Input()
+  public w100: boolean = true;
+
+
+
   @HostBinding('attr.tabindex')
   public tabindex: number = null;
 
@@ -113,16 +126,6 @@ export class FhngHTMLElementC
   //Style object fo ngStyle.
   public styles: SafeStyle & any = {};
 
-  /**
-   * Parametr width jest domyśłnym parametrem komponentu angularowego, przychwytujemy go aby obsłużyć
-   * logikę ustawiania klas typowych dla bootstrapa.
-   */
-  public width: string = 'md-12';
-
-  @HostBinding('class')
-  @Input()
-  public hostWidth: string = '';
-
   @HostBinding('style')
   public hostStyle: SafeStyle & any = {};
 
@@ -197,14 +200,9 @@ export class FhngHTMLElementC
     this.processStyleWithUnit('height', value);
   }
 
-  @Input('width')
-  public set setWidth(value: string) {
-    // this.processWidth(value, true);
-  }
-
   constructor(
     public override injector: Injector,
-    @Optional() @Host() @SkipSelf() parentFhngComponent: FhngComponent
+    @Optional() @SkipSelf() parentFhngComponent: FhngComponent
   ) {
     super(injector, parentFhngComponent);
     this.elementRef = this.injector.get(ElementRef, null);
@@ -315,38 +313,6 @@ export class FhngHTMLElementC
         this.valignBottom = true;
         this.valignMiddle = false;
         break;
-    }
-  }
-
-  public processWidth(value: string, force: boolean = false) {
-    if (this.hostWidth.length === 0 || force) {
-      if (!value) {
-        value = this.width;
-      }
-
-      if (value) {
-        this.width = value;
-
-        if (
-          value.indexOf('px') >= 0 || //pixel width
-          value.indexOf('%') >= 0 || //procent widths
-          value.indexOf('vw') >= 0 || //width Relative width of the viewport
-          value == 'fit' //width Relative width of the viewport
-        ) {
-          //Set host element width to auto to fit its content.
-          this.hostWidth += 'col-auto exactWidth';
-          //Set inner element styles to exact width;
-          if (value != 'fit') {
-            this.processStyleWithUnit('width', value);
-          }
-        } else if (value == 'auto') {
-          this.hostWidth += 'col';
-        } else {
-          //Host works with bootstrap width classes.
-          const widths = value.replace(/ /g, '').split(',');
-          this.hostWidth += ' col-' + widths.join(' col-');
-        }
-      }
     }
   }
 

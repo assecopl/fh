@@ -24,7 +24,7 @@ export abstract class GroupingComponentC<T extends FhngHTMLElementC>
   implements OnInit, OnChanges, AfterContentInit {
   constructor(
     public override injector: Injector,
-    @Optional() @Host() @SkipSelf() parentFhngComponent: FhngComponent
+    @Optional() @SkipSelf() parentFhngComponent: FhngComponent
   ) {
     super(injector, parentFhngComponent);
   }

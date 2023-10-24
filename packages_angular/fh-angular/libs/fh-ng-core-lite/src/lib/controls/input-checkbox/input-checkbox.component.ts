@@ -58,8 +58,8 @@ export class InputCheckboxComponent
 
   constructor(
     public injector: Injector,
-    @Optional() @Host() @SkipSelf() parentFhngComponent: FhngComponent,
-    @Optional() @Host() @SkipSelf() iForm: IForm<any>
+    @Optional() @SkipSelf() parentFhngComponent: FhngComponent,
+    @Optional() @SkipSelf() iForm: IForm<any>
   ) {
     super(injector, parentFhngComponent, iForm);
     this.labelPosition = 'RIGHT';

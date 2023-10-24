@@ -93,8 +93,8 @@ export class InputDateComponent extends FhngReactiveInputC implements OnInit {
     public ngbDatepickerConfig: NgbDatepickerConfig,
     public calendar: NgbCalendar,
     public fhngDateTimeAdapter: FhngDateAdapter,
-    @Optional() @Host() @SkipSelf() parentFhngComponent: FhngComponent,
-    @Optional() @Host() @SkipSelf() iForm: FormComponent
+    @Optional() @SkipSelf() parentFhngComponent: FhngComponent,
+    @Optional() @SkipSelf() iForm: FormComponent
   ) {
     super(injector, parentFhngComponent, iForm);
     //TODO formatters , config params

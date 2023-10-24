@@ -56,8 +56,8 @@ export class FileViewComponent
 
   constructor(
     public injector: Injector,
-    @Optional() @Host() @SkipSelf() parentFhngComponent: FhngComponent,
-    @Optional() @Host() @SkipSelf() iForm: FormComponent,
+    @Optional() @SkipSelf() parentFhngComponent: FhngComponent,
+    @Optional() @SkipSelf() iForm: FormComponent,
     private sanitizer: DomSanitizer,
     private httpClient: HttpClient
   ) {

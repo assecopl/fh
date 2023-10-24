@@ -17,7 +17,6 @@ import {FormsManager} from "./Socket/FormsManager";
   selector: 'fh-forms-manager-ng',
   template: `
     <div class="">
-      <h3>POC Angular</h3>
       <!--            <ng-container *ngFor="let element of subelements">-->
       <!--                <fh-dynamic-component [data]="element" [formId]="formId" [formId]="formId"></fh-dynamic-component>-->
       <!--            </ng-container>-->
@@ -62,7 +61,7 @@ import {FormsManager} from "./Socket/FormsManager";
       <div>
         <nav class="navbar navbar-expand-md navbar-dark bg-dark">
           <div class="container-fluid">
-            <a class="navbar-brand" href="#">Navbar</a>
+            <a class="navbar-brand" href="#">POC Angular</a>
             <button
               class="navbar-toggler"
               type="button"
@@ -75,8 +74,6 @@ import {FormsManager} from "./Socket/FormsManager";
               <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse " id="navbarTogglerDemo03">
-              <div class="navbar-nav me-auto mb-2 mb-lg-0"></div>
-              <div id="navbarForm" class="d-flex">
                 <fh-form
                   [formType]="navbarForm?.formType"
                   [subelements]="navbarForm?.subelements"
@@ -85,7 +82,6 @@ import {FormsManager} from "./Socket/FormsManager";
                   [formId]="navbarForm?.id"
                   [hideHeader]="navbarForm?.hideHeader"
                 />
-              </div>
             </div>
           </div>
         </nav>

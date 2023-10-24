@@ -82,7 +82,7 @@ export class PanelGroupComponent extends FhngHTMLElementC implements OnInit {
 
   constructor(
     public override injector: Injector,
-    @Optional() @Host() @SkipSelf() parentFhngComponent: FhngComponent,
+    @Optional() @SkipSelf() parentFhngComponent: FhngComponent,
     private sanitizer: DomSanitizer
   ) {
     super(injector, parentFhngComponent);
@@ -100,9 +100,9 @@ export class PanelGroupComponent extends FhngHTMLElementC implements OnInit {
      */
     this.isHeaderCLickUsed = this.headerClick.observers.length > 0;
 
-    if (this.width) {
-      this.processWidth(this.width);
-    }
+    // if (this.width) {
+    //   this.processWidth(this.width);
+    // }
   }
 
   processCollapsible(): void {

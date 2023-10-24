@@ -48,7 +48,7 @@ export class InputGroupComponent implements OnInit, OnDestroy {
   public resizeObserver: ResizeObserver = null;
 
   constructor(
-    @Optional() @Host() @SkipSelf() public parentFhngComponent: FhngComponent,
+    @Optional() @SkipSelf() public parentFhngComponent: FhngComponent,
     public elementRef: ElementRef
   ) {
     /**

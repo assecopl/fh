@@ -73,8 +73,8 @@ export class FileUploadComponent extends FhngReactiveInputC implements OnInit {
 
   constructor(
     public injector: Injector,
-    @Optional() @Host() @SkipSelf() parentFhngComponent: FhngComponent,
-    @Optional() @Host() @SkipSelf() iForm: FormComponent
+    @Optional() @SkipSelf() parentFhngComponent: FhngComponent,
+    @Optional() @SkipSelf() iForm: FormComponent
   ) {
     super(injector, parentFhngComponent, iForm);
   }
