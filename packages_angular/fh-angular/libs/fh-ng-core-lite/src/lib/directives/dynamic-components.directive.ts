@@ -86,14 +86,9 @@ export class DynamicComponentsDirective
         }
 
         if (componentRef && componentRef.instance && componentRef.instance.mapAttributes) {
-          componentRef.instance.mapAttributes(data);
+          componentRef.instance.data = data;
           componentRef.instance.formId = this.form.id;
         }
-
-
-        //TODO Czesc atrybutuow bedzie mapowana bezposrednio na dynamic-component
-        // this.width = this.data.width ? this.data.width : componentRef.instance.width;
-        // this.processWidth(this.width);
       })
 
 

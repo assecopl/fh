@@ -20,11 +20,24 @@ import {IDataAttributes} from "../interfaces/IDataAttributes";
  */
 @Directive()
 export class FhngComponent implements OnInit, AfterViewInit, AfterContentInit {
+
+
+  @Input() subelements: any[] = [];
+
+  @Input('data')
+  public set data(value: any) {
+    this.mapAttributes(value);
+  }
+
   @Input('id')
   public innerId: string = '';
 
   public get id() {
     return this.innerId;
+  }
+
+  public set id(value) {
+    this.innerId = value;
   }
 
   @Input()
@@ -120,8 +133,6 @@ export class FhngComponent implements OnInit, AfterViewInit, AfterContentInit {
     // this.searchId = searchIds[0];
   }
 
-  @Input() subelements: any[] = [];
-
   ngAfterContentInit(): void {
   }
 
@@ -173,10 +184,15 @@ export class FhngComponent implements OnInit, AfterViewInit, AfterContentInit {
     }
   }
 
-  public mapAttributes(data: IDataAttributes): void {
-    this.innerId = data.id;
-    this.subelements = data.subelements;
-    this.ariaLabel = data.ariaLabel
+  public mapAttributes(data: IDataAttributes | any): void {
+    //Przepisujemy wszystkie typowe parametry obiektu jeżeli istnieją na naszym obiekcie.
+    //W metodach w obiektach możemy sobono przepisywać parametry których nazwy się nie pokrywają.
+    let dataKeys = Object.keys(data);
+    dataKeys.forEach(key => {
+      if (this[key]) {
+        this[key] = data[key];
+      }
+    })
   }
 
   // protected fireHttpMultiPartEvent(eventType, actionName, url, data: FormData) {

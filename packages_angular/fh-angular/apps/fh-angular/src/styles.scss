@@ -5,6 +5,8 @@
 @import 'bootstrap/scss/utilities';
 @import './assets/bootstrap_override.css';
 
+@import '../../../libs/fh-ng-core-lite/src/styles/fh-ng-core-lite';
+
 //$utilities: map-merge(
 //    $utilities, (
 //    "margin-start": map-merge(

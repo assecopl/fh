@@ -67,6 +67,7 @@
       "e2eTestRunner": "none"
     },
     "@nx/angular:library": {
+      "style": "css",
       "linter": "eslint",
       "unitTestRunner": "jest"
     },

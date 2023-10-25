@@ -20,7 +20,7 @@ import {DropdownComponent} from "../dropdown/dropdown.component";
 import {ButtonComponent} from "../button/button.component";
 import {RowComponent} from "../row/row.component";
 import {OutputLabelComponent} from "../output-label/output-label.component";
-import {FormsManager} from "../../Socket/FormsManager";
+import {FhChanges, FormsManager} from "../../Socket/FormsManager";
 import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
 
 @Component({
@@ -37,9 +37,6 @@ import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
 })
 export class FormComponent extends FhngComponent implements OnInit, OnChanges {
 
-  @Input() data: any = {};
-
-  // @Input() public model: any = null;
   @Input() public label: string = null;
   @Input() public hideHeader: boolean = false;
   @Input() public formType: string = 'STANDARD';
@@ -57,10 +54,23 @@ export class FormComponent extends FhngComponent implements OnInit, OnChanges {
     public override injector: Injector, private formManager: FormsManager
   ) {
     super(injector, null);
+
   }
 
   override ngOnInit() {
     super.ngOnInit();
+    this.formManager.changesSubject.subscribe((changes: FhChanges) => {
+      if (changes[this.id]) {
+        const componentChanges = changes[this.id]
+        componentChanges.forEach(change => {
+          const component = this.findFhngComponent(change.formElementId);
+          if (component) {
+            component.data = change.changedAttributes;
+          }
+        })
+
+      }
+    })
     console.log(this.formType + "" + this.id);
     if (this.formType == 'HEADER') {
       this.header = true;
@@ -77,7 +87,6 @@ export class FormComponent extends FhngComponent implements OnInit, OnChanges {
   }
 
   public override mapAttributes(data: IDataAttributes): void {
-    super.mapAttributes(data)
-    this.formType = data.formType
+    super.mapAttributes(data);
   }
 }

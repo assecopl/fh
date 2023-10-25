@@ -28,6 +28,11 @@
         "styles": [
           "apps/fh-angular/src/styles.scss"
         ],
+        "stylePreprocessorOptions": {
+          "includePaths": [
+            "libs/fh-ng-core-lite/src/styles"
+          ]
+        },
         "scripts": []
       },
       "configurations": {
@@ -75,6 +80,11 @@
         "styles": [
           "apps/fh-angular/src/styles.scss"
         ],
+        "stylePreprocessorOptions": {
+          "includePaths": [
+            "libs/fh-ng-core-lite/src/styles"
+          ]
+        },
         "scripts": []
       },
       "configurations": {

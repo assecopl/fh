@@ -39,6 +39,8 @@ import {FhngHTMLElementC} from '../../models/componentClasses/FhngHTMLElementC';
 export class TreeComponent
   extends FhngHTMLElementC
   implements OnInit, OnChanges {
+
+
   @Input()
   public collection: any[];
 
@@ -103,10 +105,6 @@ export class TreeComponent
     super.mapAttributes(data);
 
     this.collapsedTree = data.expanded;
-    // this.collection = this.data.collection;
-    // this.relation = this.data.relation;
-    // this.iterator = this.data.iterator;
-    // this.treeElementTemplate = this.data.treeElementTemplate;
-    // this.selected = this.data.selected;
+
   }
 }

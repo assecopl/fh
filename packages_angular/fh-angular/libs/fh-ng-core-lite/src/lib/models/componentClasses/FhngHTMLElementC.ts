@@ -61,10 +61,10 @@ export class FhngHTMLElementC
   @Input()
   public hostWidth: string = '';
 
-  @Input('width')
-  public set setWidth(value: string) {
-    this.processWidth(value, true);
-  }
+  // @Input('width')
+  // public set width(value: string) {
+  //   this.processWidth(value, true);
+  // }
 
 
   @Input()
@@ -228,6 +228,7 @@ export class FhngHTMLElementC
     //   }
     //   this.availabilityDirective.setAvailability(this.availabilityDirective._myAvailability, true);
     // }
+    this.processWidth(this.width);
 
   }
 
@@ -337,17 +338,20 @@ export class FhngHTMLElementC
 
   public override mapAttributes(data: IDataAttributes): void {
     super.mapAttributes(data);
-    this.accessibility = data.accessibility;
-    this.bootstrapStyle = data.style;
-    this.icon = data.icon;
-    this.label = data.value;
-    this.title = data.title;
-    this.subelements = data.subelements;
-    if (data.width) {
-      this.width = data.width;
-    }
-    this.iconAlignment = data.iconAlignment;
-    this.styles = this._convertInlineStylesToSafeStyle(data.inlineStyle);
+    // this.accessibility = data.accessibility;
+    // this.bootstrapStyle = data.style;
+    // this.icon = data.icon;
+    // this.label = data.value;
+    // this.title = data.title;
+    // this.subelements = data.subelements;
+    // if (data.width) {
+    //   this.width = data.width;
+    // }
+    // this.iconAlignment = data.iconAlignment;
+    if (data.value) this.label = data.value;
+    if (data.width) this.processWidth(data.width, true);
+    if (data.style) this.bootstrapStyle = data.style
+    if (data.inlineStyle) this.styles = this._convertInlineStylesToSafeStyle(data.inlineStyle);
   }
 
   private _convertInlineStylesToSafeStyle (inlineStyle: string): SafeStyle {

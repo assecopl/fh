@@ -13,7 +13,11 @@
       ],
       "options": {
         "jestConfig": "libs/fh-ng-core-lite/jest.config.ts",
-        "passWithNoTests": true
+        "passWithNoTests": true,
+        "inlineStyleLanguage": "scss",
+        "styles": [
+          "libs/fh-ng-core-lite/src/styles.scss"
+        ]
       },
       "configurations": {
         "ci": {

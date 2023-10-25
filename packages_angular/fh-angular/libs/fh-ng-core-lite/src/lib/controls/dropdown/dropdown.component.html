@@ -23,11 +23,7 @@
       <ng-container *ngTemplateOutlet="contentTemplate"></ng-container>
     </button>
     <div id="{{ id }}ngbDropdownMenu" ngbDropdownMenu>
-      <fh-dynamic-component
-        *ngFor="let element of subelements"
-        [data]="element"
-        [formId]="formId"
-      ></fh-dynamic-component>
+      <ng-container [fhDynamicComponents]="subelements"></ng-container>
     </div>
   </div>
 </ng-template>

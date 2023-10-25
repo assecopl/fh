@@ -34,11 +34,37 @@ import {FhngComponent} from '../../models/componentClasses/FhngComponent';
   ],
 })
 export class TreeElementComponent extends FhngHTMLElementC implements OnInit {
+
+  private onIconClick: any;
+  @HostBinding('class.isLeaf')
+  public nextLevelExpandable: boolean = true;
+  private techIconElement: HTMLSpanElement;
+  private iconElement: HTMLSpanElement;
+  private subTree: any;
+  private onLabelClick: any;
+  private currentTechIconClasses: any;
+  private currentIconClasses: any;
+  private icons: any;
+  private selectable: any;
+  private spanWithLabel: any;
+  private ul: any;
+
+
+
   @HostBinding('class.pl-3')
   public pl3: boolean = true;
 
   //@Override bottom margin.
   override mb3 = false;
+
+  @HostBinding('class')
+  get defaultClasses() {
+    return {
+      'list-group-item-custom': true,
+      'node-treeview1': true,
+      'treeNode': true
+    }
+  }
 
   @Input()
   children: any;
@@ -94,5 +120,10 @@ export class TreeElementComponent extends FhngHTMLElementC implements OnInit {
     this.fireEventWithLock('onLabelClick', 'onLabelClick');
     // }
     return false;
+  }
+
+  public override mapAttributes(data: any) {
+    super.mapAttributes(data);
+
   }
 }

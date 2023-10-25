@@ -37,6 +37,7 @@ class FormsManager {
     public duringShutdown: boolean = false;
     private openedForms: any[] = [];
     public openedFormsSubject: Subject<any> = new Subject<any>();
+  public changesSubject: Subject<FhChanges> = new Subject<any>();
     private usedContainers: any = {};
     public eventQueue: any[] = [];
     private pendingRequestsCount: number = 0;
@@ -213,15 +214,29 @@ class FormsManager {
      * @param changesList
      */
     applyChanges(changesList) {
-        if (!changesList) {
-            return;
-        }
-        changesList.forEach((change) => {
-            let form = this.findForm(change.formId);
-            if (form) {
-                // form.applyChange(change);
-            }
+      if (changesList) {
+        //Grupujemy zmiany po id formularza.
+        let groupedCHanges = {};
+        changesList.forEach((change: any) => {
+          if (!groupedCHanges[change.formId]) {
+            groupedCHanges[change.formId] = [];
+          }
+          groupedCHanges[change.formId].push(change);
+
         });
+
+        this.changesSubject.next(groupedCHanges)
+      }
+
+      // if (!changesList) {
+      //     return;
+      // }
+      // changesList.forEach((change) => {
+      //     let form = this.findForm(change.formId);
+      //     if (form) {
+      //         // form.applyChange(change);
+      //     }
+      // });
     }
 
     fireEvent(eventType, actionName, formId, componentId, deferredEvent, doLock, params = undefined) {
@@ -552,4 +567,13 @@ class FormsManager {
     // }
 }
 
-export {FormsManager};
+export {FormsManager, FhChanges};
+
+
+interface FhChanges {
+  [key: string]: {
+    formId: string,
+    formElementId: string,
+    changedAttributes: { [key: string]: string }
+  }[]
+}

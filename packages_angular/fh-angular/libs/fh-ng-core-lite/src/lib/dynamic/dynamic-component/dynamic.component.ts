@@ -51,8 +51,6 @@ export class DynamicComponent
   extends FhngHTMLElementC
   implements OnInit,
     OnDestroy {
-  @Input() data: any = {};
-
   @ViewChild('adHost', {static: true, read: ViewContainerRef})
   public adHost!: ViewContainerRef;
 

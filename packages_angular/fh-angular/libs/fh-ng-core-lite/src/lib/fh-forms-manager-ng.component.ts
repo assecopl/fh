@@ -117,7 +117,7 @@ import {FormsManager} from "./Socket/FormsManager";
     <fhng-application-lock></fhng-application-lock>
     <fhng-notifications></fhng-notifications>
   `,
-  styles: [],
+  styleUrls: ['./fh-forms-manager-ng.component.scss'],
 })
 export class FhFormsManagerNgComponent
   extends AbstractDynamicLoadComponent
