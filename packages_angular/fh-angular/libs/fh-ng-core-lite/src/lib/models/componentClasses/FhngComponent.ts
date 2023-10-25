@@ -12,6 +12,7 @@ import {
 import * as $ from 'jquery';
 import {FormsManager} from "../../Socket/FormsManager";
 import {DynamicComponent} from "../../dynamic/dynamic-component/dynamic.component";
+import {IDataAttributes} from "../interfaces/IDataAttributes";
 
 /**
  * Klasa odpowiedzialna za budowę drzewa komponentów FHNG
@@ -170,6 +171,12 @@ export class FhngComponent implements OnInit, AfterViewInit, AfterContentInit {
     if (!success) {
       this.formsManager.eventQueue.pop();
     }
+  }
+
+  public mapAttributes(data: IDataAttributes): void {
+    this.innerId = data.id;
+    this.subelements = data.subelements;
+    this.ariaLabel = data.ariaLabel
   }
 
   // protected fireHttpMultiPartEvent(eventType, actionName, url, data: FormData) {

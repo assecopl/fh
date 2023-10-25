@@ -30,20 +30,6 @@ export class FhngHTMLElementC
   implements OnInit, AfterViewInit, AfterContentInit, OnChanges {
 
   public static STYLE_UNIT: StyleUnit = STYLE_UNIT.PX;
-
-  /**
-   * Parametr width jest domyśłnym parametrem komponentu angularowego, przychwytujemy go aby obsłużyć
-   * logikę ustawiania klas typowych dla bootstrapa.
-   */
-  @Input()
-  public width: string;
-
-  @HostBinding('class.w-100')
-  @Input()
-  public w100: boolean = true;
-
-
-
   @HostBinding('attr.tabindex')
   public tabindex: number = null;
 
@@ -63,6 +49,23 @@ export class FhngHTMLElementC
   //   //   this.availabilityDirective._myAvailability = value;
   //   // }
   // }
+
+  /**
+   * Parametr width jest domyśłnym parametrem komponentu angularowego, przychwytujemy go aby obsłużyć
+   * logikę ustawiania klas typowych dla bootstrapa.
+   */
+  @Input()
+  public width: string;
+
+  @HostBinding('class')
+  @Input()
+  public hostWidth: string = '';
+
+  @Input('width')
+  public set setWidth(value: string) {
+    this.processWidth(value, true);
+  }
+
 
   @Input()
   public bootstrapStyle: any;
@@ -225,6 +228,7 @@ export class FhngHTMLElementC
     //   }
     //   this.availabilityDirective.setAvailability(this.availabilityDirective._myAvailability, true);
     // }
+
   }
 
   public override ngOnInit(): void {
@@ -242,7 +246,7 @@ export class FhngHTMLElementC
     //   }
     // }
 
-    // this.processWidth(this.setWidth);
+    this.processWidth(this.width);
     this.processHorizontalAlign();
     this.processVerticalAlign();
 
@@ -331,16 +335,17 @@ export class FhngHTMLElementC
     }
   }
 
-  public mapAttributes (data: IDataAttributes): void {
+  public override mapAttributes(data: IDataAttributes): void {
+    super.mapAttributes(data);
     this.accessibility = data.accessibility;
     this.bootstrapStyle = data.style;
-    this.formId = data.formId;
     this.icon = data.icon;
-    this.innerId = data.id;
     this.label = data.value;
     this.title = data.title;
     this.subelements = data.subelements;
-    // this.width = data.width;
+    if (data.width) {
+      this.width = data.width;
+    }
     this.iconAlignment = data.iconAlignment;
     this.styles = this._convertInlineStylesToSafeStyle(data.inlineStyle);
   }
@@ -358,4 +363,39 @@ export class FhngHTMLElementC
 
     return _safeStyle;
   }
+
+
+  public processWidth(value: string, force: boolean = false) {
+    // if (this.hostWidth.length === 0 || force) {
+    if (!value) {
+      value = this.width;
+    }
+
+    if (value) {
+      this.width = value;
+
+      if (
+        value.indexOf('px') >= 0 || //pixel width
+        value.indexOf('%') >= 0 || //procent widths
+        value.indexOf('vw') >= 0 || //width Relative width of the viewport
+        value == 'fit' //width Relative width of the viewport
+      ) {
+        //Set host element width to auto to fit its content.
+        this.hostWidth += 'col-auto exactWidth';
+        //Set inner element styles to exact width;
+        if (value != 'fit') {
+          this.processStyleWithUnit('width', value);
+        }
+      } else if (value == 'auto') {
+        this.hostWidth += 'col';
+      } else {
+        //Host works with bootstrap width classes.
+        const widths = value.replace(/ /g, '').split(',');
+        this.hostWidth += ' col-' + widths.join(' col-');
+      }
+    }
+  }
+
+  // }
+
 }

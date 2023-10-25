@@ -2,7 +2,7 @@
   <div class="col">
     <div class="{{ class }}">
       <div class="row">
-        <ng-content></ng-content>
+        <ng-container [fhDynamicComponents]="subelements"/>
       </div>
     </div>
   </div>

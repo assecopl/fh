@@ -1,5 +1,27 @@
-import {Component, forwardRef, HostBinding, Injector, Input, OnChanges, OnInit, SimpleChanges, ElementRef} from '@angular/core';
+import {
+  Component,
+  forwardRef,
+  HostBinding,
+  Injector,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ElementRef,
+  ViewChild,
+  ViewContainerRef
+} from '@angular/core';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
+import {PanelGroupComponent} from "../panel-group/panel-group.component";
+import {TreeElementComponent} from "../tree-element/tree-element.component";
+import {TreeComponent} from "../tree/tree.component";
+import {DropdownItemComponent} from "../dropdown-item/dropdown-item.component";
+import {DropdownComponent} from "../dropdown/dropdown.component";
+import {ButtonComponent} from "../button/button.component";
+import {RowComponent} from "../row/row.component";
+import {OutputLabelComponent} from "../output-label/output-label.component";
+import {FormsManager} from "../../Socket/FormsManager";
+import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
 
 @Component({
   selector: 'fh-form',
@@ -14,6 +36,9 @@ import {FhngComponent} from '../../models/componentClasses/FhngComponent';
   ],
 })
 export class FormComponent extends FhngComponent implements OnInit, OnChanges {
+
+  @Input() data: any = {};
+
   // @Input() public model: any = null;
   @Input() public label: string = null;
   @Input() public hideHeader: boolean = false;
@@ -22,26 +47,37 @@ export class FormComponent extends FhngComponent implements OnInit, OnChanges {
   @HostBinding('class.navbar-nav')
   header: boolean = false;
 
+  @HostBinding('class.card')
+  cssCard: boolean = true;
+
+  @HostBinding('class.fc')
+  cssFc: boolean = true;
+
   constructor(
-    public override injector: Injector,
-    private _elementRef: ElementRef<HTMLElement>
+    public override injector: Injector, private formManager: FormsManager
   ) {
     super(injector, null);
   }
 
   override ngOnInit() {
     super.ngOnInit();
+    console.log(this.formType + "" + this.id);
     if (this.formType == 'HEADER') {
       this.header = true;
+      this.cssCard = false
     }
 
-    // this._elementRef.nativeElement.classList.add('fc');
-    // this._elementRef.nativeElement.classList.add('tree');
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.formType == 'HEADER') {
       this.header = true;
+      this.cssCard = false
     }
+  }
+
+  public override mapAttributes(data: IDataAttributes): void {
+    super.mapAttributes(data)
+    this.formType = data.formType
   }
 }

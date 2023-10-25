@@ -107,4 +107,35 @@ export class RowComponent extends FhngHTMLElementC implements OnInit {
   override ngOnChanges(changes: SimpleChanges) {
     super.ngOnChanges(changes);
   }
+
+  public override processWidth(value: string, force: boolean = false) {
+    // if (this.hostWidth.length === 0 || force) {
+    if (!value) {
+      value = this.width;
+    }
+
+    if (value) {
+      this.width = value;
+
+      if (
+        value.indexOf('px') >= 0 || //pixel width
+        value.indexOf('%') >= 0 || //procent widths
+        value.indexOf('vw') >= 0 || //width Relative width of the viewport
+        value == 'fit' //width Relative width of the viewport
+      ) {
+        //Set host element width to auto to fit its content.
+        this.hostWidth += 'col-auto exactWidth';
+        //Set inner element styles to exact width;
+        if (value != 'fit') {
+          this.processStyleWithUnit('width', value);
+        }
+      } else if (value == 'auto') {
+        this.hostWidth += 'col';
+      } else {
+        //Host works with bootstrap width classes.
+        const widths = value.replace(/ /g, '').split(',');
+        this.hostWidth += ' col-' + widths.join(' col-');
+      }
+    }
+  }
 }

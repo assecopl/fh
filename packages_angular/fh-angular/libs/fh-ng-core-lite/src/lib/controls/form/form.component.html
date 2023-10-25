@@ -1,29 +1,19 @@
 <ng-container *ngIf="formType == 'STANDARD'">
-  <div class="card border-0">
     <div *ngIf="label && !hideHeader" class="card-header">
       <span [innerHTML]="label"></span>
     </div>
     <div class="card-body">
       <div class="row">
-        <ng-container *ngFor="let element of subelements">
-          <fh-dynamic-component
-            [data]="element"
-            [formId]="formId"
-          ></fh-dynamic-component>
-        </ng-container>
+        <ng-container [fhDynamicComponents]="subelements"/>
       </div>
     </div>
-  </div>
 </ng-container>
 
 <ng-container *ngIf="formType == 'HEADER'">
   <div id="navbarFormInner">
     <div id="navbar-main">
-      <fh-dynamic-component
-        *ngFor="let element of subelements"
-        [data]="element"
-        [formId]="formId"
-      ></fh-dynamic-component>
+      <ng-container [fhDynamicComponents]="subelements"/>
     </div>
   </div>
 </ng-container>
+<ng-container #adHost></ng-container>

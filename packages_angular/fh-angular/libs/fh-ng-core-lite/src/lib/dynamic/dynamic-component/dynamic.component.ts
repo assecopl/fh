@@ -57,14 +57,14 @@ export class DynamicComponent
   public adHost!: ViewContainerRef;
 
 
-  @HostBinding('class')
-  @Input()
-  public hostWidth: string = '';
-
-  @Input('width')
-  public set setWidth(value: string) {
-    this.processWidth(value, true);
-  }
+  // @HostBinding('class')
+  // @Input()
+  // public hostWidth: string = '';
+  //
+  // @Input('width')
+  // public set setWidth(value: string) {
+  //   this.processWidth(value, true);
+  // }
 
   @HostBinding('class.form-group')
   @Input()
@@ -77,7 +77,7 @@ export class DynamicComponent
     super(injector, parentFhngComponent);
 
     this.width = BootstrapWidthEnum.MD12;
-    this.w100 = false;
+    // this.w100 = false;
     this.mb3 = false;
   }
 
@@ -137,7 +137,7 @@ export class DynamicComponent
 
     //TODO Czesc atrybutuow bedzie mapowana bezposrednio na dynamic-component
     this.width = this.data.width ? this.data.width : componentRef.instance.width;
-    this.processWidth(this.width);
+    // this.processWidth(this.width);
   }
 
   ngOnDestroy(): void {
@@ -148,37 +148,37 @@ export class DynamicComponent
     this.loadComponent();
   }
 
-  public processWidth(value: string, force: boolean = false) {
-    if (this.hostWidth.length === 0 || force) {
-      if (!value) {
-        value = this.width;
-      }
-
-      if (value) {
-        this.width = value;
-
-        if (
-          value.indexOf('px') >= 0 || //pixel width
-          value.indexOf('%') >= 0 || //procent widths
-          value.indexOf('vw') >= 0 || //width Relative width of the viewport
-          value == 'fit' //width Relative width of the viewport
-        ) {
-          //Set host element width to auto to fit its content.
-          this.hostWidth += 'col-auto exactWidth';
-          //Set inner element styles to exact width;
-          if (value != 'fit') {
-            this.processStyleWithUnit('width', value);
-          }
-        } else if (value == 'auto') {
-          this.hostWidth += 'col';
-        } else {
-          //Host works with bootstrap width classes.
-          const widths = value.replace(/ /g, '').split(',');
-          this.hostWidth += ' col-' + widths.join(' col-');
-        }
-      }
-    }
-  }
+  // public processWidth(value: string, force: boolean = false) {
+  //   if (this.hostWidth.length === 0 || force) {
+  //     if (!value) {
+  //       value = this.width;
+  //     }
+  //
+  //     if (value) {
+  //       this.width = value;
+  //
+  //       if (
+  //         value.indexOf('px') >= 0 || //pixel width
+  //         value.indexOf('%') >= 0 || //procent widths
+  //         value.indexOf('vw') >= 0 || //width Relative width of the viewport
+  //         value == 'fit' //width Relative width of the viewport
+  //       ) {
+  //         //Set host element width to auto to fit its content.
+  //         this.hostWidth += 'col-auto exactWidth';
+  //         //Set inner element styles to exact width;
+  //         if (value != 'fit') {
+  //           this.processStyleWithUnit('width', value);
+  //         }
+  //       } else if (value == 'auto') {
+  //         this.hostWidth += 'col';
+  //       } else {
+  //         //Host works with bootstrap width classes.
+  //         const widths = value.replace(/ /g, '').split(',');
+  //         this.hostWidth += ' col-' + widths.join(' col-');
+  //       }
+  //     }
+  //   }
+  // }
 
 
 }

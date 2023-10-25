@@ -17,6 +17,8 @@ export interface IDataAttributes {
     width: string,
     style?: string,
     title?: string,
+  ariaLabel?: string,
+  formType?: string,
     subelements?: any[],
     [name: string]: any
 }

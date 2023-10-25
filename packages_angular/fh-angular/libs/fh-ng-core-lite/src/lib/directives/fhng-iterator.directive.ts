@@ -14,7 +14,6 @@ import {
   TrackByFunction,
   ViewContainerRef,
 } from '@angular/core';
-import {GlobalErrorHandler} from '../../../ng-default-app/src/utils/GlobalErrorHandler';
 
 @Directive({
   selector: '[iterator][iteratorOf]',

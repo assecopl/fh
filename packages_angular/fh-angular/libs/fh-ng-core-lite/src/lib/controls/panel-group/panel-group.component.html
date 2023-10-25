@@ -75,12 +75,7 @@
       [attr.aria-labelledby]="label ? innerId + '-header' : null"
     >
       <div class="row">
-        <ng-container *ngFor="let element of subelements">
-          <fh-dynamic-component
-            [data]="element"
-            [formId]="formId"
-          ></fh-dynamic-component>
-        </ng-container>
+        <ng-container [fhDynamicComponents]="subelements"/>
       </div>
     </div>
   </div>
@@ -156,12 +151,7 @@
     [attr.aria-labelledby]="label ? innerId + '-header' : null"
   >
     <div class="row">
-      <ng-container *ngFor="let element of subelements">
-        <fh-dynamic-component
-          [data]="element"
-          [formId]="formId"
-        ></fh-dynamic-component>
-      </ng-container>
+      <ng-container [fhDynamicComponents]="subelements"/>
     </div>
   </div>
 </ng-container>
