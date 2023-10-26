@@ -12,7 +12,6 @@ import {
 } from '@angular/core';
 import * as $ from 'jquery';
 import {FormsManager} from "../../Socket/FormsManager";
-import {DynamicComponent} from "../../dynamic/dynamic-component/dynamic.component";
 import {IDataAttributes} from "../interfaces/IDataAttributes";
 import {FHNG_CORE_CONFIG, FhNgCoreConfig} from "../../fh-ng-core.config";
 

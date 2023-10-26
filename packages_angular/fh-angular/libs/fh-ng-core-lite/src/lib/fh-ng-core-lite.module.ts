@@ -4,7 +4,6 @@ import {FhFormsManagerNgComponent} from './fh-forms-manager-ng.component';
 import {FhMLService} from './service/fh-ml.service';
 import {AdDirective} from './directive/ad.directive';
 import {FormComponent} from './controls/form/form.component';
-import {DynamicComponent} from './dynamic/dynamic-component/dynamic.component';
 import {RowComponent} from './controls/row/row.component';
 import {ButtonComponent} from './controls/button/button.component';
 import {DropdownComponent} from './controls/dropdown/dropdown.component';
@@ -39,7 +38,6 @@ import {FhNgModule} from "./FhNgModule";
     AdDirective,
     FormComponent,
     FhFormsManagerNgComponent,
-    DynamicComponent,
     RowComponent,
     ButtonComponent,
     DropdownComponent,
