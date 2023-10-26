@@ -33,8 +33,11 @@ class EventsManager {
   }
 
   public registerEvent(event: BaseEvent): void {
-
     this.events[event.constructor.name] = event;
+  }
+
+  public registerEventWithName(name: string, event: BaseEvent): void {
+    this.events[name] = event;
   }
 
   public getEvent(type: string): BaseEvent {
