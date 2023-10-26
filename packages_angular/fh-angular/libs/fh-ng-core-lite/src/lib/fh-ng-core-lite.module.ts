@@ -27,6 +27,8 @@ import {EventsManager} from "./service/events-manager.service";
 import {DynamicComponentsDirective} from "./directives/dynamic-components.directive";
 import {FHNG_CORE_CONFIG, FhNgCoreConfig} from "./fh-ng-core.config";
 import {DebuggerComponent} from "./debug/debuger/debugger.component";
+import {TabContainerComponent} from "./controls/tab-container/tab-container.component";
+import {TabComponent} from "./controls/tab/tab.component";
 
 
 @NgModule({
@@ -49,7 +51,9 @@ import {DebuggerComponent} from "./debug/debuger/debugger.component";
     ApplicationLockComponent,
     NotificationsComponent,
     DynamicComponentsDirective,
-    DebuggerComponent
+    DebuggerComponent,
+    TabContainerComponent,
+    TabComponent
   ],
   providers: [
     CustomActionsManager,
@@ -64,6 +68,7 @@ import {DebuggerComponent} from "./debug/debuger/debugger.component";
     FhMLService,
     FormComponent,
     AdDirective,
+    CommonModule,
     RowComponent,
     ButtonComponent,
     DropdownComponent,

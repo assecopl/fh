@@ -1,8 +1,6 @@
 import {
   Component,
   forwardRef,
-  Host,
-  HostBinding,
   Injector,
   Input,
   OnInit,
@@ -11,8 +9,15 @@ import {
   SkipSelf,
 } from '@angular/core';
 import {FhngHTMLElementC} from '../../models/componentClasses/FhngHTMLElementC';
-import {BootstrapWidthEnum} from '../../models/enums/BootstrapWidthEnum';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
+import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
+
+type HElementPosition = 'LEFT' | 'CENTER' | 'RIGHT' | 'AROUND' | 'BETWEEN'| null;
+type VElementPosition = 'TOP' | 'MIDDLE' | 'BOTTOM' | null;
+interface IRowMapAttributes extends IDataAttributes {
+  elementsHorizontalAlign: HElementPosition,
+  elementsVerticalAlign: VElementPosition
+}
 
 @Component({
   selector: 'fhng-row',
@@ -31,22 +36,14 @@ import {FhngComponent} from '../../models/componentClasses/FhngComponent';
   ],
 })
 export class RowComponent extends FhngHTMLElementC implements OnInit {
-  @HostBinding('class')
-  public class;
+  @Input()
+  public elementsHorizontalAlign: HElementPosition = 'LEFT';
 
   @Input()
-  public elementsHorizontalAlign:
-    | 'LEFT'
-    | 'CENTER'
-    | 'RIGHT'
-    | 'AROUND'
-    | 'BETWEEN'
-    | null = 'LEFT';
+  public elementsVerticalAlign: VElementPosition = null;
 
   @Input()
-  public elementsVerticalAlign: 'TOP' | 'MIDDLE' | 'BOTTOM' | null = null;
-
-  @Input() public override hiddenElementsTakeUpSpace: boolean = false;
+  public override hiddenElementsTakeUpSpace: boolean = false;
 
   public rowStyleClasses: string[] = [];
 
@@ -56,14 +53,32 @@ export class RowComponent extends FhngHTMLElementC implements OnInit {
   ) {
     super(injector, parentFhngComponent);
 
-    this.width = BootstrapWidthEnum.MD12;
     this.mb3 = false;
+    this.width = 'md-12';
   }
 
   override ngOnInit() {
     super.ngOnInit();
+    this._hElementsAlign();
+    this._vElementsAlign();
+  }
 
-    this.rowStyleClasses = [];
+  override ngOnChanges(changes: SimpleChanges) {
+    super.ngOnChanges(changes);
+  }
+
+  public override mapAttributes(data: IRowMapAttributes) {
+    super.mapAttributes(data);
+
+    this._hElementsAlign(data.elementsHorizontalAlign);
+    this._vElementsAlign(data.elementsVerticalAlign);
+  }
+
+  private _hElementsAlign (elementHorizontalAlign?: HElementPosition): void {
+    if (elementHorizontalAlign) {
+      this.elementsHorizontalAlign = elementHorizontalAlign;
+    }
+
     if (this.elementsHorizontalAlign != null) {
       // @ts-ignore
       switch (this.elementsHorizontalAlign) {
@@ -83,10 +98,15 @@ export class RowComponent extends FhngHTMLElementC implements OnInit {
           this.rowStyleClasses.push('justify-content-around');
           break;
         default:
-        // GlobalErrorHandler.throwError(new Error(`Unkown elementsHorizontalAlign propety value '${this.elementsHorizontalAlign}'!`));
+          // GlobalErrorHandler.throwError(new Error(`Unkown elementsHorizontalAlign propety value '${this.elementsHorizontalAlign}'!`));
       }
     }
+  }
 
+  private _vElementsAlign (elementsVerticalAlign?: VElementPosition): void {
+    if (elementsVerticalAlign) {
+      this.elementsVerticalAlign = elementsVerticalAlign;
+    }
     if (this.elementsVerticalAlign != null) {
       switch (this.elementsVerticalAlign) {
         case 'TOP':
@@ -99,42 +119,7 @@ export class RowComponent extends FhngHTMLElementC implements OnInit {
           this.rowStyleClasses.push('align-items-end');
           break;
         default:
-        // GlobalErrorHandler.throwError(new Error(`Unkown elementsVerticalAlign propety value '${this.elementsVerticalAlign}'!`));
-      }
-    }
-  }
-
-  override ngOnChanges(changes: SimpleChanges) {
-    super.ngOnChanges(changes);
-  }
-
-  public override processWidth(value: string, force: boolean = false) {
-    // if (this.hostWidth.length === 0 || force) {
-    if (!value) {
-      value = this.width;
-    }
-
-    if (value) {
-      this.width = value;
-
-      if (
-        value.indexOf('px') >= 0 || //pixel width
-        value.indexOf('%') >= 0 || //procent widths
-        value.indexOf('vw') >= 0 || //width Relative width of the viewport
-        value == 'fit' //width Relative width of the viewport
-      ) {
-        //Set host element width to auto to fit its content.
-        this.hostWidth += 'col-auto exactWidth';
-        //Set inner element styles to exact width;
-        if (value != 'fit') {
-          this.processStyleWithUnit('width', value);
-        }
-      } else if (value == 'auto') {
-        this.hostWidth += 'col';
-      } else {
-        //Host works with bootstrap width classes.
-        const widths = value.replace(/ /g, '').split(',');
-        this.hostWidth += ' col-' + widths.join(' col-');
+          // GlobalErrorHandler.throwError(new Error(`Unkown elementsVerticalAlign propety value '${this.elementsVerticalAlign}'!`));
       }
     }
   }

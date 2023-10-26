@@ -88,7 +88,5 @@ export class DropdownComponent
   public override mapAttributes(data: any) {
     super.mapAttributes(data);
     this.label = data.label;
-
-    console.log('Dropdown:mapAttributes', data);
   }
 }

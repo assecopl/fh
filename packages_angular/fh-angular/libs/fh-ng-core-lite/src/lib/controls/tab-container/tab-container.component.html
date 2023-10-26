@@ -1,37 +1,33 @@
-<ul
-  [ngClass]="ulStyleClasses"
-  availabilityHtmlElement
-  class="border-bottom border-light d-flex justify-content-{{
+<!--class="border-bottom border-light d-flex justify-content-{{
     (horizontalAlign == 'RIGHT' ? 'END' : horizontalAlign) | lowercase
-  }}"
+  }}" -->
+<div
+  class="fc tabContainer"
+  [id]="id"
+  [class.fc-editable]="accessibility === 'EDIT'"
+  [class.d-none]="accessibility === 'HIDDEN'"
 >
-  <ng-container *ngFor="let tab of subcomponents.toArray()">
-    <li
-      tabindex="0"
-      (keydown.enter)="selectTab(tab, $event)"
-      role="tab"
-      *ngIf="
-        tab.availabilityDirective._availability != availabilityEnum.HIDDEN &&
-        tab.availabilityDirective._availability != availabilityEnum.INVISIABLE
-      "
-      [ngClass]="listStyleClasses"
-      (click)="selectTab(tab, $event)"
-    >
-      <ng-container *ngIf="tab.active">
+  <ul
+    class="nav nav-tabs"
+    [class.fc-editable]="accessibility === 'EDIT'"
+    [class.d-none]="accessibility === 'HIDDEN'"
+  >
+    <ng-container *ngFor="let tab of subelements">
+      <li class="nav-item">
         <a
-          [attr.data-tabId]="getTabId(tab)"
-          [ngClass]="activeLinkStyleClasses"
-        >{{ tab.label }}</a
-        >
-      </ng-container>
-      <ng-container *ngIf="!tab.active">
-        <a [attr.data-tabId]="getTabId(tab)" class="nav-link">{{
-          tab.label
-          }}</a>
-      </ng-container>
-    </li>
-  </ng-container>
-</ul>
-<div class="mt-3 mb-3">
-  <ng-content></ng-content>
+          class="nav-link"
+          data-toggle="tab"
+          role="tab"
+          [attr.aria-selected]="tab.selected"
+          [attr.data-tab-id]="tab.id"
+          [ngClass]="{active: tab.selected}"
+          (keydown.enter)="selectTab(tab, $event)"
+          (click)="selectTab(tab, $event)"
+        >{{ tab.label }}</a>
+      </li>
+    </ng-container>
+  </ul>
+  <div class="tab-content row eq-row">
+    <ng-container [fhDynamicComponents]="subelements"></ng-container>
+  </div>
 </div>

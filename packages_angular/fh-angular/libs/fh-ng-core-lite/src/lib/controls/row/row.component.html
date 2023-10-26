@@ -1,3 +1,10 @@
-<div class="row mb-2" [ngClass]="rowStyleClasses">
+<div
+  class="fc row containerRow"
+  [id]="id"
+  [class.fc-editable]="accessibility === 'EDIT'"
+  [class.d-none]="accessibility === 'HIDDEN'"
+  [ngClass]="rowStyleClasses"
+  [ngStyle]="styles"
+>
   <ng-container [fhDynamicComponents]="subelements"/>
 </div>

@@ -1,12 +1,19 @@
 <ng-container *ngIf="!accordion">
-  <div class="card" [class.borderHidden]="!borderVisible" [id]="id">
+  <div class="fc group panelGroup mb-3 card card-default"
+       [id]="id"
+       [ngClass]="{
+        'borderHidden': !borderVisible,
+        'fc-editable': this.accessibility === 'EDIT',
+        'd-none': this.accessibility === 'HIDDEN'
+        }"
+  >
     <ng-container *ngIf="collapsible">
       <ng-container *ngIf="accordion">
         <div
           *ngIf="label"
-          id="{{ innerId }}-header"
           role="tab"
           class="card-header collapsible"
+          [id]="innerId + '_header'"
           [class.isCollapsed]="collapsed"
           (click)="collapseToggle()"
         >
@@ -15,7 +22,7 @@
             class="btn btn-block btn-link d-flex valign-middle"
             type="button"
             data-toggle="collapse"
-            aria-expanded="false"
+            [attr.aria-expanded]="collapsed"
           >
             <span class="mr-auto card-title mb-0" [innerHTML]="label"></span>
             <i
@@ -30,18 +37,25 @@
       <ng-container *ngIf="!accordion">
         <div
           *ngIf="label"
-          id="{{ innerId }}-header"
           role="tab"
-          class="card-header collapsible d-flex valign-middle"
+          class="card-header d-flex"
+          [id]="innerId + '_header'"
           [class.isCollapsed]="collapsed"
           (click)="collapseToggle()"
         >
-          <span class="col" [innerHTML]="label"></span>
-          <i
-            class="fa align-self-center text-primary  {{
-              collapsed ? iconOpened : iconClosed
-            }}"
-          ></i>
+          <span class="mr-auto mb-0 card-title">
+            <span [id]="id + '_label'" [innerHTML]="label"></span>
+          </span>
+          <span class="toolbox align-self-center">
+              <span
+                class="collapseToggle"
+                tabindex="0"
+                role="button"
+                [attr.aria-expanded]="collapsed"
+                [attr.aria-controls]="id">
+                <i class="fa {{collapsed ? iconOpened : iconClosed}}"></i>
+              </span>
+          </span>
         </div>
       </ng-container>
     </ng-container>
@@ -49,11 +63,11 @@
       <div
         *ngIf="label"
         role="tab"
-        id="{{ innerId }}-header"
-        class="card-header"
+        class="card-header d-flex"
+        [id]="innerId + '_header'"
       >
         <span *ngIf="customHeader; else elseBlock">
-          <div class="row" routerLink="/nazwaUC/">
+          <div class="row">
             <ng-content select=".panel-header"></ng-content>
           </div>
         </span>
@@ -62,7 +76,9 @@
             <a [innerHTML]="label"></a>
           </ng-container>
           <ng-container *ngIf="!isHeaderCLickUsed">
-            <span [innerHTML]="label"></span>
+            <span class="mr-auto card-title mb-0">
+              <span [id]="innerId + '_label'" [innerHTML]="label"></span>
+            </span>
           </ng-container>
         </ng-template>
       </div>
@@ -72,10 +88,15 @@
       class="card-body"
       role="tabpanel"
       [class.collapsed]="collapsed"
-      [attr.aria-labelledby]="label ? innerId + '-header' : null"
+      [attr.aria-labelledby]="label ? innerId + '_header' : null"
     >
       <div class="row">
-        <ng-container [fhDynamicComponents]="subelements"/>
+        <ng-container *ngFor="let element of subelements">
+          <fh-dynamic-component
+            [data]="element"
+            [formId]="formId"
+          ></fh-dynamic-component>
+        </ng-container>
       </div>
     </div>
   </div>
@@ -85,7 +106,7 @@
     <ng-container *ngIf="accordion">
       <div
         *ngIf="label"
-        id="{{ innerId }}-header"
+        id="{{ innerId }}_header"
         role="tab"
         class="card-header collapsible"
         [class.isCollapsed]="collapsed"
@@ -98,38 +119,51 @@
           data-toggle="collapse"
           aria-expanded="false"
         >
-          <span class="mr-auto card-title mb-0" [innerHTML]="label"></span>
-          <i
-            *ngIf="iconOpened && iconClosed"
-            class="fa text-primary align-self-center {{
-              collapsed ? this.iconOpened : this.iconClosed
-            }}"
-          ></i>
+          <span class="mr-auto mb-0 card-title">
+            <span [id]="id + '_label'" [innerHTML]="label"></span>
+          </span>
+          <span class="toolbox align-self-center">
+              <span
+                class="collapseToggle"
+                tabindex="0"
+                role="button"
+                [attr.aria-expanded]="collapsed"
+                [attr.aria-controls]="id">
+                <i class="fa {{collapsed ? iconOpened : iconClosed}}"></i>
+              </span>
+          </span>
         </button>
       </div>
     </ng-container>
     <ng-container *ngIf="!accordion">
       <div
         *ngIf="label"
-        id="{{ innerId }}-header"
+        id="{{ innerId }}_header"
         role="tab"
         class="card-header collapsible d-flex valign-middle"
         [class.isCollapsed]="collapsed"
         (click)="collapseToggle()"
       >
-        <span class="col" [innerHTML]="label"></span>
-        <i
-          class="fa align-self-center text-primary  {{
-            collapsed ? iconOpened : iconClosed
-          }}"
-        ></i>
+        <span class="mr-auto mb-0 card-title">
+            <span [id]="id + '_label'" [innerHTML]="label"></span>
+          </span>
+        <span class="toolbox align-self-center">
+              <span
+                class="collapseToggle"
+                tabindex="0"
+                role="button"
+                [attr.aria-expanded]="collapsed"
+                [attr.aria-controls]="id">
+                <i class="fa {{collapsed ? iconOpened : iconClosed}}"></i>
+              </span>
+          </span>
       </div>
     </ng-container>
   </ng-container>
   <ng-container *ngIf="!collapsible">
-    <div *ngIf="label" role="tab" id="{{ innerId }}-header" class="card-header">
+    <div *ngIf="label" role="tab" id="{{ innerId }}_header" class="card-header">
       <span *ngIf="customHeader; else elseBlock">
-        <div class="row" routerLink="/nazwaUC/">
+        <div class="row">
           <ng-content select=".panel-header"></ng-content>
         </div>
       </span>
@@ -148,10 +182,15 @@
     class="card-body"
     role="tabpanel"
     [class.collapsed]="collapsed"
-    [attr.aria-labelledby]="label ? innerId + '-header' : null"
+    [attr.aria-labelledby]="label ? innerId + '_header' : null"
   >
-    <div class="row">
-      <ng-container [fhDynamicComponents]="subelements"/>
+    <div class="row eq-row">
+      <ng-container *ngFor="let element of subelements">
+        <fh-dynamic-component
+          [data]="element"
+          [formId]="formId"
+        ></fh-dynamic-component>
+      </ng-container>
     </div>
   </div>
 </ng-container>

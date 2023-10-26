@@ -79,7 +79,7 @@ export class OutputLabelComponent extends FhngHTMLElementC implements OnInit {
 
   constructor(
     public override injector: Injector,
-    @Optional() @SkipSelf() parentFhngComponent: FhngComponent
+    @Optional() @Host() @SkipSelf() parentFhngComponent: FhngComponent
   ) {
     super(injector, parentFhngComponent);
   }
@@ -120,6 +120,5 @@ export class OutputLabelComponent extends FhngHTMLElementC implements OnInit {
   public override mapAttributes(data: IDataAttributes) {
     super.mapAttributes(data);
     this.value = data.value;
-    console.log('OutputLabelComponent:map', data, this)
   }
 }

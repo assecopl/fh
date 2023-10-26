@@ -36,7 +36,7 @@ import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
   ],
 })
 export class FormComponent extends FhngComponent implements OnInit, OnChanges {
-
+  // @Input() public model: any = null;
   @Input() public label: string = null;
   @Input() public hideHeader: boolean = false;
   @Input() public formType: string = 'STANDARD';
@@ -54,7 +54,6 @@ export class FormComponent extends FhngComponent implements OnInit, OnChanges {
     public override injector: Injector, private formManager: FormsManager
   ) {
     super(injector, null);
-
   }
 
   override ngOnInit() {
@@ -87,6 +86,7 @@ export class FormComponent extends FhngComponent implements OnInit, OnChanges {
   }
 
   public override mapAttributes(data: IDataAttributes): void {
-    super.mapAttributes(data);
+    super.mapAttributes(data)
+    this.formType = data.formType
   }
 }

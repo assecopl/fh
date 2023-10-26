@@ -23,7 +23,6 @@ import {FHNG_CORE_CONFIG, FhNgCoreConfig} from "../../fh-ng-core.config";
 @Directive()
 export class FhngComponent implements OnInit, AfterViewInit, AfterContentInit {
 
-
   @Input() subelements: any[] = [];
 
   public _data: any;

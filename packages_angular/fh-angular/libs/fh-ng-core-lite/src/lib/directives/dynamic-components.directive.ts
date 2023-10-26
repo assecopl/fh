@@ -9,6 +9,8 @@ import {RowComponent} from "../controls/row/row.component";
 import {FormComponent} from "../controls/form/form.component";
 import {OutputLabelComponent} from "../controls/output-label/output-label.component";
 import {GroupComponent} from "../controls/group/group.component";
+import {TabContainerComponent} from "../controls/tab-container/tab-container.component";
+import {TabComponent} from "../controls/tab/tab.component";
 
 // import {TableComponent} from "../../controls/table/table.component";
 
@@ -71,7 +73,13 @@ export class DynamicComponentsDirective
               viewContainerRef.createComponent<GroupComponent>(GroupComponent, {index: index});
           } else if (data.type === 'Table') {
             // componentRef =
-            //   viewContainerRef.createComponent<FormComponent>(TableComponent);
+            //   viewContainerRef.createComponent<FormComponent>(TableComponent);TabComponent
+          } else if (data.type === 'TabContainer') {
+            componentRef =
+              viewContainerRef.createComponent<TabContainerComponent>(TabContainerComponent);
+          } else if (data.type === 'Tab') {
+            componentRef =
+                viewContainerRef.createComponent<TabComponent>(TabComponent);
           } else if (data.type === 'Form') {
             componentRef =
               viewContainerRef.createComponent<FormComponent>(FormComponent, {index: index});

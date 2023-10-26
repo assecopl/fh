@@ -30,6 +30,7 @@ export class FhngHTMLElementC
   implements OnInit, AfterViewInit, AfterContentInit, OnChanges {
 
   public static STYLE_UNIT: StyleUnit = STYLE_UNIT.PX;
+
   @HostBinding('attr.tabindex')
   public tabindex: number = null;
 
@@ -56,6 +57,8 @@ export class FhngHTMLElementC
    */
   @Input()
   public width: string;
+
+  public height: string;
 
   @HostBinding('class')
   @Input()
@@ -152,7 +155,7 @@ export class FhngHTMLElementC
   public fcClass: boolean = true;
 
   @HostBinding('class.wrapper')
-  public wrapperClas: boolean = true;
+  public wrapperClass: boolean = true;
 
   /* Setters and Getters*/
 
@@ -197,8 +200,13 @@ export class FhngHTMLElementC
     this.processStyleWithUnit('paddingRight', value);
   }
 
-  @Input()
-  public set height(value: string) {
+  @Input('width')
+  public set setWidth (value: string) {
+    this.processWidth(value, true);
+  }
+
+  @Input('height')
+  public set setHeight(value: string) {
     //TODO Mayby move this setter to decorator
     this.processStyleWithUnit('height', value);
   }
@@ -338,38 +346,17 @@ export class FhngHTMLElementC
 
   public override mapAttributes(data: IDataAttributes): void {
     super.mapAttributes(data);
-    // this.accessibility = data.accessibility;
-    // this.bootstrapStyle = data.style;
-    // this.icon = data.icon;
-    // this.label = data.value;
-    // this.title = data.title;
-    // this.subelements = data.subelements;
-    // if (data.width) {
-    //   this.width = data.width;
-    // }
-    // this.iconAlignment = data.iconAlignment;
-    if (data.value) this.label = data.value;
-    if (data.width) this.processWidth(data.width, true);
-    if (data.style) this.bootstrapStyle = data.style
     if (data.inlineStyle) this.styles = this._convertInlineStylesToSafeStyle(data.inlineStyle);
-  }
 
-  private _convertInlineStylesToSafeStyle (inlineStyle: string): SafeStyle {
-    let _safeStyle: SafeStyle = {};
-
-    for (let style of (inlineStyle || '').split(';').filter(item => !!(item))) {
-      let _property = style.split(':');
-
-      if (_property[0] && _property[1]) {
-        _safeStyle[_property[0]] = _property[1];
-      }
-    }
-
-    return _safeStyle;
+    if (data.value) this.label = data.value;
+    if (data.style) this.bootstrapStyle = data.style
+    this.setWidth = data.width;
+    this.setHeight = data.height;
   }
 
 
-  public processWidth(value: string, force: boolean = false) {
+
+  public processWidth(value: string, force: boolean = false): void {
     // if (this.hostWidth.length === 0 || force) {
     if (!value) {
       value = this.width;
@@ -400,6 +387,18 @@ export class FhngHTMLElementC
     }
   }
 
-  // }
+  private _convertInlineStylesToSafeStyle (inlineStyle: string): SafeStyle {
+    let _safeStyle: SafeStyle = {};
+
+    for (let style of (inlineStyle || '').split(';').filter(item => !!(item))) {
+      let _property = style.split(':');
+
+      if (_property[0] && _property[1]) {
+        _safeStyle[_property[0].replace(' ', '')] = _property[1];
+      }
+    }
+
+    return _safeStyle;
+  }
 
 }

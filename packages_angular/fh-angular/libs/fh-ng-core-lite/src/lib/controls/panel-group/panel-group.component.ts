@@ -68,11 +68,14 @@ export class PanelGroupComponent extends FhngHTMLElementC implements OnInit {
   @Input()
   public customHeader: boolean = false;
 
-  @HostBinding('class.mb-3')
-  public override mb3: boolean = true;
-
   @HostBinding('class.card')
   public hostCard: boolean = false;
+
+  @HostBinding('class.valign-top')
+  public classValignTop: boolean = true;
+
+  @HostBinding('class.align-self-start')
+  public classAlignSelfStart: boolean = true;
 
   @Output()
   public panelToggle = new EventEmitter<{
@@ -82,7 +85,7 @@ export class PanelGroupComponent extends FhngHTMLElementC implements OnInit {
 
   constructor(
     public override injector: Injector,
-    @Optional() @SkipSelf() parentFhngComponent: FhngComponent,
+    @Optional() @Host() @SkipSelf() parentFhngComponent: FhngComponent,
     private sanitizer: DomSanitizer
   ) {
     super(injector, parentFhngComponent);
@@ -92,6 +95,7 @@ export class PanelGroupComponent extends FhngHTMLElementC implements OnInit {
     super.ngOnInit();
     let fhngml = this.injector.get(FhMLService);
     this.label = fhngml.transform(this.label);
+    this.mb3 = false;
     this.processCollapsible();
 
     /**
@@ -100,9 +104,9 @@ export class PanelGroupComponent extends FhngHTMLElementC implements OnInit {
      */
     this.isHeaderCLickUsed = this.headerClick.observers.length > 0;
 
-    // if (this.width) {
-    //   this.processWidth(this.width);
-    // }
+    if (this.width) {
+      this.processWidth(this.width);
+    }
   }
 
   processCollapsible(): void {
@@ -141,6 +145,13 @@ export class PanelGroupComponent extends FhngHTMLElementC implements OnInit {
 
     this.label = data.label;
 
-    console.log('PanelGroup', data);
+    if (data.iconClosed) this.iconClosed = data.iconClosed;
+    if (data.iconOpened) this.iconOpened = data.iconOpened;
+
+    this.collapsed = typeof data.collapsed === "boolean" ? data.collapsed : false;
+    this.collapsible = typeof data.collapsible === "boolean" ? data.collapsible : false;
+    this.borderVisible = typeof data.collapsible === "boolean" ? data.borderVisible : false;
+
+    console.log('PanelGroup:map', data, this);
   }
 }

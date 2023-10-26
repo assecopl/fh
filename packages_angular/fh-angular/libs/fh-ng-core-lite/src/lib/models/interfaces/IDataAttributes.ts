@@ -4,6 +4,7 @@ export interface IDataAttributes {
     accessibility: Accessibility,
     designDeletable: boolean,
     formId: string,
+    height?: string;
     hintType: string,
     icon: string,
     iconAlignment: IconAligmentType,
@@ -17,8 +18,9 @@ export interface IDataAttributes {
     width: string,
     style?: string,
     title?: string,
-  ariaLabel?: string,
-  formType?: string,
+    ariaLabel?: string,
+    formType?: string,
     subelements?: any[],
+    activeTabIndex?: number,
     [name: string]: any
 }
