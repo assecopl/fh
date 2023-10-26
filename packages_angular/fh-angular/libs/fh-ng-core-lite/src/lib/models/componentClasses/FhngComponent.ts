@@ -3,6 +3,7 @@ import {
   AfterViewInit,
   Directive,
   EventEmitter,
+  InjectionToken,
   Injector,
   Input,
   OnInit,
@@ -13,6 +14,7 @@ import * as $ from 'jquery';
 import {FormsManager} from "../../Socket/FormsManager";
 import {DynamicComponent} from "../../dynamic/dynamic-component/dynamic.component";
 import {IDataAttributes} from "../interfaces/IDataAttributes";
+import {FHNG_CORE_CONFIG, FhNgCoreConfig} from "../../fh-ng-core.config";
 
 /**
  * Klasa odpowiedzialna za budowę drzewa komponentów FHNG
@@ -24,6 +26,7 @@ export class FhngComponent implements OnInit, AfterViewInit, AfterContentInit {
 
   @Input() subelements: any[] = [];
 
+  public _data: any;
   @Input('data')
   public set data(value: any) {
     this.mapAttributes(value);
@@ -59,24 +62,23 @@ export class FhngComponent implements OnInit, AfterViewInit, AfterContentInit {
   public parentFhngComponent: FhngComponent = null;
   public childFhngComponents: FhngComponent[] = [];
 
-  public wrapperComponent: DynamicComponent | any = null;
+  protected configuration: FhNgCoreConfig = null;
 
   constructor(
     public injector: Injector,
     @Optional() @SkipSelf() parentFhngComponent: FhngComponent
   ) {
     // super();
-    this.innerId =
-      this.constructor.name + '_' + (Math.random() * 10000000000).toFixed();
+    this.innerId = this.constructor.name + '_' + (Math.random() * 10000000000).toFixed();
     this.name = this.innerId; //Prevent null/empty names - it must be set to prevent getting wrong control value for input-s without names.
     this.parentFhngComponent = parentFhngComponent;
     if (this.parentFhngComponent) {
       this.parentFhngComponent.childFhngComponents.push(this);
     }
+
     this.formsManager = this.injector.get(FormsManager, null);
-    if (parentFhngComponent && parentFhngComponent.constructor.name == "DynamicComponent") {
-      this.wrapperComponent = parentFhngComponent;
-    }
+    this.configuration = this.injector.get(FHNG_CORE_CONFIG, null) as FhNgCoreConfig;
+
   }
 
   public findFhngComponent(id: string): FhngComponent {
@@ -193,6 +195,7 @@ export class FhngComponent implements OnInit, AfterViewInit, AfterContentInit {
         this[key] = data[key];
       }
     })
+    this._data = data;
   }
 
   // protected fireHttpMultiPartEvent(eventType, actionName, url, data: FormData) {

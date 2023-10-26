@@ -57,9 +57,6 @@ export class DropdownComponent
     @Optional() @SkipSelf() parentFhngComponent: FhngComponent
   ) {
     super(injector, parentFhngComponent);
-    if (this.wrapperComponent) {
-      this.wrapperComponent.cssFormGroup = true;
-    }
   }
 
   override ngOnInit(): void {

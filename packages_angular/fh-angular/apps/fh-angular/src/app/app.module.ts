@@ -8,12 +8,13 @@ import {Connector} from "../../../../libs/fh-ng-core-lite/src/lib/Socket/Connect
 import {Util} from "../../../../libs/fh-ng-core-lite/src/lib/service/Util";
 import {ApplicationLockService} from "../../../../libs/fh-ng-core-lite/src/lib/service/application-lock.service";
 import {I18nService} from "../../../../libs/fh-ng-core-lite/src/lib/service/i18n.service";
-import {FH} from "../../../../libs/fh-ng-core-lite/src/lib/Socket/FH";
 import {SocketHandler} from "../../../../libs/fh-ng-core-lite/src/lib/Socket/SocketHandler";
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [NgbModule, BrowserModule, FhNgCoreLiteModule],
+  imports: [NgbModule, BrowserModule,
+    FhNgCoreLiteModule.forRoot({production: false, development: true, debug: true})
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })

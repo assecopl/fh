@@ -1,5 +1,5 @@
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import {ModuleWithProviders, NgModule} from '@angular/core';
+import {CommonModule, JsonPipe} from '@angular/common';
 import {FhFormsManagerNgComponent} from './fh-forms-manager-ng.component';
 import {FhMLService} from './service/fh-ml.service';
 import {AdDirective} from './directive/ad.directive';
@@ -25,6 +25,8 @@ import {CustomActionEvent} from "./events/CustomActionEvent";
 import {CustomActionsManager} from "./service/custom-actions-manager.service";
 import {EventsManager} from "./service/events-manager.service";
 import {DynamicComponentsDirective} from "./directives/dynamic-components.directive";
+import {FHNG_CORE_CONFIG, FhNgCoreConfig} from "./fh-ng-core.config";
+import {DebuggerComponent} from "./debug/debuger/debugger.component";
 
 
 @NgModule({
@@ -46,7 +48,8 @@ import {DynamicComponentsDirective} from "./directives/dynamic-components.direct
     PanelGroupComponent,
     ApplicationLockComponent,
     NotificationsComponent,
-    DynamicComponentsDirective
+    DynamicComponentsDirective,
+    DebuggerComponent
   ],
   providers: [
     CustomActionsManager,
@@ -55,13 +58,12 @@ import {DynamicComponentsDirective} from "./directives/dynamic-components.direct
     NotificationEvent,
     SessionTimeoutEvent,
     CustomActionEvent],
-  imports: [CommonModule, NgbModule],
+  imports: [CommonModule, JsonPipe, NgbModule],
   exports: [
     FhFormsManagerNgComponent,
     FhMLService,
     FormComponent,
     AdDirective,
-    CommonModule,
     RowComponent,
     ButtonComponent,
     DropdownComponent,
@@ -70,10 +72,24 @@ import {DynamicComponentsDirective} from "./directives/dynamic-components.direct
     OutputLabelComponent,
       PanelGroupComponent,
     NotificationsComponent,
-    DynamicComponentsDirective
+    DynamicComponentsDirective,
+    DebuggerComponent
   ],
 })
 export class FhNgCoreLiteModule {
+
+  static forRoot(ngCoreConfig: FhNgCoreConfig): ModuleWithProviders<FhNgCoreLiteModule> {
+    return {
+      ngModule: FhNgCoreLiteModule,
+      providers: [
+        {
+          provide: FHNG_CORE_CONFIG,
+          useValue: ngCoreConfig ? ngCoreConfig : {production: true, development: false, debug: true}
+        }
+      ]
+    };
+  }
+
 }
 
 

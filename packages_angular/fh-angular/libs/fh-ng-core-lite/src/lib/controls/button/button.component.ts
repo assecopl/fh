@@ -73,12 +73,6 @@ export class ButtonComponent
   ) {
     super(injector, parentFhngComponent);
 
-    if (this.wrapperComponent) {
-      this.wrapperComponent.cssFormGroup = true;
-      this.wrapperComponent.width = BootstrapWidthEnum.MD2;
-    }
-
-
     this.bootstrapStyle = BootstrapStyleEnum.PRIMARY;
     if (this.parentButtonGroupComponent) {
       this.parentButtonGroupComponent.buttonSubcomponents.push(this);
