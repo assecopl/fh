@@ -9,6 +9,7 @@ import {RowComponent} from "../controls/row/row.component";
 import {FormComponent} from "../controls/form/form.component";
 import {OutputLabelComponent} from "../controls/output-label/output-label.component";
 import {GroupComponent} from "../controls/group/group.component";
+import {ComponentManager} from "../service/component-manager.service";
 import {TabContainerComponent} from "../controls/tab-container/tab-container.component";
 import {TabComponent} from "../controls/tab/tab.component";
 import {AccordionComponent} from "../controls/accordion/accordion.component";
@@ -29,7 +30,9 @@ export class DynamicComponentsDirective
 
   @Input() fhDynamicComponents: any[] = [];
 
-  constructor(private adHost: ViewContainerRef, private form: FormComponent
+  constructor(private adHost: ViewContainerRef,
+              private form: FormComponent,
+              private componentManager: ComponentManager
   ) {
   }
 
@@ -48,67 +51,25 @@ export class DynamicComponentsDirective
       let componentRef = null;
 
       this.fhDynamicComponents.forEach((data, index) => {
-        if (data.type === 'PanelGroup') {
+        let componentType = this.componentManager.getComponentFactory(data.type);
+        if (componentType) {
           componentRef =
-            viewContainerRef.createComponent<PanelGroupComponent>(PanelGroupComponent, {index: index});
-        } else if (data.type === 'Accordion') {
-          componentRef =
-              viewContainerRef.createComponent<AccordionComponent>(AccordionComponent);
-        } else  if (data.type !== 'OutputLabel') {
-          if (data.type === 'TreeElement') {
-            componentRef =
-              viewContainerRef.createComponent<TreeElementComponent>(TreeElementComponent, {index: index});
-          } else if (data.type === 'Tree') {
-            componentRef =
-              viewContainerRef.createComponent<TreeComponent>(TreeComponent, {index: index});
-          } else if (data.type === 'DropdownItem') {
-            componentRef =
-              viewContainerRef.createComponent<DropdownItemComponent>(DropdownItemComponent, {index: index});
-          } else if (data.type === 'Dropdown') {
-            componentRef =
-              viewContainerRef.createComponent<DropdownComponent>(DropdownComponent, {index: index});
-          } else if (data.type === 'Button') {
-            componentRef =
-              viewContainerRef.createComponent<ButtonComponent>(ButtonComponent, {index: index});
-          } else if (data.type === 'Row') {
-            componentRef =
-              viewContainerRef.createComponent<RowComponent>(RowComponent, {index: index});
-          } else if (data.type === 'Group') {
-            componentRef =
-              viewContainerRef.createComponent<GroupComponent>(GroupComponent, {index: index});
-          } else if (data.type === 'Table') {
-            // componentRef =
-            //   viewContainerRef.createComponent<FormComponent>(TableComponent);TabComponent
-          } else if (data.type === 'TabContainer') {
-            componentRef =
-              viewContainerRef.createComponent<TabContainerComponent>(TabContainerComponent);
-          } else if (data.type === 'Tab') {
-            componentRef =
-                viewContainerRef.createComponent<TabComponent>(TabComponent);
-          } else if (data.type === 'Form') {
-            componentRef =
-              viewContainerRef.createComponent<FormComponent>(FormComponent, {index: index});
-          } else if (data.type === 'Spacer') {
-            componentRef =
-              viewContainerRef.createComponent<SpacerComponent>(SpacerComponent, {index: index});
-          } else {
-            componentRef =
-              viewContainerRef.createComponent<FormComponent>(FormComponent, {index: index});
+            viewContainerRef.createComponent(componentType, {index: index});
+          if (componentRef && componentRef.instance && componentRef.instance.mapAttributes) {
+            componentRef.instance.data = data;
+            componentRef.instance.formId = this.form.id;
           }
-        } else if (data.type === 'OutputLabel') {
-          componentRef =
-            viewContainerRef.createComponent<OutputLabelComponent>(OutputLabelComponent, {index: index});
         } else {
           componentRef =
             viewContainerRef.createComponent<OutputLabelComponent>(
               OutputLabelComponent, {index: index}
             );
-        }
-
-        if (componentRef && componentRef.instance && componentRef.instance.mapAttributes) {
           componentRef.instance.data = data;
           componentRef.instance.formId = this.form.id;
+          componentRef.instance.value = "Component " + data.type + " does not exist";
         }
+
+
       })
 
 

@@ -1,6 +1,6 @@
 import {InjectionToken} from '@angular/core';
 
-export const FHNG_CORE_CONFIG = new InjectionToken(
+export const FHNG_CORE_CONFIG = new InjectionToken<FhNgCoreConfig>(
   'FH_NG_CORE_CONFIG'
 );
 

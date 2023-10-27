@@ -1,10 +1,9 @@
-import {ModuleWithProviders, NgModule} from '@angular/core';
+import {ModuleWithProviders, NgModule, inject} from '@angular/core';
 import {CommonModule, JsonPipe} from '@angular/common';
 import {FhFormsManagerNgComponent} from './fh-forms-manager-ng.component';
 import {FhMLService} from './service/fh-ml.service';
 import {AdDirective} from './directive/ad.directive';
 import {FormComponent} from './controls/form/form.component';
-import {DynamicComponent} from './dynamic/dynamic-component/dynamic.component';
 import {RowComponent} from './controls/row/row.component';
 import {ButtonComponent} from './controls/button/button.component';
 import {DropdownComponent} from './controls/dropdown/dropdown.component';
@@ -27,8 +26,10 @@ import {EventsManager} from "./service/events-manager.service";
 import {DynamicComponentsDirective} from "./directives/dynamic-components.directive";
 import {FHNG_CORE_CONFIG, FhNgCoreConfig} from "./fh-ng-core.config";
 import {DebuggerComponent} from "./debug/debuger/debugger.component";
+import {ComponentManager} from './service/component-manager.service';
 import {TabContainerComponent} from "./controls/tab-container/tab-container.component";
 import {TabComponent} from "./controls/tab/tab.component";
+import {FhNgModule} from "./FhNgModule";
 import {AccordionComponent} from "./controls/accordion/accordion.component";
 import {SpacerComponent} from "./controls/spacer/spacer.component";
 
@@ -40,7 +41,6 @@ import {SpacerComponent} from "./controls/spacer/spacer.component";
     AdDirective,
     FormComponent,
     FhFormsManagerNgComponent,
-    DynamicComponent,
     RowComponent,
     ButtonComponent,
     DropdownComponent,
@@ -65,7 +65,8 @@ import {SpacerComponent} from "./controls/spacer/spacer.component";
     LanguageChangeEvent,
     NotificationEvent,
     SessionTimeoutEvent,
-    CustomActionEvent],
+    CustomActionEvent,
+    ComponentManager],
   imports: [CommonModule, JsonPipe, NgbModule],
   exports: [
     AccordionComponent,
@@ -89,7 +90,11 @@ import {SpacerComponent} from "./controls/spacer/spacer.component";
     SpacerComponent
   ],
 })
-export class FhNgCoreLiteModule {
+export class FhNgCoreLiteModule extends FhNgModule {
+  constructor(private componentManager: ComponentManager, protected eventManager: EventsManager) {
+    super(componentManager, eventManager);
+  }
+
 
   static forRoot(ngCoreConfig: FhNgCoreConfig): ModuleWithProviders<FhNgCoreLiteModule> {
     return {
@@ -101,6 +106,27 @@ export class FhNgCoreLiteModule {
         }
       ]
     };
+  }
+
+  public override registerComponents(componentManager?: ComponentManager, eventManager?: EventsManager): void {
+    componentManager.registerComponent(ButtonComponent);
+    componentManager.registerComponent(DropdownComponent);
+    componentManager.registerComponent(DropdownItemComponent);
+    componentManager.registerComponent(FormComponent);
+    componentManager.registerComponent(GroupComponent);
+    componentManager.registerComponent(OutputLabelComponent);
+    componentManager.registerComponent(PanelGroupComponent);
+    componentManager.registerComponent(RowComponent);
+    componentManager.registerComponent(TabComponent);
+    componentManager.registerComponent(TabContainerComponent);
+    componentManager.registerComponent(TreeComponent);
+    componentManager.registerComponent(TreeElementComponent);
+  }
+
+  protected registerCustomActions(customActionsManager?: CustomActionsManager) {
+  }
+
+  protected registerEvents(eventManager?: EventsManager) {
   }
 
 }

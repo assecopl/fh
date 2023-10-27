@@ -19,7 +19,6 @@ import {DropdownItemComponent} from '../dropdown-item/dropdown-item.component';
 import {BootstrapStyleEnum} from '../../models/enums/BootstrapStyleEnum';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
 import {BootstrapWidthEnum} from './../../models/enums/BootstrapWidthEnum';
-import {DynamicComponent} from "../../dynamic/dynamic-component/dynamic.component";
 
 @Component({
   selector: '[fh-dropdown]',
