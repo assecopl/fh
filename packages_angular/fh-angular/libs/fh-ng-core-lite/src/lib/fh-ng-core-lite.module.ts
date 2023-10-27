@@ -109,6 +109,7 @@ export class FhNgCoreLiteModule extends FhNgModule {
   }
 
   public override registerComponents(componentManager?: ComponentManager, eventManager?: EventsManager): void {
+    componentManager.registerComponent(AccordionComponent);
     componentManager.registerComponent(ButtonComponent);
     componentManager.registerComponent(DropdownComponent);
     componentManager.registerComponent(DropdownItemComponent);
@@ -121,6 +122,7 @@ export class FhNgCoreLiteModule extends FhNgModule {
     componentManager.registerComponent(TabContainerComponent);
     componentManager.registerComponent(TreeComponent);
     componentManager.registerComponent(TreeElementComponent);
+    componentManager.registerComponent(SpacerComponent)
   }
 
   protected registerCustomActions(customActionsManager?: CustomActionsManager) {
