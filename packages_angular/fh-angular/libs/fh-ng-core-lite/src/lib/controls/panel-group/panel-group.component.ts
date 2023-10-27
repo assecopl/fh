@@ -68,8 +68,8 @@ export class PanelGroupComponent extends FhngHTMLElementC implements OnInit {
   @Input()
   public customHeader: boolean = false;
 
-  @HostBinding('class.card')
-  public hostCard: boolean = false;
+  @HostBinding('class')
+  public classList: string = '';
 
   @HostBinding('class.valign-top')
   public classValignTop: boolean = true;
@@ -119,6 +119,7 @@ export class PanelGroupComponent extends FhngHTMLElementC implements OnInit {
 
   collapseToggle(): void {
     this.panelToggle.emit({id: this.innerId, collapsed: !this.collapsed});
+    
     if (this.collapsed) {
       this.expandPanelGroup();
     } else {
@@ -148,10 +149,28 @@ export class PanelGroupComponent extends FhngHTMLElementC implements OnInit {
     if (data.iconClosed) this.iconClosed = data.iconClosed;
     if (data.iconOpened) this.iconOpened = data.iconOpened;
 
+    this.accordion = typeof data.accordion === "boolean" ? data.accordion : false;
     this.collapsed = typeof data.collapsed === "boolean" ? data.collapsed : false;
     this.collapsible = typeof data.collapsible === "boolean" ? data.collapsible : false;
     this.borderVisible = typeof data.collapsible === "boolean" ? data.borderVisible : false;
 
-    console.log('PanelGroup:map', data, this);
+
+    if (this.accordion) {
+      let classList = ['panelGroup', 'card', 'card-default'];
+
+      this.elementRef.nativeElement.id = this.innerId;
+      this.wrapperClass = false;
+      this.width = null;
+      this.hostWidth = data.hostWidth;
+
+      if (!this.borderVisible) {
+        classList.push('borderHidden');
+      }
+
+      this.classList = classList.join(' ');
+    }
   }
+
+
+
 }

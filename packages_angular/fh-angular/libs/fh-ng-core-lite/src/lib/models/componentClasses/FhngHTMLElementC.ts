@@ -285,6 +285,7 @@ export class FhngHTMLElementC
     if (val) {
       v = isNumber(val) ? val : val.replace(/px|%|em|rem|pt/gi, '');
       this.styles[name + '.' + FhngHTMLElementC.STYLE_UNIT] = v;
+      this.height = val;
     }
     return v;
   }
@@ -347,6 +348,8 @@ export class FhngHTMLElementC
   public override mapAttributes(data: IDataAttributes): void {
     super.mapAttributes(data);
     if (data.inlineStyle) this.styles = this._convertInlineStylesToSafeStyle(data.inlineStyle);
+
+    this.accessibility = data.accessibility;
 
     if (data.value) this.label = data.value;
     if (data.style) this.bootstrapStyle = data.style

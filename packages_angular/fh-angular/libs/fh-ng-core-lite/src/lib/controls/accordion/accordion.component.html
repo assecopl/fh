@@ -1,8 +1,10 @@
 <div
   role="tablist"
-  class="accordion"
+  class="fc accordion"
   aria-multiselectable="false"
-  availabilityHtmlElement
+  [id]="id"
+  [class.fc-editable]="accessibility === 'EDIT'"
+  [class.d-none]="accessibility === 'HIDDEN'"
 >
-  <ng-content></ng-content>
+  <ng-container [fhDynamicComponents]="subelements"></ng-container>
 </div>

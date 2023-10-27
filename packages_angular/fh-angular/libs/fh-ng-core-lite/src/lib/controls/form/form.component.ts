@@ -70,7 +70,7 @@ export class FormComponent extends FhngComponent implements OnInit, OnChanges {
 
       }
     })
-    console.log(this.formType + "" + this.id);
+
     if (this.formType == 'HEADER') {
       this.header = true;
       this.cssCard = false

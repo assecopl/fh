@@ -85,11 +85,19 @@ export class DynamicComponent
     viewContainerRef.clear();
     let componentRef = null;
 
+    if (!this.data) {
+      return;
+    }
+
     this.data.formId = this.formId;
 
     if (this.data.type === 'PanelGroup') {
       componentRef =
         viewContainerRef.createComponent<PanelGroupComponent>(PanelGroupComponent);
+    } else if (this.data.type === 'Accordion') {
+      componentRef =
+          viewContainerRef.createComponent<PanelGroupComponent>(PanelGroupComponent);
+      componentRef.instance.accordion = true;
     } else if (this.data.type !== 'OutputLabel') {
       if (this.data.type === 'TreeElement') {
         componentRef =

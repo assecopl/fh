@@ -15,16 +15,22 @@ import {
 import {GroupingComponentC} from '../../models/componentClasses/GroupingComponentC';
 import {PanelGroupComponent} from '../panel-group/panel-group.component';
 import {BootstrapWidthEnum} from '../../models/enums/BootstrapWidthEnum';
-import {DocumentedComponent} from '@fhng/ng-core';
-import {FhngAvailabilityDirective} from '@fhng/ng-availability';
+// import {DocumentedComponent} from '@fhng/ng-core';
+// import {FhngAvailabilityDirective} from '@fhng/ng-availability';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
+import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
 
-@DocumentedComponent({
-  category: DocumentedComponent.Category.ARRANGEMENT,
-  value:
-    'PanelGroup component responsible for the grouping of sub-elements, only one uncollapsed group will be allowed.',
-  icon: 'fa fa-caret-down',
-})
+interface IAccordionDataAttributes extends IDataAttributes {
+  iconOpened: string,
+  iconClosed: string
+}
+
+// @DocumentedComponent({
+//   category: DocumentedComponent.Category.ARRANGEMENT,
+//   value:
+//     'PanelGroup component responsible for the grouping of sub-elements, only one uncollapsed group will be allowed.',
+//   icon: 'fa fa-caret-down',
+// })
 @Component({
   selector: 'fhng-accordion',
   templateUrl: './accordion.component.html',
@@ -33,7 +39,7 @@ import {FhngComponent} from '../../models/componentClasses/FhngComponent';
     /**
      * Inicjalizujemy dyrektywę dostępności aby zbudoać hierarchię elementów i dać możliwość zarządzania dostępnością
      */
-    FhngAvailabilityDirective,
+    // FhngAvailabilityDirective,
     /**
      * Dodajemy deklaracje klasy ogólnej aby wstrzykiwanie i odnajdowanie komponentów wewnątrz siebie było możliwe.
      * Dzięki temu budujemy hierarchię kontrolek Fhng.
@@ -49,7 +55,9 @@ import {FhngComponent} from '../../models/componentClasses/FhngComponent';
   ],
 })
 export class AccordionComponent extends GroupingComponentC<PanelGroupComponent> {
-  width: string = BootstrapWidthEnum.MD12;
+  public override width = BootstrapWidthEnum.MD12;
+
+  public override mb3 = false;
 
   /**
    *  If `true`, only one panel could be opened at a time.
@@ -58,25 +66,29 @@ export class AccordionComponent extends GroupingComponentC<PanelGroupComponent> 
    */
   public closeOtherPanels: boolean = true;
 
-  @Input() public activeGroup: number = 0;
-  @Output() onGroupChange = new EventEmitter();
+  @Input()
+  public activeGroup: number = 0;
 
-  @Input() public iconOpened: string = null;
-  @Input() public iconClosed: string = null;
+  @Input()
+  public iconOpened: string = null;
 
-  @ContentChildren(PanelGroupComponent)
-  public subcomponents: QueryList<PanelGroupComponent> =
-    new QueryList<PanelGroupComponent>();
+  @Input()
+  public iconClosed: string = null;
+
+  @Output()
+  public onGroupChange = new EventEmitter();
 
   constructor(
-    public injector: Injector,
+    public override injector: Injector,
     @Optional() @SkipSelf() parentFhngComponent: FhngComponent
   ) {
     super(injector, parentFhngComponent);
+
+    this.mb3 = false;
   }
 
   public getSubcomponentInstance(): new (
-    ...args: any[]
+      ...args: any[]
   ) => PanelGroupComponent {
     return PanelGroupComponent;
   }
@@ -86,35 +98,53 @@ export class AccordionComponent extends GroupingComponentC<PanelGroupComponent> 
     this.onGroupChange.emit(this.activeGroup);
   }
 
-  public updateSubcomponent = (
-    subcomponent: PanelGroupComponent,
-    index: number
-  ) => {
+  public updateSubcomponent = ( subcomponent: PanelGroupComponent, index: number): void => {
     subcomponent.collapsible = true;
-    subcomponent.panelToggle.subscribe((value) => {
-      this._closeOthers(value.id);
-    });
+
+    if (subcomponent.panelToggle) {
+      subcomponent.panelToggle.subscribe((value) => {
+        this._closeOthers(value.id);
+      });
+    }
 
     subcomponent.accordion = true; //Tell PanelGroupcomponent that is inside accordion
     subcomponent.mb3 = false; // Remove bottom mirgins
-    subcomponent.hostCard = true; //Add card class to host element
     subcomponent.hostWidth = ''; //Remove width clsss from host element (remove padding)
-    subcomponent.borderVisible = true; // Turn on borders.
+    subcomponent.borderVisible = false; // Turn on borders.
 
     subcomponent.iconClosed = this.iconClosed;
     subcomponent.iconOpened = this.iconOpened;
     subcomponent.collapsed = index !== this.activeGroup;
-  };
+  }
 
   private _closeOthers(panelId: string) {
-    this.subcomponents.forEach((panel) => {
+    this.subelements.forEach((panel) => {
       if (panel.innerId !== panelId) {
         panel.collapsed = true;
       }
     });
+
+    this.subelements = JSON.parse(JSON.stringify(this.subelements));
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  public override ngOnChanges(changes: SimpleChanges) {
     super.ngOnChanges(changes);
+  }
+
+  public override mapAttributes(data: IAccordionDataAttributes) {
+    super.mapAttributes(this._updateSubElements(data));
+
+    this.iconClosed = data.iconClosed;
+    this.iconOpened = data.iconOpened;
+  }
+
+  private _updateSubElements (data: IAccordionDataAttributes): IAccordionDataAttributes {
+    for (let index = 0;  index < data.subelements?.length; index++) {
+      if (data.subelements[index].type === 'PanelGroup') {
+        this.updateSubcomponent(data.subelements[index], index);
+      }
+    }
+
+    return data;
   }
 }

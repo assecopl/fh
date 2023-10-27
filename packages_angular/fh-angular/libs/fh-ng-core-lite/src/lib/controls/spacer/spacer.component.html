@@ -1,1 +1,9 @@
-<div [style.height.px]="verticalSpace"></div>
+<div
+  class="containerSpacer"
+  [id]="id"
+  [class.hasHeight]="height"
+  [class.fc-editable]="accessibility === 'EDIT'"
+  [class.d-none]="accessibility === 'HIDDEN'"
+  [ngStyle]="styles"
+></div>
+

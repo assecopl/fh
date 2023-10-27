@@ -29,10 +29,13 @@ import {FHNG_CORE_CONFIG, FhNgCoreConfig} from "./fh-ng-core.config";
 import {DebuggerComponent} from "./debug/debuger/debugger.component";
 import {TabContainerComponent} from "./controls/tab-container/tab-container.component";
 import {TabComponent} from "./controls/tab/tab.component";
+import {AccordionComponent} from "./controls/accordion/accordion.component";
+import {SpacerComponent} from "./controls/spacer/spacer.component";
 
 
 @NgModule({
   declarations: [
+    AccordionComponent,
     FhMLService,
     AdDirective,
     FormComponent,
@@ -53,7 +56,8 @@ import {TabComponent} from "./controls/tab/tab.component";
     DynamicComponentsDirective,
     DebuggerComponent,
     TabContainerComponent,
-    TabComponent
+    TabComponent,
+    SpacerComponent
   ],
   providers: [
     CustomActionsManager,
@@ -64,6 +68,7 @@ import {TabComponent} from "./controls/tab/tab.component";
     CustomActionEvent],
   imports: [CommonModule, JsonPipe, NgbModule],
   exports: [
+    AccordionComponent,
     FhFormsManagerNgComponent,
     FhMLService,
     FormComponent,
@@ -75,10 +80,13 @@ import {TabComponent} from "./controls/tab/tab.component";
     DropdownItemComponent,
     TreeElementComponent,
     OutputLabelComponent,
-      PanelGroupComponent,
+    PanelGroupComponent,
     NotificationsComponent,
     DynamicComponentsDirective,
-    DebuggerComponent
+    DebuggerComponent,
+    TabContainerComponent,
+    TabComponent,
+    SpacerComponent
   ],
 })
 export class FhNgCoreLiteModule {

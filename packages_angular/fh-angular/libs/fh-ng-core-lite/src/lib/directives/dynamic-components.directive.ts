@@ -11,6 +11,8 @@ import {OutputLabelComponent} from "../controls/output-label/output-label.compon
 import {GroupComponent} from "../controls/group/group.component";
 import {TabContainerComponent} from "../controls/tab-container/tab-container.component";
 import {TabComponent} from "../controls/tab/tab.component";
+import {AccordionComponent} from "../controls/accordion/accordion.component";
+import {SpacerComponent} from "../controls/spacer/spacer.component";
 
 // import {TableComponent} from "../../controls/table/table.component";
 
@@ -49,7 +51,10 @@ export class DynamicComponentsDirective
         if (data.type === 'PanelGroup') {
           componentRef =
             viewContainerRef.createComponent<PanelGroupComponent>(PanelGroupComponent, {index: index});
-        } else if (data.type !== 'OutputLabel') {
+        } else if (data.type === 'Accordion') {
+          componentRef =
+              viewContainerRef.createComponent<AccordionComponent>(AccordionComponent);
+        } else  if (data.type !== 'OutputLabel') {
           if (data.type === 'TreeElement') {
             componentRef =
               viewContainerRef.createComponent<TreeElementComponent>(TreeElementComponent, {index: index});
@@ -83,6 +88,9 @@ export class DynamicComponentsDirective
           } else if (data.type === 'Form') {
             componentRef =
               viewContainerRef.createComponent<FormComponent>(FormComponent, {index: index});
+          } else if (data.type === 'Spacer') {
+            componentRef =
+              viewContainerRef.createComponent<SpacerComponent>(SpacerComponent, {index: index});
           } else {
             componentRef =
               viewContainerRef.createComponent<FormComponent>(FormComponent, {index: index});
