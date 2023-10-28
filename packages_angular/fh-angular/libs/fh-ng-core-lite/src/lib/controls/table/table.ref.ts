@@ -2,7 +2,7 @@ import {TableColumnComponent} from '../table-column/table-column.component';
 import {FhngHTMLElementC} from '../../models/componentClasses/FhngHTMLElementC';
 import {TableRowComponent} from '../table-row/table-row.component';
 import {Directive, EventEmitter} from '@angular/core';
-import {Page} from '@fhng/ng-core';
+import {Page} from "../../Base";
 
 /**
  * FIXME Przebudować Tabelę!!!!! Między innymi tak aby nie korzystać z ViewCHild i ContentCHild - działają z opuźnieniem.

@@ -1,26 +1,26 @@
-@import '~bootstrap/scss/functions';
-@import '~bootstrap/scss/variables';
-
-:host ::ng-deep {
-  .table {
-    .td {
-      display: contents;
-      padding: $table-cell-padding;
-      vertical-align: top;
-      border-top: $table-border-width solid $table-border-color;
-    }
-
-    .th {
-      display: contents;
-      padding: $table-cell-padding;
-      vertical-align: top;
-      border-top: $table-border-width solid $table-border-color;
-    }
-  }
-
-  .table-bordered {
-    .td {
-      border: $table-border-width solid $table-border-color;
-    }
-  }
-}
+//@import '~bootstrap/scss/functions';
+//@import '~bootstrap/scss/variables';
+//
+//:host ::ng-deep {
+//  .table {
+//    .td {
+//      display: contents;
+//      padding: $table-cell-padding;
+//      vertical-align: top;
+//      border-top: $table-border-width solid $table-border-color;
+//    }
+//
+//    .th {
+//      display: contents;
+//      padding: $table-cell-padding;
+//      vertical-align: top;
+//      border-top: $table-border-width solid $table-border-color;
+//    }
+//  }
+//
+//  .table-bordered {
+//    .td {
+//      border: $table-border-width solid $table-border-color;
+//    }
+//  }
+//}

@@ -15,12 +15,11 @@ import {
   SimpleChanges,
   SkipSelf,
 } from '@angular/core';
-import {FhngAvailabilityDirective} from '@fhng/ng-availability';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
 import {TableComponent} from '../table/table.component';
 import {BootstrapWidthEnum} from '../../models/enums/BootstrapWidthEnum';
-import {Page} from '@fhng/ng-core';
 import {TableComponentRef} from '../table/table.ref';
+import {Page} from '../../Base';
 
 @Component({
   selector: 'fhng-table-paged',
@@ -30,7 +29,7 @@ import {TableComponentRef} from '../table/table.ref';
     /**
      * Inicjalizujemy dyrektywę dostępności aby zbudoać hierarchię elementów i dać możliwość zarządzania dostępnością
      */
-    FhngAvailabilityDirective,
+    // FhngAvailabilityDirective,
     /**
      * Dodajemy deklaracje klasy ogólnej aby wstrzykiwanie i odnajdowanie komponentów wewnątrz siebie było możliwe.
      * Dzięki temu budujemy hierarchię kontrolek Fhng.
@@ -52,7 +51,7 @@ export class TablePagedComponent
    * @override
    */
   @Input()
-  public collection: Page<any> = null;
+  public override collection: Page<any> = null;
 
   /**
    * pageable variables and eventEmiters
@@ -72,7 +71,7 @@ export class TablePagedComponent
   public pageNumber: number = 1;
 
   constructor(
-    public injector: Injector,
+    public override injector: Injector,
     @Optional() @SkipSelf() parentFhngComponent: FhngComponent
   ) {
     super(injector, parentFhngComponent);
@@ -81,23 +80,23 @@ export class TablePagedComponent
     this.hostClass = `col-${this.width}`;
   }
 
-  ngOnInit() {
+  override ngOnInit() {
     super.ngOnInit();
     this.restorePageNumber();
   }
 
-  ngAfterViewInit(): void {
+  override ngAfterViewInit(): void {
     super.ngAfterViewInit();
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  override ngOnChanges(changes: SimpleChanges): void {
     super.ngOnChanges(changes);
   }
 
-  ngOnDestroy(): void {
+  override ngOnDestroy(): void {
   }
 
-  ngAfterContentInit(): void {
+  override ngAfterContentInit(): void {
     super.ngAfterContentInit();
   }
 

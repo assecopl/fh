@@ -96,7 +96,7 @@ export class RepeaterComponent extends FhngHTMLElementC implements OnInit {
     @Optional() @SkipSelf() parentFhngComponent: FhngComponent
   ) {
     super(injector, parentFhngComponent);
-    this.mb3 = false;
+    this.mb2 = false;
   }
 
   override ngOnInit() {

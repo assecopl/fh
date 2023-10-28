@@ -1,11 +1,38 @@
 <label class="col-form-label" *ngIf="label">{{ label }}</label>
-<table class="table">
+<table class="fc table">
   <!--  Simple HTEAD - one row-->
-  <ng-content select="thead"></ng-content>
-  <ng-content select="tbody"></ng-content>
+  <!--  <ng-content select="thead"></ng-content>-->
+  <thead>
+  <tr class="table-heading">
+    <th *ngIf="selectionCheckboxes">
+    <span class="custom-control custom-checkbox" *ngIf="selectAllChceckbox">
+      <input [id]="id+'selectAll'"
+             (click)="toggleSelectAll()"
+             aria-label="Zaznacz/odznacz wszystkie rekordy"
+             class="custom-control-input"
+             type="checkbox"
+      />
+      <label class="hidden custom-control-label ml-3" [for]="id+'selectAll'">
+        <span class="d-none">Zaznacz/odznacz wszystkie rekordy</span>
+      </label>
+    </span>
+    </th>
 
-  <!-- Dodatkowe tr dokładamy poza tbody - przeglądarki nie powinny mieć z tym problemu  -->
-  <ng-container *ngIf="minRows > collection?.length">
+    <ng-container *ngFor="let column of columns">
+
+      <th fhng-table-column [data]="column" [formId]="formId">&nbsp;{{column.id}}</th>
+    </ng-container>
+  </tr>
+
+  </thead>
+  <!--  <ng-content select="tbody"></ng-content>-->
+  <tbody>
+  <ng-container *ngFor="let tr of tableData">
+    <tr fhng-table-row [data]="tr" [formId]="formId"></tr>
+  </ng-container>
+
+
+  <ng-container *ngIf="minRows > tableData?.length">
     <tr
       *ngFor="
         let i of [].constructor(minRows - (collection ? collection?.length : 0))
@@ -14,6 +41,10 @@
       <td *ngFor="let a of [].constructor(columnsArray?.length)">&nbsp;</td>
     </tr>
   </ng-container>
+  </tbody>
+  <tfoot>
+
+  </tfoot>
 </table>
 <fhng-button
   *ngIf="csvExport"
@@ -24,3 +55,7 @@
   (click)="onExportCsv()"
 >[icon='fas fa-download'] CSV
 </fhng-button>
+
+<ng-container *ngIf="configuration.debug">
+  <fh-component-debugger/>
+</ng-container>

@@ -40,7 +40,7 @@ export class GroupComponent extends FhngHTMLElementC implements OnInit {
 
     this.width = BootstrapWidthEnum.MD12;
     if (parentFhngComponent instanceof RepeaterComponent) {
-      this.mb3 = false;
+      this.mb2 = false;
     }
   }
 

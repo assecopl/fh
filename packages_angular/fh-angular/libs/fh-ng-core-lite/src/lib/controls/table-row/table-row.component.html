@@ -1,11 +1,11 @@
-<ng-container #tr [availabilityHtmlElement]="elementRef">
+<ng-container #tr>
   <td *ngIf="tableRef?.selectionCheckboxes && tableRef?.multiselect">
     <span class="custom-control custom-checkbox">
       <input
         (click)="tableRef.select(row)"
         [id]="id"
         [checked]="highlight"
-        attr.aria-label="Zaznacz/odznacz rekord"
+        aria-label="Zaznacz/odznacz rekord"
         class="custom-control-input"
         type="checkbox"
       />
@@ -14,5 +14,9 @@
       </label>
     </span>
   </td>
-  <ng-content></ng-content>
+
+  <!--  <ng-container   [fhDynamicComponents]="subelements"></ng-container>-->
+  <ng-container *ngFor="let td of subelements;index as i;">
+    <td fhng-table-cell [data]="td" [formId]="formId"></td>
+  </ng-container>
 </ng-container>

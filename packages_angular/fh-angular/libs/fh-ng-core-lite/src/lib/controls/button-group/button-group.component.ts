@@ -94,7 +94,7 @@ export class ButtonGroupComponent
     this.width = BootstrapWidthEnum.MD12;
     this.class = 'btn-group';
     this.role = 'group';
-    this.mb3 = false;
+    this.mb2 = false;
   }
 
   public getSubcomponentInstance(): new (...args: any[]) => ButtonComponent {

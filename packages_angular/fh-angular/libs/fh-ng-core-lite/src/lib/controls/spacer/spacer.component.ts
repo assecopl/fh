@@ -38,7 +38,7 @@ import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
   ],
 })
 export class SpacerComponent extends FhngHTMLElementC implements OnInit {
-  public override mb3: boolean = false;
+  public override mb2: boolean = false;
 
   @HostBinding('class.spacer')
   public classSpacer: boolean = true;

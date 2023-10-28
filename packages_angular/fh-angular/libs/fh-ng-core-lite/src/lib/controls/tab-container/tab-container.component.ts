@@ -52,7 +52,7 @@ export class TabContainerComponent
   extends GroupingComponentC<TabComponent>
   implements OnInit, AfterContentInit {
 
-  public override mb3 = false;
+  public override mb2 = false;
 
   @Input()
   public override width: string = BootstrapWidthEnum.MD12;

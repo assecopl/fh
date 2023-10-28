@@ -12,22 +12,24 @@ import {
   SimpleChanges,
   SkipSelf,
 } from '@angular/core';
-import {FhngAvailabilityDirective} from '@fhng/ng-availability';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
 import {TableComponentRef} from '../table/table.ref';
 import {TableCellComponent} from '../table-cell/table-cell.component';
 import {TablePagedComponent} from '../table-paged/table-paged.component';
-import {Direction, Order, Page} from '@fhng/ng-core';
+import {Direction, Order, Page} from '../../Base';
+import {isNumber} from 'util';
+import {STYLE_UNIT} from "../../models/enums/StyleUnitEnum";
+import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
 
 @Component({
-  selector: 'fhng-table-column',
+  selector: '[fhng-table-column]',
   templateUrl: './table-column.component.html',
   styleUrls: ['./table-column.component.scss'],
   providers: [
     /**
      * Inicjalizujemy dyrektywę dostępności aby zbudoać hierarchię elementów i dać możliwość zarządzania dostępnością
      */
-    FhngAvailabilityDirective,
+    // FhngAvailabilityDirective,
     /**
      * Dodajemy deklaracje klasy ogólnej aby wstrzykiwanie i odnajdowanie komponentów wewnątrz siebie było możliwe.
      * Dzięki temu budujemy hierarchię kontrolek Fhng.
@@ -42,28 +44,37 @@ export class TableColumnComponent
   extends TableCellComponent
   implements OnChanges, OnInit {
   @HostBinding('class')
-  class: string = 'fhng-table-column th';
+  override class: string = 'fhng-table-column th';
 
   @Input()
   public sortBy: string = null;
 
+  @Input('data')
+  public override set data(value: any) {
+    this.mapAttributes(value);
+  }
+
+  @HostBinding('style.width')
+  public hostStyleWidth: SafeStyle & any = {};
+
   constructor(
-    public readonly elementRef: ElementRef<HTMLElement>,
-    public injector: Injector,
+    public override readonly elementRef: ElementRef<HTMLElement>,
+    public override injector: Injector,
     private table: TableComponentRef,
-    @Optional() @SkipSelf() parentFhngComponent: FhngComponent
+    @Optional() @SkipSelf() parentFhngComponent: FhngComponent,
+    private sanitizer: DomSanitizer
   ) {
-    super(elementRef, injector, parentFhngComponent);
+    super(elementRef, injector, parentFhngComponent,);
     if (table) {
       table.registerColumn(this, parentFhngComponent);
     }
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  override ngOnChanges(changes: SimpleChanges) {
     super.ngOnChanges(changes);
   }
 
-  ngOnInit() {
+  override ngOnInit() {
     super.ngOnInit();
   }
 
@@ -94,4 +105,33 @@ export class TableColumnComponent
     }
     return undefined;
   }
+
+  /**
+   * Zmiana zarzadzania szerokoscia w kolumnie, moze wystepowac tylko %, px i vw - domyslnie %
+   * @param value
+   * @param force
+   */
+  public override processWidth(value: string, force: boolean = false): void {
+    // if (this.hostWidth.length === 0 || force) {
+    if (!value) {
+      value = this.width;
+    }
+
+    if (value) {
+      this.width = value;
+      let v = null;
+      if (value) {
+        v = isNumber(value) ? value : value.replace(/px|%|em|rem|pt/gi, '');
+        let unit = value.replace(v, "");
+        unit = unit ? unit : '%';
+        // this.hostStyle[key] = v;
+        // this.hostStyle['width'] = {};
+        this.hostStyle['width'] = v + unit;
+      }
+    }
+  }
+
+
+
+
 }

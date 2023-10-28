@@ -188,8 +188,9 @@ export class FhngComponent implements OnInit, AfterViewInit, AfterContentInit {
     //Przepisujemy wszystkie typowe parametry obiektu jeżeli istnieją na naszym obiekcie.
     //W metodach w obiektach możemy sobono przepisywać parametry których nazwy się nie pokrywają.
     let dataKeys = Object.keys(data);
+    let thisKeys = Object.keys(this);
     dataKeys.forEach(key => {
-      if (this[key]) {
+      if (Object.hasOwn(this, key)) {
         this[key] = data[key];
       }
     })

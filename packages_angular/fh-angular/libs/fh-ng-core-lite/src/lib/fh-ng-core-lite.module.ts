@@ -30,35 +30,73 @@ import {ComponentManager} from './service/component-manager.service';
 import {TabContainerComponent} from "./controls/tab-container/tab-container.component";
 import {TabComponent} from "./controls/tab/tab.component";
 import {FhNgModule} from "./FhNgModule";
+import {TableComponent} from "./controls/table/table.component";
+import {TableCellComponent} from "./controls/table-cell/table-cell.component";
+import {TableColumnComponent} from "./controls/table-column/table-column.component";
+import {TableHeadRowComponent} from "./controls/table-head-row/table-head-row.component";
+import {TableRowComponent} from "./controls/table-row/table-row.component";
+import {TablePagedComponent} from "./controls/table-paged/table-paged.component";
+import {IConfig, NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask} from 'ngx-mask'
 import {AccordionComponent} from "./controls/accordion/accordion.component";
 import {SpacerComponent} from "./controls/spacer/spacer.component";
 
 
+const maskConfigFunction: () => Partial<IConfig> = () => {
+  return {
+    validation: false,
+    thousandSeparator: "",
+    decimalMarker: ",",
+    clearIfNotMatch: false,
+    patterns: {
+      '0': {pattern: new RegExp("[0-9]")},
+      '9': {pattern: new RegExp("[0-9]")},
+      'A': {pattern: new RegExp("[A-ZĄĆĘŁŃÓŚŹŻa-ząćęłńóśźż]")},
+      'a': {pattern: new RegExp("[A-ZĄĆĘŁŃÓŚŹŻa-ząćęłńóśźż]")},
+      'P': {pattern: new RegExp("[A-Z0-9]")}, //For NIP.
+      'L': {pattern: new RegExp("[A-Za-z]")},
+      'l': {pattern: new RegExp("[A-Za-z]")},
+      'M': {pattern: new RegExp('[0-9a-zA-Z._-]')},
+      'G': {pattern: new RegExp('[0-9a-zA-Z._-]')}, //Use G instead of M mark - there is somthing wrong with M (as 4.x) mark
+      'N': {pattern: new RegExp("[0-9a-zA-Z ąćęłńóśźżĄĆĘŁŃÓŚŹŻ._-]")}
+    }
+  };
+};
+
+const components = [
+  AccordionComponent,
+  FhMLService,
+  AdDirective,
+  FormComponent,
+  FhFormsManagerNgComponent,
+  RowComponent,
+  ButtonComponent,
+  DropdownComponent,
+  DropdownItemComponent,
+  TreeComponent,
+  TreeElementComponent,
+  GroupComponent,
+  RepeaterComponent,
+  OutputLabelComponent,
+  PanelGroupComponent,
+  ApplicationLockComponent,
+  NotificationsComponent,
+  DynamicComponentsDirective,
+  DebuggerComponent,
+  TabContainerComponent,
+  TabComponent,
+  TableComponent,
+  TableCellComponent,
+  TableColumnComponent,
+  TableHeadRowComponent,
+  TableRowComponent,
+  TablePagedComponent,
+  TabComponent,
+  SpacerComponent,
+  RepeaterComponent
+]
+
 @NgModule({
-  declarations: [
-    AccordionComponent,
-    FhMLService,
-    AdDirective,
-    FormComponent,
-    FhFormsManagerNgComponent,
-    RowComponent,
-    ButtonComponent,
-    DropdownComponent,
-    DropdownItemComponent,
-    TreeComponent,
-    TreeElementComponent,
-    GroupComponent,
-    RepeaterComponent,
-    OutputLabelComponent,
-    PanelGroupComponent,
-    ApplicationLockComponent,
-    NotificationsComponent,
-    DynamicComponentsDirective,
-    DebuggerComponent,
-    TabContainerComponent,
-    TabComponent,
-    SpacerComponent
-  ],
+  declarations: components,
   providers: [
     CustomActionsManager,
     EventsManager,
@@ -66,29 +104,11 @@ import {SpacerComponent} from "./controls/spacer/spacer.component";
     NotificationEvent,
     SessionTimeoutEvent,
     CustomActionEvent,
-    ComponentManager],
-  imports: [CommonModule, JsonPipe, NgbModule],
-  exports: [
-    AccordionComponent,
-    FhFormsManagerNgComponent,
-    FhMLService,
-    FormComponent,
-    AdDirective,
-    CommonModule,
-    RowComponent,
-    ButtonComponent,
-    DropdownComponent,
-    DropdownItemComponent,
-    TreeElementComponent,
-    OutputLabelComponent,
-    PanelGroupComponent,
-    NotificationsComponent,
-    DynamicComponentsDirective,
-    DebuggerComponent,
-    TabContainerComponent,
-    TabComponent,
-    SpacerComponent
+    ComponentManager,
+    provideEnvironmentNgxMask(maskConfigFunction)
   ],
+  imports: [CommonModule, JsonPipe, NgbModule, NgxMaskDirective, NgxMaskPipe],
+  exports: components,
 })
 export class FhNgCoreLiteModule extends FhNgModule {
   constructor(private componentManager: ComponentManager, protected eventManager: EventsManager) {
@@ -108,7 +128,7 @@ export class FhNgCoreLiteModule extends FhNgModule {
     };
   }
 
-  public override registerComponents(componentManager?: ComponentManager, eventManager?: EventsManager): void {
+  public override registerComponents(componentManager?: ComponentManager): void {
     componentManager.registerComponent(AccordionComponent);
     componentManager.registerComponent(ButtonComponent);
     componentManager.registerComponent(DropdownComponent);
@@ -117,11 +137,18 @@ export class FhNgCoreLiteModule extends FhNgModule {
     componentManager.registerComponent(GroupComponent);
     componentManager.registerComponent(OutputLabelComponent);
     componentManager.registerComponent(PanelGroupComponent);
+    componentManager.registerComponent(RepeaterComponent);
     componentManager.registerComponent(RowComponent);
     componentManager.registerComponent(TabComponent);
     componentManager.registerComponent(TabContainerComponent);
     componentManager.registerComponent(TreeComponent);
     componentManager.registerComponent(TreeElementComponent);
+    componentManager.registerComponent(TableComponent);
+    componentManager.registerComponent(TablePagedComponent);
+    componentManager.registerComponent(TableColumnComponent);
+    componentManager.registerComponent(TableRowComponent);
+    componentManager.registerComponent(TableHeadRowComponent);
+    componentManager.registerComponent(TableCellComponent);
     componentManager.registerComponent(SpacerComponent)
   }
 

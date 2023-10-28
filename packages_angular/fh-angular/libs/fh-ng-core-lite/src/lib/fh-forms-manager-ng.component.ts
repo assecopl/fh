@@ -1,5 +1,4 @@
 import {AfterViewInit, Component, Input, OnDestroy, OnInit,} from '@angular/core';
-import {AbstractDynamicLoadComponent} from './AbstractDynamicLoadComponent';
 import {I18nService} from "./service/i18n.service";
 import {ApplicationLockEN} from "./I18n/ApplicationLock.en";
 import {ApplicationLockPL} from "./I18n/ApplicationLock.pl";
@@ -119,20 +118,13 @@ import {FormsManager} from "./Socket/FormsManager";
   `,
   styleUrls: ['./fh-forms-manager-ng.component.scss'],
 })
-export class FhFormsManagerNgComponent
-  extends AbstractDynamicLoadComponent
-  implements OnInit, OnDestroy, AfterViewInit {
+export class FhFormsManagerNgComponent {
   public menuForm: any = null;
   @Input()
   public navbarForm: any = null;
   public mainForm: any = null;
 
-  // @ViewChild(AdDirective, {static: true}) adHost!: AdDirective;
-
-  // @ViewChild('dynamicComponentContainer', {static: true,read: ViewContainerRef})
-  // public adHost3!:ViewContainerRef;
   constructor(private fm: FormsManager, private i18n: I18nService) {
-    super();
     /**
      * Register default translations strings for module.
      */
@@ -148,32 +140,12 @@ export class FhFormsManagerNgComponent
     i18n.registerStrings('en', ShutdownEventEN);
 
 
-    // this.fm.init();
     this.fm.openedFormsSubject.subscribe((form) => {
-      // value.forEach((form) => {
         if (form.container == 'menuForm') this.menuForm = form;
         if (form.container == 'navbarForm') this.navbarForm = form;
         if (form.container == 'mainForm') this.mainForm = form;
-      // });
     });
 
-    // first.openForm.forEach((form) => {
-    //     if(form.container == "menuForm") this.menuForm = form;
-    //     if(form.container == "navbarForm") this.navbarForm = form;
-    //     if(form.container == "mainForm") this.mainForm = form;
-    //
-    //
-    // })
   }
 
-  override ngOnInit(): void {
-    super.ngOnInit();
-  }
-
-  override ngOnDestroy(): void {
-    super.ngOnDestroy();
-  }
-
-  ngAfterViewInit(): void {
-  }
 }

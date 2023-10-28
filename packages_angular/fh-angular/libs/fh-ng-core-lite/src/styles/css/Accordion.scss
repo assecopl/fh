@@ -1,0 +1,30 @@
+.fc.accordion {
+  margin: .5rem 0;
+}
+
+.fc.accordion div.card-header.d-flex {
+  padding: 0;
+}
+
+.fc.accordion .card-header button.btn.btn-block {
+  text-align: left;
+  padding: 1.2rem 2rem;
+  background-color: transparent;
+  color: #007bff;
+}
+
+.fc.accordion .card-header button .collapsibleIconOpened {
+  display: none;
+}
+
+.fc.accordion .card-header button.collapsed .collapsibleIconOpened {
+  display: block;
+}
+
+.fc.accordion .card-header button .collapsibleIconClosed {
+  display: block;
+}
+
+.fc.accordion .card-header button.collapsed .collapsibleIconClosed {
+  display: none;
+}

@@ -55,7 +55,7 @@ export class TreeElementComponent extends FhngHTMLElementC implements OnInit {
   public pl3: boolean = true;
 
   //@Override bottom margin.
-  override mb3 = false;
+  override mb2 = false;
 
   @HostBinding('class')
   get defaultClasses() {

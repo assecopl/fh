@@ -13,7 +13,6 @@ import {
   TemplateRef,
   ViewChild,
 } from '@angular/core';
-import {FhngAvailabilityDirective} from '@fhng/ng-availability';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
 import {FhngHTMLElementC} from '../../models/componentClasses/FhngHTMLElementC';
 import {TableComponentRef} from '../table/table.ref';
@@ -26,7 +25,7 @@ import {TableComponentRef} from '../table/table.ref';
     /**
      * Inicjalizujemy dyrektywę dostępności aby zbudoać hierarchię elementów i dać możliwość zarządzania dostępnością
      */
-    FhngAvailabilityDirective,
+    // FhngAvailabilityDirective,
     /**
      * Dodajemy deklaracje klasy ogólnej aby wstrzykiwanie i odnajdowanie komponentów wewnątrz siebie było możliwe.
      * Dzięki temu budujemy hierarchię kontrolek Fhng.
@@ -47,23 +46,23 @@ export class TableHeadRowComponent
   public template: TemplateRef<void>;
 
   constructor(
-    public readonly elementRef: ElementRef,
-    public injector: Injector,
+    public override readonly elementRef: ElementRef,
+    public override injector: Injector,
     @Optional() @SkipSelf() public tableRef: TableComponentRef,
-    @Optional() @SkipSelf() public parentFhngComponent: FhngComponent
+    @Optional() @SkipSelf() public override parentFhngComponent: FhngComponent
   ) {
     super(injector, parentFhngComponent);
   }
 
-  ngOnInit() {
+  override ngOnInit() {
     super.ngOnInit();
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  override ngOnChanges(changes: SimpleChanges) {
     super.ngOnChanges(changes);
   }
 
-  ngAfterViewInit(): void {
+  override ngAfterViewInit(): void {
     super.ngAfterViewInit();
   }
 

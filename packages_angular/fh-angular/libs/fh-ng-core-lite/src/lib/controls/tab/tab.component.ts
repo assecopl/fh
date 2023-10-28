@@ -43,7 +43,7 @@ export class TabComponent
   extends FhngHTMLElementC
   implements OnInit, OnChanges, AfterContentInit {
 
-  public override mb3 = false;
+  public override mb2 = false;
 
   public override wrapperClass = false;
 

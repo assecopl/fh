@@ -33,8 +33,10 @@ export class DebuggerComponent implements OnInit {
   mapcomponentData() {
     let dataKeys = Object.keys(this.component);
     dataKeys.forEach(key => {
-      if (this.component[key] && typeof this.component[key] !== "object") {
+      if (this.component[key] && (typeof this.component[key] !== "object")) {
         this.componentData2[key] = this.component[key];
+      } else {
+        // if(Array.isArray(this.component[key])) this.componentData2[key] = this.component[key];
       }
     })
   }

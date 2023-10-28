@@ -41,7 +41,7 @@ export class DropdownItemComponent extends FhngHTMLElementC implements OnInit {
   @Input()
   public url: string;
 
-  override mb3 = false;
+  override mb2 = false;
 
   @HostBinding('class.fc-editable')
   public get isEditable (): boolean {

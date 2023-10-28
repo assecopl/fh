@@ -17,21 +17,21 @@ import {
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
-import {FhngAvailabilityDirective} from '@fhng/ng-availability';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
 import {FhngHTMLElementC} from '../../models/componentClasses/FhngHTMLElementC';
 import {TableComponentRef} from '../table/table.ref';
-import {TypeUtils} from '@fhng/ng-core';
+import {TypeUtils} from '../../Base';
+import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
 
 @Component({
-  selector: 'fhng-table-row',
+  selector: '[fhng-table-row]',
   templateUrl: './table-row.component.html',
   styleUrls: ['./table-row.component.scss'],
   providers: [
     /**
      * Inicjalizujemy dyrektywę dostępności aby zbudoać hierarchię elementów i dać możliwość zarządzania dostępnością
      */
-    FhngAvailabilityDirective,
+    // FhngAvailabilityDirective,
     /**
      * Dodajemy deklaracje klasy ogólnej aby wstrzykiwanie i odnajdowanie komponentów wewnątrz siebie było możliwe.
      * Dzięki temu budujemy hierarchię kontrolek Fhng.
@@ -61,10 +61,10 @@ export class TableRowComponent
   public template: TemplateRef<void>;
 
   constructor(
-    public readonly elementRef: ElementRef,
-    public injector: Injector,
+    public override elementRef: ElementRef,
+    public override injector: Injector,
     @Optional() @SkipSelf() public tableRef: TableComponentRef,
-    @Optional() @SkipSelf() public parentFhngComponent: FhngComponent
+    @Optional() @SkipSelf() public override parentFhngComponent: FhngComponent
   ) {
     super(injector, parentFhngComponent);
     if (tableRef) {
@@ -75,7 +75,7 @@ export class TableRowComponent
   @ViewChild('tr', {static: true, read: ViewContainerRef})
   public tr: ViewContainerRef = null;
 
-  ngOnInit() {
+  override ngOnInit() {
     super.ngOnInit();
     if (
       this.tableRef &&
@@ -91,11 +91,11 @@ export class TableRowComponent
     this.toggleHighlight(this.tableRef.selected);
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  override ngOnChanges(changes: SimpleChanges) {
     super.ngOnChanges(changes);
   }
 
-  ngAfterViewInit(): void {
+  override ngAfterViewInit(): void {
     super.ngAfterViewInit();
   }
 
@@ -117,7 +117,7 @@ export class TableRowComponent
   }
 
   public toggleHighlight(selected: any) {
-    if (selected === this.row) {
+    if (selected === this) {
       this.highlight = true;
       this.ariaSelected = true;
     } else if (TypeUtils.isArray(selected)) {
@@ -137,5 +137,10 @@ export class TableRowComponent
       event.preventDefault();
       this.tableRef.select(this.row);
     }
+  }
+
+  override mapAttributes(data: IDataAttributes | any) {
+    super.mapAttributes(data);
+    this.subelements = data.tableCells;
   }
 }

@@ -53,7 +53,7 @@ export class RowComponent extends FhngHTMLElementC implements OnInit {
   ) {
     super(injector, parentFhngComponent);
 
-    this.mb3 = false;
+    this.mb2 = false;
     this.width = 'md-12';
   }
 

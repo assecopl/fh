@@ -1,0 +1,55 @@
+.fc.inputText {
+  resize: vertical;
+  height: auto;
+}
+
+.fc.inputText.hideLabel label {
+  display: none;
+}
+
+.fc.form-group.up {
+  flex-direction: column;
+}
+
+.fc.form-group.down {
+  flex-direction: column-reverse;
+}
+
+.fc.form-group.left {
+  flex-direction: row;
+}
+
+.fc.form-group.right {
+  flex-direction: row-reverse;
+}
+
+.form:not([data-designable='true']) .fc.form-group.up .col-form-label {
+  padding: 9px 0;
+}
+
+.form:not([data-designable='true']) .fc.form-group.down .col-form-label {
+  padding: 9px 0;
+}
+
+.form:not([data-designable='true']) .fc.form-group.left .col-form-label {
+  padding: 5px 10px 0 0;
+  text-align: left;
+}
+
+.form:not([data-designable='true']) .fc.form-group.right .col-form-label {
+  padding: 5px 0 0 10px;
+  text-align: right;
+}
+
+.fc.form-group.positioned.left .col-form-label,
+.fc.form-group.positioned.right .col-form-label {
+  width: 100%;
+}
+
+textarea.fc.inputText.form-control {
+  resize: none;
+}
+
+input::-ms-clear {
+  display: none;
+}

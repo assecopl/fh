@@ -82,7 +82,7 @@ export class TreeComponent
     super(injector, parentFhngComponent);
 
     this.width = BootstrapWidthEnum.MD12;
-    this.mb3 = false;
+    this.mb2 = false;
   }
 
   override ngOnInit(): void {

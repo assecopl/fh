@@ -1,20 +1,14 @@
-<td
-  availabilityHtmlElement
-  [class.text-center]="horizontalAlign == 'CENTER'"
-  [class.text-right]="horizontalAlign == 'RIGHT'"
->
-  <ng-content *ngIf="!value"></ng-content>
-  <ng-container *ngIf="value">
-    <ng-container *ngIf="formatter != null">
-      <div>
-        {{
-        formatter.fromModel(value)
-          | mask : formatter.pattern : formatter.thousandSeparator
-        }}
-      </div>
-    </ng-container>
+<!--<td-->
+<!--  [class.text-center]="horizontalAlign == 'CENTER'"-->
+<!--  [class.text-right]="horizontalAlign == 'RIGHT'"-->
+<!--&gt;-->
+<div class="row mx-0">
+  <ng-container *ngIf="!label" [fhDynamicComponents]="subelements"></ng-container>
+  <ng-container *ngIf="label">
     <ng-container *ngIf="formatter == null">
-      <div [innerHTML]="value | fhml">{{ value | fhml }}</div>
+      <div [innerHTML]="label | fhml">{{ label | fhml }}</div>
     </ng-container>
   </ng-container>
-</td>
+</div>
+<!--{{_data | json}}-->
+<!--</td>-->

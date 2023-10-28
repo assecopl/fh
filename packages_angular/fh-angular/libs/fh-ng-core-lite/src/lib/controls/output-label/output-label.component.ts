@@ -82,6 +82,7 @@ export class OutputLabelComponent extends FhngHTMLElementC implements OnInit {
     @Optional() @Host() @SkipSelf() parentFhngComponent: FhngComponent
   ) {
     super(injector, parentFhngComponent);
+    this.mb2 = false;
   }
 
   override ngOnInit() {

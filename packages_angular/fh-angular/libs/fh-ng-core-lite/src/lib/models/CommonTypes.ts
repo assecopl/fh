@@ -10,4 +10,3 @@ export type BootstrapStyleType =
   | 'light'
   | 'default';
 export type Accessibility = 'HIDDEN' | 'EDIT';
-export type StyleUnit = '%' | 'px' | 'em' | 'rem';

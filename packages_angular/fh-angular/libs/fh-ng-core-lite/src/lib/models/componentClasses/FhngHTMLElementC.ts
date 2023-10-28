@@ -21,7 +21,7 @@ import {FhngComponent} from './FhngComponent';
 import {SafeStyle} from '@angular/platform-browser';
 import {FhMLService} from '../../service/fh-ml.service';
 import {IDataAttributes} from "../interfaces/IDataAttributes";
-import {Accessibility, IconAligmentType, StyleUnit} from "../CommonTypes";
+import {Accessibility, IconAligmentType} from "../CommonTypes";
 import {STYLE_UNIT} from "../enums/StyleUnitEnum";
 
 @Directive()
@@ -29,7 +29,7 @@ export class FhngHTMLElementC
   extends FhngComponent
   implements OnInit, AfterViewInit, AfterContentInit, OnChanges {
 
-  public static STYLE_UNIT: StyleUnit = STYLE_UNIT.PX;
+  public static STYLE_UNIT: STYLE_UNIT = STYLE_UNIT.PX;
 
   @HostBinding('attr.tabindex')
   public tabindex: number = null;
@@ -85,7 +85,7 @@ export class FhngHTMLElementC
   public elementRef: ElementRef;
 
   @Input()
-  public label: string = '';
+  public label: string = null;
 
   @Input()
   public labelPosition: 'UP' | 'DOWN' | 'LEFT' | 'RIGHT' = 'UP';
@@ -136,7 +136,7 @@ export class FhngHTMLElementC
   public hostStyle: SafeStyle & any = {};
 
   @HostBinding('class.mb-2')
-  public mb3 = true;
+  public mb2 = true;
 
   @Input('formatter')
   public formatterName: string = null;
@@ -167,7 +167,7 @@ export class FhngHTMLElementC
   @Input()
   public set marginBottom(value: string) {
     this.processStyleWithUnit('marginBottom', value);
-    this.mb3 = false;
+    this.mb2 = false;
   }
 
   @Input()
@@ -208,7 +208,9 @@ export class FhngHTMLElementC
   @Input('height')
   public set setHeight(value: string) {
     //TODO Mayby move this setter to decorator
-    this.processStyleWithUnit('height', value);
+    this.height = this.processStyleWithUnit('height', value);
+
+
   }
 
   constructor(
@@ -283,9 +285,9 @@ export class FhngHTMLElementC
   processStyleWithUnit(name: string, val: string) {
     let v = null;
     if (val) {
-      v = isNumber(val) ? val : val.replace(/px|%|em|rem|pt/gi, '');
-      this.styles[name + '.' + FhngHTMLElementC.STYLE_UNIT] = v;
-      this.height = val;
+      // v = isNumber(val) ? val : val.replace(/px|%|em|rem|pt/gi, '');
+      // const unit = val.replace(v, "");
+      this.styles[name] = val;
     }
     return v;
   }
@@ -351,7 +353,7 @@ export class FhngHTMLElementC
 
     this.accessibility = data.accessibility;
 
-    if (data.value) this.label = data.value;
+    // if (data.value) this.label = data.value; //Label zostawiamy w spokoju, pozmieniamy w komponentach jak trzeba - z value na label
     if (data.style) this.bootstrapStyle = data.style
     this.setWidth = data.width;
     this.setHeight = data.height;

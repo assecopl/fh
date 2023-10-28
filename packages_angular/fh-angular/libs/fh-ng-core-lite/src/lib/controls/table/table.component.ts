@@ -21,11 +21,11 @@ import {
 import {BootstrapWidthEnum} from './../../models/enums/BootstrapWidthEnum';
 import {TableColumnComponent} from '../table-column/table-column.component';
 import {TableRowComponent} from '../table-row/table-row.component';
-import {FhngAvailabilityDirective} from '@fhng/ng-availability';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
 import {TableComponentRef} from './table.ref';
 import {TableCellComponent} from '../table-cell/table-cell.component';
 import {TableHeadRowComponent} from '../table-head-row/table-head-row.component';
+import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
 
 /**
  * FIXME Przebudować Tabelę!!!!! Między innymi tak aby nie korzystać z ViewCHild i ContentCHild - działają z opuźnieniem.
@@ -39,7 +39,7 @@ import {TableHeadRowComponent} from '../table-head-row/table-head-row.component'
     /**
      * Inicjalizujemy dyrektywę dostępności aby zbudoać hierarchię elementów i dać możliwość zarządzania dostępnością
      */
-    FhngAvailabilityDirective,
+    // FhngAvailabilityDirective,
     /**
      * Dodajemy deklaracje klasy ogólnej aby wstrzykiwanie i odnajdowanie komponentów wewnątrz siebie było możliwe.
      * Dzięki temu budujemy hierarchię kontrolek Fhng.
@@ -62,21 +62,22 @@ export class TableComponent
 
   @HostBinding('class.table-selectable')
   @Input()
-  public selectable: boolean = false;
+  public override selectable: boolean = false;
 
   @Input()
-  public multiselect: boolean = false;
+  public override multiselect: boolean = false;
 
   @Input()
-  public selectionCheckboxes: boolean = false;
+  public override selectionCheckboxes: boolean = false;
 
   @Input()
-  public selectAllChceckbox: boolean = true;
+  public override selectAllChceckbox: boolean = true;
 
   @Input()
   public csvExport: boolean;
 
-  public columns: Map<string, TableColumnComponent> = new Map();
+  public columns: any[] = [];
+
   public columnsArray: TableColumnComponent[] = [];
   /**
    * Used to calculate columns. Register columns only from first row.
@@ -86,25 +87,52 @@ export class TableComponent
 
   public rowsArray: TableRowComponent[] = [];
 
-  @ViewChild('tbody', {static: true, read: ViewContainerRef})
-  public tbody: ViewContainerRef = null;
+  // @ViewChild('tbody', {static: true, read: ViewContainerRef})
+  // public tbody: ViewContainerRef = null;
+  //
+  // @ViewChild('thead', {static: true, read: ViewContainerRef})
+  // private thead: ViewContainerRef = null;
+  //
+  // @ViewChild('tfoot', {static: true, read: ViewContainerRef})
+  // private tfoot: ViewContainerRef = null;
 
-  @ViewChild('thead', {static: true, read: ViewContainerRef})
-  private thead: ViewContainerRef = null;
-
-  @ViewChild('tfoot', {static: true, read: ViewContainerRef})
-  private tfoot: ViewContainerRef = null;
+  // @Input()
+  // public override collection: any[] | any = [];
 
   @Input()
-  public collection: any[] | any = [];
-
-  @Input()
-  public selected: any;
+  public override selected: any;
   @Output()
-  public selectedChange = new EventEmitter<any>();
+  public override selectedChange = new EventEmitter<any>();
+
+
+  protected visibleRows: any;
+  protected tableData: any = [];
+  protected rows: Array<any> = [];
+  protected rowIndexMappings: any;
+  private rowStylesMapping: any;
+  private rowHeight: any;
+  private tableGrid: any;
+  private tableStripes: any;
+  protected readonly onRowClick: any;
+  private onRowDoubleClick: any;
+  private readonly synchronizeScrolling: string;
+  private selectionChanged: any;
+  public totalColumns: number;
+  protected ieFocusFixEnabled: boolean;
+  protected table: HTMLTableElement;
+  protected header: HTMLTableSectionElement;
+  protected footer: HTMLTableSectionElement = null;
+  private _dataWrapper: HTMLTableSectionElement;
+
+  private selectAllChceckboxElement: HTMLElement = null;
+  private selectAllChceckboxThElement: HTMLTableCellElement = null;
+
+  public lastRowClicked: number = null;
+
+  private checkAllArray: Array<any> = []
 
   constructor(
-    public injector: Injector,
+    public override injector: Injector,
     @Optional() @SkipSelf() parentFhngComponent: FhngComponent
   ) {
     super(injector, parentFhngComponent);
@@ -113,15 +141,15 @@ export class TableComponent
     this.hostClass = `col-${this.width}`;
   }
 
-  ngOnInit() {
+  override ngOnInit() {
     super.ngOnInit();
   }
 
-  ngAfterViewInit(): void {
+  override ngAfterViewInit(): void {
     super.ngAfterViewInit();
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  override ngOnChanges(changes: SimpleChanges): void {
     super.ngOnChanges(changes);
     if (changes['selected'] && changes['selected'].currentValue == null) {
       this.rowsArray.forEach((row) => {
@@ -133,32 +161,32 @@ export class TableComponent
   ngOnDestroy(): void {
   }
 
-  ngAfterContentInit(): void {
+  override ngAfterContentInit(): void {
     super.ngAfterContentInit();
   }
 
   onExportCsv(): void {
-    let content = '';
-    if (this.rowsArray && this.rowsArray.length > 0) {
-      this.rowsArray[0].childFhngComponents.forEach((component) => {
-        if (component instanceof TableCellComponent) {
-          content = content.concat(component.label ? component.label : '', ';');
-        }
-      });
-    }
-    content = content.concat('\n');
-
-    this.rowsArray.forEach((row) => {
-      row.childFhngComponents.forEach((component) => {
-        if (component instanceof TableCellComponent) {
-          content = content.concat(component.value ? component.value : '', ';');
-        }
-      });
-      content = content.concat('\n');
-    });
-
-    let filename = (this.label ? this.label : 'table_export') + '.csv';
-    this.downloadFile(filename, content);
+    // let content = '';
+    // if (this.rowsArray && this.rowsArray.length > 0) {
+    //   this.rowsArray[0].childFhngComponents.forEach((component) => {
+    //     if (component instanceof TableCellComponent) {
+    //       content = content.concat(component.label ? component.label : '', ';');
+    //     }
+    //   });
+    // }
+    // content = content.concat('\n');
+    //
+    // this.rowsArray.forEach((row) => {
+    //   row.childFhngComponents.forEach((component) => {
+    //     if (component instanceof TableCellComponent) {
+    //       content = content.concat(component.label ? component.label : '', ';');
+    //     }
+    //   });
+    //   content = content.concat('\n');
+    // });
+    //
+    // let filename = (this.label ? this.label : 'table_export') + '.csv';
+    // this.downloadFile(filename, content);
   }
 
   /** Downloads file with given content */
@@ -181,7 +209,7 @@ export class TableComponent
    */
   public registerColumn(column: TableColumnComponent): void {
     if (!this.columns[column.id]) {
-      this.columns.set(column.id, column);
+      // this.columns.set(column.id, column);
       this.columnsArray.push(column);
     }
   }
@@ -191,6 +219,7 @@ export class TableComponent
       if (this.multiselect) {
         const array = (this.selected as Array<any>) || [];
         if (array.includes(selected)) {
+          // @ts-ignore
           array.removeElement(selected);
         } else {
           array.push(selected);
@@ -232,5 +261,26 @@ export class TableComponent
         row.highlight = true;
       });
     }
+  }
+
+  override mapAttributes(data: IDataAttributes | any) {
+    super.mapAttributes(data);
+    this.visibleRows = data.displayedRowsCount || 0;
+    this.tableData = data.tableRows;
+    // this.rowHeight = data.rowHeight || 'normal';
+    // this.tableGrid = data.tableGrid || 'hide';
+    // this.tableStripes = data.tableStripes || 'hide';
+    // this.ieFocusFixEnabled = data.ieFocusFixEnabled || false;
+    // this.synchronizeScrolling = data.synchronizeScrolling || null;
+    // this._dataWrapper = null;
+    // this.onRowDoubleClick = data.onRowDoubleClick;
+    // this.selectionCheckboxes = data.selectionCheckboxes || false;
+    // this.selectAllChceckbox = data.selectAllChceckbox == false ? data.selectAllChceckbox : true;
+    // this.selectionChanged = false;
+
+    // this.verticalAlign = this.componentObj.verticalAlign || 'top';
+    // this.totalColumns = 0;
+
+    // this.table = null;
   }
 }

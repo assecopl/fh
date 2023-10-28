@@ -1,9 +1,8 @@
-<th
-  [availabilityHtmlElement]="elementRef"
-  (click)="sort()"
-  [class.text-center]="horizontalAlign == 'CENTER'"
-  [class.text-right]="horizontalAlign == 'RIGHT'"
->
+<!--<th-->
+<!--  (click)="sort()"-->
+<!--  [class.text-center]="horizontalAlign == 'CENTER'"-->
+<!--  [class.text-right]="horizontalAlign == 'RIGHT'"-->
+<!--&gt;-->
   {{ label }}
   <i
     *ngIf="sortBy"
@@ -15,4 +14,4 @@
         : 'fa fa-sort-amount-up'
     }}"
   ></i>
-</th>
+<!--</th>-->

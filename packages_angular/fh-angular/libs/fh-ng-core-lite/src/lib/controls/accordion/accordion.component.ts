@@ -57,7 +57,7 @@ interface IAccordionDataAttributes extends IDataAttributes {
 export class AccordionComponent extends GroupingComponentC<PanelGroupComponent> {
   public override width = BootstrapWidthEnum.MD12;
 
-  public override mb3 = false;
+  public override mb2 = false;
 
   /**
    *  If `true`, only one panel could be opened at a time.
@@ -84,7 +84,7 @@ export class AccordionComponent extends GroupingComponentC<PanelGroupComponent> 
   ) {
     super(injector, parentFhngComponent);
 
-    this.mb3 = false;
+    this.mb2 = false;
   }
 
   public getSubcomponentInstance(): new (
@@ -108,7 +108,7 @@ export class AccordionComponent extends GroupingComponentC<PanelGroupComponent> 
     }
 
     subcomponent.accordion = true; //Tell PanelGroupcomponent that is inside accordion
-    subcomponent.mb3 = false; // Remove bottom mirgins
+    subcomponent.mb2 = false; // Remove bottom mirgins
     subcomponent.hostWidth = ''; //Remove width clsss from host element (remove padding)
     subcomponent.borderVisible = false; // Turn on borders.
 

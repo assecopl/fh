@@ -24,13 +24,11 @@
           aria-label="Ilość rekordów na stronie"
           class="custom-select"
           style="width: auto"
-          [(ngModel)]="collection.pageSize"
-          (ngModelChange)="pageSizeChange.emit(collection)"
         >
-          <option [ngValue]="5">5</option>
-          <option [ngValue]="10">10</option>
-          <option [ngValue]="20">20</option>
-          <option [ngValue]="25">25</option>
+          <option [value]="5">5</option>
+          <option [value]="10">10</option>
+          <option [value]="20">20</option>
+          <option [value]="25">25</option>
         </select>
       </div>
       <div class="col small">Rekordów na stronie</div>

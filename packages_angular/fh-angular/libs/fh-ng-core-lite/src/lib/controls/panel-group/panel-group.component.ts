@@ -95,7 +95,7 @@ export class PanelGroupComponent extends FhngHTMLElementC implements OnInit {
     super.ngOnInit();
     let fhngml = this.injector.get(FhMLService);
     this.label = fhngml.transform(this.label);
-    this.mb3 = false;
+    this.mb2 = false;
     this.processCollapsible();
 
     /**
@@ -119,7 +119,7 @@ export class PanelGroupComponent extends FhngHTMLElementC implements OnInit {
 
   collapseToggle(): void {
     this.panelToggle.emit({id: this.innerId, collapsed: !this.collapsed});
-    
+
     if (this.collapsed) {
       this.expandPanelGroup();
     } else {
