@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 
-@Injectable({providedIn: "any"})
+
 class FormComponentChangesQueue {
   private VALUE_ATTRIBUTE_NAME: string;
   private changedAttributes: {};

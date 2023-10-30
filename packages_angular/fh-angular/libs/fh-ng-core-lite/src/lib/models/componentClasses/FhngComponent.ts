@@ -14,7 +14,6 @@ import * as $ from 'jquery';
 import {FormsManager} from "../../Socket/FormsManager";
 import {IDataAttributes} from "../interfaces/IDataAttributes";
 import {FHNG_CORE_CONFIG, FhNgCoreConfig} from "../../fh-ng-core.config";
-import {FormComponentChangesQueue} from '../../service/FormComponentChangesQueue';
 import {FhngChangesComponent} from "../abstracts/FhngChangesComponent";
 
 /**
@@ -32,15 +31,15 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
     this.mapAttributes(value);
   }
 
-  @Input('id')
-  public innerId: string = '';
+  @Input()
+  public id: string = '';
 
-  public get id() {
-    return this.innerId;
+  public get innerId() {
+    return this.id;
   }
 
-  public set id(value) {
-    this.innerId = value;
+  public set innerId(value) {
+    this.id = value;
   }
 
   @Input()
@@ -190,7 +189,6 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
     //Przepisujemy wszystkie typowe parametry obiektu jeżeli istnieją na naszym obiekcie.
     //W metodach w obiektach możemy sobono przepisywać parametry których nazwy się nie pokrywają.
     let dataKeys = Object.keys(data);
-    let thisKeys = Object.keys(this);
     dataKeys.forEach(key => {
       if (Object.hasOwn(this, key)) {
         this[key] = data[key];

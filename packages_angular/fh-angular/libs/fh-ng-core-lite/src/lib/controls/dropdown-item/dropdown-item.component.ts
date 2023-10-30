@@ -13,6 +13,7 @@ import {
 } from '@angular/core';
 import {FhngHTMLElementC} from '../../models/componentClasses/FhngHTMLElementC';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
+import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
 
 @Component({
   selector: 'fh-dropdown-item',
@@ -73,5 +74,10 @@ export class DropdownItemComponent extends FhngHTMLElementC implements OnInit {
 
   override ngOnChanges(changes: SimpleChanges) {
     super.ngOnChanges(changes);
+  }
+
+  override mapAttributes(data: IDataAttributes) {
+    super.mapAttributes(data);
+    this.label = data.value;
   }
 }

@@ -27,8 +27,8 @@
   </thead>
   <!--  <ng-content select="tbody"></ng-content>-->
   <tbody>
-  <ng-container *ngFor="let tr of tableData">
-    <tr fhng-table-row [data]="tr" [formId]="formId"></tr>
+  <ng-container *ngFor="let tr of tableData;let i = index;">
+    <tr fhng-table-row [data]="tr" [formId]="formId" (click)="onRowClickEvent($event, i)"></tr>
   </ng-container>
 
 

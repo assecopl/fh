@@ -115,7 +115,13 @@ class FormsManager {
   closeForm(form: FormComponent) {
     if (form) {
       this.usedContainers[form.container.id] = null;
-        this.openedForms.splice(this.openedForms.indexOf(form), 1);
+      let indexToDelte = -1;
+      this.openedForms.forEach((value, index) => {
+        if (value.id == form.id) {
+          indexToDelte = index;
+        }
+      })
+      this.openedForms.splice(indexToDelte, 1);
 
         if (document.activeElement) {
             this.lastActiveElementId = document.activeElement.id || null;
@@ -570,11 +576,16 @@ class FormsManager {
     // }
 
   public registerForm(form: FormComponent) {
-    this.openedForms.push(form);
+    //rejestrjemy jezeli nie istnieje w tablicy
+    if (this.openedForms.indexOf(form) == -1) {
+      this.openedForms.push(form);
+    }
   }
 
   public unregisterForm(form: FormComponent) {
-    this.openedForms.splice(this.openedForms.indexOf(form), 1);
+    if (this.openedForms.indexOf(form) > -1) {
+      this.openedForms.splice(this.openedForms.indexOf(form), 1);
+    }
   }
 
 

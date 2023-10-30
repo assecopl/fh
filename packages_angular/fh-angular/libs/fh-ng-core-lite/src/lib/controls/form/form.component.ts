@@ -83,14 +83,30 @@ export class FormComponent extends FhngComponent implements OnInit, OnChanges, O
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    // if(changes['id'] && !changes['id'].firstChange){
+    this.formManager.registerForm(this);
+    // }
+
     if (this.formType == 'HEADER') {
       this.header = true;
       this.cssCard = false
     }
+
+
   }
 
   public override mapAttributes(data: IDataAttributes): void {
     super.mapAttributes(data)
     this.formType = data.formType
   }
+
+  public override collectAllChanges() {
+    var allChanges = [];
+    this.childFhngComponents.forEach(function (component) {
+      var changes = component.collectAllChanges();
+      allChanges = allChanges.concat(changes);
+    }.bind(this));
+    return this.collectChanges(allChanges);
+  };
 }
+

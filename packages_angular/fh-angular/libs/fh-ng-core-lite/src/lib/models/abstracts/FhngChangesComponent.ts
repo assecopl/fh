@@ -11,7 +11,7 @@ export abstract class FhngChangesComponent {
   abstract id: string;
   abstract formId: string;
 
-  protected changesQueue: FormComponentChangesQueue = inject(FormComponentChangesQueue);
+  protected changesQueue: FormComponentChangesQueue = new FormComponentChangesQueue();
   protected util: Util = inject(Util);
 
   public childFhngComponents: FhngChangesComponent[] = [];

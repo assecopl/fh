@@ -57,6 +57,8 @@ export class FhngHTMLElementC
   @Input()
   public width: string;
 
+  public rawValue: any;
+
   public height: string;
 
   @HostBinding('class')

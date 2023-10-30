@@ -26,6 +26,7 @@ import {TableComponentRef} from './table.ref';
 import {TableCellComponent} from '../table-cell/table-cell.component';
 import {TableHeadRowComponent} from '../table-head-row/table-head-row.component';
 import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
+import {FormComponentChangesQueue} from "../../service/FormComponentChangesQueue";
 
 /**
  * FIXME Przebudować Tabelę!!!!! Między innymi tak aby nie korzystać z ViewCHild i ContentCHild - działają z opuźnieniem.
@@ -36,6 +37,7 @@ import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],
   providers: [
+    FormComponentChangesQueue,
     /**
      * Inicjalizujemy dyrektywę dostępności aby zbudoać hierarchię elementów i dać możliwość zarządzania dostępnością
      */
@@ -62,7 +64,7 @@ export class TableComponent
 
   @HostBinding('class.table-selectable')
   @Input()
-  public override selectable: boolean = false;
+  public override selectable: boolean = true;
 
   @Input()
   public override multiselect: boolean = false;
@@ -108,16 +110,16 @@ export class TableComponent
   protected visibleRows: any;
   protected tableData: any = [];
   protected rows: Array<any> = [];
-  protected rowIndexMappings: any;
-  private rowStylesMapping: any;
-  private rowHeight: any;
-  private tableGrid: any;
-  private tableStripes: any;
-  protected readonly onRowClick: any;
-  private onRowDoubleClick: any;
+  protected rowIndexMappings: any = null;
+  private rowStylesMapping: any = null;
+  private rowHeight: any = null;
+  private tableGrid: any = null;
+  private tableStripes: any = null;
+  protected onRowClick: any = null;
+  private onRowDoubleClick: any = null;
   private readonly synchronizeScrolling: string;
-  private selectionChanged: any;
-  public totalColumns: number;
+  private selectionChanged: any = null;
+  public totalColumns: number = null;
   protected ieFocusFixEnabled: boolean;
   protected table: HTMLTableElement;
   protected header: HTMLTableSectionElement;
@@ -263,10 +265,61 @@ export class TableComponent
     }
   }
 
+  onRowClickEvent(event, mainId, silent = false) {
+    if (this.accessibility != 'EDIT') return;
+
+    if (this.selectable && this.onRowClick) {
+      if (this.multiselect == false) {
+        if (event.ctrlKey) {
+          // if (this.rawValue.indexOf(mainId) !== -1) {
+          //   this.rawValue = [];
+          //   this.rawValue.push(-1);
+          // }
+        } else {
+          this.rawValue = [];
+          this.rawValue.push(mainId);
+        }
+      } else {
+        if (event.ctrlKey) {
+          // this.selectRow(mainId);
+
+        } else if (event.shiftKey) {
+          // this.selectRows(mainId);
+        } else {
+          this.rawValue = [];
+          this.rawValue.push(mainId);
+        }
+      }
+
+      this.changesQueue.queueValueChange(this.rawValue);
+      if (!this.onRowClick || this.onRowClick === '-') {
+        // this.highlightSelectedRows();
+      }
+
+      if (!silent) {
+        // if (this._formId === 'FormPreview') {
+        //   this.fireEvent('onRowClick', this.onRowClick);
+        // } else {
+        this.fireEventWithLock('onRowClick', this.onRowClick);
+        // }
+      }
+
+      this.lastRowClicked = mainId;
+    }
+  }
+
+  public override extractChangedAttributes() {
+    if (this.changesQueue) {
+      return this.changesQueue.extractChangedAttributes();
+    }
+    return {};
+  }
+
   override mapAttributes(data: IDataAttributes | any) {
     super.mapAttributes(data);
     this.visibleRows = data.displayedRowsCount || 0;
     this.tableData = data.tableRows;
+    this.selectable = data.selectable || true;
     // this.rowHeight = data.rowHeight || 'normal';
     // this.tableGrid = data.tableGrid || 'hide';
     // this.tableStripes = data.tableStripes || 'hide';

@@ -1,76 +1,101 @@
-import {Directive, Input, OnChanges, OnInit, SimpleChanges, ViewContainerRef,} from '@angular/core';
-import {PanelGroupComponent} from "../controls/panel-group/panel-group.component";
-import {TreeElementComponent} from "../controls/tree-element/tree-element.component";
-import {TreeComponent} from "../controls/tree/tree.component";
-import {DropdownItemComponent} from "../controls/dropdown-item/dropdown-item.component";
-import {DropdownComponent} from "../controls/dropdown/dropdown.component";
-import {ButtonComponent} from "../controls/button/button.component";
-import {RowComponent} from "../controls/row/row.component";
+import {
+  Directive,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Optional,
+  SimpleChanges,
+  ViewContainerRef,
+} from '@angular/core';
 import {FormComponent} from "../controls/form/form.component";
 import {OutputLabelComponent} from "../controls/output-label/output-label.component";
-import {GroupComponent} from "../controls/group/group.component";
 import {ComponentManager} from "../service/component-manager.service";
-import {TabContainerComponent} from "../controls/tab-container/tab-container.component";
-import {TabComponent} from "../controls/tab/tab.component";
-import {AccordionComponent} from "../controls/accordion/accordion.component";
-import {SpacerComponent} from "../controls/spacer/spacer.component";
 
-// import {TableComponent} from "../../controls/table/table.component";
-
-// import {InputTextComponent} from "projects/fh-forms-manager-ng/src/lib/controls/input-text/input-text.component";
 
 @Directive({
   selector: '[fhDynamicComponents]',
 })
 export class DynamicComponentsDirective
-  implements OnInit, OnChanges {
+  implements OnInit, OnChanges, OnDestroy {
 
-  // @ViewChild('adHost', {static: true, read: ViewContainerRef})
-  // public adHost!: ViewContainerRef;
+  @Input() formId: string = null;
 
-  @Input() fhDynamicComponents: any[] = [];
+  @Input() type: string = null;
 
-  constructor(private adHost: ViewContainerRef,
-              private form: FormComponent,
+  @Input() data: any = null;
+
+  @Input() fhDynamicComponents?: any[] = [];
+
+  protected componentRefs: { [index: string]: any } = {};
+
+  constructor(private viewContainerRef: ViewContainerRef,
+              @Optional() private form: FormComponent,
               private componentManager: ComponentManager
   ) {
+    if (form) {
+      this.formId = this.form.id;
+    }
+  }
+
+  ngOnDestroy(): void {
+    for (let componentRefsKey in this.componentRefs) {
+      this.componentRefs[componentRefsKey]?.destroy();
+      this.componentRefs[componentRefsKey] = null;
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     // throw new Error('Method not implemented.');
-    if (changes["fhDynamicComponents"]) {
+    if (changes["formId"]) {
+      this.componentRefs = {};
+    }
+    if (changes["fhDynamicComponents"] || changes["data"]) {
       this.loadOrUpdateComponent();
     }
   }
 
 
   public loadOrUpdateComponent() {
-    if (this.fhDynamicComponents) {
-      const viewContainerRef = this.adHost;
-      viewContainerRef.clear();
-      let componentRef = null;
+    if (this.data) {
+      if (this.type) this.data.type = this.type;
+      this.fhDynamicComponents[0] = this.data;
+    }
 
-      this.fhDynamicComponents.forEach((data, index) => {
-        let componentType = this.componentManager.getComponentFactory(data.type);
-        if (componentType) {
-          componentRef =
-            viewContainerRef.createComponent(componentType, {index: index});
-          if (componentRef && componentRef.instance && componentRef.instance.mapAttributes) {
-            componentRef.instance.data = data;
-            componentRef.instance.formId = this.form.id;
-          }
-        } else {
-          componentRef =
-            viewContainerRef.createComponent<OutputLabelComponent>(
-              OutputLabelComponent, {index: index}
-            );
-          componentRef.instance.data = data;
-          componentRef.instance.formId = this.form.id;
-          componentRef.instance.value = "Component " + data.type + " does not exist";
+
+    if (this.fhDynamicComponents) {
+
+      for (let componentRefsKey in this.componentRefs) {
+        const c = this.viewContainerRef.indexOf(this.componentRefs[componentRefsKey]);
+        if (c >= 0) {
+          this.viewContainerRef.detach(c)
         }
 
+      }
 
+      let usedComponents = {};
+      this.fhDynamicComponents.forEach((data, index) => {
+        if (this.componentRefs[data.id]) {
+          //Jezeli istnieje juz o takim ID to robie insert
+          const component = this.componentRefs[data.id];
+          component.instance.data = data;
+          component.instance.formId = this.formId;
+          component.hostView.markForCheck();
+          this.viewContainerRef.insert(component.hostView, index);
+
+        } else {
+          this.createComponent(data, index);
+        }
+        usedComponents[data.id] = data.id;
       })
+
+      for (let componentRefsKey in this.componentRefs) {
+        if (!usedComponents[componentRefsKey]) {
+          this.componentRefs[componentRefsKey].destroy();
+          this.componentRefs[componentRefsKey] = null;
+        }
+
+      }
 
 
     }
@@ -78,6 +103,28 @@ export class DynamicComponentsDirective
 
   ngOnInit(): void {
     this.loadOrUpdateComponent();
+  }
+
+  protected createComponent(data, index) {
+    let componentRef = null;
+    let componentType = this.componentManager.getComponentFactory(data.type);
+    if (componentType) {
+      componentRef =
+        this.viewContainerRef.createComponent(componentType, {index: index});
+      if (componentRef && componentRef.instance && componentRef.instance.mapAttributes) {
+        componentRef.instance.data = data;
+        componentRef.instance.formId = this.formId;
+      }
+    } else {
+      componentRef =
+        this.viewContainerRef.createComponent<OutputLabelComponent>(
+          OutputLabelComponent, {index: index}
+        );
+      componentRef.instance.data = data;
+      componentRef.instance.formId = this.formId;
+      componentRef.instance.value = "Component " + data.type + " does not exist";
+    }
+    this.componentRefs[componentRef.instance.id] = componentRef;
   }
 
 
