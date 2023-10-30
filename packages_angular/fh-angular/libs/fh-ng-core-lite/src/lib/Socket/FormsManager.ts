@@ -11,6 +11,7 @@ import {Subject} from "rxjs";
 import {NotificationService} from "../service/Notification";
 import {EventsManager} from "../service/events-manager.service";
 import {BaseEvent} from "../events/BaseEvent";
+import {FormComponent} from "../controls/form/form.component";
 
 // declare const ENV_IS_DEVELOPMENT: boolean;
 
@@ -35,7 +36,7 @@ class FormsManager {
   private eventsManager: EventsManager = inject(EventsManager);
 
     public duringShutdown: boolean = false;
-    private openedForms: any[] = [];
+  private openedForms: FormComponent[] = [];
     public openedFormsSubject: Subject<any> = new Subject<any>();
   public changesSubject: Subject<FhChanges> = new Subject<any>();
     private usedContainers: any = {};
@@ -65,7 +66,7 @@ class FormsManager {
         // let form = (<any>FhContainer.get('Form'))(formObj);
         //Na razie zostajemy na obiekcie JSON - może przeniesiemy też klasę Form z 4.x gdy będzie potrzebna do dalszej pracy.
         this.openedFormsSubject.next(formObj);
-        this.openedForms.push(formObj);
+      // this.openedForms.push(formObj);
         this.usedContainers[formObj.containerId] = formObj;
         this.formObj = formObj;
 
@@ -111,8 +112,9 @@ class FormsManager {
         return this.initialized;
     }
 
-    closeForm(form) {
-        this.usedContainers[form.containerId] = null;
+  closeForm(form: FormComponent) {
+    if (form) {
+      this.usedContainers[form.container.id] = null;
         this.openedForms.splice(this.openedForms.indexOf(form), 1);
 
         if (document.activeElement) {
@@ -121,6 +123,7 @@ class FormsManager {
         this.lastClosedFormId = form.id;
         // form.destroy();
         form = null;
+    }
     }
 
     closeForms(formsList) {
@@ -147,7 +150,7 @@ class FormsManager {
                 return form;
             }
         }
-        return false;
+      return null;
     }
 
     handleExternalEvents(eventList) {
@@ -169,7 +172,7 @@ class FormsManager {
     findFormByContainer(containerId) {
         let form = null;
         for (let i = 0; i < this.openedForms.length; i++) {
-            if (this.openedForms[i].parentId === containerId) {
+          if (this.openedForms[i].container.id === containerId) {
                 form = this.openedForms[i];
                 break;
             }
@@ -254,7 +257,7 @@ class FormsManager {
 
         let form = this.findForm(formId);
         // if (!serviceType && form === false && ENV_IS_DEVELOPMENT) {
-        if (!serviceType && form === false) {
+      if (!serviceType && !form) {
             console.warn('%cForm not found. EventType: %s, formId: %s, componentId: %s', 'background: #cc0000; color: #FFF', eventType, formId, componentId);
             // alert('Form not found. See console for more information.');
             return false;
@@ -286,8 +289,8 @@ class FormsManager {
         //Cycle through all the boxes to gather all changes
         this.openedForms.forEach(function (form) {
             //TODO Rozwiązać pobieranie zmian z komponentów.
-            // let changes = form.collectAllChanges();
-            // eventData.changedFields = eventData.changedFields.concat(changes);
+          let changes = form.collectAllChanges();
+          eventData.changedFields = eventData.changedFields.concat(changes);
         });
 
         // if (ENV_IS_DEVELOPMENT) {
@@ -298,7 +301,7 @@ class FormsManager {
             let currentForm = this.findForm(formId);
             // if (!serviceType && (currentForm === false || (!deferredEvent.component.designMode && deferredEvent.component.destroyed) ||
             //     (document.getElementById(componentId) == null && currentForm.findComponent(componentId, true, false, true) === false))) {
-            if (!serviceType && (currentForm === false || (!deferredEvent.component.designMode && deferredEvent.component.destroyed))) { // some components are not available in HTML (RuleDiagram) and some in findComponent (Table row components)
+          if (!serviceType && (!currentForm || (!deferredEvent.component.designMode && deferredEvent.component.destroyed))) { // some components are not available in HTML (RuleDiagram) and some in findComponent (Table row components)
                 console.error('Component ' + componentId + ' on form ' + formId + ' is not available any more. Not sending event from this component to server.');
                 this.triggerQueue();
             } else {
@@ -317,19 +320,19 @@ class FormsManager {
     }
 
     fireHttpMultiPartEvent(eventType, actionName, formId, componentId, url, data: FormData) {
-        // let eventData = {
-        //     formId: formId,
-        //     eventSourceId: componentId,
-        //     eventType: eventType,
-        //     changedFields: []
-        // };
-        //
+      let eventData = {
+        formId: formId,
+        eventSourceId: componentId,
+        eventType: eventType,
+        changedFields: []
+      };
+
         // //Cycle through all the boxes to gather all changes
-        // this.openedForms.forEach(function(form) {
-        //     let changes = form.collectAllChanges();
-        //     eventData.changedFields = eventData.changedFields.concat(changes);
-        // });
-        //
+      this.openedForms.forEach(function (form) {
+        let changes = form.collectAllChanges();
+        eventData.changedFields = eventData.changedFields.concat(changes);
+      });
+
         // data.append('eventData', JSON.stringify(eventData));
         let token = Cookies.get('XSRF-TOKEN');
         let deferred = $.Deferred();
@@ -565,6 +568,17 @@ class FormsManager {
     //         menuTogglerIcon.classList.add('menuExpandRight');
     //     }
     // }
+
+  public registerForm(form: FormComponent) {
+    this.openedForms.push(form);
+  }
+
+  public unregisterForm(form: FormComponent) {
+    this.openedForms.splice(this.openedForms.indexOf(form), 1);
+  }
+
+
+
 }
 
 export {FormsManager, FhChanges};

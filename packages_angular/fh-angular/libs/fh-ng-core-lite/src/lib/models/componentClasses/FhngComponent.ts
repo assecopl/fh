@@ -14,13 +14,15 @@ import * as $ from 'jquery';
 import {FormsManager} from "../../Socket/FormsManager";
 import {IDataAttributes} from "../interfaces/IDataAttributes";
 import {FHNG_CORE_CONFIG, FhNgCoreConfig} from "../../fh-ng-core.config";
+import {FormComponentChangesQueue} from '../../service/FormComponentChangesQueue';
+import {FhngChangesComponent} from "../abstracts/FhngChangesComponent";
 
 /**
  * Klasa odpowiedzialna za budowę drzewa komponentów FHNG
  * Każda kontrolka powinna mieć przyporzadkowany elemnt w sekcji providers.{provide: FhngComponent, useExisting: forwardRef(() => RowComponent)}
  */
 @Directive()
-export class FhngComponent implements OnInit, AfterViewInit, AfterContentInit {
+export class FhngComponent extends FhngChangesComponent implements OnInit, AfterViewInit, AfterContentInit {
 
   @Input() subelements: any[] = [];
 
@@ -58,7 +60,7 @@ export class FhngComponent implements OnInit, AfterViewInit, AfterContentInit {
   public name: string = '';
 
   public parentFhngComponent: FhngComponent = null;
-  public childFhngComponents: FhngComponent[] = [];
+  public override childFhngComponents: FhngComponent[] = [];
 
   protected configuration: FhNgCoreConfig = null;
 
@@ -66,7 +68,7 @@ export class FhngComponent implements OnInit, AfterViewInit, AfterContentInit {
     public injector: Injector,
     @Optional() @SkipSelf() parentFhngComponent: FhngComponent
   ) {
-    // super();
+    super();
     this.innerId = this.constructor.name + '_' + (Math.random() * 10000000000).toFixed();
     this.name = this.innerId; //Prevent null/empty names - it must be set to prevent getting wrong control value for input-s without names.
     this.parentFhngComponent = parentFhngComponent;
@@ -196,6 +198,7 @@ export class FhngComponent implements OnInit, AfterViewInit, AfterContentInit {
     })
     this._data = data;
   }
+
 
   // protected fireHttpMultiPartEvent(eventType, actionName, url, data: FormData) {
   //     return this.formsManager.fireHttpMultiPartEvent(eventType, actionName, this.formId, this.id, url, data);

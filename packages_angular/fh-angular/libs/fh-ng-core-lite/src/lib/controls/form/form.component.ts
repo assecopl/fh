@@ -2,26 +2,19 @@ import {
   Component,
   forwardRef,
   HostBinding,
+  inject,
   Injector,
   Input,
   OnChanges,
+  OnDestroy,
   OnInit,
   SimpleChanges,
-  ElementRef,
-  ViewChild,
-  ViewContainerRef
 } from '@angular/core';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
-import {PanelGroupComponent} from "../panel-group/panel-group.component";
-import {TreeElementComponent} from "../tree-element/tree-element.component";
-import {TreeComponent} from "../tree/tree.component";
-import {DropdownItemComponent} from "../dropdown-item/dropdown-item.component";
-import {DropdownComponent} from "../dropdown/dropdown.component";
-import {ButtonComponent} from "../button/button.component";
-import {RowComponent} from "../row/row.component";
-import {OutputLabelComponent} from "../output-label/output-label.component";
 import {FhChanges, FormsManager} from "../../Socket/FormsManager";
 import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
+import {Subscription} from 'rxjs';
+import {ContainerComponent} from "../container/container.component";
 
 @Component({
   selector: 'fh-form',
@@ -35,7 +28,7 @@ import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
     {provide: FhngComponent, useExisting: forwardRef(() => FormComponent)},
   ],
 })
-export class FormComponent extends FhngComponent implements OnInit, OnChanges {
+export class FormComponent extends FhngComponent implements OnInit, OnChanges, OnDestroy {
   // @Input() public model: any = null;
   @Input() public label: string = null;
   @Input() public hideHeader: boolean = false;
@@ -50,15 +43,26 @@ export class FormComponent extends FhngComponent implements OnInit, OnChanges {
   @HostBinding('class.fc')
   cssFc: boolean = true;
 
+  private changesSubjectSubscription: Subscription;
+
+  public container: ContainerComponent = inject(ContainerComponent);
+
   constructor(
     public override injector: Injector, private formManager: FormsManager
   ) {
     super(injector, null);
+    // this.formManager.
+  }
+
+  ngOnDestroy(): void {
+    this.formManager.unregisterForm(this);
+    this.changesSubjectSubscription.unsubscribe();
   }
 
   override ngOnInit() {
     super.ngOnInit();
-    this.formManager.changesSubject.subscribe((changes: FhChanges) => {
+    this.formManager.registerForm(this);
+    this.changesSubjectSubscription = this.formManager.changesSubject.subscribe((changes: FhChanges) => {
       if (changes[this.id]) {
         const componentChanges = changes[this.id]
         componentChanges.forEach(change => {

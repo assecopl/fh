@@ -72,42 +72,19 @@ import {FormsManager} from "./Socket/FormsManager";
             >
               <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse " id="navbarTogglerDemo03">
-                <fh-form
-                  [formType]="navbarForm?.formType"
-                  [subelements]="navbarForm?.subelements"
-                  [id]="navbarForm?.id"
-                  [label]="navbarForm?.label"
-                  [formId]="navbarForm?.id"
-                  [hideHeader]="navbarForm?.hideHeader"
-                />
+            <div class="collapse navbar-collapse " id="navbarTogglerDemo03" fhng-container="navbarForm">
             </div>
           </div>
         </nav>
         <div class="container-fluid">
           <div class="row">
             <div
-              id="menuForm"
+              id="menuForm" fhng-container
               class="col-sm-12 col-md-3 col-lg-3 col-xl-2 mt-3"
             >
-              <fh-form
-                [formType]="menuForm?.formType"
-                [subelements]="menuForm?.subelements"
-                [formId]="menuForm?.id"
-                [id]="menuForm?.id"
-                [label]="menuForm?.label"
-                [hideHeader]="menuForm?.hideHeader"
-              />
             </div>
-            <div id="mainForm" class="col mt-3">
-              <fh-form
-                [formType]="mainForm?.formType"
-                [subelements]="mainForm?.subelements"
-                [formId]="mainForm?.id"
-                [id]="mainForm?.id"
-                [label]="mainForm?.label"
-                [hideHeader]="mainForm?.hideHeader"
-              />
+            <div id="mainForm" class="col mt-3" fhng-container>
+
             </div>
           </div>
         </div>
@@ -119,32 +96,8 @@ import {FormsManager} from "./Socket/FormsManager";
   styleUrls: ['./fh-forms-manager-ng.component.scss'],
 })
 export class FhFormsManagerNgComponent {
-  public menuForm: any = null;
-  @Input()
-  public navbarForm: any = null;
-  public mainForm: any = null;
 
-  constructor(private fm: FormsManager, private i18n: I18nService) {
-    /**
-     * Register default translations strings for module.
-     */
-    i18n.registerStrings('en', ApplicationLockEN);
-    i18n.registerStrings('pl', ApplicationLockPL);
-    i18n.registerStrings('en', ConnectorEN, true);
-    i18n.registerStrings('pl', ConnectorPL, true);
-    i18n.registerStrings('en', FormsManagerEN);
-    i18n.registerStrings('pl', FormsManagerPL);
-    i18n.registerStrings('en', TranslationsEn);
-    i18n.registerStrings('pl', TranslationsPl);
-    i18n.registerStrings('pl', ShutdownEventPL);
-    i18n.registerStrings('en', ShutdownEventEN);
-
-
-    this.fm.openedFormsSubject.subscribe((form) => {
-        if (form.container == 'menuForm') this.menuForm = form;
-        if (form.container == 'navbarForm') this.navbarForm = form;
-        if (form.container == 'mainForm') this.mainForm = form;
-    });
+  constructor() {
 
   }
 

@@ -16,7 +16,6 @@ import {
   SkipSelf,
   ViewChild,
 } from '@angular/core';
-import {isNumber} from 'util';
 import {FhngComponent} from './FhngComponent';
 import {SafeStyle} from '@angular/platform-browser';
 import {FhMLService} from '../../service/fh-ml.service';
