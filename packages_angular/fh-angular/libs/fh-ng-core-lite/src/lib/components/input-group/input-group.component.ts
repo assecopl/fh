@@ -12,11 +12,10 @@ import {
   SkipSelf,
 } from '@angular/core';
 import {IconAligmentType} from '../../models/CommonTypes';
-import {FhngComponent} from '@fhng/ng-basic-controls';
-import ResizeObserver from 'resize-observer-polyfill';
+import {FhngComponent} from '../../models/componentClasses/FhngComponent';
 
 @Component({
-  selector: 'fhng-input-group',
+  selector: '[fhng-input-group]',
   templateUrl: './input-group.component.html',
   styleUrls: ['./input-group.component.scss'],
 })

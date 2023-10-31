@@ -2,27 +2,20 @@ import {
   AfterContentInit,
   Component,
   forwardRef,
-  Host,
   HostBinding,
   Injector,
-  Input,
   OnChanges,
   OnInit,
   Optional,
   SimpleChanges,
   SkipSelf,
 } from '@angular/core';
-// import {DocumentedComponent} from '@fhng/ng-core';
-// import {FhngAvailabilityDirective} from '@fhng/ng-availability';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
 import {FhngHTMLElementC} from '../../models/componentClasses/FhngHTMLElementC';
 import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
+import {AvailabilityEnum} from "../../availability/enums/AvailabilityEnum";
 
-// @DocumentedComponent({
-//   category: DocumentedComponent.Category.OTHERS,
-//   value: 'Tab represents a single tab component',
-//   icon: 'fa-fw fa fa-window-maximize',
-// })
+
 @Component({
   selector: 'fhng-tab',
   templateUrl: './tab.component.html',
@@ -51,13 +44,13 @@ export class TabComponent
   public tabId: string;
 
   @HostBinding('class.tab-pane')
-  public classTabPane:boolean = true;
+  public classTabPane: boolean = true;
 
   @HostBinding('class.fc-editable')
-  public classFcEditable:boolean = false;
+  public classFcEditable: boolean = false;
 
   @HostBinding('class.d-none')
-  public classDNone:boolean = false;
+  public classDNone: boolean = false;
 
   @HostBinding('class.active')
   public selected: boolean = false;
@@ -81,18 +74,18 @@ export class TabComponent
         this.constructor.name + '_' + (Math.random() * 100000000).toFixed();
     }
 
-    this.classFcEditable = this.accessibility === 'EDIT';
-    this.classDNone = this.accessibility === 'HIDDEN';
+    this.classFcEditable = this.availability === AvailabilityEnum.EDIT;
+    this.classDNone = this.availability === AvailabilityEnum.HIDDEN;
   }
 
-  public override  ngAfterContentInit(): void {
+  public override ngAfterContentInit(): void {
   }
 
   public override ngOnChanges(changes: SimpleChanges) {
     super.ngOnChanges(changes);
   }
 
-  public override mapAttributes(data: IDataAttributes & {selected: boolean}) {
+  public override mapAttributes(data: IDataAttributes & { selected: boolean }) {
     super.mapAttributes(data);
 
     this.selected = data.selected;

@@ -9,4 +9,3 @@ export type BootstrapStyleType =
   | 'dark'
   | 'light'
   | 'default';
-export type Accessibility = 'HIDDEN' | 'EDIT';

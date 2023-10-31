@@ -1,26 +1,7 @@
-import {
-  Component,
-  forwardRef,
-  Host,
-  HostBinding,
-  Injector,
-  Input,
-  OnInit,
-  Optional,
-  SimpleChanges,
-  SkipSelf,
-} from '@angular/core';
-// import {DocumentedComponent} from '@fhng/ng-core';
+import {Component, forwardRef, HostBinding, Injector, OnInit, Optional, SimpleChanges, SkipSelf,} from '@angular/core';
 import {FhngHTMLElementC} from '../../models/componentClasses/FhngHTMLElementC';
-// import {FhngAvailabilityDirective} from '@fhng/ng-availability';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
-import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
 
-// @DocumentedComponent({
-//   category: DocumentedComponent.Category.ARRANGEMENT,
-//   value: 'Component used to create spaces in application layout',
-//   icon: 'fas fa-arrows-alt-h',
-// })
 @Component({
   selector: 'fhng-spacer',
   templateUrl: './spacer.component.html',

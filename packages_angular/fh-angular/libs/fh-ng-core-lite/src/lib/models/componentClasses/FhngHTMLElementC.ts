@@ -20,8 +20,10 @@ import {FhngComponent} from './FhngComponent';
 import {SafeStyle} from '@angular/platform-browser';
 import {FhMLService} from '../../service/fh-ml.service';
 import {IDataAttributes} from "../interfaces/IDataAttributes";
-import {Accessibility, IconAligmentType} from "../CommonTypes";
+import {IconAligmentType} from "../CommonTypes";
 import {STYLE_UNIT} from "../enums/StyleUnitEnum";
+import {AvailabilityEnum} from "../../availability/enums/AvailabilityEnum";
+import {AvailabilityUtils} from "../../availability/AvailabilityUtils";
 
 @Directive()
 export class FhngHTMLElementC
@@ -33,22 +35,14 @@ export class FhngHTMLElementC
   @HostBinding('attr.tabindex')
   public tabindex: number = null;
 
-  @Input()
-  public accessibility: Accessibility;
+  public _availability: AvailabilityEnum;
+  public set availability(value: AvailabilityEnum | string) {
+    this._availability = AvailabilityUtils.stringToEnum(value);
+  }
 
-  // public availabilityDirective: FhngAvailabilityDirective;
-  // public availabilityEnum:any = AvailabilityEnum;
-
-  public availability: string;
-  // @Input()
-  // public set availability(value: AvailabilityEnum | string) {
-  //   // if ( typeof value === 'string') {
-  //   //   const a: any = AvailabilityEnum[value];
-  //   //   this.availabilityDirective._myAvailability = a;
-  //   // } else {
-  //   //   this.availabilityDirective._myAvailability = value;
-  //   // }
-  // }
+  public get availability() {
+    return this._availability;
+  }
 
   /**
    * Parametr width jest domyśłnym parametrem komponentu angularowego, przychwytujemy go aby obsłużyć
@@ -57,7 +51,7 @@ export class FhngHTMLElementC
   @Input()
   public width: string;
 
-  public rawValue: any;
+  public rawValue: any = null;
 
   public height: string;
 
@@ -220,7 +214,6 @@ export class FhngHTMLElementC
   ) {
     super(injector, parentFhngComponent);
     this.elementRef = this.injector.get(ElementRef, null);
-    // this.availabilityDirective = this.injector.get(FhngAvailabilityDirective, null);
   }
 
   public override ngAfterContentInit(): void {
@@ -232,13 +225,6 @@ export class FhngHTMLElementC
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    // if (this.availabilityDirective && changes["availability"] && changes["availability"].firstChange == false) {
-    //   //Inside component we set availability so it will be processed by directive as its own availability.(_myAvailability)
-    //   if(this.hiddenElementsTakeUpSpace) {
-    //     this.availabilityDirective.hiddenElementsTakeUpSpace = this.hiddenElementsTakeUpSpace;
-    //   }
-    //   this.availabilityDirective.setAvailability(this.availabilityDirective._myAvailability, true);
-    // }
     this.processWidth(this.width);
 
   }
@@ -251,31 +237,12 @@ export class FhngHTMLElementC
       this.pointer = false;
     }
 
-    // if(this.formatterName){
-    //   this.formatterService = this.injector.get(FhngFormatterService, null);
-    //   if(this.formatterService) {
-    //     this.formatter = this.formatterService.getFormatter(this.formatterName);
-    //   }
-    // }
-
     this.processWidth(this.width);
     this.processHorizontalAlign();
     this.processVerticalAlign();
 
     let fhngml = this.injector.get(FhMLService);
     this.label = fhngml.transform(this.label);
-
-    /**
-     * Initilize local directive initilize it and set id
-     */
-    // if (this.availabilityDirective && !this.availabilityDirective.initialize) {
-    //   //Pass only external ID to use it with AvailabilityCOnfiguration.
-    //   this.availabilityDirective.id = this.id;
-    //   if(this.hiddenElementsTakeUpSpace) {
-    //     this.availabilityDirective.hiddenElementsTakeUpSpace = this.hiddenElementsTakeUpSpace;
-    //   }
-    //   this.availabilityDirective.ngOnInit();
-    // }
   }
 
   /**
@@ -353,7 +320,7 @@ export class FhngHTMLElementC
     if (data.inlineStyle) this.styles = this._convertInlineStylesToSafeStyle(data.inlineStyle);
 
     this.innerId = data.id;
-    this.accessibility = data.accessibility;
+    this.availability = data.accessibility;
 
     // if (data.value) this.label = data.value; //Label zostawiamy w spokoju, pozmieniamy w komponentach jak trzeba - z value na label
     if (data.style) this.bootstrapStyle = data.style

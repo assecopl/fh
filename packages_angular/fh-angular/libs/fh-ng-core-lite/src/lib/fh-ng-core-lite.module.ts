@@ -52,7 +52,14 @@ import {TranslationsPl} from "./I18n/translations.pl";
 import {ShutdownEventPL} from "./I18n/ShutdownEvent.pl";
 import {ShutdownEventEN} from "./I18n/ShutdownEvent.en";
 import {I18nService} from "./service/i18n.service";
+import {InputTextComponent} from "./controls/input-text/input-text.component";
+import {InputGroupComponent} from "./components/input-group/input-group.component";
+import {InputLabelComponent} from "./components/input-label/input-label.component";
+import {FhngAvailabilityDirective} from "./availability/directives/fhng-availability-directive";
+import {FhngAvailabilityInputDirective} from "./availability/directives/fhng-availability-input-directive";
+import {FhngAvailabilityElementDirective} from "./availability/directives/fhng-availability-element-directive";
 import {PanelHeaderFhDPComponent} from "./controls/panel-header/panel-header.component";
+
 
 const maskConfigFunction: () => Partial<IConfig> = () => {
   return {
@@ -78,6 +85,9 @@ const maskConfigFunction: () => Partial<IConfig> = () => {
 const components = [
   ContainerComponent,
   AccordionComponent,
+  FhngAvailabilityDirective,
+  FhngAvailabilityInputDirective,
+  FhngAvailabilityElementDirective,
   FhMLService,
   AdDirective,
   FormComponent,
@@ -107,6 +117,9 @@ const components = [
   TabComponent,
   SpacerComponent,
   RepeaterComponent,
+  InputGroupComponent,
+  InputLabelComponent,
+  InputTextComponent,
   ValidateMessagesComponent,
   PanelHeaderFhDPComponent
 ]
@@ -165,6 +178,7 @@ export class FhNgCoreLiteModule extends FhNgModule {
     componentManager.registerComponent(DropdownItemComponent);
     componentManager.registerComponent(FormComponent);
     componentManager.registerComponent(GroupComponent);
+    componentManager.registerComponent(InputTextComponent);
     componentManager.registerComponent(OutputLabelComponent);
     componentManager.registerComponent(PanelGroupComponent);
     componentManager.registerComponent(RepeaterComponent);

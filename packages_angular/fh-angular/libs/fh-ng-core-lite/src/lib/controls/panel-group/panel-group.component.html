@@ -2,8 +2,7 @@
   <div class="fc group panelGroup mb-3 card card-default"
        [id]="id"
        [class.borderHidden]="!borderVisible"
-       [class.fc-editable]="accessibility ==='EDIT'"
-       [class.d-none]="accessibility==='HIDDEN'"
+       [availabilityHtmlElement]="availability"
   >
     <ng-container *ngIf="collapsible">
       <div

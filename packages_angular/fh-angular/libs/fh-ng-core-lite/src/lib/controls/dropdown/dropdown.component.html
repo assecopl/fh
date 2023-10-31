@@ -18,7 +18,7 @@
       aria-haspopup="true"
       aria-expanded="false"
       [id]="id"
-      [ngClass]="{'fc-editable': accessibility === 'EDIT', 'd-none': accessibility === 'HIDDEN'}"
+      [availabilityHtmlElement]="availability"
     >
       <ng-container *ngTemplateOutlet="contentTemplate"></ng-container>
     </button>

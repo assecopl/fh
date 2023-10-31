@@ -3,12 +3,12 @@ import {FhngHTMLElementC} from '../../models/componentClasses/FhngHTMLElementC';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 
 @Component({
-  selector: 'fhng-input-label',
+  selector: '[fhng-input-label]',
   templateUrl: './input-label.component.html',
   styleUrls: ['./input-label.component.scss'],
 })
 export class InputLabelComponent extends FhngHTMLElementC implements OnInit {
-  constructor(public injector: Injector, private sanitizer: DomSanitizer) {
+  constructor(public override injector: Injector, private sanitizer: DomSanitizer) {
     super(injector, null);
   }
 
@@ -20,7 +20,7 @@ export class InputLabelComponent extends FhngHTMLElementC implements OnInit {
   @Input()
   public labelSize: string = '40';
 
-  ngOnInit() {
+  override ngOnInit() {
     // super.ngOnInit();
     this.labelHtml = this.sanitizer.bypassSecurityTrustHtml(this.label);
     if (!this.isFixedSize && this.labelSizeNumber <= 4) {

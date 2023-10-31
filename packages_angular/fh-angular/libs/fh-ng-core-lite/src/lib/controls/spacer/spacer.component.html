@@ -2,8 +2,7 @@
   class="containerSpacer"
   [id]="id"
   [class.hasHeight]="height"
-  [class.fc-editable]="accessibility === 'EDIT'"
-  [class.d-none]="accessibility === 'HIDDEN'"
+  [availabilityHtmlElement]="availability"
   [ngStyle]="styles"
 ></div>
 

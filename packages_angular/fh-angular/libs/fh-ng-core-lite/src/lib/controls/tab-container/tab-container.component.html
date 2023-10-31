@@ -4,13 +4,11 @@
 <div
   class="fc tabContainer"
   [id]="id"
-  [class.fc-editable]="accessibility === 'EDIT'"
-  [class.d-none]="accessibility === 'HIDDEN'"
+  [availabilityHtmlElement]="availability"
 >
   <ul
     class="nav nav-tabs"
-    [class.fc-editable]="accessibility === 'EDIT'"
-    [class.d-none]="accessibility === 'HIDDEN'"
+    [availabilityHtmlElement]="availability"
   >
     <ng-container *ngFor="let tab of subelements">
       <li class="nav-item">
