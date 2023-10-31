@@ -52,6 +52,7 @@ import {TranslationsPl} from "./I18n/translations.pl";
 import {ShutdownEventPL} from "./I18n/ShutdownEvent.pl";
 import {ShutdownEventEN} from "./I18n/ShutdownEvent.en";
 import {I18nService} from "./service/i18n.service";
+import {PanelHeaderFhDPComponent} from "./controls/panel-header/panel-header.component";
 
 const maskConfigFunction: () => Partial<IConfig> = () => {
   return {
@@ -106,7 +107,8 @@ const components = [
   TabComponent,
   SpacerComponent,
   RepeaterComponent,
-  ValidateMessagesComponent
+  ValidateMessagesComponent,
+  PanelHeaderFhDPComponent
 ]
 
 @NgModule({
@@ -177,8 +179,9 @@ export class FhNgCoreLiteModule extends FhNgModule {
     componentManager.registerComponent(TableRowComponent);
     componentManager.registerComponent(TableHeadRowComponent);
     componentManager.registerComponent(TableCellComponent);
-    componentManager.registerComponent(SpacerComponent)
-    componentManager.registerComponent(ValidateMessagesComponent)
+    componentManager.registerComponent(SpacerComponent);
+    componentManager.registerComponent(ValidateMessagesComponent);
+    componentManager.registerComponent(PanelHeaderFhDPComponent);
   }
 
   protected registerCustomActions(customActionsManager?: CustomActionsManager) {
