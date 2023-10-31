@@ -1,8 +1,7 @@
 <div
   class="panel-header panel-header--transparent"
+  [availabilityHtmlElement]="availability"
   [id]="innerId"
-  [class.fc-editable]="accessibility==='EDIT'"
-  [class.d-none]="accessibility==='HIDDEN'"
 >
   <div class="panel-header-group">
     <div class="panel-info">{{info}}</div>
@@ -11,11 +10,11 @@
   <div class="panel-options">
     <button
       class="panel-option"
-      [attr.aria-label]="'Close:' + title"
+      [attr.aria-label]="i18n.__('fh.close') + ':' + title"
       (click)="onClickEvent($event)"
     >
       <i class="fas fa-times"></i>
-      <span class="sr-only">{{'Close:' + title}}</span>
+      <span class="sr-only">{{ i18n.__("fh.close") + ' ' + title}}</span>
     </button>
   </div>
 </div>

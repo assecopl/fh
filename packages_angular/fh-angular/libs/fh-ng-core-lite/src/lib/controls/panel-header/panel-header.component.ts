@@ -18,6 +18,7 @@ import {FhngComponent} from '../../models/componentClasses/FhngComponent';
 import {DomSanitizer} from '@angular/platform-browser';
 import {FhMLService} from '../../service/fh-ml.service';
 import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
+import {I18nService} from "../../service/i18n.service";
 
 @Component({
   selector: 'fhng-panel-header',
@@ -48,7 +49,7 @@ export class PanelHeaderFhDPComponent extends FhngHTMLElementC implements OnInit
   constructor(
     public override injector: Injector,
     @Optional() @SkipSelf() parentFhngComponent: FhngComponent,
-    private sanitizer: DomSanitizer
+    public i18n: I18nService
   ) {
     super(injector, parentFhngComponent);
   }
