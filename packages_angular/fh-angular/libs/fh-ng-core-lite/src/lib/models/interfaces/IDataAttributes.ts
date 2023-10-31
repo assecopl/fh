@@ -1,7 +1,7 @@
-import {Accessibility, IconAligmentType} from "../CommonTypes";
+import {IconAligmentType} from "../CommonTypes";
 
 export interface IDataAttributes {
-    accessibility: Accessibility,
+  accessibility: string,
     designDeletable: boolean,
     formId: string,
     height?: string;

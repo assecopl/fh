@@ -1,8 +1,7 @@
 <div
   class="fc row containerRow"
   [id]="id"
-  [class.fc-editable]="accessibility === 'EDIT'"
-  [class.d-none]="accessibility === 'HIDDEN'"
+  [availabilityHtmlElement]="availability"
   [ngClass]="rowStyleClasses"
   [ngStyle]="styles"
 >

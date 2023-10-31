@@ -1,22 +1,17 @@
 import {
   Component,
-  ContentChildren,
   EventEmitter,
   forwardRef,
-  Host,
   Injector,
   Input,
   Optional,
   Output,
-  QueryList,
   SimpleChanges,
   SkipSelf,
 } from '@angular/core';
 import {GroupingComponentC} from '../../models/componentClasses/GroupingComponentC';
 import {PanelGroupComponent} from '../panel-group/panel-group.component';
 import {BootstrapWidthEnum} from '../../models/enums/BootstrapWidthEnum';
-// import {DocumentedComponent} from '@fhng/ng-core';
-// import {FhngAvailabilityDirective} from '@fhng/ng-availability';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
 import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
 
@@ -25,12 +20,7 @@ interface IAccordionDataAttributes extends IDataAttributes {
   iconClosed: string
 }
 
-// @DocumentedComponent({
-//   category: DocumentedComponent.Category.ARRANGEMENT,
-//   value:
-//     'PanelGroup component responsible for the grouping of sub-elements, only one uncollapsed group will be allowed.',
-//   icon: 'fa fa-caret-down',
-// })
+
 @Component({
   selector: 'fhng-accordion',
   templateUrl: './accordion.component.html',
@@ -88,7 +78,7 @@ export class AccordionComponent extends GroupingComponentC<PanelGroupComponent> 
   }
 
   public getSubcomponentInstance(): new (
-      ...args: any[]
+    ...args: any[]
   ) => PanelGroupComponent {
     return PanelGroupComponent;
   }
@@ -98,7 +88,7 @@ export class AccordionComponent extends GroupingComponentC<PanelGroupComponent> 
     this.onGroupChange.emit(this.activeGroup);
   }
 
-  public updateSubcomponent = ( subcomponent: PanelGroupComponent, index: number): void => {
+  public updateSubcomponent = (subcomponent: PanelGroupComponent, index: number): void => {
     subcomponent.collapsible = true;
 
     if (subcomponent.panelToggle) {
@@ -138,8 +128,8 @@ export class AccordionComponent extends GroupingComponentC<PanelGroupComponent> 
     this.iconOpened = data.iconOpened;
   }
 
-  private _updateSubElements (data: IAccordionDataAttributes): IAccordionDataAttributes {
-    for (let index = 0;  index < data.subelements?.length; index++) {
+  private _updateSubElements(data: IAccordionDataAttributes): IAccordionDataAttributes {
+    for (let index = 0; index < data.subelements?.length; index++) {
       if (data.subelements[index].type === 'PanelGroup') {
         this.updateSubcomponent(data.subelements[index], index);
       }

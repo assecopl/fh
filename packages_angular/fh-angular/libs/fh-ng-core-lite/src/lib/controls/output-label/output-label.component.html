@@ -95,7 +95,7 @@
     class="fc outputLabel"
     [id]="id"
     [innerHTML]="value | fhml"
-    [ngClass]="{'fc-editable': this.accessibility === 'EDIT', 'd-none': this.accessibility === 'HIDDEN'}"
+    [availabilityHtmlElement]="availability"
     [ngStyle]="styles">
     <i
       *ngIf="icon && (iconAlignment == 'BEFORE' || !iconAlignment)"

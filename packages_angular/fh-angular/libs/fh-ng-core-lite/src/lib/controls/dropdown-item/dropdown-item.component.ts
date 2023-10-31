@@ -2,7 +2,7 @@ import {
   Component,
   EventEmitter,
   forwardRef,
-  Host, HostBinding,
+  HostBinding,
   Injector,
   Input,
   OnInit,
@@ -14,6 +14,7 @@ import {
 import {FhngHTMLElementC} from '../../models/componentClasses/FhngHTMLElementC';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
 import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
+import {AvailabilityEnum} from "../../availability/enums/AvailabilityEnum";
 
 @Component({
   selector: 'fh-dropdown-item',
@@ -46,12 +47,12 @@ export class DropdownItemComponent extends FhngHTMLElementC implements OnInit {
 
   @HostBinding('class.fc-editable')
   public get isEditable (): boolean {
-    return this.accessibility == 'EDIT';
+    return this.availability == AvailabilityEnum.EDIT;
   }
 
   @HostBinding('class.d-none')
   public get isHidden (): boolean {
-    return this.accessibility == 'HIDDEN';
+    return this.availability == AvailabilityEnum.HIDDEN;
   }
 
   constructor(

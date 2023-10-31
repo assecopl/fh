@@ -1,113 +1,106 @@
-<fhng-input-label
+<div fhng-input-label
   [inputId]="id"
   [label]="label"
   [labelPosition]="labelPosition"
   [labelSize]="labelSize"
 >
   <ng-container *ngIf="inputType == inputTypeEnum.textarea">
-    <ng-container *ngIf="control">
+    <!--    <ng-container *ngIf="control">-->
       <ng-container *ngIf="!rowsCountAuto">
-        <fhng-input-group
+        <div fhng-input-group
           [iconText]="iconText"
-          [class.fhng-disabled]="control.disabled"
+             [class.fhng-disabled]="disabled"
           [icon]="icon"
           [iconAlignment]="iconAlignment"
           [required]="required"
         >
-          <textarea
+          <textarea [availabilityInput]="availability"
             #focusElement
-            availabilityControl
-            [id]="innerId"
+                    [id]="id"
             [style.height]="styles.height"
             [rows]="rowsCount"
-            class="form-control {{
-              control?.invalid && control?.touched ? 'is-invalid' : ''
-            }}"
-            [formControl]="control"
             [name]="name"
-            [maxlength]="maxLength"
+                    [disabled]="disabled"
+                    [value]="rawValue"
+                    [maxLength]="maxLength"
             [placeholder]="placeholder"
             [style.resize]="resize"
-            [availabilityHtmlElement]="elementRef"
             [attr.aria-label]="ariaLabel"
+                    class="fc inputText form-control"
           ></textarea>
-        </fhng-input-group>
+        </div>
       </ng-container>
       <ng-container *ngIf="rowsCountAuto">
-        <fhng-input-group
+        <div fhng-input-group
           [iconText]="iconText"
-          [class.fhng-disabled]="control.disabled"
+             [class.fhng-disabled]="disabled"
           [icon]="icon"
           [iconAlignment]="iconAlignment"
           [required]="required"
         >
-          <textarea
+          <textarea [availabilityInput]="availability"
             #focusElement
-            availabilityControl
             autosize
-            [id]="innerId"
+                    [id]="id"
+                    [value]="rawValue"
             [style.height]="styles.height"
             [rows]="rowsCount"
-            class="form-control {{
-              control?.invalid && control?.touched ? 'is-invalid' : ''
-            }}"
-            [formControl]="control"
             [name]="name"
-            [maxlength]="maxLength"
+                    [disabled]="disabled"
+                    [maxLength]="maxLength"
             [placeholder]="placeholder"
             [style.resize]="resize"
-            [availabilityHtmlElement]="elementRef"
             [attr.aria-label]="ariaLabel"
+                    class="fc inputText form-control"
           ></textarea>
-        </fhng-input-group>
+        </div>
       </ng-container>
-    </ng-container>
-    <ng-container *ngIf="!control">
-      <textarea
-        #focusElement
-        [id]="innerId"
-        [style.height]="styles.height"
-        [rows]="rowsCount"
-        [name]="innerId"
-        class="form-control"
-        [placeholder]="placeholder"
-        [style.resize]="resize"
-        [attr.aria-label]="ariaLabel"
-      >{{ value }}
-    </textarea
-    >
-    </ng-container>
+    <!--    </ng-container>-->
+    <!--    <ng-container *ngIf="!control">-->
+    <!--      <textarea-->
+    <!--        #focusElement-->
+    <!--        [id]="innerId"-->
+    <!--        [style.height]="styles.height"-->
+    <!--        [rows]="rowsCount"-->
+    <!--        [name]="innerId"-->
+    <!--        class="form-control"-->
+    <!--        [placeholder]="placeholder"-->
+    <!--        [style.resize]="resize"-->
+    <!--        [attr.aria-label]="ariaLabel"-->
+    <!--      >{{ value }}-->
+    <!--    </textarea-->
+    <!--    >-->
+    <!--    </ng-container>-->
   </ng-container>
   <ng-container *ngIf="inputType !== inputTypeEnum.textarea">
-    <ng-container *ngIf="control">
-      <fhng-input-group
+
+    <div fhng-input-group
         [iconText]="iconText"
-        [class.fhng-disabled]="control.disabled"
+         [class.fhng-disabled]="disabled"
         [icon]="icon"
         [iconAlignment]="iconAlignment"
         [required]="required"
       >
-        <input
+      <input [availabilityInput]="availability"
           #focusElement
-          [id]="innerId"
+             [id]="id"
+             [disabled]="disabled"
+             [value]="rawValue"
           [type]="inputType"
           [name]="name"
-          class="form-control {{
-            control?.invalid && control?.touched ? 'is-invalid' : ''
-          }}"
-          [formControl]="control"
-          [placeholder]="placeholder"
-          [maxlength]="maxLength"
+             [placeholder]="placeholder"
+             [maxLength]="maxLength"
           [mask]="formatter?.pattern"
           [patterns]="
             formatter?.customPatterns ? formatter.customPatterns : null
           "
           [clearIfNotMatch]="false"
-          availabilityControl
-          [availabilityHtmlElement]="elementRef"
           [attr.aria-label]="ariaLabel"
+             class="fc inputText form-control"
         />
-      </fhng-input-group>
+    </div>
     </ng-container>
-  </ng-container>
-</fhng-input-label>
+</div>
+<ng-container *ngIf="configuration.debug">
+  <fh-component-debugger/>
+</ng-container>

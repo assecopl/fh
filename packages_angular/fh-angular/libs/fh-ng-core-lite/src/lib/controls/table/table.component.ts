@@ -4,7 +4,6 @@ import {
   Component,
   EventEmitter,
   forwardRef,
-  Host,
   HostBinding,
   Injector,
   Input,
@@ -15,18 +14,16 @@ import {
   Output,
   SimpleChanges,
   SkipSelf,
-  ViewChild,
-  ViewContainerRef,
 } from '@angular/core';
 import {BootstrapWidthEnum} from './../../models/enums/BootstrapWidthEnum';
 import {TableColumnComponent} from '../table-column/table-column.component';
 import {TableRowComponent} from '../table-row/table-row.component';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
 import {TableComponentRef} from './table.ref';
-import {TableCellComponent} from '../table-cell/table-cell.component';
 import {TableHeadRowComponent} from '../table-head-row/table-head-row.component';
 import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
 import {FormComponentChangesQueue} from "../../service/FormComponentChangesQueue";
+import {AvailabilityEnum} from "../../availability/enums/AvailabilityEnum";
 
 /**
  * FIXME Przebudować Tabelę!!!!! Między innymi tak aby nie korzystać z ViewCHild i ContentCHild - działają z opuźnieniem.
@@ -266,7 +263,7 @@ export class TableComponent
   }
 
   onRowClickEvent(event, mainId, silent = false) {
-    if (this.accessibility != 'EDIT') return;
+    if (this.availability != AvailabilityEnum.EDIT) return;
 
     if (this.selectable && this.onRowClick) {
       if (this.multiselect == false) {

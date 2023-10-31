@@ -3,8 +3,7 @@
   class="fc accordion"
   aria-multiselectable="false"
   [id]="id"
-  [class.fc-editable]="accessibility === 'EDIT'"
-  [class.d-none]="accessibility === 'HIDDEN'"
+  [availabilityHtmlElement]="availability"
 >
   <ng-container [fhDynamicComponents]="subelements"></ng-container>
 </div>

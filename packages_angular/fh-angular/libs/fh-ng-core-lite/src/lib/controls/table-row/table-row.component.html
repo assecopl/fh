@@ -15,7 +15,7 @@
     </span>
   </td>
 
-  <!--  <ng-container   [fhDynamicComponents]="subelements"></ng-container>-->
+  <!--  <ng-container   [fhDynamicComponents]="subelements" ></ng-container>-->
   <ng-container *ngFor="let td of subelements;index as i;">
     <td fhng-table-cell [data]="td" [formId]="formId"></td>
   </ng-container>
