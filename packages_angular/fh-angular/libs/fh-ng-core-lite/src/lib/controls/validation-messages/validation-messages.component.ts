@@ -1,88 +1,122 @@
-import {AfterContentChecked, AfterViewInit, Component, Host, Injector, Input, OnInit, SkipSelf,} from '@angular/core';
 import {
-  DocumentedComponent,
-  FieldValidationResult,
-  IValidatedComponent,
-  PresentationStyleEnum,
-  TypeUtils,
-  ValidationResults,
-} from '@fhng/ng-core';
+  AfterContentChecked,
+  AfterViewInit,
+  Component, forwardRef,
+  Host,
+  Injector,
+  Input,
+  OnDestroy,
+  OnInit,
+  SkipSelf,
+} from '@angular/core';
+// import {
+//   // DocumentedComponent,
+//   FieldValidationResult,
+//   IValidatedComponent,
+//   TypeUtils,
+//   ValidationResults,
+// } from '@fhng/ng-core';
+import {TypeUtils} from "../../Base";
+import {PresentationStyleEnum} from "../../models/enums/PresentationStyleEnum";
 import {BootstrapWidthEnum} from '../../models/enums/BootstrapWidthEnum';
 import {FormComponent} from '../form/form.component';
 import {FhngHTMLElementC} from '../../models/componentClasses/FhngHTMLElementC';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
-import {Subscription} from 'rxjs';
-import {FhngReactiveInputC} from '../../models/componentClasses/FhngReactiveInputC';
+import {of, Subscription} from 'rxjs';
+import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
 
-@DocumentedComponent({
-  category: DocumentedComponent.Category.INPUTS_AND_VALIDATION,
-  value:
-    'Component responsible for displaying field, where use can set only number.',
-  icon: 'fa fa-exclamation',
-})
+
+// import {FhngReactiveInputC} from '../../models/componentClasses/FhngReactiveInputC';
+
+interface IValidateMessagesDataAttribute extends IDataAttributes {
+  level: string,
+  componentsIds: string[],
+  strictLevel: boolean,
+  htmlAccessibilityRole: string
+}
+
+interface IValidateMessage {
+  elementId: string,
+  elementLabel?: string,
+  message: string
+}
+
 @Component({
   selector: 'fhng-validation-messages',
   templateUrl: './validation-messages.component.html',
   styleUrls: ['./validation-messages.component.scss'],
+  providers: [
+    { provide: FhngComponent, useExisting: forwardRef(() => ValidateMessagesComponent)}
+  ]
 })
-export class ValidationMessagesComponent
+export class ValidateMessagesComponent
   extends FhngHTMLElementC
-  implements OnInit, AfterViewInit, AfterContentChecked {
-  errors: FieldValidationResult[] = [];
-  _errors: any;
-
-  errorLevel: PresentationStyleEnum = PresentationStyleEnum.BLOCKER;
-
-  @Input()
-  level: string;
-
-  @Input()
-  strictLevel: boolean = false;
+  implements OnInit, AfterViewInit, AfterContentChecked, OnDestroy {
 
   @Input()
   public componentIds: any | '*' = '*';
 
-  public components: (FhngComponent & IValidatedComponent)[] = [];
+  public htmlAccessibilityRole: string = '';
 
-  private mySubscription: Subscription = new Subscription();
+  @Input()
+  public level: PresentationStyleEnum = PresentationStyleEnum.BLOCKER;
+
+  @Input()
+  public strictLevel: boolean = false;
+
+  public validateMessages: IValidateMessage[] = [];
+
+  private _components: FhngComponent[] = [];
+
+  private _mySubscription: Subscription = new Subscription();
 
   constructor(
-    public injector: Injector,
+    public override injector: Injector,
     @SkipSelf() private iForm: FormComponent,
-    public validationHandler: ValidationResults
+    // public validationHandler: ValidationResults
   ) {
     super(injector, null);
 
-    if (PresentationStyleEnum[this.level]) {
-      this.errorLevel = PresentationStyleEnum[this.level];
-    }
+    this.formsManager.changesSubject.subscribe((data)=> {
+      console.log('VM:testEvent:?', data)
+    });
 
     this.width = BootstrapWidthEnum.MD12;
   }
 
-  ngOnInit(): void {
+  public override ngOnInit(): void {
     super.ngOnInit();
     //Subscribe to ValidationResultsCHanges
     //FIXME Zoptymalizować aby ograniczyć liczbę wywołań
-    this.mySubscription =
-      this.validationHandler.fieldsValidationResultsSubject.subscribe(
-        (value) => {
-          this.processCurrentErrors();
-        }
-      );
+    this._mySubscription = of().subscribe();
+      // this.validationHandler.fieldsValidationResultsSubject.subscribe(
+      //   (value) => {
+      //     this.processCurrentErrors();
+      //   }
+      // );
   }
 
-  ngOnDestroy(): void {
+  public override ngAfterViewInit(): void {
+    super.ngAfterViewInit();
+
+    this._componentsIdsMap();
+    //FIXME Think off better solution. setTimeout to prevent "Expresion changed after it was Checked."
+    setTimeout(() => {
+      this.processCurrentErrors();
+    }, 0);
+  }
+
+  public ngOnDestroy(): void {
     // FIXME unsubscribe powoduje ze formularz na powrocie nie pokazuje sie!
     // bez unsubscribe kolejne zakladki dodaja coraz wiecej obserwatorow!
-    this.mySubscription.unsubscribe();
+    this._mySubscription.unsubscribe();
   }
 
   protected getErrorsForComponent(
-    component: FhngComponent,
-    errors: FieldValidationResult[] = [],
-    validationErrors: FieldValidationResult[] = null
-  ): FieldValidationResult[] {
+    component: FhngComponent & any,
+    errors: any[] = [], //FieldValidationResult
+    validationErrors: any[] = null //FieldValidationResult
+  ): any[] { //FieldValidationResult
     if (validationErrors) {
       const componentErrors = validationErrors.filter(
         (error) =>
@@ -95,7 +129,7 @@ export class ValidationMessagesComponent
 
       if (componentErrors.length > 0) {
         errors = errors.concat(componentErrors);
-        if (component instanceof FhngReactiveInputC) {
+        // if (component instanceof FhngReactiveInputC) {
           if (component.control.disabled) {
             component.elementRef.nativeElement.classList.add('input-invalid');
           } else {
@@ -103,7 +137,7 @@ export class ValidationMessagesComponent
               'input-invalid'
             );
           }
-        }
+        // }
       }
     }
     if (component.childFhngComponents) {
@@ -115,24 +149,24 @@ export class ValidationMessagesComponent
   }
 
   processCurrentErrors() {
-    this.errors = [];
-    const allErrors = this.validationHandler.getValidationErrors();
-    if (allErrors.length > 0 && this.components && this.components.length > 0) {
-      this.components.forEach((component) => {
-        const componentErrors = this.getErrorsForComponent(
-          component,
-          [],
-          allErrors
-        );
-        this.errors = this.errors.concat(componentErrors);
-      });
-    } else {
-      this.errors = this.componentIds == '*' ? allErrors : [];
-    }
+    // this.errors = [];
+    // const allErrors = [];//this.validationHandler.getValidationErrors();
+    // if (allErrors.length > 0 && this.components && this.components.length > 0) {
+    //   this.components.forEach((component) => {
+    //     const componentErrors = this.getErrorsForComponent(
+    //       component,
+    //       [],
+    //       allErrors
+    //     );
+    //     // this.errors = this.errors.concat(componentErrors);
+    //   });
+    // } else {
+    //   // this.errors = this.componentIds == '*' ? allErrors : [];
+    // }
   }
 
-  getBootstrapLevel() {
-    switch (this.errorLevel) {
+  public getBootstrapLevel() {
+    switch (this.level) {
       case PresentationStyleEnum.BLOCKER:
       case PresentationStyleEnum.ERROR:
         return 'alert alert-danger';
@@ -146,31 +180,34 @@ export class ValidationMessagesComponent
     }
   }
 
-  ngAfterContentChecked(): void {
+  public ngAfterContentChecked(): void {
   }
 
-  ngAfterViewInit() {
-    super.ngAfterViewInit();
+  public override mapAttributes(data: IValidateMessagesDataAttribute): void {
+    super.mapAttributes(data);
 
+    this.level = data.level as PresentationStyleEnum;
+    this.componentIds = data.componentsIds;
+
+    this._componentsIdsMap();
+
+    console.log('VM:message', data, this)
+  }
+
+  private _componentsIdsMap (): void {
     if (this.componentIds === '*') {
-      //
-      this.components = null;
+      this._components = [];
     } else if (TypeUtils.isObject(this.componentIds)) {
       //Obsługujemy obiekt kontrolki FHNG.
-      this.components = [this.componentIds];
+      this._components = [this.componentIds];
     } else if (TypeUtils.isArray(this.componentIds)) {
       //Obsługujemy listę kontrolek FHNG.
-      this.components = this.componentIds;
+      this._components = this.componentIds;
     } else if (typeof this.componentIds === 'string') {
       //obsługujemy liste ID kontrolek
       const ids = this.componentIds.replace(/ /g, '').split(',');
 
-      this.components = this.iForm.findFhngComponents(ids, []);
+      this._components = this.iForm.findFhngComponents(ids, []);
     }
-
-    //FIXME Think off better solution. setTimeout to prevent "Expresion changed after it was Checked."
-    setTimeout(() => {
-      this.processCurrentErrors();
-    }, 0);
   }
 }

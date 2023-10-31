@@ -12,15 +12,15 @@
 <!--    </btn>-->
 <!--  </ng-container>-->
 <!--</ng-container>-->
-
 <ng-container>
   <button
     #focusElement
     class="btn btn-{{ bootstrapStyle }}"
-    [id]="id"
+    [id]="innerId"
     [ngStyle]="styles"
     [ngClass]="{'active': active}"
     [innerHTML]="label"
+    (click)="onClickEvent($event)"
   >
     <ng-container *ngTemplateOutlet="contentTemplate"></ng-container>
   </button>
@@ -32,4 +32,8 @@
     <ng-content *ngIf="!label"></ng-content>
   </span>
 </ng-template>
+
+<ng-container *ngIf="configuration.debug">
+  <fh-component-debugger/>
+</ng-container>
 

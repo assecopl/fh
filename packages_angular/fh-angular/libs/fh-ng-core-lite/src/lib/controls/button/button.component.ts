@@ -23,6 +23,7 @@ import {BootstrapStyleEnum} from '../../models/enums/BootstrapStyleEnum';
 import {BootstrapWidthEnum} from '../../models/enums/BootstrapWidthEnum';
 import {FhngButtonGroupComponent, FhngComponent,} from '../../models/componentClasses/FhngComponent';
 import {FhMLService} from '../../service/fh-ml.service';
+import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
 
 @Component({
   selector: 'fhng-button',
@@ -63,6 +64,8 @@ export class ButtonComponent
 
   public override parentFhngComponent: FhngComponent | any = null;
 
+  public clickEventName = null;
+
   constructor(
     public override injector: Injector,
     @Optional() @SkipSelf() parentFhngComponent: FhngComponent,
@@ -95,19 +98,19 @@ export class ButtonComponent
     }
   }
 
-  override ngOnInit() {
+  public override ngOnInit() {
     super.ngOnInit();
   }
 
-  override ngAfterViewInit() {
+  public override ngAfterViewInit() {
   }
 
-  override ngOnChanges(changes: SimpleChanges): void {
+  public override ngOnChanges(changes: SimpleChanges): void {
     super.ngOnChanges(changes);
   }
 
   @HostListener('click')
-  onSelectedButton() {
+  public onSelectedButton(): void {
     this.selectedButton.emit(this);
   }
 
@@ -120,9 +123,19 @@ export class ButtonComponent
     }
   }
 
-  public override mapAttributes(data: any) {
+  public override mapAttributes(data: IDataAttributes & {onClick: string, label: string}) {
     super.mapAttributes(data);
 
     this.label = data.label;
+    this.clickEventName = data.onClick;
+
+    console.log('Button:map', data, this)
+  }
+
+  public onClickEvent ($event: Event): void {
+    console.log('onClickEvent', $event);
+    if (this.clickEventName) {
+      this.fireEvent('onClick', this.clickEventName);
+    }
   }
 }

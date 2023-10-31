@@ -39,6 +39,7 @@ import {TablePagedComponent} from "./controls/table-paged/table-paged.component"
 import {IConfig, NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask} from 'ngx-mask'
 import {AccordionComponent} from "./controls/accordion/accordion.component";
 import {SpacerComponent} from "./controls/spacer/spacer.component";
+import {ValidateMessagesComponent} from "./controls/validation-messages/validation-messages.component";
 import {ContainerComponent} from "./controls/container/container.component";
 import {ApplicationLockEN} from "./I18n/ApplicationLock.en";
 import {ApplicationLockPL} from "./I18n/ApplicationLock.pl";
@@ -51,7 +52,6 @@ import {TranslationsPl} from "./I18n/translations.pl";
 import {ShutdownEventPL} from "./I18n/ShutdownEvent.pl";
 import {ShutdownEventEN} from "./I18n/ShutdownEvent.en";
 import {I18nService} from "./service/i18n.service";
-
 
 const maskConfigFunction: () => Partial<IConfig> = () => {
   return {
@@ -105,7 +105,8 @@ const components = [
   TablePagedComponent,
   TabComponent,
   SpacerComponent,
-  RepeaterComponent
+  RepeaterComponent,
+  ValidateMessagesComponent
 ]
 
 @NgModule({
@@ -177,6 +178,7 @@ export class FhNgCoreLiteModule extends FhNgModule {
     componentManager.registerComponent(TableHeadRowComponent);
     componentManager.registerComponent(TableCellComponent);
     componentManager.registerComponent(SpacerComponent)
+    componentManager.registerComponent(ValidateMessagesComponent)
   }
 
   protected registerCustomActions(customActionsManager?: CustomActionsManager) {

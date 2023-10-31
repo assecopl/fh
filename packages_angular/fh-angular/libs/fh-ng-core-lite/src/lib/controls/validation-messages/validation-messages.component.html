@@ -1,16 +1,12 @@
-<ng-container *ngIf="errors.length > 0">
-  <div [class]="getBootstrapLevel()">
-    <div class="mb-3" *ngFor="let error of errors">
-      <span
-        class="mb-0 pointer"
-        (click)="
-          error.knwonFhngCompoment && error.knwonFhngCompoment.focus
-            ? error.knwonFhngCompoment.focus()
-            : false
-        "
-      >
-        {{ error.message }}
-      </span>
+{{validateMessages | json}}
+<ng-container *ngIf="validateMessages?.length > 0">
+  <div [id]="innerId" [class]="getBootstrapLevel()" role="status">
+    <div class="pointer" *ngFor="let error of validateMessages || []">
+      <span *ngIf="error?.elementLabel">{{error.elementLabel}}: </span>
+      {{ error.message }}
     </div>
   </div>
+</ng-container>
+<ng-container *ngIf="configuration.debug">
+  <fh-component-debugger/>
 </ng-container>
