@@ -121,7 +121,9 @@ class FormsManager {
           indexToDelte = index;
         }
       })
-      this.openedForms.splice(indexToDelte, 1);
+      if(indexToDelte > -1) {
+        this.openedForms.splice(indexToDelte, 1);
+      }
 
         if (document.activeElement) {
             this.lastActiveElementId = document.activeElement.id || null;

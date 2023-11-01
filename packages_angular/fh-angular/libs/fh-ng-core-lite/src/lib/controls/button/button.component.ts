@@ -128,8 +128,6 @@ export class ButtonComponent
 
     this.label = data.label;
     this.clickEventName = data.onClick;
-
-    console.log('Button:map', data, this)
   }
 
   public onClickEvent ($event: Event): void {

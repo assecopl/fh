@@ -1,2 +1,8 @@
-<div [fhDynamicComponents]="[]" [data]="form" [formId]="form?.id" type="Form"></div>
-
+<fh-form
+  [formType]="form?.formType"
+  [subelements]="form?.subelements"
+  [formId]="form?.id"
+  [id]="form?.id"
+  [label]="form?.label"
+  [hideHeader]="form?.hideHeader"
+/>

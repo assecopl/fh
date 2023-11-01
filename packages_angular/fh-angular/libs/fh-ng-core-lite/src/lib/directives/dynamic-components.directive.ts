@@ -80,7 +80,8 @@ export class DynamicComponentsDirective
           const component = this.componentRefs[data.id];
           component.instance.data = data;
           component.instance.formId = this.formId;
-          component.hostView.markForCheck();
+          // component.hostView.markForCheck();
+          // component.changeDetectorRef.detectChanges();
           this.viewContainerRef.insert(component.hostView, index);
 
         } else {
@@ -93,6 +94,7 @@ export class DynamicComponentsDirective
         if (!usedComponents[componentRefsKey]) {
           this.componentRefs[componentRefsKey].destroy();
           this.componentRefs[componentRefsKey] = null;
+          delete this.componentRefs[componentRefsKey];
         }
 
       }
@@ -114,6 +116,8 @@ export class DynamicComponentsDirective
       if (componentRef && componentRef.instance && componentRef.instance.mapAttributes) {
         componentRef.instance.data = data;
         componentRef.instance.formId = this.formId;
+        // componentRef.hostView.markForCheck();
+        // componentRef.changeDetectorRef.detectChanges();
       }
     } else {
       componentRef =

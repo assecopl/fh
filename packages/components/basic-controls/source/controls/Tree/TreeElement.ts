@@ -4,7 +4,6 @@ import {Tree} from "./Tree";
 class TreeElement extends HTMLFormComponent {
     private label: string;
     private readonly onIconClick: any;
-    private readonly onIconClick: any;
     private nextLevelExpandable: any;
     private techIconElement: HTMLSpanElement;
     private iconElement: HTMLSpanElement;
