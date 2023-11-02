@@ -8,16 +8,15 @@
   </span>
 </ng-container>
 <ng-template #inputNumber>
-  <fhng-input-label
+  <div fhng-input-label
     [inputId]="id"
     [label]="label"
     [labelPosition]="labelPosition"
     [labelSize]="labelSize"
   >
-    <ng-container *ngIf="control">
-      <fhng-input-group
+    <div fhng-input-group
         [iconText]="iconText"
-        [class.fhng-disabled]="control.disabled"
+         [class.fh-disabled]="disabled"
         [icon]="icon"
         [iconAlignment]="iconAlignment"
         [required]="required"
@@ -25,15 +24,8 @@
         <input
           #focusElement
           [id]="innerId"
-          availabilityControl
-          [availabilityHtmlElement]="elementRef"
           type="text"
-          class="form-control {{
-            control?.invalid && control?.touched ? 'is-invalid' : ''
-          }} {{ textAlign == 'RIGHT' ? 'text-right' : '' }} {{
-            textAlign == 'CENTER' ? 'text-center' : ''
-          }}"
-          [formControl]="control"
+          [value]="value"
           [attr.aria-label]="!label && ariaLabel ? ariaLabel : null"
           [placeholder]="placeholder"
           [allowNegativeNumbers]="allowNegativeNumbers"
@@ -45,18 +37,8 @@
               : formatter?.separatorLimit
           }}"
           thousandSeparator="{{ formatter?.thousandSeparator }}"
+          class="fc inputNumber form-control"
         />
-      </fhng-input-group>
-    </ng-container>
-    <ng-container *ngIf="!control">
-      <input
-        [id]="innerId"
-        [attr.aria-label]="!label && ariaLabel ? ariaLabel : null"
-        type="text"
-        class="form-control"
-        [placeholder]="placeholder"
-        [value]="value"
-      />
-    </ng-container>
-  </fhng-input-label>
+    </div>
+  </div>
 </ng-template>

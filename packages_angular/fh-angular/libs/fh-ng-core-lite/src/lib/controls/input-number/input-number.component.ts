@@ -1,7 +1,6 @@
 import {
   Component,
   forwardRef,
-  Host,
   Injector,
   Input,
   OnChanges,
@@ -11,30 +10,13 @@ import {
   SkipSelf,
 } from '@angular/core';
 import {FhngReactiveInputC} from '../../models/componentClasses/FhngReactiveInputC';
-import {DocumentedComponent, FhngFormatter} from '@fhng/ng-core';
-import {FhngAvailabilityDirective} from '@fhng/ng-availability';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
-import {FormComponent} from '../form/form.component';
 
-@DocumentedComponent({
-  category: DocumentedComponent.Category.INPUTS_AND_VALIDATION,
-  value:
-    'Component responsible for displaying field, where use can set only number.',
-  icon: 'fa fa-edit',
-})
 @Component({
   selector: 'fhng-input-number',
   templateUrl: './input-number.component.html',
   styleUrls: ['./input-number.component.scss'],
   providers: [
-    /**
-     * Inicjalizujemy dyrektywę dostępności aby zbudoać hierarchię elementów i dać możliwość zarządzania dostępnością
-     */
-    FhngAvailabilityDirective,
-    /**
-     * Dodajemy deklaracje klasy ogólnej aby wstrzykiwanie i odnajdowanie komponentów wewnątrz siebie było możliwe.
-     * Dzięki temu budujemy hierarchię kontrolek Fhng.
-     */
     {
       provide: FhngComponent,
       useExisting: forwardRef(() => InputNumberComponent),
@@ -44,7 +26,7 @@ import {FormComponent} from '../form/form.component';
 export class InputNumberComponent
   extends FhngReactiveInputC
   implements OnInit, OnChanges {
-  public width = 'md-3';
+  public override width = 'md-3';
 
   public pattern: string = 'separator';
 
@@ -58,14 +40,13 @@ export class InputNumberComponent
   public textAlign: 'LEFT' | 'CENTER' | 'RIGHT';
 
   constructor(
-    public injector: Injector,
-    @Optional() @SkipSelf() parentFhngComponent: FhngComponent,
-    @Optional() @SkipSelf() iForm: FormComponent
+    public override injector: Injector,
+    @Optional() @SkipSelf() parentFhngComponent: FhngComponent
   ) {
-    super(injector, parentFhngComponent, iForm);
+    super(injector, parentFhngComponent);
   }
 
-  ngOnInit() {
+  override ngOnInit() {
     super.ngOnInit();
     this.processPattern();
   }
@@ -91,7 +72,29 @@ export class InputNumberComponent
     }
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  override ngOnChanges(changes: SimpleChanges) {
     super.ngOnChanges(changes);
   }
+}
+
+export class FhngFormatter {
+  pattern: string;
+  customPatterns = null;
+  separatorLimit; //maxIntegerDIgits
+  maxFractionDigits;
+  thousandSeparator;
+
+  constructor(patern = null, customPatterns = null) {
+    if (patern) this.pattern = patern;
+    if (customPatterns) this.customPatterns = customPatterns;
+  }
+
+  fromModel(v: any): string {
+    return v;
+  }
+
+  toModel(v: any): any {
+    return v;
+  }
+
 }

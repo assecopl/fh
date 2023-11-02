@@ -59,6 +59,7 @@ import {FhngAvailabilityDirective} from "./availability/directives/fhng-availabi
 import {FhngAvailabilityInputDirective} from "./availability/directives/fhng-availability-input-directive";
 import {FhngAvailabilityElementDirective} from "./availability/directives/fhng-availability-element-directive";
 import {PanelHeaderFhDPComponent} from "./controls/panel-header/panel-header.component";
+import {InputNumberComponent} from "./controls/input-number/input-number.component";
 
 
 const maskConfigFunction: () => Partial<IConfig> = () => {
@@ -120,6 +121,7 @@ const components = [
   InputGroupComponent,
   InputLabelComponent,
   InputTextComponent,
+  InputNumberComponent,
   ValidateMessagesComponent,
   PanelHeaderFhDPComponent
 ]
@@ -179,6 +181,7 @@ export class FhNgCoreLiteModule extends FhNgModule {
     componentManager.registerComponent(FormComponent);
     componentManager.registerComponent(GroupComponent);
     componentManager.registerComponent(InputTextComponent);
+    componentManager.registerComponent(InputNumberComponent);
     componentManager.registerComponent(OutputLabelComponent);
     componentManager.registerComponent(PanelGroupComponent);
     componentManager.registerComponent(RepeaterComponent);
