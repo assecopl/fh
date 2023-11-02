@@ -1,43 +1,39 @@
-<fhng-input-label
+<div fhng-input-label
   [inputId]="id"
   [label]="label"
   [labelPosition]="labelPosition"
   [labelSize]="labelSize"
 >
-  <ng-container *ngIf="control">
-    <fhng-input-group
-      [iconText]="iconText"
-      [class.fhng-disabled]="control.disabled"
-      [icon]="icon"
-      [iconAlignment]="iconAlignment"
-      [required]="required"
+  <div fhng-input-group
+    [iconText]="iconText"
+    [icon]="icon"
+    [iconAlignment]="iconAlignment"
+    [required]="required"
+  >
+    <select
+      #focusElement
+      class="form-control fc SelectOneMenu"
+      [id]="innerId"
+      [attr.aria-label]="!label && ariaLabel ? ariaLabel : null"
+      [style.height]="styles.height"
+      (change)="onChangeEvent($event)"
     >
-      <select
-        #focusElement
-        [id]="innerId"
-        [attr.aria-label]="!label && ariaLabel ? ariaLabel : null"
-        [style.height]="styles.height"
-        availabilityControl
-        [availabilityHtmlElement]="elementRef"
-        class="form-control {{
-          control?.invalid && control?.touched ? 'is-invalid' : ''
-        }}"
-        [formControl]="control"
+      <option
+        *ngIf="placeholder && !emptyLabel"
+        [disabled]="true"
       >
-        <option
-          *ngIf="placeholder && !emptyLabel"
-          [ngValue]="null"
-          [disabled]="true"
-        >
-          {{ placeholder }}
+        {{ placeholder }}
+      </option>
+      <option *ngIf="emptyLabel" value="" [selected]="rawValue === ''"></option>
+      <ng-container *ngFor="let option of rawOptions">
+        <option *ngIf="option || emptyValue" [selected]="rawValue === option" [value]="option">
+          {{ resultFormatter(option) }}
         </option>
-        <option *ngIf="emptyLabel" [ngValue]="null"></option>
-        <ng-container *ngFor="let option of values">
-          <option [ngValue]="option">
-            {{ resultFormatter(option) }}
-          </option>
-        </ng-container>
-      </select>
-    </fhng-input-group>
-  </ng-container>
-</fhng-input-label>
+      </ng-container>
+    </select>
+  </div>
+</div>
+
+<ng-container *ngIf="configuration.debug">
+  <fh-component-debugger/>
+</ng-container>

@@ -59,6 +59,7 @@ import {FhngAvailabilityDirective} from "./availability/directives/fhng-availabi
 import {FhngAvailabilityInputDirective} from "./availability/directives/fhng-availability-input-directive";
 import {FhngAvailabilityElementDirective} from "./availability/directives/fhng-availability-element-directive";
 import {PanelHeaderFhDPComponent} from "./controls/panel-header/panel-header.component";
+import {SelectOneMenuComponent} from "./controls/select-one-menu/select-one-menu.component";
 import {InputNumberComponent} from "./controls/input-number/input-number.component";
 import {InputDateComponent} from "./controls/input-date/input-date.component";
 import {InputTimestampComponent} from "./controls/input-timestamp/input-timestamp.component";
@@ -134,7 +135,8 @@ const components = [
   InputDateComponent,
   InputTimestampComponent,
   ValidateMessagesComponent,
-  PanelHeaderFhDPComponent
+  PanelHeaderFhDPComponent,
+  SelectOneMenuComponent
 ]
 
 @NgModule({
@@ -215,6 +217,7 @@ export class FhNgCoreLiteModule extends FhNgModule {
     componentManager.registerComponent(SpacerComponent);
     componentManager.registerComponent(ValidateMessagesComponent);
     componentManager.registerComponent(PanelHeaderFhDPComponent);
+    componentManager.registerComponent(SelectOneMenuComponent);
   }
 
   protected registerCustomActions(customActionsManager?: CustomActionsManager) {
