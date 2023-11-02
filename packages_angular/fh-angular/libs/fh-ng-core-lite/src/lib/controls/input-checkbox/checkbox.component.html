@@ -6,32 +6,27 @@
     [innerHTML]="label ? label : ''"
   >{{ label ? label : '' }}</label
   >
-  <ng-container *ngIf="control">
     <input
       #focusElement
       [id]="id"
-      [availabilityHtmlElement]="elementRef"
       availabilityControl
       type="checkbox"
-      class="custom-control-input {{
-        control?.invalid && control?.touched ? 'is-invalid' : ''
-      }} "
-      [formControl]="control"
-      [placeholder]="placeholder"
-      [name]="name"
-    />
-  </ng-container>
-  <ng-container *ngIf="!control">
-    <input
-      #focusElement
-      [id]="innerId"
-      type="checkbox"
       value="true"
-      [name]="name"
-      class="custom-control-input"
+      class="custom-control-input InputCheckbox"
       [placeholder]="placeholder"
+      [name]="name"
     />
-  </ng-container>
+  <!--  <ng-container *ngIf="!control">-->
+  <!--    <input-->
+  <!--      #focusElement-->
+  <!--      [id]="innerId"-->
+  <!--      type="checkbox"-->
+  <!--      value="true"-->
+  <!--      [name]="name"-->
+  <!--      class="custom-control-input"-->
+  <!--      [placeholder]="placeholder"-->
+  <!--    />-->
+  <!--  </ng-container>-->
   <label
     *ngIf="labelPosition == 'RIGHT'"
     [for]="innerId"

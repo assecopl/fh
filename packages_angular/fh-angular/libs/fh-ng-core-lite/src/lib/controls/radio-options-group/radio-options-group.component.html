@@ -3,13 +3,14 @@
   >{{ label }}
     <span *ngIf="required" class="required">*</span>
   </label>
-  <fhng-radio-option
-    [availability]="availabilityDirective._myAvailability"
+  <div fhng-radio-option
     *ngFor="let one of values"
     [(value)]="value"
-    [control]="control"
     [name]="groupName ? groupName : name"
     [label]="one"
     [targetValue]="one"
-  ></fhng-radio-option>
+  ></div>
 </div>
+<ng-container *ngIf="configuration.debug">
+  <fh-component-debugger/>
+</ng-container>

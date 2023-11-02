@@ -63,6 +63,9 @@ import {InputNumberComponent} from "./controls/input-number/input-number.compone
 import {InputDateComponent} from "./controls/input-date/input-date.component";
 import {InputTimestampComponent} from "./controls/input-timestamp/input-timestamp.component";
 import {FormsModule} from '@angular/forms';
+import {CheckboxComponent} from "./controls/input-checkbox/checkbox.component";
+import {RadioOptionComponent} from "./controls/radio-option/radio-option.component";
+import {RadioOptionsGroupComponent} from "./controls/radio-options-group/radio-options-group.component";
 
 
 const maskConfigFunction: () => Partial<IConfig> = () => {
@@ -123,6 +126,9 @@ const components = [
   RepeaterComponent,
   InputGroupComponent,
   InputLabelComponent,
+  CheckboxComponent,
+  RadioOptionComponent,
+  RadioOptionsGroupComponent,
   InputTextComponent,
   InputNumberComponent,
   InputDateComponent,
@@ -181,6 +187,7 @@ export class FhNgCoreLiteModule extends FhNgModule {
   public override registerComponents(componentManager?: ComponentManager): void {
     componentManager.registerComponent(AccordionComponent);
     componentManager.registerComponent(ButtonComponent);
+    componentManager?.registerComponentWithName("CheckBox", CheckboxComponent);
     componentManager.registerComponent(DropdownComponent);
     componentManager.registerComponent(DropdownItemComponent);
     componentManager.registerComponent(FormComponent);
@@ -191,6 +198,8 @@ export class FhNgCoreLiteModule extends FhNgModule {
     componentManager.registerComponent(InputTimestampComponent);
     componentManager.registerComponent(OutputLabelComponent);
     componentManager.registerComponent(PanelGroupComponent);
+    componentManager.registerComponent(RadioOptionComponent);
+    componentManager.registerComponent(RadioOptionsGroupComponent);
     componentManager.registerComponent(RepeaterComponent);
     componentManager.registerComponent(RowComponent);
     componentManager.registerComponent(TabComponent);

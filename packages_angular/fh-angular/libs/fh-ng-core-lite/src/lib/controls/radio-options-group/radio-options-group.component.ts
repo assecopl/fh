@@ -16,27 +16,17 @@ import {
   ViewChildren,
 } from '@angular/core';
 import {RadioOptionComponent} from '../radio-option/radio-option.component';
-import {DocumentedComponent, IForm} from '@fhng/ng-core';
 import {BootstrapWidthEnum} from '../../models/enums/BootstrapWidthEnum';
-import {FhngAvailabilityDirective} from '@fhng/ng-availability';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
 import {FhngReactiveInputC} from '../../models/componentClasses/FhngReactiveInputC';
+import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
 
 //FIXME - Przebudować i poprawić - teraz nie zadziała
-@DocumentedComponent({
-  category: DocumentedComponent.Category.INPUTS_AND_VALIDATION,
-  value: 'Radio Options Group aggregates single radio components',
-  icon: 'fa-fw fa fa-ellipsis-v',
-})
 @Component({
-  selector: 'fhng-radio-options-group',
+  selector: '[fhng-radio-options-group]',
   templateUrl: './radio-options-group.component.html',
   styleUrls: ['./radio-options-group.component.scss'],
   providers: [
-    /**
-     * Inicjalizujemy dyrektywę dostępności aby zbudoać hierarchię elementów i dać możliwość zarządzania dostępnością
-     */
-    FhngAvailabilityDirective,
     /**
      * Dodajemy deklaracje klasy ogólnej aby wstrzykiwanie i odnajdowanie komponentów wewnątrz siebie było możliwe.
      * Dzięki temu budujemy hierarchię kontrolek Fhng.
@@ -65,9 +55,9 @@ export class RadioOptionsGroupComponent
 
   //Used for static values mappings
   @Input()
-  public value: any = null;
+  public override value: any = null;
   @Output()
-  public valueChange: EventEmitter<any> = new EventEmitter<any>();
+  public override valueChange: EventEmitter<any> = new EventEmitter<any>();
 
   @Input()
   public groupName: string;
@@ -79,23 +69,22 @@ export class RadioOptionsGroupComponent
   public radioOptionsGroupValues: string[] = [];
 
   constructor(
-    public injector: Injector,
-    @Optional() @SkipSelf() parentFhngComponent: FhngComponent,
-    @Optional() @SkipSelf() iForm: IForm<any>
+    public override injector: Injector,
+    @Optional() @SkipSelf() parentFhngComponent: FhngComponent
   ) {
-    super(injector, parentFhngComponent, iForm);
+    super(injector, parentFhngComponent);
     this.width = BootstrapWidthEnum.MD3;
     this.groupName = this.groupName ? this.groupName : this.innerId;
   }
 
-  ngOnInit() {
+  override ngOnInit() {
     super.ngOnInit();
   }
 
-  ngAfterContentInit(): void {
+  override ngAfterContentInit(): void {
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  override ngOnChanges(changes: SimpleChanges) {
     super.ngOnChanges(changes);
   }
 
@@ -110,5 +99,10 @@ export class RadioOptionsGroupComponent
         radioOption.checked = false;
       }
     });
+  }
+
+  override mapAttributes(data: IDataAttributes | any) {
+    super.mapAttributes(data);
+    this.values = data.rawOptions;
   }
 }

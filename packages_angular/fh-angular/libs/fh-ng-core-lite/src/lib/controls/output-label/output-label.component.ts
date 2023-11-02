@@ -42,7 +42,7 @@ export class OutputLabelComponent extends FhngHTMLElementC implements OnInit {
   public override width: string = BootstrapWidthEnum.MD2;
 
   @Input()
-  public value: any;
+  public value: string = null;
 
   @HostBinding('class.justify-content-end')
   justifyContentRight: boolean = false;
@@ -88,7 +88,6 @@ export class OutputLabelComponent extends FhngHTMLElementC implements OnInit {
   override ngOnInit() {
     super.ngOnInit();
 
-    let fhngml = this.injector.get(FhMLService);
 
     this.processTextAlign();
     if (this.click?.observers.length > 0) {

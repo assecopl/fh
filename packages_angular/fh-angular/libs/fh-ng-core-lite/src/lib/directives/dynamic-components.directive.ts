@@ -124,9 +124,11 @@ export class DynamicComponentsDirective
         this.viewContainerRef.createComponent<OutputLabelComponent>(
           OutputLabelComponent, {index: index}
         );
+      data["value"] = "Component " + data.type + " does not exist";
       componentRef.instance.data = data;
       componentRef.instance.formId = this.formId;
-      componentRef.instance.value = "Component " + data.type + " does not exist";
+      // componentRef.instance.value = "Component " + data.type + " does not exist";
+
     }
     this.componentRefs[componentRef.instance.id] = componentRef;
   }

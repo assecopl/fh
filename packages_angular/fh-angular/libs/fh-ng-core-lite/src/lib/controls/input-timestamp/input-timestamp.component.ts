@@ -30,7 +30,7 @@ import {FhngComponent} from '../../models/componentClasses/FhngComponent';
 import {BootstrapWidthEnum} from '../../models/enums/BootstrapWidthEnum';
 
 @Component({
-  selector: 'fhng-input-timestamp',
+  selector: '[fhng-input-timestamp]',
   templateUrl: './input-timestamp.component.html',
   styleUrls: ['./input-timestamp.component.scss'],
   providers: [

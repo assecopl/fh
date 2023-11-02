@@ -2,7 +2,6 @@ import {
   Component,
   EventEmitter,
   forwardRef,
-  Host,
   Injector,
   Input,
   OnInit,
@@ -11,27 +10,16 @@ import {
   SimpleChanges,
   SkipSelf,
 } from '@angular/core';
-import {DocumentedComponent} from '@fhng/ng-core';
 import {FhngReactiveInputC} from '../../models/componentClasses/FhngReactiveInputC';
 import {InputTypeEnum} from '../../models/enums/InputTypeEnum';
-import {FhngAvailabilityDirective} from '@fhng/ng-availability';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
-import {FormComponent} from '../form/form.component';
 
-@DocumentedComponent({
-  category: DocumentedComponent.Category.INPUTS_AND_VALIDATION,
-  value: 'Radio Option represents a single radio component',
-  icon: 'fa fa-circle',
-})
+
 @Component({
-  selector: 'fhng-radio-option',
+  selector: '[fhng-radio-option]',
   templateUrl: './radio-option.component.html',
   styleUrls: ['./radio-option.component.scss'],
   providers: [
-    /**
-     * Inicjalizujemy dyrektywę dostępności aby zbudoać hierarchię elementów i dać możliwość zarządzania dostępnością
-     */
-    FhngAvailabilityDirective,
     /**
      * Dodajemy deklaracje klasy ogólnej aby wstrzykiwanie i odnajdowanie komponentów wewnątrz siebie było możliwe.
      * Dzięki temu budujemy hierarchię kontrolek Fhng.
@@ -47,7 +35,7 @@ export class RadioOptionComponent extends FhngReactiveInputC implements OnInit {
   public checked: boolean = false;
 
   @Input()
-  public name: string;
+  public override name: string;
 
   @Input()
   public targetValue: any;
@@ -57,14 +45,13 @@ export class RadioOptionComponent extends FhngReactiveInputC implements OnInit {
     new EventEmitter<RadioOptionComponent>();
 
   constructor(
-    public injector: Injector,
-    @Optional() @SkipSelf() parentFhngComponent: FhngComponent,
-    @Optional() @SkipSelf() iForm: FormComponent
+    public override injector: Injector,
+    @Optional() @SkipSelf() parentFhngComponent: FhngComponent
   ) {
-    super(injector, parentFhngComponent, iForm);
+    super(injector, parentFhngComponent);
   }
 
-  ngOnInit() {
+  override ngOnInit() {
     super.ngOnInit();
 
     this.inputType = InputTypeEnum.radio;
@@ -77,14 +64,15 @@ export class RadioOptionComponent extends FhngReactiveInputC implements OnInit {
   }
 
   updateControlValue(event): void {
-    this.control.setValue(this.targetValue, {
-      onlySelf: true,
-      emitEvent: false,
-    });
+    // this.control.setValue(this.targetValue, {
+    //   onlySelf: true,
+    //   emitEvent: false,
+    // });
+    this.value = this.targetValue;
     this.selectedRadio.emit(this);
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  override ngOnChanges(changes: SimpleChanges) {
     super.ngOnChanges(changes);
   }
 }

@@ -1,19 +1,19 @@
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import {InputCheckboxComponent} from './input-checkbox.component';
+import {CheckboxComponent} from './checkbox.component';
 
 describe('InputCheckboxComponent', () => {
-  let component: InputCheckboxComponent;
-  let fixture: ComponentFixture<InputCheckboxComponent>;
+  let component: CheckboxComponent;
+  let fixture: ComponentFixture<CheckboxComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [InputCheckboxComponent],
+      declarations: [CheckboxComponent],
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(InputCheckboxComponent);
+    fixture = TestBed.createComponent(CheckboxComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

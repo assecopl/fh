@@ -30,7 +30,7 @@ import Inputmask from 'inputmask';
 import {IconAligmentType} from '../../models/CommonTypes';
 
 @Component({
-  selector: 'fhng-input-date',
+  selector: '[fhng-input-date]',
   templateUrl: './input-date.component.html',
   styleUrls: ['./input-date.component.scss'],
   providers: [

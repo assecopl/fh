@@ -13,7 +13,7 @@ import {FhngReactiveInputC} from '../../models/componentClasses/FhngReactiveInpu
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
 
 @Component({
-  selector: 'fhng-input-number',
+  selector: '[fhng-input-number]',
   templateUrl: './input-number.component.html',
   styleUrls: ['./input-number.component.scss'],
   providers: [
