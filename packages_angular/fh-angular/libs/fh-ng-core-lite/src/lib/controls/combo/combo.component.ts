@@ -1,26 +1,14 @@
-import {Component, forwardRef, Host, Injector, Input, OnInit, Optional, SimpleChanges, SkipSelf,} from '@angular/core';
-import {DocumentedComponent, IForm} from '@fhng/ng-core';
+import {Component, forwardRef, Injector, Input, OnInit, Optional, SimpleChanges, SkipSelf,} from '@angular/core';
 import {NgSelectConfig} from '@ng-select/ng-select';
 import {FhngInputWithListC} from '../../models/componentClasses/FhngInputWithListC';
-import {FhngAvailabilityDirective} from '@fhng/ng-availability';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
 import {BootstrapWidthEnum} from './../../models/enums/BootstrapWidthEnum';
 
-@DocumentedComponent({
-  category: DocumentedComponent.Category.INPUTS_AND_VALIDATION,
-  value:
-    'Enables users to quickly find and select from a pre-populated list of values as they type, leveraging searching and filtering.',
-  icon: 'fa fa-outdent',
-})
 @Component({
   selector: 'fhng-combo',
   templateUrl: './combo.component.html',
   styleUrls: ['./combo.component.scss'],
   providers: [
-    /**
-     * Inicjalizujemy dyrektywę dostępności aby zbudoać hierarchię elementów i dać możliwość zarządzania dostępnością
-     */
-    FhngAvailabilityDirective,
     /**
      * Dodajemy deklaracje klasy ogólnej aby wstrzykiwanie i odnajdowanie komponentów wewnątrz siebie było możliwe.
      * Dzięki temu budujemy hierarchię kontrolek Fhng.
@@ -30,16 +18,20 @@ import {BootstrapWidthEnum} from './../../models/enums/BootstrapWidthEnum';
 })
 export class ComboComponent extends FhngInputWithListC implements OnInit {
   constructor(
-    public injector: Injector,
+    public override injector: Injector,
     private config: NgSelectConfig,
-    @Optional() @SkipSelf() parentFhngComponent: FhngComponent,
-    @Optional() @SkipSelf() iForm: IForm<any>
+    @Optional() @SkipSelf() parentFhngComponent: FhngComponent
   ) {
-    super(injector, parentFhngComponent, iForm);
+    super(injector, parentFhngComponent);
 
     this.width = BootstrapWidthEnum.MD3;
   }
 
+  @Input()
+  public filteredValues: { [key: string]: [] } = null;
+
+
+  public cursor: number = 0;
   //@Input()
   //public label:string;
   //
@@ -52,10 +44,10 @@ export class ComboComponent extends FhngInputWithListC implements OnInit {
   public multiple: boolean = false;
 
   @Input()
-  public displayFunction: any = null;
+  public override displayFunction: any = null;
 
   @Input()
-  public displayExpression: any = 'lastName'; // TODO Convertery i formatter ??
+  public override displayExpression: any = 'lastName'; // TODO Convertery i formatter ??
 
   //@Input('formatter')
   //public resultFormatter = (x: string | {name: string}) => {
@@ -66,6 +58,19 @@ export class ComboComponent extends FhngInputWithListC implements OnInit {
   //  }
   //};
 
+  public getValuesForCursor(): [] {
+    let values: [] = [];
+    const keys = Object.keys(this.filteredValues);
+    keys.forEach((value, index) => {
+      if (index == this.cursor) {
+        values = this.filteredValues[value];
+      }
+    })
+
+
+    return values
+  }
+
   @Input('filterFunction')
   public filterFunction: (term: string, value: any) => boolean = (
     term: string,
@@ -73,21 +78,23 @@ export class ComboComponent extends FhngInputWithListC implements OnInit {
   ) => this.inputFormatter(value)?.toLowerCase().includes(term?.toLowerCase());
 
   //@Input('formatter')
-  public inputFormatter = (x: string | { label: string }) => {
-    if (typeof x === 'string') {
-      return x;
-    } else if (this.displayFunction) {
-      return this.displayFunction(x);
-    } else {
-      return x[this.displayExpression ? this.displayExpression : 'label'];
-    }
+  public inputFormatter = (x: {
+    displayAsTarget: boolean,
+    targetValue: string,
+    targetId: number,
+    displayedValue: string
+  }) => {
+
+    return x.displayAsTarget ? x.targetValue : x.displayedValue;
+    ;
+
   };
 
-  ngOnInit() {
+  override ngOnInit() {
     super.ngOnInit();
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  override ngOnChanges(changes: SimpleChanges) {
     super.ngOnChanges(changes);
   }
 }

@@ -1,7 +1,6 @@
-import {Directive, Host, Injector, Input, Optional, SimpleChanges, SkipSelf,} from '@angular/core';
+import {Directive, Injector, Input, Optional, SimpleChanges, SkipSelf,} from '@angular/core';
 import {FhngReactiveInputC} from './FhngReactiveInputC';
 import {FhngComponent} from './FhngComponent';
-import {IForm} from '@fhng/ng-core';
 import {compile, eval as expEval, parse} from 'expression-eval';
 
 type Constructor<T> = new (...args: any[]) => T;
@@ -127,19 +126,18 @@ export class FhngInputWithListC extends FhngReactiveInputC {
   }
 
   constructor(
-    public injector: Injector,
-    @Optional() @SkipSelf() parentFhngComponent: FhngComponent,
-    @Optional() @SkipSelf() iForm: IForm<any>
+    public override injector: Injector,
+    @Optional() @SkipSelf() parentFhngComponent: FhngComponent
   ) {
-    super(injector, parentFhngComponent, iForm);
+    super(injector, parentFhngComponent);
   }
 
-  ngOnInit() {
+  override ngOnInit() {
     super.ngOnInit();
     this.prepareDisplayExpresion();
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  override ngOnChanges(changes: SimpleChanges) {
     super.ngOnChanges(changes);
     if (changes['displayExpression']) {
       this.prepareDisplayExpresion();
@@ -156,4 +154,5 @@ export class FhngInputWithListC extends FhngReactiveInputC {
       this.displayFunction = compile(de);
     }
   }
+
 }

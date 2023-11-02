@@ -44,6 +44,9 @@
 //@import "./css/HighContrast.css";
 //@import "./css/FontSizeButtons.css";
 
+@import '@ng-select/ng-select/scss/default.theme';
+//@import '@ng-select/ng-select/scss/ng-select.component';
+
 :focus-visible {
   outline: rgba(0, 123, 255, 0.25) solid 0.2rem;
   /*box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);*/
