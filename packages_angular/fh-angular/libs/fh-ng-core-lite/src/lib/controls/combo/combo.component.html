@@ -9,17 +9,15 @@
 </ng-container>
 
 <ng-template #combo>
-  <fhng-input-label
+  <div fhng-input-label
     [inputId]="id"
     [label]="label"
     [labelPosition]="labelPosition"
     [labelSize]="labelSize"
   >
-    <ng-container *ngIf="control">
-      <fhng-input-group
+    <div fhng-input-group
         [iconText]="iconText"
-        [class.fhng-disabled]="control.disabled"
-        [class.fhng-disabled]="control.disabled"
+         [class.fh-disabled]="disabled"
         [icon]="icon"
         [iconAlignment]="iconAlignment"
         [required]="required"
@@ -27,18 +25,14 @@
         <ng-select
           #focusElement
           [id]="innerId"
-          [availabilityHtmlElement]="elementRef"
           availabilityControl
-          class="form-control {{ required ? 'ng-select-required' : '' }} {{
-            control?.invalid && control?.touched ? 'is-invalid' : ''
-          }}"
-          [items]="values"
+          class="form-control Combo fc"
+          [items]="getValuesForCursor()"
           [searchFn]="filterFunction"
           [labelForId]="id"
           [multiple]="multiple"
           [placeholder]="placeholder"
           [readonly]="disabled"
-          [formControl]="control"
         >
           <ng-template
             ng-option-tmp
@@ -50,7 +44,10 @@
             <span [innerHTML]="inputFormatter(item) | fhml"></span>
           </ng-template>
         </ng-select>
-      </fhng-input-group>
-    </ng-container>
-  </fhng-input-label>
+    </div>
+  </div>
 </ng-template>
+<ng-container *ngIf="configuration.debug">
+  <fh-component-debugger/>
+</ng-container>
+

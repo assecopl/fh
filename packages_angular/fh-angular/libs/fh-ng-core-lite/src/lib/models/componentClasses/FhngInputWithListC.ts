@@ -1,4 +1,4 @@
-import {Directive, Host, Injector, Input, Optional, SimpleChanges, SkipSelf,} from '@angular/core';
+import {Directive, Injector, Input, Optional, SimpleChanges, SkipSelf,} from '@angular/core';
 import {FhngReactiveInputC} from './FhngReactiveInputC';
 import {FhngComponent} from './FhngComponent';
 import {compile, eval as expEval, parse} from 'expression-eval';
@@ -154,4 +154,5 @@ export class FhngInputWithListC extends FhngReactiveInputC {
       this.displayFunction = compile(de);
     }
   }
+
 }

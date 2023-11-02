@@ -1,12 +1,9 @@
-@import '~bootstrap/scss/functions';
-@import '~src/assets/fhng_variables';
-@import '~bootstrap/scss/mixins.scss';
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/mixins.scss';
 
 :host {
   ::ng-deep {
-    //FIXME This is too mauch ,  Exceeded maximum budget , fix it.
-    @import '~@ng-select/ng-select/scss/default.theme';
-    @import '~@ng-select/ng-select/scss/ng-select.component';
 
     .input-group {
       ng-select.form-control {

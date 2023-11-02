@@ -67,6 +67,8 @@ import {FormsModule} from '@angular/forms';
 import {CheckboxComponent} from "./controls/input-checkbox/checkbox.component";
 import {RadioOptionComponent} from "./controls/radio-option/radio-option.component";
 import {RadioOptionsGroupComponent} from "./controls/radio-options-group/radio-options-group.component";
+import {ComboComponent} from "./controls/combo/combo.component";
+import {NgSelectModule} from '@ng-select/ng-select';
 
 
 const maskConfigFunction: () => Partial<IConfig> = () => {
@@ -136,6 +138,7 @@ const components = [
   InputTimestampComponent,
   ValidateMessagesComponent,
   PanelHeaderFhDPComponent,
+  ComboComponent,
   SelectOneMenuComponent
 ]
 
@@ -151,7 +154,7 @@ const components = [
     ComponentManager,
     provideEnvironmentNgxMask(maskConfigFunction)
   ],
-  imports: [CommonModule, JsonPipe, NgbModule, NgxMaskDirective, NgxMaskPipe, FormsModule],
+  imports: [CommonModule, JsonPipe, NgbModule, NgxMaskDirective, NgxMaskPipe, FormsModule, NgSelectModule],
   exports: components,
 })
 export class FhNgCoreLiteModule extends FhNgModule {
@@ -190,6 +193,7 @@ export class FhNgCoreLiteModule extends FhNgModule {
     componentManager.registerComponent(AccordionComponent);
     componentManager.registerComponent(ButtonComponent);
     componentManager?.registerComponentWithName("CheckBox", CheckboxComponent);
+    componentManager.registerComponent(ComboComponent);
     componentManager.registerComponent(DropdownComponent);
     componentManager.registerComponent(DropdownItemComponent);
     componentManager.registerComponent(FormComponent);
