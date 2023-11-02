@@ -27,6 +27,7 @@ import {InputTypeEnum} from '../enums/InputTypeEnum';
 import {IconAligmentType} from '../CommonTypes'; //  Unused becouse of compiler problem
 import {FhngComponent} from './FhngComponent';
 import {FormComponent} from '../../controls/form/form.component';
+import {IDataAttributes} from "../interfaces/IDataAttributes";
 
 /**
  * TODO Rewrite
@@ -42,6 +43,12 @@ export class FhngReactiveInputC
   public inputType: InputTypeEnum = InputTypeEnum.text;
   // Store a reference to the enum form html compare purpose
   public inputTypeEnum: any = InputTypeEnum;
+
+  @Input()
+  protected onInput: any = null;
+  @Input()
+  protected onChange: any = null;
+  protected valueChanged: boolean = false;
 
   @Input()
   public placeholder: string = '';
@@ -151,5 +158,27 @@ export class FhngReactiveInputC
         this.ariaLabel = this.placeholder ? this.placeholder : null;
       }
     }
+  }
+
+  public updateModel(event) {
+    this.rawValue = event.target.value;
+  };
+
+  onInputEvent(event) {
+    this.updateModel(event);
+    if (this.onInput) {
+      this.fireEvent('onInput', this.onInput);
+    }
+  }
+
+  onChangeEvent() {
+    if (this.onChange) {
+      this.fireEventWithLock('onChange', this.onChange);
+    }
+  }
+
+  override mapAttributes(data: IDataAttributes) {
+    super.mapAttributes(data);
+    this.value = data.rawValue
   }
 }

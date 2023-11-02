@@ -68,6 +68,7 @@ import {RadioOptionComponent} from "./controls/radio-option/radio-option.compone
 import {RadioOptionsGroupComponent} from "./controls/radio-options-group/radio-options-group.component";
 import {ComboComponent} from "./controls/combo/combo.component";
 import {NgSelectModule} from '@ng-select/ng-select';
+import {AutosizeModule} from '@techiediaries/ngx-textarea-autosize';
 
 
 const maskConfigFunction: () => Partial<IConfig> = () => {
@@ -152,7 +153,7 @@ const components = [
     ComponentManager,
     provideEnvironmentNgxMask(maskConfigFunction)
   ],
-  imports: [CommonModule, JsonPipe, NgbModule, NgxMaskDirective, NgxMaskPipe, FormsModule, NgSelectModule],
+  imports: [CommonModule, JsonPipe, NgbModule, NgxMaskDirective, NgxMaskPipe, FormsModule, NgSelectModule, AutosizeModule],
   exports: components,
 })
 export class FhNgCoreLiteModule extends FhNgModule {

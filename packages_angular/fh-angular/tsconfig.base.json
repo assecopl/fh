@@ -19,6 +19,8 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
     "noImplicitAny": false,
     "resolveJsonModule": true,
     "esModuleInterop": true,

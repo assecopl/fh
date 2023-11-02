@@ -3,8 +3,6 @@ import 'reflect-metadata'
 
 // unavailable outside this module
 // @dynamic
-
-
 export class StringUtils {
   static firstLetterToUpper(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
