@@ -14,7 +14,6 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FhngReactiveInputC} from '../../models/componentClasses/FhngReactiveInputC';
-import {DocumentedComponent} from '@fhng/ng-core';
 import {
   NgbCalendar,
   NgbDateAdapter,
@@ -24,32 +23,17 @@ import {
   NgbTimeAdapter,
 } from '@ng-bootstrap/ng-bootstrap';
 import {FhngDateAdapter} from '../../models/FhngDateTimeAdapter';
-import {FhngAvailabilityDirective} from '@fhng/ng-availability';
 import {BootstrapWidthEnum} from './../../models/enums/BootstrapWidthEnum';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
 import {FormComponent} from '../form/form.component';
 import Inputmask from 'inputmask';
-import {IconAligmentType} from 'libs/ng-basic-controls/src/models/CommonTypes';
+import {IconAligmentType} from '../../models/CommonTypes';
 
-@DocumentedComponent({
-  category: DocumentedComponent.Category.INPUTS_AND_VALIDATION,
-  value:
-    'Component responsible for displaying field, where user can set only date.',
-  icon: 'fa fa-calendar',
-})
 @Component({
   selector: 'fhng-input-date',
   templateUrl: './input-date.component.html',
   styleUrls: ['./input-date.component.scss'],
   providers: [
-    /**
-     * Inicjalizujemy dyrektywę dostępności aby zbudoać hierarchię elementów i dać możliwość zarządzania dostępnością
-     */
-    FhngAvailabilityDirective,
-    /**
-     * Dodajemy deklaracje klasy ogólnej aby wstrzykiwanie i odnajdowanie komponentów wewnątrz siebie było możliwe.
-     * Dzięki temu budujemy hierarchię kontrolek Fhng.
-     */
     {
       provide: FhngComponent,
       useExisting: forwardRef(() => InputDateComponent),
@@ -63,7 +47,7 @@ import {IconAligmentType} from 'libs/ng-basic-controls/src/models/CommonTypes';
   ], // add config to the component providers
 })
 export class InputDateComponent extends FhngReactiveInputC implements OnInit {
-  public width = BootstrapWidthEnum.MD3;
+  public override width = BootstrapWidthEnum.MD3;
 
   @HostBinding('class.highlightToday') @Input() public highlightToday: boolean =
     false;
@@ -79,24 +63,23 @@ export class InputDateComponent extends FhngReactiveInputC implements OnInit {
    * @Override
    */
   @Input()
-  public iconAlignment: IconAligmentType = 'AFTER';
+  public override iconAlignment: IconAligmentType = 'AFTER';
 
   @Output() public change = new EventEmitter<any>();
   /**
    * @Override
    */
-  public icon: string = 'fa-calendar-alt text-primary';
+  public override icon: string = 'fa-calendar-alt text-primary';
 
   constructor(
-    public injector: Injector,
+    public override injector: Injector,
     public config: NgbInputDatepickerConfig,
     public ngbDatepickerConfig: NgbDatepickerConfig,
     public calendar: NgbCalendar,
     public fhngDateTimeAdapter: FhngDateAdapter,
-    @Optional() @SkipSelf() parentFhngComponent: FhngComponent,
-    @Optional() @SkipSelf() iForm: FormComponent
+    @Optional() @SkipSelf() parentFhngComponent: FhngComponent
   ) {
-    super(injector, parentFhngComponent, iForm);
+    super(injector, parentFhngComponent);
     //TODO formatters , config params
 
     const curentYear = new Date().getFullYear();
@@ -114,10 +97,10 @@ export class InputDateComponent extends FhngReactiveInputC implements OnInit {
     this.config.maxDate = {year: curentYear + 100, day: 1, month: 1};
   }
 
-  ngOnInit() {
+  override ngOnInit() {
     super.ngOnInit();
     this.fhngDateTimeAdapter.dateFormat = this.format.replace('RRRR', 'YYYY');
-    if (!this.control && this.value) {
+    if (this.value) {
       this.value = new Date(Date.parse(this.value));
     }
     if (this.iconAlignment === 'BEFORE') {
@@ -132,7 +115,7 @@ export class InputDateComponent extends FhngReactiveInputC implements OnInit {
     this.config.maxDate = {year: curentYear + 100, day: 1, month: 1};
   }
 
-  ngAfterViewInit() {
+  override ngAfterViewInit() {
     super.ngAfterViewInit();
 
     if (this.maskEnabled) {

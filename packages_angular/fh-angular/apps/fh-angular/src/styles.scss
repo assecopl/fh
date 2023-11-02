@@ -1,11 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
 @import 'bootstrap/scss/functions';
 @import 'bootstrap/scss/variables';
+@import './assets/fhng_variables';
 @import 'bootstrap/scss/mixins';
 //@import 'bootstrap/scss/utilities';
 @import './assets/bootstrap_override.css';
 
 @import '../../../libs/fh-ng-core-lite/src/styles/fh-ng-core-lite';
+
+//Custom styles
+@import "./assets/checkboxes";
+@import "./assets/input_groups";
 
 //$utilities: map-merge(
 //    $utilities, (

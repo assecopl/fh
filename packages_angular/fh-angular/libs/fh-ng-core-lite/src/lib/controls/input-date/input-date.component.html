@@ -1,17 +1,15 @@
 <div class="input-date-component" [ngStyle]="styles">
-  <fhng-input-label
+  <div fhng-input-label
     [inputId]="id"
     [label]="label"
     [labelPosition]="labelPosition"
     [labelSize]="labelSize"
   >
-    <ng-container *ngIf="control">
-      <fhng-input-group
+    <div fhng-input-group
         buttonAriaLabel="Wybierz {{ label }}"
         [inputId]="id"
         [iconText]="iconText"
-        [class.fhng-disabled]="control.disabled"
-        [availabilityHtmlElement]="elementRef"
+         [class.fh-disabled]="disabled"
         [required]="required"
         [icon]="icon"
         [iconAlignment]="iconAlignment"
@@ -25,45 +23,15 @@
           #element
           type="text"
           [id]="innerId"
-          availabilityControl
-          class="form-control {{
-            control?.invalid && control?.touched ? 'is-invalid' : ''
-          }} "
+          class="form-control InputDate fc "
           [attr.aria-label]="!label && ariaLabel ? ariaLabel : null"
           [placeholder]="format"
           [name]="name"
-          [formControl]="control"
+          [value]="value"
           ngbDatepicker
           #d="ngbDatepicker"
           (dateSelect)="onDateSelect($event)"
         />
-      </fhng-input-group>
-    </ng-container>
-    <ng-container *ngIf="!control">
-      <fhng-input-group
-        buttonAriaLabel="Wybierz {{ label }}"
-        [inputId]="id"
-        [iconText]="iconText"
-        [class.fhng-disabled]="control.disabled"
-        [id]="innerId"
-        [icon]="icon"
-        [iconAlignment]="iconAlignment"
-        (onClick)="d.toggle()"
-        ngbTooltip="{{ hint }}"
-        [placement]="hintPlacement?.toLowerCase()"
-        [triggers]="hintTrigger?.toLowerCase()"
-      >
-        <input
-          #element
-          class="form-control"
-          [placeholder]="format"
-          [attr.aria-label]="!label && ariaLabel ? ariaLabel : null"
-          [name]="name"
-          [(ngModel)]="value"
-          ngbDatepicker
-          #d="ngbDatepicker"
-        />
-      </fhng-input-group>
-    </ng-container>
-  </fhng-input-label>
+    </div>
+  </div>
 </div>

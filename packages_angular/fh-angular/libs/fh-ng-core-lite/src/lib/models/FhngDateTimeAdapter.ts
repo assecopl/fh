@@ -1,10 +1,9 @@
 import {NgbDate, NgbDateAdapter, NgbDateStruct, NgbTimeStruct,} from '@ng-bootstrap/ng-bootstrap';
 import {Injectable} from '@angular/core';
-import * as moment_ from 'moment';
+import moment from 'moment';
 import {isNumber} from 'util';
-import {FhngDateUtils} from '@fhng/ng-core';
+import {FhngDateUtils} from "./FhngDateUtils";
 
-const moment = moment_;
 
 /**
  * Custom class for handling datetime format for NgbDatepicker and NgbTimepicker.
@@ -197,7 +196,7 @@ export class FhngDateTimeAdapter extends FhngDateAdapter {
    * @Override
    * Converts a `FhngDateTimeStruct` to a native `Date`.
    */
-  public toModel(date: FhngDateTimeStruct): string {
+  public override toModel(date: FhngDateTimeStruct): string {
     let d = null;
     if (date) {
       if (this.returnType === 'string') {
