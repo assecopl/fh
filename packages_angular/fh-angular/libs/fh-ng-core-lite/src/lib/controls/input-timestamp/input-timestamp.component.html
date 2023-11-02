@@ -1,36 +1,31 @@
 <div class="input-timestamp-component" [ngStyle]="styles">
-  <fhng-input-label
+  <div fhng-input-label
     [inputId]="id"
     [label]="label"
     [labelPosition]="labelPosition"
     [labelSize]="labelSize"
   >
-    <ng-container *ngIf="control">
-      <fhng-input-group
+    <div fhng-input-group
         buttonAriaLabel="Wybierz {{ label }}"
         [inputId]="id"
         [iconText]="iconText"
-        [class.fhng-disabled]="control.disabled"
+         [class.fh-disabled]="disabled"
         [icon]="icon"
         [iconAlignment]="iconAlignment"
         (onClick)="d.toggle()"
-        [availabilityHtmlElement]="elementRef"
         [required]="required"
       >
         <input
           #focusElement
           [id]="innerId"
-          availabilityControl
           type="text"
+          [value]="value"
           ngbTooltip="{{ hint }}"
           [placement]="hintPlacement.toLowerCase()"
           [triggers]="hintTrigger.toLowerCase()"
-          class="form-control {{
-            control?.invalid && control?.touched ? 'is-invalid' : ''
-          }}"
+          class="form-control fc InputTimestamp"
           [placeholder]="format"
           [name]="name"
-          [formControl]="control"
           ngbDatepicker
           #d="ngbDatepicker"
           [footerTemplate]="t"
@@ -47,7 +42,6 @@
             ></ngb-timepicker>
           </div>
         </ng-template>
-      </fhng-input-group>
-    </ng-container>
-  </fhng-input-label>
+    </div>
+  </div>
 </div>

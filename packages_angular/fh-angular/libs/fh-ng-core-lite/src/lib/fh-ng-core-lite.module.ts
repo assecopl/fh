@@ -61,6 +61,8 @@ import {FhngAvailabilityElementDirective} from "./availability/directives/fhng-a
 import {PanelHeaderFhDPComponent} from "./controls/panel-header/panel-header.component";
 import {InputNumberComponent} from "./controls/input-number/input-number.component";
 import {InputDateComponent} from "./controls/input-date/input-date.component";
+import {InputTimestampComponent} from "./controls/input-timestamp/input-timestamp.component";
+import {FormsModule} from '@angular/forms';
 
 
 const maskConfigFunction: () => Partial<IConfig> = () => {
@@ -124,6 +126,7 @@ const components = [
   InputTextComponent,
   InputNumberComponent,
   InputDateComponent,
+  InputTimestampComponent,
   ValidateMessagesComponent,
   PanelHeaderFhDPComponent
 ]
@@ -140,7 +143,7 @@ const components = [
     ComponentManager,
     provideEnvironmentNgxMask(maskConfigFunction)
   ],
-  imports: [CommonModule, JsonPipe, NgbModule, NgxMaskDirective, NgxMaskPipe],
+  imports: [CommonModule, JsonPipe, NgbModule, NgxMaskDirective, NgxMaskPipe, FormsModule],
   exports: components,
 })
 export class FhNgCoreLiteModule extends FhNgModule {
@@ -182,9 +185,10 @@ export class FhNgCoreLiteModule extends FhNgModule {
     componentManager.registerComponent(DropdownItemComponent);
     componentManager.registerComponent(FormComponent);
     componentManager.registerComponent(GroupComponent);
-    componentManager.registerComponent(InputTextComponent);
-    componentManager.registerComponent(InputNumberComponent);
     componentManager.registerComponent(InputDateComponent);
+    componentManager.registerComponent(InputNumberComponent);
+    componentManager.registerComponent(InputTextComponent);
+    componentManager.registerComponent(InputTimestampComponent);
     componentManager.registerComponent(OutputLabelComponent);
     componentManager.registerComponent(PanelGroupComponent);
     componentManager.registerComponent(RepeaterComponent);

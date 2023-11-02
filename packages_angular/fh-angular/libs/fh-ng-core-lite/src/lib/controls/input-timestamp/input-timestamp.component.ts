@@ -24,28 +24,16 @@ import {
   NgbInputDatepickerConfig,
   NgbTimeAdapter,
 } from '@ng-bootstrap/ng-bootstrap';
-import {DocumentedComponent, IForm} from '@fhng/ng-core';
 import {FhngDateTimeAdapter} from '../../models/FhngDateTimeAdapter';
 import {FhngReactiveInputC} from '../../models/componentClasses/FhngReactiveInputC';
-import {FhngAvailabilityDirective} from '@fhng/ng-availability';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
 import {BootstrapWidthEnum} from '../../models/enums/BootstrapWidthEnum';
 
-@DocumentedComponent({
-  category: DocumentedComponent.Category.INPUTS_AND_VALIDATION,
-  value:
-    'Component responsible for displaying field, where use can set date and time',
-  icon: 'fa fa-calendar',
-})
 @Component({
   selector: 'fhng-input-timestamp',
   templateUrl: './input-timestamp.component.html',
   styleUrls: ['./input-timestamp.component.scss'],
   providers: [
-    /**
-     * Inicjalizujemy dyrektywę dostępności aby zbudoać hierarchię elementów i dać możliwość zarządzania dostępnością
-     */
-    FhngAvailabilityDirective,
     /**
      * Dodajemy deklaracje klasy ogólnej aby wstrzykiwanie i odnajdowanie komponentów wewnątrz siebie było możliwe.
      * Dzięki temu budujemy hierarchię kontrolek Fhng.
@@ -78,18 +66,17 @@ export class InputTimestampComponent
   /**
    * @Override
    */
-  public icon: string = 'fa-calendar';
+  public override icon: string = 'fa-calendar';
 
   constructor(
     @Inject(LOCALE_ID) private _locale: string,
-    public injector: Injector,
+    public override injector: Injector,
     public config: NgbInputDatepickerConfig,
     public calendar: NgbCalendar,
     public fhngDateTimeAdapter: FhngDateTimeAdapter,
-    @Optional() @SkipSelf() parentFhngComponent: FhngComponent,
-    @Optional() @SkipSelf() iForm: IForm<any>
+    @Optional() @SkipSelf() parentFhngComponent: FhngComponent
   ) {
-    super(injector, parentFhngComponent, iForm);
+    super(injector, parentFhngComponent);
     this.width = BootstrapWidthEnum.MD3;
     //TODO formatters , config params
 
@@ -98,7 +85,7 @@ export class InputTimestampComponent
     this.config.maxDate = {year: curentYear + 100, day: 1, month: 1};
   }
 
-  ngOnInit() {
+  override ngOnInit() {
     super.ngOnInit();
     this.fhngDateTimeAdapter.dateFormat = this.format.replace('RRRR', 'YYYY');
   }
@@ -111,7 +98,7 @@ export class InputTimestampComponent
     }
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  override ngOnChanges(changes: SimpleChanges) {
     super.ngOnChanges(changes);
   }
 
