@@ -24,10 +24,10 @@ export class InputGroupComponent implements OnInit, OnDestroy {
   private focus: boolean = false;
 
   @Input()
-  public icon: string;
+  public icon: string = null;
 
   @Input()
-  public iconText: string;
+  public iconText: string = null;
 
   @Input()
   public required: boolean = false;
@@ -53,49 +53,49 @@ export class InputGroupComponent implements OnInit, OnDestroy {
     /**
      * Dostosowanie szerokosci roboczej input-a do wielkości i ilości dodatkowych elementów (ikony,przyciski,teksy)
      */
-    this.resizeObserver = new ResizeObserver((entries, observer) => {
-      const element = entries[0].target;
-      const appender = element.querySelector('.input-group-append');
-      const prepender = element.querySelector('.input-group-prepend');
-      const input = element.querySelector('input');
-      const textarea = element.querySelector('textarea');
-      if (
-        appender != null &&
-        (input != null || textarea != null) &&
-        appender['offsetWidth'] > 0
-      ) {
-        const e = input == null ? textarea : input;
-        e.style.paddingRight = appender['offsetWidth'] + 'px';
-      } else if (
-        prepender != null &&
-        (input != null || textarea != null) &&
-        prepender['offsetWidth'] > 0
-      ) {
-        const e = input == null ? textarea : input;
-        e.style.paddingLeft = prepender['offsetWidth'] + 'px';
-      }
-    });
+    // this.resizeObserver = new ResizeObserver((entries, observer) => {
+    //   const element = entries[0].target;
+    //   const appender = element.querySelector('.input-group-append');
+    //   const prepender = element.querySelector('.input-group-prepend');
+    //   const input = element.querySelector('input');
+    //   const textarea = element.querySelector('textarea');
+    //   if (
+    //     appender != null &&
+    //     (input != null || textarea != null) &&
+    //     appender['offsetWidth'] > 0
+    //   ) {
+    //     const e = input == null ? textarea : input;
+    //     e.style.paddingRight = appender['offsetWidth'] + 'px';
+    //   } else if (
+    //     prepender != null &&
+    //     (input != null || textarea != null) &&
+    //     prepender['offsetWidth'] > 0
+    //   ) {
+    //     const e = input == null ? textarea : input;
+    //     e.style.paddingLeft = prepender['offsetWidth'] + 'px';
+    //   }
+    // });
   }
 
-  public startAdjustingInputPadding() {
-    this.resizeObserver.observe(this.elementRef.nativeElement);
-  }
-
-  public stopAdjustingInputPadding() {
-    if (this.resizeObserver) {
-      this.resizeObserver.unobserve(this.elementRef.nativeElement);
-    }
-  }
+  // public startAdjustingInputPadding() {
+  //   this.resizeObserver.observe(this.elementRef.nativeElement);
+  // }
+  //
+  // public stopAdjustingInputPadding() {
+  //   if (this.resizeObserver) {
+  //     this.resizeObserver.unobserve(this.elementRef.nativeElement);
+  //   }
+  // }
 
   addonClick() {
     this.onClick.emit();
   }
 
   ngOnInit(): void {
-    this.startAdjustingInputPadding();
+    // this.startAdjustingInputPadding();
   }
 
   ngOnDestroy(): void {
-    this.stopAdjustingInputPadding();
+    // this.stopAdjustingInputPadding();
   }
 }
