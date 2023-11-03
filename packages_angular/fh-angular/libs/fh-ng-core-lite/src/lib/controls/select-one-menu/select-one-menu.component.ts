@@ -1,52 +1,82 @@
-import {Component, forwardRef, Host, Injector, OnInit, Optional, SimpleChanges, SkipSelf,} from '@angular/core';
-import {DocumentedComponent, IForm} from '@fhng/ng-core';
+import {Component, forwardRef, Host, Injector, Input, OnInit, Optional, SimpleChanges, SkipSelf,} from '@angular/core';
 import {FhngInputWithListC} from '../../models/componentClasses/FhngInputWithListC';
-import {FhngAvailabilityDirective} from '@fhng/ng-availability';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
 import {BootstrapWidthEnum} from '../../models/enums/BootstrapWidthEnum';
+import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
+
+interface ISelectOneMenuDataAttributes extends IDataAttributes {
+  rawOptions: string[];
+  rawValue: string;
+  require: boolean;
+  inputSize: number;
+  selectedIndex: number;
+  emptyValue: boolean;
+  emptyLabel: boolean;
+  keepRemovedValue: boolean;
+  onChange: string;
+}
 
 @Component({
   selector: 'fhng-select-one-menu',
   templateUrl: './select-one-menu.component.html',
   styleUrls: ['./select-one-menu.component.scss'],
   providers: [
-    /**
-     * Inicjalizujemy dyrektywę dostępności aby zbudoać hierarchię elementów i dać możliwość zarządzania dostępnością
-     */
-    FhngAvailabilityDirective,
-    /**
-     * Dodajemy deklaracje klasy ogólnej aby wstrzykiwanie i odnajdowanie komponentów wewnątrz siebie było możliwe.
-     * Dzięki temu budujemy hierarchię kontrolek Fhng.
-     */
     {
       provide: FhngComponent,
       useExisting: forwardRef(() => SelectOneMenuComponent),
     },
   ],
 })
-@DocumentedComponent({
-  category: DocumentedComponent.Category.INPUTS_AND_VALIDATION,
-  value:
-    'Component responsible for displaying list of values with possibility of selecting only one value.',
-  icon: 'fa fa-caret-down',
-})
+
 export class SelectOneMenuComponent
   extends FhngInputWithListC
   implements OnInit {
+
+  @Input()
+  public rawOptions: string[] = [];
+
+  @Input()
+  public require: boolean;
+
+  @Input()
+  public selectedIndex: number;
+
+  @Input()
+  public keepRemovedValue: boolean;
+
   constructor(
-    public injector: Injector,
-    @Optional() @SkipSelf() parentFhngComponent: FhngComponent,
-    @Optional() @SkipSelf() iForm: IForm<any>
+    public override injector: Injector,
+    @Optional() @SkipSelf() parentFhngComponent: FhngComponent
   ) {
-    super(injector, parentFhngComponent, iForm);
+    super(injector, parentFhngComponent);
     this.width = BootstrapWidthEnum.MD3;
   }
 
-  ngOnInit() {
+  public override ngOnInit(): void {
     super.ngOnInit();
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  public override ngOnChanges(changes: SimpleChanges): void {
     super.ngOnChanges(changes);
+  }
+
+  public override mapAttributes(data: ISelectOneMenuDataAttributes): void {
+    super.mapAttributes(data);
+
+    this.rawOptions = data.rawOptions;
+    this.rawValue = data.rawValue;
+    this.require = data.require;
+    this.inputSize = data.inputSize;
+    this.selectedIndex = data.selectedIndex;
+    this.emptyValue = data.emptyValue;
+    this.emptyLabel = data.emptyLabel;
+    this.keepRemovedValue = data.keepRemovedValue;
+  }
+
+  public onSelectChangeEvent ($event: Event): void {
+    $event.preventDefault();
+
+    this.updateModel($event);
+    this.onChangeEvent();
   }
 }

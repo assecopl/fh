@@ -132,12 +132,12 @@ export class FhngInputWithListC extends FhngReactiveInputC {
     super(injector, parentFhngComponent);
   }
 
-  override ngOnInit() {
+  public override ngOnInit() {
     super.ngOnInit();
     this.prepareDisplayExpresion();
   }
 
-  override ngOnChanges(changes: SimpleChanges) {
+  public override ngOnChanges(changes: SimpleChanges) {
     super.ngOnChanges(changes);
     if (changes['displayExpression']) {
       this.prepareDisplayExpresion();
