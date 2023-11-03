@@ -9,3 +9,5 @@ export type BootstrapStyleType =
   | 'dark'
   | 'light'
   | 'default';
+
+export let FORM_VALUE_ATTRIBUTE_NAME: string = 'value';

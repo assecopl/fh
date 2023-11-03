@@ -15,6 +15,7 @@ import {InputTypeEnum} from '../../models/enums/InputTypeEnum';
 import {FhngReactiveInputC} from '../../models/componentClasses/FhngReactiveInputC';
 import {BootstrapWidthEnum} from '../../models/enums/BootstrapWidthEnum';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
+import {FORM_VALUE_ATTRIBUTE_NAME} from "../../models/CommonTypes";
 
 @Component({
   selector: '[fhng-input-text]',
@@ -48,6 +49,27 @@ export class InputTextComponent extends FhngReactiveInputC implements OnInit {
   @Input()
   public resize: string = 'none';
 
+
+  // protected keySupport: FormComponentKeySupport;
+  // private readonly isTextarea: boolean;
+  public textareaAutosize: boolean;
+  protected keySupportCallback: any;
+  private readonly maskDefinition: string;
+  protected mask: any;
+  private lastValidMaskedValue: any;
+  protected readonly textAlign: string;
+  protected format: string;
+  protected emptyValue: any;
+  protected onEmptyValue: any;
+  private timeoutFunction: any;
+  private readonly inputTimeout: number;
+  protected inputmaskEnabled: boolean;
+  protected maskPlugin: any;
+  protected maskInsertMode: boolean;
+  public input: any;
+
+
+
   @ViewChild('inputRef', {static: false}) inputRef: ElementRef = null;
 
   constructor(
@@ -68,4 +90,20 @@ export class InputTextComponent extends FhngReactiveInputC implements OnInit {
   override ngOnChanges(changes: SimpleChanges) {
     super.ngOnChanges(changes);
   }
+
+  public override updateModel(event) {
+    this.valueChanged = true;
+    this.rawValue = event.target.value;
+  };
+
+  override extractChangedAttributes() {
+    let attrs = {};
+    if (this.valueChanged) {
+      attrs[FORM_VALUE_ATTRIBUTE_NAME] = this.rawValue;
+      this.valueChanged = false;
+    }
+
+    return attrs;
+  };
+
 }

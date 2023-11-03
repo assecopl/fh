@@ -81,7 +81,7 @@ export class ComboComponent extends FhngInputWithListC implements OnInit {
   public inputFormatter = (x: {
     displayAsTarget: boolean,
     targetValue: string,
-    targetId: number,
+    targetId: number, NInputText
     displayedValue: string
   }) => {
 
