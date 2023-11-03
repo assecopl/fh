@@ -6,12 +6,12 @@
   position: relative;
 
   .input-group-append {
-    position: absolute;
-    border: 1px solid transparent;
-    top: $input-border-width;
-    bottom: $input-border-width;
-    right: $input-border-width;
-    border-radius: $border-radius;
+    //position: absolute;
+    //border: 1px solid transparent;
+    //top: $input-border-width;
+    //bottom: $input-border-width;
+    //right: $input-border-width;
+    //border-radius: $border-radius;
 
     button:focus {
       border-color: $input-btn-focus-color;
@@ -21,22 +21,22 @@
 
     ::ng-deep {
       .input-group-text {
-        z-index: 1001;
-        //top:0;
-        //bottom: 0;
-        border: 0px solid transparent;
-        border-radius: $border-radius;
+        //z-index: 1001;
+        ////top:0;
+        ////bottom: 0;
+        //border: 0px solid transparent;
+        //border-radius: $border-radius;
       }
     }
   }
 
   .input-group-prepend {
-    position: absolute;
-    border: 1px solid transparent;
-    top: $input-border-width;
-    bottom: $input-border-width;
-    left: $input-border-width;
-    border-radius: $border-radius;
+    //position: absolute;
+    //border: 1px solid transparent;
+    //top: $input-border-width;
+    //bottom: $input-border-width;
+    //left: $input-border-width;
+    //border-radius: $border-radius;
 
     button:focus {
       border-color: $input-btn-focus-color;
@@ -45,9 +45,9 @@
     }
 
     .input-group-text {
-      z-index: 1001;
-      border: 0px solid transparent;
-      border-radius: $border-radius;
+      //z-index: 1001;
+      //border: 0px solid transparent;
+      //border-radius: $border-radius;
     }
   }
 

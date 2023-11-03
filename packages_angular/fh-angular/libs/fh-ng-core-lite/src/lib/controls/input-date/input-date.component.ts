@@ -69,7 +69,7 @@ export class InputDateComponent extends FhngReactiveInputC implements OnInit {
   /**
    * @Override
    */
-  public override icon: string = 'fa-calendar-alt text-primary';
+  public override icon: string = 'fa-calendar-alt';
 
   constructor(
     public override injector: Injector,
