@@ -11,7 +11,7 @@ export interface IDataAttributes {
     id: string,
     inlineStyle?: string,
     invisible: boolean,
-    onClick: string,
+    onClick?: string,
     push: boolean,
     type: string,
     value: string,

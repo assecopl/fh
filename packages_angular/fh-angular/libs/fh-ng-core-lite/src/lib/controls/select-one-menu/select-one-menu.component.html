@@ -16,7 +16,7 @@
       [id]="innerId"
       [attr.aria-label]="!label && ariaLabel ? ariaLabel : null"
       [style.height]="styles.height"
-      (change)="onChangeEvent($event)"
+      (change)="onSelectChangeEvent($event)"
     >
       <option
         *ngIf="placeholder && !emptyLabel"

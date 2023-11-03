@@ -70,6 +70,8 @@ import {RadioOptionsGroupComponent} from "./controls/radio-options-group/radio-o
 import {ComboComponent} from "./controls/combo/combo.component";
 import {NgSelectModule} from '@ng-select/ng-select';
 import {AutosizeModule} from '@techiediaries/ngx-textarea-autosize';
+import {ImageComponent} from "./controls/image/image.component";
+
 
 
 const maskConfigFunction: () => Partial<IConfig> = () => {
@@ -140,7 +142,8 @@ const components = [
   ValidateMessagesComponent,
   PanelHeaderFhDPComponent,
   ComboComponent,
-  SelectOneMenuComponent
+  SelectOneMenuComponent,
+  ImageComponent
 ]
 
 @NgModule({
@@ -223,6 +226,7 @@ export class FhNgCoreLiteModule extends FhNgModule {
     componentManager.registerComponent(ValidateMessagesComponent);
     componentManager.registerComponent(PanelHeaderFhDPComponent);
     componentManager.registerComponent(SelectOneMenuComponent);
+    componentManager.registerComponent(ImageComponent);
   }
 
   protected registerCustomActions(customActionsManager?: CustomActionsManager) {

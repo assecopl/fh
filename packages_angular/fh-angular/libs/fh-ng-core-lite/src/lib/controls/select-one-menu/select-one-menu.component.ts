@@ -44,9 +44,6 @@ export class SelectOneMenuComponent
   @Input()
   public keepRemovedValue: boolean;
 
-  @Input()
-  public onChange: string;
-
   constructor(
     public override injector: Injector,
     @Optional() @SkipSelf() parentFhngComponent: FhngComponent
@@ -76,17 +73,10 @@ export class SelectOneMenuComponent
     this.keepRemovedValue = data.keepRemovedValue;
   }
 
-  public onChangeEvent ($event: Event): void {
-    $event.stopPropagation();
+  public onSelectChangeEvent ($event: Event): void {
+    $event.preventDefault();
 
-    this.value = this.rawValue = ($event.target as any).value;
-
-    if (this.onChange) {
-      if (this.formId === 'FormPreview') {
-        this.fireEvent('onChange', this.onChange);
-      } else {
-        this.fireEventWithLock('onChange', this.onChange);
-      }
-    }
+    this.updateModel($event);
+    this.onChangeEvent();
   }
 }

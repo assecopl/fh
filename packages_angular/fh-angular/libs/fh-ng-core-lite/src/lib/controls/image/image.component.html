@@ -1,1 +1,25 @@
-<img [alt]="alt" [src]="src" style=""/>
+<img
+  class="fc image img-fluid"
+  style="width: 100%"
+  [availabilityHtmlElement]="availability"
+  [id]="innerId"
+  [alt]="alt || ''"
+  [src]="src"
+  [useMap]="imageAreas.length ? '#' + innerId + '_map' : ''"
+  [ngStyle]="styles"
+  (click)="onClickEvent($event)"
+/>
+<map [name]="innerId + '_map'" *ngIf="imageAreas.length">
+  <area
+    shape="rect"
+    *ngFor="let area of imageAreas"
+    [id]="innerId + '_map' + area.id"
+    [coords]="[area.xl, area.yl, area.xp, area.yp].join(',')"
+    [attr.data-id]="area.id"
+    (click)="onAreaClickEvent($event, area.id)"
+  >
+</map>
+
+<ng-container *ngIf="configuration.debug">
+  <fh-component-debugger/>
+</ng-container>
