@@ -126,6 +126,9 @@ export class FhngHTMLElementC
   public hintType: 'STANDARD' | 'STANDARD_POPOVER' | 'STATIC' | 'STATIC_POPOVER' | 'STATIC_POPOVER_LEFT' | 'STATIC_LEFT' = 'STANDARD_POPOVER'
 
   @Input()
+  public presentationStyle: 'BLOCKER' | "ERROR" | "INFO" | "WARNING" | "SUCCESS" | "OK" = null;
+
+  @Input()
   public title: string = '';
 
   //Style object fo ngStyle.
@@ -390,6 +393,40 @@ export class FhngHTMLElementC
       return this.hint;
     }
     return null;
+  }
+
+  setPresentationStyle(): string {
+    let styles = null;
+
+    switch (this.presentationStyle) {
+      case 'BLOCKER':
+      case 'ERROR':
+        // ['is-invalid', 'border', 'border-danger'].forEach(function (cssClass) {
+        //   this.getMainComponent().classList.add(cssClass);
+        // }.bind(this));
+        styles = 'is-invalid border border-danger';
+        break;
+      case 'OK':
+        // ['border', 'border-success'].forEach(function (cssClass) {
+        //   this.getMainComponent().classList.add(cssClass);
+        // }.bind(this));
+        styles = 'border border-success';
+        break;
+      case 'INFO':
+        // ['border', 'border-info'].forEach(function (cssClass) {
+        //   this.getMainComponent().classList.add(cssClass);
+        // }.bind(this));
+        styles = 'border border-info';
+        break;
+      case 'WARNING':
+        // ['border', 'border-warning'].forEach(function (cssClass) {
+        //   this.getMainComponent().classList.add(cssClass);
+        // }.bind(this));
+        styles = 'border border-warning';
+        break;
+    }
+
+    return styles;
   }
 
 }
