@@ -53,7 +53,7 @@ export class FhngHTMLElementC
 
   public rawValue: any = null;
 
-  public height: string;
+  public height: string = null;
 
   @HostBinding('class')
   @Input()
@@ -66,7 +66,7 @@ export class FhngHTMLElementC
 
 
   @Input()
-  public bootstrapStyle: any;
+  public bootstrapStyle: any = null;
 
   @Input()
   public hiddenElementsTakeUpSpace: boolean = false;
@@ -258,13 +258,13 @@ export class FhngHTMLElementC
 
 
   processStyleWithUnit(name: string, val: string) {
-    let v = null;
+    // let v = null;
     if (val) {
       // v = isNumber(val) ? val : val.replace(/px|%|em|rem|pt/gi, '');
       // const unit = val.replace(v, "");
       this.styles[name] = val;
     }
-    return v;
+    return val;
   }
 
   public processHorizontalAlign() {
