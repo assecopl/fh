@@ -25,6 +25,8 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
 
   @Input() subelements: any[] = [];
 
+  @Input() nonVisualComponents: any[] = [];
+
   public _data: any;
   @Input('data')
   public set data(value: any) {

@@ -30,6 +30,7 @@ class ComponentManager {
 
   public registerComponent(component: Type<FhngComponent> | any): void {
     this.components[component.name.replace("Component", "")] = component;
+    console.log('register', this.components);
   }
 
   public registerComponentWithName(name: string, component: Type<FhngComponent> | any): void {

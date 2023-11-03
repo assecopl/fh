@@ -27,6 +27,8 @@ export class DynamicComponentsDirective
 
   @Input() fhDynamicComponents?: any[] = [];
 
+  @Input() fhNonVisualSubcomponents?: any[] = [];
+
   protected componentRefs: { [index: string]: any } = {};
 
   constructor(private viewContainerRef: ViewContainerRef,
@@ -74,7 +76,7 @@ export class DynamicComponentsDirective
       }
 
       let usedComponents = {};
-      this.fhDynamicComponents.forEach((data, index) => {
+      [...this.fhDynamicComponents, ...this.fhNonVisualSubcomponents].forEach((data, index) => {
         if (this.componentRefs[data.id]) {
           //Jezeli istnieje juz o takim ID to robie insert
           const component = this.componentRefs[data.id];

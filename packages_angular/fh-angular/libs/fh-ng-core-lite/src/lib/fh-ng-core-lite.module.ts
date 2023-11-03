@@ -71,6 +71,7 @@ import {ComboComponent} from "./controls/combo/combo.component";
 import {NgSelectModule} from '@ng-select/ng-select';
 import {AutosizeModule} from '@techiediaries/ngx-textarea-autosize';
 import {ImageComponent} from "./controls/image/image.component";
+import {TimerComponent} from "./controls/timer/timer.component";
 
 
 
@@ -143,7 +144,8 @@ const components = [
   PanelHeaderFhDPComponent,
   ComboComponent,
   SelectOneMenuComponent,
-  ImageComponent
+  ImageComponent,
+  TimerComponent
 ]
 
 @NgModule({
@@ -227,6 +229,7 @@ export class FhNgCoreLiteModule extends FhNgModule {
     componentManager.registerComponent(PanelHeaderFhDPComponent);
     componentManager.registerComponent(SelectOneMenuComponent);
     componentManager.registerComponent(ImageComponent);
+    componentManager.registerComponent(TimerComponent);
   }
 
   protected registerCustomActions(customActionsManager?: CustomActionsManager) {
