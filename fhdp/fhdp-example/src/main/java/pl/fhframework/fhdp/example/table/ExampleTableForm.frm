@@ -8,11 +8,13 @@
                 label="[icon='fas fa-plus']" paddingRight="10"/>
         <Table collection="{listElements}" selected="{selectedListElement}" iterator="row" onRowClick="editBaseList()">
             <Column width="1" label="Id" value="{row.id}"/>
+
             <Column width="4" label="Name" value="{row.name}"/>
             <Column width="4" label="Description" value="{row.description}"/>
             <Column width="1" verticalAlign="top"
                     label="[className='d-flex,align-items-center'][portal='btnAddBase2'][/className]">
-                <Button horizontalAlign="right" style="default" width="xs-1" verticalAlign="middle"
+
+            <Button horizontalAlign="right" style="default" width="xs-1" verticalAlign="middle"
                         onClick="removeBaseList({row})" label="[icon='fa fa-trash']"
                         styleClasses="button-in-operations"/>
             </Column>

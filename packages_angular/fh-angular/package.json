@@ -8,7 +8,7 @@
     "watch": "nx build --watch --project=fh-angular",
     "FhDP_Example": "nx buildExample --watch --project=fh-angular --configuration=development",
     "test": "nx test",
-    "postinstall": "npx --package @angular/compiler-cli@15.2.9 --yes ngcc\""
+    "postinstall": "npx --package @angular/compiler-cli@15.2.9 --yes ngcc"
   },
   "private": true,
   "dependencies": {

@@ -80,7 +80,9 @@
                     </InputText>
                 </PanelGroup>
                 <PanelGroup width="md-12" label="{$.fh.docs.component.inputtext_with_icon_after_inputtext}" id="_Form_TabContainer_Tab1_PanelGroup9">
-                    <InputText width="md-12" id="inputTextExampleId11" iconAlignment="after" icon="fa fa-thumbs-o-up" rowsCount="1" label="{$.fh.docs.component.inputtext_with_icon_after_label}"/>
+                    <InputText hint="Ttttteeessstttt" width="md-12" id="inputTextExampleId11" iconAlignment="after"
+                               icon="fa fa-thumbs-o-up" rowsCount="1"
+                               label="{$.fh.docs.component.inputtext_with_icon_after_label}"/>
                     <InputText id="inputTextExampleCode11" label="{$.fh.docs.component.code}" width="md-12" rowsCount="2">
                         <![CDATA[
       <InputText id="inputTextExampleId11" iconAlignment="after" icon="fa fa-thumbs-o-up" rowsCount="1" value="The icon is after text."/>

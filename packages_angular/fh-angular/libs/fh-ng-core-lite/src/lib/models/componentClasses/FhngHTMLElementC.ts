@@ -112,7 +112,9 @@ export class FhngHTMLElementC
   public valignBottom: boolean;
 
   @Input()
-  public hint: any;
+  public hint: any = null;
+  @Input()
+  public hintTitle: any = null;
 
   @Input()
   public hintPlacement: 'LEFT' | 'RIGHT' | 'TOP' | 'BOTTOM' = 'TOP';
@@ -120,6 +122,8 @@ export class FhngHTMLElementC
   @Input()
   public hintTrigger: 'HOVER' | 'FOCUS' | 'HOVER FOCUS' | string =
     'HOVER FOCUS';
+  @Input()
+  public hintType: 'STANDARD' | 'STANDARD_POPOVER' | 'STATIC' | 'STATIC_POPOVER' | 'STATIC_POPOVER_LEFT' | 'STATIC_LEFT' = 'STANDARD_POPOVER'
 
   @Input()
   public title: string = '';
@@ -241,8 +245,8 @@ export class FhngHTMLElementC
     this.processHorizontalAlign();
     this.processVerticalAlign();
 
-    let fhngml = this.injector.get(FhMLService);
-    this.label = fhngml.transform(this.label);
+    let fhml = this.injector.get(FhMLService);
+    this.label = fhml.transform(this.label);
   }
 
   /**
@@ -372,6 +376,20 @@ export class FhngHTMLElementC
     }
 
     return _safeStyle;
+  }
+
+  public getHintTooltip(): string {
+    if (this.hint && this.hintType == 'STANDARD') {
+      return this.hint;
+    }
+    return null;
+  }
+
+  public getHintPopover(): string {
+    if (this.hint && this.hintType == 'STANDARD_POPOVER') {
+      return this.hint;
+    }
+    return null;
   }
 
 }
