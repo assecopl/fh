@@ -28,7 +28,9 @@
             [style.resize]="resize"
             [attr.aria-label]="ariaLabel"
                     [required]="required"
-                    class="fc inputText form-control"
+                    [ngbTooltip]="getHintTooltip()" [ngbPopover]="getHintPopover()" [popoverTitle]="hintTitle"
+                    [placement]="hintPlacement.toLowerCase()" [triggers]="hintTrigger.toLowerCase()"
+                    class="fc inputText form-control {{setPresentationStyle()}}"
           ></textarea>
         </div>
       </ng-container>
@@ -54,7 +56,9 @@
             [style.resize]="resize"
                     [required]="required"
             [attr.aria-label]="ariaLabel"
-                    class="fc inputText form-control"
+                    [ngbTooltip]="getHintTooltip()" [ngbPopover]="getHintPopover()" [popoverTitle]="hintTitle"
+                    [placement]="hintPlacement.toLowerCase()" [triggers]="hintTrigger.toLowerCase()"
+                    class="fc inputText form-control {{setPresentationStyle()}}"
           ></textarea>
         </div>
       </ng-container>
@@ -100,12 +104,14 @@
           [clearIfNotMatch]="false"
           [attr.aria-label]="ariaLabel"
              [required]="required"
-             class="fc inputText form-control"
+             class="fc inputText form-control {{setPresentationStyle()}}"
+             [ngbTooltip]="getHintTooltip()" [ngbPopover]="getHintPopover()" [popoverTitle]="hintTitle"
+             [placement]="hintPlacement.toLowerCase()" [triggers]="hintTrigger.toLowerCase()"
+
         />
     </div>
     </ng-container>
 </div>
-
 <ng-container *ngIf="configuration.debug">
   <fh-component-debugger/>
 </ng-container>

@@ -53,7 +53,7 @@ export class FhngHTMLElementC
 
   public rawValue: any = null;
 
-  public height: string;
+  public height: string = null;
 
   @HostBinding('class')
   @Input()
@@ -66,7 +66,7 @@ export class FhngHTMLElementC
 
 
   @Input()
-  public bootstrapStyle: any;
+  public bootstrapStyle: any = null;
 
   @Input()
   public hiddenElementsTakeUpSpace: boolean = false;
@@ -112,7 +112,9 @@ export class FhngHTMLElementC
   public valignBottom: boolean;
 
   @Input()
-  public hint: any;
+  public hint: any = null;
+  @Input()
+  public hintTitle: any = null;
 
   @Input()
   public hintPlacement: 'LEFT' | 'RIGHT' | 'TOP' | 'BOTTOM' = 'TOP';
@@ -120,6 +122,11 @@ export class FhngHTMLElementC
   @Input()
   public hintTrigger: 'HOVER' | 'FOCUS' | 'HOVER FOCUS' | string =
     'HOVER FOCUS';
+  @Input()
+  public hintType: 'STANDARD' | 'STANDARD_POPOVER' | 'STATIC' | 'STATIC_POPOVER' | 'STATIC_POPOVER_LEFT' | 'STATIC_LEFT' = 'STANDARD_POPOVER'
+
+  @Input()
+  public presentationStyle: 'BLOCKER' | "ERROR" | "INFO" | "WARNING" | "SUCCESS" | "OK" = null;
 
   @Input()
   public title: string = '';
@@ -241,8 +248,8 @@ export class FhngHTMLElementC
     this.processHorizontalAlign();
     this.processVerticalAlign();
 
-    let fhngml = this.injector.get(FhMLService);
-    this.label = fhngml.transform(this.label);
+    let fhml = this.injector.get(FhMLService);
+    this.label = fhml.transform(this.label);
   }
 
   /**
@@ -251,13 +258,13 @@ export class FhngHTMLElementC
 
 
   processStyleWithUnit(name: string, val: string) {
-    let v = null;
+    // let v = null;
     if (val) {
       // v = isNumber(val) ? val : val.replace(/px|%|em|rem|pt/gi, '');
       // const unit = val.replace(v, "");
       this.styles[name] = val;
     }
-    return v;
+    return val;
   }
 
   public processHorizontalAlign() {
@@ -372,6 +379,54 @@ export class FhngHTMLElementC
     }
 
     return _safeStyle;
+  }
+
+  public getHintTooltip(): string {
+    if (this.hint && this.hintType == 'STANDARD') {
+      return this.hint;
+    }
+    return null;
+  }
+
+  public getHintPopover(): string {
+    if (this.hint && this.hintType == 'STANDARD_POPOVER') {
+      return this.hint;
+    }
+    return null;
+  }
+
+  setPresentationStyle(): string {
+    let styles = null;
+
+    switch (this.presentationStyle) {
+      case 'BLOCKER':
+      case 'ERROR':
+        // ['is-invalid', 'border', 'border-danger'].forEach(function (cssClass) {
+        //   this.getMainComponent().classList.add(cssClass);
+        // }.bind(this));
+        styles = 'is-invalid border border-danger';
+        break;
+      case 'OK':
+        // ['border', 'border-success'].forEach(function (cssClass) {
+        //   this.getMainComponent().classList.add(cssClass);
+        // }.bind(this));
+        styles = 'border border-success';
+        break;
+      case 'INFO':
+        // ['border', 'border-info'].forEach(function (cssClass) {
+        //   this.getMainComponent().classList.add(cssClass);
+        // }.bind(this));
+        styles = 'border border-info';
+        break;
+      case 'WARNING':
+        // ['border', 'border-warning'].forEach(function (cssClass) {
+        //   this.getMainComponent().classList.add(cssClass);
+        // }.bind(this));
+        styles = 'border border-warning';
+        break;
+    }
+
+    return styles;
   }
 
 }
