@@ -77,6 +77,7 @@ import {TimerComponent} from "./controls/timer/timer.component";
 
 const maskConfigFunction: () => Partial<IConfig> = () => {
   return {}
+  //TODO Zastanowic sie co dalej z maskami i jak je dostosowac - najprawdopodobniej zaakceptowac nowe definicje wynikające ze zaktualizowanego pluginu.
   // return {
   //   validation: false,
   //   thousandSeparator: "",
