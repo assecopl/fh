@@ -1,13 +1,13 @@
-<ng-container *ngIf="hint; else inputNumber">
-  <span
-    ngbTooltip="{{ hint }}"
-    [placement]="hintPlacement.toLowerCase()"
-    [triggers]="hintTrigger.toLowerCase()"
-  >
-    <ng-container *ngTemplateOutlet="inputNumber"></ng-container>
-  </span>
-</ng-container>
-<ng-template #inputNumber>
+<!--<ng-container *ngIf="hint; else inputNumber">-->
+<!--  <span-->
+<!--    ngbTooltip="{{ hint }}"-->
+<!--    [placement]="hintPlacement.toLowerCase()"-->
+<!--    [triggers]="hintTrigger.toLowerCase()"-->
+<!--  >-->
+<!--    <ng-container *ngTemplateOutlet="inputNumber"></ng-container>-->
+<!--  </span>-->
+<!--</ng-container>-->
+<!--<ng-template #inputNumber>-->
   <div fhng-input-label
     [inputId]="id"
     [label]="label"
@@ -21,11 +21,12 @@
         [iconAlignment]="iconAlignment"
         [required]="required"
       >
-        <input
+      <input [availabilityInput]="availability" (input)="onInputEvent($event)" (change)="onChangeEvent()"
           #focusElement
           [id]="innerId"
           type="text"
-          [value]="value"
+             [disabled]="disabled"
+             [value]="rawValue"
           [attr.aria-label]="!label && ariaLabel ? ariaLabel : null"
           [placeholder]="placeholder"
           [allowNegativeNumbers]="allowNegativeNumbers"
@@ -37,8 +38,15 @@
               : formatter?.separatorLimit
           }}"
           thousandSeparator="{{ formatter?.thousandSeparator }}"
-          class="fc inputNumber form-control"
+             [ngbTooltip]="getHintTooltip()" [ngbPopover]="getHintPopover()" [popoverTitle]="hintTitle"
+             [placement]="hintPlacement.toLowerCase()" [triggers]="hintTrigger.toLowerCase()"
+             class="fc inputNumber form-control {{setPresentationStyle()}}"
         />
     </div>
   </div>
-</ng-template>
+
+{{disabled}} {{availability}} {{rawValue}}
+<!--</ng-template>-->
+<ng-container *ngIf="configuration.debug">
+  <fh-component-debugger/>
+</ng-container>

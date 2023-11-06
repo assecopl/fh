@@ -55,6 +55,7 @@ export class FhngReactiveInputC
   public disabled: boolean = false;
 
   public override set availability(value: AvailabilityEnum | string) {
+
     this._availability = AvailabilityUtils.stringToEnum(value);
     if (this._availability == AvailabilityEnum.EDIT) {
       this.disabled = false;
@@ -180,6 +181,8 @@ export class FhngReactiveInputC
 
   override mapAttributes(data: IDataAttributes) {
     super.mapAttributes(data);
-    this.value = data.rawValue
+    if (data.rawValue) {
+      this.value = data.rawValue;
+    }
   }
 }

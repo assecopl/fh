@@ -328,7 +328,9 @@ export class FhngHTMLElementC
     super.mapAttributes(data);
     if (data.inlineStyle) this.styles = this._convertInlineStylesToSafeStyle(data.inlineStyle);
 
-    this.availability = data.accessibility;
+    if (data.accessibility) {
+      this.availability = data.accessibility;
+    }
 
     // if (data.value) this.label = data.value; //Label zostawiamy w spokoju, pozmieniamy w komponentach jak trzeba - z value na label
     if (data.style) this.bootstrapStyle = data.style

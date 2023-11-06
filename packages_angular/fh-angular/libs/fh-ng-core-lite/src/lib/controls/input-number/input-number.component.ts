@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 import {FhngReactiveInputC} from '../../models/componentClasses/FhngReactiveInputC';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
+import {FORM_VALUE_ATTRIBUTE_NAME} from "../../models/CommonTypes";
 
 @Component({
   selector: '[fhng-input-number]',
@@ -75,6 +76,22 @@ export class InputNumberComponent
   override ngOnChanges(changes: SimpleChanges) {
     super.ngOnChanges(changes);
   }
+
+  public override updateModel(event) {
+    this.valueChanged = true;
+    this.rawValue = event.target.value;
+  };
+
+
+  override extractChangedAttributes() {
+    let attrs = {};
+    if (this.valueChanged) {
+      attrs[FORM_VALUE_ATTRIBUTE_NAME] = this.rawValue;
+      this.valueChanged = false;
+    }
+
+    return attrs;
+  };
 }
 
 export class FhngFormatter {
