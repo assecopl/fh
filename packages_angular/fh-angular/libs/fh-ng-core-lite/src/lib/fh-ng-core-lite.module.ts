@@ -76,32 +76,32 @@ import {TimerComponent} from "./controls/timer/timer.component";
 
 
 const maskConfigFunction: () => Partial<IConfig> = () => {
-  return {}
   //TODO Zastanowic sie co dalej z maskami i jak je dostosowac - najprawdopodobniej zaakceptowac nowe definicje wynikające ze zaktualizowanego pluginu.
-  // return {
-  //   validation: false,
-  //   thousandSeparator: "",
-  //   decimalMarker: ",",
-  //   clearIfNotMatch: true,
-  //   patterns: {
-  //     '0': {pattern: new RegExp("[0-9]"),optional:true},
-  //     '9': {pattern: new RegExp("[0-9]")},
-  //     'A': {pattern: new RegExp("[A-ZĄĆĘŁŃÓŚŹŻa-ząćęłńóśźż]")},
-  //     'a': {pattern: new RegExp("[A-ZĄĆĘŁŃÓŚŹŻa-ząćęłńóśźż]"),optional:true},
-  //     'P': {pattern: new RegExp("[A-Z0-9]")}, //For NIP.
-  //     'p': {pattern: new RegExp("[A-Z0-9]"),optional:true}, //For NIP.
-  //     'L': {pattern: new RegExp("[A-Za-z]")},
-  //     'l': {pattern: new RegExp("[A-Za-z]"),optional:true},
-  //     'R': {pattern: new RegExp("[0-9A-Za-z]")},
-  //     'r': {pattern: new RegExp("[0-9A-Za-z]"),optional:true},
-  //     'M': {pattern: new RegExp('[0-9a-zA-Z._-]')},
-  //     'm': {pattern: new RegExp('[0-9a-zA-Z._-]'), optional:true},
-  //     'G': {pattern: new RegExp('[0-9a-zA-Z._-]')}, //Use G instead of M mark - there is somthing wrong with M (as 4.x) mark
-  //     'g': {pattern: new RegExp('[0-9a-zA-Z._-]'),optional:true}, //Use G instead of M mark - there is somthing wrong with M (as 4.x) mark
-  //     'N': {pattern: new RegExp("[0-9a-zA-Z ąćęłńóśźżĄĆĘŁŃÓŚŹŻ._-]")},
-  //     'n': {pattern: new RegExp("[0-9a-zA-Z ąćęłńóśźżĄĆĘŁŃÓŚŹŻ._-]"),optional:true}
-  //   }
-  // };
+  return {
+    validation: false,
+    thousandSeparator: "",
+    // decimalMarker: (Intl.NumberFormat() as any).formatToParts(1.1).find(part => part.type === 'decimal').value,
+    decimalMarker: ".",
+    // clearIfNotMatch: true,
+    // patterns: {
+    //   '0': {pattern: new RegExp("[0-9]"),optional:true},
+    //   '9': {pattern: new RegExp("[0-9]")},
+    //   'A': {pattern: new RegExp("[A-ZĄĆĘŁŃÓŚŹŻa-ząćęłńóśźż]")},
+    //   'a': {pattern: new RegExp("[A-ZĄĆĘŁŃÓŚŹŻa-ząćęłńóśźż]"),optional:true},
+    //   'P': {pattern: new RegExp("[A-Z0-9]")}, //For NIP.
+    //   'p': {pattern: new RegExp("[A-Z0-9]"),optional:true}, //For NIP.
+    //   'L': {pattern: new RegExp("[A-Za-z]")},
+    //   'l': {pattern: new RegExp("[A-Za-z]"),optional:true},
+    //   'R': {pattern: new RegExp("[0-9A-Za-z]")},
+    //   'r': {pattern: new RegExp("[0-9A-Za-z]"),optional:true},
+    //   'M': {pattern: new RegExp('[0-9a-zA-Z._-]')},
+    //   'm': {pattern: new RegExp('[0-9a-zA-Z._-]'), optional:true},
+    //   'G': {pattern: new RegExp('[0-9a-zA-Z._-]')}, //Use G instead of M mark - there is somthing wrong with M (as 4.x) mark
+    //   'g': {pattern: new RegExp('[0-9a-zA-Z._-]'),optional:true}, //Use G instead of M mark - there is somthing wrong with M (as 4.x) mark
+    //   'N': {pattern: new RegExp("[0-9a-zA-Z ąćęłńóśźżĄĆĘŁŃÓŚŹŻ._-]")},
+    //   'n': {pattern: new RegExp("[0-9a-zA-Z ąćęłńóśźżĄĆĘŁŃÓŚŹŻ._-]"),optional:true}
+    // }
+  };
 };
 
 const components = [

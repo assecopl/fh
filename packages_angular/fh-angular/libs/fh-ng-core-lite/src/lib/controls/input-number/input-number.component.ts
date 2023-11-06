@@ -1,6 +1,7 @@
 import {
   Component,
   forwardRef,
+  Inject,
   Injector,
   Input,
   OnChanges,
@@ -12,6 +13,7 @@ import {
 import {FhngReactiveInputC} from '../../models/componentClasses/FhngReactiveInputC';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
 import {FORM_VALUE_ATTRIBUTE_NAME} from "../../models/CommonTypes";
+import {IConfig, NGX_MASK_CONFIG} from "ngx-mask";
 
 @Component({
   selector: '[fhng-input-number]',
@@ -32,6 +34,8 @@ export class InputNumberComponent
   public pattern: string = 'separator';
 
   @Input()
+  public radixPoint: any = null;
+  @Input()
   public maxFractionDigits: any = null;
   @Input()
   public maxIntigerDigits: any = null;
@@ -42,9 +46,11 @@ export class InputNumberComponent
 
   constructor(
     public override injector: Injector,
-    @Optional() @SkipSelf() parentFhngComponent: FhngComponent
+    @Optional() @SkipSelf() parentFhngComponent: FhngComponent,
+    @Inject(NGX_MASK_CONFIG) private maskConfig: IConfig
   ) {
     super(injector, parentFhngComponent);
+    this.radixPoint = maskConfig.decimalMarker;
   }
 
   override ngOnInit() {

@@ -1,40 +1,41 @@
-  <div fhng-input-label
-    [inputId]="id"
-    [label]="label"
-    [labelPosition]="labelPosition"
-    [labelSize]="labelSize"
+<div fhng-input-label
+     [inputId]="id"
+     [label]="label"
+     [labelPosition]="labelPosition"
+     [labelSize]="labelSize"
+>
+  <div fhng-input-group
+       [iconText]="iconText"
+       [class.fh-disabled]="disabled"
+       [icon]="icon"
+       [iconAlignment]="iconAlignment"
+       [required]="required"
   >
-    <div fhng-input-group
-        [iconText]="iconText"
-         [class.fh-disabled]="disabled"
-        [icon]="icon"
-        [iconAlignment]="iconAlignment"
-        [required]="required"
-      >
-      <input [availabilityInput]="availability" (input)="onInputEvent($event)" (change)="onChangeEvent()"
-          #focusElement
-          [id]="innerId"
-          type="text"
-             [disabled]="disabled"
-             [(ngModel)]="rawValue"
-          [attr.aria-label]="!label && ariaLabel ? ariaLabel : null"
-          [placeholder]="placeholder"
-          [allowNegativeNumbers]="allowNegativeNumbers"
-          [name]="name"
-          [mask]="formatter?.pattern"
-          separatorLimit="{{
+    <input [availabilityInput]="availability" (input)="onInputEvent($event)" (change)="onChangeEvent()"
+           #focusElement
+           [id]="innerId"
+           type="text"
+           [disabled]="disabled"
+           [(ngModel)]="rawValue"
+           [attr.aria-label]="!label && ariaLabel ? ariaLabel : null"
+           [placeholder]="placeholder"
+           [allowNegativeNumbers]="allowNegativeNumbers"
+           [name]="name"
+           [mask]="formatter?.pattern"
+           separatorLimit="{{
             maxIntigerDigits
               ? [].constructor(maxIntigerDigits + 1).join('1')
               : formatter?.separatorLimit
           }}"
-          thousandSeparator="{{ formatter?.thousandSeparator }}"
-             [ngbTooltip]="getHintTooltip()" [ngbPopover]="getHintPopover()" [popoverTitle]="hintTitle"
-             [placement]="hintPlacement.toLowerCase()" [triggers]="hintTrigger.toLowerCase()"
-             class="fc inputNumber form-control {{setPresentationStyle()}}"
-        />
-    </div>
+           thousandSeparator="{{ formatter?.thousandSeparator }}"
+           decimalMarker="{{this.radixPoint}}"
+           [ngbTooltip]="getHintTooltip()" [ngbPopover]="getHintPopover()" [popoverTitle]="hintTitle"
+           [placement]="hintPlacement.toLowerCase()" [triggers]="hintTrigger.toLowerCase()"
+           class="fc inputNumber form-control {{setPresentationStyle()}}"
+    />
   </div>
-  {{rawValue}}
+</div>
+{{rawValue}}
 <ng-container *ngIf="configuration.debug">
   <fh-component-debugger/>
 </ng-container>
