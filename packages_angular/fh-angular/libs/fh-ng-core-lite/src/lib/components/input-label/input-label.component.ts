@@ -1,4 +1,4 @@
-import {Component, Injector, Input, OnInit} from '@angular/core';
+import {Component, HostBinding, Injector, Input, OnInit} from '@angular/core';
 import {FhngHTMLElementC} from '../../models/componentClasses/FhngHTMLElementC';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 

@@ -28,7 +28,7 @@
               : formatter?.separatorLimit
           }}"
            thousandSeparator="{{ formatter?.thousandSeparator }}"
-           decimalMarker="{{this.radixPoint}}"
+
            [ngbTooltip]="getHintTooltip()" [ngbPopover]="getHintPopover()" [popoverTitle]="hintTitle"
            [placement]="hintPlacement.toLowerCase()" [triggers]="hintTrigger.toLowerCase()"
            class="fc inputNumber form-control {{setPresentationStyle()}}"

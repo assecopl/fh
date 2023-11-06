@@ -19,21 +19,28 @@ import {
   NgbCalendar,
   NgbDate,
   NgbDateAdapter,
-  NgbDateParserFormatter,
+  NgbDateParserFormatter, NgbDateStruct,
   NgbInputDatepicker,
   NgbInputDatepickerConfig,
-  NgbTimeAdapter,
+  NgbTimeAdapter, NgbTimeStruct,
 } from '@ng-bootstrap/ng-bootstrap';
-import {FhngDateTimeAdapter} from '../../models/FhngDateTimeAdapter';
 import {FhngReactiveInputC} from '../../models/componentClasses/FhngReactiveInputC';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
 import {BootstrapWidthEnum} from '../../models/enums/BootstrapWidthEnum';
+import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
+import {CustomNgbDatetimeService} from "../../service/custom-ngb-date-parser-formatter.service";
+
+interface IInputTimestampDataAttributes extends IDataAttributes {
+  format?: string;
+  onChange?: string;
+}
 
 @Component({
   selector: '[fhng-input-timestamp]',
   templateUrl: './input-timestamp.component.html',
   styleUrls: ['./input-timestamp.component.scss'],
   providers: [
+    CustomNgbDatetimeService,
     /**
      * Dodajemy deklaracje klasy ogólnej aby wstrzykiwanie i odnajdowanie komponentów wewnątrz siebie było możliwe.
      * Dzięki temu budujemy hierarchię kontrolek Fhng.
@@ -43,23 +50,34 @@ import {BootstrapWidthEnum} from '../../models/enums/BootstrapWidthEnum';
       useExisting: forwardRef(() => InputTimestampComponent),
     },
     NgbInputDatepickerConfig,
-    FhngDateTimeAdapter,
-    {provide: NgbDateAdapter, useExisting: FhngDateTimeAdapter},
-    {provide: NgbTimeAdapter, useExisting: FhngDateTimeAdapter},
-    {provide: NgbDateParserFormatter, useExisting: FhngDateTimeAdapter},
+    {provide: NgbDateAdapter, useExisting: CustomNgbDatetimeService},
+    {provide: NgbTimeAdapter, useExisting: CustomNgbDatetimeService},
+    {provide: NgbDateParserFormatter, useExisting: CustomNgbDatetimeService}
   ],
 })
 export class InputTimestampComponent
   extends FhngReactiveInputC
   implements OnInit {
-  @HostBinding('class.highlightToday') @Input() public highlightToday: boolean =
-    false;
 
-  @Input() public format: string = 'DD-MM-YYYY HH:mm:ss';
+  public override width: BootstrapWidthEnum = BootstrapWidthEnum.MD3;
 
-  @ViewChild('d', {read: NgbInputDatepicker}) d: NgbInputDatepicker & any;
+  public override mb2: boolean = false;
 
-  @Output() public change = new EventEmitter<any>();
+  @HostBinding('class.form-group')
+  public formGroupClass: boolean = true;
+
+  @HostBinding('class.highlightToday')
+  @Input()
+  public highlightToday: boolean = false;
+
+  @Input()
+  public format: string = 'DD-MM-YYYY HH:mm:ss';
+
+  @ViewChild('d', {read: NgbInputDatepicker})
+  public d: NgbInputDatepicker & any;
+
+  @Output()
+  public change = new EventEmitter<any>();
 
   public c: NgbDate;
 
@@ -73,28 +91,24 @@ export class InputTimestampComponent
     public override injector: Injector,
     public config: NgbInputDatepickerConfig,
     public calendar: NgbCalendar,
-    public fhngDateTimeAdapter: FhngDateTimeAdapter,
+    public custom: CustomNgbDatetimeService,
     @Optional() @SkipSelf() parentFhngComponent: FhngComponent
   ) {
     super(injector, parentFhngComponent);
-    this.width = BootstrapWidthEnum.MD3;
-    //TODO formatters , config params
 
     const curentYear = new Date().getFullYear();
+
     this.config.minDate = {year: curentYear - 100, day: 1, month: 1};
     this.config.maxDate = {year: curentYear + 100, day: 1, month: 1};
   }
 
   override ngOnInit() {
     super.ngOnInit();
-    this.fhngDateTimeAdapter.dateFormat = this.format.replace('RRRR', 'YYYY');
   }
 
-  public timeChangeEvent(event) {
-    //Use NgbInputDatepicker internal function to update input value dynamicly.
-    // console.log("timeChangeEvent", event);
+  public timeChangeEvent(value: string) {
     if (this.d) {
-      this.d.manualDateChange(event, true);
+      this.updateModel(value);
     }
   }
 
@@ -102,10 +116,26 @@ export class InputTimestampComponent
     super.ngOnChanges(changes);
   }
 
-  changeHour(event) {
+  public onDateSelect(value: string): void {
+    this.updateModel(value);
   }
 
-  onDateSelect(date: any) {
-    this.change.emit();
+  public onClosed(): void {
+    this.value = this.rawValue;
+    this.onChangeEvent();
+  }
+
+  public override updateModel(date: string) {
+    this.valueChanged = true;
+    this.rawValue = date;
+  };
+
+  public override mapAttributes(data: IInputTimestampDataAttributes): void {
+    super.mapAttributes(data);
+
+    this.onChange = data.onChange;
+    this.custom.frontendFormat = this.format?.replace('RRRR', 'YYYY');
+
+    console.log('data', this)
   }
 }

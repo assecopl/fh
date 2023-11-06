@@ -5,6 +5,7 @@
 <div class="row" *ngIf="labelPosition == 'LEFT' || labelPosition == 'RIGHT'">
   <label
     *ngIf="label && labelPosition == 'LEFT'"
+    [id]="inputId + '_label'"
     [for]="inputId"
     [ngStyle]="
       isFixedSize
@@ -35,6 +36,7 @@
   </div>
   <label
     *ngIf="label && labelPosition == 'RIGHT'"
+    [id]="inputId + '_label'"
     [for]="inputId"
     [ngStyle]="
       isFixedSize
@@ -49,16 +51,18 @@
 <ng-container *ngIf="labelPosition == 'UP' || labelPosition == 'DOWN'">
   <label
     *ngIf="label && labelPosition == 'UP'"
+    [id]="inputId + '_label'"
     [for]="inputId"
     [innerHTML]="labelHtml"
-    class="col-form-label"
+    class="col-form-label align-items-end"
   >{{ label }}</label
   >
   <ng-container *ngTemplateOutlet="content"></ng-container>
   <label
     *ngIf="label && labelPosition == 'DOWN'"
+    [id]="inputId + '_label'"
     [for]="inputId"
-    class="col-form-label"
+    class="col-form-label align-items-end"
   >{{ label }}</label
   >
 </ng-container>

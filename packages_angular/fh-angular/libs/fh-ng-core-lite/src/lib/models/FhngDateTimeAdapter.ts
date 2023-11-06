@@ -164,6 +164,8 @@ export class FhngDateAdapter extends NgbDateAdapter<string> {
       date = new NgbDate(null, null, null);
       let current = moment(value, this.dateFormat);
 
+      console.log('parseToFhngDateTime', value, this.dateFormat, current)
+
       if (!current.isValid()) {
         if (!new RegExp(/^[A-Za-z]+$/).test(value.toString())) {
           //Jeżeli data jest nieprawidłowa i zawiera literki to nie uzupełniona została całkowicie maska.

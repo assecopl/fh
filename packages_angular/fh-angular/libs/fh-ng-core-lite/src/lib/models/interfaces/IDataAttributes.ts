@@ -22,6 +22,6 @@ export interface IDataAttributes {
     formType?: string,
     subelements?: any[],
     activeTabIndex?: number,
-  rawValue?: any
+    rawValue?: any
     [name: string]: any
 }

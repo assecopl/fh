@@ -17,6 +17,11 @@
 
     ngb-timepicker {
       display: inline-block;
+
+      input.ngb-tp-input {
+        padding-left: initial;
+        padding-right: initial;
+      }
     }
   }
 }
