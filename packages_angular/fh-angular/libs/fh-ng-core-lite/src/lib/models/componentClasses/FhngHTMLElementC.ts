@@ -24,6 +24,7 @@ import {IconAligmentType} from "../CommonTypes";
 import {STYLE_UNIT} from "../enums/StyleUnitEnum";
 import {AvailabilityEnum} from "../../availability/enums/AvailabilityEnum";
 import {AvailabilityUtils} from "../../availability/AvailabilityUtils";
+import {FhngFormatter} from "../../controls/input-number/input-number.component";
 
 @Directive()
 export class FhngHTMLElementC
@@ -51,6 +52,7 @@ export class FhngHTMLElementC
   @Input()
   public width: string;
 
+  @Input()
   public rawValue: any = null;
 
   public height: string = null;
@@ -140,10 +142,10 @@ export class FhngHTMLElementC
   @HostBinding('class.mb-2')
   public mb2 = true;
 
-  @Input('formatter')
+  // @Input('formatter')
   public formatterName: string = null;
   // public formatter:FhngFormatter = null;
-  public formatter: any = null;
+  public formatter: FhngFormatter = null;
   // public formatterService:FhngFormatterService = null;
   public formatterService: any = null;
 

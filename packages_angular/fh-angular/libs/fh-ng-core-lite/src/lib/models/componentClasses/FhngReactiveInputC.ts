@@ -1,17 +1,8 @@
-import {
-  AbstractControl,
-  ControlContainer,
-  FormArray,
-  FormControl,
-  FormGroup,
-  FormGroupDirective,
-  ValidatorFn,
-} from '@angular/forms';
+import {ValidatorFn,} from '@angular/forms';
 import {
   Directive,
   ElementRef,
   EventEmitter,
-  Host,
   HostBinding,
   Injector,
   Input,
@@ -26,8 +17,9 @@ import {FhngHTMLElementC} from './FhngHTMLElementC';
 import {InputTypeEnum} from '../enums/InputTypeEnum';
 import {IconAligmentType} from '../CommonTypes'; //  Unused becouse of compiler problem
 import {FhngComponent} from './FhngComponent';
-import {FormComponent} from '../../controls/form/form.component';
 import {IDataAttributes} from "../interfaces/IDataAttributes";
+import {AvailabilityEnum} from "../../availability/enums/AvailabilityEnum";
+import {AvailabilityUtils} from "../../availability/AvailabilityUtils";
 
 /**
  * TODO Rewrite
@@ -62,6 +54,15 @@ export class FhngReactiveInputC
   @Input()
   public disabled: boolean = false;
 
+  public override set availability(value: AvailabilityEnum | string) {
+    this._availability = AvailabilityUtils.stringToEnum(value);
+    if (this._availability == AvailabilityEnum.EDIT) {
+      this.disabled = false;
+    } else {
+      this.disabled = true;
+    }
+
+  }
 
   @Input()
   public iconText: string = null;

@@ -1,6 +1,7 @@
 import {Directive, ElementRef, Input, OnInit} from '@angular/core';
 import {AvailabilityUtils} from "../AvailabilityUtils";
 import {AvailabilityEnum} from "../enums/AvailabilityEnum";
+import {NgControl} from '@angular/forms';
 
 
 /**
@@ -16,6 +17,7 @@ export class FhngAvailabilityInputDirective implements OnInit {
   @Input('availabilityInput')
   public set availability(value: AvailabilityEnum | string) {
     this._availability = AvailabilityUtils.stringToEnum(value);
+    AvailabilityUtils.setInputELementAvaialbility(this.htmlElement.nativeElement, this._availability)
   }
 
   constructor(protected htmlElement: ElementRef,
@@ -24,7 +26,6 @@ export class FhngAvailabilityInputDirective implements OnInit {
   }
 
   public ngOnInit(): void {
-    AvailabilityUtils.setInputELementAvaialbility(this.htmlElement.nativeElement, this._availability)
   }
 
 

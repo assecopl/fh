@@ -78,7 +78,7 @@ export class InputNumberComponent
 }
 
 export class FhngFormatter {
-  pattern: string;
+  pattern: string = null;
   customPatterns = null;
   separatorLimit; //maxIntegerDIgits
   maxFractionDigits;

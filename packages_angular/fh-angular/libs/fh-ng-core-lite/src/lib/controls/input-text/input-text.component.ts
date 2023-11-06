@@ -16,6 +16,8 @@ import {FhngReactiveInputC} from '../../models/componentClasses/FhngReactiveInpu
 import {BootstrapWidthEnum} from '../../models/enums/BootstrapWidthEnum';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
 import {FORM_VALUE_ATTRIBUTE_NAME} from "../../models/CommonTypes";
+import {FhngFormatter} from "../input-number/input-number.component";
+import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
 
 @Component({
   selector: '[fhng-input-text]',
@@ -31,8 +33,15 @@ import {FORM_VALUE_ATTRIBUTE_NAME} from "../../models/CommonTypes";
 export class InputTextComponent extends FhngReactiveInputC implements OnInit {
   public override width = BootstrapWidthEnum.MD3;
 
-  @Input('mask')
+  // @Input('mask')
   public pattern: string = null;
+
+  @Input()
+  public set mask(value: string) {
+    if (value) {
+      this.formatter = new FhngFormatter(value, null);
+    }
+  }
 
   @Input()
   public rowsCount: number = 1;
@@ -55,7 +64,6 @@ export class InputTextComponent extends FhngReactiveInputC implements OnInit {
   public textareaAutosize: boolean;
   protected keySupportCallback: any;
   private readonly maskDefinition: string;
-  protected mask: any;
   private lastValidMaskedValue: any;
   protected readonly textAlign: string;
   protected format: string;
@@ -81,6 +89,7 @@ export class InputTextComponent extends FhngReactiveInputC implements OnInit {
 
   override ngOnInit() {
     super.ngOnInit();
+    this.inputType = InputTypeEnum.text;
     if (this.height || this.rowsCount > 1 || this.rowsCountAuto) {
       this.inputType = InputTypeEnum.textarea;
     }
@@ -89,6 +98,7 @@ export class InputTextComponent extends FhngReactiveInputC implements OnInit {
 
   override ngOnChanges(changes: SimpleChanges) {
     super.ngOnChanges(changes);
+    console.log("-------changes----------", this.id, changes);
   }
 
   public override updateModel(event) {
@@ -105,5 +115,11 @@ export class InputTextComponent extends FhngReactiveInputC implements OnInit {
 
     return attrs;
   };
+
+  override mapAttributes(data: IDataAttributes | any) {
+    super.mapAttributes(data);
+    this.mask = data.mask
+    this.rawValue = data.rawValue;
+  }
 
 }

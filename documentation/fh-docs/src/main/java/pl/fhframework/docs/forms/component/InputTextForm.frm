@@ -291,7 +291,7 @@ getFieldsHighlightingList().add(model, "highlight", PresentationStyleEnum.INFO);
             <PanelGroup width="md-12" label="{$.fh.docs.component.inputtext_with_email_mask}" id="_Form_TabContainer_Tab3_PanelGroup2">
                 <OutputLabel width="md-12" value="{$.fh.docs.component.inputtext_with_email_mask_label}:" id="_Form_TabContainer_Tab3_PanelGroup2_OutputLabel1"/>
                 <OutputLabel width="md-12" value="[size='15']*\{1\}M\{0,99\}@M\{1,26\}[/size]" id="_Form_TabContainer_Tab3_PanelGroup2_OutputLabel2"/>
-                <InputText id="inputTextExample20_2" width="md-6" mask="*{1}[M{0,99}]@M{1,26}"/>
+                <InputText id="inputTextExample20_2" width="md-6" mask="A*@A*.SSS"/>
                 <InputText id="inputTextCodeExample20" label="{$.fh.docs.component.code}" width="md-12">
                     <![CDATA[![ESCAPE[
 <InputText id="inputTextExample20_2"  width="md-6" mask="*{1}[M{0,99}]@M{1,26}" />

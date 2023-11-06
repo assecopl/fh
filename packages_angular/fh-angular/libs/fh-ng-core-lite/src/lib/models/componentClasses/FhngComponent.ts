@@ -15,7 +15,6 @@ import {FormsManager} from "../../Socket/FormsManager";
 import {IDataAttributes} from "../interfaces/IDataAttributes";
 import {FHNG_CORE_CONFIG, FhNgCoreConfig} from "../../fh-ng-core.config";
 import {FhngChangesComponent} from "../abstracts/FhngChangesComponent";
-
 /**
  * Klasa odpowiedzialna za budowę drzewa komponentów FHNG
  * Każda kontrolka powinna mieć przyporzadkowany elemnt w sekcji providers.{provide: FhngComponent, useExisting: forwardRef(() => RowComponent)}

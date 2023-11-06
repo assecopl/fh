@@ -36,7 +36,7 @@ import {TableColumnComponent} from "./controls/table-column/table-column.compone
 import {TableHeadRowComponent} from "./controls/table-head-row/table-head-row.component";
 import {TableRowComponent} from "./controls/table-row/table-row.component";
 import {TablePagedComponent} from "./controls/table-paged/table-paged.component";
-import {IConfig, NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask} from 'ngx-mask'
+import {IConfig, NgxMaskDirective, NgxMaskPipe, provideNgxMask} from 'ngx-mask'
 import {AccordionComponent} from "./controls/accordion/accordion.component";
 import {SpacerComponent} from "./controls/spacer/spacer.component";
 import {ValidateMessagesComponent} from "./controls/validation-messages/validation-messages.component";
@@ -72,28 +72,36 @@ import {NgSelectModule} from '@ng-select/ng-select';
 import {AutosizeModule} from '@techiediaries/ngx-textarea-autosize';
 import {ImageComponent} from "./controls/image/image.component";
 import {TimerComponent} from "./controls/timer/timer.component";
+import {DisableControlDirective} from "./directives/disable-control.directive";
 
 
 
 const maskConfigFunction: () => Partial<IConfig> = () => {
-  return {
-    validation: false,
-    thousandSeparator: "",
-    decimalMarker: ",",
-    clearIfNotMatch: false,
-    patterns: {
-      '0': {pattern: new RegExp("[0-9]")},
-      '9': {pattern: new RegExp("[0-9]")},
-      'A': {pattern: new RegExp("[A-ZĄĆĘŁŃÓŚŹŻa-ząćęłńóśźż]")},
-      'a': {pattern: new RegExp("[A-ZĄĆĘŁŃÓŚŹŻa-ząćęłńóśźż]")},
-      'P': {pattern: new RegExp("[A-Z0-9]")}, //For NIP.
-      'L': {pattern: new RegExp("[A-Za-z]")},
-      'l': {pattern: new RegExp("[A-Za-z]")},
-      'M': {pattern: new RegExp('[0-9a-zA-Z._-]')},
-      'G': {pattern: new RegExp('[0-9a-zA-Z._-]')}, //Use G instead of M mark - there is somthing wrong with M (as 4.x) mark
-      'N': {pattern: new RegExp("[0-9a-zA-Z ąćęłńóśźżĄĆĘŁŃÓŚŹŻ._-]")}
-    }
-  };
+  return {}
+  // return {
+  //   validation: false,
+  //   thousandSeparator: "",
+  //   decimalMarker: ",",
+  //   clearIfNotMatch: true,
+  //   patterns: {
+  //     '0': {pattern: new RegExp("[0-9]"),optional:true},
+  //     '9': {pattern: new RegExp("[0-9]")},
+  //     'A': {pattern: new RegExp("[A-ZĄĆĘŁŃÓŚŹŻa-ząćęłńóśźż]")},
+  //     'a': {pattern: new RegExp("[A-ZĄĆĘŁŃÓŚŹŻa-ząćęłńóśźż]"),optional:true},
+  //     'P': {pattern: new RegExp("[A-Z0-9]")}, //For NIP.
+  //     'p': {pattern: new RegExp("[A-Z0-9]"),optional:true}, //For NIP.
+  //     'L': {pattern: new RegExp("[A-Za-z]")},
+  //     'l': {pattern: new RegExp("[A-Za-z]"),optional:true},
+  //     'R': {pattern: new RegExp("[0-9A-Za-z]")},
+  //     'r': {pattern: new RegExp("[0-9A-Za-z]"),optional:true},
+  //     'M': {pattern: new RegExp('[0-9a-zA-Z._-]')},
+  //     'm': {pattern: new RegExp('[0-9a-zA-Z._-]'), optional:true},
+  //     'G': {pattern: new RegExp('[0-9a-zA-Z._-]')}, //Use G instead of M mark - there is somthing wrong with M (as 4.x) mark
+  //     'g': {pattern: new RegExp('[0-9a-zA-Z._-]'),optional:true}, //Use G instead of M mark - there is somthing wrong with M (as 4.x) mark
+  //     'N': {pattern: new RegExp("[0-9a-zA-Z ąćęłńóśźżĄĆĘŁŃÓŚŹŻ._-]")},
+  //     'n': {pattern: new RegExp("[0-9a-zA-Z ąćęłńóśźżĄĆĘŁŃÓŚŹŻ._-]"),optional:true}
+  //   }
+  // };
 };
 
 const components = [
@@ -145,7 +153,8 @@ const components = [
   ComboComponent,
   SelectOneMenuComponent,
   ImageComponent,
-  TimerComponent
+  TimerComponent,
+  DisableControlDirective
 ]
 
 @NgModule({
@@ -158,7 +167,7 @@ const components = [
     SessionTimeoutEvent,
     CustomActionEvent,
     ComponentManager,
-    provideEnvironmentNgxMask(maskConfigFunction)
+    provideNgxMask(maskConfigFunction)
   ],
   imports: [CommonModule, JsonPipe, NgbModule, NgxMaskDirective, NgxMaskPipe, FormsModule, NgSelectModule, AutosizeModule],
   exports: components,

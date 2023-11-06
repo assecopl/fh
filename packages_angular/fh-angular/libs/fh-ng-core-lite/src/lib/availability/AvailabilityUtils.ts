@@ -1,4 +1,4 @@
-import {AbstractControl} from '@angular/forms';
+import {AbstractControl, NgControl} from '@angular/forms';
 import {AvailabilityEnum} from './enums/AvailabilityEnum';
 
 /**
@@ -87,30 +87,32 @@ export class AvailabilityUtils {
   }
 
 
-  public static setFormControlAvailability(control: AbstractControl, availability: AvailabilityEnum) {
+  public static setFormControlAvailability(control: NgControl, availability: AvailabilityEnum) {
     /**
      * Timeout is basicly for first change when components are being initilize.
      * It prevents from error : Expression has changed after it was checked.
      * TODO Think of better solution.
      */
+    let action = 'enable';
     setTimeout(function () {
       switch (availability as AvailabilityEnum) {
         case AvailabilityEnum.EDIT:
-          control.enable({onlySelf: true, emitEvent: false});
+          action = 'enable';
           break;
         case AvailabilityEnum.VIEW:
-          control.disable({onlySelf: true, emitEvent: false});
+          action = 'disable';
           break;
         case AvailabilityEnum.HIDDEN:
-          control.disable({onlySelf: true, emitEvent: false});
+          action = 'disable';
           break;
         case AvailabilityEnum.INVISIABLE:
-          control.disable({onlySelf: true, emitEvent: false});
+          action = 'disable';
           break;
         case AvailabilityEnum.DEFECTED:
-          control.disable({onlySelf: true, emitEvent: false});
+          action = 'disable';
           break;
       }
+      control[action]();
     }, 0)
 
 

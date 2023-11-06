@@ -1,67 +1,67 @@
 <div fhng-input-label
-  [inputId]="id"
-  [label]="label"
-  [labelPosition]="labelPosition"
-  [labelSize]="labelSize"
+     [inputId]="id"
+     [label]="label"
+     [labelPosition]="labelPosition"
+     [labelSize]="labelSize"
 >
   <ng-container *ngIf="inputType == inputTypeEnum.textarea">
     <!--    <ng-container *ngIf="control">-->
     {{rowsCountAuto}}
-      <ng-container *ngIf="!rowsCountAuto">
-        <div fhng-input-group
-          [iconText]="iconText"
-             [class.fhng-disabled]="disabled"
-          [icon]="icon"
-          [iconAlignment]="iconAlignment"
-          [required]="required"
-        >
+    <ng-container *ngIf="!rowsCountAuto">
+      <div fhng-input-group
+           [iconText]="iconText"
+           [class.fhng-disabled]="disabled"
+           [icon]="icon"
+           [iconAlignment]="iconAlignment"
+           [required]="required"
+      >
           <textarea [availabilityInput]="availability" (input)="onInputEvent($event)" (change)="onChangeEvent()"
-            #focusElement
+                    #focusElement
                     [id]="id"
-            [style.height]="styles.height"
-            [rows]="rowsCount"
-            [name]="name"
+                    [style.height]="styles.height"
+                    [rows]="rowsCount"
+                    [name]="name"
                     [disabled]="disabled"
                     [value]="rawValue"
                     [maxLength]="maxLength"
-            [placeholder]="placeholder"
-            [style.resize]="resize"
-            [attr.aria-label]="ariaLabel"
+                    [placeholder]="placeholder"
+                    [style.resize]="resize"
+                    [attr.aria-label]="ariaLabel"
                     [required]="required"
                     [ngbTooltip]="getHintTooltip()" [ngbPopover]="getHintPopover()" [popoverTitle]="hintTitle"
                     [placement]="hintPlacement.toLowerCase()" [triggers]="hintTrigger.toLowerCase()"
                     class="fc inputText form-control {{setPresentationStyle()}}"
           ></textarea>
-        </div>
-      </ng-container>
-      <ng-container *ngIf="rowsCountAuto">
-        <div fhng-input-group
-          [iconText]="iconText"
-             [class.fhng-disabled]="disabled"
-          [icon]="icon"
-          [iconAlignment]="iconAlignment"
-          [required]="required"
-        >
+      </div>
+    </ng-container>
+    <ng-container *ngIf="rowsCountAuto">
+      <div fhng-input-group
+           [iconText]="iconText"
+           [class.fhng-disabled]="disabled"
+           [icon]="icon"
+           [iconAlignment]="iconAlignment"
+           [required]="required"
+      >
           <textarea [availabilityInput]="availability" (input)="onInputEvent($event)" (change)="onChangeEvent()"
-            #focusElement
-            autosize
+                    #focusElement
+                    autosize
                     [id]="id"
                     [value]="rawValue"
-            [style.height]="styles.height"
-            [rows]="rowsCount"
-            [name]="name"
+                    [style.height]="styles.height"
+                    [rows]="rowsCount"
+                    [name]="name"
                     [disabled]="disabled"
                     [maxLength]="maxLength"
-            [placeholder]="placeholder"
-            [style.resize]="resize"
+                    [placeholder]="placeholder"
+                    [style.resize]="resize"
                     [required]="required"
-            [attr.aria-label]="ariaLabel"
+                    [attr.aria-label]="ariaLabel"
                     [ngbTooltip]="getHintTooltip()" [ngbPopover]="getHintPopover()" [popoverTitle]="hintTitle"
                     [placement]="hintPlacement.toLowerCase()" [triggers]="hintTrigger.toLowerCase()"
                     class="fc inputText form-control {{setPresentationStyle()}}"
           ></textarea>
-        </div>
-      </ng-container>
+      </div>
+    </ng-container>
     <!--    </ng-container>-->
     <!--    <ng-container *ngIf="!control">-->
     <!--      <textarea-->
@@ -82,36 +82,35 @@
   <ng-container *ngIf="inputType !== inputTypeEnum.textarea">
 
     <div fhng-input-group
-        [iconText]="iconText"
+         [iconText]="iconText"
          [class.fhng-disabled]="disabled"
-        [icon]="icon"
-        [iconAlignment]="iconAlignment"
-        [required]="required"
-      >
+         [icon]="icon"
+         [iconAlignment]="iconAlignment"
+         [required]="required"
+    >
       <input [availabilityInput]="availability" (input)="onInputEvent($event)" (change)="onChangeEvent()"
-          #focusElement
+             #focusElement
              [id]="id"
+
+             [(ngModel)]="rawValue"
              [disabled]="disabled"
-             [value]="rawValue"
-          [type]="inputType"
-          [name]="name"
+             [type]="inputType"
+             [name]="name"
              [placeholder]="placeholder"
              [maxLength]="maxLength"
-          [mask]="formatter?.pattern"
-          [patterns]="
-            formatter?.customPatterns ? formatter.customPatterns : null
-          "
-          [clearIfNotMatch]="false"
-          [attr.aria-label]="ariaLabel"
+             [mask]="formatter?.pattern"
+             [dropSpecialCharacters]="false"
+             [attr.aria-label]="ariaLabel"
              [required]="required"
              class="fc inputText form-control {{setPresentationStyle()}}"
              [ngbTooltip]="getHintTooltip()" [ngbPopover]="getHintPopover()" [popoverTitle]="hintTitle"
              [placement]="hintPlacement.toLowerCase()" [triggers]="hintTrigger.toLowerCase()"
 
-        />
+      />
     </div>
-    </ng-container>
+  </ng-container>
 </div>
+{{formatter?.pattern}}
 <ng-container *ngIf="configuration.debug">
   <fh-component-debugger/>
 </ng-container>
