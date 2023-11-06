@@ -1,13 +1,3 @@
-<!--<ng-container *ngIf="hint; else inputNumber">-->
-<!--  <span-->
-<!--    ngbTooltip="{{ hint }}"-->
-<!--    [placement]="hintPlacement.toLowerCase()"-->
-<!--    [triggers]="hintTrigger.toLowerCase()"-->
-<!--  >-->
-<!--    <ng-container *ngTemplateOutlet="inputNumber"></ng-container>-->
-<!--  </span>-->
-<!--</ng-container>-->
-<!--<ng-template #inputNumber>-->
   <div fhng-input-label
     [inputId]="id"
     [label]="label"
@@ -26,7 +16,7 @@
           [id]="innerId"
           type="text"
              [disabled]="disabled"
-             [value]="rawValue"
+             [(ngModel)]="rawValue"
           [attr.aria-label]="!label && ariaLabel ? ariaLabel : null"
           [placeholder]="placeholder"
           [allowNegativeNumbers]="allowNegativeNumbers"
@@ -44,9 +34,7 @@
         />
     </div>
   </div>
-
-{{disabled}} {{availability}} {{rawValue}}
-<!--</ng-template>-->
+  {{rawValue}}
 <ng-container *ngIf="configuration.debug">
   <fh-component-debugger/>
 </ng-container>

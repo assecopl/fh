@@ -56,12 +56,12 @@ export class InputNumberComponent
     if (!this.formatterName) {
       // this.customPatterns = {'N': {pattern: new RegExp("^([-]?" + integerMark + "" + separatorMark + "" + fractionMark + ")$")}};
       let pattern = 'separator';
-      if (this.maxFractionDigits) {
+      if (this.maxFractionDigits || this.maxFractionDigits == 0) {
         pattern = 'separator.' + this.maxFractionDigits;
       }
       this.formatter = new FhngFormatter(pattern, null);
       this.formatter.thousandSeparator = '';
-      if (this.maxIntigerDigits) {
+      if (this.maxIntigerDigits || this.maxIntigerDigits == 0) {
         let ints = '1';
         this.maxIntigerDigits--;
         while (this.maxIntigerDigits) {
@@ -75,6 +75,7 @@ export class InputNumberComponent
 
   override ngOnChanges(changes: SimpleChanges) {
     super.ngOnChanges(changes);
+    this.processPattern()
   }
 
   public override updateModel(event) {

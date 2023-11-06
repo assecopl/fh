@@ -190,11 +190,17 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
     //Przepisujemy wszystkie typowe parametry obiektu jeżeli istnieją na naszym obiekcie.
     //W metodach w obiektach możemy sobono przepisywać parametry których nazwy się nie pokrywają.
     let dataKeys = Object.keys(data);
+    let notFindAttributes: string[] = []
     dataKeys.forEach(key => {
       if (Object.hasOwn(this, key)) {
         this[key] = data[key];
+      } else {
+        if (this.configuration.debug) {
+          notFindAttributes.push(key);
+        }
       }
     })
+    console.log(this.id, this.constructor.name, notFindAttributes);
     this._data = data;
   }
 
