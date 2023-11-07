@@ -3,7 +3,6 @@ import {
   ElementRef,
   EventEmitter,
   forwardRef,
-  Host,
   HostBinding,
   Injector,
   Input,
@@ -20,14 +19,19 @@ import {
   NgbDateParserFormatter,
   NgbDatepickerConfig,
   NgbInputDatepickerConfig,
-  NgbTimeAdapter,
 } from '@ng-bootstrap/ng-bootstrap';
 import {FhngDateAdapter} from '../../models/FhngDateTimeAdapter';
 import {BootstrapWidthEnum} from './../../models/enums/BootstrapWidthEnum';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
-import {FormComponent} from '../form/form.component';
 import Inputmask from 'inputmask';
-import {IconAligmentType} from '../../models/CommonTypes';
+import {FORM_VALUE_ATTRIBUTE_NAME, IconAligmentType} from '../../models/CommonTypes';
+import {CustomNgbDateService, CustomNgbDatetimeService} from "../../service/custom-ngb-date-parser-formatter.service";
+import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
+
+interface IInputDateDataAttributes extends IDataAttributes {
+  format?: string;
+  onChange?: string;
+}
 
 @Component({
   selector: '[fhng-input-date]',
@@ -39,25 +43,36 @@ import {IconAligmentType} from '../../models/CommonTypes';
       useExisting: forwardRef(() => InputDateComponent),
     },
     NgbInputDatepickerConfig,
-    FhngDateAdapter,
     NgbDatepickerConfig,
-    {provide: NgbDateAdapter, useExisting: FhngDateAdapter},
-    {provide: NgbTimeAdapter, useExisting: FhngDateAdapter},
-    {provide: NgbDateParserFormatter, useExisting: FhngDateAdapter},
+    CustomNgbDateService,
+    {provide: NgbDateAdapter, useExisting: CustomNgbDateService},
+    {provide: NgbDateParserFormatter, useExisting: CustomNgbDateService},
   ], // add config to the component providers
 })
 export class InputDateComponent extends FhngReactiveInputC implements OnInit {
   public override width = BootstrapWidthEnum.MD3;
 
-  @HostBinding('class.highlightToday') @Input() public highlightToday: boolean =
-    false;
+  @HostBinding('class.form-group')
+  public formGroupClass: boolean = true;
 
-  @Input() public format: string = 'DD-MM-YYYY';
+  @HostBinding('class.highlightToday')
+  @Input()
+  public highlightToday: boolean = false;
 
-  @Input() public maskEnabled: boolean = true;
-  @Input() public maskDynamic: boolean = false;
+  @Input()
+  public format: string = 'DD-MM-YYYY';
 
-  @ViewChild('element') inputRef: ElementRef;
+  @Input()
+  public maskEnabled: boolean = true;
+
+  @Input()
+  public maskDynamic: boolean = false;
+
+  @ViewChild('element')
+  public inputRef: ElementRef;
+
+  @Output()
+  public change = new EventEmitter<any>();
 
   /**
    * @Override
@@ -65,96 +80,103 @@ export class InputDateComponent extends FhngReactiveInputC implements OnInit {
   @Input()
   public override iconAlignment: IconAligmentType = 'AFTER';
 
-  @Output() public change = new EventEmitter<any>();
-  /**
-   * @Override
-   */
   public override icon: string = 'fa-calendar-alt';
 
   constructor(
     public override injector: Injector,
-    public config: NgbInputDatepickerConfig,
-    public ngbDatepickerConfig: NgbDatepickerConfig,
+    public config: NgbDatepickerConfig,
     public calendar: NgbCalendar,
-    public fhngDateTimeAdapter: FhngDateAdapter,
+    private _customNgbDateService: CustomNgbDateService,
     @Optional() @SkipSelf() parentFhngComponent: FhngComponent
   ) {
     super(injector, parentFhngComponent);
-    //TODO formatters , config params
 
     const curentYear = new Date().getFullYear();
-    this.ngbDatepickerConfig.minDate = {
-      year: curentYear - 100,
-      day: 1,
-      month: 1,
-    };
+
     this.config.minDate = {year: curentYear - 100, day: 1, month: 1};
-    this.ngbDatepickerConfig.maxDate = {
-      year: curentYear + 100,
-      day: 1,
-      month: 1,
-    };
     this.config.maxDate = {year: curentYear + 100, day: 1, month: 1};
   }
 
   override ngOnInit() {
     super.ngOnInit();
-    this.fhngDateTimeAdapter.dateFormat = this.format.replace('RRRR', 'YYYY');
-    if (this.value) {
-      this.value = new Date(Date.parse(this.value));
-    }
-    if (this.iconAlignment === 'BEFORE') {
-      this.config.placement = 'bottom-left';
-    }
-    if (this.iconAlignment == 'AFTER') {
-      this.config.placement = 'bottom-right';
-    }
-
-    const curentYear = new Date().getFullYear();
-    this.config.minDate = {year: curentYear - 100, day: 1, month: 1};
-    this.config.maxDate = {year: curentYear + 100, day: 1, month: 1};
   }
 
   override ngAfterViewInit() {
     super.ngAfterViewInit();
 
-    if (this.maskEnabled) {
-      Inputmask({
-        clearMaskOnLostFocus: false,
-        greedy: false,
-        jitMasking: this.maskDynamic,
-        placeholder: this.format,
-        definitions: {
-          R: {
-            validator: '[0-9]',
-            cardinality: 1,
-            definitionSymbol: '*',
-          },
-          Y: {
-            validator: '[0-9]',
-            cardinality: 1,
-            definitionSymbol: '*',
-          },
-          M: {
-            validator: '[0-9]',
-            cardinality: 1,
-            definitionSymbol: '*',
-          },
-          D: {
-            validator: '[0-9]',
-            cardinality: 1,
-            definitionSymbol: '*',
-          },
-        },
-        insertMode: true,
-        shiftPositions: false,
-        alias: 'date',
-        mask: this.format,
-      }).mask(this.inputRef.nativeElement);
+    // if (this.maskEnabled) {
+    //   Inputmask({
+    //     clearMaskOnLostFocus: false,
+    //     greedy: false,
+    //     jitMasking: this.maskDynamic,
+    //     placeholder: this.format,
+    //     definitions: {
+    //       R: {
+    //         validator: '[0-9]',
+    //         cardinality: 1,
+    //         definitionSymbol: '*',
+    //       },
+    //       Y: {
+    //         validator: '[0-9]',
+    //         cardinality: 1,
+    //         definitionSymbol: '*',
+    //       },
+    //       M: {
+    //         validator: '[0-9]',
+    //         cardinality: 1,
+    //         definitionSymbol: '*',
+    //       },
+    //       D: {
+    //         validator: '[0-9]',
+    //         cardinality: 1,
+    //         definitionSymbol: '*',
+    //       },
+    //     },
+    //     insertMode: true,
+    //     shiftPositions: false,
+    //     alias: 'date',
+    //     mask: this.format,
+    //   }).mask(this.inputRef.nativeElement);
+    // }
+  }
+
+  public onDateSelect(value: string): void {
+    this.updateModel(value);
+  }
+
+  public onClosed(): void {
+    this.value = this.rawValue;
+    this.onChangeEvent();
+  }
+
+  public onChangeInputEvent ($event: any): void {
+    $event.preventDefault();
+
+    if (CustomNgbDatetimeService.isDateValid($event.target.value, this._customNgbDateService.frontendFormat)) {
+      this.updateModel($event.target.value);
+      this.onChangeEvent();
     }
   }
 
-  onDateSelect(date: any) {
-    this.change.emit();
+  public override updateModel(date: string) {
+    this.valueChanged = true;
+    this.rawValue = date;
+  };
+
+  public override mapAttributes(data: IInputDateDataAttributes): void {
+    super.mapAttributes(data);
+
+    this.onChange = data.onChange;
+    this._customNgbDateService.frontendFormat = this.format?.replace('RRRR', 'YYYY');
   }
+
+  public override extractChangedAttributes() {
+    let attrs = {};
+    if (this.valueChanged) {
+      attrs[FORM_VALUE_ATTRIBUTE_NAME] = this.rawValue;
+      this.valueChanged = false;
+    }
+
+    return attrs;
+  };
 }

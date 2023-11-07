@@ -36,6 +36,10 @@ export class CustomNgbDatetimeService extends NgbDateParserFormatter {
     }
   }
 
+  public static isDateValid (input: string, format: string): boolean {
+    return moment(input, format).isValid();
+  }
+
   public parse(value: string): NgbDateStruct & NgbTimeStruct  | null {
     return this.fromModel(value, this.backendFormat);
   }
@@ -72,5 +76,31 @@ export class CustomNgbDatetimeService extends NgbDateParserFormatter {
         .minute(date?.minute ? date.minute : this._tmpDate.minute)
         .second(date?.second ? date.second : this._tmpDate.second)
         .format(format || this.backendFormat) : null;
+  }
+}
+
+@Injectable()
+export class CustomNgbDateService extends CustomNgbDatetimeService {
+  private _frontendDateFormat = FhngDateUtils.FRONTEND_DATE_FORMAT;
+
+  private _backendDateFormat = FhngDateUtils.BACKEND_DATE_FORMAT;
+
+  override get backendFormat(): string {
+    return this._backendDateFormat;
+  }
+
+  override set backendFormat(value: string) {
+    if (value) {
+      this._backendDateFormat = value;
+    }
+  }
+  override get frontendFormat(): string {
+    return this._frontendDateFormat;
+  }
+
+  override set frontendFormat(value: string) {
+    if (value) {
+      this._frontendDateFormat = value;
+    }
   }
 }
