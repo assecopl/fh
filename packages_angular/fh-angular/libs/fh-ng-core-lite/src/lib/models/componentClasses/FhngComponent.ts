@@ -206,7 +206,7 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
         }
       }
     })
-    console.log(this.id, this.constructor.name, notFindAttributes);
+
     this._data = data;
   }
 

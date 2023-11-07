@@ -1,40 +1,43 @@
-<div class="input-date-component" [ngStyle]="styles">
-  <div fhng-input-label
+<div fhng-input-label
+  [inputId]="id"
+  [label]="label"
+  [labelPosition]="labelPosition"
+  [labelSize]="labelSize"
+>
+  <div fhng-input-group
+    buttonAriaLabel="{{ label }}"
+    ngbTooltip="{{ hint }}"
+    [class.fh-disabled]="disabled"
     [inputId]="id"
-    [label]="label"
-    [labelPosition]="labelPosition"
-    [labelSize]="labelSize"
+    [iconText]="iconText"
+    [icon]="icon"
+    [iconAlignment]="iconAlignment"
+    [placement]="hintPlacement?.toLowerCase()"
+    [required]="required"
+    [triggers]="hintTrigger?.toLowerCase()"
+    (onClick)="d.toggle()"
   >
-    <div fhng-input-group
-        buttonAriaLabel="Wybierz {{ label }}"
-        [inputId]="id"
-        [iconText]="iconText"
-         [class.fh-disabled]="disabled"
-        [required]="required"
-        [icon]="icon"
-        [iconAlignment]="iconAlignment"
-        (onClick)="d.toggle()"
-        ngbTooltip="{{ hint }}"
-        [placement]="hintPlacement?.toLowerCase()"
-        [triggers]="hintTrigger?.toLowerCase()"
-      >
-        <input
-          #focusElement
-          #element
-          type="text"
-          [id]="innerId"
-          class="form-control InputDate fc "
-          [attr.aria-label]="!label && ariaLabel ? ariaLabel : null"
-          [placeholder]="format"
-          [name]="name"
-          [value]="value"
-          ngbDatepicker
-          #d="ngbDatepicker"
-          (dateSelect)="onDateSelect($event)"
-        />
-    </div>
+    <input
+      #focusElement
+      #element
+      #d="ngbDatepicker"
+      class="form-control InputDate fc"
+      type="text"
+      ngbDatepicker
+      [attr.aria-label]="!label && ariaLabel ? ariaLabel : null"
+      [availabilityHtmlElement]="availability"
+      [id]="innerId"
+      [ngModel]="value"
+      [ngStyle]="styles"
+      [placeholder]="format"
+      [name]="name"
+      (ngModelChange)="onDateSelect($event)"
+      (closed)="onClosed()"
+      (change)="onChangeInputEvent($event)"
+    />
   </div>
 </div>
+
 <ng-container *ngIf="configuration.debug">
   <fh-component-debugger/>
 </ng-container>

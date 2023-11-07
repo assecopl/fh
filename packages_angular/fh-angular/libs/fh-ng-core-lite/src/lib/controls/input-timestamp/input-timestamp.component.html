@@ -4,16 +4,18 @@
   [labelPosition]="labelPosition"
   [labelSize]="labelSize"
 >
-  {{value | json}}
   <div fhng-input-group
-    buttonAriaLabel="Wybierz {{ label }}"
+    buttonAriaLabel="{{ label }}"
+    ngbTooltip="{{ hint }}"
+    [class.fh-disabled]="disabled"
     [inputId]="id"
     [iconText]="iconText"
-    [class.fh-disabled]="disabled"
     [icon]="icon"
     [iconAlignment]="iconAlignment"
-    (onClick)="d.toggle()"
+    [placement]="hintPlacement?.toLowerCase()"
     [required]="required"
+    [triggers]="hintTrigger?.toLowerCase()"
+    (click)="d.toggle()"
   >
     <input
       #focusElement
@@ -22,17 +24,17 @@
       type="text"
       ngbTooltip="{{ hint }}"
       ngbDatepicker
+      [attr.aria-label]="!label && ariaLabel ? ariaLabel : null"
       [availabilityHtmlElement]="availability"
       [id]="innerId"
       [ngModel]="value"
       [ngStyle]="styles"
-      [placement]="hintPlacement.toLowerCase()"
-      [triggers]="hintTrigger.toLowerCase()"
       [placeholder]="format"
       [name]="name"
       [footerTemplate]="t"
       (ngModelChange)="onDateSelect($event)"
       (closed)="onClosed()"
+      (change)="onChangeInputEvent($event)"
     />
     <ng-template #t>
       <div class="text-center pl-1 ngb-footer">
