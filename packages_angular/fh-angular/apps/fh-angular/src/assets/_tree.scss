@@ -62,7 +62,8 @@
 }
 
 .fc.outputLabel.hasHeight {
-  display: inline-block
+  display: inline-block;
+  overflow-y: auto;
 }
 
 .fc.tree.treelines .treeNode > .row {

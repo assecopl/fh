@@ -2,7 +2,6 @@ import {
   Component,
   EventEmitter,
   forwardRef,
-  Host,
   HostBinding,
   HostListener,
   Injector,
@@ -15,13 +14,11 @@ import {
 } from '@angular/core';
 import {FhngHTMLElementC} from '../../models/componentClasses/FhngHTMLElementC';
 import {BootstrapWidthEnum} from '../../models/enums/BootstrapWidthEnum';
-import {IconAligmentType} from '../../models/CommonTypes';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
-import {FhMLService} from '../../service/fh-ml.service';
 import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
 
 @Component({
-  selector: 'fhng-output-label',
+  selector: '[fhng-output-label]',
   templateUrl: './output-label.component.html',
   styleUrls: ['./output-label.component.scss'],
   providers: [
