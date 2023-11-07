@@ -79,7 +79,7 @@ export class FhngHTMLElementC
   public icon: string = null;
 
   @Input()
-  public iconAlignment: IconAligmentType;
+  public iconAlignment: IconAligmentType = null;
 
   public elementRef: ElementRef;
 
