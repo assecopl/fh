@@ -6,27 +6,18 @@
     [innerHTML]="label ? label : ''"
   >{{ label ? label : '' }}</label
   >
-    <input
-      #focusElement
-      [id]="id"
-      availabilityControl
-      type="checkbox"
-      value="true"
-      class="custom-control-input InputCheckbox"
-      [placeholder]="placeholder"
-      [name]="name"
-    />
-  <!--  <ng-container *ngIf="!control">-->
-  <!--    <input-->
-  <!--      #focusElement-->
-  <!--      [id]="innerId"-->
-  <!--      type="checkbox"-->
-  <!--      value="true"-->
-  <!--      [name]="name"-->
-  <!--      class="custom-control-input"-->
-  <!--      [placeholder]="placeholder"-->
-  <!--    />-->
-  <!--  </ng-container>-->
+  <input #inp [availabilityInput]="availability" (change)="inputCheckEvent(inp.checked);onChangeEvent()"
+         #focusElement
+         [id]="id"
+         type="checkbox"
+         class="custom-control-input InputCheckbox {{setPresentationStyle()}}"
+         [placeholder]="placeholder"
+         [name]="name"
+         [(ngModel)]="rawValue"
+         [disabled]="disabled"
+         [ngbTooltip]="getHintTooltip()" [ngbPopover]="getHintPopover()" [popoverTitle]="hintTitle"
+         [placement]="hintPlacement.toLowerCase()" [triggers]="hintTrigger.toLowerCase()"
+  />
   <label
     *ngIf="labelPosition == 'RIGHT'"
     [for]="innerId"
@@ -35,3 +26,6 @@
   >{{ label ? label : '' }}</label
   >
 </div>
+<ng-container *ngIf="configuration.debug">
+  <fh-component-debugger/>
+</ng-container>

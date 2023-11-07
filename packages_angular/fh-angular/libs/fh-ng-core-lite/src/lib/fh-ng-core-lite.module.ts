@@ -72,6 +72,7 @@ import {NgSelectModule} from '@ng-select/ng-select';
 import {AutosizeModule} from '@techiediaries/ngx-textarea-autosize';
 import {ImageComponent} from "./controls/image/image.component";
 import {TimerComponent} from "./controls/timer/timer.component";
+import {FhngHasHeightDirective} from "../styles/directives/fhng-has-height.directive";
 
 
 
@@ -153,7 +154,8 @@ const components = [
   ComboComponent,
   SelectOneMenuComponent,
   ImageComponent,
-  TimerComponent
+  TimerComponent,
+  FhngHasHeightDirective
 ]
 
 @NgModule({

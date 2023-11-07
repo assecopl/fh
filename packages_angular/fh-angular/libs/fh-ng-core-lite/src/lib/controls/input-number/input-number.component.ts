@@ -85,6 +85,7 @@ export class InputNumberComponent
   }
 
   public override updateModel(event) {
+    if (!this.disabled)
     this.valueChanged = true;
     this.rawValue = event.target.value;
   };
@@ -99,6 +100,8 @@ export class InputNumberComponent
 
     return attrs;
   };
+
+  protected readonly Array = Array;
 }
 
 export class FhngFormatter {
@@ -108,7 +111,7 @@ export class FhngFormatter {
   maxFractionDigits;
   thousandSeparator;
 
-  constructor(patern = null, customPatterns = null) {
+  constructor(patern: string = null, customPatterns = null,) {
     if (patern) this.pattern = patern;
     if (customPatterns) this.customPatterns = customPatterns;
   }

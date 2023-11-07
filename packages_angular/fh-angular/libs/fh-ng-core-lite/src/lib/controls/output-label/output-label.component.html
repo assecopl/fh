@@ -96,7 +96,9 @@
     [id]="id"
     [innerHTML]="value | fhml"
     [availabilityHtmlElement]="availability"
-    [ngStyle]="styles">
+    [ngStyle]="styles"
+    [hasHeight]="height"
+  >
     <i
       *ngIf="icon && (iconAlignment == 'BEFORE' || !iconAlignment)"
       class="mr-2 {{ icon }}"

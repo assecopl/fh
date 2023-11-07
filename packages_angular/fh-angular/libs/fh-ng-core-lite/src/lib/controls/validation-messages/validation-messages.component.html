@@ -1,6 +1,6 @@
 <ng-container *ngIf="validateMessages?.length > 0">
-  <div [id]="innerId" [class]="getBootstrapLevel()" role="status">
-    <div class="pointer" *ngFor="let error of validateMessages || []">
+  <div [id]="id" [class]="getBootstrapLevel()" role="status">
+    <div class="pointer" *ngFor="let error of validateMessages" (click)="iForm.focusComponent(error.elementId)">
       <span *ngIf="error?.elementLabel">{{error.elementLabel}}: </span>
       {{ error.message }}
     </div>

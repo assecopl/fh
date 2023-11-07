@@ -54,10 +54,9 @@ export class FhngReactiveInputC
   @Input()
   public disabled: boolean = false;
 
-  public override set availability(value: AvailabilityEnum | string) {
-
-    this._availability = AvailabilityUtils.stringToEnum(value);
-    if (this._availability == AvailabilityEnum.EDIT) {
+  public override set accessibility(value: AvailabilityEnum | string) {
+    this.availability = AvailabilityUtils.stringToEnum(value);
+    if (this.availability == AvailabilityEnum.EDIT) {
       this.disabled = false;
     } else {
       this.disabled = true;
@@ -163,18 +162,20 @@ export class FhngReactiveInputC
   }
 
   public updateModel(event) {
-    this.rawValue = event.target.value;
+    if (!this.disabled) {
+      this.rawValue = event.target.value;
+    }
   };
 
   onInputEvent(event) {
     this.updateModel(event);
-    if (this.onInput) {
+    if (this.onInput && !this.disabled) {
       this.fireEvent('onInput', this.onInput);
     }
   }
 
   onChangeEvent() {
-    if (this.onChange) {
+    if (this.onChange && !this.disabled) {
       this.fireEventWithLock('onChange', this.onChange);
     }
   }

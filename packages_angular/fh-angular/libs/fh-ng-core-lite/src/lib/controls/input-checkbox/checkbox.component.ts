@@ -2,7 +2,6 @@ import {
   Component,
   EventEmitter,
   forwardRef,
-  Host,
   Injector,
   Input,
   OnInit,
@@ -13,8 +12,9 @@ import {
 } from '@angular/core';
 import {FhngReactiveInputC} from '../../models/componentClasses/FhngReactiveInputC';
 import {InputTypeEnum} from '../../models/enums/InputTypeEnum';
-import {BootstrapWidthEnum} from './../../models/enums/BootstrapWidthEnum';
+import {BootstrapWidthEnum} from '../../models/enums/BootstrapWidthEnum';
 import {FhngComponent} from "../../models/componentClasses/FhngComponent";
+import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
 
 @Component({
   selector: '[fhng-input-checkbox]',
@@ -40,6 +40,8 @@ export class CheckboxComponent
   @Input()
   public checked: boolean = false;
 
+  public override rawValue: boolean = false;
+
   @Output()
   public selectedCheckbox: EventEmitter<CheckboxComponent> =
     new EventEmitter<CheckboxComponent>();
@@ -64,5 +66,19 @@ export class CheckboxComponent
 
   override ngOnChanges(changes: SimpleChanges) {
     super.ngOnChanges(changes);
+  }
+
+  inputCheckEvent(checked) {
+    if (!this.disabled) {
+      this.changesQueue.queueValueChange(checked);
+    }
+  }
+
+  override extractChangedAttributes() {
+    return this.changesQueue.extractChangedAttributes();
+  };
+
+  override mapAttributes(data: IDataAttributes) {
+    super.mapAttributes(data);
   }
 }
