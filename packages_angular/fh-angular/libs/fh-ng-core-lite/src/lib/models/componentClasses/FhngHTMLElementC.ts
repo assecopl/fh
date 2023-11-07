@@ -4,7 +4,6 @@ import {
   Directive,
   ElementRef,
   EventEmitter,
-  Host,
   HostBinding,
   Injector,
   Input,
@@ -36,13 +35,16 @@ export class FhngHTMLElementC
   @HostBinding('attr.tabindex')
   public tabindex: number = null;
 
-  public _availability: AvailabilityEnum;
-  public set availability(value: AvailabilityEnum | string) {
-    this._availability = AvailabilityUtils.stringToEnum(value);
+
+  public availability: AvailabilityEnum = AvailabilityEnum.EDIT;
+
+  @Input('availability')
+  public set accessibility(value: AvailabilityEnum | string) {
+    this.availability = AvailabilityUtils.stringToEnum(value);
   }
 
-  public get availability() {
-    return this._availability;
+  public get accessibility() {
+    return this.availability;
   }
 
   /**
@@ -309,27 +311,12 @@ export class FhngHTMLElementC
     }
   }
 
-  /**
-   * Component Focus logic
-   */
-  @ViewChild('focusElement', {static: false}) focusElement: ElementRef;
-
-  public focus() {
-    if (this.focusElement) {
-      try {
-        this.focusElement.nativeElement.focus();
-      } catch (e) {
-        console.warn('Element ' + this.id + ' is not focusable');
-      }
-    }
-  }
-
   public override mapAttributes(data: IDataAttributes): void {
     super.mapAttributes(data);
     if (data.inlineStyle) this.styles = this._convertInlineStylesToSafeStyle(data.inlineStyle);
 
     if (data.accessibility) {
-      this.availability = data.accessibility;
+      this.accessibility = data.accessibility;
     }
 
     // if (data.value) this.label = data.value; //Label zostawiamy w spokoju, pozmieniamy w komponentach jak trzeba - z value na label

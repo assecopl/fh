@@ -2,6 +2,7 @@ import {
   AfterContentInit,
   AfterViewInit,
   Directive,
+  ElementRef,
   EventEmitter,
   InjectionToken,
   Injector,
@@ -9,6 +10,7 @@ import {
   OnInit,
   Optional,
   SkipSelf,
+  ViewChild,
 } from '@angular/core';
 import * as $ from 'jquery';
 import {FormsManager} from "../../Socket/FormsManager";
@@ -193,7 +195,11 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
     let notFindAttributes: string[] = []
     dataKeys.forEach(key => {
       if (Object.hasOwn(this, key)) {
-        this[key] = data[key];
+        if (typeof this[key] == "boolean") {
+          this[key] = data[key] == 'true';
+        } else {
+          this[key] = data[key];
+        }
       } else {
         if (this.configuration.debug) {
           notFindAttributes.push(key);
@@ -202,6 +208,31 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
     })
     console.log(this.id, this.constructor.name, notFindAttributes);
     this._data = data;
+  }
+
+  /**
+   * Component Focus logic
+   */
+  @ViewChild('focusElement', {static: false}) focusElement: ElementRef;
+
+  public focus() {
+    if (this.focusElement) {
+      try {
+        this.focusElement.nativeElement.focus();
+      } catch (e) {
+        console.warn('Element ' + this.id + ' is not focusable');
+      }
+    }
+  }
+
+  public focusComponent(componentId: string) {
+    this.childFhngComponents.forEach(component => {
+      if (component.id == componentId) {
+        component.focus();
+      } else {
+        component.focusComponent(componentId);
+      }
+    })
   }
 
 
