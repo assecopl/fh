@@ -56,7 +56,7 @@ export class TableRowComponent
   hover: boolean = false;
 
   @Input()
-  public row: any;
+  public rowIndex: any = null;
 
   @ViewChild(TemplateRef, {read: TemplateRef, static: true})
   public template: TemplateRef<void>;
@@ -78,18 +78,18 @@ export class TableRowComponent
 
   override ngOnInit() {
     super.ngOnInit();
-    if (
-      this.tableRef &&
-      (this.tableRef.selectable ||
-        this.tableRef.selectedChange.observers.length > 0)
-    ) {
-      this.pointer = true;
-      this.tabindex = 0;
-    } else {
-      this.pointer = false;
-      this.tabindex = null;
-    }
-    this.toggleHighlight(this.tableRef.selected);
+    // if (
+    //   this.tableRef &&
+    //   (this.tableRef.selectable ||
+    //     this.tableRef.selectedChange.observers.length > 0)
+    // ) {
+    //   this.pointer = true;
+    //   this.tabindex = 0;
+    // } else {
+    //   this.pointer = false;
+    //   this.tabindex = null;
+    // }
+    // this.toggleHighlight(this.tableRef.selected);
   }
 
   override ngOnChanges(changes: SimpleChanges) {
@@ -113,21 +113,21 @@ export class TableRowComponent
   @HostListener('click', ['$event'])
   private clickRow(event: any) {
     if (!this.tableRef?.selectionCheckboxes) {
-      this.tableRef.select(this.row);
+      this.tableRef.onRowClickEvent(event, this.rowIndex, false);
     }
   }
 
   public toggleHighlight(selected: any) {
-    if (selected === this) {
-      this.highlight = true;
-      this.ariaSelected = true;
-    } else if (TypeUtils.isArray(selected)) {
-      this.highlight = (selected as Array<any>).includes(this.row);
-      this.ariaSelected = this.highlight;
-    } else {
-      this.highlight = false;
-      this.ariaSelected = false;
-    }
+    // if (selected === this) {
+    //   this.highlight = true;
+    //   this.ariaSelected = true;
+    // } else if (TypeUtils.isArray(selected)) {
+    //   this.highlight = (selected as Array<any>).includes(this.row);
+    //   this.ariaSelected = this.highlight;
+    // } else {
+    //   this.highlight = false;
+    //   this.ariaSelected = false;
+    // }
   }
 
   @HostListener('keydown.enter', ['$event']) onEnterHandler(
@@ -136,7 +136,7 @@ export class TableRowComponent
     if (!this.tableRef?.selectionCheckboxes) {
       event.stopPropagation();
       event.preventDefault();
-      this.tableRef.select(this.row);
+      this.tableRef.select(event, this);
     }
   }
 

@@ -68,6 +68,6 @@ export class TableHeadRowComponent
 
   public toggleHighlightAll() {
     this.highlight = !this.highlight;
-    this.tableRef.toggleSelectAll();
+    // this.tableRef.toggleSelectAll();
   }
 }

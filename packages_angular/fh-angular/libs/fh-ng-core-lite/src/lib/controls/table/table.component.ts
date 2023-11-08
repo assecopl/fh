@@ -98,10 +98,10 @@ export class TableComponent
   // @Input()
   // public override collection: any[] | any = [];
 
-  @Input()
-  public override selected: any;
-  @Output()
-  public override selectedChange = new EventEmitter<any>();
+  // @Input()
+  // public override selected: any;
+  // @Output()
+  // public override selectedChange = new EventEmitter<any>();
 
 
   protected visibleRows: any;
@@ -131,6 +131,8 @@ export class TableComponent
   private checkAllArray: Array<any> = []
 
   public override rawValue: number[] = []
+
+  public checkAllValue: boolean = false;
 
   constructor(
     public override injector: Injector,
@@ -215,57 +217,39 @@ export class TableComponent
     }
   }
 
-  public select(selected: any) {
-    if (this.selectedChange?.observers?.length > 0) {
-      if (this.multiselect) {
-        const array = (this.selected as Array<any>) || [];
-        if (array.includes(selected)) {
-          // @ts-ignore
-          array.removeElement(selected);
-        } else {
-          array.push(selected);
-        }
-        this.selectedChange.emit(array);
-        this.rowsArray.forEach((row) => {
-          row.toggleHighlight(array);
-        });
-        const header = this.childFhngComponents.find(
-          (element) => element instanceof TableHeadRowComponent
-        ) as TableHeadRowComponent;
-        if (header) {
-          header.highlight = array?.length == this.collection?.length;
-        }
-      } else {
-        this.selectedChange.emit(selected);
-        this.rowsArray.forEach((row) => {
-          row.toggleHighlight(selected);
-        });
-      }
-    }
+  public select(event, row: any) {
+    event.stopPropagation();
+    if (this.availability != AvailabilityEnum.EDIT) return;
+    // this.onRowClickEvent(event, this.rowsArray.indexOf(selected), false);
+    this.selectRow(this.rowsArray.indexOf(row));
+    this.changesQueue.queueValueChange(this.rawValue);
+    this.fireEventWithLock('onRowClick', this.onRowClick);
   }
 
-  public toggleSelectAll() {
-    if (
-      this.selected &&
-      this.selected.length > 0 &&
-      this.selected.length == this.collection.length
-    ) {
-      this.selected = [];
-      this.selectedChange.emit([]);
-      this.rowsArray.forEach((row) => {
-        row.highlight = false;
-      });
-    } else {
-      this.selected = [...this.collection];
-      this.selectedChange.emit(this.selected);
-      this.rowsArray.forEach((row) => {
-        row.highlight = true;
-      });
-    }
+  public toggleSelectAll(event) {
+
+    if (this.availability != AvailabilityEnum.EDIT) return;
+
+    this.selectAllRows(event.target.checked);
+
+    this.changesQueue.queueValueChange(this.rawValue);
+    this.fireEventWithLock('onRowClick', this.onRowClick);
   }
+
+  public selectAllRows(selectOrClear) {
+    if (selectOrClear) {
+      this.rawValue = [];
+      this.rowsArray.forEach((value, index) => {
+        this.rawValue.push(index);
+      })
+    } else {
+      this.rawValue = [-1];
+    }
+  };
 
   onRowClickEvent(event, mainId, silent = false) {
     if (this.availability != AvailabilityEnum.EDIT) return;
+    this.checkAllValue = false;
 
     if (this.selectable && this.onRowClick) {
       if (this.multiselect == false) {
@@ -322,6 +306,11 @@ export class TableComponent
     this.selectable = data.selectable || true;
     if (data.selectedRowNumber) {
       this.rawValue = data.selectedRowNumber;
+      if (this.rowsArray.length == this.rawValue.length) {
+        this.checkAllValue = true;
+      } else {
+        this.checkAllValue = false;
+      }
     }
     // this.rowHeight = data.rowHeight || 'normal';
     // this.tableGrid = data.tableGrid || 'hide';
