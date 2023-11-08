@@ -90,18 +90,18 @@ export class FhngHTMLElementC
   public labelPosition: 'UP' | 'DOWN' | 'LEFT' | 'RIGHT' = 'UP';
 
   @Input()
-  public horizontalAlign: 'LEFT' | 'CENTER' | 'RIGHT';
+  public horizontalAlign: 'LEFT' | 'CENTER' | 'RIGHT' = null;
 
-  @HostBinding('class.align-self-left')
-  public alignLeft: boolean;
+  @HostBinding('class.align-left')
+  public alignLeft: boolean = false;
 
-  @HostBinding('class.text-center')
-  @HostBinding('class.align-self-center')
-  public alignCenter: boolean;
+  // @HostBinding('class.text-center')
+  @HostBinding('class.align-center')
+  public alignCenter: boolean = false;
 
-  @HostBinding('class.text-right')
-  @HostBinding('class.align-self-right')
-  public alignRight: boolean;
+  // @HostBinding('class.text-right')
+  @HostBinding('class.align-right')
+  public alignRight: boolean = false;
 
   @Input()
   public verticalAlign: 'TOP' | 'MIDDLE' | 'BOTTOM';

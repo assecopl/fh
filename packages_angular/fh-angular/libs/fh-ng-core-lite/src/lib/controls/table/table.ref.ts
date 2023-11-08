@@ -1,7 +1,7 @@
 import {TableColumnComponent} from '../table-column/table-column.component';
 import {FhngHTMLElementC} from '../../models/componentClasses/FhngHTMLElementC';
 import {TableRowComponent} from '../table-row/table-row.component';
-import {Directive, EventEmitter} from '@angular/core';
+import {Directive, EventEmitter, Input} from '@angular/core';
 import {Page} from "../../Base";
 
 /**
@@ -18,6 +18,12 @@ export abstract class TableComponentRef extends FhngHTMLElementC {
   public selectAllChceckbox: boolean;
   public multiselect: boolean;
   public selectable: boolean;
+
+  /**
+   * TODO Zastanowic sie jak zalatwic fixed header w tabeli. Opcje (pozycja sticky, transform-tranlsate na tr/th, kopia nagłówka z pozycja aboslutna)
+   */
+  @Input()
+  public fixedHeader: boolean = false;
 
   abstract select(row: any);
 

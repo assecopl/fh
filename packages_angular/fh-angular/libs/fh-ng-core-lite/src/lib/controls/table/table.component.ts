@@ -120,7 +120,7 @@ export class TableComponent
   protected ieFocusFixEnabled: boolean;
   protected table: HTMLTableElement;
   protected header: HTMLTableSectionElement;
-  protected footer: HTMLTableSectionElement = null;
+  protected footer: any = null;
   private _dataWrapper: HTMLTableSectionElement;
 
   private selectAllChceckboxElement: HTMLElement = null;
@@ -129,6 +129,8 @@ export class TableComponent
   public lastRowClicked: number = null;
 
   private checkAllArray: Array<any> = []
+
+  public override rawValue: number[] = []
 
   constructor(
     public override injector: Injector,
@@ -268,20 +270,20 @@ export class TableComponent
     if (this.selectable && this.onRowClick) {
       if (this.multiselect == false) {
         if (event.ctrlKey) {
-          // if (this.rawValue.indexOf(mainId) !== -1) {
-          //   this.rawValue = [];
-          //   this.rawValue.push(-1);
-          // }
+          if (this.rawValue.indexOf(mainId) !== -1) {
+            this.rawValue = [];
+            this.rawValue.push(-1);
+          }
         } else {
           this.rawValue = [];
           this.rawValue.push(mainId);
         }
       } else {
         if (event.ctrlKey) {
-          // this.selectRow(mainId);
+          this.selectRow(mainId);
 
         } else if (event.shiftKey) {
-          // this.selectRows(mainId);
+          this.selectRows(mainId);
         } else {
           this.rawValue = [];
           this.rawValue.push(mainId);
@@ -289,9 +291,6 @@ export class TableComponent
       }
 
       this.changesQueue.queueValueChange(this.rawValue);
-      if (!this.onRowClick || this.onRowClick === '-') {
-        // this.highlightSelectedRows();
-      }
 
       if (!silent) {
         // if (this._formId === 'FormPreview') {
@@ -314,9 +313,16 @@ export class TableComponent
 
   override mapAttributes(data: IDataAttributes | any) {
     super.mapAttributes(data);
-    this.visibleRows = data.displayedRowsCount || 0;
-    this.tableData = data.tableRows;
+    if (data.displayedRowsCount) {
+      this.visibleRows = data.displayedRowsCount || 0;
+    }
+    if (data.tableRows) {
+      this.tableData = data.tableRows;
+    }
     this.selectable = data.selectable || true;
+    if (data.selectedRowNumber) {
+      this.rawValue = data.selectedRowNumber;
+    }
     // this.rowHeight = data.rowHeight || 'normal';
     // this.tableGrid = data.tableGrid || 'hide';
     // this.tableStripes = data.tableStripes || 'hide';
@@ -333,4 +339,76 @@ export class TableComponent
 
     // this.table = null;
   }
+
+  selectRow(mainId) {
+    let index = this.rawValue.indexOf(parseInt(mainId));
+    if (index == -1) {
+      this.rawValue.push(mainId);
+      this.rawValue.sort();
+    } else if (index != -1) {
+      this.rawValue.splice(index, 1);
+      this.rawValue.filter(idx => idx > -1);
+      if (this.rawValue.length == 0) {
+        this.rawValue.push(-1);
+      }
+    }
+  };
+
+  selectRows(mainId) {
+    mainId = parseInt(mainId);
+    let index = this.rawValue.indexOf(mainId);
+    let lastRowCLicked = this.lastRowClicked ? this.lastRowClicked : 0;
+    if (index == -1) {
+      //Select Rows
+
+      //select all rows before first selected row
+      if (mainId < lastRowCLicked) {
+        while (mainId < lastRowCLicked) {
+          lastRowCLicked--;
+          let x = this.rawValue.indexOf(lastRowCLicked);
+          if (x == -1) {
+            this.rawValue.push(lastRowCLicked);
+          }
+        }
+      }
+      //select all rows after last selected row
+      if (mainId > lastRowCLicked) {
+        while (mainId > lastRowCLicked) {
+          lastRowCLicked++;
+          let x = this.rawValue.indexOf(lastRowCLicked);
+          if (x == -1) {
+            this.rawValue.push(lastRowCLicked);
+          }
+        }
+      }
+    } else if (index != -1) {
+      //deselect rows
+      // this.rawValue.filter(idx => idx > -1);
+      //deselect all rows before first selected row
+      if (mainId < lastRowCLicked) {
+        while (mainId <= lastRowCLicked) {
+          let x = this.rawValue.indexOf(lastRowCLicked);
+          if (x != -1) {
+            this.rawValue.splice(x, 1);
+          }
+          lastRowCLicked--;
+        }
+      }
+      //deselect all rows after last selected row
+      else if (mainId > lastRowCLicked) {
+        while (mainId >= lastRowCLicked) {
+
+          let x = this.rawValue.indexOf(lastRowCLicked);
+          if (x != -1) {
+            this.rawValue.splice(x, 1);
+          }
+          lastRowCLicked++;
+        }
+      }
+      // this.rawValue.filter(idx => idx > -1);
+      if (this.rawValue.length == 0) {
+        this.rawValue.push(-1);
+      }
+    }
+  };
 }

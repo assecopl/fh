@@ -24,3 +24,14 @@
 //    }
 //  }
 //}
+
+:host ::ng-deep {
+  .table {
+    position: relative;
+
+    &.fixedHeader {
+      //TODO Style dla FixeadHeader
+
+    }
+  }
+}

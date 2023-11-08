@@ -48,6 +48,7 @@ export class TableRowComponent
   @HostBinding('attr.aria-selected')
   public ariaSelected: boolean = false;
 
+  @Input()
   @HostBinding('class.table-primary')
   highlight: boolean = false;
 

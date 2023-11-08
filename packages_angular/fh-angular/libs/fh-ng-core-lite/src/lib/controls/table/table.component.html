@@ -1,10 +1,12 @@
 <label class="col-form-label" *ngIf="label">{{ label }}</label>
-<table class="fc table">
-  <!--  Simple HTEAD - one row-->
-  <!--  <ng-content select="thead"></ng-content>-->
-  <thead>
-  <tr class="table-heading">
-    <th *ngIf="selectionCheckboxes">
+<div [hasHeight]="height" [style.height]="height" class="fc" #scrollable
+>
+  <table class="fc table {{fixedHeader ? 'fixedHeader': ''}} fixedHeader">
+    <!--  Simple HTEAD - one row-->
+    <!--  <ng-content select="thead"></ng-content>-->
+    <thead #tableHeading>
+    <tr class="table-heading">
+      <th *ngIf="selectionCheckboxes">
     <span class="custom-control custom-checkbox" *ngIf="selectAllChceckbox">
       <input [id]="id+'selectAll'"
              (click)="toggleSelectAll()"
@@ -16,37 +18,52 @@
         <span class="d-none">Zaznacz/odznacz wszystkie rekordy</span>
       </label>
     </span>
-    </th>
+      </th>
 
-    <ng-container *ngFor="let column of columns">
+      <ng-container *ngFor="let column of columns">
 
-      <th fhng-table-column [data]="column" [formId]="formId">&nbsp;{{column.id}}</th>
+        <th fhng-table-column [data]="column" [formId]="formId">&nbsp;{{column.id}}</th>
+      </ng-container>
+    </tr>
+
+    </thead>
+    <!--  <ng-content select="tbody"></ng-content>-->
+    <tbody>
+    <ng-container *ngFor="let tr of tableData;let i = index;">
+      <tr fhng-table-row [data]="tr" [formId]="formId" (click)="onRowClickEvent($event, i)"
+          [highlight]="rawValue.includes(i)"></tr>
     </ng-container>
-  </tr>
-
-  </thead>
-  <!--  <ng-content select="tbody"></ng-content>-->
-  <tbody>
-  <ng-container *ngFor="let tr of tableData;let i = index;">
-    <tr fhng-table-row [data]="tr" [formId]="formId" (click)="onRowClickEvent($event, i)"></tr>
-  </ng-container>
 
 
-  <ng-container *ngIf="minRows > tableData?.length">
-    <tr
-      *ngFor="
+    <ng-container *ngIf="minRows > tableData?.length">
+      <tr
+        *ngFor="
         let i of [].constructor(minRows - (collection ? collection?.length : 0))
       "
-    >
-      <td *ngFor="let a of [].constructor(columnsArray?.length)">&nbsp;</td>
-    </tr>
-  </ng-container>
-  </tbody>
-  <tfoot>
+      >
+        <td *ngFor="let a of [].constructor(columnsArray?.length)">&nbsp;</td>
+      </tr>
+    </ng-container>
+    </tbody>
+    <tfoot>
+    <ng-container *ngIf="footer">
+      <tr>
+        <td [colSpan]="columns.length + (selectAllChceckbox? 1 : 0)">
+          <div class="fc footer card-footer  {{footer.id}}">
+            <div class="row fc wrapper">
+              <ng-container [fhDynamicComponents]="footer.subelements"
+                            [fhNonVisualSubcomponents]="footer.nonVisualComponents || []"/>
+            </div>
+          </div>
+        </td>
+      </tr>
 
-  </tfoot>
-</table>
-<fhng-button
+    </ng-container>
+    </tfoot>
+  </table>
+</div>
+{{rawValue | json}}
+<div fhng-button
   *ngIf="csvExport"
   [id]="'csvBtn'"
   bootstrapStyle="link"
@@ -54,7 +71,7 @@
   horizontalAlign="RIGHT"
   (click)="onExportCsv()"
 >[icon='fas fa-download'] CSV
-</fhng-button>
+</div>
 
 <ng-container *ngIf="configuration.debug">
   <fh-component-debugger/>

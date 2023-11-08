@@ -196,7 +196,7 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
     dataKeys.forEach(key => {
       if (Object.hasOwn(this, key)) {
         if (typeof this[key] == "boolean") {
-          this[key] = data[key] == 'true';
+          this[key] = data[key] == true || data[key] == 'true';
         } else {
           this[key] = data[key];
         }
@@ -206,6 +206,7 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
         }
       }
     })
+    // console.log(this.id, this.constructor.name, notFindAttributes);
 
     this._data = data;
   }

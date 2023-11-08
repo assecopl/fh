@@ -20,13 +20,11 @@ import {
 } from '@angular/core';
 import {FhngHTMLElementC} from '../../models/componentClasses/FhngHTMLElementC';
 import {BootstrapStyleEnum} from '../../models/enums/BootstrapStyleEnum';
-import {BootstrapWidthEnum} from '../../models/enums/BootstrapWidthEnum';
 import {FhngButtonGroupComponent, FhngComponent,} from '../../models/componentClasses/FhngComponent';
-import {FhMLService} from '../../service/fh-ml.service';
 import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
 
 @Component({
-  selector: 'fhng-button',
+  selector: '[fhng-button]',
   templateUrl: './button.component.html',
   styleUrls: ['./button.component.scss'],
   providers: [
