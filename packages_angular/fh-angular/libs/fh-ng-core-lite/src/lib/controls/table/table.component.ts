@@ -219,6 +219,7 @@ export class TableComponent
 
   public select(event, row: any) {
     event.stopPropagation();
+    if (this.availability != AvailabilityEnum.EDIT) return;
     // this.onRowClickEvent(event, this.rowsArray.indexOf(selected), false);
     this.selectRow(this.rowsArray.indexOf(row));
     this.changesQueue.queueValueChange(this.rawValue);
@@ -226,6 +227,7 @@ export class TableComponent
   }
 
   public toggleSelectAll(event) {
+
     if (this.availability != AvailabilityEnum.EDIT) return;
 
     this.selectAllRows(event.target.checked);
