@@ -9,10 +9,11 @@
       <th *ngIf="selectionCheckboxes">
     <span class="custom-control custom-checkbox" *ngIf="selectAllChceckbox">
       <input [id]="id+'selectAll'"
-             (click)="toggleSelectAll()"
+             (click)="toggleSelectAll($event)"
              aria-label="Zaznacz/odznacz wszystkie rekordy"
              class="custom-control-input"
              type="checkbox"
+             [checked]="checkAllValue"
       />
       <label class="hidden custom-control-label ml-3" [for]="id+'selectAll'">
         <span class="d-none">Zaznacz/odznacz wszystkie rekordy</span>
@@ -30,7 +31,7 @@
     <!--  <ng-content select="tbody"></ng-content>-->
     <tbody>
     <ng-container *ngFor="let tr of tableData;let i = index;">
-      <tr fhng-table-row [data]="tr" [formId]="formId" (click)="onRowClickEvent($event, i)"
+      <tr fhng-table-row [data]="tr" [formId]="formId" [rowIndex]="i"
           [highlight]="rawValue.includes(i)"></tr>
     </ng-container>
 
@@ -62,7 +63,6 @@
     </tfoot>
   </table>
 </div>
-{{rawValue | json}}
 <div fhng-button
   *ngIf="csvExport"
   [id]="'csvBtn'"

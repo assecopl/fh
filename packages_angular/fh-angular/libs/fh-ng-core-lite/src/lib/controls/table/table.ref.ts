@@ -11,8 +11,8 @@ import {Page} from "../../Base";
 @Directive()
 export abstract class TableComponentRef extends FhngHTMLElementC {
   abstract rowsArray: TableRowComponent[];
-  public selected: any;
-  public selectedChange: EventEmitter<any>;
+  // public selected: any;
+  // public selectedChange: EventEmitter<any>;
   public collection: Page<any> | Array<any>;
   public selectionCheckboxes: boolean;
   public selectAllChceckbox: boolean;
@@ -25,9 +25,11 @@ export abstract class TableComponentRef extends FhngHTMLElementC {
   @Input()
   public fixedHeader: boolean = false;
 
-  abstract select(row: any);
+  abstract select(event, row: any);
 
-  abstract toggleSelectAll();
+  abstract onRowClickEvent(event, mainId, silent?)
+
+  abstract toggleSelectAll(event);
 
   abstract registerColumn(
     column: TableColumnComponent,

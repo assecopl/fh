@@ -2,7 +2,7 @@
   <td *ngIf="tableRef?.selectionCheckboxes && tableRef?.multiselect">
     <span class="custom-control custom-checkbox">
       <input
-        (click)="tableRef.select(row)"
+        (click)="tableRef.select($event, this)"
         [id]="id"
         [checked]="highlight"
         aria-label="Zaznacz/odznacz rekord"
