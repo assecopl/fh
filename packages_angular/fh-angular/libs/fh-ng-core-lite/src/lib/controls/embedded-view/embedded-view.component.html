@@ -1,0 +1,39 @@
+<div
+  *ngIf="
+    mimeType === 'application/pdf' &&
+    !isSupportPDF &&
+    !acrobatInfo.acrobat &&
+    acrobatInfo.browser !== 'firefox'; else iframe"
+  [ngStyle]="styles"
+>
+  <a
+    [id]="innerId"
+    [href]="createBlob()"
+    [download]="label"
+  >
+    {{'embv_download' | i18n:null:i18n.selectedLanguage}} {{label}}
+  </a>
+  <div class="text-muted">
+    {{'embv_showError'| i18n:null:this.i18n.selectedLanguage }}
+  </div>
+</div>
+<ng-template #iframe>
+  <div fhng-input-label
+       [inputId]="innerId"
+       [label]="label"
+       [labelPosition]="labelPosition"
+  >
+    <iframe
+            class="example-iframe klasa-2 containerEmbedPage"
+            [availabilityHtmlElement]="availability"
+            [id]="innerId"
+            [hasHeight]="height"
+            [ngStyle]="styles"
+            [src]="src | safe:'resourceUrl'"
+    ></iframe>
+  </div>
+</ng-template>
+
+<ng-container *ngIf="configuration.debug">
+  <fh-component-debugger/>
+</ng-container>

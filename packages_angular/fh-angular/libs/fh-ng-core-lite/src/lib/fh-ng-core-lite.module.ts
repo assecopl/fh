@@ -73,6 +73,10 @@ import {AutosizeModule} from '@techiediaries/ngx-textarea-autosize';
 import {ImageComponent} from "./controls/image/image.component";
 import {TimerComponent} from "./controls/timer/timer.component";
 import {FhngHasHeightDirective} from "../styles/directives/fhng-has-height.directive";
+import {EmbedPageComponent} from "./controls/embedded-view/embedded-view.component";
+import {SafePipe} from "./pipes/safe.pipe";
+import {i18nPipe} from "./pipes/i18n.pipe";
+import {HtmlViewComponent} from "./controls/html-view/html-view.component";
 
 
 
@@ -155,7 +159,11 @@ const components = [
   SelectOneMenuComponent,
   ImageComponent,
   TimerComponent,
-  FhngHasHeightDirective
+  FhngHasHeightDirective,
+  EmbedPageComponent,
+  HtmlViewComponent,
+  SafePipe,
+  i18nPipe
 ]
 
 @NgModule({
@@ -240,6 +248,8 @@ export class FhNgCoreLiteModule extends FhNgModule {
     componentManager.registerComponent(SelectOneMenuComponent);
     componentManager.registerComponent(ImageComponent);
     componentManager.registerComponent(TimerComponent);
+    componentManager.registerComponent(EmbedPageComponent);
+    componentManager.registerComponent(HtmlViewComponent)
   }
 
   protected registerCustomActions(customActionsManager?: CustomActionsManager) {
