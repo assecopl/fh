@@ -64,7 +64,8 @@ export class TableColumnComponent
     @Optional() @SkipSelf() parentFhngComponent: FhngComponent,
     private sanitizer: DomSanitizer
   ) {
-    super(elementRef, injector, parentFhngComponent,);
+    super(elementRef, injector, parentFhngComponent);
+    this.wrapperClass = false
     if (table) {
       table.registerColumn(this, parentFhngComponent);
     }

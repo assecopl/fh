@@ -53,6 +53,7 @@ export class TableCellComponent
     @Optional() @SkipSelf() parentFhngComponent: FhngComponent
   ) {
     super(injector, parentFhngComponent);
+    this.wrapperClass = false;
   }
 
   override ngOnChanges(changes: SimpleChanges) {

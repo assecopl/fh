@@ -70,14 +70,13 @@ export class TableComponent
   public override selectionCheckboxes: boolean = false;
 
   @Input()
-  public override selectAllChceckbox: boolean = true;
+  public override selectAllChceckbox: boolean = false;
 
   @Input()
   public csvExport: boolean;
 
   public columns: any[] = [];
-
-  public columnsArray: TableColumnComponent[] = [];
+  public columnsMap: Map<string, TableColumnComponent> = new Map();
   /**
    * Used to calculate columns. Register columns only from first row.
    * @private
@@ -133,13 +132,14 @@ export class TableComponent
   public override rawValue: number[] = []
 
   public checkAllValue: boolean = false;
+  public horizontalScrolling: boolean = false;
 
   constructor(
     public override injector: Injector,
     @Optional() @SkipSelf() parentFhngComponent: FhngComponent
   ) {
     super(injector, parentFhngComponent);
-
+    this.wrapperClass = false;
     this.width = BootstrapWidthEnum.MD12;
     this.hostClass = `col-${this.width}`;
   }
@@ -211,9 +211,8 @@ export class TableComponent
    * @param row
    */
   public registerColumn(column: TableColumnComponent): void {
-    if (!this.columns[column.id]) {
-      // this.columns.set(column.id, column);
-      this.columnsArray.push(column);
+    if (!this.columnsMap.get(column.id)) {
+      this.columnsMap.set(column.id, column);
     }
   }
 

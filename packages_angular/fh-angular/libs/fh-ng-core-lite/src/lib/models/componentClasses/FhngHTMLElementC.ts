@@ -95,11 +95,11 @@ export class FhngHTMLElementC
   @HostBinding('class.align-left')
   public alignLeft: boolean = false;
 
-  // @HostBinding('class.text-center')
+  @HostBinding('class.text-center')
   @HostBinding('class.align-center')
   public alignCenter: boolean = false;
 
-  // @HostBinding('class.text-right')
+  @HostBinding('class.text-right')
   @HostBinding('class.align-right')
   public alignRight: boolean = false;
 

@@ -68,6 +68,7 @@ export class TableRowComponent
     @Optional() @SkipSelf() public override parentFhngComponent: FhngComponent
   ) {
     super(injector, parentFhngComponent);
+    this.wrapperClass = false;
     if (tableRef) {
       tableRef.rowsArray.push(this);
     }
