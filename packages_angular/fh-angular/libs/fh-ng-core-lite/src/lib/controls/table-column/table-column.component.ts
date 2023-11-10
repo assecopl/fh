@@ -57,6 +57,15 @@ export class TableColumnComponent
   @HostBinding('style.width')
   public hostStyleWidth: SafeStyle & any = {};
 
+  @HostBinding('class.sortable')
+  public sortable: boolean = false;
+  // private sorter: any;
+  public rowspan: number = null;
+  public subColumnsExists: boolean = false;
+  public colspan: number = null;
+
+  public direction: Direction = null;
+
   constructor(
     public override readonly elementRef: ElementRef<HTMLElement>,
     public override injector: Injector,
@@ -66,6 +75,7 @@ export class TableColumnComponent
   ) {
     super(elementRef, injector, parentFhngComponent);
     this.wrapperClass = false
+
     if (table) {
       table.registerColumn(this, parentFhngComponent);
     }
@@ -73,6 +83,9 @@ export class TableColumnComponent
 
   override ngOnChanges(changes: SimpleChanges) {
     super.ngOnChanges(changes);
+    if (changes['sortedBy'] && changes['sortedBy'].currentValue != this.sortBy) {
+      this.direction == null;
+    }
   }
 
   override ngOnInit() {
@@ -80,31 +93,17 @@ export class TableColumnComponent
   }
 
   public sort() {
-    if (this.sortBy && this.table instanceof TablePagedComponent) {
-      let direction = this.getDirection();
-      if (direction == null || direction == Direction.DESC) {
-        direction = Direction.ASC;
+    if (this.sortable && this.table instanceof TablePagedComponent) {
+
+      if (this.direction == null || this.direction == Direction.DESC) {
+        this.direction = Direction.ASC;
       } else {
-        direction = Direction.DESC;
+        this.direction = Direction.DESC;
       }
 
-      (this.table.collection as Page<any>).orders = [
-        new Order(this.sortBy, direction),
-      ];
-      this.table.sortChange.emit(this.table.collection);
-    }
-  }
 
-  public getDirection() {
-    if (
-      this.table instanceof TablePagedComponent &&
-      this.table.collection instanceof Page
-    ) {
-      return (this.table.collection as Page<any>).orders.find(
-        (order) => order.property == this.sortBy
-      )?.direction;
+      this.table.sortChange(this.id, Direction[this.direction]);
     }
-    return undefined;
   }
 
   /**

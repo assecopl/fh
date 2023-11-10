@@ -154,14 +154,15 @@ export class TableComponent
 
   override ngOnChanges(changes: SimpleChanges): void {
     super.ngOnChanges(changes);
-    if (changes['selected'] && changes['selected'].currentValue == null) {
-      this.rowsArray.forEach((row) => {
-        row.toggleHighlight(null);
-      });
-    }
+    // if (changes['selected'] && changes['selected'].currentValue == null) {
+    //   this.rowsArray.forEach((row) => {
+    //     row.toggleHighlight(null);
+    //   });
+    // }
   }
 
-  ngOnDestroy(): void {
+  override ngOnDestroy(): void {
+    super.ngOnDestroy();
   }
 
   override ngAfterContentInit(): void {
@@ -300,11 +301,21 @@ export class TableComponent
       this.visibleRows = data.displayedRowsCount || 0;
     }
     if (data.tableRows) {
+      this.rowsArray = []
       this.tableData = data.tableRows;
+
     }
     this.selectable = data.selectable || true;
     if (data.selectedRowNumber) {
       this.rawValue = data.selectedRowNumber;
+      if (this.rowsArray.length == this.rawValue.length) {
+        this.checkAllValue = true;
+      } else {
+        this.checkAllValue = false;
+      }
+    }
+    if (data.selectedRowsNumbers) {
+      this.rawValue = data.selectedRowsNumbers;
       if (this.rowsArray.length == this.rawValue.length) {
         this.checkAllValue = true;
       } else {

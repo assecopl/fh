@@ -41,7 +41,7 @@
     <ng-container *ngIf="minRows > tableData?.length">
       <tr
         *ngFor="
-        let i of [].constructor(minRows - (collection ? collection?.length : 0))
+        let i of [].constructor(minRows - (tableData ? tableData?.length : 0))
       "
       >
         <td *ngFor="let a of [].constructor(columns?.length)">&nbsp;</td>

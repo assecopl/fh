@@ -1,17 +1,18 @@
-<!--<th-->
-<!--  (click)="sort()"-->
-<!--  [class.text-center]="horizontalAlign == 'CENTER'"-->
-<!--  [class.text-right]="horizontalAlign == 'RIGHT'"-->
-<!--&gt;-->
+<ng-container *ngIf="!sortable">
   {{ label }}
-  <i
-    *ngIf="sortBy"
-    class="{{
-      getDirection() == null
+</ng-container>
+<ng-container *ngIf="sortable">
+  <button (click)="sort()" class="btn btn-sortable btn-link btn-block text-body" [class.text-left]="!horizontalAlign">
+    {{ label }}
+    <i
+
+      class="{{
+      direction == null
         ? 'fa fa-sort'
-        : getDirection() == 0
+        : direction == 0
         ? 'fa fa-sort-amount-down'
         : 'fa fa-sort-amount-up'
     }}"
-  ></i>
-<!--</th>-->
+    ></i>
+  </button>
+</ng-container>

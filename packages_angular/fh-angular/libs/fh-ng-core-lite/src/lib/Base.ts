@@ -232,6 +232,6 @@ export class Page<T> extends Array<T> {
 export class Pageable {
   constructor(public pageNumber: number,
               public pageSize: number,
-              public orders: Order[] = []) {
+              public sort: Order[] = []) {
   }
 }
