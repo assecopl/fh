@@ -112,7 +112,8 @@ export class ButtonComponent
     this.selectedButton.emit(this);
   }
 
-  ngOnDestroy(): void {
+  override ngOnDestroy(): void {
+    super.ngOnDestroy();
     if (
       this.parentButtonGroupComponent &&
       this.parentButtonGroupComponent.buttonSubcomponents

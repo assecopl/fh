@@ -4,9 +4,9 @@ import {
   Directive,
   ElementRef,
   EventEmitter,
-  InjectionToken,
   Injector,
   Input,
+  OnDestroy,
   OnInit,
   Optional,
   SkipSelf,
@@ -17,12 +17,13 @@ import {FormsManager} from "../../Socket/FormsManager";
 import {IDataAttributes} from "../interfaces/IDataAttributes";
 import {FHNG_CORE_CONFIG, FhNgCoreConfig} from "../../fh-ng-core.config";
 import {FhngChangesComponent} from "../abstracts/FhngChangesComponent";
+
 /**
  * Klasa odpowiedzialna za budowę drzewa komponentów FHNG
  * Każda kontrolka powinna mieć przyporzadkowany elemnt w sekcji providers.{provide: FhngComponent, useExisting: forwardRef(() => RowComponent)}
  */
 @Directive()
-export class FhngComponent extends FhngChangesComponent implements OnInit, AfterViewInit, AfterContentInit {
+export class FhngComponent extends FhngChangesComponent implements OnInit, AfterViewInit, AfterContentInit, OnDestroy {
 
   @Input() subelements: any[] = [];
 
@@ -74,9 +75,6 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
     this.innerId = this.constructor.name + '_' + (Math.random() * 10000000000).toFixed();
     this.name = this.innerId; //Prevent null/empty names - it must be set to prevent getting wrong control value for input-s without names.
     this.parentFhngComponent = parentFhngComponent;
-    if (this.parentFhngComponent) {
-      this.parentFhngComponent.childFhngComponents.push(this);
-    }
 
     this.formsManager = this.injector.get(FormsManager, null);
     this.configuration = this.injector.get(FHNG_CORE_CONFIG, null) as FhNgCoreConfig;
@@ -87,7 +85,7 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
     let c: FhngComponent = null;
 
     for (const component of this.childFhngComponents) {
-      if (id === component.id) {
+      if (id === component?.id) {
         c = component;
       } else {
         c = component.findFhngComponent(id);
@@ -131,10 +129,26 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
   }
 
   public ngOnInit(): void {
+    //rejestrujemy component na liscie elementów rodzica jeżeli nie istnieje na niej.
+    if (this.parentFhngComponent) {
+      const idx = this.parentFhngComponent.childFhngComponents.indexOf(this);
+      if (idx == -1) {
+        this.parentFhngComponent.childFhngComponents.push(this);
+      }
+    }
     // super.ngOnInit();
     //Ucinamy
     // const searchIds = this.id.split("_iteratorIndex_")
     // this.searchId = searchIds[0];
+  }
+
+  ngOnDestroy(): void {
+    if (this.parentFhngComponent) {
+      const idx = this.parentFhngComponent.childFhngComponents.indexOf(this);
+      if (idx > -1) {
+        this.parentFhngComponent.childFhngComponents.splice(idx, 1);
+      }
+    }
   }
 
   ngAfterContentInit(): void {

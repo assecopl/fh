@@ -96,6 +96,7 @@ export class InputGroupComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+
     // this.stopAdjustingInputPadding();
   }
 }

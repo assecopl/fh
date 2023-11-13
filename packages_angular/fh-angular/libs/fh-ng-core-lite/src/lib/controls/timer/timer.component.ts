@@ -53,7 +53,8 @@ export class TimerComponent extends FhngComponent implements OnInit, OnDestroy {
     this._setupTimer();
   }
 
-  public ngOnDestroy() {
+  public override ngOnDestroy() {
+    super.ngOnDestroy();
     this._destroy();
   }
 

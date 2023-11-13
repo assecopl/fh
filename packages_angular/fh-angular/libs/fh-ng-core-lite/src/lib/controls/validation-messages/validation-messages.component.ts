@@ -76,7 +76,9 @@ export class ValidateMessagesComponent
   public override ngOnInit(): void {
     super.ngOnInit();
   }
-  public ngOnDestroy(): void {
+
+  public override ngOnDestroy(): void {
+    super.ngOnDestroy();
 
   }
 

@@ -54,7 +54,8 @@ export class FormComponent extends FhngComponent implements OnInit, OnChanges, O
     // this.formManager.
   }
 
-  ngOnDestroy(): void {
+  override ngOnDestroy(): void {
+    super.ngOnDestroy();
     this.formManager.unregisterForm(this);
     this.changesSubjectSubscription.unsubscribe();
   }
