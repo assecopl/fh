@@ -106,9 +106,7 @@
       <ng-content></ng-content>
     </ng-container>
     <ng-container *ngIf="value !== undefined && value !== null">
-      <ng-container>
-        {{ value | fhml }}
-      </ng-container>
+      <span [innerHtml]="value | fhml"></span>
     </ng-container>
     <i *ngIf="icon && iconAlignment == 'AFTER'" class="ml-2 {{ icon }}"></i>
   </span>

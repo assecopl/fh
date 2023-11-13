@@ -1,12 +1,12 @@
 import {
-  AfterContentInit,
+  AfterContentInit, AfterViewInit,
   Component,
   ContentChildren,
   EventEmitter,
   forwardRef,
   Host, HostBinding,
   Injector,
-  Input,
+  Input, OnDestroy,
   OnInit,
   Optional,
   Output,
@@ -22,7 +22,8 @@ import {BootstrapWidthEnum} from '../../models/enums/BootstrapWidthEnum';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
 import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
 
-type TabElement = IDataAttributes & {label: string, id: string, selected: boolean};
+type Tab = {label: string, id: string, selected: boolean};
+type TabElement = IDataAttributes & Tab;
 
 // @DocumentedComponent({
 //   category: DocumentedComponent.Category.ARRANGEMENT,
@@ -50,7 +51,7 @@ type TabElement = IDataAttributes & {label: string, id: string, selected: boolea
 })
 export class TabContainerComponent
   extends GroupingComponentC<TabComponent>
-  implements OnInit, AfterContentInit {
+  implements OnInit, AfterContentInit, AfterViewInit, OnDestroy {
 
   public override mb2 = false;
 
@@ -77,6 +78,8 @@ export class TabContainerComponent
 
   public boundActiveTabIndex: number;
 
+  public tabs: {id: string, label: string, selected: boolean}[] = [];
+
   constructor(
     public override injector: Injector,
     @Optional() @SkipSelf() parentFhngComponent: FhngComponent
@@ -99,7 +102,7 @@ export class TabContainerComponent
 
   public override ngAfterContentInit(): void {
     this.activateDefaultTab();
-    this.subelements = JSON.parse(JSON.stringify(this.subelements));
+    console.log(JSON.parse(JSON.stringify(this.childFhngComponents)));
   }
 
   public override ngOnChanges(changes: SimpleChanges) {
@@ -111,8 +114,16 @@ export class TabContainerComponent
     ) {
       this.deactivateTabs();
       this.activateDefaultTab();
-      this.subelements = JSON.parse(JSON.stringify(this.subelements));
     }
+  }
+
+  public override ngAfterViewInit(): void {
+    super.ngAfterViewInit();
+    this._mapSubscribtions();
+  }
+
+  public ngOnDestroy(): void {
+    this._unsubscribe();
   }
 
   public activateDefaultTab(): void {
@@ -147,7 +158,7 @@ export class TabContainerComponent
   }
 
 
-  selectTab(tab: TabElement, event: Event): void {
+  public selectTab(tab: TabElement, event: Event): void {
     if (event) {
       event.preventDefault();
       event.stopPropagation();
@@ -170,7 +181,7 @@ export class TabContainerComponent
     this.subelements = JSON.parse(JSON.stringify(this.subelements));
   }
 
-  deactivateTabs() {
+  public deactivateTabs(): void {
     this.subelements.forEach((element) => {
       element.selected = false;
     });
@@ -184,13 +195,33 @@ export class TabContainerComponent
     this.activeTabIndex = data.activeTabIndex;
 
     this._mapTabs();
-
-    // console.log('TabContainer', data, this);
   }
 
-  private _mapTabs () {
+  private _mapTabs() {
     this.subelements.map((element, index) => {
-        element.selected = (index === this.activeTabIndex)
+        element.selected = (index === this.activeTabIndex);
     });
+  }
+
+  private _subscriptions = [];
+
+  private _mapSubscribtions(): void {
+    this._unsubscribe();
+    this.childFhngComponents.forEach((element: any, index: number) => {
+      if (element.update) {
+        this._subscriptions.push(element.update.subscribe((data: TabElement) => this._updateSubscribeEvent(data)));
+      }
+    });
+  }
+
+  private _unsubscribe(): void {
+    this._subscriptions.forEach(element => element.unsubscribe());
+    this._subscriptions = [];
+  }
+
+  private _updateSubscribeEvent(data: TabElement): void {
+    let index = this.subelements.findIndex(element => element.id === data.id);
+
+    this.subelements[index] = {...this.subelements[index], label: data.label, selected: data.selected}
   }
 }

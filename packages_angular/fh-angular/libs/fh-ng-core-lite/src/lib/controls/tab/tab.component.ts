@@ -7,6 +7,7 @@ import {
   OnChanges,
   OnInit,
   Optional,
+  Output,
   SimpleChanges,
   SkipSelf,
 } from '@angular/core';
@@ -14,6 +15,8 @@ import {FhngComponent} from '../../models/componentClasses/FhngComponent';
 import {FhngHTMLElementC} from '../../models/componentClasses/FhngHTMLElementC';
 import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
 import {AvailabilityEnum} from "../../availability/enums/AvailabilityEnum";
+import {BehaviorSubject, Observable, of} from "rxjs";
+import {BootstrapWidthEnum} from "../../models/enums/BootstrapWidthEnum";
 
 
 @Component({
@@ -55,13 +58,19 @@ export class TabComponent
   @HostBinding('class.active')
   public selected: boolean = false;
 
+  @Output()
+  public update: Observable<any> = of();
+
+  public override width: BootstrapWidthEnum = BootstrapWidthEnum.MD12;
+
+  private _updateBehavior: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+
   constructor(
     public override injector: Injector,
     @Optional() @SkipSelf() parentFhngComponent: FhngComponent
   ) {
     super(injector, parentFhngComponent);
-
-    this.width = 'md-12';
+    this.update = this._updateBehavior.asObservable();
   }
 
   public override ngOnInit() {
@@ -89,5 +98,6 @@ export class TabComponent
     super.mapAttributes(data);
 
     this.selected = data.selected;
+    this._updateBehavior.next(data);
   }
 }

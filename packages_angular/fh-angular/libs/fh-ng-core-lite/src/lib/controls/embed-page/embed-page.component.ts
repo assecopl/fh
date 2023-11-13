@@ -16,9 +16,9 @@ interface ActiveXObject {
 declare var ActiveXObject: ActiveXObject;
 
 @Component({
-  selector: '[fhng-embedded-view]',
-  templateUrl: './embedded-view.component.html',
-  styleUrls: ['./embedded-view.component.sass'],
+  selector: '[fhng-embed-page]',
+  templateUrl: './embed-page.component.html',
+  styleUrls: ['./embed-page.component.sass'],
   providers: [
     {
       provide: FhngComponent,

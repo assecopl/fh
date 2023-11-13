@@ -1,4 +1,4 @@
-import {ModuleWithProviders, NgModule, inject} from '@angular/core';
+import {ModuleWithProviders, NgModule, inject, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import {CommonModule, JsonPipe} from '@angular/common';
 import {FhFormsManagerNgComponent} from './fh-forms-manager-ng.component';
 import {FhMLService} from './service/fh-ml.service';
@@ -73,10 +73,13 @@ import {AutosizeModule} from '@techiediaries/ngx-textarea-autosize';
 import {ImageComponent} from "./controls/image/image.component";
 import {TimerComponent} from "./controls/timer/timer.component";
 import {FhngHasHeightDirective} from "../styles/directives/fhng-has-height.directive";
-import {EmbedPageComponent} from "./controls/embedded-view/embedded-view.component";
+import {EmbedPageComponent} from "./controls/embed-page/embed-page.component";
 import {SafePipe} from "./pipes/safe.pipe";
 import {i18nPipe} from "./pipes/i18n.pipe";
 import {HtmlViewComponent} from "./controls/html-view/html-view.component";
+import {XMLViewerFhDPComponent} from "./controls/xml-viewer/xml-viewer.component";
+import {FileUploadComponent} from "./controls/file-upload/file-upload.component";
+import {FileUploadAccessorComponent} from "./components/file-upload-accessor/file-upload.component";
 
 
 
@@ -163,11 +166,15 @@ const components = [
   EmbedPageComponent,
   HtmlViewComponent,
   SafePipe,
-  i18nPipe
+  i18nPipe,
+  XMLViewerFhDPComponent,
+  FileUploadComponent,
+  FileUploadAccessorComponent
 ]
 
 @NgModule({
   declarations: components,
+  schemas:[CUSTOM_ELEMENTS_SCHEMA],
   providers: [
     CustomActionsManager,
     EventsManager,
@@ -249,7 +256,9 @@ export class FhNgCoreLiteModule extends FhNgModule {
     componentManager.registerComponent(ImageComponent);
     componentManager.registerComponent(TimerComponent);
     componentManager.registerComponent(EmbedPageComponent);
-    componentManager.registerComponent(HtmlViewComponent)
+    componentManager.registerComponent(HtmlViewComponent);
+    componentManager.registerComponent(XMLViewerFhDPComponent);
+    componentManager.registerComponent(FileUploadComponent);
   }
 
   protected registerCustomActions(customActionsManager?: CustomActionsManager) {
