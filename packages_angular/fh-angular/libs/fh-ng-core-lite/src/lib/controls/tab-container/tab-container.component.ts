@@ -122,7 +122,7 @@ export class TabContainerComponent
     this._mapSubscribtions();
   }
 
-  public ngOnDestroy(): void {
+  public override ngOnDestroy(): void {
     this._unsubscribe();
   }
 
