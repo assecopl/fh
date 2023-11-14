@@ -1,12 +1,36 @@
-<ng-container *ngIf="control">
-  <fhng-file-upload-accessor
+<div
+  class="fc fileUpload"
+  style="height: auto"
+  [id]="innerId"
+  [availabilityHtmlElement]="availability"
+>
+  <button
+    (click)="file.click()"
+    class="btn btn-block btn-primary btn-{{ style }}"
+    [ngStyle]="styles"
+    [innerHTML]="label"
+  ></button>
+  <input
     #file
+    class="file-input d-none"
     type="file"
+    [accept]="extensions"
+    [attr.aria-label]="label"
     [multiple]="multiple"
-    [maxSize]="maxSize"
-    [extensions]="extensions"
-    [formControl]="control"
-    [label]="label"
-    (change)="change($event)"
-  ></fhng-file-upload-accessor>
+    (change)="onAddedFiles($event)"
+    [value]="value"
+  />
+</div>
+
+<!--<fhng-file-upload-accessor-->
+<!--    #file-->
+<!--    [multiple]="multiple"-->
+<!--    [maxSize]="maxSize"-->
+<!--    [extensions]="extensions"-->
+<!--    [label]="label"-->
+<!--    (change)="onFileChangeEvent($event)"-->
+<!--&gt;</fhng-file-upload-accessor>-->
+
+<ng-container *ngIf="configuration.debug">
+  <fh-component-debugger/>
 </ng-container>

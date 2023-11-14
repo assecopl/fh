@@ -1,8 +1,6 @@
-import {Component, ElementRef, HostListener, Injector, Input, ViewChild,} from '@angular/core';
+import {Component, ElementRef, HostBinding, HostListener, Injector, Input, ViewChild,} from '@angular/core';
 import {FhngHTMLElementC} from './../../models/componentClasses/FhngHTMLElementC';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
-import {FhngNotificationService} from '@fhng/ng-core';
-import {TranslateService} from '@ngx-translate/core';
 
 /**
  * ControlValueAccessor wykorzystywany do bardziej specyficznej i bezpośredniej pracy z zawartością kontrolki.
@@ -23,12 +21,17 @@ import {TranslateService} from '@ngx-translate/core';
 export class FileUploadAccessorComponent
   extends FhngHTMLElementC
   implements ControlValueAccessor {
-  @Input() progress;
-  onChange: Function;
-  public file: File | File[] | null = null;
+
+  public override mb2: false;
+
+  @HostBinding('id')
+  @Input()
+  public override id: string;
 
   @Input()
-  public label: string;
+  public progress;
+
+  public file: File | File[] | null = null;
 
   @Input()
   public maxSize: number = 1000000;
@@ -39,7 +42,10 @@ export class FileUploadAccessorComponent
   @Input()
   public multiple: boolean = false;
 
-  @ViewChild('file') fileInput: ElementRef<HTMLInputElement>;
+  @ViewChild('file')
+  public fileInput: ElementRef<HTMLInputElement>;
+
+  public onChange: Function;
 
   @HostListener('change', ['$event.target.files']) emitFiles(event: FileList) {
     let file: File | File[] | null = event && event.item(0);
@@ -66,11 +72,15 @@ export class FileUploadAccessorComponent
 
   constructor(
     private host: ElementRef<HTMLInputElement>,
-    public injector: Injector,
-    public notification: FhngNotificationService,
-    public translate: TranslateService
+    public override injector: Injector,
+    // public notification: FhngNotificationService,
   ) {
     super(injector, null);
+    this.registerOnChange(this.onChange);
+  }
+
+  public onChangeEvent(file: any): void {
+
   }
 
   writeValue(value: null) {
@@ -79,7 +89,7 @@ export class FileUploadAccessorComponent
     this.file = null;
   }
 
-  registerOnChange(fn: Function) {
+  public registerOnChange(fn: Function): void {
     this.onChange = fn;
   }
 
@@ -102,13 +112,13 @@ export class FileUploadAccessorComponent
     if (file && this.maxSize) {
       if (file && file.size >= this.maxSize) {
         //TODO Translate!!
-        this.notification.showError(
-          `Plik ${file.name} jest za duży. Maksymalny rozmiar pliku to ${
-            this.maxSize / 1024
-          } KB.`,
-          null,
-          10000
-        );
+        // this.notification.showError(
+        //   `Plik ${file.name} jest za duży. Maksymalny rozmiar pliku to ${
+        //     this.maxSize / 1024
+        //   } KB.`,
+        //   null,
+        //   10000
+        // );
         return false;
       } else {
         return true;
@@ -151,11 +161,11 @@ export class FileUploadAccessorComponent
         return true;
       } else {
         //TODO Translate!!
-        this.notification.showError(
-          `Plik tego formatu nie jest obsługiwany. Akceptowalne pliki : ${this.extensions}.`,
-          null,
-          10000
-        );
+        // this.notification.showError(
+        //   `Plik tego formatu nie jest obsługiwany. Akceptowalne pliki : ${this.extensions}.`,
+        //   null,
+        //   10000
+        // );
         return false;
       }
     }
