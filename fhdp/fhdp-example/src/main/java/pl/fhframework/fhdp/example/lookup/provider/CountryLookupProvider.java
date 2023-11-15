@@ -23,6 +23,7 @@ public class CountryLookupProvider implements IComboDataProviderFhDP<Country, St
 
     @Override
     public String getCode(Country element) {
+        if(element == null) return null;
         return element.getCode();
     }
 
