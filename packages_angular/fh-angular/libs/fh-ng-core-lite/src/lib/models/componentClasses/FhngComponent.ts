@@ -200,7 +200,7 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
 
     return this._http.request(req).pipe(
         map(event => this._handleEvent(event)),
-        catchError(this._handleError)
+        catchError(this.handleError)
     );
   }
 
@@ -245,7 +245,7 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
         if (typeof this[key] == "boolean") {
           this[key] = data[key] == true || data[key] == 'true';
         } else {
-          this[key] = data[key];
+          this[key] = data[key] || this[key];
         }
       } else {
         if (this.configuration.debug) {
@@ -283,10 +283,16 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
     })
   }
 
+  public handleError(error: HttpErrorResponse) {
+    let message = `Error during sending request, status is: ${error} `;
 
-  // protected fireHttpMultiPartEvent(eventType, actionName, url, data: FormData) {
-  //     return this.formsManager.fireHttpMultiPartEvent(eventType, actionName, this.formId, this.id, url, data);
-  // };
+    if (error.status == 0) {
+      console.error('%c Error during sending request, status is: ',
+          'background: #F00; color: #FFF', error.status);
+    }
+
+    return throwError(() => new Error(message));
+  }
 
   private _getCookieToken(): string {
     const regExp = /XSRF-TOKEN=([a-zA-Z0-1]*)/i,
@@ -310,17 +316,6 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
     }
 
     return event;
-  }
-
-  private _handleError(error: HttpErrorResponse) {
-    let message = `Error during sending request, status is: ${error} `;
-
-    if (error.status == 0) {
-      console.error('%c Error during sending request, status is: ',
-          'background: #F00; color: #FFF', error.status);
-    }
-
-    return throwError(() => new Error(message));
   }
 }
 

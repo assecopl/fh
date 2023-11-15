@@ -208,4 +208,10 @@ export class RepeaterComponent extends FhngHTMLElementC implements OnInit {
       this.select(event);
     }
   }
+
+  public override mapAttributes(data: IDataAttributes) {
+    super.mapAttributes(data);
+
+    console.log('R:mapAttributes', data);
+  }
 }

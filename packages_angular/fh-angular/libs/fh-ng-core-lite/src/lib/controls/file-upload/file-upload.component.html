@@ -3,19 +3,40 @@
   style="height: auto"
   [id]="innerId"
   [availabilityHtmlElement]="availability"
+  [class.upload-active]="dragover"
 >
   <button
-    (click)="file.click()"
     class="fc button btn btn-block btn-primary btn-{{ style }}"
     [ngClass]="getButtonClass()"
     [ngStyle]="styles"
   >
+    <label [id]="innerId + '_label'" [for]="innerId + 'file'" class="control-label fileNames sr-only">
+      {{ label || fileNames }}
+    </label>
+
+    <input
+      #file
+      class="file-input"
+      type="file"
+      name="file"
+      [id]="innerId + '_file'"
+      [accept]="extensions"
+      [attr.aria-label]="label"
+      [attr.aria-describedby]="innerId + '_label'"
+      [multiple]="multiple"
+      (change)="onAddedFiles($event)"
+      [value]="value"
+      (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave($event)"
+      (drop)="onDrop($event)"
+    />
+
     <ng-container *ngIf="!showProgressBar">
-      {{label}}
+      {{ label }}
     </ng-container>
 
     <ng-container *ngIf="showProgressBar">
-      <span>{{'abort' | i18n }}</span>
+      {{ 'abort' | i18n }}
     </ng-container>
 
     <div
@@ -32,16 +53,6 @@
       ></div>
     </div>
   </button>
-  <input
-    #file
-    class="file-input d-none"
-    type="file"
-    [accept]="extensions"
-    [attr.aria-label]="label"
-    [multiple]="multiple"
-    (change)="onAddedFiles($event)"
-    [value]="value"
-  />
 </div>
 
 <ng-container *ngIf="configuration.debug">
