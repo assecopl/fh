@@ -8,6 +8,7 @@ import {
   OnChanges,
   OnDestroy,
   OnInit,
+  Optional,
   SimpleChanges,
 } from '@angular/core';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
@@ -15,6 +16,7 @@ import {FhChanges, FormsManager} from "../../Socket/FormsManager";
 import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
 import {Subscription} from 'rxjs';
 import {ContainerComponent} from "../container/container.component";
+import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'fh-form',
@@ -43,12 +45,17 @@ export class FormComponent extends FhngComponent implements OnInit, OnChanges, O
   @HostBinding('class.fc')
   cssFc: boolean = true;
 
+  @Input()
+  public modal: boolean = false;
+
   private changesSubjectSubscription: Subscription;
 
-  public container: ContainerComponent = inject(ContainerComponent);
+  public container: ContainerComponent = inject(ContainerComponent, {optional: true});
 
   constructor(
-    public override injector: Injector, private formManager: FormsManager
+      public override injector: Injector,
+      private formManager: FormsManager,
+      @Optional() public activeModal: NgbActiveModal
   ) {
     super(injector, null);
     // this.formManager.

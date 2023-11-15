@@ -1,4 +1,5 @@
 import 'reflect-metadata'
+import {AvailabilityEnum} from "./availability/enums/AvailabilityEnum";
 
 
 // unavailable outside this module
@@ -234,4 +235,29 @@ export class Pageable {
               public pageSize: number,
               public sort: Order[] = []) {
   }
+}
+
+export interface IForm {
+  accessibility: AvailabilityEnum
+  blockFocusForModal: boolean
+  blocked: boolean
+  container: string //"MODAL_VIRTUAL_CONTAINER"
+  designDeletable: boolean
+  designMode: boolean
+  effectiveFormType: "MODAL_OVERFLOW" | "STANDARD" | "MODAL" | "FLOATING" | "HEADER" | "MINIMAL"
+  focusFirstElement: boolean
+  formType: "MODAL_OVERFLOW" | "STANDARD" | "MODAL" | "FLOATING" | "HEADER" | "MINIMAL"
+  fromCloud: boolean
+  hideHeader: boolean
+  hintType: 'STANDARD' | 'STANDARD_POPOVER' | 'STATIC' | 'STATIC_POPOVER' | 'STATIC_POPOVER_LEFT' | 'STATIC_LEFT'
+  id: string
+  invisible: boolean
+  label: string
+  modal: boolean
+  modalSize: "REGULAR" | "SMALL" | "LARGE" | "XLARGE" | "XXLARGE" | "FULL"
+  push: false
+  state: "ACTIVE" | "INACTIVE_PENDING" | "INACTIVE" | "SHADOWED" | "HIDDEN" | "CLOSED"
+  subelements: any[]
+  nonVisualSubcomponents?: any[]
+
 }

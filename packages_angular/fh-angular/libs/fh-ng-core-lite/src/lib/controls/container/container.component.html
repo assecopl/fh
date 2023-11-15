@@ -1,9 +1,14 @@
-<fh-form
-  [formType]="form?.formType"
-  [subelements]="form?.subelements"
-  [nonVisualComponents]="form?.nonVisualSubcomponents || []"
-  [formId]="form?.id"
-  [id]="form?.id"
-  [label]="form?.label"
-  [hideHeader]="form?.hideHeader"
-/>
+<ng-container *ngIf="form && !form.modal">
+    <fh-form
+            [formType]="form.formType"
+            [subelements]="form.subelements || []"
+            [nonVisualComponents]="form?.nonVisualSubcomponents || []"
+            [formId]="form?.id"
+            [id]="form.id"
+            [label]="form.label"
+            [hideHeader]="form.hideHeader"
+    />
+</ng-container>
+<!--<pre>-->
+<!--{{form | json}}-->
+<!--</pre>-->

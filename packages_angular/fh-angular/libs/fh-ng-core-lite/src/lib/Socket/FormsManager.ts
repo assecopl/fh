@@ -1,10 +1,9 @@
 import {default as Cookies} from "js-cookie"
 import {SocketOutputCommands} from "./SocketOutputCommands";
 import * as $ from 'jquery'; //TODO remove Jquery
-
 import {ApplicationLockService} from "../service/application-lock.service";
 import {I18nService} from "../service/i18n.service";
-import {Injectable, Injector, inject} from "@angular/core";
+import {inject, Injectable, Injector} from "@angular/core";
 import {Util} from "../service/Util";
 import {SocketHandler} from "./SocketHandler";
 import {Subject} from "rxjs";
@@ -32,13 +31,16 @@ class FormsManager {
     // @lazyInject('LayoutHandler')
     // private layoutHandler: LayoutHandler;
 
-  private notificationService: NotificationService = inject(NotificationService);
-  private eventsManager: EventsManager = inject(EventsManager);
+    private notificationService: NotificationService = inject(NotificationService);
+    private eventsManager: EventsManager = inject(EventsManager);
 
     public duringShutdown: boolean = false;
-  private openedForms: FormComponent[] = [];
+    private openedForms: FormComponent[] = [];
     public openedFormsSubject: Subject<any> = new Subject<any>();
-  public changesSubject: Subject<FhChanges> = new Subject<any>();
+
+    public closeFormsSubject: Subject<any> = new Subject<any>();
+
+    public changesSubject: Subject<FhChanges> = new Subject<any>();
     private usedContainers: any = {};
     public eventQueue: any[] = [];
     private pendingRequestsCount: number = 0;
@@ -66,7 +68,7 @@ class FormsManager {
         // let form = (<any>FhContainer.get('Form'))(formObj);
         //Na razie zostajemy na obiekcie JSON - może przeniesiemy też klasę Form z 4.x gdy będzie potrzebna do dalszej pracy.
         this.openedFormsSubject.next(formObj);
-      // this.openedForms.push(formObj);
+        // this.openedForms.push(formObj);
         this.usedContainers[formObj.containerId] = formObj;
         this.formObj = formObj;
 
@@ -112,26 +114,26 @@ class FormsManager {
         return this.initialized;
     }
 
-  closeForm(form: FormComponent) {
-    if (form) {
-      this.usedContainers[form.container.id] = null;
-      let indexToDelte = -1;
-      this.openedForms.forEach((value, index) => {
-        if (value.id == form.id) {
-          indexToDelte = index;
-        }
-      })
-      if(indexToDelte > -1) {
-        this.openedForms.splice(indexToDelte, 1);
-      }
+    closeForm(form: FormComponent) {
+        if (form) {
+            this.usedContainers[form.container.id] = null;
+            let indexToDelte = -1;
+            this.openedForms.forEach((value, index) => {
+                if (value.id == form.id) {
+                    indexToDelte = index;
+                }
+            })
+            if (indexToDelte > -1) {
+                this.openedForms.splice(indexToDelte, 1);
+            }
 
-        if (document.activeElement) {
-            this.lastActiveElementId = document.activeElement.id || null;
+            if (document.activeElement) {
+                this.lastActiveElementId = document.activeElement.id || null;
+            }
+            this.lastClosedFormId = form.id;
+            // form.destroy();
+            form = null;
         }
-        this.lastClosedFormId = form.id;
-        // form.destroy();
-        form = null;
-    }
     }
 
     closeForms(formsList) {
@@ -139,15 +141,16 @@ class FormsManager {
             return;
         }
         formsList.forEach((formId) => {
-            let form = this.findForm(formId);
-            if (typeof form === 'object') {
-
-                // if (form.container.id === 'designedFormContainer' && !localStorage.getItem('formContainerHeight')) {
-                //     localStorage.setItem('formContainerHeight', form.container.clientHeight);
-                // }
-
-                this.closeForm(form);
-            }
+            this.closeFormsSubject.next(formId);
+            // let form = this.findForm(formId);
+            // if (typeof form === 'object') {
+            //
+            //     // if (form.container.id === 'designedFormContainer' && !localStorage.getItem('formContainerHeight')) {
+            //     //     localStorage.setItem('formContainerHeight', form.container.clientHeight);
+            //     // }
+            //
+            //     this.closeForm(form);
+            // }
         });
     }
 
@@ -158,7 +161,7 @@ class FormsManager {
                 return form;
             }
         }
-      return null;
+        return null;
     }
 
     handleExternalEvents(eventList) {
@@ -167,9 +170,9 @@ class FormsManager {
         }
         eventList.forEach((eventObj) => {
             let type = eventObj.type;
-          // let event = this.injector.get('Events.' + type, null); // sprawdzić czy po stringu znajdzie, jeżeli nie - zdefiniować InejctionToken dla każdego eventu.
+            // let event = this.injector.get('Events.' + type, null); // sprawdzić czy po stringu znajdzie, jeżeli nie - zdefiniować InejctionToken dla każdego eventu.
 
-          let event: BaseEvent = this.eventsManager.getEvent(type);
+            let event: BaseEvent = this.eventsManager.getEvent(type);
 
             if (event && typeof event.fire === 'function') {
                 event.fire(eventObj);
@@ -180,7 +183,7 @@ class FormsManager {
     findFormByContainer(containerId) {
         let form = null;
         for (let i = 0; i < this.openedForms.length; i++) {
-          if (this.openedForms[i].container.id === containerId) {
+            if (this.openedForms[i].container.id === containerId) {
                 form = this.openedForms[i];
                 break;
             }
@@ -225,47 +228,47 @@ class FormsManager {
      * @param changesList
      */
     applyChanges(changesList) {
-      if (changesList) {
-        //Grupujemy zmiany po id formularza.
-        let groupedCHanges = {};
-        changesList.forEach((change: any) => {
-          if (!groupedCHanges[change.formId]) {
-            groupedCHanges[change.formId] = [];
-          }
-          groupedCHanges[change.formId].push(change);
+        if (changesList) {
+            //Grupujemy zmiany po id formularza.
+            let groupedCHanges = {};
+            changesList.forEach((change: any) => {
+                if (!groupedCHanges[change.formId]) {
+                    groupedCHanges[change.formId] = [];
+                }
+                groupedCHanges[change.formId].push(change);
 
-        });
+            });
 
-        this.changesSubject.next(groupedCHanges)
-      }
+            this.changesSubject.next(groupedCHanges)
+        }
 
-      // if (!changesList) {
-      //     return;
-      // }
-      // changesList.forEach((change) => {
-      //     let form = this.findForm(change.formId);
-      //     if (form) {
-      //         // form.applyChange(change);
-      //     }
-      // });
+        // if (!changesList) {
+        //     return;
+        // }
+        // changesList.forEach((change) => {
+        //     let form = this.findForm(change.formId);
+        //     if (form) {
+        //         // form.applyChange(change);
+        //     }
+        // });
     }
 
     fireEvent(eventType, actionName, formId, componentId, deferredEvent, doLock, params = undefined) {
         let serviceType = eventType === null && formId == null;
 
         if (this.pendingRequestsCount > 0) {
-          // let event = new NotificationEvent();
-          // event.fire({
-          //     level: 'warning',
-          //     message: this.i18n.__("request pending")
-          // });
-          this.notificationService.showWarning(this.i18n.__("request pending"))
+            // let event = new NotificationEvent();
+            // event.fire({
+            //     level: 'warning',
+            //     message: this.i18n.__("request pending")
+            // });
+            this.notificationService.showWarning(this.i18n.__("request pending"))
             return false;
         }
 
         let form = this.findForm(formId);
         // if (!serviceType && form === false && ENV_IS_DEVELOPMENT) {
-      if (!serviceType && !form) {
+        if (!serviceType && !form) {
             console.warn('%cForm not found. EventType: %s, formId: %s, componentId: %s', 'background: #cc0000; color: #FFF', eventType, formId, componentId);
             // alert('Form not found. See console for more information.');
             return false;
@@ -297,8 +300,8 @@ class FormsManager {
         //Cycle through all the boxes to gather all changes
         this.openedForms.forEach(function (form) {
             //TODO Rozwiązać pobieranie zmian z komponentów.
-          let changes = form.collectAllChanges();
-          eventData.changedFields = eventData.changedFields.concat(changes);
+            let changes = form.collectAllChanges();
+            eventData.changedFields = eventData.changedFields.concat(changes);
         });
 
         // if (ENV_IS_DEVELOPMENT) {
@@ -309,7 +312,7 @@ class FormsManager {
             let currentForm = this.findForm(formId);
             // if (!serviceType && (currentForm === false || (!deferredEvent.component.designMode && deferredEvent.component.destroyed) ||
             //     (document.getElementById(componentId) == null && currentForm.findComponent(componentId, true, false, true) === false))) {
-          if (!serviceType && (!currentForm || (!deferredEvent.component.designMode && deferredEvent.component.destroyed))) { // some components are not available in HTML (RuleDiagram) and some in findComponent (Table row components)
+            if (!serviceType && (!currentForm || (!deferredEvent.component.designMode && deferredEvent.component.destroyed))) { // some components are not available in HTML (RuleDiagram) and some in findComponent (Table row components)
                 console.error('Component ' + componentId + ' on form ' + formId + ' is not available any more. Not sending event from this component to server.');
                 this.triggerQueue();
             } else {
@@ -328,18 +331,18 @@ class FormsManager {
     }
 
     fireHttpMultiPartEvent(eventType, actionName, formId, componentId, url, data: FormData) {
-      let eventData = {
-        formId: formId,
-        eventSourceId: componentId,
-        eventType: eventType,
-        changedFields: []
-      };
+        let eventData = {
+            formId: formId,
+            eventSourceId: componentId,
+            eventType: eventType,
+            changedFields: []
+        };
 
         // //Cycle through all the boxes to gather all changes
-      this.openedForms.forEach(function (form) {
-        let changes = form.collectAllChanges();
-        eventData.changedFields = eventData.changedFields.concat(changes);
-      });
+        this.openedForms.forEach(function (form) {
+            let changes = form.collectAllChanges();
+            eventData.changedFields = eventData.changedFields.concat(changes);
+        });
 
         // data.append('eventData', JSON.stringify(eventData));
         let token = Cookies.get('XSRF-TOKEN');
@@ -577,19 +580,18 @@ class FormsManager {
     //     }
     // }
 
-  public registerForm(form: FormComponent) {
-    //rejestrjemy jezeli nie istnieje w tablicy
-    if (this.openedForms.indexOf(form) == -1) {
-      this.openedForms.push(form);
+    public registerForm(form: FormComponent) {
+        //rejestrjemy jezeli nie istnieje w tablicy
+        if (this.openedForms.indexOf(form) == -1) {
+            this.openedForms.push(form);
+        }
     }
-  }
 
-  public unregisterForm(form: FormComponent) {
-    if (this.openedForms.indexOf(form) > -1) {
-      this.openedForms.splice(this.openedForms.indexOf(form), 1);
+    public unregisterForm(form: FormComponent) {
+        if (this.openedForms.indexOf(form) > -1) {
+            this.openedForms.splice(this.openedForms.indexOf(form), 1);
+        }
     }
-  }
-
 
 
 }
@@ -598,9 +600,11 @@ export {FormsManager, FhChanges};
 
 
 interface FhChanges {
-  [key: string]: {
-    formId: string,
-    formElementId: string,
-    changedAttributes: { [key: string]: string }
-  }[]
+    [key: string]: {
+        formId: string,
+        formElementId: string,
+        changedAttributes: {
+            [key: string]: string
+        }
+    }[]
 }
