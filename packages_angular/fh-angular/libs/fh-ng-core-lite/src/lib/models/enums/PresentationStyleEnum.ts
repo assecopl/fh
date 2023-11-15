@@ -18,5 +18,7 @@ export enum PresentationStyleEnum {
     /**
      * Signals blocking error. Data value from field cannot be assigned to model and action cannot be performed
      */
-    BLOCKER = "BLOCKER"
+    BLOCKER = "BLOCKER",
+    SUCCESS = "SUCCESS",
+    DANGER = "DANGER"
 }

@@ -15,6 +15,8 @@ import {
 } from '@angular/core';
 import {FhngHTMLElementC} from '../../models/componentClasses/FhngHTMLElementC';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
+import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
+import {BootstrapWidthEnum} from "../../models/enums/BootstrapWidthEnum";
 
 @Component({
   selector: 'fh-repeater',
@@ -51,7 +53,9 @@ export class RepeaterComponent extends FhngHTMLElementC implements OnInit {
   unhighlighted: boolean = false;
 
   @HostBinding('class.pt-2')
-  pt2: boolean = true;
+  pt2: boolean = false;
+
+  public override width = BootstrapWidthEnum.MD12;
 
   @Input()
   public collection: any[] | any = [];

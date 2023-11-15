@@ -1,5 +1,6 @@
 import {ModuleWithProviders, NgModule, inject, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import {CommonModule, JsonPipe} from '@angular/common';
+import {HttpClientModule} from "@angular/common/http";
 import {FhFormsManagerNgComponent} from './fh-forms-manager-ng.component';
 import {FhMLService} from './service/fh-ml.service';
 import {AdDirective} from './directive/ad.directive';
@@ -185,7 +186,17 @@ const components = [
     ComponentManager,
     provideNgxMask(maskConfigFunction)
   ],
-  imports: [CommonModule, JsonPipe, NgbModule, NgxMaskDirective, NgxMaskPipe, FormsModule, NgSelectModule, AutosizeModule],
+  imports: [
+    CommonModule,
+    JsonPipe,
+    NgbModule,
+    NgxMaskDirective,
+    NgxMaskPipe,
+    FormsModule,
+    NgSelectModule,
+    AutosizeModule,
+    HttpClientModule
+  ],
   exports: components,
 })
 export class FhNgCoreLiteModule extends FhNgModule {

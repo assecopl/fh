@@ -2,7 +2,6 @@ import {
   Component,
   EventEmitter,
   forwardRef,
-  Host,
   Injector,
   Input,
   OnInit,
@@ -14,11 +13,13 @@ import {
 import {FhngReactiveInputC} from '../../models/componentClasses/FhngReactiveInputC';
 import {BootstrapWidthEnum} from './../../models/enums/BootstrapWidthEnum';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
-import {NG_VALUE_ACCESSOR, ValidatorFn} from '@angular/forms';
 import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
-import {BootstrapStyleType, FORM_VALUE_ATTRIBUTE_NAME} from "../../models/CommonTypes";
+import {BootstrapStyleType} from "../../models/CommonTypes";
 import {BootstrapStyleEnum} from "../../models/enums/BootstrapStyleEnum";
-import {FileUploadAccessorComponent} from "../../components/file-upload-accessor/file-upload.component";
+import {HttpEvent, HttpEventType} from "@angular/common/http";
+import {map} from "rxjs/operators";
+import {lastValueFrom} from "rxjs";
+import {PresentationStyleEnum} from "../../models/enums/PresentationStyleEnum";
 
 type UpdateOn =  'change' | 'blur' | 'submit';
 
@@ -28,7 +29,9 @@ export interface IFileUploadDataAttributes extends IDataAttributes {
   language?: string;
   maxSize?: number;
   extensions?: string;
-  style: BootstrapStyleType
+  style?: BootstrapStyleType,
+  fileNames?: string[];
+  presentationStyle?: PresentationStyleEnum
 }
 
 @Component({
@@ -39,13 +42,8 @@ export interface IFileUploadDataAttributes extends IDataAttributes {
     {
       provide: FhngComponent,
       useExisting: forwardRef(() => FileUploadComponent),
-    },
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: FileUploadAccessorComponent,
-      multi: true,
-    },
-  ],
+    }
+  ]
 })
 export class FileUploadComponent extends FhngReactiveInputC implements OnInit {
   public override width = BootstrapWidthEnum.MD3;
@@ -79,6 +77,13 @@ export class FileUploadComponent extends FhngReactiveInputC implements OnInit {
   @Input()
   public file: File | File[] | null = null;
 
+  public progress = 0;
+
+  public showProgressBar = false;
+
+  @Input()
+  public fileNames: string[] = [];
+
   constructor(
       public override injector: Injector,
       @Optional() @SkipSelf() parentFhngComponent: FhngComponent
@@ -109,6 +114,7 @@ export class FileUploadComponent extends FhngReactiveInputC implements OnInit {
     this.language = data.language;
     this.maxSize = data.maxSize;
     this.style = data.style || BootstrapStyleEnum.PRIMARY;
+    this.fileNames = data.fileNames || [];
   }
 
   public onAddedFiles($event: Event & {target?: {files?: FileList}}): void {
@@ -116,6 +122,7 @@ export class FileUploadComponent extends FhngReactiveInputC implements OnInit {
 
     let file: File | File[] | null =
         $event && $event.target.files && $event.target.files.item(0);
+    let formData: FormData = null;
 
     if (this.multiple && $event &&  $event.target.files) {
       file = Array.from($event.target.files);
@@ -126,14 +133,32 @@ export class FileUploadComponent extends FhngReactiveInputC implements OnInit {
         this._filesSizeValidator(file)
     ) {
       this.file = file;
+      formData = this._createFormDataObject($event.target.files);
     } else {
       this.file = null;
     }
 
-    console.log('this.add', this.file);
-    this.rawValue = this.file;
     this.valueChanged = true;
-    this.fireEventWithLock('onUpload', this.onUpload);
+
+    console.log('addFile', formData, this.file);
+
+    let request = this.fireHttpMultiPartEvent(
+      'onUpload',
+      this.onUpload,
+      '/fhdp-demo-app/fileUpload',
+      formData
+    ).pipe(
+        map(event => this._getEventMessage(event, formData))
+    );
+
+    lastValueFrom(request).then((response: any) => {
+      if (response.body) {
+        this.valueChanged = true;
+        this.rawValue = response.body.ids;
+        this.value = this.file = null;
+        this.fireEventWithLock('onUpload', this.onUpload);
+      }
+    });
   }
 
   public getExtensions(): string[] {
@@ -143,12 +168,30 @@ export class FileUploadComponent extends FhngReactiveInputC implements OnInit {
   public override extractChangedAttributes() {
     let attrs = {};
     if (this.valueChanged) {
-      attrs[FORM_VALUE_ATTRIBUTE_NAME] = this.rawValue;
+      attrs['fileIds'] = this.rawValue;
       this.valueChanged = false;
     }
 
     return attrs;
   };
+
+  public getButtonClass(): {[name: string]: any } {
+    let _class = {
+      'btn-danger': [
+          PresentationStyleEnum.DANGER,
+          PresentationStyleEnum.ERROR,
+          PresentationStyleEnum.BLOCKER
+        ].includes(this.presentationStyle),
+      'btn-info': this.presentationStyle === PresentationStyleEnum.INFO,
+      'btn-primary': this.presentationStyle === PresentationStyleEnum.OK,
+      'btn-success': this.showProgressBar || this.presentationStyle === PresentationStyleEnum.SUCCESS,
+      'btn-warning': this.presentationStyle === PresentationStyleEnum.WARNING,
+    };
+
+    _class['btn-' + this.style] = !this.showProgressBar;
+
+    return _class;
+  }
 
   private _requiredFilesType(files: File | File[], type: string[]): boolean {
     if (files instanceof Array) {
@@ -201,5 +244,46 @@ export class FileUploadComponent extends FhngReactiveInputC implements OnInit {
     }
 
     return (files as File).size <= this.maxSize;
+  }
+
+  private _createFormDataObject (file: FileList): FormData {
+    let formData = new FormData();
+
+    for (let i = 0; i < file?.length; i++) {
+      formData.append('file', file[i]);
+    }
+
+    formData.append('componentId', this.id);
+    formData.append('formId', this.formId);
+    formData.append('containerId', this.formsManager.findForm(this.formId)?.container.id);
+
+    return formData;
+  }
+
+  private _getEventMessage(event: HttpEvent<any>, file: FormData): HttpEvent<any> {
+    console.log('progressEvent', event);
+    switch (event.type) {
+      case HttpEventType.Sent:
+        this.showProgressBar = true;
+        this.progress = 0;
+        break;
+
+      case HttpEventType.UploadProgress:
+        // Compute and show the % done:
+        this.progress = event.total ? Math.round(100 * event.loaded / event.total) : 0;
+        break
+
+      case HttpEventType.Response:
+        this.progress = 100;
+        this.showProgressBar = false;
+        break;
+
+      default:
+        this.progress = 100;
+        this.showProgressBar = false;
+        break;
+    }
+
+    return event;
   }
 }

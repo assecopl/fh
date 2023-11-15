@@ -24,6 +24,7 @@ import {STYLE_UNIT} from "../enums/StyleUnitEnum";
 import {AvailabilityEnum} from "../../availability/enums/AvailabilityEnum";
 import {AvailabilityUtils} from "../../availability/AvailabilityUtils";
 import {FhngFormatter} from "../../controls/input-number/input-number.component";
+import {PresentationStyleEnum} from "../enums/PresentationStyleEnum";
 
 @Directive()
 export class FhngHTMLElementC
@@ -130,7 +131,7 @@ export class FhngHTMLElementC
   public hintType: 'STANDARD' | 'STANDARD_POPOVER' | 'STATIC' | 'STATIC_POPOVER' | 'STATIC_POPOVER_LEFT' | 'STATIC_LEFT' = 'STANDARD_POPOVER'
 
   @Input()
-  public presentationStyle: 'BLOCKER' | "ERROR" | "INFO" | "WARNING" | "SUCCESS" | "OK" = null;
+  public presentationStyle: PresentationStyleEnum = null;
 
   @Input()
   public title: string = '';
