@@ -11,12 +11,16 @@ import {
   Optional,
   SkipSelf,
   ViewChild,
+  inject
 } from '@angular/core';
 import * as $ from 'jquery';
 import {FormsManager} from "../../Socket/FormsManager";
 import {IDataAttributes} from "../interfaces/IDataAttributes";
 import {FHNG_CORE_CONFIG, FhNgCoreConfig} from "../../fh-ng-core.config";
 import {FhngChangesComponent} from "../abstracts/FhngChangesComponent";
+import {HttpClient, HttpErrorResponse, HttpEvent, HttpEventType, HttpHeaders, HttpRequest} from "@angular/common/http";
+import {catchError, last, map, tap} from 'rxjs/operators';
+import {lastValueFrom, Observable, throwError} from "rxjs";
 
 /**
  * Klasa odpowiedzialna za budowę drzewa komponentów FHNG
@@ -56,6 +60,8 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
 
   protected formsManager: FormsManager;
 
+  protected destroyed: boolean;
+
   /**
    * For Input(FhngReactiveInputC) components this parameter is used as modelBinding parameter.
    */
@@ -63,9 +69,12 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
   public name: string = '';
 
   public parentFhngComponent: FhngComponent = null;
+
   public override childFhngComponents: FhngComponent[] = [];
 
   protected configuration: FhNgCoreConfig = null;
+
+  private _http: HttpClient = null;
 
   constructor(
     public injector: Injector,
@@ -79,6 +88,7 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
     this.formsManager = this.injector.get(FormsManager, null);
     this.configuration = this.injector.get(FHNG_CORE_CONFIG, null) as FhNgCoreConfig;
 
+    this._http = inject(HttpClient);
   }
 
   public findFhngComponent(id: string): FhngComponent {
@@ -163,13 +173,36 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
     this.fireEventImpl(eventType, actionName, false, params);
   }
 
+  public fireHttpMultiPartEvent(evnetType, actionName, url, data: FormData): Observable<HttpEvent<any>> {
+    return this.fireHttpMultiPartEventImpl(evnetType, actionName, this.formId, this.id, url, data);
+  }
+
   /* Fire event to backend and lock application */
 
   protected fireEventWithLock(eventType, actionName, params = undefined) {
     this.fireEventImpl(eventType, actionName, true, params);
   }
 
-  protected destroyed: boolean;
+  protected fireHttpMultiPartEventImpl (eventType, actionName, formId, componentId, url, data: FormData): Observable<HttpEvent<any>>{
+    const token = this._getCookieToken();
+
+    let headers = new HttpHeaders();
+
+    if (token) {
+      headers.set('X-CSRF-TOKEN', token);
+    }
+
+    const req = new HttpRequest('POST', url, data, {
+        reportProgress: true,
+        withCredentials: true,
+        headers: headers
+      });
+
+    return this._http.request(req).pipe(
+        map(event => this._handleEvent(event)),
+        catchError(this._handleError)
+    );
+  }
 
   /* Fire event to backend */
 
@@ -254,6 +287,41 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
   // protected fireHttpMultiPartEvent(eventType, actionName, url, data: FormData) {
   //     return this.formsManager.fireHttpMultiPartEvent(eventType, actionName, this.formId, this.id, url, data);
   // };
+
+  private _getCookieToken(): string {
+    const regExp = /XSRF-TOKEN=([a-zA-Z0-1]*)/i,
+        tokenCookie = document.cookie.match(regExp);
+
+    return tokenCookie && tokenCookie[1] ? tokenCookie[1] : null;
+  }
+
+  private _handleEvent(event: HttpEvent<any>): HttpEvent<any> {
+    switch (event.type) {
+      case HttpEventType.Sent:
+        break;
+
+      case HttpEventType.UploadProgress:
+        break;
+
+      case HttpEventType.Response:
+        break;
+
+      default:
+    }
+
+    return event;
+  }
+
+  private _handleError(error: HttpErrorResponse) {
+    let message = `Error during sending request, status is: ${error} `;
+
+    if (error.status == 0) {
+      console.error('%c Error during sending request, status is: ',
+          'background: #F00; color: #FFF', error.status);
+    }
+
+    return throwError(() => new Error(message));
+  }
 }
 
 @Directive()
