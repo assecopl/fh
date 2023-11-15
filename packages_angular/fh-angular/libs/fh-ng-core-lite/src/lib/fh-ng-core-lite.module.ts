@@ -81,6 +81,8 @@ import {HtmlViewComponent} from "./controls/html-view/html-view.component";
 import {XMLViewerFhDPComponent} from "./controls/xml-viewer/xml-viewer.component";
 import {FileUploadComponent} from "./controls/file-upload/file-upload.component";
 import {FileUploadAccessorComponent} from "./components/file-upload-accessor/file-upload.component";
+import {ComboPL} from "./controls/combo/i18n/combo.pl";
+import {ComboEN} from "./controls/combo/i18n/combo.en";
 
 
 
@@ -216,6 +218,11 @@ export class FhNgCoreLiteModule extends FhNgModule {
     i18n.registerStrings('pl', TranslationsPl);
     i18n.registerStrings('pl', ShutdownEventPL);
     i18n.registerStrings('en', ShutdownEventEN);
+    /**
+     * Register default translations strings for components.
+     */
+    i18n.registerStrings('pl', ComboPL);
+    i18n.registerStrings('en', ComboEN);
   }
 
 
