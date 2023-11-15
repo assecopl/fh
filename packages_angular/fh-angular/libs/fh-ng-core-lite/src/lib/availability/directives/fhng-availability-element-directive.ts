@@ -15,6 +15,7 @@ export class FhngAvailabilityElementDirective implements OnInit {
   @Input('availabilityHtmlElement')
   public set availability(value: AvailabilityEnum | string) {
     this._availability = AvailabilityUtils.stringToEnum(value);
+    AvailabilityUtils.setHtmlElementAvailability(this.htmlElement.nativeElement, this._availability)
   }
 
   constructor(protected htmlElement: ElementRef,
@@ -23,7 +24,7 @@ export class FhngAvailabilityElementDirective implements OnInit {
 
 
   public ngOnInit(): void {
-    AvailabilityUtils.setHtmlElementAvailability(this.htmlElement.nativeElement, this._availability)
+
   }
 
 

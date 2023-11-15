@@ -6,7 +6,7 @@
   <!--  <ng-content select="thead"></ng-content>-->
   <thead #tableHeading>
   <tr class="table-heading">
-    <th *ngIf="selectionCheckboxes">
+    <th *ngIf="selectionCheckboxes" [style.width]="'60px'">
     <span class="custom-control custom-checkbox" *ngIf="selectAllChceckbox">
       <input [id]="id+'selectAll'"
              (click)="toggleSelectAll($event)"

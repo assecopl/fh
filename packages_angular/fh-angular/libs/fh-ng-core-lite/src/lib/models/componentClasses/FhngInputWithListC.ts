@@ -75,6 +75,7 @@ type Constructor<T> = new (...args: any[]) => T;
 
 @Directive()
 export class FhngInputWithListC extends FhngReactiveInputC {
+  @Input()
   public values: Array<any> = [];
 
   @Input('values')

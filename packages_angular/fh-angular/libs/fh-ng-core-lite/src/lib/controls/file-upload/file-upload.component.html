@@ -6,10 +6,32 @@
 >
   <button
     (click)="file.click()"
-    class="btn btn-block btn-primary btn-{{ style }}"
+    class="fc button btn btn-block btn-primary btn-{{ style }}"
+    [ngClass]="getButtonClass()"
     [ngStyle]="styles"
-    [innerHTML]="label"
-  ></button>
+  >
+    <ng-container *ngIf="!showProgressBar">
+      {{label}}
+    </ng-container>
+
+    <ng-container *ngIf="showProgressBar">
+      <span>{{'abort' | i18n }}</span>
+    </ng-container>
+
+    <div
+      class="progress progress-striped active"
+      [class.d-none]="!showProgressBar"
+    >
+      <div
+        class="progress-bar"
+        role="progressbar"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        [attr.aria-valuenow]="progress"
+        [style.width]="progress + '%'"
+      ></div>
+    </div>
+  </button>
   <input
     #file
     class="file-input d-none"
@@ -21,15 +43,6 @@
     [value]="value"
   />
 </div>
-
-<!--<fhng-file-upload-accessor-->
-<!--    #file-->
-<!--    [multiple]="multiple"-->
-<!--    [maxSize]="maxSize"-->
-<!--    [extensions]="extensions"-->
-<!--    [label]="label"-->
-<!--    (change)="onFileChangeEvent($event)"-->
-<!--&gt;</fhng-file-upload-accessor>-->
 
 <ng-container *ngIf="configuration.debug">
   <fh-component-debugger/>

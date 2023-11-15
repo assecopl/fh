@@ -1,5 +1,6 @@
 import {ModuleWithProviders, NgModule, inject, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import {CommonModule, JsonPipe} from '@angular/common';
+import {HttpClientModule} from "@angular/common/http";
 import {FhFormsManagerNgComponent} from './fh-forms-manager-ng.component';
 import {FhMLService} from './service/fh-ml.service';
 import {AdDirective} from './directive/ad.directive';
@@ -80,6 +81,8 @@ import {HtmlViewComponent} from "./controls/html-view/html-view.component";
 import {XMLViewerFhDPComponent} from "./controls/xml-viewer/xml-viewer.component";
 import {FileUploadComponent} from "./controls/file-upload/file-upload.component";
 import {FileUploadAccessorComponent} from "./components/file-upload-accessor/file-upload.component";
+import {ComboPL} from "./controls/combo/i18n/combo.pl";
+import {ComboEN} from "./controls/combo/i18n/combo.en";
 
 
 
@@ -185,7 +188,17 @@ const components = [
     ComponentManager,
     provideNgxMask(maskConfigFunction)
   ],
-  imports: [CommonModule, JsonPipe, NgbModule, NgxMaskDirective, NgxMaskPipe, FormsModule, NgSelectModule, AutosizeModule],
+  imports: [
+    CommonModule,
+    JsonPipe,
+    NgbModule,
+    NgxMaskDirective,
+    NgxMaskPipe,
+    FormsModule,
+    NgSelectModule,
+    AutosizeModule,
+    HttpClientModule
+  ],
   exports: components,
 })
 export class FhNgCoreLiteModule extends FhNgModule {
@@ -205,6 +218,11 @@ export class FhNgCoreLiteModule extends FhNgModule {
     i18n.registerStrings('pl', TranslationsPl);
     i18n.registerStrings('pl', ShutdownEventPL);
     i18n.registerStrings('en', ShutdownEventEN);
+    /**
+     * Register default translations strings for components.
+     */
+    i18n.registerStrings('pl', ComboPL);
+    i18n.registerStrings('en', ComboEN);
   }
 
 
