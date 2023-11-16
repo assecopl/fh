@@ -9,6 +9,7 @@
     class="fc button btn btn-block btn-primary btn-{{ style }}"
     [ngClass]="getButtonClass()"
     [ngStyle]="styles"
+    (click)="onCancelUpload($event)"
   >
     <label [id]="innerId + '_label'" [for]="innerId + 'file'" class="control-label fileNames sr-only">
       {{ label || fileNames }}
@@ -23,6 +24,7 @@
       [accept]="extensions"
       [attr.aria-label]="label"
       [attr.aria-describedby]="innerId + '_label'"
+      [class.d-none]="showProgressBar"
       [multiple]="multiple"
       (change)="onAddedFiles($event)"
       [value]="value"
@@ -36,7 +38,7 @@
     </ng-container>
 
     <ng-container *ngIf="showProgressBar">
-      {{ 'abort' | i18n }}
+      {{ 'fh.upload.button.abort' | i18n }}
     </ng-container>
 
     <div
