@@ -606,5 +606,9 @@ interface FhChanges {
         changedAttributes: {
             [key: string]: string
         }
+        addedComponents: {
+            [key: string]: any[]
+        }
+        removedComponents: string[];
     }[]
 }

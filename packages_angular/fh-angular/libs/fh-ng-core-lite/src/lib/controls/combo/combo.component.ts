@@ -7,7 +7,7 @@ import {FORM_VALUE_ATTRIBUTE_NAME} from "../../models/CommonTypes";
 import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
 
 @Component({
-  selector: 'fhng-combo',
+  selector: '[fhng-combo]',
   templateUrl: './combo.component.html',
   styleUrls: ['./combo.component.scss'],
   providers: [

@@ -83,6 +83,7 @@ import {FileUploadComponent} from "./controls/file-upload/file-upload.component"
 import {FileUploadAccessorComponent} from "./components/file-upload-accessor/file-upload.component";
 import {ComboPL} from "./controls/combo/i18n/combo.pl";
 import {ComboEN} from "./controls/combo/i18n/combo.en";
+import {DictionaryLookupComponent} from "./controls/dictionary-combo/dictionary-lookup.component";
 
 
 
@@ -172,7 +173,8 @@ const components = [
   i18nPipe,
   XMLViewerFhDPComponent,
   FileUploadComponent,
-  FileUploadAccessorComponent
+  FileUploadAccessorComponent,
+  DictionaryLookupComponent
 ]
 
 @NgModule({
@@ -243,6 +245,7 @@ export class FhNgCoreLiteModule extends FhNgModule {
     componentManager.registerComponent(ButtonComponent);
     componentManager?.registerComponentWithName("CheckBox", CheckboxComponent);
     componentManager.registerComponent(ComboComponent);
+    componentManager.registerComponentWithName("DictionaryLookupFhDP", DictionaryLookupComponent);
     componentManager.registerComponent(DropdownComponent);
     componentManager.registerComponent(DropdownItemComponent);
     componentManager.registerComponent(FormComponent);

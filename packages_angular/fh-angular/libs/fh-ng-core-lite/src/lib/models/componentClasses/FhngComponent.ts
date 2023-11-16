@@ -258,6 +258,34 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
     this._data = data;
   }
 
+  processAddedComponents(addedComponents) {
+    if (addedComponents) {
+      let newSubelements = []
+      if (addedComponents['-']) {
+        newSubelements.push(...addedComponents['-'])
+      }
+      this.subelements.forEach((subelement, index) => {
+        newSubelements.push(subelement);
+        if (addedComponents[subelement.id]) { //checks if there are components to add after subelement
+          newSubelements.push(...addedComponents[subelement.id])
+        }
+      });
+      this.subelements = newSubelements;
+    }
+  }
+
+  processRemovedComponents(removedComponents: string[]) {
+    if (removedComponents) {
+      let newSubelements = []
+      this.subelements.forEach((subelement, index) => {
+        if (!removedComponents.includes(subelement.id)) { //checks if there are this component should be removed
+          newSubelements.push(subelement);
+        }
+      });
+      this.subelements = newSubelements;
+    }
+  }
+
   /**
    * Component Focus logic
    */

@@ -1,0 +1,64 @@
+<ng-container *ngIf="hint; else combo">
+  <span
+          ngbTooltip="{{ hint }}"
+          [placement]="hintPlacement.toLowerCase()"
+          [triggers]="hintTrigger.toLowerCase()"
+  >
+    <ng-container *ngTemplateOutlet="combo"></ng-container>
+  </span>
+</ng-container>
+
+<ng-template #combo>
+    <div fhng-input-label
+         [inputId]="id"
+         [label]="label"
+         [labelPosition]="labelPosition"
+         [labelSize]="labelSize"
+    >
+        <div fhng-input-group
+             [iconText]="iconText"
+             [class.fh-disabled]="disabled"
+             [icon]="icon"
+             [iconAlignment]="iconAlignment"
+             [required]="required"
+        >
+            <input [availabilityInput]="availability" (input)="onInputEvent($event)" (change)="onChangeEvent()"
+                   #focusElement
+                   [id]="id"
+
+                   [(ngModel)]="rawValue"
+                   [disabled]="disabled"
+                   [type]="inputType"
+                   [name]="name"
+                   [placeholder]="placeholder"
+                   [maxLength]="maxLength"
+                   [mask]="formatter?.pattern"
+                   [dropSpecialCharacters]="false"
+                   [attr.aria-label]="ariaLabel"
+                   [required]="required"
+                   class="fc inputText form-control {{setPresentationStyle()}}"
+                   [ngbTooltip]="getHintTooltip()" [ngbPopover]="getHintPopover()" [popoverTitle]="hintTitle"
+                   [placement]="hintPlacement.toLowerCase()" [triggers]="hintTrigger.toLowerCase()"
+
+            />
+        </div>
+    </div>
+</ng-template>
+<!--<div class="row">-->
+<!--  <div class="col-md-6">-->
+<!--    <pre>-->
+<!--rawValue : {{rawValue | json}} <br>-->
+<!--multiselectRawValue : {{multiselectRawValue | json}} <br>-->
+<!--</pre>-->
+<!--  </div>-->
+<!--  <div class="col-md-6">-->
+<!--    <pre>-->
+<!--values : {{values | json}} <br>-->
+<!--</pre>-->
+<!--  </div>-->
+<!--</div>-->
+
+<ng-container *ngIf="configuration.debug">
+    <fh-component-debugger/>
+</ng-container>
+
