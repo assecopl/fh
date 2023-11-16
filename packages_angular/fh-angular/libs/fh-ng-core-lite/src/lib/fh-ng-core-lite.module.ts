@@ -84,7 +84,8 @@ import {FileUploadAccessorComponent} from "./components/file-upload-accessor/fil
 import {ComboPL} from "./controls/combo/i18n/combo.pl";
 import {ComboEN} from "./controls/combo/i18n/combo.en";
 import {DictionaryLookupComponent} from "./controls/dictionary-combo/dictionary-lookup.component";
-
+import {UploadPL} from "./controls/file-upload/i18n/upload.pl";
+import {UploadEN} from "./controls/file-upload/i18n/upload.en";
 
 
 const maskConfigFunction: () => Partial<IConfig> = () => {
@@ -225,6 +226,9 @@ export class FhNgCoreLiteModule extends FhNgModule {
      */
     i18n.registerStrings('pl', ComboPL);
     i18n.registerStrings('en', ComboEN);
+    // FileUpload
+    i18n.registerStrings('pl', UploadPL);
+    i18n.registerStrings('en', UploadEN);
   }
 
 
