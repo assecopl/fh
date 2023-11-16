@@ -212,7 +212,7 @@ public class DictionaryLookupFhDP extends BaseInputFieldWithKeySupport implement
                 }
             }
             //Tymczasowe
-            search(false, false);
+            search(false, true);
         } catch (Exception ex) {
             FhLogger.warn("DictionaryCombo: Provider not found.", ex);
         }
