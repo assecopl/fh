@@ -1,9 +1,12 @@
 <div
-  class="fc row containerRow"
+  class="fc row containerRow {{styleClasses}}"
   [id]="id"
   [availabilityHtmlElement]="availability"
-  [ngClass]="rowStyleClasses"
+  [ngClass]=""
   [ngStyle]="styles"
 >
   <ng-container [fhDynamicComponents]="subelements" [fhNonVisualSubcomponents]="nonVisualComponents"/>
 </div>
+<ng-container *ngIf="configuration.debug">
+  <fh-component-debugger/>
+</ng-container>

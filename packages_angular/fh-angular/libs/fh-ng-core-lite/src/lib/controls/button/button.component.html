@@ -15,11 +15,11 @@
 <ng-container>
   <button
     #focusElement
-    class="btn btn-{{ bootstrapStyle }}"
+    class="btn btn-{{ bootstrapStyle }} {{styleClasses}}"
     [id]="innerId"
     [ngStyle]="styles"
     [ngClass]="{'active': active}"
-    [innerHTML]="label"
+    [innerHTML]="label | fhml"
     (click)="onClickEvent($event)"
   >
     <ng-container *ngTemplateOutlet="contentTemplate"></ng-container>
@@ -33,7 +33,7 @@
   </span>
 </ng-template>
 
-<ng-container *ngIf="configuration.debug">
-  <fh-component-debugger/>
-</ng-container>
+<!--<ng-container *ngIf="configuration.debug">-->
+<!--  <fh-component-debugger/>-->
+<!--</ng-container>-->
 

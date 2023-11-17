@@ -70,6 +70,7 @@ export class FhngHTMLElementC
   // }
 
 
+  //TODO TO jest tylko dla przyciskow
   @Input()
   public bootstrapStyle: any = null;
 
@@ -141,6 +142,9 @@ export class FhngHTMLElementC
 
   @HostBinding('style')
   public hostStyle: SafeStyle & any = {};
+
+  @Input()
+  public styleClasses:string = null;
 
   @HostBinding('class.mb-2')
   public mb2 = true;
@@ -254,7 +258,7 @@ export class FhngHTMLElementC
     this.processVerticalAlign();
 
     let fhml = this.injector.get(FhMLService);
-    this.label = fhml.transform(this.label);
+    // this.label = fhml.transform(this.label);
   }
 
   /**
@@ -312,9 +316,10 @@ export class FhngHTMLElementC
     }
   }
 
-  public override mapAttributes(data: IDataAttributes): void {
+  public override mapAttributes(data: IDataAttributes | any): void {
     super.mapAttributes(data);
     if (data.inlineStyle) this.styles = this._convertInlineStylesToSafeStyle(data.inlineStyle);
+    if (data.wrapperStyle) this.hostStyle = this._convertInlineStylesToSafeStyle(data.wrapperStyle);
 
     if (data.accessibility) {
       this.accessibility = data.accessibility;

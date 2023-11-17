@@ -94,7 +94,7 @@ export class PanelGroupComponent extends FhngHTMLElementC implements OnInit {
   override ngOnInit() {
     super.ngOnInit();
     let fhngml = this.injector.get(FhMLService);
-    this.label = fhngml.transform(this.label);
+    // this.label = fhngml.transform(this.label);
     this.mb2 = false;
     this.processCollapsible();
 

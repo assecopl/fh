@@ -7,7 +7,7 @@ declare const $: any;
 @Injectable({
   providedIn: 'root',
 })
-class Util {
+class Utils {
   constructor() {
   }
 
@@ -215,4 +215,4 @@ class Util {
   }
 }
 
-export {Util};
+export {Utils};

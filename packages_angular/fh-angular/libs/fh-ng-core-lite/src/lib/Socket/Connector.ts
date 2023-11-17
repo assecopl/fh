@@ -2,7 +2,7 @@ import {SocketOutputCommands} from "./SocketOutputCommands";
 import * as Pako from "pako";
 import {ApplicationLockService} from "../service/application-lock.service";
 import {Injectable, Optional, inject} from "@angular/core";
-import {Util} from "../service/Util";
+import {Utils} from "../service/Utils";
 import {I18nService} from "../service/i18n.service";
 import {FormsManager} from "./FormsManager";
 
@@ -17,7 +17,7 @@ class Connector {
     // @lazyInject('FormsManager')
     private formsManager: FormsManager = inject(FormsManager);
     // @lazyInject('Util')
-    private util: Util = inject(Util);
+    private util: Utils = inject(Utils);
     // @lazyInject('I18n')
     private i18n: I18nService = inject(I18nService);
 

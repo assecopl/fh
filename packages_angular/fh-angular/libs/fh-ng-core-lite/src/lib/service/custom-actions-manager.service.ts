@@ -6,7 +6,7 @@ import {Injectable} from "@angular/core";
 })
 export class CustomActionsManager {
 
-  private _callbacks: { [key: string]: (data: string) => void; } = {};
+  public _callbacks: { [key: string]: (data: string) => void; } = {};
 
   constructor() {
   }

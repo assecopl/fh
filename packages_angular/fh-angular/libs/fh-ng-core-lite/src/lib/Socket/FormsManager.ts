@@ -4,7 +4,7 @@ import * as $ from 'jquery'; //TODO remove Jquery
 import {ApplicationLockService} from "../service/application-lock.service";
 import {I18nService} from "../service/i18n.service";
 import {inject, Injectable, Injector} from "@angular/core";
-import {Util} from "../service/Util";
+import {Utils} from "../service/Utils";
 import {SocketHandler} from "./SocketHandler";
 import {Subject} from "rxjs";
 import {NotificationService} from "../service/Notification";
@@ -23,7 +23,7 @@ class FormsManager {
     // @lazyInject('ApplicationLock')
     private applicationLock: ApplicationLockService = inject(ApplicationLockService);
     // @lazyInject('Util')
-    private util: Util = inject(Util);
+    private util: Utils = inject(Utils);
     // @lazyInject('I18n')
     private i18n: I18nService = inject(I18nService);
     // @lazyInject('SocketHandler')

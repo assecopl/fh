@@ -11,11 +11,9 @@
     </ng-container>
 
     <ng-container *ngIf="formType == 'HEADER'">
-        <div id="navbarFormInner">
             <div id="navbar-main">
                 <ng-container [fhDynamicComponents]="subelements" [fhNonVisualSubcomponents]="nonVisualComponents"/>
             </div>
-        </div>
     </ng-container>
 </ng-container>
 <ng-container *ngIf="modal">
@@ -34,7 +32,7 @@
         </div>
     </div>
 </ng-container>
-<ng-container *ngIf="configuration.debug">
-    <fh-component-debugger/>
-</ng-container>
+<!--<ng-container *ngIf="configuration.debug">-->
+<!--    <fh-component-debugger/>-->
+<!--</ng-container>-->
 

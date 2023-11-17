@@ -64,13 +64,14 @@ export class FhMLService {
     });
     this.registerTag(
       'size',
-      function (match, size, contents) {
+      (match, size, contents) => {
         const span = document.createElement('span');
         span.classList.add('fhml');
         span.classList.add('fhml-tag-size');
         span.style.fontSize = size + 'px';
 
         span.innerHTML = contents;
+
 
         return span.outerHTML;
       },
@@ -482,12 +483,9 @@ export class FhMLService {
       .replace(/"/g, "'")
       .replace(/\\'/g, "'");
     if (this.needParse(unescapedQuotesText)) {
-      return this.sanitizer.sanitize(
-        SecurityContext.HTML,
-        this.sanitizer.bypassSecurityTrustHtml(
+      return this.sanitizer.bypassSecurityTrustHtml(
           this.parse(unescapedQuotesText, true)
         )
-      );
     } else {
       return this.sanitizer.sanitize(
         SecurityContext.HTML,

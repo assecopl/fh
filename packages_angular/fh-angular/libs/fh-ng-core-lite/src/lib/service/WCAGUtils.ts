@@ -3,7 +3,7 @@ import {Injectable} from "@angular/core";
 @Injectable({
     providedIn: 'root',
 })
-class WCAGUtil {
+class WCAGUtils {
 
     public fireFocusOnReturn: boolean = false;
 
@@ -123,4 +123,4 @@ class WCAGUtil {
 
 }
 
-export {WCAGUtil};
+export {WCAGUtils};

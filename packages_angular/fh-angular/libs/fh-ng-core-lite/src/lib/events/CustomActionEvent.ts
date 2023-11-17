@@ -16,8 +16,8 @@ class CustomActionEvent extends BaseEvent {
   public fire(data): void {
     let actionName = data.actionName;
     //
-    if (this.customActionsManager.callbacks[actionName]) {
-      this.customActionsManager.callbacks[actionName](data.data);
+    if (this.customActionsManager._callbacks[actionName]) {
+      this.customActionsManager._callbacks[actionName](data.data);
     }
   }
 }

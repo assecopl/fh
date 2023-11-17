@@ -14,7 +14,7 @@
         (click)="collapseToggle()"
       >
         <span class="mr-auto mb-0 card-title">
-          <span [id]="id + '_label'" [innerHTML]="label"></span>
+          <span [id]="id + '_label'" [innerHTML]="label | fhml"></span>
         </span>
         <span class="toolbox align-self-center">
           <span
@@ -42,11 +42,11 @@
         </span>
         <ng-template #elseBlock>
           <ng-container *ngIf="isHeaderCLickUsed">
-            <a [innerHTML]="label"></a>
+            <a [innerHTML]="label | fhml"></a>
           </ng-container>
           <ng-container *ngIf="!isHeaderCLickUsed">
             <span class="mr-auto card-title mb-0">
-              <span [id]="innerId + '_label'" [innerHTML]="label"></span>
+              <span [id]="innerId + '_label'" [innerHTML]="label | fhml"></span>
             </span>
           </ng-container>
         </ng-template>
@@ -83,7 +83,7 @@
         aria-expanded="false"
       >
         <span class="mr-auto mb-0 card-title">
-          <span [id]="id + '_label'" [innerHTML]="label"></span>
+          <span [id]="id + '_label'" [innerHTML]="label | fhml"></span>
         </span>
         <span class="toolbox align-self-center">
           <span
@@ -107,10 +107,10 @@
       </span>
       <ng-template #elseBlock>
         <ng-container *ngIf="isHeaderCLickUsed">
-          <a [innerHTML]="label"></a>
+          <a [innerHTML]="label | fhml"></a>
         </ng-container>
         <ng-container *ngIf="!isHeaderCLickUsed">
-          <span [innerHTML]="label"></span>
+          <span [innerHTML]="label | fhml"></span>
         </ng-container>
       </ng-template>
     </div>

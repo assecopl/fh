@@ -1,10 +1,10 @@
 import {BaseEvent} from "./BaseEvent";
 import {Injectable, inject} from "@angular/core";
-import {Util} from "../service/Util";
+import {Utils} from "../service/Utils";
 
 @Injectable({providedIn: 'root'})
 export class SessionTimeoutEvent extends BaseEvent {
-  protected util: Util = inject(Util);
+  protected util: Utils = inject(Utils);
 
   private readonly timerObject: string = 'logoutTimer';
   private timerId: number;

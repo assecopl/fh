@@ -19,7 +19,7 @@ import {ContainerComponent} from "../container/container.component";
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-    selector: 'fh-form',
+    selector: '[fh-form]',
     templateUrl: './form.component.html',
     styleUrls: ['./form.component.scss'],
     providers: [
@@ -36,8 +36,8 @@ export class FormComponent extends FhngComponent implements OnInit, OnChanges, O
     @Input() public hideHeader: boolean = false;
     @Input() public formType: string = 'STANDARD';
 
-    @HostBinding('class.navbar-nav')
-    header: boolean = false;
+    // @HostBinding('class.navbar-nav')
+    // header: boolean = false;
 
     @HostBinding('class.card')
     cssCard: boolean = true;
@@ -92,7 +92,7 @@ export class FormComponent extends FhngComponent implements OnInit, OnChanges, O
         })
 
         if (this.formType == 'HEADER') {
-            this.header = true;
+            // this.header = true;
             this.cssCard = false
         }
 
@@ -104,7 +104,7 @@ export class FormComponent extends FhngComponent implements OnInit, OnChanges, O
         // }
 
         if (this.formType == 'HEADER') {
-            this.header = true;
+            // this.header = true;
             this.cssCard = false
         }
 

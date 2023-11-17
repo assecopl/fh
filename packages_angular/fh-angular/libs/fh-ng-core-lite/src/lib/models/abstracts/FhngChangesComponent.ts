@@ -1,6 +1,6 @@
 import {Directive, inject} from "@angular/core";
 import {FormComponentChangesQueue} from "../../service/FormComponentChangesQueue";
-import {Util} from "../../service/Util";
+import {Utils} from "../../service/Utils";
 
 /**
  * Component odpowiedzialny za pobieranie zmian przed wysyłką zapytania socketowego.
@@ -12,7 +12,7 @@ export abstract class FhngChangesComponent {
   abstract formId: string;
 
   protected changesQueue: FormComponentChangesQueue = new FormComponentChangesQueue();
-  protected util: Util = inject(Util);
+  protected util: Utils = inject(Utils);
 
   public childFhngComponents: FhngChangesComponent[] = [];
 
