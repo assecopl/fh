@@ -87,7 +87,6 @@ export class FormComponent extends FhngComponent implements OnInit, OnChanges, O
                         }
                     }
                 })
-
             }
         })
 
