@@ -7,11 +7,13 @@
 >
   <button
     class="fc button btn btn-block btn-primary btn-{{ style }}"
+    [attr.aria-label]="!showProgressBar ? label : ('fh.upload.button.abort' | i18n)"
     [ngClass]="getButtonClass()"
     [ngStyle]="styles"
+    [tabIndex]="showProgressBar ? 0 : -1"
     (click)="onCancelUpload($event)"
   >
-    <label [id]="innerId + '_label'" [for]="innerId + 'file'" class="control-label fileNames sr-only">
+    <label [id]="innerId + '_label'" [for]="innerId + '_file'" class="control-label fileNames sr-only">
       {{ label || fileNames }}
     </label>
 
@@ -25,9 +27,10 @@
       [attr.aria-label]="label"
       [attr.aria-describedby]="innerId + '_label'"
       [class.d-none]="showProgressBar"
+      [tabIndex]="showProgressBar ? -1 : 0"
       [multiple]="multiple"
-      (change)="onAddedFiles($event)"
       [value]="value"
+      (change)="onAddedFiles($event)"
       (dragover)="onDragOver($event)"
       (dragleave)="onDragLeave($event)"
       (drop)="onDrop($event)"

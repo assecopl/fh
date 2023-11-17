@@ -24,7 +24,7 @@
       type="text"
       ngbTooltip="{{ hint }}"
       ngbDatepicker
-      [attr.aria-label]="!label && ariaLabel ? ariaLabel : null"
+      [attr.aria-label]="!label && ariaLabel ? ariaLabel : ('fh.timestamp.label' | i18n)"
       [availabilityHtmlElement]="availability"
       [id]="innerId"
       [ngModel]="value"

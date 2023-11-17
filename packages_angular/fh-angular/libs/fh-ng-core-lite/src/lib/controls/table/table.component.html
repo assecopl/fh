@@ -1,8 +1,23 @@
-<label class="col-form-label" *ngIf="label">{{ label }}</label>
-<div [hasHeight]="height" [style.height]="height" class="fc" #scrollable
-     [style.overflow-y]="horizontalScrolling?'auto':false">
-  <table class="fc table {{fixedHeader ? 'fixedHeader': ''}} fixedHeader {{horizontalScrolling?'table-responsive':''}}"
-         [style.table-layout]="horizontalScrolling?'initial':'fixed'">
+<label
+  class="col-form-label"
+  [id]="innerId + '_label'"
+  [for]="innerId"
+  *ngIf="label">
+  {{ label }}
+</label>
+<div
+  #scrollable
+  class="fc"
+  [attr.aria-labelledby]="innerId + '_label'"
+  [hasHeight]="height"
+  [style.height]="height"
+  [style.overflow-y]="horizontalScrolling?'auto':false">
+  <table
+    tabindex="0"
+    class="fc table {{fixedHeader ? 'fixedHeader': ''}} fixedHeader {{horizontalScrolling?'table-responsive':''}}"
+    [id]="innerId"
+    [style.table-layout]="horizontalScrolling?'initial':'fixed'"
+  >
     <!--  Simple HTEAD - one row-->
     <!--  <ng-content select="thead"></ng-content>-->
     <thead #tableHeading>
@@ -40,6 +55,7 @@
 
     <ng-container *ngIf="minRows > tableData?.length">
       <tr
+        tabindex="0"
         *ngFor="
         let i of [].constructor(minRows - (tableData ? tableData?.length : 0))
       "

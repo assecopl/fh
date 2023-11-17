@@ -130,7 +130,6 @@ export class ButtonComponent
   }
 
   public onClickEvent ($event: Event): void {
-    console.log('onClickEvent', $event);
     if (this.clickEventName) {
       this.fireEvent('onClick', this.clickEventName);
     }
