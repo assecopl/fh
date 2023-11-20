@@ -296,7 +296,6 @@ export class TableComponent
   }
 
   override mapAttributes(data: IDataAttributes | any) {
-    console.log("Table:map", data);
     super.mapAttributes(data);
     if (data.displayedRowsCount) {
       this.visibleRows = data.displayedRowsCount || 0;

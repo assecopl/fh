@@ -1,5 +1,5 @@
 import {
-  AfterContentInit,
+  AfterContentInit, AfterViewInit,
   Component,
   EventEmitter,
   forwardRef,
@@ -7,7 +7,7 @@ import {
   HostBinding,
   Injector,
   Input,
-  OnChanges,
+  OnChanges, OnDestroy,
   OnInit,
   Optional,
   Output,
@@ -18,6 +18,12 @@ import {ButtonComponent} from '../button/button.component';
 import {GroupingComponentC} from '../../models/componentClasses/GroupingComponentC';
 import {BootstrapWidthEnum} from '../../models/enums/BootstrapWidthEnum';
 import {FhngButtonGroupComponent, FhngComponent,} from '../../models/componentClasses/FhngComponent';
+import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
+
+export interface IGroupButtonDataAttributes extends IDataAttributes {
+  activeButton?: number;
+  onButtonChange?: string;
+}
 
 @Component({
   selector: 'fhng-button-group',
@@ -36,7 +42,7 @@ import {FhngButtonGroupComponent, FhngComponent,} from '../../models/componentCl
 })
 export class ButtonGroupComponent
   extends GroupingComponentC<ButtonComponent>
-  implements OnChanges, OnInit, AfterContentInit {
+  implements OnChanges, OnInit, AfterContentInit, AfterViewInit, OnDestroy {
 
   public override mb2 = false;
 
@@ -49,31 +55,17 @@ export class ButtonGroupComponent
   @Input()
   public breadcrumbs: boolean = false;
 
-  public initialized: boolean = false;
-
-  @Input()
-  public selectedButton: ButtonComponent;
-
-  public activeButtonComponent: ButtonComponent = null;
-
-  public activeButtonComponentIndex: number;
-
-  @Output()
-  public selectedButtonGroup: EventEmitter<ButtonGroupComponent> =
-    new EventEmitter<ButtonGroupComponent>();
-
   @HostBinding('class')
   public class: string = 'btn-group';
 
   @HostBinding('attr.role')
   public role: string = 'group';
 
-  public buttonSubcomponents: ButtonComponent[] = [];
+  public onButtonChange: string;
 
-  public updateSubcomponent: (
-    subcomponent: ButtonComponent,
-    index: number
-  ) => null;
+  private _subscriptions = [];
+
+  private valueChanged = false;
 
   constructor(
     public override injector: Injector,
@@ -82,76 +74,109 @@ export class ButtonGroupComponent
     super(injector, parentFhngComponent);
   }
 
+  public updateSubcomponent: (
+    subcomponent: ButtonComponent,
+    index: number
+  ) => null;
+
   public getSubcomponentInstance(): new (...args: any[]) => ButtonComponent {
     return ButtonComponent;
   }
 
   public override ngOnChanges(changes: SimpleChanges) {
     super.ngOnChanges(changes);
-    // if (
-    //   changes.activeButton &&
-    //   this.activeButton !== changes.activeButton.currentValue
-    // ) {
-    //   this.activeButton = changes.activeButton.currentValue;
-    //   this.setActiveButton();
-    // }
   }
 
   public override ngOnInit() {
     super.ngOnInit();
-
-    //Listen to each button selected event emiter and process selection in group.
-    if (this.buttonSubcomponents.length > 0) {
-      if (this.breadcrumbs) {
-        this.activeButton = this.buttonSubcomponents.length - 1;
-      }
-      this.buttonSubcomponents.forEach((button) => {
-        if (this.breadcrumbs) {
-          button.bootstrapStyle = 'btn-link';
-          button.breadcrumb = true;
-        } else {
-          button.selectedButton.subscribe((val) => {
-            this.processActiveButton(val);
-          });
-        }
-      });
-      this.setActiveButton();
-    }
-    this.initialized = true;
   }
 
   public override ngAfterContentInit(): void {
-    this.processButtonsWidth();
+    super.ngAfterContentInit();
   }
 
-  private processButtonsWidth() {
-    this.buttonSubcomponents.forEach((button) => {
-      button.hostWidth = button.hostWidth.replace('col-md', 'md');
-    });
+  public override ngAfterViewInit() {
+    super.ngAfterViewInit();
+    this._mapSubscriptions();
   }
 
-  setActiveButton() {
-    if (this.activeButton < this.buttonSubcomponents.length) {
-      this.activeButtonComponentIndex = this.activeButton;
-      this.activeButtonComponent = this.buttonSubcomponents[this.activeButton];
-      this.activeButtonComponent.active = true;
-      this.buttonSubcomponents
-        .filter((button) => button != this.activeButtonComponent)
-        .forEach((button) => (button.active = false));
+  public override ngOnDestroy(): void {
+    this._unsubscribe();
+  }
+
+  public override mapAttributes(data: IGroupButtonDataAttributes) {
+    super.mapAttributes(this._prepareButton(data));
+
+    this.onButtonChange = data.onButtonChange || this.onButtonChange;
+  }
+
+  public override extractChangedAttributes() {
+    let attr = {};
+    if (this.valueChanged) {
+      attr['value'] = this.activeButton;
+      this.valueChanged = false;
     }
-  }
 
-  public processActiveButton(selectedButton: ButtonComponent) {
-    this.buttonSubcomponents.forEach((button, index) => {
-      if (button.innerId === selectedButton.innerId) {
-        button.active = !button.active;
-        this.activeButtonComponent = button;
-        this.activeButtonComponentIndex = index;
-      } else {
-        button.active = false;
+    return attr;
+  };
+
+  private _prepareButton(data: IGroupButtonDataAttributes ): IGroupButtonDataAttributes {
+    data.subelements?.forEach((element) => {
+      if (element.type === 'Button') {
+        element.mb2 = false;
+        element.width = null;
+        element.styleClasses = 'px-0,col';
       }
     });
 
-    this.selectedButtonGroup.emit(this);
+    this._setActiveButton(data);
+
+    return data;
+  }
+
+  private _setActiveButton(data: IGroupButtonDataAttributes): void {
+    if (data.subelements instanceof Array) {
+      (data.subelements.filter(element => element.type = 'Button') || []).forEach((element, index) => {
+        element.active = index === data.activeButton;
+      });
+    }
+    this.childFhngComponents.forEach((element: any, index) => {
+      element.active = index === data.activeButton;
+    });
+  }
+
+  private _mapSubscriptions(): void {
+    this._unsubscribe();
+    this.childFhngComponents.forEach((element: any, index: number) => {
+      if (element.onUpdateButtonEvent$) {
+        this._subscriptions.push(element.onUpdateButtonEvent$.subscribe((data: ButtonComponent) => this._updateSubscribeEvent(data)));
+      }
+
+      if (element.onClickButtonEvent$) {
+        this._subscriptions.push(element.onClickButtonEvent$.subscribe((data: ButtonComponent) => this._onClickSubscribeEvent(data)));
+      }
+    });
+  }
+
+  private _unsubscribe(): void {
+    this._subscriptions.forEach(element => element.unsubscribe());
+    this._subscriptions = [];
+  }
+
+  private _updateSubscribeEvent(data: ButtonComponent): void {
+    let index = this.subelements.findIndex(element => element.id === data.id);
+
+    this.subelements[index] = {...this.subelements[index], label: data.label, active: data.active}
+  }
+
+  private _onClickSubscribeEvent(data: ButtonComponent): void {
+    let index = this.subelements.findIndex(element => element.id === data.id);
+
+    this.activeButton = index;
+
+    if (this.onButtonChange && index > -1) {
+      this.valueChanged = true;
+      this.fireEventWithLock('onButtonChange', this.onButtonChange);
+    }
   }
 }

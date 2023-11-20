@@ -15,10 +15,10 @@
 <ng-container>
   <button
     #focusElement
-    class="btn btn-{{ bootstrapStyle }}"
+    class="fc btn btn-{{ bootstrapStyle }}"
     [id]="innerId"
+    [class.active]="active"
     [ngStyle]="styles"
-    [ngClass]="{'active': active}"
     [innerHTML]="label"
     (click)="onClickEvent($event)"
   >

@@ -1,16 +1,7 @@
-<!--<ng-container *ngIf="breadcrumbs; else content">-->
-<!--  <nav aria-label="breadcrumb">-->
-<!--    <ol class="breadcrumb">-->
-<!--      <ng-container *ngTemplateOutlet="content"></ng-container>-->
-<!--    </ol>-->
-<!--  </nav>-->
-<!--</ng-container>-->
-
 <div class="fc buttonGroup btn-group mb-3 fc-editable" role="group">
   <ng-container [fhDynamicComponents]="subelements" [fhNonVisualSubcomponents]="nonVisualComponents"/>
 </div>
 
-
-<ng-template #content>
-  <ng-content></ng-content>
-</ng-template>
+<ng-container *ngIf="configuration.debug">
+  <fh-component-debugger/>
+</ng-container>
