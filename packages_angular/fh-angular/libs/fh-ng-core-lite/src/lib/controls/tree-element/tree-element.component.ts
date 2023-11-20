@@ -76,7 +76,11 @@ export class TreeElementComponent extends FhngHTMLElementC implements OnInit {
   @Input()
   public selected: boolean = false;
 
-  collapsed: boolean;
+  @Input()
+  collapsed: boolean = true;
+
+  @HostBinding('class')
+  override styleClasses = null;
 
   @Output()
   public treeElement: EventEmitter<any> = new EventEmitter<any>();
@@ -93,6 +97,9 @@ export class TreeElementComponent extends FhngHTMLElementC implements OnInit {
 
   override ngOnInit(): void {
     super.ngOnInit();
+    if(!this.collapsed) {
+      this.treeElement.emit({id: this.id, collpased: this.collapsed});
+    }
   }
 
   public processTreeElementClick(): void {
@@ -124,6 +131,7 @@ export class TreeElementComponent extends FhngHTMLElementC implements OnInit {
 
   public override mapAttributes(data: any) {
     super.mapAttributes(data);
+
 
   }
 }

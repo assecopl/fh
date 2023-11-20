@@ -1,5 +1,5 @@
 <div [availabilityHtmlElement]>
-  <label class="col-form-label"
+  <label class="col-form-label" *ngIf="label"
   >{{ label }}
     <span *ngIf="required" class="required">*</span>
   </label>

@@ -98,13 +98,15 @@ export class TreeComponent
   }
 
   public setSelected(element: any) {
+    this.activeElements[element.id] = element.collpased;
     this.selectedChange.emit(element);
   }
 
   public override mapAttributes(data: any) {
     super.mapAttributes(data);
 
-    this.collapsedTree = data.expanded;
-
+    if (data.expanded == 'true' || data.expanded == 'false' || data.expanded == true) {
+      this.collapsedTree =  !(data.expanded == true || data.expanded == 'true');
+    }
   }
 }

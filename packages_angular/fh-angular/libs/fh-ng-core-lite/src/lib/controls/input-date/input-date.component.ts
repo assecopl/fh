@@ -52,9 +52,6 @@ interface IInputDateDataAttributes extends IDataAttributes {
 export class InputDateComponent extends FhngReactiveInputC implements OnInit {
   public override width = BootstrapWidthEnum.MD3;
 
-  @HostBinding('class.form-group')
-  public formGroupClass: boolean = true;
-
   @HostBinding('class.highlightToday')
   @Input()
   public highlightToday: boolean = false;

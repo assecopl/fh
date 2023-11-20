@@ -68,7 +68,6 @@ export class ButtonComponent
     public override injector: Injector,
     @Optional() @SkipSelf() parentFhngComponent: FhngComponent,
     @Optional()
-    @Host()
     @SkipSelf()
     public parentButtonGroupComponent: FhngButtonGroupComponent
   ) {
@@ -77,6 +76,7 @@ export class ButtonComponent
     this.bootstrapStyle = BootstrapStyleEnum.PRIMARY;
     if (this.parentButtonGroupComponent) {
       this.parentButtonGroupComponent.buttonSubcomponents.push(this);
+      this.width = "";
 
       if (this.parentButtonGroupComponent.initialized) {
         if (this.parentButtonGroupComponent.breadcrumbs) {
@@ -122,15 +122,23 @@ export class ButtonComponent
     }
   }
 
+  processStyleForButtonGroup() {
+    if(this.parentButtonGroupComponent) {
+      this.width = "";
+      this.hostWidth = "btn btn-"+this.bootstrapStyle+" "+this.styleClasses;
+      // this.hostStyle = this.styleClasses;
+    }
+  }
+
   public override mapAttributes(data: IDataAttributes & {onClick: string, label: string}) {
     super.mapAttributes(data);
 
     this.label = data.label;
     this.clickEventName = data.onClick;
+    this.processStyleForButtonGroup();
   }
 
   public onClickEvent ($event: Event): void {
-    console.log('onClickEvent', $event);
     if (this.clickEventName) {
       this.fireEvent('onClick', this.clickEventName);
     }

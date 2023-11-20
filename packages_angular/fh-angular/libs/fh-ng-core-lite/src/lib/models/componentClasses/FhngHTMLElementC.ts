@@ -14,9 +14,10 @@ import {
   SimpleChanges,
   SkipSelf,
   ViewChild,
+  inject,
 } from '@angular/core';
 import {FhngComponent} from './FhngComponent';
-import {SafeStyle} from '@angular/platform-browser';
+import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
 import {FhMLService} from '../../service/fh-ml.service';
 import {IDataAttributes} from "../interfaces/IDataAttributes";
 import {IconAligmentType} from "../CommonTypes";
@@ -224,6 +225,8 @@ export class FhngHTMLElementC
 
   }
 
+  private _sanitizer: DomSanitizer = inject(DomSanitizer);
+
   constructor(
     public override injector: Injector,
     @Optional() @SkipSelf() parentFhngComponent: FhngComponent
@@ -318,11 +321,15 @@ export class FhngHTMLElementC
 
   public override mapAttributes(data: IDataAttributes | any): void {
     super.mapAttributes(data);
-    if (data.inlineStyle) this.styles = this._convertInlineStylesToSafeStyle(data.inlineStyle);
-    if (data.wrapperStyle) this.hostStyle = this._convertInlineStylesToSafeStyle(data.wrapperStyle);
+    if (data.inlineStyle) this.styles = this._sanitizer.bypassSecurityTrustStyle(data.inlineStyle);
+    if (data.wrapperStyle) this.hostStyle = this._sanitizer.bypassSecurityTrustStyle(data.wrapperStyle);
 
     if (data.accessibility) {
       this.accessibility = data.accessibility;
+    }
+
+    if(this.styleClasses && this.styleClasses.includes(",")){
+      this.styleClasses = this.styleClasses.replaceAll(',', ' ')
     }
 
     // if (data.value) this.label = data.value; //Label zostawiamy w spokoju, pozmieniamy w komponentach jak trzeba - z value na label

@@ -12,7 +12,7 @@
 <!--    </btn>-->
 <!--  </ng-container>-->
 <!--</ng-container>-->
-<ng-container>
+<ng-container *ngIf="!parentButtonGroupComponent; else contentTemplate">
   <button
     #focusElement
     class="btn btn-{{ bootstrapStyle }} {{styleClasses}}"

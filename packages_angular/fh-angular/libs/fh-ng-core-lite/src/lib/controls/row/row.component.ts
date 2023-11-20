@@ -20,7 +20,7 @@ interface IRowMapAttributes extends IDataAttributes {
 }
 
 @Component({
-  selector: 'fhng-row',
+  selector: '[fhng-row]',
   templateUrl: './row.component.html',
   styleUrls: ['./row.component.css'],
   providers: [
@@ -70,8 +70,12 @@ export class RowComponent extends FhngHTMLElementC implements OnInit {
   public override mapAttributes(data: IRowMapAttributes) {
     super.mapAttributes(data);
 
-    this._hElementsAlign(data.elementsHorizontalAlign);
-    this._vElementsAlign(data.elementsVerticalAlign);
+    if(data.elementsHorizontalAlign) {
+      this._hElementsAlign(data.elementsHorizontalAlign);
+    }
+    if(data.elementsVerticalAlign) {
+      this._vElementsAlign(data.elementsVerticalAlign);
+    }
   }
 
   private _hElementsAlign (elementHorizontalAlign?: HElementPosition): void {

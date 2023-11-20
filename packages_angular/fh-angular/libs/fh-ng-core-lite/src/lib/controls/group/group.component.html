@@ -1,9 +1,6 @@
-<div [id]="id" [ngStyle]="styles" class="group row">
-  <div class="col">
-    <div class="{{ class }}">
-      <div class="row">
+<div [id]="id" [ngStyle]="styles" class="group row {{styleClasses}}">
         <ng-container [fhDynamicComponents]="subelements" [fhNonVisualSubcomponents]="nonVisualComponents"/>
-      </div>
-    </div>
-  </div>
 </div>
+<ng-container *ngIf="configuration.debug">
+  <fh-component-debugger/>
+</ng-container>

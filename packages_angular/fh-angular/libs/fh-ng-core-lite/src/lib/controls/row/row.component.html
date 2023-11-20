@@ -1,5 +1,5 @@
 <div
-  class="fc row containerRow {{styleClasses}}"
+  class="fc row containerRow {{styleClasses}} {{rowStyleClasses.join(' ')}}"
   [id]="id"
   [availabilityHtmlElement]="availability"
   [ngClass]=""
@@ -7,6 +7,3 @@
 >
   <ng-container [fhDynamicComponents]="subelements" [fhNonVisualSubcomponents]="nonVisualComponents"/>
 </div>
-<ng-container *ngIf="configuration.debug">
-  <fh-component-debugger/>
-</ng-container>

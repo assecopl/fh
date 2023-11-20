@@ -96,6 +96,9 @@ export class FhngReactiveInputC
   @Input()
   maxLength: number = null; // todo:
 
+  @HostBinding('class.form-group')
+  public formGroupClass: boolean = true;
+
   /**
    * Konstruktor wymaga przekazania klasy Injector. Z kalsy tej w ręczny sposób pobieramy dodatkowe wymagane serwisy.
    * Wykorzystujemy pobieranie z Injector-a aby ograniczyć przekazywanie parametrów z konstruktorów rozszerzanych komponentów.

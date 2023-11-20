@@ -1,6 +1,14 @@
-<label class="col-form-label" *ngIf="label">{{ label }}</label>
+<label
+  class="col-form-label"
+  [id]="innerId + '_label'"
+  [for]="innerId"
+  *ngIf="label">
+  {{ label }}
+</label>
 <table
-  class="fc table tablePaged {{fixedHeader ? 'fixedHeader': ''}} fixedHeader {{horizontalScrolling?'table-responsive':''}}"
+  tabindex="0"
+  class="fc table tablePaged {{fixedHeader ? 'fixedHeader': ''}} fixedHeader "
+  [id]="innerId"
   [style.table-layout]="horizontalScrolling?'initial':'fixed'">
   <!--  Simple HTEAD - one row-->
   <!--  <ng-content select="thead"></ng-content>-->
@@ -32,13 +40,14 @@
   <!--  <ng-content select="tbody"></ng-content>-->
   <tbody>
   <ng-container *ngFor="let tr of tableData;let i = index;">
-    <tr fhng-table-row [data]="tr" [formId]="formId" [rowIndex]="i" [horizontalAlign]="horizontalAlign"
+    <tr tabindex="0" fhng-table-row [data]="tr" [formId]="formId" [rowIndex]="i" [horizontalAlign]="horizontalAlign"
         [highlight]="rawValue.includes(i)"></tr>
   </ng-container>
 
 
   <ng-container *ngIf="minRows > tableData?.length">
     <tr
+      tabindex="0"
       *ngFor="
         let i of [].constructor(minRows - (tableData ? tableData?.length : 0))
       "
@@ -65,7 +74,7 @@
 
 </table>
 
-<div *ngIf="totalRows > 0" class="row">
+<div *ngIf="totalRows > 0" class="row mt-3">
   <div class="col-auto mr-auto">
     <div class="row align-items-center justify-content-start">
       <div class="col-auto">
@@ -119,6 +128,6 @@
   (click)="onExportCsv()"
 >[icon='fas fa-download'] CSV
 </div>
-<ng-container *ngIf="configuration.debug">
-  <fh-component-debugger/>
-</ng-container>
+<!--<ng-container *ngIf="configuration.debug">-->
+<!--  <fh-component-debugger/>-->
+<!--</ng-container>-->

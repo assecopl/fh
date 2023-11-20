@@ -17,7 +17,7 @@
            type="text"
            [disabled]="disabled"
            [(ngModel)]="rawValue"
-           [attr.aria-label]="!label && ariaLabel ? ariaLabel : null"
+           [attr.aria-label]="!label && ariaLabel ? ariaLabel : ('fh.number.label' | i18n)"
            [placeholder]="placeholder"
            [allowNegativeNumbers]="allowNegativeNumbers"
            [name]="name"

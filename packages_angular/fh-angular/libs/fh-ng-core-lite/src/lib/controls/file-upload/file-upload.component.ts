@@ -3,7 +3,7 @@ import {
   EventEmitter,
   forwardRef,
   Injector,
-  Input,
+  Input, OnDestroy,
   OnInit,
   Optional,
   Output,
@@ -17,8 +17,8 @@ import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
 import {BootstrapStyleType} from "../../models/CommonTypes";
 import {BootstrapStyleEnum} from "../../models/enums/BootstrapStyleEnum";
 import {HttpErrorResponse, HttpEvent, HttpEventType} from "@angular/common/http";
-import {catchError, map} from "rxjs/operators";
-import {lastValueFrom, throwError} from "rxjs";
+import {catchError, last, map, takeUntil} from "rxjs/operators";
+import {lastValueFrom, Subject, throwError} from "rxjs";
 import {PresentationStyleEnum} from "../../models/enums/PresentationStyleEnum";
 import {NotificationService} from "../../service/Notification";
 import {I18nService} from "../../service/i18n.service";
@@ -47,7 +47,7 @@ export interface IFileUploadDataAttributes extends IDataAttributes {
     }
   ]
 })
-export class FileUploadComponent extends FhngReactiveInputC implements OnInit {
+export class FileUploadComponent extends FhngReactiveInputC implements OnInit, OnDestroy {
   public override width = BootstrapWidthEnum.MD3;
 
   public override mb2 = false;
@@ -88,6 +88,8 @@ export class FileUploadComponent extends FhngReactiveInputC implements OnInit {
 
   public dragover: boolean = false;
 
+  private _destroyRequest$ = new Subject<void>();
+
   constructor(
       public override injector: Injector,
       @Optional() @SkipSelf() parentFhngComponent: FhngComponent,
@@ -104,6 +106,14 @@ export class FileUploadComponent extends FhngReactiveInputC implements OnInit {
   public override ngOnChanges(changes: SimpleChanges): void {
     super.ngOnChanges(changes);
   }
+
+  public override ngOnDestroy() {
+    super.ngOnDestroy();
+
+    this._destroyRequest$.next();
+    this._destroyRequest$.complete();
+  }
+
 
   public override mapAttributes(data: IFileUploadDataAttributes): void {
     super.mapAttributes(data);
@@ -128,16 +138,17 @@ export class FileUploadComponent extends FhngReactiveInputC implements OnInit {
   };
 
   public override handleError (error: HttpErrorResponse) {
-    let msg = this._i18n.__('upload error'),
+    console.log('handleError', error);
+    let msg = this._i18n.__('fh.upload.message.upload_error'),
         level: 'error' | 'warning' = 'error';
 
     if (error.status === 409) {
-      msg = this._i18n.__('max file exceeded')
+      msg = this._i18n.__('fh.upload.message.max_file_exceeded');
     } else if (error.status === 400) {
-      msg = this._i18n.__('incorrect file extension')
+      msg = this._i18n.__('fh.upload.message.incorrect_file_extension', [this.extensions]);
     } else if (error.status === -1) {
       level = 'warning';
-      msg = this._i18n.__('upload aborted')
+      msg = this._i18n.__('fh.upload.message.upload_aborted');
     }
 
     if (level === 'warning') {
@@ -179,9 +190,16 @@ export class FileUploadComponent extends FhngReactiveInputC implements OnInit {
       formData
     ).pipe(
         map(event => this._getEventMessage(event, formData)),
+        takeUntil(this._destroyRequest$),
+        last()
     );
 
     lastValueFrom(request).then((response: any) => {
+      if (response.type === HttpEventType.UploadProgress) {
+        this.showProgressBar = false;
+        this.handleError({status: -1} as HttpErrorResponse);
+      }
+
       if (response.body) {
         this.valueChanged = true;
         this.rawValue = response.body.ids;
@@ -241,6 +259,14 @@ export class FileUploadComponent extends FhngReactiveInputC implements OnInit {
     }
   }
 
+  public onCancelUpload($event?: Event): void {
+    if (this.showProgressBar) {
+      $event?.preventDefault();
+      $event?.stopPropagation();
+      this._destroyRequest$.next();
+    }
+  }
+
   private _requiredFilesType(files: File | File[], type: string[]): boolean {
     if (files instanceof Array) {
       for (let i = 0; i < files.length; i++) {
@@ -272,7 +298,7 @@ export class FileUploadComponent extends FhngReactiveInputC implements OnInit {
         return true;
       } else {
         this._notification.showError(
-          this._i18n.__('incorect_file_extension', [this.extensions]), //Plik tego formatu nie jest obsługiwany. Akceptowalne pliki : ${this.extensions}.
+          this._i18n.__('fh.upload.message.incorrect_file_extension', [this.extensions]), //Plik tego formatu nie jest obsługiwany. Akceptowalne pliki : ${this.extensions}.
           null,
           10000
         );
@@ -307,6 +333,8 @@ export class FileUploadComponent extends FhngReactiveInputC implements OnInit {
 
     for (let i = 0; i < file?.length; i++) {
       formData.append('file', file[i]);
+
+      //TODO: dodać walidacje dodawanych plików
     }
 
     formData.append('componentId', this.id);
@@ -317,6 +345,7 @@ export class FileUploadComponent extends FhngReactiveInputC implements OnInit {
   }
 
   private _getEventMessage(event: HttpEvent<any>, file?: FormData): HttpEvent<any> {
+    console.log('_getEventMessage', event)
     switch (event.type) {
       case HttpEventType.Sent:
         this.showProgressBar = true;

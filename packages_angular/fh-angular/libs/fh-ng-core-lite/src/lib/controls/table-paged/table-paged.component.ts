@@ -19,7 +19,7 @@ import {TableComponentRef} from '../table/table.ref';
 import {AvailabilityEnum} from "../../availability/enums/AvailabilityEnum";
 
 @Component({
-  selector: 'fhng-table-paged',
+  selector: '[fhng-table-paged]',
   templateUrl: './table-paged.component.html',
   styleUrls: ['./table-paged.component.scss'],
   providers: [

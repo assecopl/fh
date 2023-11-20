@@ -64,9 +64,6 @@ export class InputTimestampComponent
 
   public override mb2: boolean = false;
 
-  @HostBinding('class.form-group')
-  public formGroupClass: boolean = true;
-
   @HostBinding('class.highlightToday')
   @Input()
   public highlightToday: boolean = false;

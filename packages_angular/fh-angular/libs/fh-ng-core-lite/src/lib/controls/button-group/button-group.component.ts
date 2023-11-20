@@ -16,29 +16,14 @@ import {
 } from '@angular/core';
 import {ButtonComponent} from '../button/button.component';
 import {GroupingComponentC} from '../../models/componentClasses/GroupingComponentC';
-import {DocumentedComponent} from '@fhng/ng-core';
 import {BootstrapWidthEnum} from '../../models/enums/BootstrapWidthEnum';
-import {FhngAvailabilityDirective} from '@fhng/ng-availability';
 import {FhngButtonGroupComponent, FhngComponent,} from '../../models/componentClasses/FhngComponent';
 
-@DocumentedComponent({
-  category: DocumentedComponent.Category.BUTTONS_AND_OTHER,
-  value: 'ButtonGroup component responsible for the grouping of buttons.',
-  icon: 'fa fa-square',
-})
 @Component({
   selector: 'fhng-button-group',
   templateUrl: './button-group.component.html',
   styleUrls: ['./button-group.component.scss'],
   providers: [
-    /**
-     * Inicjalizujemy dyrektywę dostępności aby zbudoać hierarchię elementów i dać możliwość zarządzania dostępnością
-     */
-    FhngAvailabilityDirective,
-    /**
-     * Dodajemy deklaracje klasy ogólnej aby wstrzykiwanie i odnajdowanie komponentów wewnątrz siebie było możliwe.
-     * Dzięki temu budujemy hierarchię kontrolek Fhng.
-     */
     {
       provide: FhngComponent,
       useExisting: forwardRef(() => ButtonGroupComponent),
@@ -52,6 +37,11 @@ import {FhngButtonGroupComponent, FhngComponent,} from '../../models/componentCl
 export class ButtonGroupComponent
   extends GroupingComponentC<ButtonComponent>
   implements OnChanges, OnInit, AfterContentInit {
+
+  public override mb2 = false;
+
+  public override width = BootstrapWidthEnum.MD12;
+
   @Input()
   public activeButton: number;
 
@@ -73,10 +63,10 @@ export class ButtonGroupComponent
     new EventEmitter<ButtonGroupComponent>();
 
   @HostBinding('class')
-  public class: string;
+  public class: string = 'btn-group';
 
   @HostBinding('attr.role')
-  public role: string;
+  public role: string = 'group';
 
   public buttonSubcomponents: ButtonComponent[] = [];
 
@@ -86,33 +76,28 @@ export class ButtonGroupComponent
   ) => null;
 
   constructor(
-    public injector: Injector,
+    public override injector: Injector,
     @Optional() @SkipSelf() parentFhngComponent: FhngComponent
   ) {
     super(injector, parentFhngComponent);
-
-    this.width = BootstrapWidthEnum.MD12;
-    this.class = 'btn-group';
-    this.role = 'group';
-    this.mb2 = false;
   }
 
   public getSubcomponentInstance(): new (...args: any[]) => ButtonComponent {
     return ButtonComponent;
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  public override ngOnChanges(changes: SimpleChanges) {
     super.ngOnChanges(changes);
-    if (
-      changes.activeButton &&
-      this.activeButton !== changes.activeButton.currentValue
-    ) {
-      this.activeButton = changes.activeButton.currentValue;
-      this.setActiveButton();
-    }
+    // if (
+    //   changes.activeButton &&
+    //   this.activeButton !== changes.activeButton.currentValue
+    // ) {
+    //   this.activeButton = changes.activeButton.currentValue;
+    //   this.setActiveButton();
+    // }
   }
 
-  ngOnInit() {
+  public override ngOnInit() {
     super.ngOnInit();
 
     //Listen to each button selected event emiter and process selection in group.
@@ -135,7 +120,7 @@ export class ButtonGroupComponent
     this.initialized = true;
   }
 
-  ngAfterContentInit(): void {
+  public override ngAfterContentInit(): void {
     this.processButtonsWidth();
   }
 

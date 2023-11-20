@@ -25,15 +25,11 @@
             <input [availabilityInput]="availability" (input)="onInputEvent($event)" (change)="onChangeEvent()"
                    #focusElement
                    [id]="id"
-
                    [(ngModel)]="rawValue"
                    [disabled]="disabled"
                    [type]="inputType"
                    [name]="name"
                    [placeholder]="placeholder"
-                   [maxLength]="maxLength"
-                   [mask]="formatter?.pattern"
-                   [dropSpecialCharacters]="false"
                    [attr.aria-label]="ariaLabel"
                    [required]="required"
                    class="fc inputText form-control {{setPresentationStyle()}}"

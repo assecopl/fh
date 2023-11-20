@@ -18,7 +18,7 @@
 </ng-container>
 <ng-container *ngIf="modal">
 
-    <div class="modal-header">
+    <div class="modal-header" *ngIf="label">
         <h4 class="modal-title">
             <span [innerHTML]="label"></span>
         </h4>

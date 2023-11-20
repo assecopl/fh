@@ -74,11 +74,11 @@
   margin-bottom: 20px;
 }
 
-.fc.wrapper .table-responsive .row {
+.fc.wrapper .table-responsive > table .row {
   display: block;
 }
 
-.fc.wrapper .table-responsive table {
+.fc.wrapper .table-responsive.table {
   margin-bottom: 0;
 }
 

@@ -16,7 +16,7 @@ import {FhngComponent} from '../../models/componentClasses/FhngComponent';
 import {RepeaterComponent} from '../repeater/repeater.component';
 
 @Component({
-  selector: 'fhng-group',
+  selector: '[fhng-group]',
   templateUrl: './group.component.html',
   styleUrls: ['./group.component.scss'],
   providers: [

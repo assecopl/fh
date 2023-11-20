@@ -84,7 +84,17 @@ import {FileUploadAccessorComponent} from "./components/file-upload-accessor/fil
 import {ComboPL} from "./controls/combo/i18n/combo.pl";
 import {ComboEN} from "./controls/combo/i18n/combo.en";
 import {DictionaryLookupComponent} from "./controls/dictionary-combo/dictionary-lookup.component";
-
+import {UploadPL} from "./controls/file-upload/i18n/upload.pl";
+import {UploadEN} from "./controls/file-upload/i18n/upload.en";
+import {InputDatePL} from "./controls/input-date/i18n/input-date.pl";
+import {InputDateEN} from "./controls/input-date/i18n/input-date.en";
+import {NumberPL} from "./controls/input-number/i18n/number.pl";
+import {NumberEN} from "./controls/input-number/i18n/number.en";
+import {TextPL} from "./controls/input-text/i18n/text.pl";
+import {TextEN} from "./controls/input-text/i18n/text.en";
+import {TimestampPL} from "./controls/input-timestamp/i18n/timestamp.pl";
+import {TimestampEN} from "./controls/input-timestamp/i18n/timestamp.en";
+import {ButtonGroupComponent} from "./controls/button-group/button-group.component";
 
 
 const maskConfigFunction: () => Partial<IConfig> = () => {
@@ -174,7 +184,8 @@ const components = [
   XMLViewerFhDPComponent,
   FileUploadComponent,
   FileUploadAccessorComponent,
-  DictionaryLookupComponent
+  DictionaryLookupComponent,
+  ButtonGroupComponent
 ]
 
 @NgModule({
@@ -225,6 +236,23 @@ export class FhNgCoreLiteModule extends FhNgModule {
      */
     i18n.registerStrings('pl', ComboPL);
     i18n.registerStrings('en', ComboEN);
+    // FileUpload
+    i18n.registerStrings('pl', UploadPL);
+    i18n.registerStrings('en', UploadEN);
+    // InputDate
+    i18n.registerStrings('pl', InputDatePL);
+    i18n.registerStrings('en', InputDateEN);
+    // InputNumber
+    i18n.registerStrings('pl', NumberPL);
+    i18n.registerStrings('en', NumberEN);
+    // InputText
+    i18n.registerStrings('pl', TextPL);
+    i18n.registerStrings('en', TextEN);
+    // InputTimestamp
+    i18n.registerStrings('pl', TimestampPL);
+    i18n.registerStrings('en', TimestampEN);
+
+
   }
 
 
@@ -280,6 +308,14 @@ export class FhNgCoreLiteModule extends FhNgModule {
     componentManager.registerComponent(HtmlViewComponent);
     componentManager.registerComponent(XMLViewerFhDPComponent);
     componentManager.registerComponent(FileUploadComponent);
+    componentManager.registerComponent(ButtonGroupComponent);
+
+    //PPMKS Specific
+    componentManager?.registerComponentWithName("InputTextFhDP", InputTextComponent);
+    componentManager?.registerComponentWithName("TreeFhDP", TreeComponent);
+    componentManager?.registerComponentWithName("TabContainerFhDP", TabContainerComponent);
+
+
   }
 
   protected registerCustomActions(customActionsManager?: CustomActionsManager) {

@@ -45,6 +45,11 @@ export class FormComponent extends FhngComponent implements OnInit, OnChanges, O
     @HostBinding('class.fc')
     cssFc: boolean = true;
 
+  @HostBinding('id')
+  @Input()
+  public override id: string = '';
+
+
     @Input()
     public modal: boolean = false;
 
@@ -87,7 +92,6 @@ export class FormComponent extends FhngComponent implements OnInit, OnChanges, O
                         }
                     }
                 })
-
             }
         })
 

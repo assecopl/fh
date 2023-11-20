@@ -61,6 +61,9 @@ export class TableRowComponent
   @ViewChild(TemplateRef, {read: TemplateRef, static: true})
   public template: TemplateRef<void>;
 
+  @HostBinding('tabindex')
+  public override tabindex = 0;
+
   constructor(
     public override elementRef: ElementRef,
     public override injector: Injector,
