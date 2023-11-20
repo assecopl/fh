@@ -17,8 +17,8 @@
     #focusElement
     class="btn btn-{{ bootstrapStyle }} {{styleClasses}}"
     [id]="innerId"
+    [class.active]="active"
     [ngStyle]="styles"
-    [ngClass]="{'active': active}"
     [innerHTML]="label | fhml"
     (click)="onClickEvent($event)"
   >

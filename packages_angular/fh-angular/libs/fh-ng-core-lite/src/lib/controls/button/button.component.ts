@@ -22,6 +22,15 @@ import {FhngHTMLElementC} from '../../models/componentClasses/FhngHTMLElementC';
 import {BootstrapStyleEnum} from '../../models/enums/BootstrapStyleEnum';
 import {FhngButtonGroupComponent, FhngComponent,} from '../../models/componentClasses/FhngComponent';
 import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
+import {BehaviorSubject, Subject, Observable, of} from "rxjs";
+
+export interface IButtonDataAttributes extends IDataAttributes {
+  active?: boolean;
+  onClick: string;
+  label: string;
+  styleClasses?: string;
+  mb2?: boolean;
+}
 
 @Component({
   selector: '[fhng-button]',
@@ -47,11 +56,20 @@ export class ButtonComponent
   @Input()
   public active: boolean;
 
+  @Input()
+  public disabled: boolean;
+
+  public clickEventName = null;
+
+  @Input()
+  @HostBinding('class')
+  public styleClasses = null;
+
   @HostBinding('class.breadcrumb-item')
   public breadcrumb: boolean = false;
 
-  @Input()
-  public disabled: boolean;
+  @HostBinding('class.button')
+  public buttonClass: boolean = true;
 
   @ViewChild('content')
   public someInput: ElementRef;
@@ -60,9 +78,15 @@ export class ButtonComponent
   public selectedButton: EventEmitter<ButtonComponent> =
     new EventEmitter<ButtonComponent>();
 
-  public override parentFhngComponent: FhngComponent | any = null;
+  @Output()
+  public onUpdateButtonEvent$: Observable<any> = of();
 
-  public clickEventName = null;
+  @Output()
+  public onClickButtonEvent$: Observable<any> = of();
+
+  private _updateButtonBehavior: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+
+  private _clickButtonBehavior: Subject<any> = new Subject<any>();
 
   constructor(
     public override injector: Injector,
@@ -72,6 +96,8 @@ export class ButtonComponent
     public parentButtonGroupComponent: FhngButtonGroupComponent
   ) {
     super(injector, parentFhngComponent);
+    this.onUpdateButtonEvent$ = this._updateButtonBehavior.asObservable();
+    this.onClickButtonEvent$ = this._clickButtonBehavior.asObservable();
 
     this.bootstrapStyle = BootstrapStyleEnum.PRIMARY;
     if (this.parentButtonGroupComponent) {
@@ -114,12 +140,6 @@ export class ButtonComponent
 
   override ngOnDestroy(): void {
     super.ngOnDestroy();
-    if (
-      this.parentButtonGroupComponent &&
-      this.parentButtonGroupComponent.buttonSubcomponents
-    ) {
-      // this.parentButtonGroupComponent.buttonSubcomponents.removeElement(this);
-    }
   }
 
   processStyleForButtonGroup() {
@@ -130,17 +150,24 @@ export class ButtonComponent
     }
   }
 
-  public override mapAttributes(data: IDataAttributes & {onClick: string, label: string}) {
+  public override mapAttributes(data: IButtonDataAttributes) {
     super.mapAttributes(data);
 
     this.label = data.label;
     this.clickEventName = data.onClick;
+
+    this.active = typeof data.active === 'boolean' ? data.active : this.active;
+    this.mb2 = typeof data.mb2 === 'boolean' ? data.mb2 : this.mb2;
+    this.styleClasses = (data.styleClasses || '').replaceAll(',', ' ') || this.styleClasses;
     this.processStyleForButtonGroup();
+    this._updateButtonBehavior.next(data);
   }
 
   public onClickEvent ($event: Event): void {
     if (this.clickEventName) {
       this.fireEvent('onClick', this.clickEventName);
     }
+
+    this._clickButtonBehavior.next(this);
   }
 }

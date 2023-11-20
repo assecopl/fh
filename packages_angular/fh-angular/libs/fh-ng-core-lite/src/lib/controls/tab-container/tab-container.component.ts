@@ -80,6 +80,8 @@ export class TabContainerComponent
 
   public tabs: {id: string, label: string, selected: boolean}[] = [];
 
+  private _subscriptions = [];
+
   constructor(
     public override injector: Injector,
     @Optional() @SkipSelf() parentFhngComponent: FhngComponent
@@ -102,7 +104,6 @@ export class TabContainerComponent
 
   public override ngAfterContentInit(): void {
     this.activateDefaultTab();
-    console.log(JSON.parse(JSON.stringify(this.childFhngComponents)));
   }
 
   public override ngOnChanges(changes: SimpleChanges) {
@@ -119,7 +120,7 @@ export class TabContainerComponent
 
   public override ngAfterViewInit(): void {
     super.ngAfterViewInit();
-    this._mapSubscribtions();
+    this._mapSubscriptions();
   }
 
   public override ngOnDestroy(): void {
@@ -203,13 +204,11 @@ export class TabContainerComponent
     });
   }
 
-  private _subscriptions = [];
-
-  private _mapSubscribtions(): void {
+  private _mapSubscriptions(): void {
     this._unsubscribe();
     this.childFhngComponents.forEach((element: any, index: number) => {
-      if (element.update) {
-        this._subscriptions.push(element.update.subscribe((data: TabElement) => this._updateSubscribeEvent(data)));
+      if (element.update$) {
+        this._subscriptions.push(element.update$.subscribe((data: TabElement) => this._updateSubscribeEvent(data)));
       }
     });
   }

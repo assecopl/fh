@@ -59,7 +59,7 @@ export class TabComponent
   public selected: boolean = false;
 
   @Output()
-  public update: Observable<any> = of();
+  public update$: Observable<any> = of();
 
   public override width: BootstrapWidthEnum = BootstrapWidthEnum.MD12;
 
@@ -70,7 +70,7 @@ export class TabComponent
     @Optional() @SkipSelf() parentFhngComponent: FhngComponent
   ) {
     super(injector, parentFhngComponent);
-    this.update = this._updateBehavior.asObservable();
+    this.update$ = this._updateBehavior.asObservable();
   }
 
   public override ngOnInit() {
