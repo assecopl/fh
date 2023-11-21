@@ -30,6 +30,7 @@ export interface IButtonDataAttributes extends IDataAttributes {
   label: string;
   styleClasses?: string;
   mb2?: boolean;
+  wrapperClass?: boolean;
 }
 
 @Component({
@@ -54,7 +55,8 @@ export class ButtonComponent
   implements OnInit, OnDestroy, OnChanges, AfterViewInit {
 
   @Input()
-  public active: boolean;
+  @HostBinding('class.active')
+  public active: boolean = false;
 
   @Input()
   public disabled: boolean;
@@ -100,26 +102,6 @@ export class ButtonComponent
     this.onClickButtonEvent$ = this._clickButtonBehavior.asObservable();
 
     this.bootstrapStyle = BootstrapStyleEnum.PRIMARY;
-    if (this.parentButtonGroupComponent) {
-      this.parentButtonGroupComponent.buttonSubcomponents.push(this);
-      this.width = "";
-
-      if (this.parentButtonGroupComponent.initialized) {
-        if (this.parentButtonGroupComponent.breadcrumbs) {
-          this.bootstrapStyle = 'btn-link';
-          this.breadcrumb = true;
-          this.parentButtonGroupComponent.activeButton =
-            this.parentButtonGroupComponent.buttonSubcomponents.length - 1;
-        } else {
-          this.selectedButton.subscribe((val) => {
-            this.parentButtonGroupComponent.processActiveButton(val);
-          });
-        }
-        if (this.parentButtonGroupComponent.activeButton) {
-          this.parentButtonGroupComponent.setActiveButton();
-        }
-      }
-    }
   }
 
   public override ngOnInit() {
@@ -146,7 +128,6 @@ export class ButtonComponent
     if(this.parentButtonGroupComponent) {
       this.width = "";
       this.hostWidth = "btn btn-"+this.bootstrapStyle+" "+this.styleClasses;
-      // this.hostStyle = this.styleClasses;
     }
   }
 
@@ -158,7 +139,8 @@ export class ButtonComponent
 
     this.active = typeof data.active === 'boolean' ? data.active : this.active;
     this.mb2 = typeof data.mb2 === 'boolean' ? data.mb2 : this.mb2;
-    this.styleClasses = (data.styleClasses || '').replaceAll(',', ' ') || this.styleClasses;
+    this.wrapperClass = typeof data.wrapperClass === 'boolean' ? data.wrapperClass : this.wrapperClass;
+    this.styleClasses = (data.styleClasses || '').replaceAll(',', ' ') || this.styleClasses || '';
     this.processStyleForButtonGroup();
     this._updateButtonBehavior.next(data);
   }

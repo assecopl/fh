@@ -1,7 +1,6 @@
 <div class="fc buttonGroup btn-group mb-3 fc-editable {{styleClasses}}" role="group">
-  <button #d fhng-button *ngFor="let b of subelements" [availabilityHtmlElement]="b.accessibility" [data]="b" [formId]="formId" (click)="d.onClickEvent($event)"></button>
+  <button #d fhng-button *ngFor="let b of subelements" [availabilityHtmlElement]="b.accessibility" [data]="b" [formId]="formId" (click)="onButtonClick(d)"></button>
 </div>
-
 
 <ng-container *ngIf="configuration.debug">
   <fh-component-debugger/>
