@@ -107,6 +107,12 @@ export class ButtonGroupComponent
   public override mapAttributes(data: IGroupButtonDataAttributes) {
     super.mapAttributes(this._prepareButton(data));
 
+    (this.subelements.filter(element => element.type = 'Button') || []).forEach((element, index) => {
+      element.active = index === data.activeButton;
+    });
+
+    this.subelements = JSON.parse(JSON.stringify(this.subelements));
+
     this.onButtonChange = data.onButtonChange || this.onButtonChange;
   }
 
@@ -120,12 +126,16 @@ export class ButtonGroupComponent
     return attr;
   };
 
+  public onButtonClick (element): void {
+    this._onClickSubscribeEvent(element);
+  }
+
   private _prepareButton(data: IGroupButtonDataAttributes ): IGroupButtonDataAttributes {
     data.subelements?.forEach((element) => {
       if (element.type === 'Button') {
         element.mb2 = false;
         element.width = null;
-        element.styleClasses = 'px-0,col';
+        element.wrapperClass = false;
       }
     });
 
@@ -147,6 +157,7 @@ export class ButtonGroupComponent
 
   private _mapSubscriptions(): void {
     this._unsubscribe();
+
     this.childFhngComponents.forEach((element: any, index: number) => {
       if (element.onUpdateButtonEvent$) {
         this._subscriptions.push(element.onUpdateButtonEvent$.subscribe((data: ButtonComponent) => this._updateSubscribeEvent(data)));
@@ -173,6 +184,7 @@ export class ButtonGroupComponent
     let index = this.subelements.findIndex(element => element.id === data.id);
 
     this.activeButton = index;
+    console.log('buttonGroupClick', index)
 
     if (this.onButtonChange && index > -1) {
       this.valueChanged = true;
