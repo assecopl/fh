@@ -1,37 +1,29 @@
 import {
-  AfterContentInit, AfterViewInit,
+  AfterContentInit,
+  AfterViewInit,
   Component,
-  ContentChildren,
   EventEmitter,
   forwardRef,
-  Host, HostBinding,
   Injector,
-  Input, OnDestroy,
+  Input,
+  OnDestroy,
   OnInit,
   Optional,
   Output,
-  QueryList,
   SimpleChanges,
   SkipSelf,
 } from '@angular/core';
 import {GroupingComponentC} from '../../models/componentClasses/GroupingComponentC';
 import {TabComponent} from '../tab/tab.component';
-// import {DocumentedComponent} from '@fhng/ng-core';
 import {BootstrapWidthEnum} from '../../models/enums/BootstrapWidthEnum';
-// import {FhngAvailabilityDirective} from '@fhng/ng-availability';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
 import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
 
-type Tab = {label: string, id: string, selected: boolean};
+type Tab = { label: string, id: string, selected: boolean };
 type TabElement = IDataAttributes & Tab;
 
-// @DocumentedComponent({
-//   category: DocumentedComponent.Category.ARRANGEMENT,
-//   value: 'Tab Container aggregates single tab components',
-//   icon: 'fas fa-window-maximize',
-// })
 @Component({
-  selector: 'fhng-tab-container',
+  selector: '[fhng-tab-container]',
   templateUrl: './tab-container.component.html',
   styleUrls: ['./tab-container.component.scss'],
   providers: [
@@ -78,7 +70,7 @@ export class TabContainerComponent
 
   public boundActiveTabIndex: number;
 
-  public tabs: {id: string, label: string, selected: boolean}[] = [];
+  public tabs: { id: string, label: string, selected: boolean }[] = [];
 
   private _subscriptions = [];
 
@@ -109,9 +101,9 @@ export class TabContainerComponent
   public override ngOnChanges(changes: SimpleChanges) {
     super.ngOnChanges(changes);
     if (
-        changes['activeTabLabel'] ||
-        changes['activeTabId'] ||
-        changes['activeTabIndex']
+      changes['activeTabLabel'] ||
+      changes['activeTabId'] ||
+      changes['activeTabIndex']
     ) {
       this.deactivateTabs();
       this.activateDefaultTab();
@@ -200,7 +192,7 @@ export class TabContainerComponent
 
   private _mapTabs() {
     this.subelements.map((element, index) => {
-        element.selected = (index === this.activeTabIndex);
+      element.selected = (index === this.activeTabIndex);
     });
   }
 

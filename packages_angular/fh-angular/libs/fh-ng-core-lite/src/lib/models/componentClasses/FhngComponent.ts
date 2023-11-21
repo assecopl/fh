@@ -42,6 +42,26 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
   @Input()
   public id: string = '';
 
+  /**
+   * Definition of control Type - used for dynamic creation
+   *  Type and name of control registered in ComponentManager must match.
+   */
+  @Input('type')
+  public _type: string = null;
+
+  public set type(value:string){
+    this._type = value;
+    this.fhdp = value.includes("FhDP");
+  }
+
+  public get type() {
+    return this._type;
+  }
+
+  /**
+   * Is current control is variation of FhDP control.
+   */
+  public fhdp:boolean = false;
   public get innerId() {
     return this.id;
   }
@@ -62,9 +82,6 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
 
   protected destroyed: boolean;
 
-  /**
-   * For Input(FhngReactiveInputC) components this parameter is used as modelBinding parameter.
-   */
   @Input('name')
   public name: string = '';
 
@@ -254,6 +271,10 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
       }
     })
     // console.log(this.id, this.constructor.name, notFindAttributes);
+
+    if(data.type){
+      this.type = data.type;
+    }
 
     this._data = data;
   }

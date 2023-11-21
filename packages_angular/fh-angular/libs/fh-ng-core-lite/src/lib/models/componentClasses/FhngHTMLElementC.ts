@@ -336,6 +336,7 @@ export class FhngHTMLElementC
     if (data.style) this.bootstrapStyle = data.style
     this.setWidth = data.width;
     this.setHeight = data.height;
+
   }
 
 

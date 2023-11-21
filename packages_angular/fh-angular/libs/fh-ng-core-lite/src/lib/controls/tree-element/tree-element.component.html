@@ -1,5 +1,5 @@
 <div class="row" [ngStyle]="styles" [style.color]="getTextColor()" >
-  <div tabindex="0" class="col-md-12 treeNodeBody  {{styleClasses}}" >
+  <div tabindex="0" class="col-md-12 treeNodeBody  " >
     <ng-container *ngIf="expandableNode && collapsed">
 <!--      <div class="caretWrapper">-->
         <span (click)="processTreeElementClick()" class="fa fa-fw fa-caret-right"></span>
