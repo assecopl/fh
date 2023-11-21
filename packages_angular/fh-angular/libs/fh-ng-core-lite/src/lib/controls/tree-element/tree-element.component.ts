@@ -35,19 +35,21 @@ import {FhngComponent} from '../../models/componentClasses/FhngComponent';
 })
 export class TreeElementComponent extends FhngHTMLElementC implements OnInit {
 
-  private onIconClick: any;
-  @HostBinding('class.isLeaf')
-  public nextLevelExpandable: boolean = true;
+  public onIconClick: any = null;
+  // @HostBinding('class.isLeaf')
+  // public nextLevelExpandable: boolean = true;
   private techIconElement: HTMLSpanElement;
   private iconElement: HTMLSpanElement;
   private subTree: any;
-  private onLabelClick: any;
+  public onLabelClick: any = null;
   private currentTechIconClasses: any;
   private currentIconClasses: any;
   private icons: any;
   private selectable: any;
   private spanWithLabel: any;
   private ul: any;
+
+  public customHighlightColor:string = null;
 
 
 
@@ -69,6 +71,7 @@ export class TreeElementComponent extends FhngHTMLElementC implements OnInit {
   @Input()
   children: any;
 
+  @HostBinding('class.isLeaf')
   @HostBinding('class.text-underline')
   @Input()
   expandableNode: boolean = false;
@@ -77,7 +80,13 @@ export class TreeElementComponent extends FhngHTMLElementC implements OnInit {
   public selected: boolean = false;
 
   @Input()
+  public selectedElement: any = null;
+
+  @Input()
   collapsed: boolean = true;
+
+  @Input()
+  expanded: boolean = true;
 
   @HostBinding('class')
   override styleClasses = null;
@@ -97,9 +106,9 @@ export class TreeElementComponent extends FhngHTMLElementC implements OnInit {
 
   override ngOnInit(): void {
     super.ngOnInit();
-    if(!this.collapsed) {
-      this.treeElement.emit({id: this.id, collpased: this.collapsed});
-    }
+    // if(!this.expanded) {
+    //   this.treeElement.emit({id: this.id, collpased: this.collapsed});
+    // }
   }
 
   public processTreeElementClick(): void {
@@ -110,28 +119,35 @@ export class TreeElementComponent extends FhngHTMLElementC implements OnInit {
     }
 
     this.treeElement.emit({id: this.id, collpased: this.collapsed});
-    this.fireEventWithLock('onLabelClick', 'onLabelClick');
+    if(this.onIconClick) {
+      this.fireEventWithLock('onIconClick', 'onIconClick');
+    }
   }
 
   labelClicked(event) {
     event.stopPropagation();
 
-    // if (this.nextLevelExpandable) {
-    // this.changesQueue.queueAttributeChange('collapsed', this.collapsed);
-    // } else {
-    this.selected = !this.selected;
-    // this.changesQueue.queueAttributeChange('selected', this.selected);
-    // }
-
-    // if (this.onLabelClick) {
+    if (this.expandableNode) {
+      this.changesQueue.queueAttributeChange('collapsed', this.collapsed);
+    } else {
+        this.changesQueue.queueAttributeChange('selected', this.selected);
+    }
+    this.treeElement.emit({id: this.id, selected: this});
+    if (this.onLabelClick) {
     this.fireEventWithLock('onLabelClick', 'onLabelClick');
-    // }
+    }
     return false;
   }
 
   public override mapAttributes(data: any) {
     super.mapAttributes(data);
+  }
 
-
+  getTextColor() {
+    if (this.selectedElement == this) {
+      return  'var(--color-main)';
+    } else {
+      return 'var(--color-tree-element-selected)';
+    }
   }
 }

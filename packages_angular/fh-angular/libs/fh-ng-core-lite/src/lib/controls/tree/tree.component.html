@@ -15,7 +15,7 @@
 <!--</ul>-->
 <ng-container *ngIf="!child; then rootTemplate; else childTemplate"></ng-container>
 <ng-template #rootTemplate>
-  <div class="fc tree treeview">
+  <div class="fc tree treeview {{styleClasses}}" [class.treelines]="lines">
     <div class="eq-row">
       <ul class="list-group col-12 treeElementList">
         <ng-container *ngTemplateOutlet="listElementsTemplate"></ng-container>
@@ -34,18 +34,19 @@
         [formId]="formId"
         [id]="e.id"
         width="md-12"
-        [selected]="selected == e"
+        [selectedElement]="selected"
         [label]="e.label"
         (treeElement)="processCollapsed($event)"
-        [expandableNode]="e.subelements?.length > 0">
+        [expandableNode]="e.subelements?.length > 0"
+    class="list-group-item-custom node-treeview1 treeNode pl-3">
       <ng-container *ngIf="e.subelements?.length > 0">
         <ul class="list-group col-12" fh-tree
             [id]="e.id"
             [child]="true"
             [formId]="formId"
             [selected]="selected"
-            (selectedChange)="setSelected($event)"
-            [collapsedTree]="!!activeElements[e.id]"
+            (selectedChange)="processCollapsed($event)"
+            [collapsedTree]="activeElements[e.id] || collapsedTree"
             [subelements]="e.subelements"
             [treeElementTemplate]=" treeElementTemplate ? treeElementTemplate : treeElement">
         </ul>
@@ -53,5 +54,3 @@
     </li>
   </ng-container>
 </ng-template>
-
-

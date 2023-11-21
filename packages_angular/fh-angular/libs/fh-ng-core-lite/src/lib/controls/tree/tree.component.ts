@@ -64,6 +64,8 @@ export class TreeComponent
   @ContentChild(TreeElementComponent)
   treeElement: TreeElementComponent;
 
+  public lines:boolean = false;
+
   @Input()
   public selected: any;
 
@@ -72,7 +74,7 @@ export class TreeComponent
 
   @HostBinding('class.d-none')
   private get hostDNoneClassDisplay () {
-    return !this.collapsedTree && this.treeElementTemplate !== null;
+    return this.collapsedTree && this.treeElementTemplate !== null;
   }
 
   constructor(
@@ -94,12 +96,17 @@ export class TreeComponent
   }
 
   public processCollapsed(element: any) {
-    this.activeElements[element.id] = !element.collpased;
+    this.activeElements[element.id] = element.collpased;
+    if(element.selected){
+      this.selected = element.selected
+      this.subelements = [...this.subelements]
+    }
+    this.selectedChange.emit(element);
   }
 
   public setSelected(element: any) {
-    this.activeElements[element.id] = element.collpased;
-    this.selectedChange.emit(element);
+    this.processCollapsed(element)
+
   }
 
   public override mapAttributes(data: any) {
