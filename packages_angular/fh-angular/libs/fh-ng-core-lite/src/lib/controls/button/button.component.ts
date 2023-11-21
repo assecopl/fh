@@ -63,7 +63,7 @@ export class ButtonComponent
 
   @Input()
   @HostBinding('class')
-  public styleClasses = null;
+  public override styleClasses = null;
 
   @HostBinding('class.breadcrumb-item')
   public breadcrumb: boolean = false;

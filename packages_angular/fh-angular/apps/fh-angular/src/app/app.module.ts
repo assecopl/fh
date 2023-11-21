@@ -5,7 +5,7 @@ import {AppComponent} from './app.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {FhNgCoreLiteModule} from "fh-ng-core-lite";
 import {Connector} from "../../../../libs/fh-ng-core-lite/src/lib/Socket/Connector";
-import {Util} from "../../../../libs/fh-ng-core-lite/src/lib/service/Util";
+import {Utils} from "../../../../libs/fh-ng-core-lite/src/lib/service/Utils";
 import {ApplicationLockService} from "../../../../libs/fh-ng-core-lite/src/lib/service/application-lock.service";
 import {I18nService} from "../../../../libs/fh-ng-core-lite/src/lib/service/i18n.service";
 import {SocketHandler} from "../../../../libs/fh-ng-core-lite/src/lib/Socket/SocketHandler";
@@ -21,11 +21,11 @@ import {SocketHandler} from "../../../../libs/fh-ng-core-lite/src/lib/Socket/Soc
 export class AppModule {
 
   constructor(private connector: Connector,
-              private util: Util,
+              private utils: Utils,
               private applicationLock: ApplicationLockService,
               private i18n: I18nService,
               private socketHandler: SocketHandler) {
-    connector.setup(util.getPath('socketForms'))
+    connector.setup(utils.getPath('socketForms'))
     // connector.target = util.getPath('socketForms');
     connector.reconnectCallback = () => {
       console.log(i18n.__('error.connection_lost'))
