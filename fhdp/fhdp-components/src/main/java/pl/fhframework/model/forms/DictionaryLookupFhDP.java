@@ -1,6 +1,7 @@
 package pl.fhframework.model.forms;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ import pl.fhframework.model.forms.designer.BindingExpressionDesignerPreviewProvi
 import pl.fhframework.model.forms.provider.IComboDataProviderFhDP;
 import pl.fhframework.model.forms.provider.NameValue;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -92,7 +94,8 @@ public class DictionaryLookupFhDP extends BaseInputFieldWithKeySupport implement
     private String guuid;
 
     @Getter
-    private Boolean displayOnlyCode = true;
+    @XMLProperty
+    private Boolean displayOnlyCode;
 
     @Getter
     private String popupColor;
@@ -168,6 +171,8 @@ public class DictionaryLookupFhDP extends BaseInputFieldWithKeySupport implement
 
     protected boolean noResult = false;
 
+    protected boolean dirty = false;
+
 
     public DictionaryLookupFhDP(Form form) {
         super(form);
@@ -175,7 +180,7 @@ public class DictionaryLookupFhDP extends BaseInputFieldWithKeySupport implement
 
     @Override
     public void init(){
-        log.debug("Init...");
+        System.out.println("Init...");
         super.init();
         try {
             this.resolveDataProvider();
@@ -192,9 +197,12 @@ public class DictionaryLookupFhDP extends BaseInputFieldWithKeySupport implement
             rows = new ArrayList();
             language = SessionManager.getUserSession().getLanguage().toLanguageTag();
 
-            if(displayOnlyCodeModelBinding != null && displayOnlyCodeModelBinding.getBindingResult() != null) {
-                displayOnlyCode = getDisplayOnlyCodeModelBinding().getBindingResult().getValue();
-            }
+            //TODO: check binding!!!
+            if(displayOnlyCode == null) displayOnlyCode = false;
+
+//            if(displayOnlyCodeModelBinding != null && displayOnlyCodeModelBinding.getBindingResult() != null) {
+//                displayOnlyCode = getDisplayOnlyCodeModelBinding().getBindingResult().getValue();
+//            }
             if(popupBackgroundColorBinding != null && popupBackgroundColorBinding.getBindingResult() != null){
                 popupColor = popupBackgroundColorBinding.getBindingResult().getValue();
             }
@@ -202,23 +210,143 @@ public class DictionaryLookupFhDP extends BaseInputFieldWithKeySupport implement
                 BindingResult selectedBindingResult = getModelBinding().getBindingResult();
                 if (selectedBindingResult != null) {
                     currentSourceObject = selectedBindingResult.getValue();
-                    if (currentSourceObject != null) {
-                        if (displayOnlyCode) {
-                            setRawValue(dataProvider.getSrcKey(currentSourceObject));
-                        } else {
-                            setRawValue(dataProvider.getDisplayValue(currentSourceObject));
-                        }
-                    }
+
                 }
             }
-            //Tymczasowe
-            search(false, false);
         } catch (Exception ex) {
             FhLogger.warn("DictionaryCombo: Provider not found.", ex);
         }
     }
 
-    private Object getValueFromProvider(String code) {
+    @Override
+    public ElementChanges updateView() {
+        ElementChanges elementChange = super.updateView();
+        elementChange.addChange("dirty", dirty);
+        System.out.println("updateView... ElementChange: " + toJson(elementChange));
+        if(searchPerformed) {
+            searchPerformed = false;
+            elementChange.addChange(ATTR_ROWS, rows);
+            elementChange.addChange(ATTR_PAGE, page);
+            elementChange.addChange(ATTR_PAGES_COUNT, pagesCount);
+
+            columns = dataProvider.getColumnDefinitions();
+            elementChange.addChange(ATTR_COLUMNS, columns);
+            if(noResult == true){
+                //Force model clean when there is no matching values found.
+                this.updateBindingForValue(null, getModelBinding(), getModelBinding().getBindingExpression(), this.getOptionalFormatter());
+                elementChange.addChange("searchRequested", getRawValue());
+//                elementChange.addChange(VALUE_FOR_CHANGED_BINDING_ATTR, this.filterText);
+                this.noResult = false;
+            }
+        }
+//        if(currentLastValue != null) {
+//            Object lastValue = elementChange.getChangedAttributes().get(ATTR_LAST_VALUE);
+//            if(lastValue.equals(currentLastValue)) {
+//                elementChange.getChangedAttributes().remove(ATTR_LAST_VALUE);
+//            }
+//        }
+        if(languageChanged == true){
+            List<Object> paramsList = new LinkedList<>();
+            paramsList.addAll(getValuesFromDictionaryComboParameters(this.getTitleParamsList));
+            title = (String) ReflectionUtils.run(this.getTitle, this.dataProvider, paramsList.toArray());
+            elementChange.addChange(ATTR_TITLE, title);
+            this.languageChanged = false;
+        }
+
+        return elementChange;
+    }
+
+    public static String toJson(Object bean) {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.writeValueAsString(bean);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public void updateModel(ValueChange valueChange){
+        String json = toJson(valueChange);
+        System.out.println("updateModel: " + json);
+        if(valueChange.hasAttributeChanged("text")) {
+            dirty = true;
+        }
+        if(valueChange.hasAttributeChanged("blur")) {
+            String newValue = valueChange.getStringAttribute("blur");
+            if ("null".equals(newValue)) {
+                newValue = null;
+            }
+            if(newValue != null && newValue.length() > 1) {
+                Object result = getValueFromProvider(dataProvider.initResultFromKey(newValue));
+                if(result != null) {
+                    //Found the result by code. Finished.
+                     currentSourceObject = result;
+                     dirty = false;
+                     Object code = dataProvider.getCode(currentSourceObject);
+                     updateBindingForValue(code, getModelBinding(), code);
+                } else {
+                    Object value = getValueFromBinding();
+                    currentSourceObject = getValueFromProvider(value);
+                    dirty = false;
+                }
+            }
+        }
+    }
+
+    private Object getValueFromBinding() {
+        BindingResult selectedBindingResult = getModelBinding().getBindingResult();
+        if (selectedBindingResult != null) {
+            return selectedBindingResult.getValue();
+        }
+        return null;
+    }
+
+    @Override
+    protected boolean processValueBinding(ElementChanges elementChanges) {
+        if (!dirty && getModelBinding() != null) {
+            BindingResult selectedBindingResult = getModelBinding().getBindingResult();
+            if (selectedBindingResult != null) {
+                Object value = selectedBindingResult.getValue();
+                if("null".equals(value)) {
+                    value = null;
+                }
+                if(currentSourceObject == null && value == null) {
+                    return false;
+                }
+                if(value != null && currentSourceObject == null) {
+                    currentSourceObject = value;
+                }
+//                System.out.println("processValueBinding... value: " + value);
+                if(currentSourceObject != null) {
+                    System.out.println("processValueBinding... change from: " + currentSourceObject + " to " + value);
+//                    currentSourceObject = value;
+                    if (displayOnlyCode) {
+                        System.out.println("processValueBinding. displayOnlyCode = true");
+                        setRawValue((value == null)? null :  dataProvider.getSrcKey(currentSourceObject));
+                    } else {
+                        System.out.println("processValueBinding. displayOnlyCode = false");
+                        if(value != null) {
+                            setRawValue(dataProvider.getDisplayValue(currentSourceObject));
+                            elementChanges.addChange(RAW_VALUE_ATTR, (getRawValue() == null) ? "" : getRawValue());
+                        } else {
+                            setRawValue(null);
+                        }
+                    }
+//                    if(!this.searchPerformed) {
+//                        System.out.println("processValueBinding. New rawValue: " + ((rawValue == null) ? "real null" : rawValue));
+//                        elementChanges.addChange(VALUE_FOR_CHANGED_BINDING_ATTR, (rawValue == null) ? "" : rawValue);
+//                        System.out.println("After processValueBinding. dirty: " + dirty);
+//                    }
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private Object getValueFromProvider(Object code) {
         List<Object> allParamsList = new LinkedList<>();
         allParamsList.add(code);
         allParamsList.addAll(this.getValuesFromDictionaryComboParameters(this.getValueParamsList));
@@ -335,44 +463,6 @@ public class DictionaryLookupFhDP extends BaseInputFieldWithKeySupport implement
     }
 
 
-    @Override
-    protected boolean processValueBinding(ElementChanges elementChanges) {
-        if (getModelBinding() != null) {
-            BindingResult selectedBindingResult = getModelBinding().getBindingResult();
-            if (selectedBindingResult != null) {
-                Object value = selectedBindingResult.getValue();
-                if("null".equals(value)) {
-                    value = null;
-                }
-                if(currentSourceObject == null && value == null) return false;
-//                System.out.println("processValueBinding... value: " + value);
-                if((currentSourceObject == null) || !currentSourceObject.equals(value)) {
-                    System.out.println("processValueBinding... change from: " + currentSourceObject + " to " + value);
-                    currentSourceObject = value;
-                    if (displayOnlyCode) {
-                        System.out.println("processValueBinding. displayOnlyCode = true");
-                        setRawValue((value == null)? null :  dataProvider.getSrcKey(currentSourceObject));
-                    } else {
-                        System.out.println("processValueBinding. displayOnlyCode = false");
-                        if(value != null) {
-                            setRawValue(dataProvider.getDisplayValue(currentSourceObject));
-                            elementChanges.addChange(VALUE_FOR_CHANGED_BINDING_ATTR, (getRawValue() == null) ? "" : getRawValue());
-                        } else {
-                            setRawValue(null);
-                        }
-                    }
-//                    if(!this.searchPerformed) {
-//                        System.out.println("processValueBinding. New rawValue: " + ((rawValue == null) ? "real null" : rawValue));
-//                        elementChanges.addChange(VALUE_FOR_CHANGED_BINDING_ATTR, (rawValue == null) ? "" : rawValue);
-//                        System.out.println("After processValueBinding. dirty: " + dirty);
-//                    }
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
     /**
      * Function for geting actual values from DictionaryComboParameter based on its model bindings.
      *
@@ -391,109 +481,6 @@ public class DictionaryLookupFhDP extends BaseInputFieldWithKeySupport implement
         });
 
         return l;
-    }
-
-    @Override
-    public ElementChanges updateView() {
-        log.debug("updateView... page: " + page);
-        ElementChanges elementChange = super.updateView();
-        if(searchPerformed) {
-            searchPerformed = false;
-            elementChange.addChange(ATTR_ROWS, rows);
-            elementChange.addChange(ATTR_PAGE, page);
-            elementChange.addChange(ATTR_PAGES_COUNT, pagesCount);
-
-            columns = dataProvider.getColumnDefinitions();
-            elementChange.addChange(ATTR_COLUMNS, columns);
-            if(noResult == true){
-                //Force model clean when there is no matching values found.
-                this.updateBindingForValue(null, getModelBinding(), getModelBinding().getBindingExpression(), this.getOptionalFormatter());
-                elementChange.addChange("searchRequested", getRawValue());
-//                elementChange.addChange(VALUE_FOR_CHANGED_BINDING_ATTR, this.filterText);
-                this.noResult = false;
-            }
-        }
-//        if(currentLastValue != null) {
-//            Object lastValue = elementChange.getChangedAttributes().get(ATTR_LAST_VALUE);
-//            if(lastValue.equals(currentLastValue)) {
-//                elementChange.getChangedAttributes().remove(ATTR_LAST_VALUE);
-//            }
-//        }
-        if(languageChanged == true){
-            List<Object> paramsList = new LinkedList<>();
-            paramsList.addAll(getValuesFromDictionaryComboParameters(this.getTitleParamsList));
-            title = (String) ReflectionUtils.run(this.getTitle, this.dataProvider, paramsList.toArray());
-            elementChange.addChange(ATTR_TITLE, title);
-            this.languageChanged = false;
-        }
-
-        return elementChange;
-    }
-
-
-    @Override
-    public void updateModel(ValueChange valueChange){
-//        System.out.println("updateModel... valueSelected: " + valueSelected);
-//        if(valueChange.hasAttributeChanged("text")){
-//            String newValue = valueChange.getStringAttribute("text");
-//            if("null".equals(newValue)) {
-//                newValue = null;
-//            }
-//            String refValue = filterText;
-//            System.out.println("updateModel... new value: " + ((newValue == null)?"real null":"string null"));
-//            if(newValue == null) {
-//                dirty = true;
-//                rawValue = null;
-//                filterText = null;
-//                valueSelected = true;
-//            } else {
-//                if (!displayOnlyCode) {
-//                    if (selectedItem != null) {
-//                        refValue = dataProvider.getDisplayValue(selectedItem);
-//                    } else {
-//                        refValue = filterText;
-//                    }
-//                }
-//                if (!newValue.equals(refValue)) {
-//                    dirty = true;
-//                    rawValue = newValue;
-//                    System.out.println("updateModel... changed rawValue: " + rawValue);
-//                    filterText = rawValue;
-//                    boolean singleSearch = this.rawValue!=null && (!dirty || !getAvailability().equals(AccessibilityEnum.EDIT));
-//                    search(singleSearch, true);
-//                }
-//            }
-////            refreshView();
-//        }
-//        if(valueSelected) {
-//            System.out.println("updateModel... value selected: " + rawValue);
-//            valueSelected = false;
-//            Object result = null;
-//            if(filterText != null) {
-//                selectedItem = getValueFromProvider(filterText);
-//                result = dataProvider.getCode(selectedItem);
-//
-//                //Validate
-//                ValidateInput input = new ValidateInput();
-//                input.setId(this.getGuuid());
-//                input.setCode(filterText);
-//                dictionaryComboValidate(input);
-//
-//                dirty = false;
-//            } else {
-//                selectedItem = null;
-//            }
-//            this.updateBindingForValue(result, getModelBinding(), getModelBinding().getBindingExpression(), this.getOptionalFormatter());
-//            if(!displayOnlyCode) {
-//                if(selectedItem != null) {
-//                    rawValue = dataProvider.getDisplayValue(selectedItem);
-//                }
-//            }
-//        }
-//        if(valueChange.hasAttributeChanged("dirty")){
-//            dirty = valueChange.getBooleanAttribute("dirty");
-//            System.out.println("updateModel. Changed dirty to: " + dirty);
-//        }
     }
 
     private void updateRows(Pageable pageable) {

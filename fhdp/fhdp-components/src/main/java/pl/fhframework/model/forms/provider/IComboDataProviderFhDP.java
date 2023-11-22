@@ -24,6 +24,8 @@ public interface IComboDataProviderFhDP<SRC, RESULT> extends IComboDataProvider<
      */
     List<NameValue> getColumnDefinitions();
 
+    RESULT initResultFromKey(String key);
+
     /**
      * Returns title displayed on the list
      * @return

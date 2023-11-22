@@ -50,6 +50,11 @@ public class CountryLookupProvider implements IComboDataProviderFhDP<Country, St
     }
 
     @Override
+    public String initResultFromKey(String key) {
+        return key;
+    }
+
+    @Override
     public String getSrcKey(Country element) {
         if(element == null) return null;
         return element.getCode();

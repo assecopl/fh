@@ -49,8 +49,8 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
     private divTooltipId: any;
     private divTooltip: any;
 
-  private columns: any[] = [];
-  private rows: any[] [];
+  public columns: any[] = [];
+  public rows: any[] = [];
   private popupOpen: boolean = false;
     private searchRequested: boolean;
   private page: number = null;
@@ -330,7 +330,12 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
     let attrs = {};
     // if (this.valueChanged) {
     //   attrs[FORM_VALUE_ATTRIBUTE_NAME] = this.rawValue;
-    attrs["text"] = this.rawValue;
+    if(this.onBlurValue && this.dirty) {
+      attrs["blur"] = this.onBlurValue;
+      this.onBlurValue = null;
+    } else {
+      attrs["text"] = this.rawValue;
+    }
     this.valueChanged = false;
     // }
 
@@ -341,6 +346,16 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
     if (this.onChange) {
       this.fireEventWithLock('onChange', this.onChange);
     }
+  }
+
+  public onBlurValue: string
+  onBlurEvent() {
+    this.onBlurValue = this.rawValue;
+    this.fireEventWithLock('onChange', this.onChange);
+  }
+
+  onSelectedEvent(i: number) {
+
   }
 }
 

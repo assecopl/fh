@@ -49,6 +49,11 @@ public class CountryNameValueLookupProvider implements IComboDataProviderFhDP<Na
     }
 
     @Override
+    public String initResultFromKey(String key) {
+        return key;
+    }
+
+    @Override
     public String getSrcKey(NameValueDto element) {
         if(element == null) return null;
         return element.getValue();

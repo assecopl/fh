@@ -2,18 +2,26 @@
 <Form xmlns="http://fh.asseco.com/form/fhdp/1.0" container="mainForm" formType="STANDARD">
     <PanelHeaderFhDP title="Lookup fields" onClick="close" width="md-12"/>
 
+    <Row>
+        <OutputLabel value="Selected country code: {countryCode}"/>
+    </Row>
 
-    <DictionaryLookupFhDP id="dcCountry"
-                             emptyValue="true"
-                             width="md-4"
-                             label="Country"
-                             required="true"
-                             onChange="-"
-                             hint="test hint" hintType="STATIC"
-                             dispalyOnlyCode="false"
-                             value="{countryCode}"
-                             provider="pl.fhframework.fhdp.example.lookup.provider.CountryLookupProvider"
-                             icon="fas fa-search" />
+    <Row>
+        <DictionaryLookupFhDP id="dcCountry"
+                              emptyValue="true"
+                              width="md-4"
+                              label="Country"
+                              required="true"
+                              onChange="-"
+                              hint="test hint" hintType="STATIC"
+                              dispalyOnlyCode="false"
+                              value="{countryCode}"
+                              provider="pl.fhframework.fhdp.example.lookup.provider.CountryLookupProvider"
+                              icon="fas fa-search" />
+
+    </Row>
+
+
     <!--        <DictionaryComboFhDP id="dcCountryNameValue"-->
     <!--                             emptyValue="true"-->
     <!--                             width="md-4"-->

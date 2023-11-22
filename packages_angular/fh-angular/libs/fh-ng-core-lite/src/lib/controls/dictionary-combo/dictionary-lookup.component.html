@@ -22,7 +22,7 @@
              [iconAlignment]="iconAlignment"
              [required]="required"
         >
-            <input [availabilityInput]="availability" (input)="onInputEvent($event)" (change)="onChangeEvent()"
+            <input [availabilityInput]="availability" (input)="onInputEvent($event)" (change)="onChangeEvent()" (blur)="onBlurEvent()"
                    #focusElement
                    [id]="id"
                    [(ngModel)]="rawValue"
@@ -40,11 +40,26 @@
         </div>
     </div>
 </ng-template>
+
+<table class="table">
+  <thead>
+  <tr>
+    <th>Idx</th>
+    <th *ngFor="let c of columns">{{c.title}}</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let r of rows;let i = index;" (click)="onSelectedEvent(i)">
+    <td>{{i}}</td>
+    <td *ngFor="let c of columns"> {{r[c.field]}}</td>
+  </tr>
+  </tbody>
+</table>
 <!--<div class="row">-->
 <!--  <div class="col-md-6">-->
 <!--    <pre>-->
-<!--rawValue : {{rawValue | json}} <br>-->
-<!--multiselectRawValue : {{multiselectRawValue | json}} <br>-->
+<!--rows : {{rows | json}} <br>-->
+<!--colums : {{columns | json}} <br>-->
 <!--</pre>-->
 <!--  </div>-->
 <!--  <div class="col-md-6">-->
