@@ -19,7 +19,7 @@ import {
   NgbCalendar,
   NgbDate,
   NgbDateAdapter,
-  NgbDateParserFormatter,
+  NgbDateParserFormatter, NgbDatepickerConfig,
   NgbInputDatepicker,
   NgbInputDatepickerConfig,
   NgbTimeAdapter,
@@ -87,17 +87,20 @@ export class InputTimestampComponent
   constructor(
     @Inject(LOCALE_ID) private _locale: string,
     public override injector: Injector,
-    public config: NgbInputDatepickerConfig,
     public calendar: NgbCalendar,
     private customNgbDatetimeService: CustomNgbDatetimeService,
+    private _dateConfig: NgbDatepickerConfig,
+    private _inputDateConfig: NgbInputDatepickerConfig,
     @Optional() @SkipSelf() parentFhngComponent: FhngComponent
   ) {
     super(injector, parentFhngComponent);
 
     const curentYear = new Date().getFullYear();
 
-    this.config.minDate = {year: curentYear - 100, day: 1, month: 1};
-    this.config.maxDate = {year: curentYear + 100, day: 1, month: 1};
+    this._dateConfig.minDate = {year: curentYear - 100, day: 1, month: 1};
+    this._dateConfig.maxDate = {year: curentYear + 100, day: 1, month: 1};
+
+    this._inputDateConfig.container = 'body';
   }
 
   override ngOnInit() {
@@ -153,4 +156,10 @@ export class InputTimestampComponent
 
     return attrs;
   };
+
+  public onClickButton(d: NgbInputDatepicker): void {
+    if (!this.disabled) {
+      d.toggle();
+    }
+  }
 }
