@@ -54,7 +54,7 @@ export class TabContainerComponent
   public activeTabLabel: string;
 
   @Input()
-  public activeTabIndex: number;
+  public activeTabIndex: number = 0;
 
   @Input()
   public activeTabId: string;
@@ -185,7 +185,9 @@ export class TabContainerComponent
   public override mapAttributes(data: IDataAttributes) {
     super.mapAttributes(data);
 
-    this.activeTabIndex = data.activeTabIndex;
+    if(data.activeTabIndex) {
+      this.activeTabIndex = data.activeTabIndex;
+    }
 
     this._mapTabs();
   }

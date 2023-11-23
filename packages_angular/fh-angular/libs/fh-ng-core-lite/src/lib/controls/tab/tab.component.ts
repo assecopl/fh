@@ -97,7 +97,9 @@ export class TabComponent
   public override mapAttributes(data: IDataAttributes & { selected: boolean }) {
     super.mapAttributes(data);
 
-    this.selected = data.selected;
+    if(data.selected) {
+      this.selected = data.selected;
+    }
     this._updateBehavior.next(data);
   }
 }
