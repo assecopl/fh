@@ -3,6 +3,7 @@
   [label]="label"
   [labelPosition]="labelPosition"
   [labelSize]="labelSize"
+  [availabilityHtmlElement]="availability"
 >
   <div fhng-input-group
     buttonAriaLabel="{{ label }}"
@@ -15,7 +16,7 @@
     [placement]="hintPlacement?.toLowerCase()"
     [required]="required"
     [triggers]="hintTrigger?.toLowerCase()"
-    (onClick)="d.toggle()"
+    (onClick)="onClickButton(d)"
   >
     <input
       #focusElement
@@ -26,6 +27,7 @@
       ngbDatepicker
       [attr.aria-label]="!label && ariaLabel ? ariaLabel : ( 'fh.input_date.label' | i18n)"
       [availabilityHtmlElement]="availability"
+      [disabled]="disabled"
       [id]="innerId"
       [ngModel]="value"
       [ngStyle]="styles"

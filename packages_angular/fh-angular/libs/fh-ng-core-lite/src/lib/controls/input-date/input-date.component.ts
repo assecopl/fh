@@ -17,7 +17,7 @@ import {
   NgbCalendar,
   NgbDateAdapter,
   NgbDateParserFormatter,
-  NgbDatepickerConfig,
+  NgbDatepickerConfig, NgbInputDatepicker,
   NgbInputDatepickerConfig,
 } from '@ng-bootstrap/ng-bootstrap';
 import {FhngDateAdapter} from '../../models/FhngDateTimeAdapter';
@@ -81,17 +81,20 @@ export class InputDateComponent extends FhngReactiveInputC implements OnInit {
 
   constructor(
     public override injector: Injector,
-    public config: NgbDatepickerConfig,
     public calendar: NgbCalendar,
     private _customNgbDateService: CustomNgbDateService,
+    private _dateConfig: NgbDatepickerConfig,
+    private _inputDateConfig: NgbInputDatepickerConfig,
     @Optional() @SkipSelf() parentFhngComponent: FhngComponent
   ) {
     super(injector, parentFhngComponent);
 
     const curentYear = new Date().getFullYear();
 
-    this.config.minDate = {year: curentYear - 100, day: 1, month: 1};
-    this.config.maxDate = {year: curentYear + 100, day: 1, month: 1};
+    this._dateConfig.minDate = {year: curentYear - 100, day: 1, month: 1};
+    this._dateConfig.maxDate = {year: curentYear + 100, day: 1, month: 1};
+
+    this._inputDateConfig.container = 'body';
   }
 
   override ngOnInit() {
@@ -176,4 +179,10 @@ export class InputDateComponent extends FhngReactiveInputC implements OnInit {
 
     return attrs;
   };
+
+  public onClickButton(d: NgbInputDatepicker): void {
+    if (!this.disabled) {
+      d.toggle();
+    }
+  }
 }
