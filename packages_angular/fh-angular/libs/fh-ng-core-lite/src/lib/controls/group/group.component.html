@@ -1,4 +1,4 @@
-<div [id]="id" [ngStyle]="styles" class="group row {{styleClasses}}">
+<div [id]="id" [ngStyle]="styles" class="group row {{styleClasses}}" [availabilityHtmlElement]="accessibility">
         <ng-container [fhDynamicComponents]="subelements" [fhNonVisualSubcomponents]="nonVisualComponents"/>
 </div>
 <!--<ng-container *ngIf="configuration.debug">-->

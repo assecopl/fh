@@ -141,8 +141,12 @@ export class ButtonComponent
   public override mapAttributes(data: IButtonDataAttributes) {
     super.mapAttributes(data);
 
-    this.label = data.label;
-    this.clickEventName = data.onClick;
+    if(data.label) {
+      this.label = data.label;
+    }
+    if(data.onClick) {
+      this.clickEventName = data.onClick;
+    }
 
     this.active = typeof data.active === 'boolean' ? data.active : this.active;
     this.wrapperClass = typeof data.wrapperClass === 'boolean' ? data.wrapperClass : this.wrapperClass;

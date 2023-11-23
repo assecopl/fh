@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   EventEmitter,
   forwardRef,
@@ -33,7 +34,7 @@ import {FhngComponent} from '../../models/componentClasses/FhngComponent';
     },
   ],
 })
-export class TreeElementComponent extends FhngHTMLElementC implements OnInit {
+export class TreeElementComponent extends FhngHTMLElementC implements OnInit, AfterViewInit {
 
   public onIconClick: any = null;
   // @HostBinding('class.isLeaf')
@@ -125,7 +126,7 @@ export class TreeElementComponent extends FhngHTMLElementC implements OnInit {
   }
 
   labelClicked(event) {
-    event.stopPropagation();
+     event? event.stopPropagation():null;
 
     if (this.expandableNode) {
       this.changesQueue.queueAttributeChange('collapsed', this.collapsed);
@@ -148,6 +149,54 @@ export class TreeElementComponent extends FhngHTMLElementC implements OnInit {
       return  'var(--color-main)';
     } else {
       return 'var(--color-tree-element-selected)';
+    }
+  }
+
+  /**
+   * Fhdp Functionality
+   * //TODO This should be removed
+   */
+  public override ngAfterViewInit(): void {
+    this.processFhdDPinit();
+  }
+
+
+  private expandedException:string = null;
+
+  public processFhdDPinit(){
+    if (this.expandedException && this.fhdp) {
+      const exceptions = this.expandedException.split('|');
+      for (const ex of exceptions) {
+        if (this.label && this.label.includes(ex)) {
+          setTimeout(() => {
+            // if(!this.collapsed)
+            this.processTreeElementClick();
+          }, 0);
+        }
+      }
+
+      if(this.accessibility !== 'HIDDEN') {
+        let regex = /[a-zA-Z_0-9]+\[0\]/;
+        if (this.id.endsWith('[0]')) {
+          let match = this.id.match(regex);
+          if (match && match.length && match[0] === this.id) {
+            setTimeout(() => {
+              // if(!this.collapsed)
+              this.labelClicked(null)
+            }, 0);
+            // this.setCurrent(true);
+
+            // this.selectBranch(document.getElementById(this.id));
+          }
+        }
+      }
+    }
+  }
+
+  selectBranch(branchToSelect) {
+    branchToSelect.children[0].children[0].click();
+    if ((branchToSelect.children[0].children[0].children[0] as HTMLElement).classList.contains('fa-caret-right')) {
+      (branchToSelect.children[0].children[0].children[0] as HTMLElement).click();
     }
   }
 }
