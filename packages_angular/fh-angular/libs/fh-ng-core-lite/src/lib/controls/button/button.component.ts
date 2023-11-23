@@ -64,14 +64,16 @@ export class ButtonComponent
   public clickEventName = null;
 
   @Input()
-  @HostBinding('class')
   public override styleClasses = null;
 
   @HostBinding('class.breadcrumb-item')
   public breadcrumb: boolean = false;
 
   @HostBinding('class.button')
-  public buttonClass: boolean = true;
+  public buttonClass: boolean = false;
+
+  @HostBinding('class.form-group')
+  public formGroupClass: boolean = true;
 
   @ViewChild('content')
   public someInput: ElementRef;
@@ -106,6 +108,7 @@ export class ButtonComponent
 
   public override ngOnInit() {
     super.ngOnInit();
+    this.mb2 = false;
   }
 
   public override ngAfterViewInit() {
@@ -115,9 +118,12 @@ export class ButtonComponent
     super.ngOnChanges(changes);
   }
 
-  @HostListener('click')
-  public onSelectedButton(): void {
-    this.selectedButton.emit(this);
+  @HostListener('click', ['$event'])
+  public onSelectedButton(event): void {
+    if(this.parentButtonGroupComponent) {
+      this.selectedButton.emit(this);
+      this.onClickEvent(event);
+    }
   }
 
   override ngOnDestroy(): void {
@@ -128,6 +134,7 @@ export class ButtonComponent
     if(this.parentButtonGroupComponent) {
       this.width = "";
       this.hostWidth = "btn btn-"+this.bootstrapStyle+" "+this.styleClasses;
+      this.buttonClass = true;
     }
   }
 
@@ -138,7 +145,6 @@ export class ButtonComponent
     this.clickEventName = data.onClick;
 
     this.active = typeof data.active === 'boolean' ? data.active : this.active;
-    this.mb2 = typeof data.mb2 === 'boolean' ? data.mb2 : this.mb2;
     this.wrapperClass = typeof data.wrapperClass === 'boolean' ? data.wrapperClass : this.wrapperClass;
     this.styleClasses = (data.styleClasses || '').replaceAll(',', ' ') || this.styleClasses || '';
     this.processStyleForButtonGroup();

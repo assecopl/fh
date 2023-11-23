@@ -1,3 +1,4 @@
+@import "bootstrap/scss/variables";
 //
 //.fc.combo.autocompleter {
 //  left: 0;
@@ -54,6 +55,7 @@
 
   &.ng-select-multiple {
     .ng-select-container {
+      height: $input-height-inner;
       .ng-value-container {
         padding-top: 5px;
         padding-bottom: 5px;

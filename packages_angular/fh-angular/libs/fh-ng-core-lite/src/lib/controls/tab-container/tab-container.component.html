@@ -19,7 +19,7 @@
           [ngClass]="{active: tab.selected}"
           (keydown.enter)="selectTab(tab, $event)"
           (click)="selectTab(tab, $event)"
-        >{{ tab.label }}</a>
+        [innerHtml]="tab.label | fhml"></a>
       </li>
     </ng-container>
   </ul>

@@ -46,7 +46,7 @@
             [formId]="formId"
             [selected]="selected"
             (selectedChange)="processCollapsed($event)"
-            [collapsedTree]="activeElements[e.id] || collapsedTree"
+            [collapsedTree]="activeElements[e.id]"
             [subelements]="e.subelements"
             [treeElementTemplate]=" treeElementTemplate ? treeElementTemplate : treeElement">
         </ul>
@@ -54,3 +54,4 @@
     </li>
   </ng-container>
 </ng-template>
+
