@@ -310,11 +310,11 @@ export class FhNgCoreLiteModule extends FhNgModule {
     componentManager.registerComponent(FileUploadComponent);
     componentManager.registerComponent(ButtonGroupComponent);
 
-    //PPMKS Specific
+    //FHDP Specific
     componentManager?.registerComponentWithName("InputTextFhDP", InputTextComponent);
     componentManager?.registerComponentWithName("TreeFhDP", TreeComponent);
     componentManager?.registerComponentWithName("TabContainerFhDP", TabContainerComponent);
-
+    componentManager?.registerComponentWithName("InputTimestampFhDP", InputTimestampComponent);
 
   }
 
