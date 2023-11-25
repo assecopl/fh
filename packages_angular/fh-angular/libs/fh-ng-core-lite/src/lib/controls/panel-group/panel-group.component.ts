@@ -170,7 +170,4 @@ export class PanelGroupComponent extends FhngHTMLElementC implements OnInit {
       this.classList = classList.join(' ');
     }
   }
-
-
-
 }

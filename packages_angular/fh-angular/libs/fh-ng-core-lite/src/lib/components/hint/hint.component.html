@@ -1,0 +1,9 @@
+<ng-container>
+  <ng-content></ng-content>
+  <button
+    *ngIf="hint"
+    [attr.aria-label]="hintAriaLabel"
+    [attr.aria-haspopup]="true"
+    class="btn hint-ico-help fa    border-0 px-0 p-0 fa-question-circle ml-2 fh-tooltip"
+  ></button>
+</ng-container>

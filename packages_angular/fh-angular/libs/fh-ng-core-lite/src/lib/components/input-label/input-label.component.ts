@@ -8,9 +8,6 @@ import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
   styleUrls: ['./input-label.component.scss'],
 })
 export class InputLabelComponent extends FhngHTMLElementC implements OnInit {
-  constructor(public override injector: Injector, private sanitizer: DomSanitizer) {
-    super(injector, null);
-  }
 
   public labelHtml: SafeHtml;
 
@@ -20,12 +17,8 @@ export class InputLabelComponent extends FhngHTMLElementC implements OnInit {
   @Input()
   public labelSize: string = '40';
 
-  override ngOnInit() {
-    // super.ngOnInit();
-    this.labelHtml = this.sanitizer.bypassSecurityTrustHtml(this.label);
-    if (!this.isFixedSize && this.labelSizeNumber <= 4) {
-      this.labelSize = '5';
-    }
+  get isFixedSize(): boolean {
+    return this.labelSize.includes('px');
   }
 
   get labelSizeNumber(): number {
@@ -35,7 +28,23 @@ export class InputLabelComponent extends FhngHTMLElementC implements OnInit {
     return Number(this.labelSize);
   }
 
-  get isFixedSize(): boolean {
-    return this.labelSize.includes('px');
+  constructor(public override injector: Injector, private sanitizer: DomSanitizer) {
+    super(injector, null);
   }
+
+  override ngOnInit() {
+    // super.ngOnInit();
+    this.labelHtml = this.sanitizer.bypassSecurityTrustHtml(this.label);
+    if (!this.isFixedSize && this.labelSizeNumber <= 4) {
+      this.labelSize = '5';
+    }
+  }
+
+  public override mapAttributes(data: any) {
+    super.mapAttributes(data);
+
+    console.log(data, this);
+  }
+
+
 }

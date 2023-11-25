@@ -12,4 +12,5 @@ export enum BootstrapWidthEnum {
   MD11 = 'md-11',
   MD12 = 'md-12',
   AUTO = 'auto',
+  NONE = 'none'
 }

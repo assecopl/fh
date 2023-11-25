@@ -7,6 +7,7 @@
     *ngIf="label && labelPosition == 'LEFT'"
     [id]="inputId + '_label'"
     [for]="inputId"
+    [fhng-hint]="hint"
     [ngStyle]="
       isFixedSize
         ? { flex: '0 0 ' + labelSize, maxWidth: labelSize }
@@ -15,9 +16,15 @@
             maxWidth: labelSizeNumber + '%'
           }
     "
+    [innerHTML]="labelHtml"
+    [hintTrigger]="hintTrigger"
+    [hintType]="hintType"
+    [hintPlacement]="hintPlacement"
+    [hintTitle]="hintTitle"
     class=" label col-form-label"
-  >{{ label }}</label
   >
+    <span [innerHTML]="labelHtml">{{label}}</span>
+  </label>
   <div
     [ngStyle]="
       isFixedSize
@@ -38,14 +45,21 @@
     *ngIf="label && labelPosition == 'RIGHT'"
     [id]="inputId + '_label'"
     [for]="inputId"
+    [fhng-hint]="hint"
+    [hintTrigger]="hintTrigger"
+    [hintType]="hintType"
+    [hintPlacement]="hintPlacement"
+    [hintTitle]="hintTitle"
     [ngStyle]="
       isFixedSize
         ? { flex: '0 0 ' + labelSize, maxWidth: labelSize }
         : { flex: '0 0 ' + labelSize + '%', maxWidth: labelSizeNumber + '%' }
     "
+    [innerHTML]="labelHtml"
     class="label col-form-label"
-  >{{ label }}</label
   >
+    <span [innerHTML]="labelHtml">{{label}}</span>
+  </label>
 </div>
 
 <ng-container *ngIf="labelPosition == 'UP' || labelPosition == 'DOWN'">
@@ -53,16 +67,28 @@
     *ngIf="label && labelPosition == 'UP'"
     [id]="inputId + '_label'"
     [for]="inputId"
-    [innerHTML]="labelHtml"
+    [fhng-hint]="hint"
+    [hintTrigger]="hintTrigger"
+    [hintType]="hintType"
+    [hintPlacement]="hintPlacement"
+    [hintTitle]="hintTitle"
     class="col-form-label align-items-end"
-  >{{ label }}</label
   >
+    <span [innerHTML]="labelHtml">{{label}}</span>
+  </label>
   <ng-container *ngTemplateOutlet="content"></ng-container>
   <label
     *ngIf="label && labelPosition == 'DOWN'"
     [id]="inputId + '_label'"
     [for]="inputId"
+    [innerHTML]="labelHtml"
+    [fhng-hint]="hint"
+    [hintTrigger]="hintTrigger"
+    [hintType]="hintType"
+    [hintPlacement]="hintPlacement"
+    [hintTitle]="hintTitle"
     class="col-form-label align-items-end"
-  >{{ label }}</label
   >
+    <span [innerHTML]="labelHtml">{{label}}</span>
+  </label>
 </ng-container>

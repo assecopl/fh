@@ -26,6 +26,23 @@ import {AvailabilityEnum} from "../../availability/enums/AvailabilityEnum";
 import {AvailabilityUtils} from "../../availability/AvailabilityUtils";
 import {FhngFormatter} from "../../controls/input-number/input-number.component";
 import {PresentationStyleEnum} from "../enums/PresentationStyleEnum";
+import {BootstrapWidthEnum} from "../enums/BootstrapWidthEnum";
+
+export enum HintPlacement {
+  'LEFT' = 'LEFT',
+  'RIGHT' = 'RIGHT',
+  'TOP' = 'TOP',
+  'BOTTOM' = 'BOTTOM'
+}
+
+export enum HintType {
+  'STANDARD'= 'STANDARD',
+  'STANDARD_POPOVER' = 'STANDARD_POPOVER',
+  'STATIC' = 'STATIC',
+  'STATIC_POPOVER' = 'STATIC_POPOVER',
+  'STATIC_POPOVER_LEFT' = 'STATIC_POPOVER_LEFT',
+  'STATIC_LEFT' = 'STATIC_LEFT'
+}
 
 @Directive()
 export class FhngHTMLElementC
@@ -124,13 +141,13 @@ export class FhngHTMLElementC
   public hintTitle: any = null;
 
   @Input()
-  public hintPlacement: 'LEFT' | 'RIGHT' | 'TOP' | 'BOTTOM' = 'TOP';
+  public hintPlacement: HintPlacement = HintPlacement.TOP;
 
   @Input()
   public hintTrigger: 'HOVER' | 'FOCUS' | 'HOVER FOCUS' | string =
     'HOVER FOCUS';
   @Input()
-  public hintType: 'STANDARD' | 'STANDARD_POPOVER' | 'STATIC' | 'STATIC_POPOVER' | 'STATIC_POPOVER_LEFT' | 'STATIC_LEFT' = 'STANDARD_POPOVER'
+  public hintType: HintType = HintType.STANDARD_POPOVER
 
   @Input()
   public presentationStyle: PresentationStyleEnum = null;
@@ -337,6 +354,7 @@ export class FhngHTMLElementC
     this.setWidth = data.width;
     this.setHeight = data.height;
 
+    this.hint = data.hint || this.hint;
   }
 
 
@@ -362,8 +380,10 @@ export class FhngHTMLElementC
         if (value != 'fit') {
           this.processStyleWithUnit('width', value);
         }
-      } else if (value == 'auto') {
+      } else if (value === BootstrapWidthEnum.AUTO) {
         this.hostWidth += 'col';
+      } else if (value === BootstrapWidthEnum.NONE) {
+        this.hostWidth = '';
       } else {
         //Host works with bootstrap width classes.
         const widths = value.replace(/ /g, '').split(',');

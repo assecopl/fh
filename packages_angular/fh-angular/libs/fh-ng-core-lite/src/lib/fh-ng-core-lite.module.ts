@@ -95,6 +95,7 @@ import {TextEN} from "./controls/input-text/i18n/text.en";
 import {TimestampPL} from "./controls/input-timestamp/i18n/timestamp.pl";
 import {TimestampEN} from "./controls/input-timestamp/i18n/timestamp.en";
 import {ButtonGroupComponent} from "./controls/button-group/button-group.component";
+import {HintComponent} from "./components/hint/hint.component";
 
 
 const maskConfigFunction: () => Partial<IConfig> = () => {
@@ -185,7 +186,8 @@ const components = [
   FileUploadComponent,
   FileUploadAccessorComponent,
   DictionaryLookupComponent,
-  ButtonGroupComponent
+  ButtonGroupComponent,
+  HintComponent
 ]
 
 @NgModule({

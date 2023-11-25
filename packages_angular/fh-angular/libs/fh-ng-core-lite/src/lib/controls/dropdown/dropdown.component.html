@@ -9,22 +9,28 @@
 </ng-container>
 
 <ng-template #dropdown>
-  <div ngbDropdown class="d-grid">
-    <button
-      class="fc button btn btn-{{ bootstrapStyle }} btn-block navbar-btn dropdown-toggle"
-      ngbDropdownToggle
-      type="button"
-      data-toggle="dropdown"
-      aria-haspopup="true"
-      aria-expanded="false"
-      [id]="id"
-      [availabilityHtmlElement]="availability"
-    >
-      <ng-container *ngTemplateOutlet="contentTemplate"></ng-container>
-    </button>
-    <div id="{{ id }}ngbDropdownMenu" ngbDropdownMenu>
-      <ng-container [fhDynamicComponents]="subelements" [fhNonVisualSubcomponents]="nonVisualComponents"></ng-container>
+  <ng-container *ngIf="!parentButtonGroupComponent; else dropdownElements">
+    <div ngbDropdown class="d-grid" display="dynamic">
+      <ng-container *ngTemplateOutlet="dropdownElements"></ng-container>
     </div>
+  </ng-container>
+</ng-template>
+
+<ng-template #dropdownElements>
+  <button
+    class="fc button btn btn-{{ bootstrapStyle }} btn-block navbar-btn dropdown-toggle"
+    ngbDropdownToggle
+    type="button"
+    data-toggle="dropdown"
+    aria-haspopup="true"
+    aria-expanded="false"
+    [id]="id"
+    [availabilityHtmlElement]="availability"
+  >
+    <ng-container *ngTemplateOutlet="contentTemplate"></ng-container>
+  </button>
+  <div id="{{ id }}ngbDropdownMenu" ngbDropdownMenu>
+    <ng-container [fhDynamicComponents]="subelements" [fhNonVisualSubcomponents]="nonVisualComponents"></ng-container>
   </div>
 </ng-template>
 

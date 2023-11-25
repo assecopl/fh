@@ -69,7 +69,7 @@ export class ButtonGroupComponent
 
   constructor(
     public override injector: Injector,
-    @Optional() @SkipSelf() parentFhngComponent: FhngComponent
+    @Optional() @SkipSelf() parentFhngComponent: FhngComponent,
   ) {
     super(injector, parentFhngComponent);
   }
@@ -128,6 +128,10 @@ export class ButtonGroupComponent
 
   public onButtonClick (element): void {
     this._onClickSubscribeEvent(element);
+  }
+
+  public isDropdown (element: FhngComponent): boolean {
+    return element.type === "Dropdown" || !!element.subelements?.length
   }
 
   private _prepareButton(data: IGroupButtonDataAttributes ): IGroupButtonDataAttributes {

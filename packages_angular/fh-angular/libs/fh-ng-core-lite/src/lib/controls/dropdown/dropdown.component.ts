@@ -17,7 +17,7 @@ import {
 import {GroupingComponentC} from '../../models/componentClasses/GroupingComponentC';
 import {DropdownItemComponent} from '../dropdown-item/dropdown-item.component';
 import {BootstrapStyleEnum} from '../../models/enums/BootstrapStyleEnum';
-import {FhngComponent} from '../../models/componentClasses/FhngComponent';
+import {FhngButtonGroupComponent, FhngComponent} from '../../models/componentClasses/FhngComponent';
 import {BootstrapWidthEnum} from './../../models/enums/BootstrapWidthEnum';
 
 @Component({
@@ -40,6 +40,9 @@ export class DropdownComponent
   implements OnInit, AfterContentInit, OnChanges {
   public override width: string = BootstrapWidthEnum.MD2;
 
+  @HostBinding('class')
+  public override styleClasses: string = '';
+
   public updateSubcomponent = null;
 
   public showItems: boolean;
@@ -51,11 +54,17 @@ export class DropdownComponent
   @HostBinding('class.dropdown')
   public dropdown: boolean;
 
+  @HostBinding('class.btn-group')
+  public btnGroupClass: boolean = false;
+
   constructor(
     public override injector: Injector,
-    @Optional() @SkipSelf() parentFhngComponent: FhngComponent
+    @Optional() @SkipSelf() parentFhngComponent: FhngComponent,
+    public parentButtonGroupComponent: FhngButtonGroupComponent
   ) {
     super(injector, parentFhngComponent);
+
+    this.btnGroupClass = !!this.parentButtonGroupComponent;
   }
 
   override ngOnInit(): void {
@@ -87,5 +96,12 @@ export class DropdownComponent
   public override mapAttributes(data: any) {
     super.mapAttributes(data);
     this.label = data.label;
+    this.styleClasses = data.styleClasses || this.styleClasses;
+
+    if (!!this.parentButtonGroupComponent) {
+      this.fcClass = false;
+      this.width = BootstrapWidthEnum.NONE;
+      this.mb2 = false;
+    }
   }
 }

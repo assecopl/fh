@@ -31,6 +31,9 @@
   <span #content>
     <ng-content *ngIf="!label"></ng-content>
   </span>
+  <ng-container *ngIf="subelements.length">
+    Dropdown?
+  </ng-container>
 </ng-template>
 
 <!--<ng-container *ngIf="configuration.debug">-->
