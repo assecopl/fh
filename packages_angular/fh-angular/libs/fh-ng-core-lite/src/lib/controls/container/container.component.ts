@@ -47,7 +47,6 @@ export class ContainerComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit() {
-
     this.formManager.openedFormsSubject.subscribe((form: IForm) => {
       if (form.container == this.id) {
         this.form = this.resolveModal(form)

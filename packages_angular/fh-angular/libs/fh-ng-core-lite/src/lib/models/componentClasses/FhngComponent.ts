@@ -312,6 +312,17 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
    */
   @ViewChild('focusElement', {static: false}) focusElement: ElementRef;
 
+
+  public focusOnInit() {
+    if (this.focusElement && this.formsManager.shouldComponentRefocus(this)) {
+      try {
+        this.focusElement.nativeElement.focus();
+      } catch (e) {
+        console.warn('Element ' + this.id + ' is not focusable');
+      }
+    }
+  }
+
   public focus() {
     if (this.focusElement) {
       try {

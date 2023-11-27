@@ -1,15 +1,16 @@
 import {
-    Component,
-    forwardRef,
-    HostBinding,
-    inject,
-    Injector,
-    Input,
-    OnChanges,
-    OnDestroy,
-    OnInit,
-    Optional,
-    SimpleChanges,
+  AfterViewInit,
+  Component,
+  forwardRef,
+  HostBinding,
+  inject,
+  Injector,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Optional,
+  SimpleChanges,
 } from '@angular/core';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
 import {FhChanges, FormsManager} from "../../Socket/FormsManager";
@@ -30,7 +31,7 @@ import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
         {provide: FhngComponent, useExisting: forwardRef(() => FormComponent)},
     ],
 })
-export class FormComponent extends FhngComponent implements OnInit, OnChanges, OnDestroy {
+export class FormComponent extends FhngComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
     // @Input() public model: any = null;
     @Input() public label: string = null;
     @Input() public hideHeader: boolean = false;
@@ -130,5 +131,10 @@ export class FormComponent extends FhngComponent implements OnInit, OnChanges, O
         }.bind(this));
         return this.collectChanges(allChanges);
     };
+
+  override ngAfterViewInit(): void {
+    super.ngAfterViewInit();
+
+  }
 }
 
