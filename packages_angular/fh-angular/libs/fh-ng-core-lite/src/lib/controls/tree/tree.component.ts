@@ -99,9 +99,9 @@ export class TreeComponent
     this.activeElements[element.id] = element.collpased;
     if(element.selected){
       this.selected = element.selected
-      this.subelements = [...this.subelements]
+      // this.subelements = [...this.subelements]
     }
-    this.selectedChange.emit(element);
+    // this.selectedChange.emit(element);
   }
 
   public setSelected(element: any) {

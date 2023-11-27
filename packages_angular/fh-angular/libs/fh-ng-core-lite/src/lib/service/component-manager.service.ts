@@ -1,10 +1,5 @@
-import {ComponentFactory, Injectable, Type, inject} from '@angular/core';
-import {BaseEvent} from "../events/BaseEvent";
-import {NotificationEvent} from "../events/NotificationEvent";
+import {inject, Injectable, Type} from '@angular/core';
 import {NotificationService} from "./Notification";
-import {SessionTimeoutEvent} from "../events/SessionTimeoutEvent";
-import {CustomActionEvent} from '../events/CustomActionEvent';
-import {LanguageChangeEvent} from "../events/LanguageChangeEvent";
 import {FhngComponent} from "../models/componentClasses/FhngComponent";
 import {FHNG_CORE_CONFIG, FhNgCoreConfig} from "../fh-ng-core.config";
 
