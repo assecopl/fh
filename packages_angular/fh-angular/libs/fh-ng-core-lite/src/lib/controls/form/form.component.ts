@@ -41,6 +41,8 @@ export class FormComponent extends FhngComponent implements OnInit, OnChanges, O
 
     @HostBinding('class.card')
     cssCard: boolean = true;
+    @HostBinding('class.form')
+    cssForm: boolean = true;
 
     @HostBinding('class.fc')
     cssFc: boolean = true;

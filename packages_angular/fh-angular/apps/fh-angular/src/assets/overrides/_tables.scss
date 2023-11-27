@@ -1,0 +1,120 @@
+.fc.table {
+  //width: calc(100% + 30px);
+  color: $c-text;
+  //margin-left: -15px; margin-right: -15px;
+    &:focus { outline: 0; }
+    a { color: inherit; text-decoration: underline;}
+    td {
+        span.fc.outputLabel {
+            display: inline-flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+    }
+    > thead { border: 0;
+        > tr { border: 0;
+            > th {
+              padding: $p-table !important;
+              &.sortable {
+                button {
+                  padding: 0px !important;
+                }
+              }
+                text-align: left;
+                position: sticky !important;
+                top: 0;
+                background: $c-white;
+                font-weight: $t-fw;
+                white-space: nowrap;
+                z-index: 3;
+                cursor: pointer;
+                user-select: text;
+                border: 0 !important;
+                > span {
+                    white-space: normal;
+                }
+                > span.sorter {
+                    display: unset;
+                }
+                > i { margin-left: 5px; }
+                &::after { position: absolute; top: 100%; left: 0; width: 100%; height: 10px; content: ''; background-image: linear-gradient(to bottom, rgba(#000, .10), rgba(#000, 0)); }
+            }
+        }
+    }
+    > tbody {
+        > tr {
+            &.table-primary {
+                &,
+                > td { background: $c-white; font-weight: 600;  }
+            }
+            &:hover { background: $c-bg; }
+            > td { white-space: normal; word-break: break-word; padding: $p-table; border-bottom: 1px solid $c-border-light; text-align: left; vertical-align: middle; position: relative; z-index: 1; border-top: 0 !important;
+                > span {
+                    white-space: normal;
+                }
+                > div {
+                    padding: unset !important;
+                    margin: unset;
+                    > div {
+                      padding: unset !important;
+                    }
+                }
+            }
+            > td.col-halign-center {
+                span {
+                    justify-content: center;
+                }
+            }
+        }
+    }
+    > tfoot {
+        .footer {
+            width: 100% !important;
+            .row {
+                display: flex;
+
+            }
+        }
+    }
+    &-row {
+        @each $color-name, $color in $colors {
+            &--#{$color-name} {
+                td:first-child{ position: relative;
+                    &::before { position: absolute; top: calc(50% - 12.5px); height: 25px; width: 4px; border-radius: 0 3px 3px 0; left: 0; display: block; content: ''; background: $color; box-shadow: inset -2px 0 2px rgba(#000, .1); }
+                }
+            }
+        }
+    }
+}
+.rowsCountSelector {
+    select {padding: 5px; border-radius: 3px;  }
+}
+.modal-table td .row {
+    margin: 0;
+    padding-left: 0px !important;
+}
+.toolsRow-position-relative div.toolsRow {
+    position: relative !important;
+    margin-bottom: unset !important;
+}
+.fc.wrapper .toolsRow {
+    font-size: var(--font-size-short);
+}
+
+.table-default-cursor {
+    > table {
+        > thead {
+            th {cursor: default !important;}
+        }
+        > tbody {
+            tr {cursor: default !important;}
+        }
+    }
+}
+
+.tables-disable-pointer-events {
+    td { pointer-events: none;
+        span {pointer-events: none;}
+    }
+    th {pointer-events: none;}
+}

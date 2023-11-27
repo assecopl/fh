@@ -1,0 +1,8 @@
+.nav-tabs { margin-left: -15px; margin-right: -15px; display: flex; flex-wrap: wrap; overflow: visible; padding: 0 $p-bigger; background: linear-gradient(to bottom, $c-bg-light, $c-bg); padding-top: $p-default; position: sticky; top: 0; z-index: 4; padding-bottom: 10px; padding: 15px 15px 0 15px ; border: 0;
+    &::after { position: absolute; top: 100%; left: 0; width: 100%; height: 10px; content: ''; display: block; background-color: $c-bg-light;
+        .panel--search & { background-color: transparent; background-image: linear-gradient(to bottom, $c-bg-light, transparent); height: 20px; pointer-events: none; }
+    }
+    .nav-link { padding: $p-bigger; margin-right: 5px; font-weight: 600;  user-select: none; cursor: pointer; display: flex; align-items: center; opacity: .7; border: 0; color: inherit !important;
+        &.active { background: $c-bg-light; opacity: 1; box-shadow: $sh-default; border-radius: 5px 5px 0 0;  }
+    }
+}

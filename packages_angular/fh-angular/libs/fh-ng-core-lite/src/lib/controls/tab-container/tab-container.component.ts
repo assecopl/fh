@@ -126,6 +126,7 @@ export class TabContainerComponent
           if (tab.label === this.activeTabLabel) {
             tab.selected = true;
             this.boundActiveTabIndex = this.subelements.findIndex(subElement => subElement.id === tab.id);
+            this.activeTabIndex = this.boundActiveTabIndex;
           }
         });
       } else if (this.activeTabIndex) {
@@ -142,10 +143,12 @@ export class TabContainerComponent
         if (tab) {
           tab.selected = true;
           this.boundActiveTabIndex = this.subelements.findIndex(subElement => subElement.id === tab.id);
+          this.activeTabIndex = this.boundActiveTabIndex;
         }
       } else {
         this.subelements[0].selected = true;
         this.boundActiveTabIndex = 0;
+        this.activeTabIndex = this.boundActiveTabIndex
       }
     }
   }
@@ -164,6 +167,7 @@ export class TabContainerComponent
     tab.selected = true;
 
     this.boundActiveTabIndex = this.subelements.findIndex(element => element.id === tab.id);
+    this.activeTabIndex = this.boundActiveTabIndex
 
     if (this.tabChange) {
       this.activeTabIdChange.emit(tab.id);

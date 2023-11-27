@@ -1,0 +1,34 @@
+@function button-color($color-name) {
+    @if ($color-name == 'primary') {
+      @return $c-negative-text;
+    }
+    @else {
+      @return $c-white;
+    }
+}
+
+@mixin button($color, $name) { border: 0; background: $color; color: button-color($name); padding: 12px 25px; border-radius: $br-default; font-weight: 700;
+    &:not(:disabled):not(.disabled):active,
+    &.dropdown-toggle:focus,
+    &:hover,
+    &:active,
+    &:focus {
+        background: $color; border-color: $color; box-shadow: 0; color: button-color($name);
+    }
+    &:not(:disabled):not(.disabled):active:focus {
+        box-shadow: none;
+    }
+}
+
+.btn-group { display: flex; flex-wrap: wrap;
+    > .button {  margin: 5px; }
+}
+.btn {  border: 0; background: transparent; padding: 12px 25px; border-radius: $br-default; font-weight: 700; cursor: pointer; user-select: none; color: $c-text;
+
+    @each $name, $color in $colors {
+        &-#{$name} { @include button($color, $name); }
+    }
+    &--light { background: $c-white; box-shadow: $sh-light; }
+    &--sm { font-size: .85rem; padding: 3px 6px; }
+    &[disabled] { opacity: .25; pointer-events: none; cursor: not-allowed; }
+}

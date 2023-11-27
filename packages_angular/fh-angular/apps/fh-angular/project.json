@@ -65,7 +65,7 @@
     "buildExample": {
       "executor": "@angular-devkit/build-angular:browser",
       "options": {
-        "outputPath": "../../fhdp/fhdp-example/target/classes/static/angular",
+        "outputPath": "../../../ppmks-apps/ppmks-apps-app/ppmks-apps-app-starter/target/classes/static/angular",
         "index": "apps/fh-angular/src/index.html",
         "main": "apps/fh-angular/src/main.ts",
         "polyfills": [

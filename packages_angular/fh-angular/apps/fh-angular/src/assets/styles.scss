@@ -1,0 +1,78 @@
+@import './styles/variables';
+@import './styles/typography';
+@import './styles/reset';
+@import './styles/animations';
+@import './styles/buttons';
+@import './styles/shadows';
+@import './styles/app';
+@import './styles/user';
+@import './styles/panels';
+@import './styles/tray';
+@import './styles/tables';
+@import './styles/forms';
+@import './styles/boxes';
+@import './styles/status';
+@import './styles/params';
+@import './styles/search-box';
+@import './styles/cards';
+@import './styles/loader';
+@import './styles/labels';
+@import './styles/flex-box';
+@import './styles/atomic';
+@import './styles/tabs';
+@import './styles/login';
+@import './styles/chips';
+@import './styles/pagination';
+@import './styles/mui';
+@import './styles/nested-table';
+@import './styles/region-table';
+
+@import './overrides';
+@import './precise';
+
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
+
+body,
+html { font-family: 'Montserrat', sans-serif;  line-height: 1; position: relative; color: $c-text; font-size: $fs-default;   }
+
+.document { padding: 15px;
+    &--header { padding-bottom: 0;  border-bottom: 1px solid $c-border-light; }
+}
+
+
+//  RWD
+.mobile-only { display: none;
+    @media (max-width: 1200px) { display: block; }
+}
+.desktop-only { display: none;
+    @media (min-width: 1201px) { display: block; }
+}
+
+.full-iframe { position: absolute; top: 0; left: 0; bottom: 0; right: 0; border: 0; width: 100%; height: 100%; }
+
+.notifications { position: fixed; bottom: 15px; right: 15px; width: 400px; z-index: 10; transform: translateY(calc(100% + 30px)); transition: .2s linear;
+    &--open { transform: translateY(0);}
+}
+.notification { padding: 30px 15px; background: $c-white; box-shadow: $sh-default; border-radius: 5px;
+    &-title { font-weight: 900; font-size: 1.3rem; margin-bottom: 10px; }
+    &-body { font-weight: 600; font-size: 1.1rem; }
+}
+
+
+//Angular
+.fc.combo {
+  .ng-select-container {
+    height: auto !important;
+    min-height: var(--minWidth-rawinput);
+    .ng-value-container {
+      min-height: var(--minWidth-rawinput);
+
+    }
+  }
+  .ng-value {
+    border:none !important;
+    font-weight: bold !important;
+    color: black !important;
+  }
+}

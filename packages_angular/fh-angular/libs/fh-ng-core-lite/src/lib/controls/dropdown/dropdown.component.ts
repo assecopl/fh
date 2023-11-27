@@ -60,7 +60,7 @@ export class DropdownComponent
   constructor(
     public override injector: Injector,
     @Optional() @SkipSelf() parentFhngComponent: FhngComponent,
-    public parentButtonGroupComponent: FhngButtonGroupComponent
+    @Optional() @SkipSelf() public parentButtonGroupComponent: FhngButtonGroupComponent
   ) {
     super(injector, parentFhngComponent);
 

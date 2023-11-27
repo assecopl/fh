@@ -1,0 +1,12 @@
+.card-box {
+    & *:nth-child(2) {  border-top-right-radius: 15px;}
+    &-tabs{ display: flex; user-select: none;
+        + * { border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;}
+    }
+    &-tab { padding: 20px 30px; font-weight: 900; opacity: .5; font-size: 1.1rem;
+        &--active { background: $c-white; box-shadow: $sh-default; position: relative; border-top-left-radius: 15px; border-top-right-radius: 15px; opacity: 1;
+            &::after { position: absolute; bottom: -25px; height: 30px; content: ''; width: 100%; background-color: $c-white; left: 0; }
+        }
+    }
+    &-body { padding: 20px; background: $c-white; box-shadow: $sh-default; min-height: 500px; }
+}

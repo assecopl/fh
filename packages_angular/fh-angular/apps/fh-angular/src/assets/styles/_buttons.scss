@@ -1,0 +1,20 @@
+@mixin button($color) { border: 0; background: $color; color: $c-white; padding: 12px 25px; border-radius: $br-default; font-weight: 700;
+    &:hover,
+    &:active,
+    &:focus {
+        // background: darken($color, 3%); border-color: darken($color, 3%); box-shadow: 0;
+    }
+}
+
+.btn-group { display: flex; flex-wrap: wrap;
+    > .button {  margin: 5px; }
+}
+.button {  border: 0; background: transparent; padding: 12px 25px; border-radius: $br-default; font-weight: 700; cursor: pointer; user-select: none; color: $c-text;
+
+    @each $name, $color in $colors {
+        &--#{$name} { @include button($color); }
+    }
+    &--light { background: $c-white; box-shadow: $sh-light; }
+    &--sm { font-size: .85rem; padding: 3px 6px; }
+    &[disabled] { opacity: .25; pointer-events: none; cursor: not-allowed; }
+}
