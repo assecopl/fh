@@ -1,102 +1,72 @@
-<div  id="fh-layout-standard" class="fh-layout-div">
-  <div id="appLayout" class="app sidebar-closed advanced-sidebar-closed menu-closed"
-  >
-    <div class="app-header app-header">
-      <div class="app-header-logo">
-<!--        <img th:src="${@environment.getProperty('fh.application.logo.url')}"-->
-<!--             th:alt="${@environment.getProperty('fh.application.title')}" />-->
-        <div id="appTitle" fhng-container></div>
-      </div>
-      <div id="appHeaderButtons" fhng-container="appHeaderButtons" class="app-header-buttons">
-      </div>
-      <div id="navbarForm" fhng-container="navbarForm" class="app-header-tray tray">
-      </div>
-      <div id="chatForm"></div>
-      <div class="app-header-user">
-        <div class="user user--reversed">
-          <div class="user-avatar">
-            <div id="userInitial" fhng-container="userInitial"></div>
-          </div>
-          <div class="user-info pr-0">
-            <div id="systemInfo" fhng-container="systemInfo">
-              <!--                            <span id="sessionCounter">&#45;&#45;:&#45;&#45;</span>-->
-            </div>
-          </div>
+<!--    <router-outlet></router-outlet>-->
+<div class="fh-layout-div">
+  <!--            <nav class="navbar navbar-expand-lg navbar-light bg-light">-->
+  <!--                <div class="container-fluid">-->
+  <!--                    <a class="navbar-brand" href="#">Navbar</a>-->
+  <!--                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">-->
+  <!--                        <span class="navbar-toggler-icon"></span>-->
+  <!--                    </button>-->
+  <!--                    <div class="collapse navbar-collapse" id="navbarSupportedContent">-->
+  <!--                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">-->
+  <!--                            <li class="nav-item">-->
+  <!--                                <a class="nav-link active" aria-current="page" href="#">Home</a>-->
+  <!--                            </li>-->
+  <!--                            <li class="nav-item">-->
+  <!--                                <a class="nav-link" href="#">Link</a>-->
+  <!--                            </li>-->
+  <!--                            <li class="nav-item dropdown">-->
+  <!--                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">-->
+  <!--                                    Dropdown-->
+  <!--                                </a>-->
+  <!--                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">-->
+  <!--                                    <li><a class="dropdown-item" href="#">Action</a></li>-->
+  <!--                                    <li><a class="dropdown-item" href="#">Another action</a></li>-->
+  <!--                                    <li><hr class="dropdown-divider"></li>-->
+  <!--                                    <li><a class="dropdown-item" href="#">Something else here</a></li>-->
+  <!--                                </ul>-->
+  <!--                            </li>-->
+  <!--                            <li class="nav-item">-->
+  <!--                                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>-->
+  <!--                            </li>-->
+  <!--                        </ul>-->
+  <!--                        <form class="d-flex">-->
+  <!--                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">-->
+  <!--                            <button class="btn btn-outline-success" type="submit">Search</button>-->
+  <!--                        </form>-->
+  <!--                    </div>-->
+  <!--                </div>-->
+  <!--            </nav>-->
+  <div>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">POC Angular</a>
+        <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse " id="navbarTogglerDemo03" fhng-container="navbarForm">
         </div>
       </div>
-    </div>
-    <div fhng-container="menuForm" class="app-menu">
-    </div>
-    <div class="app-body">
-      <div class="panels">
-        <div class="panel panel--search">
-          <div id="searchForm" fhng-container class="panel-body">
-          </div>
-          <div id="searchButtonsForm" fhng-container="searchButtonsForm" class="panel-footer d-none">
-          </div>
+    </nav>
+    <div class="container-fluid">
+      <div class="row">
+        <div id="menuForm" fhng-container
+             class="col-sm-12 col-md-3 col-lg-3 col-xl-2 mt-3"
+        >
         </div>
-        <div class="panel panel--advanced-search">
-          <div id="advancedSearchForm" fhng-container="advancedSearchForm" class="panel-body">
-          </div>
-        </div>
-        <div class="panel panel--main">
-          <div id="mainForm" fhng-container="mainForm" class="panel-body">
-          </div>
-          <div id="buttonsForm" fhng-container="buttonsForm" class="panel-footer d-none">
-          </div>
-        </div>
-        <div id="appSiderHelp" class="app-sider app-sider--from-top app-sider--help">
-          <div class="panels">
-            <div class="panel panel--sider">
-              <div id="appSider" fhng-container class="panel-body">
-              </div>
-            </div>
-          </div>
-        </div>
-        <div id="appSiderDetails"  class="app-sider app-sider--details">
-          <div class="panels">
-            <div class="panel panel--sider">
-              <div id="appSiderDetailsContent" fhng-container class="panel-body">
-              </div>
-            </div>
-          </div>
+        <div id="mainForm" class="col mt-3" fhng-container>
+
         </div>
       </div>
     </div>
   </div>
-
-
-<!--  <div>-->
-<!--    <nav class="navbar navbar-expand-md navbar-dark bg-dark">-->
-<!--      <div class="container-fluid">-->
-<!--        <a class="navbar-brand" href="#">POC Angular</a>-->
-<!--        <button-->
-<!--                class="navbar-toggler"-->
-<!--                type="button"-->
-<!--                data-bs-toggle="collapse"-->
-<!--                data-bs-target="#navbarSupportedContent"-->
-<!--                aria-controls="navbarSupportedContent"-->
-<!--                aria-expanded="false"-->
-<!--                aria-label="Toggle navigation"-->
-<!--        >-->
-<!--          <span class="navbar-toggler-icon"></span>-->
-<!--        </button>-->
-<!--        <div class="collapse navbar-collapse " id="navbarTogglerDemo03" fhng-container="navbarForm">-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </nav>-->
-<!--    <div class="container-fluid">-->
-<!--      <div class="row">-->
-<!--        <div id="menuForm" fhng-container-->
-<!--             class="col-sm-12 col-md-3 col-lg-3 col-xl-2 mt-3"-->
-<!--        >-->
-<!--        </div>-->
-<!--        <div id="mainForm" class="col mt-3" fhng-container>-->
-
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
 </div>
 <fhng-application-lock></fhng-application-lock>
 <fhng-notifications></fhng-notifications>
