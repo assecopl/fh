@@ -19,7 +19,7 @@ import {DomSanitizer} from '@angular/platform-browser';
 import {FhMLService} from '../../service/fh-ml.service';
 
 @Component({
-  selector: 'fhng-panel-group',
+  selector: '[fhng-panel-group]',
   templateUrl: './panel-group.component.html',
   styleUrls: ['./panel-group.component.scss'],
   providers: [
