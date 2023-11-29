@@ -379,8 +379,10 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
   }
 }
 
+export abstract class FhngGroupComponent {}
+
 @Directive()
-export abstract class FhngButtonGroupComponent {
+export abstract class FhngButtonGroupComponent extends FhngGroupComponent {
   public initialized: boolean;
 
   public buttonSubcomponents: FhngComponent[] = [];

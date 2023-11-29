@@ -68,6 +68,23 @@ export class CustomNgbDatetimeService extends NgbDateParserFormatter {
   }
 
   public toModel (date: NgbDateStruct & NgbTimeStruct | null, format?: string): string | null {
+      if (!this._tmpDate && !date) {
+        return null;
+      }
+
+      if (!this._tmpDate) {
+        let current = moment();
+
+        this._tmpDate = {
+          year: current.year(),
+          month: current.month(),
+          day: current.day(),
+          hour: current.hour(),
+          minute: current.minute(),
+          second:current.second()
+        }
+      }
+
       return date ? moment()
         .year(date?.year ? date.year : this._tmpDate.year)
         .month(date?.month ? date.month-1 : this._tmpDate.month-1)

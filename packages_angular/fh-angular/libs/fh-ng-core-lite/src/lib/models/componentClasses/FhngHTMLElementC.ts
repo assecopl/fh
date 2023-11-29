@@ -150,6 +150,9 @@ export class FhngHTMLElementC
   public hintType: HintType = HintType.STANDARD_POPOVER
 
   @Input()
+  public hintInputGroup: string; // TODO: do zrobienia po właściwym wdrożeniu hintów.
+
+  @Input()
   public presentationStyle: PresentationStyleEnum = null;
 
   @Input()
