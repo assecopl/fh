@@ -1,5 +1,6 @@
 import {Injectable, Pipe, SecurityContext} from '@angular/core';
 import {DomSanitizer} from '@angular/platform-browser';
+import {FhngComponent} from "../models/componentClasses/FhngComponent";
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,8 @@ export class FhMLService {
     '`': string;
   };
 
-  constructor(private sanitizer: DomSanitizer) {
+  constructor(private sanitizer: DomSanitizer,
+              private component:FhngComponent) {
     this.supportedTags = [];
     this.escapedMap = {
       // not escaping ' = / as they are fhml input and output characters
@@ -26,7 +28,7 @@ export class FhMLService {
       '`': '&#x60;',
     };
 
-    this.registerTag('b', function (match, contents) {
+    this.registerTag('b', function  (component, match, contents) {
       const span = document.createElement('span');
       span.classList.add('fhml');
       span.classList.add('fhml-tag-b');
@@ -35,7 +37,7 @@ export class FhMLService {
 
       return span.outerHTML;
     });
-    this.registerTag('i', function (match, contents) {
+    this.registerTag('i', function  (component, match, contents) {
       const span = document.createElement('span');
       span.classList.add('fhml');
       span.classList.add('fhml-tag-i');
@@ -44,7 +46,7 @@ export class FhMLService {
 
       return span.outerHTML;
     });
-    this.registerTag('u', function (match, contents) {
+    this.registerTag('u', function  (component, match, contents) {
       const span = document.createElement('span');
       span.classList.add('fhml');
       span.classList.add('fhml-tag-u');
@@ -53,7 +55,7 @@ export class FhMLService {
 
       return span.outerHTML;
     });
-    this.registerTag('lt', function (match, contents) {
+    this.registerTag('lt', function  (component, match, contents) {
       const span = document.createElement('span');
       span.classList.add('fhml');
       span.classList.add('fhml-tag-lt');
@@ -64,7 +66,7 @@ export class FhMLService {
     });
     this.registerTag(
       'size',
-      (match, size, contents) => {
+       (component, match, size, contents) => {
         const span = document.createElement('span');
         span.classList.add('fhml');
         span.classList.add('fhml-tag-size');
@@ -79,7 +81,7 @@ export class FhMLService {
     );
     this.registerTag(
       'color',
-      function (match, color, contents) {
+      function  (component, match, color, contents) {
         const span = document.createElement('span');
         span.classList.add('fhml');
         span.classList.add('fhml-tag-color');
@@ -93,7 +95,7 @@ export class FhMLService {
     );
     this.registerTag(
       'icon',
-      function (match, iconName) {
+      function  (component, match, iconName) {
         const icon = document.createElement('i');
         icon.classList.add('fhml');
         icon.classList.add('fhml-tag-icon');
@@ -111,7 +113,7 @@ export class FhMLService {
       {
         //List tag
         tag: 'sup',
-        tagConstructor: (match, contents) => {
+        tagConstructor:  (component, match, contents) => {
           var ul = document.createElement('sup');
           ul.classList.add('fhml-sup');
           ul.innerHTML = contents;
@@ -123,7 +125,7 @@ export class FhMLService {
       {
         //List tag
         tag: 'h1',
-        tagConstructor: (match, contents) => {
+        tagConstructor:  (component, match, contents) => {
           var ul = document.createElement('h1');
           ul.classList.add('fhml-h1');
           ul.innerHTML = contents;
@@ -135,7 +137,7 @@ export class FhMLService {
       {
         //List tag
         tag: 'h2',
-        tagConstructor: (match, contents) => {
+        tagConstructor:  (component, match, contents) => {
           var ul = document.createElement('h2');
           ul.classList.add('fhml-h2');
           ul.innerHTML = contents;
@@ -147,7 +149,7 @@ export class FhMLService {
       {
         //List tag
         tag: 'h3',
-        tagConstructor: (match, contents) => {
+        tagConstructor:  (component, match, contents) => {
           var ul = document.createElement('h3');
           ul.classList.add('fhml-h3');
           ul.innerHTML = contents;
@@ -159,7 +161,7 @@ export class FhMLService {
       {
         //List tag
         tag: 'h4',
-        tagConstructor: (match, contents) => {
+        tagConstructor:  (component, match, contents) => {
           var ul = document.createElement('h4');
           ul.classList.add('fhml-h4');
           ul.innerHTML = contents;
@@ -171,7 +173,7 @@ export class FhMLService {
       {
         //List tag
         tag: 'h5',
-        tagConstructor: (match, contents) => {
+        tagConstructor:  (component, match, contents) => {
           var ul = document.createElement('h5');
           ul.classList.add('fhml-h5');
           ul.innerHTML = contents;
@@ -183,7 +185,7 @@ export class FhMLService {
       {
         //List tag
         tag: 'h6',
-        tagConstructor: (match, contents) => {
+        tagConstructor:  (component, match, contents) => {
           var ul = document.createElement('h6');
           ul.classList.add('fhml-h6');
           ul.innerHTML = contents;
@@ -195,7 +197,7 @@ export class FhMLService {
       {
         //New line tag
         tag: 'br/',
-        tagConstructor: (match, contents) => {
+        tagConstructor:  (component, match, contents) => {
           var br = document.createElement('br');
 
           return br.outerHTML;
@@ -207,7 +209,7 @@ export class FhMLService {
       {
         //Text with custom css class
         tag: 'className',
-        tagConstructor: (match, classes, contents) => {
+        tagConstructor:  (component, match, classes, contents) => {
           var span = document.createElement('span');
           span.classList.add('fhml');
           classes.split(',').forEach((cssClass) => {
@@ -224,7 +226,7 @@ export class FhMLService {
       {
         //text strikethrough
         tag: 'del',
-        tagConstructor: (match, contents) => {
+        tagConstructor:  (component, match, contents) => {
           var del = document.createElement('del');
           del.classList.add('fhml');
           del.innerHTML = contents;
@@ -236,7 +238,7 @@ export class FhMLService {
       {
         //text strikethrough
         tag: 's',
-        tagConstructor: (match, contents) => {
+        tagConstructor:  (component, match, contents) => {
           var del = document.createElement('del');
           del.classList.add('fhml');
           del.innerHTML = contents;
@@ -251,7 +253,7 @@ export class FhMLService {
         //text highlight
         tag: 'mark',
 
-        tagConstructor: (match, contents) => {
+        tagConstructor:  (component, match, contents) => {
           var mark = document.createElement('mark');
           mark.classList.add('fhml');
           mark.innerHTML = contents;
@@ -266,7 +268,7 @@ export class FhMLService {
         //A section that is quoted from another source
         tag: 'blockquote',
 
-        tagConstructor: (match, contents) => {
+        tagConstructor:  (component, match, contents) => {
           var blockquote = document.createElement('blockquote');
           blockquote.classList.add('fhml');
           blockquote.classList.add('blockquote');
@@ -282,7 +284,7 @@ export class FhMLService {
       {
         //A section that is quoted from another source
         tag: 'q',
-        tagConstructor: (match, contents) => {
+        tagConstructor:  (component, match, contents) => {
           var blockquote = document.createElement('blockquote');
           blockquote.classList.add('fhml');
           blockquote.classList.add('blockquote');
@@ -297,7 +299,7 @@ export class FhMLService {
       {
         //Blocquote footer / footer
         tag: 'bqFooter',
-        tagConstructor: (match, contents) => {
+        tagConstructor:  (component, match, contents) => {
           var blockquote = document.createElement('footer');
           blockquote.classList.add('fhml');
           blockquote.classList.add('blockquote-footer');
@@ -311,7 +313,7 @@ export class FhMLService {
       {
         //Blocquote footer / footer
         tag: 'small',
-        tagConstructor: (match, contents) => {
+        tagConstructor:  (component, match, contents) => {
           var small = document.createElement('small');
           small.classList.add('fhml');
           small.classList.add('fhml-small');
@@ -325,7 +327,7 @@ export class FhMLService {
       {
         //List tag
         tag: 'ul',
-        tagConstructor: (match, contents) => {
+        tagConstructor:  (component, match, contents) => {
           var ul = document.createElement('ul');
           ul.classList.add('fhml');
           ul.innerHTML = contents;
@@ -338,7 +340,7 @@ export class FhMLService {
       {
         //List element tag
         tag: 'li',
-        tagConstructor: (match, contents) => {
+        tagConstructor:  (component, match, contents) => {
           var li = document.createElement('li');
           li.classList.add('fhml');
           li.innerHTML = contents;
@@ -349,7 +351,7 @@ export class FhMLService {
       {
         //List element tag
         tag: 'counter',
-        tagConstructor: (match, contents) => {
+        tagConstructor:  (component, match, contents) => {
           var li = document.createElement('span');
           li.classList.add('badge');
           li.classList.add('badge-danger');
@@ -364,7 +366,7 @@ export class FhMLService {
       {
         //text as computer code in a document
         tag: 'code',
-        tagConstructor: (match, contents) => {
+        tagConstructor:  (component, match, contents) => {
           var span = document.createElement('span');
           span.classList.add('fhml');
           span.classList.add('highlight');
@@ -382,7 +384,7 @@ export class FhMLService {
       },
       {
         tag: 'portal',
-        tagConstructor: (match, attr) => {
+        tagConstructor:  (component, match, attr) => {
           console.warn('THIS PORTAL TAG IS DEPRECATED. PLEASE USE fhportal!');
           const attrList = attr.split(',');
           const idPart = attrList[0];
@@ -411,8 +413,8 @@ export class FhMLService {
       },
       {
         tag: 'fhportal',
-        tagConstructor: (match, attr) => {
-          new Portal();
+        tagConstructor:  (component, match, attr) => {
+
           try {
             const parseAttr = (attr: string): {
               v?: string,
@@ -472,18 +474,21 @@ export class FhMLService {
             if (meta.removeWrapper) {
               portal.setAttribute('removeWrapper', meta.removeWrapper)
             }
+            component.hasPortal = true;
             return portal.outerHTML;
           } catch (e: any) {
+            component.hasPortal = false;
             console.error(e.message);
             return '<div>Error portal</div>'
           }
+
         },
         attr: '(.+)',
         noContent: true
       },
       {
         tag: 'nbsp',
-        tagConstructor: (match, attr) => {
+        tagConstructor:  (component, match, attr) => {
           const repTime = Number(attr);
           if (!isNaN(repTime)) {
             var span = document.createElement('span');
@@ -497,7 +502,7 @@ export class FhMLService {
       },
       {
         tag: 'unescape',
-        tagConstructor: (match, attr) => {
+        tagConstructor:  (component, match, attr) => {
           const code = String(attr);
           const span = document.createElement('span');
           span.innerHTML += `&#${code};`;
@@ -508,7 +513,7 @@ export class FhMLService {
       },
       {
         tag: 'ahref',
-        tagConstructor: (match, attr, contents) => {
+        tagConstructor:  (component, match, attr, contents) => {
           try {
             const parseAttr = (attr: string): { href?: string, alt?: string, target?: string } => {
               const res = {};
@@ -552,7 +557,7 @@ export class FhMLService {
       },
       {
         tag: 'extAttributes/',
-        tagConstructor: (match, contents) => {
+        tagConstructor:  (component, match, contents) => {
           return '';
         },
         noContent: true
@@ -617,7 +622,7 @@ export class FhMLService {
         return tag.name;
       })
       .join('|');
-    regexString += ")[=a-zA-Z0-9 #,.()'-]*\\]";
+    regexString += ")[=a-zA-Z0-9 #,;.()'-]*\\]";
     const res = (string || '').match(new RegExp(regexString));
 
     return res && typeof res === 'object' ? !!res.length : !!res;
@@ -630,8 +635,8 @@ export class FhMLService {
     if (!skipHtmlEscape) {
       parsed = this.escapeHtml(parsed);
     }
-    this.supportedTags.forEach(function (tag) {
-      parsed = parsed.replace(tag.regex, tag.fn);
+    this.supportedTags.forEach((tag) => {
+      parsed = parsed.replace(tag.regex, tag.fn.bind(this, this.component));
     });
 
     return parsed;
@@ -670,11 +675,12 @@ type TagMetaType = {
 };
 
 //TODO Portal functionality need to bę rewriet fo Angular
-//@DEPRECATED
-export class Portal {
+@Injectable({
+  providedIn: 'root',
+})
+export class FhmlPortalManager {
   constructor() {
-    this.init();
-    window['fhportal'] = this;
+    // this.init();
   }
 
   private MAX_VERSION = 2;
@@ -687,15 +693,14 @@ export class Portal {
     '2': this.version_2
   }
 
-  init() {
-    if (!window['fhportal']) {
-      const config = {attributes: true, childList: true, subtree: true};
-      const observer = new MutationObserver(this.handleMutation);
-      observer.observe(document.body, Portal.OBSERVER_CONFIG);
-    }
-  }
+  // init() {
+  //     // setTimeout( () => {
+  //     //   this.handleMutation(null, null);
+  //     // }, 500)
+  //
+  // }
 
-  version_1({sourceElement, portal, sourceId}) {
+  private version_1({sourceElement, portal, sourceId}) {
     const sourceCoords = sourceElement.getBoundingClientRect() as any;
     const portalCoords = portal.getBoundingClientRect() as any;
     if (portalCoords.x !== sourceCoords.x || portalCoords.y !== sourceCoords.y) {
@@ -720,7 +725,7 @@ export class Portal {
     portal.setAttribute('used', 'true');
   }
 
-  version_2({sourceElement, portal, sourceId}) {
+  private version_2({sourceElement, portal, sourceId}) {
     const replaceParentId = portal.getAttribute('replaceParentId')
     if (!!replaceParentId) {
       const oldParent = document.getElementsByClassName(replaceParentId)[0];
@@ -742,17 +747,17 @@ export class Portal {
         portal.setAttribute('used', 'false');
       } else if (!document.body.contains(portal) || !document.body.contains(sourceElement)) {
         observer.disconnect();
-        Portal.OBSERVERS[sourceId] = undefined;
+        FhmlPortalManager.OBSERVERS[sourceId] = undefined;
       }
     });
-    observer.observe(portal.parentElement, Portal.OBSERVER_CONFIG);
-    if (Portal.OBSERVERS[sourceId]) {
-      Portal.OBSERVERS[sourceId].disconnect();
+    observer.observe(portal.parentElement, FhmlPortalManager.OBSERVER_CONFIG);
+    if (FhmlPortalManager.OBSERVERS[sourceId]) {
+      FhmlPortalManager.OBSERVERS[sourceId].disconnect();
     }
-    Portal.OBSERVERS[sourceId] = observer;
+    FhmlPortalManager.OBSERVERS[sourceId] = observer;
   }
 
-  processVersion(version: number, args: { [key: string]: any }) {
+  private processVersion(version: number, args: { [key: string]: any }) {
     const f = this.VERSION_STORE[`${version}`];
     console.log(version, args, f)
     if (f) {
@@ -761,7 +766,7 @@ export class Portal {
   }
 
 
-  private handleMutation = (mutationList, observer) => {
+  public handleMutation = () => {
     const portals = document.querySelectorAll('fh-portal[used="false"]');
     portals.forEach(portal => {
       try {

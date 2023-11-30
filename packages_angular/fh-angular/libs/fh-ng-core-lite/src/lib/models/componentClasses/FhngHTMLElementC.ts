@@ -5,6 +5,7 @@ import {
   ElementRef,
   EventEmitter,
   HostBinding,
+  inject,
   Injector,
   Input,
   OnChanges,
@@ -13,8 +14,6 @@ import {
   Output,
   SimpleChanges,
   SkipSelf,
-  ViewChild,
-  inject,
 } from '@angular/core';
 import {FhngComponent} from './FhngComponent';
 import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
@@ -256,11 +255,15 @@ export class FhngHTMLElementC
   }
 
   public override ngAfterContentInit(): void {
+    super.ngAfterContentInit();
     //After content init logic
+
   }
 
   public override ngAfterViewInit(): void {
+    super.ngAfterViewInit()
     //After View init logic
+
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -410,17 +413,25 @@ export class FhngHTMLElementC
   }
 
   public getHintTooltip(): string {
-    if (this.hint && this.hintType == 'STANDARD') {
-      return this.hint;
-    }
-    return null;
+    return AvailabilityUtils.processOnEdit(this.availability,
+      () => {
+        if (this.hint && this.hintType == 'STANDARD') {
+          return this.hint;
+        }
+      },
+      null
+    )
   }
 
   public getHintPopover(): string {
-    if (this.hint && this.hintType == 'STANDARD_POPOVER') {
-      return this.hint;
-    }
-    return null;
+    return AvailabilityUtils.processOnEdit(this.availability,
+      () => {
+      if (this.hint && this.hintType == 'STANDARD_POPOVER') {
+        return this.hint;
+      }
+    },
+    null
+    )
   }
 
   setPresentationStyle(): string {

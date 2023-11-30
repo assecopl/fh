@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   ElementRef,
   forwardRef,
@@ -42,7 +43,7 @@ import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
 })
 export class TableColumnComponent
   extends TableCellComponent
-  implements OnChanges, OnInit {
+  implements OnChanges, OnInit, AfterViewInit {
   @HostBinding('class')
   override class: string = 'fhng-table-column th';
 
@@ -90,6 +91,14 @@ export class TableColumnComponent
 
   override ngOnInit() {
     super.ngOnInit();
+  }
+
+  override ngAfterViewInit() {
+    super.ngAfterViewInit();
+  }
+
+  override ngAfterContentInit() {
+    super.ngAfterContentInit();
   }
 
   public sort() {
