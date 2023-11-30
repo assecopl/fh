@@ -76,7 +76,5 @@ export class HintComponent implements OnInit {
 
   public ngOnInit() {
 
-    // this._ngbTooltip.open(this._element)
-    console.log('parent', this._parentFhngComponent);
   }
 }
