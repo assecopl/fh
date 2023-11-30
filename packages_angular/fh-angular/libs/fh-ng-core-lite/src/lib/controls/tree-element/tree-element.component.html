@@ -13,7 +13,23 @@
     <span (click)="labelClicked($event)" class="fc outputLabel" [innerHTML]="label | fhml" ></span>
   </div>
 </div>
-<ng-content></ng-content>
+<ng-container *ngIf="subelements?.length > 0">
+  <ul class="list-group col-12 {{collapsed?'d-none':''}}">
+    <ng-container *ngFor="let e of subelements">
+      <li [availabilityHtmlElement]="e.accessibility" fh-tree-element [data]="e" [collapsed]="tree.activeElements[e.id]"
+          [formId]="formId"
+          [id]="e.id"
+          width="md-12"
+          [selectedElement]="tree.selected"
+          [label]="e.label"
+          (treeElement)="tree.processCollapsed($event)"
+          [expandableNode]="e.subelements?.length > 0"
+          class="list-group-item-custom node-treeview1 treeNode pl-3">
+
+      </li>
+    </ng-container>
+  </ul>
+</ng-container>
 <!--<ng-container *ngIf="configuration.debug">-->
 <!--  <fh-component-debugger/>-->
 <!--</ng-container>-->

@@ -25,19 +25,9 @@
         (treeElement)="processCollapsed($event)"
         [expandableNode]="e.subelements?.length > 0"
     class="list-group-item-custom node-treeview1 treeNode pl-3">
-      <ng-container *ngIf="e.subelements?.length > 0">
-        <ul class="list-group col-12" fh-tree
-            [id]="e.id"
-            [child]="true"
-            [formId]="formId"
-            [selected]="selected"
-            (selectedChange)="processCollapsed($event)"
-            [collapsedTree]="activeElements[e.id]"
-            [subelements]="e.subelements"
-            [treeElementTemplate]=" treeElementTemplate ? treeElementTemplate : treeElement">
-        </ul>
-      </ng-container>
+
     </li>
   </ng-container>
 </ng-template>
+Subelements : {{subelements.length}}
 
