@@ -357,6 +357,10 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
   onSelectedEvent(i: number) {
 
   }
+
+  public listOfElementsIsVisible(){
+    return this.rows.length>0;
+  }
 }
 
 export class ComboListElement {
