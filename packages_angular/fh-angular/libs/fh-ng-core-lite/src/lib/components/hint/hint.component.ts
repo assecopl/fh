@@ -1,6 +1,8 @@
-import {Component, ElementRef, Input, OnInit} from "@angular/core";
+import {Component, ElementRef, HostBinding, Input, OnInit, Optional, SkipSelf} from "@angular/core";
 import {SafeHtml} from "@angular/platform-browser";
 import {HintPlacement, HintType} from "../../models/componentClasses/FhngHTMLElementC";
+import {FhngComponent, FhngGroupComponent} from "../../models/componentClasses/FhngComponent";
+import {NgbTooltip, NgbTooltipModule} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: '[fhng-hint]',
@@ -28,6 +30,35 @@ export class HintComponent implements OnInit {
 
   public hintAriaLabel = '';
 
+  private _hintIcon: string = '';
+
+  @Input()
+  public set hintIcon(value: string) {
+    if (value) {
+      let classList = [];
+
+      value.split(' ').forEach(value => classList.push(value.trim()))
+
+      this._hintIcon = classList.join(' ');
+    }
+  }
+
+  public get hintIcon(): string {
+    return this._hintIcon || 'fa-question-circle';
+  }
+
+  public get classList() {
+    let classList: string[] = [];
+
+    if (!(this._parentFhngComponent instanceof FhngGroupComponent)) {
+      classList.push('border-0');
+      classList.push('px-0');
+      classList.push('p-0');
+    }
+
+    return [this.hintIcon, ...classList];
+  }
+
   private _tooltipOptions = {
     placement: this.hintPlacement,
     title: this.hintTitle,
@@ -36,10 +67,14 @@ export class HintComponent implements OnInit {
     boundary: 'window'
   }
 
-  constructor(private _element: ElementRef) {
+  constructor(
+    private _element: ElementRef,
+    @Optional() @SkipSelf() private _parentFhngComponent: FhngComponent,
+  ) {
+
   }
 
   public ngOnInit() {
-    this._tooltipOptions
+
   }
 }
