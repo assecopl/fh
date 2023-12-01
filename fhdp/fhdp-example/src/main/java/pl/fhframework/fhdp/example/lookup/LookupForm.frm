@@ -7,7 +7,11 @@
     </Row>
 
     <Row>
-        <DictionaryLookupFhDP id="dcCountry"
+        <InputText value="{regionFilter}" label="Filtr regionu"/>
+    </Row>
+
+    <Row>
+        <DictionaryLookupFhDP id="dcCountry1"
                               emptyValue="true"
                               width="md-4"
                               label="Country"
@@ -16,10 +20,29 @@
                               hint="test hint" hintType="STATIC"
                               dispalyOnlyCode="false"
                               value="{countryCode}"
-                              provider="pl.fhframework.fhdp.example.lookup.provider.CountryLookupProvider"
-                              icon="fas fa-search" />
+                              provider="pl.fhframework.fhdp.example.lookup.provider.CountryNameValueLookupDummyLegacyProvider"
+                              icon="fas fa-search" >
+            <DictionaryComboParameterFhDP name="codeListId" value="356COM"/>
+<!--            <DictionaryComboParameterFhDP name="referenceDate" value="{referenceDate}"/>-->
+            <DictionaryComboParameterFhDP name="regionFilter" value="{regionFilter}"/>
+        </DictionaryLookupFhDP>
 
     </Row>
+
+<!--    <Row>-->
+<!--        <DictionaryLookupFhDP id="dcCountry2"-->
+<!--                              emptyValue="true"-->
+<!--                              width="md-4"-->
+<!--                              label="Country"-->
+<!--                              required="true"-->
+<!--                              onChange="-"-->
+<!--                              hint="test hint" hintType="STATIC"-->
+<!--                              dispalyOnlyCode="false"-->
+<!--                              value="{countryCode}"-->
+<!--                              provider="pl.fhframework.fhdp.example.lookup.provider.CountryNameValueLookupProvider"-->
+<!--                              icon="fas fa-search" />-->
+
+<!--    </Row>-->
 
 
     <!--        <DictionaryComboFhDP id="dcCountryNameValue"-->

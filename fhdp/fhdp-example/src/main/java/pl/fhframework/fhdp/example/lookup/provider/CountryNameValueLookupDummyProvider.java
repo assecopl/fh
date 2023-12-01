@@ -5,18 +5,20 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.dp.transport.dto.commons.NameValueDto;
 import pl.fhframework.model.forms.PageModel;
 import pl.fhframework.model.forms.provider.IDictionaryLookupProvider;
 import pl.fhframework.model.forms.provider.NameValue;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 @AllArgsConstructor
-public class CountryNameValueLookupDummyProvider implements /*IComboDataProviderFhDP<NameValueDto, String>,*/ IDictionaryLookupProvider<NameValueDto> {
+public class CountryNameValueLookupDummyProvider implements /*IComboDataProviderFhDP<NameValueDto, String>,*/ IDictionaryLookupProvider<NameValueDto, String> {
 
 
     @Override
@@ -25,14 +27,31 @@ public class CountryNameValueLookupDummyProvider implements /*IComboDataProvider
     }
 
     @Override
-    public String getElementId(NameValueDto element) {
+    public String getDisplayValueByElement(Object object) {
+        try {
+            return getDisplayValue((NameValueDto) object);
+        }catch (ClassCastException exc){
+            FhLogger.error("Provided object must be ", exc);
+            throw exc;
+        }
+    }
+
+//    @Override
+//    public String getDisplayValueByElementId(String elementId) {
+//        return getDisplayValue(getElementById(elementId));
+//    }
+
+    @Override
+    public String getModelValue(NameValueDto element) {
         return element.getName();
     }
 
     @Override
-    public NameValueDto getElementById(String elementId) {
+    public NameValueDto getElementByModelValue(String modelValue, Function<String, Object> externalAttributesResolver) {
+        String regionFilter = (String)externalAttributesResolver.apply("regionFilter");
         return Arrays.stream(CountryEnum.values())
-                .filter(country -> country.codeAlfa2.equals(elementId))
+                .filter(country-> (regionFilter==null||regionFilter.isEmpty()) || regionFilter.equals(country.region))
+                .filter(country -> country.codeAlfa2.equals(modelValue) || country.codeAlfa3.equals(modelValue))
                 .map(country -> new NameValueDto(country.codeAlfa2, country.polishName))
                 .findFirst().orElse(null);
     }
@@ -43,8 +62,10 @@ public class CountryNameValueLookupDummyProvider implements /*IComboDataProvider
 //    }
 
     @Override
-    public PageModel<NameValueDto> getValuesPaged(String searchText, Pageable pageable, Object... param) {
+    public PageModel<NameValueDto> getDictionaryElementsPaged(String searchText, Pageable pageable, Function<String, Object> externalAttributesResolver) {
+        String regionFilter = (String)externalAttributesResolver.apply("regionFilter");
         List<NameValueDto> countries = Arrays.stream(CountryEnum.values())
+                .filter(country-> (regionFilter==null||regionFilter.isEmpty()) || regionFilter.equals(country.region))
                 .filter(country -> country.isMatchingByName(searchText))
                 .map(country -> new NameValueDto(country.codeAlfa2, country.polishName))
                 .collect(Collectors.toList());
@@ -83,7 +104,7 @@ public class CountryNameValueLookupDummyProvider implements /*IComboDataProvider
                         .orElseGet(() -> null));
     }
 
-    public String getTitle() {
+    public String getTitle(Function<String, Object> externalAttributesValuesProvider) {
         return "Countries";
     }
 

@@ -11,6 +11,8 @@ public class LookupForm extends Form<LookupForm.Model> {
     public static class Model {
         private String countryCode;
         private String countryCodeNameValue;
+        private String referenceDate;
+        private String regionFilter;
     }
 
     public LookupForm() {

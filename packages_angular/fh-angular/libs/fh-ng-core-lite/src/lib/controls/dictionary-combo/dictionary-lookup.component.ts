@@ -49,6 +49,8 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
     private divTooltipId: any;
     private divTooltip: any;
 
+    public dicTitle: string;
+
   public columns: any[] = [];
   public rows: any[] = [];
   private popupOpen: boolean = false;
@@ -330,8 +332,14 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
     let attrs = {};
     // if (this.valueChanged) {
     //   attrs[FORM_VALUE_ATTRIBUTE_NAME] = this.rawValue;
-    if(this.onBlurValue && this.dirty) {
+    if(this.onSelectValue!==null && this.onSelectValue!==undefined) {
+      attrs["select"] = this.onSelectValue;
+      console.warn("TERAZ idzie selected!!!!!!!!!!!!!!!!")
+      this.onSelectValue = null;
+      this.onBlurValue = null;
+    }else if(this.onBlurValue) {
       attrs["blur"] = this.onBlurValue;
+      console.warn("TERAZ idzie blur!!!!!!!!!!!!!!!!")
       this.onBlurValue = null;
     } else {
       attrs["text"] = this.rawValue;
@@ -351,11 +359,22 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
   public onBlurValue: string
   onBlurEvent() {
     this.onBlurValue = this.rawValue;
+    console.warn("TERAZ idzie blur?")
     this.fireEventWithLock('onChange', this.onChange);
+
+
+    // setTimeout(() => {
+    //   console.warn("TERAZ idzie blur?")
+    //   this.fireEventWithLock('onChange', this.onChange);
+    // }, 2000);
+
   }
 
+  public onSelectValue: number
   onSelectedEvent(i: number) {
-
+    this.onSelectValue = i;
+    console.warn("TERAZ idzie selected?")
+    this.fireEventWithLock('onChange', this.onChange);
   }
 
   public listOfElementsIsVisible(){
