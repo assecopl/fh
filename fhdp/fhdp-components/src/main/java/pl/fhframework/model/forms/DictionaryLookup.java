@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import pl.fhframework.annotations.CompilationTraversable;
 import pl.fhframework.annotations.Control;
 import pl.fhframework.annotations.DocumentedComponent;
 import pl.fhframework.annotations.XMLProperty;
@@ -38,26 +37,20 @@ public class DictionaryLookup extends BaseInputFieldWithKeySupport implements IG
     @Getter
     @Setter
     @XMLProperty
-    @JsonIgnore//Web control don't need this information
-    private String provider;
+    private Integer pageSize = 5;
 
     @Getter
     @Setter
     @XMLProperty
-    private Integer pageSize = 5;
+    @JsonIgnore//Web control don't need this information
+    private String provider;
 
     @Getter
     private List<NameValue> columns;
 
-
     @JsonIgnore
     @Getter
-    @CompilationTraversable
-    private List<NonVisualFormElement> nonVisualSubcomponents = new ArrayList<>();
-
-    @JsonIgnore
-    @Getter
-    private final List<DictionaryComboParameterFhDP> subcomponents = new LinkedList<>();//TODO: Usunąć - mamy tylko kontrolki nonVisualSubcomponents
+    private final List<DictionaryComboParameterFhDP> subcomponents = new LinkedList<>();
 
     @JsonIgnore
     private IDictionaryLookupProvider<Object, Object> dictionaryLookupProvider;
@@ -88,7 +81,8 @@ public class DictionaryLookup extends BaseInputFieldWithKeySupport implements IG
             serviceSelectingNewElement(valueChange);
         } else if (this.servicedIntention.isLeavingControl()) {
             final String searchText = valueChange.getStringAttribute("blur");
-            selectedDictionaryElement = dictionaryLookupProvider.getElementByModelValue(searchText, this::getParameterValue);
+            //selectedDictionaryElement = dictionaryLookupProvider.getElementByModelValue(searchText, this::getParameterValue);
+            selectedDictionaryElement = null;
             if (selectedDictionaryElement == null) {
 //                Pageable pageable = PageRequest.of(0, pageSize);
 //                List<Object> rows = getMatchingElements(searchText, pageable);
@@ -133,7 +127,7 @@ public class DictionaryLookup extends BaseInputFieldWithKeySupport implements IG
         if (this.servicedIntention != null) {
             ValueChange valueChange = this.servicedIntention.valueChange;
             if (this.servicedIntention.isSelectingNewElement()) {
-                elementChange.addChange(RAW_VALUE_ATTR, getRawValue());
+               elementChange.addChange(RAW_VALUE_ATTR, getRawValue());
             } else if (this.servicedIntention.isLeavingControl()) {
                 elementChange.addChange(RAW_VALUE_ATTR, getRawValue());
             } else if (this.servicedIntention.isLookingForMatchingElements()) {
@@ -146,7 +140,6 @@ public class DictionaryLookup extends BaseInputFieldWithKeySupport implements IG
         //Aktualizacja listy kolumn TODO: Rozważyć, czy to się nie dzieje tylko w fazie inicjalizacji
         if (columns == null) {
             this.columns = dictionaryLookupProvider.getColumnDefinitions();
-            ;
             elementChange.addChange(ATTR_COLUMNS, columns);
         }
 
@@ -235,6 +228,7 @@ public class DictionaryLookup extends BaseInputFieldWithKeySupport implements IG
                 .resolveValue();
     }
 
+
     private static IDictionaryLookupProvider<Object, Object> getDictionaryLookupProvider(String providerClassName, String componentId) {
         if (providerClassName != null) {
             try {
@@ -246,8 +240,9 @@ public class DictionaryLookup extends BaseInputFieldWithKeySupport implements IG
                 } else if (IComboDataProviderFhDP.class.isAssignableFrom(foundProviderClass)) {
                     @SuppressWarnings("unchecked")
                     Class<? extends IComboDataProviderFhDP<?, ?>> wrappedProviderClass = (Class<? extends IComboDataProviderFhDP<?, ?>>) foundProviderClass;
-                    IComboDataProviderFhDP<?, ?> wrappedProvider = AutowireHelper.getBean(wrappedProviderClass);
-                    return new DictionaryLookupLegacyProvider(wrappedProvider);
+                    @SuppressWarnings("unchecked")
+                    IComboDataProviderFhDP<Object, Object> wrappedProvider = (IComboDataProviderFhDP<Object, Object>)AutowireHelper.getBean(wrappedProviderClass);
+                    return new DictionaryLookupLegacyProvider<Object, Object>(wrappedProvider);
                 } else {
                     throw new RuntimeException("Not supported provider type '" + foundProviderClass.getName() + "'!");
                 }
@@ -267,7 +262,7 @@ public class DictionaryLookup extends BaseInputFieldWithKeySupport implements IG
     //************************************************************************************************************
 
     @Override
-    public BaseInputField createNewSameComponent() {
+    public DictionaryLookup createNewSameComponent() {
         return null;
     }
 
@@ -284,5 +279,10 @@ public class DictionaryLookup extends BaseInputFieldWithKeySupport implements IG
     @Override
     public void removeSubcomponent(DictionaryComboParameterFhDP removedFormElement) {
         subcomponents.remove(removedFormElement);
+    }
+
+    @Override
+    public List<NonVisualFormElement> getNonVisualSubcomponents() {
+        return Collections.emptyList();
     }
 }

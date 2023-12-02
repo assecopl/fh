@@ -3,7 +3,7 @@
     <PanelHeaderFhDP title="Lookup fields" onClick="close" width="md-12"/>
 
     <Row>
-        <OutputLabel value="Selected country code: {countryCode}"/>
+        <OutputLabel value="Selected country code: {countryEnum.englishName}"/>
     </Row>
 
     <Row>
@@ -19,8 +19,8 @@
                               onChange="-"
                               hint="test hint" hintType="STATIC"
                               dispalyOnlyCode="false"
-                              value="{countryCode}"
-                              provider="pl.fhframework.fhdp.example.lookup.provider.CountryNameValueLookupDummyLegacyProvider"
+                              value="{countryEnum}"
+                              provider="pl.fhframework.fhdp.example.lookup.provider.CountryEnumValueLookupDummyLegacyProvider"
                               icon="fas fa-search" >
             <DictionaryComboParameterFhDP name="codeListId" value="356COM"/>
 <!--            <DictionaryComboParameterFhDP name="referenceDate" value="{referenceDate}"/>-->

@@ -45,21 +45,6 @@
         </div>
     </div>
 </ng-template>
-<input [availabilityInput]="availability" (input)="onInputEvent($event)" (blur)="onBlurEvent()"
-       #focusElement
-       [id]="id"
-       [(ngModel)]="rawValue"
-       [disabled]="disabled"
-       [type]="inputType"
-       [name]="name"
-       [placeholder]="placeholder"
-       [attr.aria-label]="ariaLabel"
-       [required]="required"
-       class="fc inputText form-control {{setPresentationStyle()}}"
-       [ngbTooltip]="getHintTooltip()" [ngbPopover]="getHintPopover()" [popoverTitle]="hintTitle"
-       [placement]="hintPlacement.toLowerCase()" [triggers]="hintTrigger.toLowerCase()"
-
-/>
 <table class="table" *ngIf="listOfElementsIsVisible()">
   <thead>
   <tr>

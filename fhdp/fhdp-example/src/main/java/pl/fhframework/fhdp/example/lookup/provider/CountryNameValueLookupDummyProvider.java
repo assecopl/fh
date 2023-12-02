@@ -110,7 +110,7 @@ public class CountryNameValueLookupDummyProvider implements /*IComboDataProvider
 
     @Getter
     @AllArgsConstructor
-    private enum CountryEnum {
+    public enum CountryEnum {
         AFGANISTAN("Afganistan", "Afghanistan", "AF", "AFG", "004", "ISO 3166-2:AF", "nonUE"),
         ALBANIA("Albania", "Albania", "AL", "ALB", "008", "ISO 3166-2:AL", "nonUE"),
         ALGIERIA("Algieria", "Algeria", "DZ", "DZA", "012", "ISO 3166-2:DZ", "nonUE"),
@@ -406,6 +406,11 @@ public class CountryNameValueLookupDummyProvider implements /*IComboDataProvider
                 result = base.toLowerCase().startsWith(piece.toLowerCase()) || base.toLowerCase().contains(piece);
             }
             return result;
+        }
+
+        @Override
+        public String toString() {
+            return "ME:" + super.toString();
         }
     }
 }
