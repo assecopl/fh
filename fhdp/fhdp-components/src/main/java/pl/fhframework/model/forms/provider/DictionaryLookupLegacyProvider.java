@@ -41,7 +41,11 @@ public class DictionaryLookupLegacyProvider<DIC_ELEMENT_TYPE, MODEL_TYPE> implem
 
     @Override
     public String getDisplayValue(DIC_ELEMENT_TYPE dictionaryElement) {
-        return null;
+        if (dictionaryElement!=null) {
+            return legacyComboDataProviderFhDP.getDisplayValue(dictionaryElement);
+        }else{
+            return "";
+        }
     }
 
     @Override

@@ -78,6 +78,8 @@ public class DictionaryLookup extends BaseInputFieldWithKeySupport implements IG
         if (this.servicedIntention.isSelectingNewElement()) {
             final Integer selectedIndex = valueChange.getIntAttribute("select");
             selectedDictionaryElement = rows.get(selectedIndex);
+            this.servicedIntention.selectedModelObject = selectedDictionaryElement;
+            this.setRawValue(dictionaryLookupProvider.getDisplayValue(this.servicedIntention.selectedModelObject));
             serviceSelectingNewElement(valueChange);
         } else if (this.servicedIntention.isLeavingControl()) {
             final String searchText = valueChange.getStringAttribute("blur");
@@ -88,6 +90,8 @@ public class DictionaryLookup extends BaseInputFieldWithKeySupport implements IG
 //                List<Object> rows = getMatchingElements(searchText, pageable);
                 if (rows.size() == 1) {
                     selectedDictionaryElement = rows.get(0);
+                    this.servicedIntention.selectedModelObject = selectedDictionaryElement;
+                    this.setRawValue(dictionaryLookupProvider.getDisplayValue(this.servicedIntention.selectedModelObject));
                 }
             }
         } else {
@@ -127,9 +131,13 @@ public class DictionaryLookup extends BaseInputFieldWithKeySupport implements IG
         if (this.servicedIntention != null) {
             ValueChange valueChange = this.servicedIntention.valueChange;
             if (this.servicedIntention.isSelectingNewElement()) {
-               elementChange.addChange(RAW_VALUE_ATTR, getRawValue());
+                elementChange.addChange(RAW_VALUE_ATTR, getRawValue());
+               //elementChange.addChange(RAW_VALUE_ATTR, dictionaryLookupProvider.getDisplayValue(this.servicedIntention.selectedModelObject));
+               //elementChange.addChange("displayedValue", dictionaryLookupProvider.getDisplayValue(this.servicedIntention.selectedModelObject));
             } else if (this.servicedIntention.isLeavingControl()) {
                 elementChange.addChange(RAW_VALUE_ATTR, getRawValue());
+                //elementChange.addChange(RAW_VALUE_ATTR, dictionaryLookupProvider.getDisplayValue(this.servicedIntention.selectedModelObject));
+                //elementChange.addChange("displayedValue", dictionaryLookupProvider.getDisplayValue(this.servicedIntention.selectedModelObject));
             } else if (this.servicedIntention.isLookingForMatchingElements()) {
                 serviceLookingForElements(valueChange, elementChange);
             } else if (this.servicedIntention.isChangingPage()) {
@@ -198,6 +206,7 @@ public class DictionaryLookup extends BaseInputFieldWithKeySupport implements IG
         @Setter
         private boolean selectingNewElement;
         private boolean isChangingPage;
+        private Object selectedModelObject;
 
         public Intention(ValueChange valueChange) {
             this.valueChange = valueChange;

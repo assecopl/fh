@@ -23,7 +23,11 @@ public class CountryNameValueLookupDummyProvider implements /*IComboDataProvider
 
     @Override
     public String getDisplayValue(NameValueDto element) {
-        return element.getValue() + ": " + element.getName();
+        if (element!=null) {
+            return element.getValue() + ": " + element.getName();
+        }else{
+            return "";
+        }
     }
 
     @Override
