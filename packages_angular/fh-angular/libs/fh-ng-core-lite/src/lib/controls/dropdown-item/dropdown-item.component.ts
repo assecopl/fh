@@ -73,7 +73,6 @@ export class DropdownItemComponent extends FhngHTMLElementC implements OnInit {
   }
 
   public onClick() {
-    console.log('dropdown-item:onClick()', this)
     if (this.url) {
       window.location.href = this.url;
     }

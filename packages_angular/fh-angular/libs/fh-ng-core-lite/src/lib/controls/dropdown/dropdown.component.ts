@@ -109,8 +109,6 @@ export class DropdownComponent
     }
 
     this._mapSubscriptions()
-
-    console.log('dropdown:map', data, this);
   }
 
   private _mapSubscriptions(): void {
