@@ -7,3 +7,8 @@
 >
   <ng-container [fhDynamicComponents]="subelements" [fhNonVisualSubcomponents]="nonVisualComponents"/>
 </div>
+
+<ng-container *ngIf="configuration.debug">
+  <fh-component-debugger/>
+</ng-container>
+

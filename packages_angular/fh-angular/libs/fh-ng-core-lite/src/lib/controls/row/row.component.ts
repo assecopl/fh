@@ -37,7 +37,7 @@ interface IRowMapAttributes extends IDataAttributes {
 })
 export class RowComponent extends FhngHTMLElementC implements OnInit {
   @Input()
-  public elementsHorizontalAlign: HElementPosition = 'LEFT';
+  public elementsHorizontalAlign: HElementPosition = null;
 
   @Input()
   public elementsVerticalAlign: VElementPosition = null;

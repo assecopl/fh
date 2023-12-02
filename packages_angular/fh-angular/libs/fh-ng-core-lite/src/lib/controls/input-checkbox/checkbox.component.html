@@ -1,4 +1,4 @@
-<div class="custom-control custom-checkbox pl-2">
+
   <label
     *ngIf="labelPosition == 'LEFT'"
     [for]="id"
@@ -6,26 +6,29 @@
     [innerHTML]="label ? label : ''"
   >{{ label ? label : '' }}</label
   >
-  <input #inp [availabilityInput]="availability" (change)="inputCheckEvent(inp.checked);onChangeEvent()"
+  <input #inp
          #focusElement
-         [id]="id"
          type="checkbox"
-         class="custom-control-input InputCheckbox {{setPresentationStyle()}}"
+         class="fc InputCheckbox form-check-input {{setPresentationStyle()}} {{styleClasses}}"
+
+         [availabilityInput]="availability"
+         [id]="id"
          [placeholder]="placeholder"
          [name]="name"
-         [(ngModel)]="rawValue"
          [disabled]="disabled"
          [ngbTooltip]="getHintTooltip()" [ngbPopover]="getHintPopover()" [popoverTitle]="hintTitle"
          [placement]="hintPlacement.toLowerCase()" [triggers]="hintTrigger.toLowerCase()"
+         [(ngModel)]="rawValue"
+         (change)="inputCheckEvent(inp.checked);onChangeEvent()"
   />
   <label
     *ngIf="labelPosition == 'RIGHT'"
     [for]="innerId"
-    class="custom-control-label ml-3"
+    class="form-check-label ml-3"
     [innerHTML]="label ? label : ''"
   >{{ label ? label : '' }}</label
   >
-</div>
+
 <ng-container *ngIf="configuration.debug">
   <fh-component-debugger/>
 </ng-container>
