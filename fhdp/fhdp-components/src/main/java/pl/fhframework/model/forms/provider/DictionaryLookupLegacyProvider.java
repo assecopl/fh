@@ -1,5 +1,7 @@
 package pl.fhframework.model.forms.provider;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import pl.fhframework.ReflectionUtils;
 import pl.fhframework.core.uc.Parameter;
@@ -35,15 +37,22 @@ public class DictionaryLookupLegacyProvider<DIC_ELEMENT_TYPE, MODEL_TYPE> implem
     @Override
     @SuppressWarnings("unchecked")
     public PageModel<DIC_ELEMENT_TYPE> getDictionaryElementsPaged(String searchText, Pageable pageable, Function<String, Object> externalAttributesValuesProvider) {
-        Object[] attributes = getAttributesValues(attributeNamesForGetValuesPaged, externalAttributesValuesProvider, searchText, pageable);
-        return (PageModel<DIC_ELEMENT_TYPE>) ReflectionUtils.run(this.getValuesPaged, this.legacyComboDataProviderFhDP, attributes);
+        boolean searchByCode = searchText.length() > 1 && searchText.toUpperCase().equals(searchText);
+        if (searchByCode) {//search by code
+            MODEL_TYPE modelValue = (MODEL_TYPE) searchText; //TODO: Tutaj trzeba zrobić coś bardziej inteligentnego
+            final DIC_ELEMENT_TYPE foundObject = this.getElementByModelValue(modelValue, externalAttributesValuesProvider);
+            return new PageModel<>(pg -> getPageWithOneElement(foundObject));
+        } else {//Search by content
+            Object[] attributes = getAttributesValues(attributeNamesForGetValuesPaged, externalAttributesValuesProvider, searchText, pageable);
+            return (PageModel<DIC_ELEMENT_TYPE>) ReflectionUtils.run(this.getValuesPaged, this.legacyComboDataProviderFhDP, attributes);
+        }
     }
 
     @Override
     public String getDisplayValue(DIC_ELEMENT_TYPE dictionaryElement) {
-        if (dictionaryElement!=null) {
+        if (dictionaryElement != null) {
             return legacyComboDataProviderFhDP.getDisplayValue(dictionaryElement);
-        }else{
+        } else {
             return "";
         }
     }
@@ -113,5 +122,13 @@ public class DictionaryLookupLegacyProvider<DIC_ELEMENT_TYPE, MODEL_TYPE> implem
                 Arrays.stream(mainAttributesValues),
                 attributesNames.stream().map(valuesResolver)
         ).toArray();
+    }
+
+    private Page<DIC_ELEMENT_TYPE> getPageWithOneElement(DIC_ELEMENT_TYPE pageContent) {
+        if (pageContent != null) {
+            return new PageImpl<>(Collections.singletonList(pageContent));
+        } else {
+            return Page.empty();
+        }
     }
 }

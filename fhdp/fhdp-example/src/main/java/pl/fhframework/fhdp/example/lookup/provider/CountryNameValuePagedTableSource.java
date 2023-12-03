@@ -16,7 +16,8 @@ public class CountryNameValuePagedTableSource {
     }
 
     public PageModel<NameValueDto> createPagedModel(Pageable pageable) {
-        return new PageModel<>(t -> loadPage(pageable));
+        //TODO: Do wyjaśnienia z Jackiem po co przekazywany jest ten interfjes pageable. To miałoby sens gdybyśmy tutaj roblili refresha na pagemodel...
+        return new PageModel<>(t -> loadPage(t));
     }
 
     private Page<NameValueDto> loadPage(Pageable pageable) {

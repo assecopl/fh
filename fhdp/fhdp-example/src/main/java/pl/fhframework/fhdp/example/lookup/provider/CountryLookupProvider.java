@@ -66,12 +66,6 @@ public class CountryLookupProvider implements IComboDataProviderFhDP<Country, St
         return new CountryPagedTableSource(countries).createPagedModel(pageable);
     }
 
-    public PageModel<Country> getValuesPaged(String text, Pageable pageable, Object... param) {
-        CountryApiResponse result = restClient.listCountries(text);
-        List<Country> countries = getCountries(result);
-        return new CountryPagedTableSource(countries).createPagedModel(pageable);
-    }
-
     public Country getValue(String code) {
         CountryApiResponse result = restClient.listCountries(code);
         if(result.getData() != null && result.getData().containsKey(code)) {

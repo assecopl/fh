@@ -58,6 +58,8 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
   public page: number = null;
   public pagesCount: number = null;
   public tableIsVisible : boolean = false;
+  public orgRawValue: any;
+
     private isSearch: boolean = true;
     private popupColor?: string;
     private dirty: boolean = false;
@@ -292,6 +294,7 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
 
     override mapAttributes(data: IDataAttributes | any) {
         super.mapAttributes(data);
+        console.log("Ustaanie org value", this.orgRawValue, " - ", data)
       // if (data.filteredValues) {
       //     this.values = this.getValuesForCursor();
       // }
@@ -318,12 +321,13 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
   public override updateModel(event) {
     // if (!this.disabled) {
     this.rawValue = event.target.value;
+    console.warn("Update RawValue to", this.rawValue);
     // }
   };
 
   override onInputEvent(event) {
     this.updateModel(event);
-
+    this.tableIsVisible = this.rawValue.length>0;
 
     this.fireEvent('onInput', this.onInput);
 
@@ -332,29 +336,50 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
 
   override extractChangedAttributes() {
     let attrs = {};
-    // if (this.valueChanged) {
-    //   attrs[FORM_VALUE_ATTRIBUTE_NAME] = this.rawValue;
-    if(this.onSelectValue!==null && this.onSelectValue!==undefined) {
-      attrs["select"] = this.onSelectValue;
-      console.warn("TERAZ idzie selected!!!!!!!!!!!!!!!!")
-      this.onSelectValue = null;
+    if (1 == 1) {
+      if (this.onSelectValue !== null && this.onSelectValue !== undefined) {
+        attrs["command"] = "selectItem";
+        attrs["select"] = this.onSelectValue;
+        this.onSelectValue = null;
+      } else if (this.onPageChange) {
+        attrs["command"] = "changePage";
+        attrs["pageChange"] = this.onPageChange;
+        this.onPageChange = null;
+      } else {
+        attrs["command"] = "search";
+        attrs["text"] = this.rawValue;
+      }
+      this.valueChanged = false;
       this.onBlurValue = null;
-    }else if(this.onPageValue!==null && this.onPageValue!==undefined) {
-      attrs["page"] = this.onPageValue;
-      attrs["text"] = this.rawValue;
-      console.warn("TERAZ idzie page value!!!!!!!!!!!!!!!!")
-      this.onPageValue = null;
-      this.onBlurValue = null;
-    }else if(this.onBlurValue) {
-      attrs["blur"] = this.onBlurValue;
-      console.warn("TERAZ idzie blur!!!!!!!!!!!!!!!!")
-      this.onBlurValue = null;
+      console.warn("Wprowadzono: ", this.orgRawValue)
     } else {
-      attrs["text"] = this.rawValue;
-    }
-    this.valueChanged = false;
-    // }
+      // if (this.valueChanged) {
+      //   attrs[FORM_VALUE_ATTRIBUTE_NAME] = this.rawValue;
+      if (this.onSelectValue !== null && this.onSelectValue !== undefined) {
+        attrs["command"] = "selectItem";
+        attrs["select"] = this.onSelectValue;
+        console.warn("TERAZ idzie selected!!!!!!!!!!!!!!!!")
+        this.onSelectValue = null;
+        this.onBlurValue = null;
+      } else if (this.onPageValue !== null && this.onPageValue !== undefined) {
+        attrs["command"] = "changePage";
+        attrs["pageChange"] =
 
+          //attrs["page"] = this.onPageValue;
+          //attrs["text"] = this.rawValue;
+          console.warn("TERAZ idzie page value!!!!!!!!!!!!!!!!")
+        this.onPageValue = null;
+        this.onBlurValue = null;
+      } else if (this.onBlurValue) {
+        attrs["blur"] = this.onBlurValue;
+        console.warn("TERAZ idzie blur!!!!!!!!!!!!!!!!")
+        this.onBlurValue = null;
+      } else {
+        attrs["text"] = this.rawValue;
+      }
+      this.valueChanged = false;
+      // }
+    }
     return attrs;
   };
 
@@ -370,27 +395,44 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
     // console.warn("TERAZ idzie blur?")
     // this.fireEventWithLock('onChange', this.onChange);
 
+    console.info("org value 1 = ", this.orgRawValue);
 
     setTimeout(() => {
       if (this.onBlurValue) {
-        console.warn("TERAZ idzie blur?")
-        this.fireEventWithLock('onChange', this.onChange);
+        this.tableIsVisible = false;
+        if (this.rows.length==1){
+          this.onSelectedEvent(0);
+        }else {
+          ;
+          this.rawValue = this.orgRawValue;
+          //this.fireEventWithLock('onChange', this.onChange);
+        }
+        debugger
+        console.info("org value 2 = ", this.orgRawValue);
+        console.log("sdfsdf");
+        console.warn("!!!!!!!!!!");
       }
-    }, 200);
+    }, 2020);
 
   }
 
   public onSelectValue: number
   onSelectedEvent(i: number) {
     this.onSelectValue = i;
-    console.warn("TERAZ idzie selected?")
+    this.tableIsVisible = false;
     this.fireEventWithLock('onChange', this.onChange);
   }
 
   public onPageValue: number
-  onPageChangeEvent(step) {
-    this.page += step;
-    this.onPageValue = this.page;
+  public onPageChange: string;
+
+  onPreviousPageEvent(){
+    this.onPageChange =  "previous";
+    this.fireEventWithLock('onChange', this.onChange);
+  }
+
+  onNextPageEvent(){
+    this.onPageChange =  "next";
     this.fireEventWithLock('onChange', this.onChange);
   }
 

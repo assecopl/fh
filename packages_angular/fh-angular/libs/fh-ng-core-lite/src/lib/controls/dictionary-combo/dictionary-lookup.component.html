@@ -46,10 +46,10 @@
     </div>
 </ng-template>
 <span>
-<button [disabled]="!tableIsVisible || page<=0" (click)="onPageChangeEvent(-1)">&lt;Prev page</button>
-<button [disabled]="!tableIsVisible || page+1>=pagesCount" (click)="onPageChangeEvent(1)">&gt;Next page</button>
-<span>Page {{page+1}}/{{pagesCount}}</span>
-  </span>
+<div *ngIf="tableIsVisible">
+<button [disabled]="page<=1" (click)="onPreviousPageEvent()">&lt;Prev page</button>
+<button [disabled]="page>=pagesCount" (click)="onNextPageEvent()">&gt;Next page</button>
+<span>Page {{page}}/{{pagesCount}}</span>
 <table class="table" *ngIf="listOfElementsIsVisible()">
   <thead>
   <tr>
@@ -64,6 +64,7 @@
   </tr>
   </tbody>
 </table>
+</div>
 <!--<div class="row">-->
 <!--  <div class="col-md-6">-->
 <!--    <pre>-->

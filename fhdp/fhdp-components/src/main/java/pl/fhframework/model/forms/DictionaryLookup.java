@@ -78,34 +78,100 @@ public class DictionaryLookup extends BaseInputFieldWithKeySupport implements IG
         this.page = 0;
     }
 
+
+    private ValueChange commandValueData;
+
     @Override
     public void updateModel(ValueChange valueChange) {
         if (valueChange.hasAttributeChanged("command")) {
+            this.commandValueData = valueChange;
             String command = valueChange.getStringAttribute("command");//Read command
-            switch (command){
-                case "search" : serviceSearchCommand(valueChange); break;
-                case "changePage" : serviceChangePage(valueChange); break;
-                case "onSelect" : serviceOnSelectItem(valueChange); break;
+            switch (command) {
+                case "search":
+                    serviceSearchCommand(valueChange);
+                    break;
+                case "changePage":
+                    serviceChangePage(valueChange);
+                    break;
+                case "selectItem":
+                    serviceOnSelectItem(valueChange);
+                    break;
             }
-        }else{
-            updateModelOLD(valueChange);
+        } else {
+            //updateModelOLD(valueChange);
         }
     }
 
     private void serviceOnSelectItem(ValueChange valueChange) {
-
+        final Integer selectedIndex = valueChange.getIntAttribute("select");
+        final Object selectedDictionaryElement = pageModel.getPage().getContent().get(selectedIndex);
+        this.getModelBinding().setValue(dictionaryLookupProvider.getModelValue(selectedDictionaryElement));
+        this.setRawValue(dictionaryLookupProvider.getDisplayValue(selectedDictionaryElement));
+        log.warn("Selected item {}", getRawValue());
     }
 
     private void serviceSearchCommand(ValueChange valueChange) {
+        final String searchText = valueChange.getStringAttribute("text");
+        if (searchText != null && !searchText.isEmpty()) {
+            Pageable pageable = PageRequest.of(page, pageSize);
+            this.pageModel = dictionaryLookupProvider.getDictionaryElementsPaged(searchText, pageable, this::getParameterValue);
+            this.pageModel.doRefresh(pageable);
+//            if (this.pageModel.getPage() != null) {
+//                log.debug("Searching by matching text " + searchText + " and found " + rows.size() + " elements.");
+//            } else {
+//                log.warn("Unsuccessful searching by matchin text '" + searchText + "'!");
+//            }
+        } else {
 
+        }
     }
 
     private void serviceChangePage(ValueChange valueChange) {
-
+        String direction = valueChange.getStringAttribute("pageChange");
+        Pageable pageable;
+        if ("next".equals(direction)) {
+            pageable = pageModel.getPage().nextOrLastPageable();
+        } else if ("previous".equals(direction)) {
+            pageable = pageModel.getPage().previousOrFirstPageable();
+        } else {
+            throw new RuntimeException("Unknown page change direction '" + direction + "'!");
+        }
+        this.pageModel.doRefresh(pageable);
+        this.rows = this.pageModel.getPage().getContent();
     }
 
     @Override
     public ElementChanges updateView() {
+        final String rawValueToShow = getRawValue();
+        ElementChanges elementChange = super.updateView();
+        if (this.commandValueData != null) {
+            switch (this.commandValueData.getStringAttribute("command")) {
+                case "selectItem":
+                    elementChange.addChange(RAW_VALUE_ATTR, rawValueToShow);
+                    elementChange.addChange(ATTR_ROWS, Collections.emptyList());
+                    elementChange.addChange(ATTR_PAGE, null);
+                    elementChange.addChange(ATTR_PAGES_COUNT, null);
+                    break;
+
+                case "search":
+                case "changePage":
+                    elementChange.addChange(ATTR_ROWS, pageModel.getPage().getContent());
+                    elementChange.addChange(ATTR_PAGE, pageModel.getPage().getNumber()+1);
+                    elementChange.addChange(ATTR_PAGES_COUNT, pageModel.getPage().getTotalPages());
+                    if (columns == null) {
+                        this.columns = dictionaryLookupProvider.getColumnDefinitions();
+                        elementChange.addChange(ATTR_COLUMNS, columns);
+                    }
+                    break;
+            }
+        }else{
+            FhLogger.warn("Ustaiwanie orgRawValue {}", getRawValue());
+            elementChange.addChange("orgRawValue", getRawValue());
+        }
+        return elementChange;
+    }
+
+    public ElementChanges updateViewOLD() {
         ElementChanges elementChange = super.updateView();
 
         if (this.servicedIntention != null) {
