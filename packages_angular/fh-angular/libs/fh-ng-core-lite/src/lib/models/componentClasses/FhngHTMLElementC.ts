@@ -293,7 +293,8 @@ export class FhngHTMLElementC
 
 
   processStyleWithUnit(name: string, val: string) {
-    // let v = null;
+    let v = null;
+
     if (val) {
       // v = isNumber(val) ? val : val.replace(/px|%|em|rem|pt/gi, '');
       // const unit = val.replace(v, "");
@@ -344,7 +345,17 @@ export class FhngHTMLElementC
 
   public override mapAttributes(data: IDataAttributes | any): void {
     super.mapAttributes(data);
-    if (data.inlineStyle) this.styles = this._sanitizer.bypassSecurityTrustStyle(data.inlineStyle);
+
+    if (data.inlineStyle) {
+      let _tempStyles = {};
+      for (let inline of data.inlineStyle.split(';') || []) {
+        let _style = inline.split(':');
+
+        _tempStyles[_style[0]] = _style[1];
+      }
+
+      this.styles = _tempStyles;
+    }
     if (data.wrapperStyle) this.hostStyle = this._sanitizer.bypassSecurityTrustStyle(data.wrapperStyle);
 
     if (data.accessibility) {
@@ -384,6 +395,7 @@ export class FhngHTMLElementC
         this.hostWidth += 'col-auto exactWidth';
         //Set inner element styles to exact width;
         if (value != 'fit') {
+          console.log('here', value);
           this.processStyleWithUnit('width', value);
         }
       } else if (value === BootstrapWidthEnum.AUTO) {
