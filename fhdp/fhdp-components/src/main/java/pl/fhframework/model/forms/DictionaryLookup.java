@@ -48,6 +48,9 @@ public class DictionaryLookup extends BaseInputFieldWithKeySupport implements IG
     @Getter
     private List<NameValue> columns;
 
+    @Getter
+    private Integer page;
+
     @JsonIgnore
     @Getter
     private final List<DictionaryComboParameterFhDP> subcomponents = new LinkedList<>();
@@ -61,6 +64,9 @@ public class DictionaryLookup extends BaseInputFieldWithKeySupport implements IG
     @JsonIgnore
     private List<?> rows = null;
 
+    @JsonIgnore
+    private PageModel<Object> pageModel;
+
     public DictionaryLookup(Form<?> form) {
         super(form);
     }
@@ -69,59 +75,33 @@ public class DictionaryLookup extends BaseInputFieldWithKeySupport implements IG
     public void init() {
         super.init();
         this.dictionaryLookupProvider = getDictionaryLookupProvider(provider, this.getId());
+        this.page = 0;
     }
 
     @Override
     public void updateModel(ValueChange valueChange) {
-        this.servicedIntention = new Intention(valueChange);
-        Object selectedDictionaryElement;
-        if (this.servicedIntention.isSelectingNewElement()) {
-            final Integer selectedIndex = valueChange.getIntAttribute("select");
-            selectedDictionaryElement = rows.get(selectedIndex);
-            this.servicedIntention.selectedModelObject = selectedDictionaryElement;
-            this.setRawValue(dictionaryLookupProvider.getDisplayValue(this.servicedIntention.selectedModelObject));
-            serviceSelectingNewElement(valueChange);
-        } else if (this.servicedIntention.isLeavingControl()) {
-            final String searchText = valueChange.getStringAttribute("blur");
-            //selectedDictionaryElement = dictionaryLookupProvider.getElementByModelValue(searchText, this::getParameterValue);
-            selectedDictionaryElement = null;
-            if (selectedDictionaryElement == null) {
-//                Pageable pageable = PageRequest.of(0, pageSize);
-//                List<Object> rows = getMatchingElements(searchText, pageable);
-                if (rows.size() == 1) {
-                    selectedDictionaryElement = rows.get(0);
-                    this.servicedIntention.selectedModelObject = selectedDictionaryElement;
-                    this.setRawValue(dictionaryLookupProvider.getDisplayValue(this.servicedIntention.selectedModelObject));
-                }
+        if (valueChange.hasAttributeChanged("command")) {
+            String command = valueChange.getStringAttribute("command");//Read command
+            switch (command){
+                case "search" : serviceSearchCommand(valueChange); break;
+                case "changePage" : serviceChangePage(valueChange); break;
+                case "onSelect" : serviceOnSelectItem(valueChange); break;
             }
-        } else {
-            selectedDictionaryElement = null;
+        }else{
+            updateModelOLD(valueChange);
         }
+    }
 
-        if (selectedDictionaryElement != null) {
-            //this.setRawValue(dictionaryLookupProvider.getDisplayValue(selectedDictionaryElement));
-            this.getModelBinding().setValue(dictionaryLookupProvider.getModelValue(selectedDictionaryElement)); //TODO: Tutaj jest bug zwiazany z komatybilnością wstecz - do modelu zamiast obiektu wpisujemy string z kodem
-            this.servicedIntention.setSelectingNewElement(true);
-        }
+    private void serviceOnSelectItem(ValueChange valueChange) {
 
-//        final String searchText = valueChange.getStringAttribute("text");
-//        Object foundObject = dictionaryLookupProvider.getElementById(searchText);
-//        if (foundObject != null) {//TODO: To powinno być przeniesione do intencji
-//            //serviceSelectingNewElement(valueChange);
-//            dictionaryLookupProvider.getDisplayValueByElement(foundObject);
-//            this.setRawValue(searchText);
-//            this.getModelBinding().setValue(dictionaryLookupProvider.getElementId(foundObject));
-//            this.servicedIntention.setSelectingNewElement(true);
-//        }else{
-//            Pageable pageable = PageRequest.of(0, pageSize);
-//            List<Object> rows = getMatchingElements(searchText, pageable);
-//            if (rows.size()==1){
-//                foundObject = rows.get(0);
-//                this.setRawValue(searchText);
-//                this.getModelBinding().setValue(dictionaryLookupProvider.getElementId(foundObject));
-//                this.servicedIntention.setSelectingNewElement(true);
-//            }
-//        }
+    }
+
+    private void serviceSearchCommand(ValueChange valueChange) {
+
+    }
+
+    private void serviceChangePage(ValueChange valueChange) {
+
     }
 
     @Override
@@ -132,10 +112,12 @@ public class DictionaryLookup extends BaseInputFieldWithKeySupport implements IG
             ValueChange valueChange = this.servicedIntention.valueChange;
             if (this.servicedIntention.isSelectingNewElement()) {
                 elementChange.addChange(RAW_VALUE_ATTR, getRawValue());
-               //elementChange.addChange(RAW_VALUE_ATTR, dictionaryLookupProvider.getDisplayValue(this.servicedIntention.selectedModelObject));
-               //elementChange.addChange("displayedValue", dictionaryLookupProvider.getDisplayValue(this.servicedIntention.selectedModelObject));
+                elementChange.addChange("tableVisibility", false);
+                //elementChange.addChange(RAW_VALUE_ATTR, dictionaryLookupProvider.getDisplayValue(this.servicedIntention.selectedModelObject));
+                //elementChange.addChange("displayedValue", dictionaryLookupProvider.getDisplayValue(this.servicedIntention.selectedModelObject));
             } else if (this.servicedIntention.isLeavingControl()) {
                 elementChange.addChange(RAW_VALUE_ATTR, getRawValue());
+                elementChange.addChange("tableVisibility", false);
                 //elementChange.addChange(RAW_VALUE_ATTR, dictionaryLookupProvider.getDisplayValue(this.servicedIntention.selectedModelObject));
                 //elementChange.addChange("displayedValue", dictionaryLookupProvider.getDisplayValue(this.servicedIntention.selectedModelObject));
             } else if (this.servicedIntention.isLookingForMatchingElements()) {
@@ -169,19 +151,27 @@ public class DictionaryLookup extends BaseInputFieldWithKeySupport implements IG
                 elementChange.addChange(ATTR_ROWS, rows);
                 FhLogger.info("Searching by code " + searchText + " and found " + (foundObject != null));
             } else {
-                Pageable pageable = PageRequest.of(0, pageSize);
-                this.rows = getMatchingElements(searchText, pageable); //TODO: Tutaj powinien jeszcze zostać użyty konwerter aby dopuścić oprócz stringów obiekty bardziej złożone
-                List<?> rows = getMatchingElements(searchText, pageable); //TODO: Tutaj powinien jeszcze zostać użyty konwerter aby dopuścić oprócz stringów obiekty bardziej złożone
-                elementChange.addChange(ATTR_ROWS, rows);
-                elementChange.addChange(ATTR_PAGE, pageable.getPageNumber());
-                elementChange.addChange(ATTR_PAGES_COUNT, pageable.getPageSize());
-                List<String> test = Arrays.asList("Ala", "Józek", "Tomek", "Basia");
-                elementChange.addChange("testowaKolekcja", test);
-                System.out.println("Searching by matching text " + searchText + " and found " + rows.size() + " elements.");
+                Pageable pageable = PageRequest.of(page, pageSize);
+                //this.rows = getMatchingElements(searchText, pageable); //TODO: Tutaj powinien jeszcze zostać użyty konwerter aby dopuścić oprócz stringów obiekty bardziej złożone
+                //List<?> rows = getMatchingElements(searchText, pageable); //TODO: Tutaj powinien jeszcze zostać użyty konwerter aby dopuścić oprócz stringów obiekty bardziej złożone
+                this.pageModel = dictionaryLookupProvider.getDictionaryElementsPaged(searchText, pageable, this::getParameterValue);
+                this.pageModel.doRefresh(pageable);
+                if (this.pageModel.getPage() != null) {
+                    this.rows = this.pageModel.getPage().getContent();
+                    elementChange.addChange(ATTR_ROWS, rows);
+                    elementChange.addChange(ATTR_PAGE, pageModel.getPage().getNumber());
+                    elementChange.addChange(ATTR_PAGES_COUNT, pageModel.getPage().getTotalPages());
+                    List<String> test = Arrays.asList("Ala", "Józek", "Tomek", "Basia");
+                    elementChange.addChange("testowaKolekcja", test);
+                    log.debug("Searching by matching text " + searchText + " and found " + rows.size() + " elements.");
+                } else {
+                    log.warn("Unsuccessful searching by matchin text '" + searchText + "'!");
+                }
             }
         } else {
             elementChange.addChange(ATTR_ROWS, Collections.emptyList());
         }
+        elementChange.addChange("tableIsVisible", true);
     }
 
 
@@ -195,7 +185,19 @@ public class DictionaryLookup extends BaseInputFieldWithKeySupport implements IG
     }
 
     private void serviceChangedPage(ValueChange valueChange, ElementChanges elementChange) {
-        log.error("Changing page intention not implemented yet");
+        String direction = valueChange.getStringAttribute("pageChange");
+        Pageable pageable;
+        if ("next".equals(direction)) {
+            pageable = pageModel.getPage().nextOrLastPageable();
+        } else if ("next".equals(direction)) {
+            pageable = pageModel.getPage().previousOrFirstPageable();
+        } else {
+            throw new RuntimeException("Unknown page change direction '" + direction + "'!");
+        }
+        this.pageModel.doRefresh(pageable);
+        this.rows = this.pageModel.getPage().getContent();
+        elementChange.addChange(ATTR_ROWS, rows);
+        elementChange.addChange(ATTR_PAGE, pageModel.getPage().getNumber());
     }
 
     @Getter
@@ -213,20 +215,33 @@ public class DictionaryLookup extends BaseInputFieldWithKeySupport implements IG
             this.lookingForMatchingElements = valueChange.hasAttributeChanged("text");
             this.leavingControl = valueChange.hasAttributeChanged("blur");
             this.selectingNewElement = valueChange.hasAttributeChanged("select");
+            this.isChangingPage = valueChange.hasAttributeChanged("page");
         }
     }
 
-    private List<Object> getMatchingElements(String searchText, Pageable pageable) {
-        final PageModel<Object> pm = dictionaryLookupProvider.getDictionaryElementsPaged(searchText, pageable, this::getParameterValue);
-        if (pm == null) {
-            FhLogger.warn("Provider has returned null what has been converted into empty array!");
-            return Collections.emptyList();
-        } else {
-            pm.doRefresh(pageable);
-            Page<Object> p1 = pm.getPage();
-            return (p1 != null) ? p1.getContent() : Collections.emptyList();
-        }
-    }
+//    private List<Object> getMatchingElementsOLD(String searchText, Pageable pageable) {
+//        final PageModel<Object> pm = dictionaryLookupProvider.getDictionaryElementsPaged(searchText, pageable, this::getParameterValue);
+//        if (pm == null) {
+//            FhLogger.warn("Provider has returned null what has been converted into empty array!");
+//            return Collections.emptyList();
+//        } else {
+//            pm.doRefresh(pageable);
+//            Page<Object> p1 = pm.getPage();
+//            return (p1 != null) ? p1.getContent() : Collections.emptyList();
+//        }
+//    }
+//
+//    private PageModel<Object> getMatchingElements(String searchText, Pageable pageable) {
+//        final PageModel<Object> pm = dictionaryLookupProvider.getDictionaryElementsPaged(searchText, pageable, this::getParameterValue);
+//        if (pm == null) {
+//            FhLogger.warn("Provider has returned null what has been converted into empty array!");
+//            return Collections.emptyList();
+//        } else {
+//            pm.doRefresh(pageable);
+//            Page<Object> p1 = pm.getPage();
+//            return (p1 != null) ? p1.getContent() : Collections.emptyList();
+//        }
+//    }
 
 
     private Object getParameterValue(String attributeName) {
@@ -250,7 +265,7 @@ public class DictionaryLookup extends BaseInputFieldWithKeySupport implements IG
                     @SuppressWarnings("unchecked")
                     Class<? extends IComboDataProviderFhDP<?, ?>> wrappedProviderClass = (Class<? extends IComboDataProviderFhDP<?, ?>>) foundProviderClass;
                     @SuppressWarnings("unchecked")
-                    IComboDataProviderFhDP<Object, Object> wrappedProvider = (IComboDataProviderFhDP<Object, Object>)AutowireHelper.getBean(wrappedProviderClass);
+                    IComboDataProviderFhDP<Object, Object> wrappedProvider = (IComboDataProviderFhDP<Object, Object>) AutowireHelper.getBean(wrappedProviderClass);
                     return new DictionaryLookupLegacyProvider<Object, Object>(wrappedProvider);
                 } else {
                     throw new RuntimeException("Not supported provider type '" + foundProviderClass.getName() + "'!");
@@ -293,5 +308,68 @@ public class DictionaryLookup extends BaseInputFieldWithKeySupport implements IG
     @Override
     public List<NonVisualFormElement> getNonVisualSubcomponents() {
         return Collections.emptyList();
+    }
+
+
+    //************************************************************************************************************
+    //************************************************************************************************************
+    //************************************************************************************************************
+    //************************************************************************************************************
+
+
+    public void updateModelOLD(ValueChange valueChange) {
+        log.info("Text:{}, blur:{}, select:{}, page:{}", valueChange.hasAttributeChanged("text"), valueChange.hasAttributeChanged("blur"), valueChange.hasAttributeChanged("select"), valueChange.hasAttributeChanged("page"));
+        this.servicedIntention = new Intention(valueChange);
+        Object selectedDictionaryElement;
+        if (valueChange.hasAttributeChanged("page")) {
+            selectedDictionaryElement = null;
+            this.page = valueChange.getIntAttribute("page");
+        } else if (this.servicedIntention.isSelectingNewElement()) {
+            final Integer selectedIndex = valueChange.getIntAttribute("select");
+            selectedDictionaryElement = rows.get(selectedIndex);
+            this.servicedIntention.selectedModelObject = selectedDictionaryElement;
+            this.setRawValue(dictionaryLookupProvider.getDisplayValue(this.servicedIntention.selectedModelObject));
+            serviceSelectingNewElement(valueChange);
+        } else if (this.servicedIntention.isLeavingControl()) {
+            final String searchText = valueChange.getStringAttribute("blur");
+            //selectedDictionaryElement = dictionaryLookupProvider.getElementByModelValue(searchText, this::getParameterValue);
+            selectedDictionaryElement = null;
+            if (selectedDictionaryElement == null) {
+//                Pageable pageable = PageRequest.of(0, pageSize);
+//                List<Object> rows = getMatchingElements(searchText, pageable);
+                if (rows != null && rows.size() == 1) {
+                    selectedDictionaryElement = rows.get(0);
+                    this.servicedIntention.selectedModelObject = selectedDictionaryElement;
+                    this.setRawValue(dictionaryLookupProvider.getDisplayValue(this.servicedIntention.selectedModelObject));
+                }
+            }
+        } else {
+            selectedDictionaryElement = null;
+        }
+
+        if (selectedDictionaryElement != null) {
+            //this.setRawValue(dictionaryLookupProvider.getDisplayValue(selectedDictionaryElement));
+            this.getModelBinding().setValue(dictionaryLookupProvider.getModelValue(selectedDictionaryElement)); //TODO: Tutaj jest bug zwiazany z komatybilnością wstecz - do modelu zamiast obiektu wpisujemy string z kodem
+            this.servicedIntention.setSelectingNewElement(true);
+        }
+
+//        final String searchText = valueChange.getStringAttribute("text");
+//        Object foundObject = dictionaryLookupProvider.getElementById(searchText);
+//        if (foundObject != null) {//TODO: To powinno być przeniesione do intencji
+//            //serviceSelectingNewElement(valueChange);
+//            dictionaryLookupProvider.getDisplayValueByElement(foundObject);
+//            this.setRawValue(searchText);
+//            this.getModelBinding().setValue(dictionaryLookupProvider.getElementId(foundObject));
+//            this.servicedIntention.setSelectingNewElement(true);
+//        }else{
+//            Pageable pageable = PageRequest.of(0, pageSize);
+//            List<Object> rows = getMatchingElements(searchText, pageable);
+//            if (rows.size()==1){
+//                foundObject = rows.get(0);
+//                this.setRawValue(searchText);
+//                this.getModelBinding().setValue(dictionaryLookupProvider.getElementId(foundObject));
+//                this.servicedIntention.setSelectingNewElement(true);
+//            }
+//        }
     }
 }

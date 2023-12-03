@@ -45,6 +45,11 @@
         </div>
     </div>
 </ng-template>
+<span>
+<button [disabled]="!tableIsVisible || page<=0" (click)="onPageChangeEvent(-1)">&lt;Prev page</button>
+<button [disabled]="!tableIsVisible || page+1>=pagesCount" (click)="onPageChangeEvent(1)">&gt;Next page</button>
+<span>Page {{page+1}}/{{pagesCount}}</span>
+  </span>
 <table class="table" *ngIf="listOfElementsIsVisible()">
   <thead>
   <tr>

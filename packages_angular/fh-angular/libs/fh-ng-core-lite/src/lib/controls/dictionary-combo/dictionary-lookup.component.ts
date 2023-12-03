@@ -55,8 +55,9 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
   public rows: any[] = [];
   private popupOpen: boolean = false;
     private searchRequested: boolean;
-  private page: number = null;
-  private pagesCount: number = null;
+  public page: number = null;
+  public pagesCount: number = null;
+  public tableIsVisible : boolean = false;
     private isSearch: boolean = true;
     private popupColor?: string;
     private dirty: boolean = false;
@@ -328,6 +329,7 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
 
   }
 
+
   override extractChangedAttributes() {
     let attrs = {};
     // if (this.valueChanged) {
@@ -336,6 +338,12 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
       attrs["select"] = this.onSelectValue;
       console.warn("TERAZ idzie selected!!!!!!!!!!!!!!!!")
       this.onSelectValue = null;
+      this.onBlurValue = null;
+    }else if(this.onPageValue!==null && this.onPageValue!==undefined) {
+      attrs["page"] = this.onPageValue;
+      attrs["text"] = this.rawValue;
+      console.warn("TERAZ idzie page value!!!!!!!!!!!!!!!!")
+      this.onPageValue = null;
       this.onBlurValue = null;
     }else if(this.onBlurValue) {
       attrs["blur"] = this.onBlurValue;
@@ -359,14 +367,16 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
   public onBlurValue: string
   onBlurEvent() {
     this.onBlurValue = this.rawValue;
-    console.warn("TERAZ idzie blur?")
-    this.fireEventWithLock('onChange', this.onChange);
+    // console.warn("TERAZ idzie blur?")
+    // this.fireEventWithLock('onChange', this.onChange);
 
 
-    // setTimeout(() => {
-    //   console.warn("TERAZ idzie blur?")
-    //   this.fireEventWithLock('onChange', this.onChange);
-    // }, 2000);
+    setTimeout(() => {
+      if (this.onBlurValue) {
+        console.warn("TERAZ idzie blur?")
+        this.fireEventWithLock('onChange', this.onChange);
+      }
+    }, 200);
 
   }
 
@@ -377,9 +387,17 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
     this.fireEventWithLock('onChange', this.onChange);
   }
 
+  public onPageValue: number
+  onPageChangeEvent(step) {
+    this.page += step;
+    this.onPageValue = this.page;
+    this.fireEventWithLock('onChange', this.onChange);
+  }
+
   public listOfElementsIsVisible(){
     return this.rows.length>0;
   }
+
 }
 
 export class ComboListElement {

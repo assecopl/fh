@@ -79,8 +79,8 @@ public class CountryNameValueLookupDummyProvider implements /*IComboDataProvider
     @Override
     public List<NameValue> getColumnDefinitions() {
         List<NameValue> columns = new ArrayList<>();
-        columns.add(new NameValue("Code", "value"));
-        columns.add(new NameValue("Name", "name"));
+        columns.add(new NameValue("Value", "value"));
+        columns.add(new NameValue("Name/Code", "name"));
         return columns;
     }
 
