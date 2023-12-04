@@ -1,0 +1,23 @@
+<ng-container>
+  <ng-content></ng-content>
+  <button
+    class="btn hint-ico-help fa  ml-2 fh-tooltip"
+    *ngIf="hint && ['STATIC', 'STANDARD'].includes(hintType)"
+    container="body"
+    [ngbTooltip]="hint"
+    [attr.aria-label]="hintAriaLabel"
+    [attr.aria-haspopup]="true"
+    [ngClass]="classList"
+  ></button>
+
+  <button
+    class="btn hint-ico-help fa  ml-2 fh-tooltip"
+    *ngIf="hint && hintType === 'STATIC_POPOVER'"
+    container="body"
+    [ngbPopover]="hint"
+    [popoverTitle]="hintTitle"
+    [attr.aria-label]="hintAriaLabel"
+    [attr.aria-haspopup]="true"
+    [ngClass]="classList"
+  ></button>
+</ng-container>

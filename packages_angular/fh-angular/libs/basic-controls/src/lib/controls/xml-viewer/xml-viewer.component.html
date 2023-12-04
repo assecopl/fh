@@ -1,0 +1,11 @@
+<div
+  [id]="innerId"
+  [availabilityHtmlElement]="availability"
+  [ngStyle]="styles"
+>
+    <xml-viewer-component [xml]="content"></xml-viewer-component>
+</div>
+
+<ng-container *ngIf="configuration.debug">
+    <fh-component-debugger/>
+</ng-container>

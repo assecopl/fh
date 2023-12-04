@@ -1,0 +1,8 @@
+.fc.image {
+  display: inline-block;
+}
+
+#selectedImagePreview.fc.image {
+  max-width: 300px;
+  max-height: 300px;
+}

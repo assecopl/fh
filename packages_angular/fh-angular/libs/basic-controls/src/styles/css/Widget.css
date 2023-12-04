@@ -1,0 +1,97 @@
+.widgetRemoveButton,
+.gridAddButton,
+.gridEditButton {
+  background: transparent;
+  border: none;
+  text-align: right;
+  position: absolute;
+  top: -6px;
+  z-index: 100;
+}
+
+.widgetRemoveButton.fa {
+  right: 15px;
+  top: 5px;
+  display: none;
+}
+
+.grid-stack-item.ui-draggable-handle .widgetRemoveButton.fa {
+  display: block;
+}
+
+.gridAddButton.fa {
+  right: 68px;
+  display: none;
+}
+
+.gridEditButton {
+  right: 18px;
+}
+
+.widgetRemoveButton:active,
+.widgetRemoveButton:focus,
+.gridAddButton:active,
+.gridAddButton:focus,
+.gridEditButton:active,
+.gridEditButton:focus {
+  outline: none;
+  border: none;
+  box-shadow: none;
+}
+
+.widgetRemoveButton:before,
+.gridAddButton:before,
+.gridEditButton:before {
+  font-size: 30px;
+  color: #0EA0F4;
+}
+
+.grid-stack {
+  margin-top: 30px;
+}
+
+.grid-stack-item-content {
+  color: #2c3e50;
+  text-align: center;
+  /*background-color: #18bc9c;*/
+  background-color: #FFFFFF;
+  border: 1px solid #DCDCDC;
+}
+
+.grid-stack-item {
+  /*background-color: #18bc9c;*/
+  background-color: transparent;
+  overflow: hidden;
+}
+
+.grid-stack-item.ui-draggable-handle .grid-stack-item-content {
+  cursor: move;
+  border: 1px solid #0EA0F4;
+}
+
+.grid-stack-item.ui-draggable-handle .grid-stack-item-content:active {
+  border: 3px solid #0EA0F4;
+}
+
+.grid-stack-item.ui-draggable-handle .grid-stack-item-content:before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+  z-index: 1000;
+}
+
+.grid-stack-item.ui-draggable-handle .grid-stack-item-content:after {
+  content: "\f047";
+  font-family: FontAwesome, monospace;
+  font-size: 50px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  color: #0EA0F4;
+  z-index: 1001;
+  transform: translate(-50%, -50%);
+}

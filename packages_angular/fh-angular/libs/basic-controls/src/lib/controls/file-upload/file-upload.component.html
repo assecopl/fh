@@ -1,0 +1,65 @@
+<div
+  class="fc fileUpload"
+  style="height: auto"
+  [id]="innerId"
+  [availabilityHtmlElement]="availability"
+  [class.upload-active]="dragover"
+>
+  <button
+    class="fc button btn btn-block btn-primary btn-{{ style }}"
+    [attr.aria-label]="!showProgressBar ? label : ('fh.upload.button.abort' | i18n)"
+    [ngClass]="getButtonClass()"
+    [ngStyle]="styles"
+    [tabIndex]="showProgressBar ? 0 : -1"
+    (click)="onCancelUpload($event)"
+  >
+    <label [id]="innerId + '_label'" [for]="innerId + '_file'" class="control-label fileNames sr-only">
+      {{ label || fileNames }}
+    </label>
+
+    <input
+      #file
+      class="file-input"
+      type="file"
+      name="file"
+      [id]="innerId + '_file'"
+      [accept]="extensions"
+      [attr.aria-label]="label"
+      [attr.aria-describedby]="innerId + '_label'"
+      [class.d-none]="showProgressBar"
+      [tabIndex]="showProgressBar ? -1 : 0"
+      [multiple]="multiple"
+      [value]="value"
+      (change)="onAddedFiles($event)"
+      (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave($event)"
+      (drop)="onDrop($event)"
+    />
+
+    <ng-container *ngIf="!showProgressBar">
+      {{ label }}
+    </ng-container>
+
+    <ng-container *ngIf="showProgressBar">
+      {{ 'fh.upload.button.abort' | i18n }}
+    </ng-container>
+
+    <div
+      class="progress progress-striped active"
+      [class.d-none]="!showProgressBar"
+    >
+      <div
+        class="progress-bar"
+        role="progressbar"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        [attr.aria-valuenow]="progress"
+        [style.width]="progress + '%'"
+      ></div>
+    </div>
+  </button>
+</div>
+
+<ng-container *ngIf="configuration.debug">
+  <fh-component-debugger/>
+</ng-container>

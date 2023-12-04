@@ -1,0 +1,60 @@
+<div
+  class="input-group {{
+    (icon || iconText) && iconAlignment == 'BEFORE' ? 'has-prepend' : ''
+  }} {{
+    ((icon || iconText) && iconAlignment == 'AFTER') || required
+      ? 'has-append'
+      : ''
+  }}"
+>
+  <div
+    class="input-group-prepend"
+    *ngIf="(icon || iconText) && iconAlignment == 'BEFORE'"
+  >
+    <button
+      *ngIf="onClick?.observers?.length > 0"
+      class="input-group-text"
+      (click)="addonClick()"
+      type="button"
+      [attr.aria-label]="buttonAriaLabel"
+      [attr.aria-labelledby]="inputId"
+    >
+      <i *ngIf="icon" class="fas {{ icon }}"></i>
+      <span *ngIf="!icon && iconText">{{ iconText }}</span>
+    </button>
+    <div *ngIf="onClick?.observers?.length == 0" class="input-group-text">
+      <i *ngIf="icon" class="fas {{ icon }}"></i>
+      <span *ngIf="!icon && iconText">{{ iconText }}</span>
+    </div>
+    <ng-content select=".input-group-text"></ng-content>
+  </div>
+  <ng-content></ng-content>
+  <div
+    class="input-group-append"
+    *ngIf="((icon || iconText) && iconAlignment == 'AFTER') || required"
+  >
+    <ng-content select=".input-group-text"></ng-content>
+    <ng-container *ngIf="(icon || iconText) && iconAlignment == 'AFTER'">
+      <button
+        *ngIf="onClick?.observers?.length > 0"
+        role="button"
+        class="input-group-text"
+        (click)="addonClick()"
+        type="button"
+        [attr.aria-label]="buttonAriaLabel"
+        [attr.aria-labelledby]="inputId"
+      >
+        <i *ngIf="icon && !iconText" class="fas {{ icon }}"></i>
+        <span *ngIf="!icon && iconText">{{ iconText }}</span>
+      </button>
+      <div *ngIf="onClick?.observers?.length == 0" class="input-group-text">
+        <i *ngIf="icon" class="fas {{ icon }}"></i>
+        <span *ngIf="!icon && iconText">{{ iconText }}</span>
+      </div>
+    </ng-container>
+
+    <div *ngIf="required" class="input-group-text">
+      <span class="fas fa-star-of-life" style="font-size: 0.5rem"></span>
+    </div>
+  </div>
+</div>

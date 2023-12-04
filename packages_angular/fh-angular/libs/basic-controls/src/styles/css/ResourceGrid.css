@@ -1,0 +1,36 @@
+
+.resources {
+  height: 300px;
+  overflow-y: scroll;
+  margin-bottom: 30px;
+  overflow-x: hidden;
+}
+
+.resources a.resource {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 4px;
+  line-height: 1.42857143;
+  display: block;
+  margin-bottom: 20px;
+  transition: border .2s ease-in-out;
+}
+
+.resources a.resource.selected {
+  border: 1px solid #3598DB;
+}
+
+.resources a.resource img {
+  display: block;
+  width: 100%;
+  max-height: 120px;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.resources a.resource .caption {
+  font-size: 0.9em;
+  text-align: center;
+  padding: 10px;
+  overflow: hidden;
+}

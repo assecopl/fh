@@ -3,5 +3,6 @@
   "dest": "../../dist/libs/basic-controls",
   "lib": {
     "entryFile": "src/index.ts"
-  }
+  },
+  "assets": ["./src/styles/fh-ng-core-lite.scss"]
 }

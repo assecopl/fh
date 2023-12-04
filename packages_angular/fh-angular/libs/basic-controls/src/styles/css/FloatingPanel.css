@@ -1,0 +1,15 @@
+.fc.panel > .card-header ~ .card-body, .fc.panel.fullscreen > .card-body {
+  height: calc(100% - 35px);
+}
+
+.list-group a.list-group-item {
+  cursor: pointer;
+}
+
+.fc.group.floating {
+  display: flex;
+}
+
+.fc.group.floating > .card-body {
+  flex: 1;
+}

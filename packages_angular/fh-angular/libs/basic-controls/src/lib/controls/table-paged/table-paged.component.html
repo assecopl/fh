@@ -1,0 +1,136 @@
+<label
+  class="col-form-label"
+  [id]="innerId + '_label'"
+  [for]="innerId"
+  *ngIf="label">
+  {{ label }}
+</label>
+<table
+  tabindex="0"
+  class="fc table tablePaged {{fixedHeader ? 'fixedHeader': ''}} fixedHeader "
+  [id]="innerId"
+  [style.table-layout]="horizontalScrolling?'initial':'fixed'">
+  <!--  Simple HTEAD - one row-->
+  <!--  <ng-content select="thead"></ng-content>-->
+  <thead #tableHeading>
+  <tr class="table-heading">
+    <th *ngIf="selectionCheckboxes" [style.width]="'60px'">
+    <span class="custom-control custom-checkbox" *ngIf="selectAllChceckbox">
+      <input [id]="id+'selectAll'"
+             (click)="toggleSelectAll($event)"
+             aria-label="Zaznacz/odznacz wszystkie rekordy"
+             class="custom-control-input"
+             type="checkbox"
+             [checked]="checkAllValue"
+      />
+      <label class="hidden custom-control-label ml-3" [for]="id+'selectAll'">
+        <span class="d-none">Zaznacz/odznacz wszystkie rekordy</span>
+      </label>
+    </span>
+    </th>
+
+    <ng-container *ngFor="let column of columns">
+
+      <th fhng-table-column [horizontalAlign]="horizontalAlign" [data]="column" [formId]="formId" [sortBy]="sortedBy">
+        &nbsp;{{column.id}}</th>
+    </ng-container>
+  </tr>
+
+  </thead>
+  <!--  <ng-content select="tbody"></ng-content>-->
+  <tbody>
+  <ng-container *ngFor="let tr of tableData;let i = index;">
+    <tr tabindex="0" fhng-table-row [data]="tr" [formId]="formId" [rowIndex]="i" [horizontalAlign]="horizontalAlign"
+        [highlight]="rawValue.includes(i)"></tr>
+  </ng-container>
+
+
+  <ng-container *ngIf="minRows > tableData?.length">
+    <tr
+      tabindex="0"
+      *ngFor="
+        let i of [].constructor(minRows - (tableData ? tableData?.length : 0))
+      "
+    >
+      <td *ngFor="let a of [].constructor(columns?.length)">&nbsp;</td>
+    </tr>
+  </ng-container>
+  </tbody>
+
+  <ng-container *ngIf="footer">
+    <tfoot>
+    <tr>
+      <td [colSpan]="columns.length + (selectionCheckboxes? 1 : 0)">
+        <div class="fc footer card-footer  {{footer.id}}">
+          <div class="row fc wrapper">
+            <ng-container [fhDynamicComponents]="footer.subelements"
+                          [fhNonVisualSubcomponents]="footer.nonVisualComponents || []"/>
+          </div>
+        </div>
+      </td>
+    </tr>
+    </tfoot>
+  </ng-container>
+
+</table>
+
+<div *ngIf="totalRows > 0" class="row mt-3">
+  <div class="col-auto mr-auto">
+    <div class="row align-items-center justify-content-start">
+      <div class="col-auto">
+        <select #pageSizeSelect [value]="pageSize" (change)="pageSizeSelectEvent(pageSizeSelect.value)"
+          aria-label="Ilość rekordów na stronie"
+          class="custom-select"
+          style="width: auto"
+        >
+          <ng-container *ngFor="let ps of pageSizes">
+            <option [value]="ps">{{ps}}</option>
+          </ng-container>
+
+        </select>
+      </div>
+      <div class="col small">Rekordów na stronie</div>
+    </div>
+  </div>
+  <div class="col-auto">
+    <div class="row align-items-center justify-content-end">
+      <div class="col-auto small">
+        <!--        TODO TRANSLATE Library -->
+        Rekordy
+        {{
+        pageNumber > 0
+          ? pageSize * pageNumber
+          : 1
+        }}
+        -
+        {{(pageSize * pageNumber) + pageSize < totalRows ? (pageSize * pageNumber) + pageSize : totalRows}}
+        z {{ totalRows  }}
+      </div>
+      <div class="col-auto">
+        <ngb-pagination
+          class="mb-0"
+          [collectionSize]="totalRows"
+          [(page)]="nextPageNumber"
+          [pageSize]="pageSize"
+          [maxSize]="3"
+          [rotate]="false"
+          [ellipses]="false"
+          (pageChange)="pageChange($event)"
+        >
+        </ngb-pagination>
+      </div>
+    </div>
+  </div>
+</div>
+<div fhng-button
+  *ngIf="csvExport"
+  [id]="'csvBtn'"
+  bootstrapStyle="link"
+  width="md-2"
+  horizontalAlign="RIGHT"
+  (click)="onExportCsv()"
+>[icon='fas fa-download'] CSV
+</div>
+<!--<ng-container *ngIf="configuration.debug">-->
+<!--  <fh-component-debugger/>-->
+<!--</ng-container>-->
