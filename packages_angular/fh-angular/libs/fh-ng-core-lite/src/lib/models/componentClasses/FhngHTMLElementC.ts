@@ -5,6 +5,7 @@ import {
   ElementRef,
   EventEmitter,
   HostBinding,
+  inject,
   Injector,
   Input,
   OnChanges,
@@ -13,8 +14,6 @@ import {
   Output,
   SimpleChanges,
   SkipSelf,
-  ViewChild,
-  inject,
 } from '@angular/core';
 import {FhngComponent} from './FhngComponent';
 import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
@@ -150,6 +149,9 @@ export class FhngHTMLElementC
   public hintType: HintType = HintType.STANDARD_POPOVER
 
   @Input()
+  public hintInputGroup: string; // TODO: do zrobienia po właściwym wdrożeniu hintów.
+
+  @Input()
   public presentationStyle: PresentationStyleEnum = null;
 
   @Input()
@@ -253,11 +255,15 @@ export class FhngHTMLElementC
   }
 
   public override ngAfterContentInit(): void {
+    super.ngAfterContentInit();
     //After content init logic
+
   }
 
   public override ngAfterViewInit(): void {
+    super.ngAfterViewInit()
     //After View init logic
+
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -287,7 +293,8 @@ export class FhngHTMLElementC
 
 
   processStyleWithUnit(name: string, val: string) {
-    // let v = null;
+    let v = null;
+
     if (val) {
       // v = isNumber(val) ? val : val.replace(/px|%|em|rem|pt/gi, '');
       // const unit = val.replace(v, "");
@@ -338,7 +345,17 @@ export class FhngHTMLElementC
 
   public override mapAttributes(data: IDataAttributes | any): void {
     super.mapAttributes(data);
-    if (data.inlineStyle) this.styles = this._sanitizer.bypassSecurityTrustStyle(data.inlineStyle);
+
+    if (data.inlineStyle) {
+      let _tempStyles = {};
+      for (let inline of data.inlineStyle.split(';') || []) {
+        let _style = inline.split(':');
+
+        _tempStyles[_style[0]] = _style[1];
+      }
+
+      this.styles = _tempStyles;
+    }
     if (data.wrapperStyle) this.hostStyle = this._sanitizer.bypassSecurityTrustStyle(data.wrapperStyle);
 
     if (data.accessibility) {
@@ -378,6 +395,7 @@ export class FhngHTMLElementC
         this.hostWidth += 'col-auto exactWidth';
         //Set inner element styles to exact width;
         if (value != 'fit') {
+          console.log('here', value);
           this.processStyleWithUnit('width', value);
         }
       } else if (value === BootstrapWidthEnum.AUTO) {
@@ -407,17 +425,25 @@ export class FhngHTMLElementC
   }
 
   public getHintTooltip(): string {
-    if (this.hint && this.hintType == 'STANDARD') {
-      return this.hint;
-    }
-    return null;
+    return AvailabilityUtils.processOnEdit(this.availability,
+      () => {
+        if (this.hint && this.hintType == 'STANDARD') {
+          return this.hint;
+        }
+      },
+      null
+    )
   }
 
   public getHintPopover(): string {
-    if (this.hint && this.hintType == 'STANDARD_POPOVER') {
-      return this.hint;
-    }
-    return null;
+    return AvailabilityUtils.processOnEdit(this.availability,
+      () => {
+      if (this.hint && this.hintType == 'STANDARD_POPOVER') {
+        return this.hint;
+      }
+    },
+    null
+    )
   }
 
   setPresentationStyle(): string {

@@ -9,14 +9,32 @@
 </ng-container>
 
 <ng-template #dropdown>
-  <ng-container *ngIf="!parentButtonGroupComponent; else dropdownElements">
-    <div ngbDropdown class="d-grid" display="dynamic">
+  <ng-container *ngIf="!parentButtonGroupComponent; else buttonDropdownElements">
       <ng-container *ngTemplateOutlet="dropdownElements"></ng-container>
-    </div>
   </ng-container>
 </ng-template>
 
 <ng-template #dropdownElements>
+  <div ngbDropdown class="d-grid" display="dynamic">
+    <button
+      class="fc button btn btn-{{ bootstrapStyle }} btn-block navbar-btn dropdown-toggle"
+      ngbDropdownToggle
+      type="button"
+      data-toggle="dropdown"
+      aria-haspopup="true"
+      aria-expanded="false"
+      [id]="id"
+      [availabilityHtmlElement]="availability"
+    >
+      <ng-container *ngTemplateOutlet="contentTemplate"></ng-container>
+    </button>
+    <div id="{{ id }}ngbDropdownMenu" ngbDropdownMenu >
+      <ng-container [fhDynamicComponents]="subelements" [fhNonVisualSubcomponents]="nonVisualComponents"></ng-container>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #buttonDropdownElements>
   <button
     class="fc button btn btn-{{ bootstrapStyle }} btn-block navbar-btn dropdown-toggle"
     ngbDropdownToggle

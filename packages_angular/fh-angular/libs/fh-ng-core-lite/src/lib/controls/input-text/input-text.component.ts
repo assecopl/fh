@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   ElementRef,
   forwardRef,
@@ -30,7 +31,7 @@ import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
     },
   ],
 })
-export class InputTextComponent extends FhngReactiveInputC implements OnInit {
+export class InputTextComponent extends FhngReactiveInputC implements OnInit, AfterViewInit {
   public override width = BootstrapWidthEnum.MD3;
 
   // @Input('mask')
@@ -120,6 +121,11 @@ export class InputTextComponent extends FhngReactiveInputC implements OnInit {
     super.mapAttributes(data);
     this.mask = data.mask
     this.rawValue = data.rawValue;
+  }
+
+  override ngAfterViewInit(): void {
+    super.ngAfterViewInit();
+
   }
 
 }

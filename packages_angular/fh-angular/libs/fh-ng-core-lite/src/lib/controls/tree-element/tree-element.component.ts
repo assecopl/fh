@@ -14,6 +14,7 @@ import {
 } from '@angular/core';
 import {FhngHTMLElementC} from '../../models/componentClasses/FhngHTMLElementC';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
+import {TreeComponent} from "../tree/tree.component";
 
 @Component({
   selector: '[fh-tree-element]',
@@ -84,7 +85,7 @@ export class TreeElementComponent extends FhngHTMLElementC implements OnInit, Af
   public selectedElement: any = null;
 
   @Input()
-  collapsed: boolean = true;
+  public collapsed: boolean = true;
 
   @Input()
   expanded: boolean = true;
@@ -97,7 +98,8 @@ export class TreeElementComponent extends FhngHTMLElementC implements OnInit, Af
 
   constructor(
     injector: Injector,
-    @Optional() @SkipSelf() parentFhngComponent: FhngComponent
+    @Optional() @SkipSelf() parentFhngComponent: FhngComponent,
+  @Optional() @SkipSelf() public tree: TreeComponent
   ) {
     super(injector, parentFhngComponent);
 
@@ -197,6 +199,22 @@ export class TreeElementComponent extends FhngHTMLElementC implements OnInit, Af
     branchToSelect.children[0].children[0].click();
     if ((branchToSelect.children[0].children[0].children[0] as HTMLElement).classList.contains('fa-caret-right')) {
       (branchToSelect.children[0].children[0].children[0] as HTMLElement).click();
+    }
+  }
+
+  override processAddedComponents(addedComponents) {
+    if (addedComponents) {
+      let newSubelements = []
+      if (addedComponents['-']) {
+        newSubelements.push(...addedComponents['-'])
+      }
+      this.subelements.forEach((subelement, index) => {
+        newSubelements.push(subelement);
+        if (addedComponents[subelement.id]) { //checks if there are components to add after subelement
+          newSubelements.push(...addedComponents[subelement.id])
+        }
+      });
+      this.subelements = newSubelements;
     }
   }
 }

@@ -1,9 +1,9 @@
 <ng-container *ngIf="!sortable">
-  {{ label }}
+  <span [innerHTML]="label | fhml"></span>
 </ng-container>
 <ng-container *ngIf="sortable">
   <button (click)="sort()" class="btn btn-sortable btn-link btn-block text-body" [class.text-left]="!horizontalAlign">
-    {{ label }}
+    <span [innerHTML]="label | fhml"></span>
     <i
 
       class="{{

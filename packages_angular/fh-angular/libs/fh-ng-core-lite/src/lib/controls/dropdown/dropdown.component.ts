@@ -1,5 +1,5 @@
 import {
-  AfterContentInit,
+  AfterContentInit, AfterViewInit,
   Component,
   ContentChildren,
   forwardRef,
@@ -37,7 +37,7 @@ import {BootstrapWidthEnum} from './../../models/enums/BootstrapWidthEnum';
 })
 export class DropdownComponent
   extends GroupingComponentC<DropdownItemComponent>
-  implements OnInit, AfterContentInit, OnChanges {
+  implements OnInit, AfterContentInit, AfterViewInit, OnChanges {
   public override width: string = BootstrapWidthEnum.MD2;
 
   @HostBinding('class')
@@ -57,6 +57,8 @@ export class DropdownComponent
   @HostBinding('class.btn-group')
   public btnGroupClass: boolean = false;
 
+  private _subscriptions = [];
+
   constructor(
     public override injector: Injector,
     @Optional() @SkipSelf() parentFhngComponent: FhngComponent,
@@ -67,7 +69,7 @@ export class DropdownComponent
     this.btnGroupClass = !!this.parentButtonGroupComponent;
   }
 
-  override ngOnInit(): void {
+  public override ngOnInit(): void {
     super.ngOnInit();
 
     this.width = BootstrapWidthEnum.MD2;
@@ -76,8 +78,6 @@ export class DropdownComponent
       : BootstrapStyleEnum.PRIMARY;
     this.dropdown = true;
     this.showItems = false;
-
-
   }
 
   public getSubcomponentInstance(): new (
@@ -86,10 +86,14 @@ export class DropdownComponent
     return DropdownItemComponent;
   }
 
-  override ngAfterContentInit(): void {
+  public override ngAfterContentInit(): void {
   }
 
-  override ngOnChanges(changes: SimpleChanges) {
+  public override ngAfterViewInit() {
+    super.ngAfterViewInit();
+  }
+
+  public override ngOnChanges(changes: SimpleChanges) {
     super.ngOnChanges(changes);
   }
 
@@ -103,5 +107,25 @@ export class DropdownComponent
       this.width = BootstrapWidthEnum.NONE;
       this.mb2 = false;
     }
+
+    this._mapSubscriptions()
+  }
+
+  private _mapSubscriptions(): void {
+    this._unsubscribe();
+    (this.childFhngComponents as DropdownItemComponent[]).forEach((element: DropdownItemComponent, index: number) => {
+      if (element.selectedButton$) {
+        this._subscriptions.push(element.selectedButton$.subscribe((data: DropdownItemComponent) => this._selectedButtonSubscribeEvent(data)));
+      }
+    });
+  }
+
+  private _unsubscribe(): void {
+    this._subscriptions.forEach(element => element.unsubscribe());
+    this._subscriptions = [];
+  }
+
+  private _selectedButtonSubscribeEvent(data: DropdownItemComponent): void {
+    // console.log('sub_event', data)
   }
 }

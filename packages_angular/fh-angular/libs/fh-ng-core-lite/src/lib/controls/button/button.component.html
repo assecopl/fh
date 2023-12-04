@@ -13,12 +13,11 @@
 <!--  </ng-container>-->
 <!--</ng-container>-->
 <ng-container *ngIf="!parentButtonGroupComponent; else contentTemplate">
-  <button
+  <button [availabilityHtmlElement]="accessibility"
     #focusElement
     class="fc btn button btn-{{ bootstrapStyle }} {{styleClasses}}"
     [id]="innerId"
     [class.active]="active"
-    [ngStyle]="styles"
     [innerHTML]="label | fhml"
     (click)="onClickEvent($event)"
   >

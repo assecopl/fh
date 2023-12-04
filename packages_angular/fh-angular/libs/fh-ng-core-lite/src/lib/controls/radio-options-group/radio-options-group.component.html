@@ -1,15 +1,27 @@
-<div [availabilityHtmlElement]>
-  <label class="col-form-label" *ngIf="label"
+<div
+  [availabilityHtmlElement]="availability"
+>
+  <label
+    class="col-form-label"
+    [id]="innerId + '_label'"
+    [for]="innerId"
+    *ngIf="label"
   >{{ label }}
     <span *ngIf="required" class="required">*</span>
   </label>
-  <div fhng-radio-option
-    *ngFor="let one of values"
-    [(value)]="value"
-    [name]="groupName ? groupName : name"
-    [label]="one"
-    [targetValue]="one"
-  ></div>
+  <fieldset
+    [id]="innerId"
+    [attr.aria-labelledby]="innerId + '_label'"
+    class="radio-positioned-left"
+  >
+    <div fhng-radio-option
+         *ngFor="let one of values"
+         [(value)]="value"
+         [name]="groupName ? groupName : name"
+         [label]="one"
+         [targetValue]="one"
+    ></div>
+  </fieldset>
 </div>
 <ng-container *ngIf="configuration.debug">
   <fh-component-debugger/>

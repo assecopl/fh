@@ -82,10 +82,10 @@ export class DynamicComponentsDirective
           const component = this.componentRefs[data.id];
           component.instance.data = data;
           component.instance.formId = this.formId;
-          // component.hostView.markForCheck();
+          component.hostView.markForCheck();
           // component.changeDetectorRef.detectChanges();
           this.viewContainerRef.insert(component.hostView, index);
-
+          component.instance.focusOnInit();
         } else {
           this.createComponent(data, index);
         }
@@ -133,6 +133,7 @@ export class DynamicComponentsDirective
 
     }
     this.componentRefs[componentRef.instance.id] = componentRef;
+    componentRef.instance.focusOnInit();
   }
 
 

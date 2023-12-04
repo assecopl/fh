@@ -6,6 +6,11 @@ import {AvailabilityEnum} from './enums/AvailabilityEnum';
  */
 export class AvailabilityUtils {
 
+  public static processOnEdit(availability: AvailabilityEnum | string, fn:() => any, defaultReturn:any) {
+    if (!availability) return defaultReturn;
+    if (AvailabilityUtils.stringToEnum(availability) === AvailabilityEnum.EDIT) return fn();
+    return defaultReturn;
+  }
 
   public static isHidden(availability: AvailabilityEnum | string): boolean {
     if (!availability) return false;

@@ -1,7 +1,7 @@
 import {
   Component,
   EventEmitter,
-  forwardRef,
+  forwardRef, HostBinding,
   Injector,
   Input,
   OnInit,
@@ -15,6 +15,11 @@ import {InputTypeEnum} from '../../models/enums/InputTypeEnum';
 import {BootstrapWidthEnum} from '../../models/enums/BootstrapWidthEnum';
 import {FhngComponent} from "../../models/componentClasses/FhngComponent";
 import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
+
+export interface ICheckboxDataAttributes extends IDataAttributes{
+  horizontalAlign?: "LEFT" | "CENTER" | "RIGHT" | null;
+  verticalAlign?: "TOP" | "MIDDLE" | "BOTTOM" | null;
+}
 
 @Component({
   selector: '[fhng-input-checkbox]',
@@ -34,17 +39,62 @@ import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
 export class CheckboxComponent
   extends FhngReactiveInputC
   implements OnInit {
-  // @HostBinding('class.form-check')
-  // formCheck: boolean = true;
+  public override width: string = BootstrapWidthEnum.MD2;
+
+  public override rawValue: boolean = false;
+
+  @HostBinding('class.form-check')
+  public formCheckClass: boolean = true;
+
+  @HostBinding('class.form-switch')
+  public formSwitchClass: boolean = false;
+
+  @HostBinding('class.form-group')
+  public formCheck: boolean = true;
+
+  @HostBinding('class.stickedLabel')
+  public stickyLabelClass: boolean = true;
+
+
+  @HostBinding('class.justify-content-start')
+  public justifyContentStartClass: boolean = true;
+
+  @HostBinding('class.justify-content-center')
+  public justifyContentCenterClass: boolean = false;
+
+  @HostBinding('class.justify-content-end')
+  public justifyContentEndClass: boolean = false;
+
+
+  @HostBinding('class.align-items-start')
+  public alignItemsStartClass: boolean = true;
+
+  @HostBinding('class.align-items-center')
+  public alignItemsCenterClass: boolean = false;
+
+  @HostBinding('class.align-items-end')
+  public alignItemsEndClass: boolean = false;
+
 
   @Input()
   public checked: boolean = false;
 
-  public override rawValue: boolean = false;
-
   @Output()
   public selectedCheckbox: EventEmitter<CheckboxComponent> =
     new EventEmitter<CheckboxComponent>();
+
+  @HostBinding('class')
+  public get additionalClasses() {
+    let _additionalClasses = ['positioned'];
+
+    if (this.labelPosition) {
+      _additionalClasses.push(this.labelPosition.toLowerCase());
+    } else {
+      _additionalClasses.push('right');
+    }
+
+    return _additionalClasses.join(' ');
+  }
 
   constructor(
     public override injector: Injector,
@@ -52,10 +102,11 @@ export class CheckboxComponent
   ) {
     super(injector, parentFhngComponent);
     this.labelPosition = 'RIGHT';
+
+    if(!this.fhdp) {
+      this.formSwitchClass = true;
+    }
   }
-
-  public override width: string = BootstrapWidthEnum.MD12;
-
   //public class:string = "";
 
   override ngOnInit() {
@@ -78,7 +129,53 @@ export class CheckboxComponent
     return this.changesQueue.extractChangedAttributes();
   };
 
-  override mapAttributes(data: IDataAttributes) {
+  override mapAttributes(data: ICheckboxDataAttributes) {
     super.mapAttributes(data);
+
+    this.horizontalAlign = data.horizontalAlign || this.horizontalAlign;
+    this.verticalAlign = data.verticalAlign || this.verticalAlign;
+
+    this._updateAlignItemAlign();
+    this._updateJustifyContentAlign();
+  }
+
+  private _updateJustifyContentAlign () {
+    switch (this.horizontalAlign) {
+      case "CENTER":
+        this.justifyContentStartClass = false;
+        this.justifyContentEndClass = false;
+        this.justifyContentCenterClass = true;
+        break;
+      case "RIGHT":
+        this.justifyContentStartClass = false;
+        this.justifyContentEndClass = true;
+        this.justifyContentCenterClass = false;
+        break;
+      case "LEFT":
+      default:
+        this.justifyContentStartClass = true;
+        this.justifyContentEndClass = false;
+        this.justifyContentCenterClass = false;
+    }
+  }
+
+  private _updateAlignItemAlign () {
+    switch (this.verticalAlign) {
+      case "MIDDLE":
+        this.justifyContentStartClass = false;
+        this.justifyContentEndClass = false;
+        this.justifyContentCenterClass = true;
+        break;
+      case "BOTTOM":
+        this.justifyContentStartClass = false;
+        this.justifyContentEndClass = true;
+        this.justifyContentCenterClass = false;
+        break;
+      case "TOP":
+      default:
+        this.justifyContentStartClass = true;
+        this.justifyContentEndClass = false;
+        this.justifyContentCenterClass = false;
+    }
   }
 }

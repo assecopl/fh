@@ -21,6 +21,7 @@ import {FhngChangesComponent} from "../abstracts/FhngChangesComponent";
 import {HttpClient, HttpErrorResponse, HttpEvent, HttpEventType, HttpHeaders, HttpRequest} from "@angular/common/http";
 import {catchError, last, map, tap} from 'rxjs/operators';
 import {lastValueFrom, Observable, throwError} from "rxjs";
+import {FhmlPortalManager} from "../../service/fh-ml.service";
 
 /**
  * Klasa odpowiedzialna za budowę drzewa komponentów FHNG
@@ -32,6 +33,12 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
   @Input() subelements: any[] = [];
 
   @Input() nonVisualComponents: any[] = [];
+
+  /*
+    FhPortal logic
+   */
+  public hasPortal:boolean = false;
+  protected fhmlPortalManager:FhmlPortalManager = inject(FhmlPortalManager);
 
   public _data: any;
   @Input('data')
@@ -182,6 +189,9 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
   }
 
   ngAfterViewInit(): void {
+    if(this.hasPortal){
+      this.fhmlPortalManager.handleMutation();
+    }
   }
 
   /* Fire event to backend */
@@ -312,6 +322,17 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
    */
   @ViewChild('focusElement', {static: false}) focusElement: ElementRef;
 
+
+  public focusOnInit() {
+    if (this.focusElement && this.formsManager.shouldComponentRefocus(this)) {
+      try {
+        this.focusElement.nativeElement.focus();
+      } catch (e) {
+        console.warn('Element ' + this.id + ' is not focusable');
+      }
+    }
+  }
+
   public focus() {
     if (this.focusElement) {
       try {
@@ -368,8 +389,10 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
   }
 }
 
+export abstract class FhngGroupComponent {}
+
 @Directive()
-export abstract class FhngButtonGroupComponent {
+export abstract class FhngButtonGroupComponent extends FhngGroupComponent {
   public initialized: boolean;
 
   public buttonSubcomponents: FhngComponent[] = [];

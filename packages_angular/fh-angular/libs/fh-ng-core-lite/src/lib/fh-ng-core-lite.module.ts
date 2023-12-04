@@ -96,6 +96,7 @@ import {TimestampPL} from "./controls/input-timestamp/i18n/timestamp.pl";
 import {TimestampEN} from "./controls/input-timestamp/i18n/timestamp.en";
 import {ButtonGroupComponent} from "./controls/button-group/button-group.component";
 import {HintComponent} from "./components/hint/hint.component";
+import {RedirectEvent} from "./events/RedirectEvent";
 
 
 const maskConfigFunction: () => Partial<IConfig> = () => {
@@ -200,6 +201,7 @@ const components = [
     NotificationEvent,
     SessionTimeoutEvent,
     CustomActionEvent,
+    RedirectEvent,
     ComponentManager,
     provideNgxMask(maskConfigFunction)
   ],

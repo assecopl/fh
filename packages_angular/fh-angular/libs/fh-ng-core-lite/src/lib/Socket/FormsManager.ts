@@ -11,6 +11,7 @@ import {NotificationService} from "../service/Notification";
 import {EventsManager} from "../service/events-manager.service";
 import {BaseEvent} from "../events/BaseEvent";
 import {FormComponent} from "../controls/form/form.component";
+import {FhngComponent} from "../models/componentClasses/FhngComponent";
 
 // declare const ENV_IS_DEVELOPMENT: boolean;
 
@@ -88,16 +89,6 @@ class FormsManager {
                     + this.usedContainers[formObj.container].id + '". It will be overwritten');
             }
             this.openForm(formObj);
-            if (this.lastActiveElementId && this.lastClosedFormId === formObj.id) {
-                // let element = document.getElementById(this.lastActiveElementId);
-                // if (element) {
-                //     // skip menu's focus
-                //     if (document.getElementById('menuForm').contains(element)) {
-                //         return;
-                //     }
-                //     element.focus();
-                // }
-            }
         });
     }
 
@@ -114,25 +105,14 @@ class FormsManager {
         return this.initialized;
     }
 
-    closeForm(form: FormComponent) {
-        if (form) {
-            this.usedContainers[form.container.id] = null;
-            let indexToDelte = -1;
-            this.openedForms.forEach((value, index) => {
-                if (value.id == form.id) {
-                    indexToDelte = index;
-                }
-            })
-            if (indexToDelte > -1) {
-                this.openedForms.splice(indexToDelte, 1);
-            }
+    closeForm(formId: string) {
+      this.closeFormsSubject.next(formId);
+        if (formId) {
 
             if (document.activeElement) {
                 this.lastActiveElementId = document.activeElement.id || null;
             }
-            this.lastClosedFormId = form.id;
-            // form.destroy();
-            form = null;
+            this.lastClosedFormId = formId;
         }
     }
 
@@ -141,7 +121,7 @@ class FormsManager {
             return;
         }
         formsList.forEach((formId) => {
-            this.closeFormsSubject.next(formId);
+            this.closeForm(formId);
             // let form = this.findForm(formId);
             // if (typeof form === 'object') {
             //
@@ -591,6 +571,10 @@ class FormsManager {
         if (this.openedForms.indexOf(form) > -1) {
             this.openedForms.splice(this.openedForms.indexOf(form), 1);
         }
+    }
+
+    public shouldComponentRefocus(c:FhngComponent){
+      return c.id == this.lastActiveElementId && c.formId == this.lastClosedFormId;
     }
 
 

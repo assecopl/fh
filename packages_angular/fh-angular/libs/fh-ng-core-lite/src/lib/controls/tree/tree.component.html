@@ -1,18 +1,4 @@
-<!--<ul *ngIf="collapsedTree || treeElementTemplate == null" availabilityHtmlElement>-->
-<!--    <ng-container *ngFor="let e of subelements; let i = index;">-->
-<!--        <fh-tree-element (click)="setSelected(e)" [id]="e.id+'_'+i" width="md-12" [selected]="selected == e"-->
-<!--                           (treeElement)="processCollapsed($event)"-->
-<!--                           [expandableNode]="e[relation]?.length > 0"-->
-<!--                           [label]=" e[treeElementTemplate ? treeElementTemplate.label.replace(iterator+'.', ''): treeElement.label.replace(iterator+'.', '')]"></fh-tree-element>-->
-<!--        <ng-container *ngIf="e[relation]?.length > 0">-->
-<!--            <fh-tree [selected]="selected" (selectedChange)="setSelected($event)" [iterator]="iterator"-->
-<!--                       [collapsedTree]="activeElements[e.id+'_'+i] == false" [collection]="e[relation]"-->
-<!--                       [relation]="relation"-->
-<!--                       [treeElementTemplate]="treeElementTemplate ? treeElementTemplate : treeElement">-->
-<!--            </fh-tree>-->
-<!--        </ng-container>-->
-<!--    </ng-container>-->
-<!--</ul>-->
+<!--subelements.length: {{subelements.length}}-->
 <ng-container *ngIf="!child; then rootTemplate; else childTemplate"></ng-container>
 <ng-template #rootTemplate>
   <div class="fc tree treeview {{styleClasses}}" [class.treelines]="lines">
@@ -30,7 +16,7 @@
 
 <ng-template #listElementsTemplate>
   <ng-container *ngFor="let e of subelements">
-    <li fh-tree-element [data]="e" [collapsed]="collapsedTree"
+    <li [availabilityHtmlElement]="e.accessibility" fh-tree-element [data]="e" [collapsed]="collapsedTree"
         [formId]="formId"
         [id]="e.id"
         width="md-12"
@@ -39,19 +25,9 @@
         (treeElement)="processCollapsed($event)"
         [expandableNode]="e.subelements?.length > 0"
     class="list-group-item-custom node-treeview1 treeNode pl-3">
-      <ng-container *ngIf="e.subelements?.length > 0">
-        <ul class="list-group col-12" fh-tree
-            [id]="e.id"
-            [child]="true"
-            [formId]="formId"
-            [selected]="selected"
-            (selectedChange)="processCollapsed($event)"
-            [collapsedTree]="activeElements[e.id]"
-            [subelements]="e.subelements"
-            [treeElementTemplate]=" treeElementTemplate ? treeElementTemplate : treeElement">
-        </ul>
-      </ng-container>
+
     </li>
   </ng-container>
 </ng-template>
+Subelements : {{subelements.length}}
 

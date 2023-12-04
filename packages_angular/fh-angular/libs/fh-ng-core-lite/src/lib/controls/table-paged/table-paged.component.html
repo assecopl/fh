@@ -112,6 +112,9 @@
           [collectionSize]="totalRows"
           [(page)]="nextPageNumber"
           [pageSize]="pageSize"
+          [maxSize]="3"
+          [rotate]="false"
+          [ellipses]="false"
           (pageChange)="pageChange($event)"
         >
         </ngb-pagination>

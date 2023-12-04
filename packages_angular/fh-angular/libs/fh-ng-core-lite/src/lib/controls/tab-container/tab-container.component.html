@@ -9,7 +9,7 @@
   >
     <ng-container *ngFor="let tab of subelements">
       <li class="nav-item">
-        <a
+        <a [availabilityHtmlElement]="tab.accessibility"
           tabindex="0"
           class="nav-link"
           data-toggle="tab"
