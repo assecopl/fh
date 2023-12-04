@@ -1,0 +1,15 @@
+<ng-container *ngIf="form && !form.modal">
+    <div fh-form
+         [container]="this"
+         [formType]="form.formType"
+         [subelements]="form.subelements || []"
+         [nonVisualComponents]="form?.nonVisualSubcomponents || []"
+         [formId]="form?.id"
+         [id]="form.id"
+         [label]="form.label"
+         [hideHeader]="form.hideHeader"
+    ></div>
+</ng-container>
+<!--<pre>-->
+<!--{{form | json}}-->
+<!--</pre>-->

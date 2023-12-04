@@ -10,6 +10,12 @@
       "node_modules/@types"
     ],
     "paths": {
+      "@fh-ng/basic-controls": [
+        "libs/basic-controls/src/index.ts"
+      ],
+      "@fh-ng/forms-handler": [
+        "libs/forms-handler/src/index.ts"
+      ],
       "fh-ng-core-lite": [
         "libs/fh-ng-core-lite/src/index.ts"
       ]
