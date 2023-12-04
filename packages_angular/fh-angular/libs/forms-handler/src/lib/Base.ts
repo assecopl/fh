@@ -261,3 +261,25 @@ export interface IForm {
   nonVisualSubcomponents?: any[]
 
 }
+
+export class FhngFormatter {
+  pattern: string = null;
+  customPatterns = null;
+  separatorLimit; //maxIntegerDIgits
+  maxFractionDigits;
+  thousandSeparator;
+
+  constructor(patern: string = null, customPatterns = null,) {
+    if (patern) this.pattern = patern;
+    if (customPatterns) this.customPatterns = customPatterns;
+  }
+
+  fromModel(v: any): string {
+    return v;
+  }
+
+  toModel(v: any): any {
+    return v;
+  }
+
+}

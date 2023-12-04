@@ -106,8 +106,7 @@ export class FhNgFormsHandlerModule extends FhNgModule {
   }
 
   public registerComponents(componentManager?: ComponentManager): void {
-
-
+    componentManager.registerComponent(FormComponent);
   }
 
   protected registerCustomActions(customActionsManager?: CustomActionsManager) {

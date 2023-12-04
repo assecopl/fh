@@ -6,7 +6,7 @@
     "start": "nx serve --project=fh-angular",
     "build": "nx build --project=fh-angular",
     "build:forms-handler": "nx build --project=forms-handler --verbose",
-    "build:basic-controls": "nx build --project=basic-controls",
+    "build:basic-controls": "nx build --project=basic-controls --verbose",
     "watch": "nx build --watch --project=fh-angular",
     "FhDP_Example": "nx buildExample --watch --project=fh-angular --configuration=development",
     "test": "nx test",
