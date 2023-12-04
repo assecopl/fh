@@ -59,6 +59,7 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
   public pagesCount: number = null;
   public tableIsVisible : boolean = false;
   public orgRawValue: any;
+  private onInputValue:String;
 
     private isSearch: boolean = true;
     private popupColor?: string;
@@ -294,7 +295,7 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
 
     override mapAttributes(data: IDataAttributes | any) {
         super.mapAttributes(data);
-        console.log("Ustaanie org value", this.orgRawValue, " - ", data)
+        console.log("Setting orgRawValue=", this.orgRawValue, " - ", data)
       // if (data.filteredValues) {
       //     this.values = this.getValuesForCursor();
       // }
@@ -327,6 +328,7 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
 
   override onInputEvent(event) {
     this.updateModel(event);
+    this.onInputValue = this.rawValue;
     this.tableIsVisible = this.rawValue.length>0;
 
     this.fireEvent('onInput', this.onInput);
@@ -345,9 +347,10 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
         attrs["command"] = "changePage";
         attrs["pageChange"] = this.onPageChange;
         this.onPageChange = null;
-      } else {
+      } else if (this.onInputValue){
         attrs["command"] = "search";
         attrs["text"] = this.rawValue;
+        this.onInputValue = null;
       }
       this.valueChanged = false;
       this.onBlurValue = null;
@@ -395,8 +398,6 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
     // console.warn("TERAZ idzie blur?")
     // this.fireEventWithLock('onChange', this.onChange);
 
-    console.info("org value 1 = ", this.orgRawValue);
-
     setTimeout(() => {
       if (this.onBlurValue) {
         this.tableIsVisible = false;
@@ -407,12 +408,8 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
           this.rawValue = this.orgRawValue;
           //this.fireEventWithLock('onChange', this.onChange);
         }
-        debugger
-        console.info("org value 2 = ", this.orgRawValue);
-        console.log("sdfsdf");
-        console.warn("!!!!!!!!!!");
       }
-    }, 2020);
+    }, 200);
 
   }
 

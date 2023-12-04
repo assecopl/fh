@@ -16,7 +16,7 @@ public class CountryPagedTableSource {
     }
 
     public PageModel<Country> createPagedModel(Pageable pageable) {
-        return new PageModel<>(t -> loadPage(pageable));
+        return new PageModel<>(t -> loadPage(t));
     }
 
     private Page<Country> loadPage(Pageable pageable) {

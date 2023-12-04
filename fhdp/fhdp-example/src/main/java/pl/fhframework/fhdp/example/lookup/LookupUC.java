@@ -39,4 +39,9 @@ public class LookupUC implements IInitialUseCase {
         exit();
     }
 
+    @Action(validate = false)
+    public void setCountry(String countryCode){
+        model.setCountryCode(countryCode);
+    }
+
 }

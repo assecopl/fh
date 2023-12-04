@@ -40,6 +40,32 @@
 <!--                              hint="test hint" hintType="STATIC"-->
 <!--                              dispalyOnlyCode="false"-->
 <!--                              value="{countryCode}"-->
+<!--                              provider="pl.fhframework.fhdp.example.lookup.provider.CountryLookupProvider"-->
+<!--                              icon="fas fa-search" >-->
+<!--            <DictionaryComboParameterFhDP name="codeListId" value="356COM"/>-->
+<!--            &lt;!&ndash;            <DictionaryComboParameterFhDP name="referenceDate" value="{referenceDate}"/>&ndash;&gt;-->
+<!--            <DictionaryComboParameterFhDP name="regionFilter" value="{regionFilter}"/>-->
+<!--        </DictionaryLookupFhDP>-->
+
+<!--    </Row>-->
+
+    <Row>
+        <Button label="France" onClick="setCountry('FR')"/>
+        <Button label="Poland" onClick="setCountry('PL')"/>
+        <Button label="Germany" onClick="setCountry('DE')"/>
+        <Button label="Close" onClick="close()"/>
+    </Row>
+
+<!--    <Row>-->
+<!--        <DictionaryLookupFhDP id="dcCountry2"-->
+<!--                              emptyValue="true"-->
+<!--                              width="md-4"-->
+<!--                              label="Country"-->
+<!--                              required="true"-->
+<!--                              onChange="-"-->
+<!--                              hint="test hint" hintType="STATIC"-->
+<!--                              dispalyOnlyCode="false"-->
+<!--                              value="{countryCode}"-->
 <!--                              provider="pl.fhframework.fhdp.example.lookup.provider.CountryNameValueLookupProvider"-->
 <!--                              icon="fas fa-search" />-->
 
