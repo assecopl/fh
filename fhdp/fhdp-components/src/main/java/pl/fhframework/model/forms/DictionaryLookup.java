@@ -46,6 +46,11 @@ public class DictionaryLookup extends BaseInputFieldWithKeySupport implements IG
     private String provider;
 
     @Getter
+    @Setter
+    @XMLProperty
+    private boolean displayOnlyCode = true;
+
+    @Getter
     private List<NameValue> columns;
 
     @JsonIgnore
@@ -94,13 +99,12 @@ public class DictionaryLookup extends BaseInputFieldWithKeySupport implements IG
     @Override
     public ElementChanges updateView() {
         ElementChanges elementChange = super.updateView();
-        final Object dictionaryElement = dictionaryLookupProvider.getElementByModelValue(getRawValue(), this::getParameterValue);
-        final String rawValueToShow = dictionaryLookupProvider.getDisplayValue(dictionaryElement);
         if (this.commandValueData != null) {
             switch (this.commandValueData.getStringAttribute("command")) {
                 case "selectItem":
-                    elementChange.addChange(RAW_VALUE_ATTR, rawValueToShow);
-                    elementChange.addChange("orgRawValue", rawValueToShow);
+                    final String presentedTextValue = getPresentedTextValue();
+                    elementChange.addChange(RAW_VALUE_ATTR, presentedTextValue);
+                    elementChange.addChange("orgRawValue", presentedTextValue);
                     elementChange.addChange(ATTR_ROWS, Collections.emptyList());
                     elementChange.addChange(ATTR_PAGE, null);
                     elementChange.addChange(ATTR_PAGES_COUNT, null);
@@ -117,11 +121,22 @@ public class DictionaryLookup extends BaseInputFieldWithKeySupport implements IG
                     }
                     break;
             }
+            commandValueData = null;
         } else {
-            elementChange.addChange("orgRawValue", rawValueToShow);
-            elementChange.addChange(RAW_VALUE_ATTR, rawValueToShow);
+            final String presentedTextValue = getPresentedTextValue();
+            elementChange.addChange("orgRawValue", presentedTextValue);
+            elementChange.addChange(RAW_VALUE_ATTR, presentedTextValue);
         }
         return elementChange;
+    }
+
+    private String getPresentedTextValue() {
+        if (this.displayOnlyCode) {
+            return dictionaryLookupProvider.getDisplayCode(this.getModelBinding().getBindingResult().getValue());
+        } else {
+            final Object dictionaryElement = dictionaryLookupProvider.getElementByModelValue(getRawValue(), this::getParameterValue);
+            return dictionaryLookupProvider.getDisplayValue(dictionaryElement);
+        }
     }
 
     //************************************************************************************************************
@@ -133,7 +148,7 @@ public class DictionaryLookup extends BaseInputFieldWithKeySupport implements IG
         final Integer selectedIndex = valueChange.getIntAttribute("select");
         final Object selectedDictionaryElement = pageModel.getPage().getContent().get(selectedIndex);
         this.getModelBinding().setValue(dictionaryLookupProvider.getModelValue(selectedDictionaryElement));
-        this.setRawValue(dictionaryLookupProvider.getDisplayValue(selectedDictionaryElement));
+        //this.setRawValue(dictionaryLookupProvider.getDisplayValue(selectedDictionaryElement));
         log.warn("Selected item {}", getRawValue());
     }
 
@@ -181,7 +196,7 @@ public class DictionaryLookup extends BaseInputFieldWithKeySupport implements IG
                     Class<? extends IComboDataProviderFhDP<?, ?>> wrappedProviderClass = (Class<? extends IComboDataProviderFhDP<?, ?>>) foundProviderClass;
                     @SuppressWarnings("unchecked")
                     IComboDataProviderFhDP<Object, Object> wrappedProvider = (IComboDataProviderFhDP<Object, Object>) AutowireHelper.getBean(wrappedProviderClass);
-                    return new DictionaryLookupLegacyProvider<Object, Object>(wrappedProvider);
+                    return new DictionaryLookupLegacyProvider<>(wrappedProvider);
                 } else {
                     throw new RuntimeException("Not supported provider type '" + foundProviderClass.getName() + "'!");
                 }

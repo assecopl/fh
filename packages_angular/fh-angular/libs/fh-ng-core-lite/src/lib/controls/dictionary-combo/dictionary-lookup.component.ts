@@ -338,51 +338,26 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
 
   override extractChangedAttributes() {
     let attrs = {};
-    if (1 == 1) {
-      if (this.onSelectValue !== null && this.onSelectValue !== undefined) {
-        attrs["command"] = "selectItem";
-        attrs["select"] = this.onSelectValue;
-        this.onSelectValue = null;
-      } else if (this.onPageChange) {
-        attrs["command"] = "changePage";
-        attrs["pageChange"] = this.onPageChange;
-        this.onPageChange = null;
-      } else if (this.onInputValue){
-        attrs["command"] = "search";
-        attrs["text"] = this.rawValue;
-        this.onInputValue = null;
-      }
-      this.valueChanged = false;
-      this.onBlurValue = null;
-      console.warn("Wprowadzono: ", this.orgRawValue)
-    } else {
-      // if (this.valueChanged) {
-      //   attrs[FORM_VALUE_ATTRIBUTE_NAME] = this.rawValue;
-      if (this.onSelectValue !== null && this.onSelectValue !== undefined) {
-        attrs["command"] = "selectItem";
-        attrs["select"] = this.onSelectValue;
-        console.warn("TERAZ idzie selected!!!!!!!!!!!!!!!!")
-        this.onSelectValue = null;
-        this.onBlurValue = null;
-      } else if (this.onPageValue !== null && this.onPageValue !== undefined) {
-        attrs["command"] = "changePage";
-        attrs["pageChange"] =
-
-          //attrs["page"] = this.onPageValue;
-          //attrs["text"] = this.rawValue;
-          console.warn("TERAZ idzie page value!!!!!!!!!!!!!!!!")
-        this.onPageValue = null;
-        this.onBlurValue = null;
-      } else if (this.onBlurValue) {
-        attrs["blur"] = this.onBlurValue;
-        console.warn("TERAZ idzie blur!!!!!!!!!!!!!!!!")
-        this.onBlurValue = null;
-      } else {
-        attrs["text"] = this.rawValue;
-      }
-      this.valueChanged = false;
-      // }
+    if (this.onSelectValue !== null && this.onSelectValue !== undefined) {
+      attrs["command"] = "selectItem";
+      attrs["select"] = this.onSelectValue;
+      this.onSelectValue = null;
+    } else if (this.onPageChange) {
+      attrs["command"] = "changePage";
+      attrs["pageChange"] = this.onPageChange;
+      this.onPageChange = null;
+    } else if (this.onInputValue != null) {
+      attrs["command"] = "search";
+      attrs["text"] = this.rawValue;
+      this.onInputValue = null;
+    } else if (this.onBlurValue!=null){
+      console.log("On blur")
+    }else{
+      console.error("Unknown path of processing dictionary-lookup!");
     }
+    this.valueChanged = false;
+    this.onBlurValue = null;
+    console.warn("Wprowadzono: ", this.orgRawValue)
     return attrs;
   };
 
@@ -399,14 +374,13 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
     // this.fireEventWithLock('onChange', this.onChange);
 
     setTimeout(() => {
-      if (this.onBlurValue) {
+      if (this.onBlurValue!=null) {
         this.tableIsVisible = false;
         if (this.rows.length==1){
           this.onSelectedEvent(0);
         }else {
-          ;
           this.rawValue = this.orgRawValue;
-          //this.fireEventWithLock('onChange', this.onChange);
+          this.fireEventWithLock('onChange', this.onChange);
         }
       }
     }, 200);

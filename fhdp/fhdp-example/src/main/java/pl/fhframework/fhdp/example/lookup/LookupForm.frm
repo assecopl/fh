@@ -20,6 +20,7 @@
                               onChange="-"
                               hint="test hint" hintType="STATIC"
                               dispalyOnlyCode="false"
+                              displayOnlyCode="true"
                               value="{countryCode}"
                               provider="pl.fhframework.fhdp.example.lookup.provider.CountryLookupProvider"
                               icon="fas fa-search" >
@@ -35,7 +36,7 @@
                               required="true"
                               onChange="-"
                               hint="test hint" hintType="STATIC"
-                              dispalyOnlyCode="true"
+                             displayOnlyCode="true"
                               value="{countryCode}"
                               provider="pl.fhframework.fhdp.example.lookup.provider.CountryLookupProvider"
                               icon="fas fa-search" >

@@ -31,6 +31,11 @@ public class CountryNameValueLookupDummyProvider implements /*IComboDataProvider
     }
 
     @Override
+    public String getDisplayCode(String value) {
+        return value;
+    }
+
+    @Override
     public String getDisplayValueByElement(Object object) {
         try {
             return getDisplayValue((NameValueDto) object);
