@@ -1,0 +1,129 @@
+<ng-container *ngIf="!accordion">
+  <div class="fc group panelGroup mb-3 card card-default {{styleClasses}}"
+       [id]="id"
+       [class.borderHidden]="!borderVisible"
+       [availabilityHtmlElement]="availability"
+  >
+    <ng-container *ngIf="collapsible">
+      <div
+        *ngIf="label"
+        role="tab"
+        class="card-header d-flex"
+        [id]="innerId + '_header'"
+        [class.isCollapsed]="collapsed"
+        (click)="collapseToggle()"
+      >
+        <span class="mr-auto mb-0 card-title">
+          <span [id]="id + '_label'" [innerHTML]="label | fhml"></span>
+        </span>
+        <span class="toolbox align-self-center">
+          <span
+            class="collapseToggle"
+              tabindex="0"
+              role="button"
+              [attr.aria-expanded]="collapsed"
+              [attr.aria-controls]="id">
+            <i class="fa {{collapsed ? iconOpened : iconClosed}}"></i>
+          </span>
+        </span>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="!collapsible">
+      <div
+        *ngIf="label"
+        role="tab"
+        class="card-header d-flex"
+        [id]="innerId + '_header'"
+      >
+        <span *ngIf="customHeader; else elseBlock">
+          <div class="row">
+            <ng-content select=".panel-header"></ng-content>
+          </div>
+        </span>
+        <ng-template #elseBlock>
+          <ng-container *ngIf="isHeaderCLickUsed">
+            <a [innerHTML]="label | fhml"></a>
+          </ng-container>
+          <ng-container *ngIf="!isHeaderCLickUsed">
+            <span class="mr-auto card-title mb-0">
+              <span [id]="innerId + '_label'" [innerHTML]="label | fhml"></span>
+            </span>
+          </ng-container>
+        </ng-template>
+      </div>
+    </ng-container>
+
+    <div
+      class="card-body"
+      role="tabpanel"
+      [class.collapsed]="collapsed"
+      [attr.aria-labelledby]="label ? innerId + '_header' : null"
+    >
+      <div class="row eq-row">
+        <ng-container [fhDynamicComponents]="subelements" [fhNonVisualSubcomponents]="nonVisualComponents"></ng-container>
+      </div>
+    </div>
+  </div>
+</ng-container>
+<ng-container *ngIf="accordion">
+  <ng-container *ngIf="collapsible">
+    <div
+      *ngIf="label"
+      id="{{ innerId }}_header"
+      role="tab"
+      class="card-header collapsible"
+      [class.isCollapsed]="collapsed"
+      (click)="collapseToggle()"
+    >
+      <button
+        *ngIf="accordion"
+        class="btn btn-block btn-link d-flex valign-middle"
+        type="button"
+        data-toggle="collapse"
+        aria-expanded="false"
+      >
+        <span class="mr-auto mb-0 card-title">
+          <span [id]="id + '_label'" [innerHTML]="label | fhml"></span>
+        </span>
+        <span class="toolbox align-self-center">
+          <span
+            class="collapseToggle"
+            tabindex="0"
+            role="button"
+            [attr.aria-expanded]="collapsed"
+            [attr.aria-controls]="id">
+            <i class="fa {{collapsed ? iconOpened : iconClosed}}"></i>
+          </span>
+        </span>
+      </button>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="!collapsible">
+    <div *ngIf="label" role="tab" id="{{ innerId }}_header" class="card-header">
+      <span *ngIf="customHeader; else elseBlock">
+        <div class="row">
+          <ng-content select=".panel-header"></ng-content>
+        </div>
+      </span>
+      <ng-template #elseBlock>
+        <ng-container *ngIf="isHeaderCLickUsed">
+          <a [innerHTML]="label | fhml"></a>
+        </ng-container>
+        <ng-container *ngIf="!isHeaderCLickUsed">
+          <span [innerHTML]="label | fhml"></span>
+        </ng-container>
+      </ng-template>
+    </div>
+  </ng-container>
+
+  <div
+    class="card-body"
+    role="tabpanel"
+    [class.collapsed]="collapsed"
+    [attr.aria-labelledby]="label ? innerId + '_header' : null"
+  >
+    <div class="row eq-row">
+      <ng-container [fhDynamicComponents]="subelements" [fhNonVisualSubcomponents]="nonVisualComponents"></ng-container>
+    </div>
+  </div>
+</ng-container>

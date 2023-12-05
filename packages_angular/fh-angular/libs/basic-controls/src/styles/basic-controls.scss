@@ -1,0 +1,56 @@
+//TODO Posprzatac i przeniesc style na kontrolki jezeli to mozliwe.
+//@import "./css/Accordion";
+//@import "./css/ApplicationLock.css";
+@import "./css/Button";
+@import "./css/ButtonGroup";
+//@import "./css/Calendar.css";
+@import "./css/Combo";
+@import "css/Checkbox";
+//@import "./css/Dropdown.css";
+@import "./css/FileUpload";
+//@import "./css/FloatingPanel.css";
+//@import "./css/Form.css";
+@import "./css/Group";
+@import "./css/Image";
+//@import "./css/InputDate";
+@import "./css/InputText";
+//@import "./css/InputTimestamp.css";
+//@import "./css/Link.css";
+@import "./css/Modal";
+//@import "./css/MdFileViewer.css";
+//@import "./css/OutputLabel.css";
+//@import "./css/PanelGroup.css";
+@import "./css/PanelHeaderFhDP";
+@import "./css/FHML";
+//@import "./css/ResourceGrid.css";
+//@import "./css/Row.css";
+//@import "./css/SelectOneMenu.css";
+//@import "./css/SelectCombo.css";
+//@import "./css/SplitContainer.css";
+@import "./css/Table";
+@import "./css/TabPanel";
+//@import "./css/HtmlEditor.css";
+@import "./css/Tree";
+//@import "./css/UseCaseDesigner.css";
+//@import "./css/Widget.css";
+//@import "./css/Wizard.css";
+//@import "./css/jquery.tagsinput-revisited.css";
+//@import "./css/SelectComboMenu.css";
+//@import "./css/ThreeDotsMenu.css";
+//@import "~highlightjs/styles/github.css";
+//@import "~summernote/dist/summernote-bs4.css";
+//@import "~select2/dist/css/select2.min.css";
+//@import "~select2-theme-bootstrap4/dist/select2-bootstrap.min.css";
+//@import "./css/Select2Combo.css";
+//@import "./css/HighContrast.css";
+//@import "./css/FontSizeButtons.css";
+@import "./FormComponents";
+
+
+@import '@ng-select/ng-select/scss/default.theme';
+//@import '@ng-select/ng-select/scss/ng-select.component';
+
+:focus-visible {
+  outline: rgba(0, 123, 255, 0.25) solid 0.2rem;
+  /*box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);*/
+}

@@ -1,0 +1,64 @@
+.fc.fileUpload {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.fc.fileUpload .button {
+  position: relative;
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 50%;
+}
+
+.fc.fileUpload .button input[type="file"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.fc.fileUpload label {
+  align-items: center;
+  display: flex;
+  /*justify-content: center;*/
+  width: 100%;
+  /*max-width: 50%;*/
+  overflow: hidden;
+  padding: 0 9px;
+  margin: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fc.fileUpload label:empty {
+  display: none;
+}
+
+.fc.fileUpload.upload-active .button {
+  background-color: #ffffff;
+  background-image: none;
+  color: #345578;
+  border-style: dashed;
+}
+
+.fc.fileUpload .button span {
+  color: white;
+  z-index: 1;
+}
+
+.fc.fileUpload .progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  background-color: transparent;
+}

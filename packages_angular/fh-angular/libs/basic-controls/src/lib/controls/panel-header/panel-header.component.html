@@ -1,0 +1,24 @@
+<div
+  class="panel-header panel-header--transparent"
+  [availabilityHtmlElement]="availability"
+  [id]="innerId"
+>
+  <div class="panel-header-group">
+    <div class="panel-info">{{info}}</div>
+    <div class="panel-title">{{title}}</div>
+  </div>
+  <div class="panel-options">
+    <button
+      class="panel-option"
+      [attr.aria-label]="i18n.__('fh.close') + ':' + title"
+      (click)="onClickEvent($event)"
+    >
+      <i class="fas fa-times"></i>
+      <span class="sr-only">{{ i18n.__("fh.close") + ' ' + title}}</span>
+    </button>
+  </div>
+</div>
+
+<!--<ng-container *ngIf="configuration.debug">-->
+<!--  <fh-component-debugger/>-->
+<!--</ng-container>-->

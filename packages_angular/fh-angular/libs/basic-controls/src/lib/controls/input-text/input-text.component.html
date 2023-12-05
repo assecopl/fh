@@ -1,0 +1,119 @@
+<div fhng-input-label
+     [inputId]="id"
+     [label]="label"
+     [labelPosition]="labelPosition"
+     [labelSize]="labelSize"
+     [hint]="hint"
+     [hintTrigger]="hintTrigger"
+     [hintType]="hintType"
+     [hintPlacement]="hintPlacement"
+     [hintTitle]="hintTitle"
+>
+  <ng-container *ngIf="inputType == inputTypeEnum.textarea">
+    <!--    <ng-container *ngIf="control">-->
+    <ng-container *ngIf="!rowsCountAuto">
+      <div fhng-input-group
+           [iconText]="iconText"
+           [class.fhng-disabled]="disabled"
+           [icon]="icon"
+           [iconAlignment]="iconAlignment"
+           [required]="required"
+      >
+          <textarea [availabilityInput]="availability" (input)="onInputEvent($event)" (change)="onChangeEvent()"
+                    #focusElement
+                    [id]="id"
+                    [style.height]="styles.height"
+                    [rows]="rowsCount"
+                    [name]="name"
+                    [disabled]="disabled"
+                    [value]="rawValue"
+                    [maxLength]="maxLength"
+                    [placeholder]="placeholder"
+                    [style.resize]="resize"
+                    [attr.aria-label]="ariaLabel || label || ('fh.text.label' | i18n)"
+                    [required]="required"
+                    [ngbTooltip]="getHintTooltip()" [ngbPopover]="getHintPopover()" [popoverTitle]="hintTitle"
+                    [placement]="hintPlacement.toLowerCase()" [triggers]="hintTrigger.toLowerCase()"
+                    class="fc inputText form-control {{setPresentationStyle()}}"
+          ></textarea>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="rowsCountAuto">
+      <div fhng-input-group
+           [iconText]="iconText"
+           [class.fhng-disabled]="disabled"
+           [icon]="icon"
+           [iconAlignment]="iconAlignment"
+           [required]="required"
+      >
+          <textarea [availabilityInput]="availability" (input)="onInputEvent($event)" (change)="onChangeEvent()"
+                    #focusElement
+                    autosize
+                    [id]="id"
+                    [value]="rawValue"
+                    [style.height]="styles.height"
+                    [rows]="rowsCount"
+                    [name]="name"
+                    [disabled]="disabled"
+                    [maxLength]="maxLength"
+                    [placeholder]="placeholder"
+                    [style.resize]="resize"
+                    [required]="required"
+                    [attr.aria-label]="ariaLabel || label || ('fh.text.label' | i18n)"
+                    [ngbTooltip]="getHintTooltip()" [ngbPopover]="getHintPopover()" [popoverTitle]="hintTitle"
+                    [placement]="hintPlacement.toLowerCase()" [triggers]="hintTrigger.toLowerCase()"
+                    class="fc inputText form-control {{setPresentationStyle()}}"
+          ></textarea>
+      </div>
+    </ng-container>
+    <!--    </ng-container>-->
+    <!--    <ng-container *ngIf="!control">-->
+    <!--      <textarea-->
+    <!--        #focusElement-->
+    <!--        [id]="innerId"-->
+    <!--        [style.height]="styles.height"-->
+    <!--        [rows]="rowsCount"-->
+    <!--        [name]="innerId"-->
+    <!--        class="form-control"-->
+    <!--        [placeholder]="placeholder"-->
+    <!--        [style.resize]="resize"-->
+    <!--        [attr.aria-label]="ariaLabel"-->
+    <!--      >{{ value }}-->
+    <!--    </textarea-->
+    <!--    >-->
+    <!--    </ng-container>-->
+  </ng-container>
+  <ng-container *ngIf="inputType !== inputTypeEnum.textarea">
+
+    <div fhng-input-group
+         [iconText]="iconText"
+         [class.fhng-disabled]="disabled"
+         [icon]="icon"
+         [iconAlignment]="iconAlignment"
+         [required]="required"
+    >
+      <input [availabilityInput]="availability" (input)="onInputEvent($event)" (change)="onChangeEvent()"
+             #focusElement
+             [id]="id"
+
+             [(ngModel)]="rawValue"
+             [disabled]="disabled"
+             [type]="inputType"
+             [name]="name"
+             [placeholder]="placeholder"
+             [maxLength]="maxLength"
+             [mask]="formatter?.pattern"
+             [dropSpecialCharacters]="false"
+             [attr.aria-label]="ariaLabel || label || ('fh.text.label' | i18n)"
+             [required]="required"
+             class="fc inputText form-control {{setPresentationStyle()}}"
+             [ngbTooltip]="getHintTooltip()" [ngbPopover]="getHintPopover()" [popoverTitle]="hintTitle"
+             [placement]="hintPlacement.toLowerCase()" [triggers]="hintTrigger.toLowerCase()"
+
+      />
+    </div>
+  </ng-container>
+</div>
+<ng-container *ngIf="configuration.debug">
+  <fh-component-debugger/>
+</ng-container>

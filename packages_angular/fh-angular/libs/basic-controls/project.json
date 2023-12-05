@@ -1,0 +1,59 @@
+{
+  "name": "basic-controls",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/basic-controls/src",
+  "prefix": "lib",
+  "tags": [
+    "fh-ng"
+  ],
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:package",
+      "outputs": [
+        "{workspaceRoot}/dist/{projectRoot}"
+      ],
+      "options": {
+        "project": "libs/basic-controls/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/basic-controls/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/basic-controls/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
+      "options": {
+        "jestConfig": "libs/basic-controls/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "libs/basic-controls/**/*.ts",
+          "libs/basic-controls/**/*.html",
+          "libs/basic-controls/package.json"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "@fh-ng/forms-handler",
+  "version": "4.20.0-SNAPSHOT",
+  "peerDependencies": {
+    "@types/pako": "2.0.1",
+    "@angular/platform-browser": "^16.0.0",
+    "@angular/platform-browser-dynamic": "^16.0.0",
+    "@angular/common": "^16.0.0",
+    "@angular/core": "^16.0.0",
+    "@angular/localize": "^16.0.0",
+    "@ng-bootstrap/ng-bootstrap": "11.0.1",
+    "bootstrap": "4.6.1",
+    "rxjs": "7.8.0",
+    "js-cookie": "3.0.5",
+    "pako": "2.1.0",
+    "moment": "2.29.1",
+    "@angular/forms": "^16.0.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false
+}

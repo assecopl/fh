@@ -1,0 +1,97 @@
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/mixins.scss';
+
+:host {
+  ::ng-deep {
+
+    .input-group {
+      ng-select.form-control {
+        padding: 0px;
+        border: none;
+        @each $state, $data in $form-validation-states {
+          @include form-validation-state-selector($state) {
+            .ng-select-container {
+              border-color: map-get($data, color);
+
+              @if $enable-validation-icons {
+                padding-right: 0;
+                background-image: escape-svg(map-get($data, icon));
+                background-repeat: no-repeat;
+                background-position: right $input-height-inner center;
+                background-size: $input-height-inner-half $input-height-inner-half;
+              }
+            }
+          }
+        }
+
+        &.ng-select-focused:not(.ng-select-opened) {
+          .ng-select-container {
+            color: $input-focus-color;
+            background-color: $input-focus-bg;
+            border-color: $input-focus-border-color;
+            outline: 0;
+            // Avoid using mixin so we can pass custom focus shadow properly
+            @if $enable-shadows {
+              box-shadow: $input-box-shadow, $input-focus-box-shadow;
+            } @else {
+              box-shadow: $input-focus-box-shadow;
+            }
+          }
+        }
+
+        .ng-select-container {
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+          height: $input-height;
+          border-width: $border-width;
+        }
+      }
+    }
+
+    //Set invalid border style
+    .ng-select {
+      &.is-invalid {
+        .ng-select-container {
+          border-color: $danger;
+        }
+      }
+
+      .ng-arrow-wrapper {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        width: 32px;
+        background-color: transparent;
+        border-left: 1px solid transparent;
+        padding-right: 0;
+        background-image: url('/assets/img/svg/icons/down.svg');
+        background-position: center center;
+        background-repeat: no-repeat;
+
+        .ng-arrow {
+          border: 0px;
+          display: none;
+          //height: 100%;
+          //width: 32px;
+          //background-image: url('/assets/img/svg/icons/down.svg');
+        }
+      }
+
+      //&.ng-select-opened {
+      //  .ng-arrow-wrapper {
+      //    background-image: url('/assets/img/svg/icons/up.svg');
+      //  }
+      //}
+      //&.ng-select-required {
+      //  .ng-arrow-wrapper , .ng-clear-wrapper{
+      //    right: 30px;
+      //  }
+      //}
+      .ng-clear-wrapper {
+        color: #666;
+      }
+    }
+  }
+}

@@ -1,0 +1,33 @@
+<ul
+  [ngClass]="ulStyleClasses"
+  availabilityHtmlElement
+  class="border-bottom border-light d-flex justify-content-{{
+    (horizontalAlign == 'RIGHT' ? 'END' : horizontalAlign) | lowercase
+  }}"
+>
+  <li
+    *ngFor="let tab of subcomponents.toArray(); let i = index"
+    [ngClass]="listStyleClasses"
+    (click)="selectTab(tab)"
+  >
+    <ng-container *ngIf="tab.active">
+      <a
+        [attr.data-tabId]="getTabId(tab)"
+        [attr.data-tab-index]="i + 1"
+        [ngClass]="activeLinkStyleClasses"
+      >{{ tab.label }}</a
+      >
+    </ng-container>
+    <ng-container *ngIf="!tab.active">
+      <a
+        [attr.data-tabId]="getTabId(tab)"
+        [attr.data-tab-index]="i + 1"
+        class="nav-link"
+      >{{ tab.label }}</a
+      >
+    </ng-container>
+  </li>
+</ul>
+<div class="mt-3 mb-3">
+  <ng-content></ng-content>
+</div>

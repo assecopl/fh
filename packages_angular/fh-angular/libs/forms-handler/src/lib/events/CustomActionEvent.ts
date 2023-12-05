@@ -1,0 +1,24 @@
+import {BaseEvent} from "./BaseEvent";
+import {Injectable} from "@angular/core";
+import {CustomActionsManager} from "../service/custom-actions-manager.service";
+
+@Injectable({
+    providedIn: 'root',
+})
+class CustomActionEvent extends BaseEvent {
+
+
+    constructor(private customActionsManager: CustomActionsManager) {
+        super();
+    }
+
+    public fire(data): void {
+        let actionName = data.actionName;
+        //
+        if (this.customActionsManager._callbacks[actionName]) {
+            this.customActionsManager._callbacks[actionName](data.data);
+        }
+    }
+}
+
+export {CustomActionEvent};

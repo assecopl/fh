@@ -1,0 +1,14 @@
+:host {
+  &.repeater-selectable,
+  &.repeater-clickable {
+    cursor: pointer;
+  }
+
+  &.bg-primary {
+    ::ng-deep {
+      .fh-tag-icon {
+        color: white !important;
+      }
+    }
+  }
+}
