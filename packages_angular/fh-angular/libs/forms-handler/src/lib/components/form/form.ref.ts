@@ -1,5 +1,5 @@
 import {Directive, Input} from '@angular/core';
-import {FhngComponent, Page} from "@fh-ng/forms-handler";
+import {FhngComponent} from "../../models/componentClasses/FhngComponent";
 
 /**
  * FIXME Przebudować Tabelę!!!!! Między innymi tak aby nie korzystać z ViewCHild i ContentCHild - działają z opuźnieniem.
