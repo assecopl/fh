@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FH} from "../../../../libs/fh-ng-core-lite/src/lib/Socket/FH";
+import {FH} from "@fh-ng/forms-handler";
 
 @Component({
   selector: 'app-root',

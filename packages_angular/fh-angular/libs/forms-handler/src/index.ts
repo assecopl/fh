@@ -1,4 +1,9 @@
+export * from "./lib/fh-ng-core.config";
 
+export {ApplicationLockService} from "./lib/service/application-lock.service";
+export {SocketHandler} from "./lib/Socket/SocketHandler";
+export {Connector} from "./lib/Socket/Connector";
+export {FH} from "./lib/Socket/FH";
 export {NotificationsComponent} from "./lib/components/notifications/notifications-component";
 export {ApplicationLockComponent} from "./lib/components/backdrop/application-lock.component";
 export {ContainerComponent} from "./lib/components/container/container.component";
