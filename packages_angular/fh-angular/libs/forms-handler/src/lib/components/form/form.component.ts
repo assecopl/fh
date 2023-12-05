@@ -17,6 +17,7 @@ import {FhChanges, FormsManager} from "../../Socket/FormsManager";
 import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
 import {Subscription} from 'rxjs';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+import {FormComponentRef} from "./form.ref";
 
 @Component({
     selector: '[fh-form]',
@@ -28,9 +29,11 @@ import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
          * Dzięki temu budujemy hierarchię kontrolek Fhng.
          */
         {provide: FhngComponent, useExisting: forwardRef(() => FormComponent)},
+        {provide: FormComponentRef, useExisting: forwardRef(() => FormComponent)},
+
     ],
 })
-export class FormComponent extends FhngComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
+export class FormComponent extends FormComponentRef implements OnInit, OnChanges, OnDestroy, AfterViewInit {
     // @Input() public model: any = null;
     @Input() public label: string = null;
     @Input() public hideHeader: boolean = false;

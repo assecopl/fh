@@ -1,5 +1,6 @@
 package pl.fhframework.model.forms.provider;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -14,8 +15,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class DictionaryLookupLegacyProvider<DIC_ELEMENT_TYPE, MODEL_TYPE> implements IDictionaryLookupProvider<DIC_ELEMENT_TYPE, MODEL_TYPE> {
-    private final IComboDataProviderFhDP<DIC_ELEMENT_TYPE, MODEL_TYPE> legacyComboDataProviderFhDP;
+public class DictionaryLookupLegacyProvider<DIC_ELEMENT_TYPE, FORM_MODEL_BINDING_TYPE> implements IDictionaryLookupProvider<DIC_ELEMENT_TYPE, FORM_MODEL_BINDING_TYPE> {
+    private final IComboDataProviderFhDP<DIC_ELEMENT_TYPE, FORM_MODEL_BINDING_TYPE> legacyComboDataProviderFhDP;
     private final Method getValuesPaged;
     private final Method getTitle;
     private final Method getValue;
@@ -24,7 +25,7 @@ public class DictionaryLookupLegacyProvider<DIC_ELEMENT_TYPE, MODEL_TYPE> implem
     private final List<String> attributeNamesForGetTitle;
     private final List<String> attributeNamesForGetValue;
 
-    public DictionaryLookupLegacyProvider(IComboDataProviderFhDP<DIC_ELEMENT_TYPE, MODEL_TYPE> legacyComboDataProviderFhDP) {
+    public DictionaryLookupLegacyProvider(IComboDataProviderFhDP<DIC_ELEMENT_TYPE, FORM_MODEL_BINDING_TYPE> legacyComboDataProviderFhDP) {
         this.legacyComboDataProviderFhDP = legacyComboDataProviderFhDP;
         this.getValue = getProviderMethod("getValue");
         this.getValuesPaged = getProviderMethod("getValuesPaged");
@@ -39,7 +40,7 @@ public class DictionaryLookupLegacyProvider<DIC_ELEMENT_TYPE, MODEL_TYPE> implem
     public PageModel<DIC_ELEMENT_TYPE> getDictionaryElementsPaged(String searchText, Pageable pageable, Function<String, Object> externalAttributesValuesProvider) {
         boolean searchByCode = searchText.length() > 1 && searchText.toUpperCase().equals(searchText);
         if (searchByCode) {//search by code
-            MODEL_TYPE modelValue = (MODEL_TYPE) searchText; //TODO: Tutaj trzeba zrobić coś bardziej inteligentnego
+            FORM_MODEL_BINDING_TYPE modelValue = (FORM_MODEL_BINDING_TYPE) searchText; //TODO: Tutaj trzeba zrobić coś bardziej inteligentnego
             final DIC_ELEMENT_TYPE foundObject = this.getElementByModelValue(modelValue, externalAttributesValuesProvider);
             return new PageModel<>(pg -> getPageWithOneElement(foundObject));
         } else {//Search by content
@@ -50,7 +51,9 @@ public class DictionaryLookupLegacyProvider<DIC_ELEMENT_TYPE, MODEL_TYPE> implem
 
     @Override
     public String getDisplayValue(DIC_ELEMENT_TYPE dictionaryElement) {
-        if (dictionaryElement != null) {
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        System.out.println("getDisplayValue(DIC_ELEMENT_TYPE) used by: "+stackTraceElements[2].toString());
+        if (dictionaryElement != null) {//Used by serviceOnSelectItem, getPresentText
             return legacyComboDataProviderFhDP.getDisplayValue(dictionaryElement);
         } else {
             return "";
@@ -58,19 +61,35 @@ public class DictionaryLookupLegacyProvider<DIC_ELEMENT_TYPE, MODEL_TYPE> implem
     }
 
     @Override
+    public String getDisplayCode(FORM_MODEL_BINDING_TYPE value) {
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        System.out.println("getDisplayCode(FORM_MODEL_BINDING_TYPE) used by: "+stackTraceElements[2].toString());
+        if (value == null) {
+            return "";
+        } else if (value instanceof String) {
+            return (String) value; //In most cases value is just wanted code.
+        } else {
+            //TODO: Jak obsłużyć sytuację, gdy wartość w modelu nie jest powiązana z kodem a jakimś bardiej złożonym obiektem?
+            throw new NotImplementedException("Sorry, I have no idea how to convert object '" + value.getClass().getName() + "' into string representing code!");
+        }
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
     public String getDisplayValueByElement(Object dictionaryElement) {
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        System.out.println("getDisplayValue(Object) used by: "+stackTraceElements[2].toString());
         return getDisplayValue((DIC_ELEMENT_TYPE) dictionaryElement);
     }
 
     @Override
-    public MODEL_TYPE getModelValue(DIC_ELEMENT_TYPE dictionaryElement) {
+    public FORM_MODEL_BINDING_TYPE getModelValue(DIC_ELEMENT_TYPE dictionaryElement) {
         return legacyComboDataProviderFhDP.getCode(dictionaryElement);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public DIC_ELEMENT_TYPE getElementByModelValue(MODEL_TYPE modelValue, Function<String, Object> externalAttributesValuesProvider) {
+    public DIC_ELEMENT_TYPE getElementByModelValue(FORM_MODEL_BINDING_TYPE modelValue, Function<String, Object> externalAttributesValuesProvider) {
         Object[] attributes = getAttributesValues(attributeNamesForGetValue, externalAttributesValuesProvider, modelValue);
         return (DIC_ELEMENT_TYPE) ReflectionUtils.run(this.getValue, this.legacyComboDataProviderFhDP, attributes);
     }

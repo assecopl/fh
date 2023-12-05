@@ -14,7 +14,7 @@ import pl.fhframework.model.forms.designer.InputFieldDesignerPreviewProvider;
 
 import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalArea.CONTENT;
 @DesignerControl(defaultWidth = -1)
-@Control(parents = {DictionaryComboFhDP.class}, canBeDesigned = false)
+@Control(parents = {DictionaryComboFhDP.class, DictionaryLookup.class, DictionaryLookupFhDP.class}, canBeDesigned = false)
 @DocumentedComponent(documentationExample = true, value = "It is used to construct columns of Table components.", icon = "fa fa-columns")
 @ModelElement(type = ModelElementType.HIDDEN)
 public class DictionaryComboParameterFhDP extends FormElement implements Boundable{
@@ -71,6 +71,16 @@ public class DictionaryComboParameterFhDP extends FormElement implements Boundab
 
         }
         return this.value;
+    }
+
+    public Object getBindingValue() {
+        if (modelBinding != null) {
+            BindingResult bindingResult = modelBinding.getBindingResult();
+            if (bindingResult != null) {
+                return bindingResult.getValue();
+            }
+        }
+        return null;
     }
 
     }

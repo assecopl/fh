@@ -1,4 +1,4 @@
-import {NgModule, ModuleWithProviders} from '@angular/core';
+import {NgModule, ModuleWithProviders, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import '@angular/localize/init';
 import {FhNgModule} from './FhNgModule';
@@ -56,6 +56,7 @@ const components = [
 
 @NgModule({
   declarations: components,
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [
     CustomActionsManager,
     EventsManager,
@@ -70,7 +71,6 @@ const components = [
     CommonModule,
     FormsModule,
     NgbModule
-
   ],
   exports: components,
 })

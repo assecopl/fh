@@ -9,6 +9,7 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import {ComponentManager} from "../service/component-manager.service";
+import {FormComponentRef} from "../components/form/form.ref";
 
 
 @Directive({
@@ -30,8 +31,12 @@ export class DynamicComponentsDirective
   protected componentRefs: { [index: string]: any } = {};
 
   constructor(private viewContainerRef: ViewContainerRef,
+              @Optional() private form: FormComponentRef,
               private componentManager: ComponentManager
   ) {
+    if (form) {
+      this.formId = this.form.id;
+    }
   }
 
   ngOnDestroy(): void {

@@ -1,19 +1,24 @@
-import {NgModule} from '@angular/core';
+import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 
 import {AppComponent} from './app.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {FhNgCoreLiteModule} from "fh-ng-core-lite";
-import {Connector} from "../../../../libs/fh-ng-core-lite/src/lib/Socket/Connector";
-import {Utils} from "../../../../libs/fh-ng-core-lite/src/lib/service/Utils";
-import {ApplicationLockService} from "../../../../libs/fh-ng-core-lite/src/lib/service/application-lock.service";
-import {I18nService} from "../../../../libs/fh-ng-core-lite/src/lib/service/i18n.service";
-import {SocketHandler} from "../../../../libs/fh-ng-core-lite/src/lib/Socket/SocketHandler";
+import {
+  ApplicationLockService,
+  Connector,
+  FhNgFormsHandlerModule,
+  I18nService,
+  SocketHandler,
+  Utils
+} from "@fh-ng/forms-handler";
+import {FhNgBasicControlsModule} from "@fh-ng/basic-controls";
+import {CommonModule} from '@angular/common';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [NgbModule, BrowserModule,
-    FhNgCoreLiteModule.forRoot({production: false, development: true, debug: true})
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  imports: [CommonModule, NgbModule, BrowserModule, FhNgBasicControlsModule,
+    FhNgFormsHandlerModule.forRoot({production: false, development: true, debug: true})
   ],
   providers: [],
   bootstrap: [AppComponent],

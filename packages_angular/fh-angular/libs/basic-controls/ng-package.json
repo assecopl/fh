@@ -4,5 +4,9 @@
   "lib": {
     "entryFile": "src/index.ts"
   },
-  "assets": ["./src/styles/fh-ng-core-lite.scss"]
+  "assets": [
+    "./src/styles/basic-controls.scss",
+    "./src/styles/FormComponents.scss",
+    "./src/styles/css/**"
+  ]
 }

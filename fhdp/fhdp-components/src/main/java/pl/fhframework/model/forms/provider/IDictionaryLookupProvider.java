@@ -9,10 +9,10 @@ import java.util.function.Function;
 
 public interface IDictionaryLookupProvider <DIC_ELEMENT_TYPE, MODEL_TYPE>{
     PageModel<DIC_ELEMENT_TYPE> getDictionaryElementsPaged(String searchText, Pageable pageable, Function<String, Object> externalAttributesValuesProvider);
-
     String getDisplayValue(DIC_ELEMENT_TYPE dictionaryElement);
 
     //String getDisplayValueByElementId(String elementId);
+    String getDisplayCode(MODEL_TYPE value);
 
     String getDisplayValueByElement(Object dictionaryElement);
 
