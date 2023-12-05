@@ -28,7 +28,24 @@
             <DictionaryComboParameterFhDP name="regionFilter" value="{regionFilter}"/>
         </DictionaryLookupFhDP>
 
+        <DictionaryComboFhDP id="dcCountry2"
+                              emptyValue="true"
+                              width="md-4"
+                              label="Country"
+                              required="true"
+                              onChange="-"
+                              hint="test hint" hintType="STATIC"
+                              dispalyOnlyCode="true"
+                              value="{countryCode}"
+                              provider="pl.fhframework.fhdp.example.lookup.provider.CountryLookupProvider"
+                              icon="fas fa-search" >
+            <DictionaryComboParameterFhDP name="codeListId" value="356COM"/>
+            <!--            <DictionaryComboParameterFhDP name="referenceDate" value="{referenceDate}"/>-->
+            <DictionaryComboParameterFhDP name="regionFilter" value="{regionFilter}"/>
+        </DictionaryComboFhDP>
     </Row>
+
+
 
 <!--    <Row>-->
 <!--        <DictionaryLookupFhDP id="dcCountry2"-->

@@ -164,7 +164,7 @@ public class DictionaryLookup extends BaseInputFieldWithKeySupport implements IG
                 .filter(param -> param.getName().equals(attributeName))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("You don't provide required parameter '" + attributeName + "' in DictionaryLookup '" + this.getId() + " on form '" + this.getForm().getId() + "'!"))
-                .resolveValue();
+                .getBindingValue();
     }
 
 

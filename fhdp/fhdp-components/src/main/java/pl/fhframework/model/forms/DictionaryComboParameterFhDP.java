@@ -73,4 +73,14 @@ public class DictionaryComboParameterFhDP extends FormElement implements Boundab
         return this.value;
     }
 
+    public Object getBindingValue() {
+        if (modelBinding != null) {
+            BindingResult bindingResult = modelBinding.getBindingResult();
+            if (bindingResult != null) {
+                return bindingResult.getValue();
+            }
+        }
+        return null;
+    }
+
     }
