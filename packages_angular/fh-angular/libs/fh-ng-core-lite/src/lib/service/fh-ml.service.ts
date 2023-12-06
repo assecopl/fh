@@ -1,5 +1,5 @@
 import {Injectable, Pipe, SecurityContext} from '@angular/core';
-import {DomSanitizer} from '@angular/platform-browser';
+import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {FhngComponent} from "../models/componentClasses/FhngComponent";
 
 @Injectable({
@@ -630,11 +630,12 @@ export class FhMLService {
 
   // tslint:disable-next-line:no-unnecessary-initializer
   parse(source, skipHtmlEscape = undefined) {
-    let parsed = source;
+    let parsed = source.replaceAll(/(\r\n|\n|\r)/gm, "");
 
     if (!skipHtmlEscape) {
       parsed = this.escapeHtml(parsed);
     }
+
     this.supportedTags.forEach((tag) => {
       parsed = parsed.replace(tag.regex, tag.fn.bind(this, this.component));
     });
@@ -646,19 +647,24 @@ export class FhMLService {
     valueText =
       valueText === undefined || valueText === null ? '' : valueText.toString();
 
+    let data: SafeHtml = '';
+
     const unescapedQuotesText = valueText
-      .replace(/"/g, "'")
-      .replace(/\\'/g, "'");
+      .replaceAll(/"/g, "'")
+      .replaceAll(/\\'/g, "'");
+
     if (this.needParse(unescapedQuotesText)) {
-      return this.sanitizer.bypassSecurityTrustHtml(
+      data = this.sanitizer.bypassSecurityTrustHtml(
           this.parse(unescapedQuotesText, true)
-        )
+        );
     } else {
-      return this.sanitizer.sanitize(
+      data = this.sanitizer.sanitize(
         SecurityContext.HTML,
         this.sanitizer.bypassSecurityTrustHtml(valueText.replace(/\\'/g, "'"))
       );
     }
+
+    return data;
   }
 }
 
