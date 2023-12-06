@@ -70,7 +70,7 @@ public class CountryEnumValueLookupDummyLegacyProvider implements IComboDataProv
         return realProvider.getColumnDefinitions();
     }
 
-    @Override
+//    @Override
     public CountryNameValueLookupDummyProvider.CountryEnum initResultFromKey(String key) {
         return Arrays.stream(CountryNameValueLookupDummyProvider.CountryEnum.values())
                 .filter(country -> country.getCodeAlfa2().equals(key))
