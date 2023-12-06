@@ -79,7 +79,7 @@ public class CountryNameValueLookupDummyLegacyProvider implements IComboDataProv
         return realProvider.getColumnDefinitions();
     }
 
-    @Override
+//    @Override
     public String initResultFromKey(String key) {
         return null;
     }
