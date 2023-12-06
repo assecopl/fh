@@ -184,7 +184,8 @@ export class FhNgBasicControlsModule extends FhNgModule {
     componentManager.registerComponent(ButtonComponent);
     componentManager?.registerComponentWithName("CheckBox", CheckboxComponent);
     componentManager.registerComponent(ComboComponent);
-    componentManager.registerComponentWithName("DictionaryLookupFhDP", DictionaryLookupComponent);
+    componentManager.registerComponent(DictionaryLookupComponent);
+    componentManager.registerComponentWithName("DictionaryComboFhDP", DictionaryLookupComponent);
     componentManager.registerComponent(DropdownComponent);
     componentManager.registerComponent(DropdownItemComponent);
     componentManager.registerComponent(GroupComponent);
@@ -226,6 +227,7 @@ export class FhNgBasicControlsModule extends FhNgModule {
     componentManager?.registerComponentWithName("TreeFhDP", TreeComponent);
     componentManager?.registerComponentWithName("TabContainerFhDP", TabContainerComponent);
     componentManager?.registerComponentWithName("InputTimestampFhDP", InputTimestampComponent);
+    //componentManager?.registerComponentWithName("DictionaryComboFhDP", DictionaryLookupComponent);
 
   }
 
