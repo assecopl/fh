@@ -322,7 +322,7 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
   public override updateModel(event) {
     // if (!this.disabled) {
     this.rawValue = event.target.value;
-    console.warn("Update RawValue to", this.rawValue);
+    console.log("Update RawValue to", this.rawValue);
     // }
   };
 
@@ -350,14 +350,13 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
       attrs["command"] = "search";
       attrs["text"] = this.rawValue;
       this.onInputValue = null;
-    } else if (this.onBlurValue!=null){
-      console.log("On blur")
-    }else{
-      console.error("Unknown path of processing dictionary-lookup!");
+    } else if (this.onBlurValue != null) {
+      console.log("on blur - simply refresh");
+    } else {
+      //Some other path...
     }
     this.valueChanged = false;
     this.onBlurValue = null;
-    console.warn("Wprowadzono: ", this.orgRawValue)
     return attrs;
   };
 
@@ -370,8 +369,6 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
   public onBlurValue: string
   onBlurEvent() {
     this.onBlurValue = this.rawValue;
-    // console.warn("TERAZ idzie blur?")
-    // this.fireEventWithLock('onChange', this.onChange);
 
     setTimeout(() => {
       if (this.onBlurValue!=null) {
@@ -379,8 +376,7 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
         if (this.rows.length==1){
           this.onSelectedEvent(0);
         }else {
-          this.rawValue = this.orgRawValue;
-          this.fireEventWithLock('onChange', this.onChange);
+          this.fireEventWithLock('onChange', this.onChange);//here we do loopback request, to refresh displayed value
         }
       }
     }, 200);
