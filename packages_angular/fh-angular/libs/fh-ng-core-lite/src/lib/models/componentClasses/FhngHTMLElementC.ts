@@ -395,7 +395,6 @@ export class FhngHTMLElementC
         this.hostWidth += 'col-auto exactWidth';
         //Set inner element styles to exact width;
         if (value != 'fit') {
-          console.log('here', value);
           this.processStyleWithUnit('width', value);
         }
       } else if (value === BootstrapWidthEnum.AUTO) {

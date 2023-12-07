@@ -33,6 +33,11 @@ public class CountryEnumValueLookupDummyProvider implements IDictionaryLookupPro
     }
 
     @Override
+    public String getDisplayCode(CountryNameValueLookupDummyProvider.CountryEnum value) {
+        return value.getCodeAlfa2();
+    }
+
+    @Override
     public String getDisplayValueByElement(Object dictionaryElement) {
         return this.getDisplayValue((NameValueDto) dictionaryElement);
     }

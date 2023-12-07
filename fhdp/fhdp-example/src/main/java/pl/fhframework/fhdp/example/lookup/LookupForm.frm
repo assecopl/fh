@@ -12,7 +12,7 @@
     </Row>
 
     <Row>
-        <DictionaryLookupFhDP id="dcCountry1"
+        <DictionaryComboFhDP id="dcCountry1"
                               emptyValue="true"
                               width="md-4"
                               label="Country"
@@ -20,15 +20,33 @@
                               onChange="-"
                               hint="test hint" hintType="STATIC"
                               dispalyOnlyCode="false"
+                              displayOnlyCode="true"
                               value="{countryCode}"
                               provider="pl.fhframework.fhdp.example.lookup.provider.CountryLookupProvider"
                               icon="fas fa-search" >
             <DictionaryComboParameterFhDP name="codeListId" value="356COM"/>
 <!--            <DictionaryComboParameterFhDP name="referenceDate" value="{referenceDate}"/>-->
             <DictionaryComboParameterFhDP name="regionFilter" value="{regionFilter}"/>
-        </DictionaryLookupFhDP>
+        </DictionaryComboFhDP>
 
+<!--        <DictionaryComboFhDP_OLD id="dcCountry2"-->
+<!--                              emptyValue="true"-->
+<!--                              width="md-4"-->
+<!--                              label="Country"-->
+<!--                              required="true"-->
+<!--                              onChange="-"-->
+<!--                              hint="test hint" hintType="STATIC"-->
+<!--                             displayOnlyCode="true"-->
+<!--                              value="{countryCode}"-->
+<!--                              provider="pl.fhframework.fhdp.example.lookup.provider.CountryLookupProvider"-->
+<!--                              icon="fas fa-search" >-->
+<!--            <DictionaryComboParameterFhDP name="codeListId" value="356COM"/>-->
+<!--            &lt;!&ndash;            <DictionaryComboParameterFhDP name="referenceDate" value="{referenceDate}"/>&ndash;&gt;-->
+<!--            <DictionaryComboParameterFhDP name="regionFilter" value="{regionFilter}"/>-->
+<!--        </DictionaryComboFhDP_OLD>-->
     </Row>
+
+
 
 <!--    <Row>-->
 <!--        <DictionaryLookupFhDP id="dcCountry2"-->
