@@ -1,6 +1,6 @@
 {
   "name": "@fh-ng/basic-controls",
-  "version": "4.20.0-SPANSHOT-1",
+  "version": "4.20.0-SNAPSHOT-1",
   "peerDependencies": {
     "@angular/platform-browser": "^16.0.0",
     "@angular/platform-browser-dynamic": "^16.0.0",
