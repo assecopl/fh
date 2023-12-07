@@ -59,6 +59,7 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
   public orgRawValue: any;
   private onSearchValue:String;
   private valueHasBeenChanged: boolean;
+  private onRefreshValue: boolean;
 
   private isSearch: boolean = true;
   private popupColor?: string;
@@ -294,6 +295,9 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
 
   override mapAttributes(data: IDataAttributes | any) {
     super.mapAttributes(data);
+    if (data.rawValue===""){
+      this.rawValue = "";
+    }
     // if (data.filteredValues) {
     //     this.values = this.getValuesForCursor();
     // }
@@ -336,6 +340,7 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
     if (this.onSelectValue !== null && this.onSelectValue !== undefined) {
       attrs["command"] = "selectItem";
       attrs["select"] = this.onSelectValue;
+      this.resetValueChanged();
       this.onSelectValue = null;
     } else if (this.onPageChange) {
       attrs["command"] = "changePage";
@@ -345,19 +350,21 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
       attrs["command"] = "search";
       attrs["text"] = this.rawValue || "";
       this.onSearchValue = null;
+    } else if (this.onRefreshValue){
+      attrs["command"] = "refreshValue";
+      this.onRefreshValue = false;
+      this.resetValueChanged();
     } else if (this.onBlurValue != null) {
-      console.log("on blur - simply refresh");
+      //console.log("on blur - simply refresh");
     } else {
       //Some other path...
     }
-    this.valueChanged = false;
     this.onBlurValue = null;
     return attrs;
   };
 
   override onChangeEvent() {
     if (this.onChange) {
-      this.callRefresh();
     }
   }
 
@@ -369,7 +376,7 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
       if (this.onBlurValue != null) {
         const needRefresh =  this.tableIsVisible || this.valueHasBeenChanged;
         this.tableIsVisible = false;
-        this.valueHasBeenChanged = false;
+        this.resetValueChanged()
         if (needRefresh) {
           if (this.rows.length == 1) {
             this.onSelectedEvent(0);
@@ -380,7 +387,8 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
             if (index >= 0) {
               this.onSelectedEvent(index);
             } else {
-              this.callRefresh();//here we do loopback request, to refresh displayed value
+              this.onRefreshValue = true;
+              this.refreshPresentedValue();//here we do loopback request, to refresh displayed value
             }
           }
         }
@@ -393,41 +401,46 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
   onSelectedEvent(i: number) {
     this.onSelectValue = i;
     this.tableIsVisible = false;
-    this.callRefresh();
+    this.refreshPresentedValue();
   }
 
   public onPageValue: number
   public onPageChange: string;
 
-  onSearchEvent() {
+  onSwitchSearchModeEvent() {
     if (this.tableIsVisible) {
-      this.onExitSearch();
+      this.onCancelSearch();
     } else {
       this.tableIsVisible = true;
       this.onSearchValue = this.rawValue || "";
-      this.callRefresh();
+      this.refreshPresentedValue();
     }
   }
 
   onPreviousPageEvent(){
     this.onPageChange =  "previous";
-    this.callRefresh();
+    this.fireEventWithLock('onChange', this.onChange);
   }
 
   onNextPageEvent(){
     this.onPageChange =  "next";
-    this.callRefresh();
+    this.fireEventWithLock('onChange', this.onChange);
   }
 
-  onExitSearch(){
+  onCancelSearch(){
     this.tableIsVisible = false;
     if (this.valueHasBeenChanged){
-      this.callRefresh();
+      this.onRefreshValue = true;
+      this.refreshPresentedValue();
     }
   }
 
-  callRefresh(){
+  refreshPresentedValue(){
     this.fireEventWithLock('onChange', this.onChange);
+    this.resetValueChanged();
+  }
+
+  private resetValueChanged() {
     this.valueHasBeenChanged = false;
   }
 }

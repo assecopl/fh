@@ -74,6 +74,7 @@ public class DictionaryLookup extends BaseInputFieldWithKeySupport implements IG
     public void init() {
         super.init();
         this.dictionaryLookupProvider = getDictionaryLookupProvider(provider, this.getId());
+        this.lastPresentedValue = "";
     }
 
 
@@ -92,6 +93,8 @@ public class DictionaryLookup extends BaseInputFieldWithKeySupport implements IG
                 case "selectItem":
                     serviceOnSelectItem(valueChange);
                     break;
+                case "refreshValue":
+                    break;//Nothing to do here
             }
         }
     }
@@ -102,9 +105,7 @@ public class DictionaryLookup extends BaseInputFieldWithKeySupport implements IG
         if (this.commandValueData != null) {
             switch (this.commandValueData.getStringAttribute("command")) {
                 case "selectItem":
-                    final String presentedTextValue = getPresentedTextValue();
-                    elementChange.addChange(RAW_VALUE_ATTR, presentedTextValue);
-                    elementChange.addChange("orgRawValue", presentedTextValue);
+                    elementChange.addChange(RAW_VALUE_ATTR, getPresentedTextValue());
                     elementChange.addChange(ATTR_ROWS, Collections.emptyList());
                     elementChange.addChange(ATTR_PAGE, null);
                     elementChange.addChange(ATTR_PAGES_COUNT, null);
@@ -121,15 +122,21 @@ public class DictionaryLookup extends BaseInputFieldWithKeySupport implements IG
                         elementChange.addChange("title", dictionaryLookupProvider.getTitle(this::getParameterValue));
                     }
                     break;
+                case "refreshValue":
+                    elementChange.addChange(RAW_VALUE_ATTR, getPresentedTextValue());
             }
             commandValueData = null;
         } else {
             final String presentedTextValue = getPresentedTextValue();
-            elementChange.addChange("orgRawValue", presentedTextValue);
-            elementChange.addChange(RAW_VALUE_ATTR, presentedTextValue);
+            if (!Objects.equals(lastPresentedValue, presentedTextValue)) {
+                this.lastPresentedValue = presentedTextValue;
+                elementChange.addChange(RAW_VALUE_ATTR, presentedTextValue);
+            }
         }
         return elementChange;
     }
+
+    private String lastPresentedValue;
 
     private String getPresentedTextValue() {
         if (this.displayOnlyCode) {
