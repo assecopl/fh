@@ -5,16 +5,16 @@ import {FhngComponent, IDataAttributes} from '@fh-ng/forms-handler';
 import {BootstrapWidthEnum} from "../../models/enums/BootstrapWidthEnum";
 
 @Component({
-    selector: '[dictionary-lookup]',
-    templateUrl: './dictionary-lookup.component.html',
-    styleUrls: ['./dictionary-lookup.component.scss'],
-    providers: [
-        /**
-         * Dodajemy deklaracje klasy ogólnej aby wstrzykiwanie i odnajdowanie komponentów wewnątrz siebie było możliwe.
-         * Dzięki temu budujemy hierarchię kontrolek Fhng.
-         */
-        {provide: FhngComponent, useExisting: forwardRef(() => DictionaryLookupComponent)},
-    ],
+  selector: '[dictionary-lookup]',
+  templateUrl: './dictionary-lookup.component.html',
+  styleUrls: ['./dictionary-lookup.component.scss'],
+  providers: [
+    /**
+     * Dodajemy deklaracje klasy ogólnej aby wstrzykiwanie i odnajdowanie komponentów wewnątrz siebie było możliwe.
+     * Dzięki temu budujemy hierarchię kontrolek Fhng.
+     */
+    {provide: FhngComponent, useExisting: forwardRef(() => DictionaryLookupComponent)},
+  ],
 })
 export class DictionaryLookupComponent extends FhngInputWithListC implements OnInit {
 
@@ -57,7 +57,8 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
   public pagesCount: number = null;
   public tableIsVisible : boolean = false;
   public orgRawValue: any;
-  private onInputValue:String;
+  private onSearchValue:String;
+  private valueHasBeenChanged: boolean;
 
   private isSearch: boolean = true;
   private popupColor?: string;
@@ -293,7 +294,6 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
 
   override mapAttributes(data: IDataAttributes | any) {
     super.mapAttributes(data);
-    console.log("Setting orgRawValue=", this.orgRawValue, " - ", data)
     // if (data.filteredValues) {
     //     this.values = this.getValuesForCursor();
     // }
@@ -320,19 +320,16 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
   public override updateModel(event) {
     // if (!this.disabled) {
     this.rawValue = event.target.value;
-    console.log("Update RawValue to", this.rawValue);
     // }
   };
 
   override onInputEvent(event) {
     this.updateModel(event);
-    this.onInputValue = this.rawValue;
-    this.tableIsVisible = this.rawValue.length>0;
-
+    this.onSearchValue = this.rawValue;
+    this.tableIsVisible = true;
+    this.valueHasBeenChanged = true;
     this.fireEvent('onInput', this.onInput);
-
   }
-
 
   override extractChangedAttributes() {
     let attrs = {};
@@ -344,10 +341,10 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
       attrs["command"] = "changePage";
       attrs["pageChange"] = this.onPageChange;
       this.onPageChange = null;
-    } else if (this.onInputValue != null) {
+    } else if (this.onSearchValue != null) {
       attrs["command"] = "search";
-      attrs["text"] = this.rawValue;
-      this.onInputValue = null;
+      attrs["text"] = this.rawValue || "";
+      this.onSearchValue = null;
     } else if (this.onBlurValue != null) {
       console.log("on blur - simply refresh");
     } else {
@@ -360,7 +357,7 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
 
   override onChangeEvent() {
     if (this.onChange) {
-      this.fireEventWithLock('onChange', this.onChange);
+      this.callRefresh();
     }
   }
 
@@ -369,12 +366,23 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
     this.onBlurValue = this.rawValue;
 
     setTimeout(() => {
-      if (this.onBlurValue!=null) {
+      if (this.onBlurValue != null) {
+        const needRefresh =  this.tableIsVisible || this.valueHasBeenChanged;
         this.tableIsVisible = false;
-        if (this.rows.length==1){
-          this.onSelectedEvent(0);
-        }else {
-          this.fireEventWithLock('onChange', this.onChange);//here we do loopback request, to refresh displayed value
+        this.valueHasBeenChanged = false;
+        if (needRefresh) {
+          if (this.rows.length == 1) {
+            this.onSelectedEvent(0);
+          } else {
+            let index = this.rows.findIndex(row =>
+              Object.values(row).some(valueInRow => valueInRow === this.rawValue) //We are looking for first elemet which has value equals to this.rawValue - usualy dictionary code will match
+            );
+            if (index >= 0) {
+              this.onSelectedEvent(index);
+            } else {
+              this.callRefresh();//here we do loopback request, to refresh displayed value
+            }
+          }
         }
       }
     }, 200);
@@ -385,26 +393,43 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
   onSelectedEvent(i: number) {
     this.onSelectValue = i;
     this.tableIsVisible = false;
-    this.fireEventWithLock('onChange', this.onChange);
+    this.callRefresh();
   }
 
   public onPageValue: number
   public onPageChange: string;
 
+  onSearchEvent() {
+    if (this.tableIsVisible) {
+      this.onExitSearch();
+    } else {
+      this.tableIsVisible = true;
+      this.onSearchValue = this.rawValue || "";
+      this.callRefresh();
+    }
+  }
+
   onPreviousPageEvent(){
     this.onPageChange =  "previous";
-    this.fireEventWithLock('onChange', this.onChange);
+    this.callRefresh();
   }
 
   onNextPageEvent(){
     this.onPageChange =  "next";
+    this.callRefresh();
+  }
+
+  onExitSearch(){
+    this.tableIsVisible = false;
+    if (this.valueHasBeenChanged){
+      this.callRefresh();
+    }
+  }
+
+  callRefresh(){
     this.fireEventWithLock('onChange', this.onChange);
+    this.valueHasBeenChanged = false;
   }
-
-  public listOfElementsIsVisible(){
-    return this.rows.length>0;
-  }
-
 }
 
 export class ComboListElement {

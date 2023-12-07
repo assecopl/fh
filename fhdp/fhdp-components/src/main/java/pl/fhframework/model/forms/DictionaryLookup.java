@@ -118,6 +118,7 @@ public class DictionaryLookup extends BaseInputFieldWithKeySupport implements IG
                     if (columns == null) {
                         this.columns = dictionaryLookupProvider.getColumnDefinitions();
                         elementChange.addChange(ATTR_COLUMNS, columns);
+                        elementChange.addChange("title", dictionaryLookupProvider.getTitle(this::getParameterValue));
                     }
                     break;
             }
@@ -154,7 +155,7 @@ public class DictionaryLookup extends BaseInputFieldWithKeySupport implements IG
 
     private void serviceSearchCommand(ValueChange valueChange) {
         final String searchText = valueChange.getStringAttribute("text");
-        if (searchText != null && !searchText.isEmpty()) {
+        if (searchText != null) {
             Pageable pageable = PageRequest.of(0, pageSize);
             this.pageModel = dictionaryLookupProvider.getDictionaryElementsPaged(searchText, pageable, this::getParameterValue);
             this.pageModel.doRefresh(pageable);

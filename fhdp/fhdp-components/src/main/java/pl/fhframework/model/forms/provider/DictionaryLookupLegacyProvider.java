@@ -63,7 +63,6 @@ public class DictionaryLookupLegacyProvider<DIC_ELEMENT_TYPE, FORM_MODEL_BINDING
     @Override
     public String getDisplayCode(FORM_MODEL_BINDING_TYPE value) {
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
-        System.out.println("getDisplayCode(FORM_MODEL_BINDING_TYPE) used by: "+stackTraceElements[2].toString());
         if (value == null) {
             return "";
         } else if (value instanceof String) {
@@ -78,7 +77,6 @@ public class DictionaryLookupLegacyProvider<DIC_ELEMENT_TYPE, FORM_MODEL_BINDING
     @SuppressWarnings("unchecked")
     public String getDisplayValueByElement(Object dictionaryElement) {
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
-        System.out.println("getDisplayValue(Object) used by: "+stackTraceElements[2].toString());
         return getDisplayValue((DIC_ELEMENT_TYPE) dictionaryElement);
     }
 

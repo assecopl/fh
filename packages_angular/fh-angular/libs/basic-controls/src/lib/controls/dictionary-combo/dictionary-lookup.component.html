@@ -1,85 +1,95 @@
 <ng-container *ngIf="hint; else combo">
   <span
-          ngbTooltip="{{ hint }}"
-          [placement]="hintPlacement.toLowerCase()"
-          [triggers]="hintTrigger.toLowerCase()"
+    ngbTooltip="{{ hint }}"
+    [placement]="hintPlacement.toLowerCase()"
+    [triggers]="hintTrigger.toLowerCase()"
   >
     <ng-container *ngTemplateOutlet="combo"></ng-container>
   </span>
 </ng-container>
 <h3>{{dicTitle}}</h3>
 <ng-template #combo>
-    <div fhng-input-label
-         [inputId]="id"
-         [label]="label"
-         [labelPosition]="labelPosition"
-         [labelSize]="labelSize"
-         [hint]="hint"
-         [hintTrigger]="hintTrigger"
-         [hintType]="hintType"
-         [hintPlacement]="hintPlacement"
-         [hintTitle]="hintTitle"
+  <div fhng-input-label
+       [inputId]="id"
+       [label]="label"
+       [labelPosition]="labelPosition"
+       [labelSize]="labelSize"
+       [hint]="hint"
+       [hintTrigger]="hintTrigger"
+       [hintType]="hintType"
+       [hintPlacement]="hintPlacement"
+       [hintTitle]="hintTitle"
+  >
+    <div fhng-input-group
+         [iconText]="iconText"
+         [class.fh-disabled]="disabled"
+         [icon]="icon"
+         [iconAlignment]="iconAlignment"
+         [required]="required"
+         (onClick)="onSearchEvent()"
     >
-        <div fhng-input-group
-             [iconText]="iconText"
-             [class.fh-disabled]="disabled"
-             [icon]="icon"
-             [iconAlignment]="iconAlignment"
+      <input [availabilityInput]="availability" (input)="onInputEvent($event)" (blur)="onBlurEvent()"
+             #focusElement
+             [id]="id"
+             [(ngModel)]="rawValue"
+             [disabled]="disabled"
+             [type]="inputType"
+             [name]="name"
+             [placeholder]="placeholder"
+             [attr.aria-label]="ariaLabel"
              [required]="required"
-        >
-            <input [availabilityInput]="availability" (input)="onInputEvent($event)" (blur)="onBlurEvent()"
-                   #focusElement
-                   [id]="id"
-                   [(ngModel)]="rawValue"
-                   [disabled]="disabled"
-                   [type]="inputType"
-                   [name]="name"
-                   [placeholder]="placeholder"
-                   [attr.aria-label]="ariaLabel"
-                   [required]="required"
-                   class="fc inputText form-control {{setPresentationStyle()}}"
-                   [ngbTooltip]="getHintTooltip()" [ngbPopover]="getHintPopover()" [popoverTitle]="hintTitle"
-                   [placement]="hintPlacement.toLowerCase()" [triggers]="hintTrigger.toLowerCase()"
+             class="fc inputText form-control {{setPresentationStyle()}}"
+             [ngbTooltip]="getHintTooltip()" [ngbPopover]="getHintPopover()" [popoverTitle]="hintTitle"
+             [placement]="hintPlacement.toLowerCase()" [triggers]="hintTrigger.toLowerCase()"
 
-            />
-        </div>
+      />
     </div>
+  </div>
 </ng-template>
 <span>
 <div *ngIf="tableIsVisible">
-<button [disabled]="page<=1" (click)="onPreviousPageEvent()">&lt;Prev page</button>
-<button [disabled]="page>=pagesCount" (click)="onNextPageEvent()">&gt;Next page</button>
-<span>Page {{page}}/{{pagesCount}}</span>
-<table class="table" *ngIf="listOfElementsIsVisible()">
-  <thead>
-  <tr>
-    <th>Id</th>
-    <th *ngFor="let c of columns">{{c.title}}</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let r of rows;let i = index;" (click)="onSelectedEvent(i)">
-    <td>{{i}}</td>
-    <td *ngFor="let c of columns"> {{r[c.field]}}</td>
-  </tr>
-  </tbody>
-</table>
+  <div>
+    <span [innerHTML]="title | fhml"></span>
+    <span>
+      <button [disabled]="page<=1" (click)="onPreviousPageEvent()">&lt;</button>
+      {{ page }} of {{ pagesCount }}
+      <button [disabled]="page>=pagesCount" (click)="onNextPageEvent()">&gt;</button>
+    </span>
+    <span>
+      <button (click)="onExitSearch()">x</button>
+    </span>
+  </div>
+  <table class="table">
+    <thead>
+    <tr>
+      <th>Id</th>
+      <th *ngFor="let c of columns">{{ c.title }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let r of rows;let i = index;" (click)="onSelectedEvent(i)">
+      <td>{{ i }}</td>
+      <td *ngFor="let c of columns"> {{ r[c.field] }}</td>
+    </tr>
+    </tbody>
+  </table>
 </div>
-<!--<div class="row">-->
-<!--  <div class="col-md-6">-->
-<!--    <pre>-->
-<!--rows : {{rows | json}} <br>-->
-<!--colums : {{columns | json}} <br>-->
-<!--</pre>-->
-<!--  </div>-->
-<!--  <div class="col-md-6">-->
-<!--    <pre>-->
-<!--values : {{values | json}} <br>-->
-<!--</pre>-->
-<!--  </div>-->
-<!--</div>-->
+  <!--<div class="row">-->
+  <!--  <div class="col-md-6">-->
+  <!--    <pre>-->
+  <!--rows : {{rows | json}} <br>-->
+  <!--colums : {{columns | json}} <br>-->
+  <!--</pre>-->
+  <!--  </div>-->
+  <!--  <div class="col-md-6">-->
+  <!--    <pre>-->
+  <!--values : {{values | json}} <br>-->
+  <!--</pre>-->
+  <!--  </div>-->
+  <!--</div>-->
 
 <ng-container *ngIf="configuration.debug">
     <fh-component-debugger/>
 </ng-container>
 
+</span>
