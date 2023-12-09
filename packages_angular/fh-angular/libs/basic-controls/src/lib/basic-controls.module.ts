@@ -1,7 +1,7 @@
 import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
 import {CommonModule, JsonPipe} from '@angular/common';
 import {IConfig, NgxMaskDirective, NgxMaskPipe, provideNgxMask} from "ngx-mask";
-import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
+import {NgbModule, NgbTooltipConfig} from "@ng-bootstrap/ng-bootstrap";
 import {FormsModule} from "@angular/forms";
 import {NgSelectModule} from "@ng-select/ng-select";
 import {HttpClientModule} from "@angular/common/http";
@@ -137,7 +137,7 @@ const components = [
 @NgModule({
   declarations: components,
   schemas:[CUSTOM_ELEMENTS_SCHEMA],
-  providers:[provideNgxMask(maskConfigFunction)],
+  providers:[provideNgxMask(maskConfigFunction),{provide: NgbTooltipConfig}],
   imports: [FhNgFormsHandlerModule,CommonModule,
     JsonPipe,
     NgbModule,
@@ -152,8 +152,11 @@ const components = [
 export class FhNgBasicControlsModule extends FhNgModule {
 
 
-  constructor(private componentManager: ComponentManager, protected eventManager: EventsManager, protected i18n: I18nService) {
+  constructor(tooltipConfig: NgbTooltipConfig, private componentManager: ComponentManager, protected eventManager: EventsManager, protected i18n: I18nService) {
     super(componentManager, eventManager);
+
+    tooltipConfig.container = "body";
+    tooltipConfig.autoClose = false;
 
     /**
      * Register default translations strings for components.
