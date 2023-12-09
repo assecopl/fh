@@ -15,9 +15,6 @@
       ],
       "@fh-ng/forms-handler": [
         "libs/forms-handler/src/index.ts"
-      ],
-      "fh-ng-core-lite": [
-        "libs/fh-ng-core-lite/src/index.ts"
       ]
     },
     "noImplicitOverride": true,
