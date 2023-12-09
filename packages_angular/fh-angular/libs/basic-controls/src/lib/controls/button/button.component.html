@@ -1,17 +1,4 @@
-<!--<ng-container *ngIf="breadcrumb">-->
-<!--  <ng-container *ngIf="!active; else contentTemplate">-->
-<!--    <btn-->
-<!--      #focusElement-->
-<!--      [id]="id"-->
-<!--      class="{{ active ? 'active' : '' }} btn-link"-->
-<!--      [ngStyle]="styles"-->
-<!--      [class.active]="active"-->
-<!--      availabilityHtmlElement-->
-<!--    >-->
-<!--      <ng-container *ngTemplateOutlet="contentTemplate"></ng-container>-->
-<!--    </btn>-->
-<!--  </ng-container>-->
-<!--</ng-container>-->
+
 <ng-container *ngIf="!parentButtonGroupComponent; else contentTemplate">
   <button [availabilityHtmlElement]="accessibility"
     #focusElement
@@ -20,10 +7,12 @@
     [class.active]="active"
     [innerHTML]="label | fhml"
     (click)="onClickEvent($event)"
-    [ngStyle]="styles"
+    [ngStyle]="styles" [ngbTooltip]="getHintTooltip()"
+    [triggers]="hintTrigger.toLowerCase()"
   >
     <ng-container *ngTemplateOutlet="contentTemplate"></ng-container>
   </button>
+  {{hintPlacement}}
 </ng-container>
 
 <ng-template #contentTemplate>
@@ -36,7 +25,7 @@
   </ng-container>
 </ng-template>
 
-<!--<ng-container *ngIf="configuration.debug">-->
-<!--  <fh-component-debugger/>-->
-<!--</ng-container>-->
+<ng-container *ngIf="configuration.debug">
+  <fh-component-debugger/>
+</ng-container>
 
