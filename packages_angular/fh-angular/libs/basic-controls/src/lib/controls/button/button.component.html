@@ -20,6 +20,7 @@
     [class.active]="active"
     [innerHTML]="label | fhml"
     (click)="onClickEvent($event)"
+    [ngStyle]="styles"
   >
     <ng-container *ngTemplateOutlet="contentTemplate"></ng-container>
   </button>
