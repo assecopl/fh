@@ -87,21 +87,25 @@ export class RadioOptionsGroupComponent
     super.ngOnChanges(changes);
   }
 
-  public processRadioSelection(option) {
-    const selectedRadioOption = option.target;
-
-    this.subcomponents.forEach((radioOption) => {
-      if (
-        radioOption.innerId !== selectedRadioOption.id &&
-        radioOption.checked
-      ) {
-        radioOption.checked = false;
-      }
-    });
+  public processRadioSelection(option, idx) {
+    if (!this.disabled) {
+      this.changesQueue.queueValueChange(idx);
+    }
+    // const selectedRadioOption = option.target;
+    // this.subcomponents.forEach((radioOption) => {
+    //   if (
+    //     radioOption.innerId !== selectedRadioOption.id &&
+    //     radioOption.checked
+    //   ) {
+    //     radioOption.checked = false;
+    //   }
+    // });
+    this.onChangeEvent();
   }
 
   override mapAttributes(data: IDataAttributes | any) {
     super.mapAttributes(data);
-    this.values = data.rawOptions;
+
+    this.values = data.rawOptions || this.values;
   }
 }

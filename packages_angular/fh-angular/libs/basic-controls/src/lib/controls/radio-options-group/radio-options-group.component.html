@@ -14,12 +14,13 @@
     [attr.aria-labelledby]="innerId + '_label'"
     class="radio-positioned-left"
   >
-    <div fhng-radio-option
-         *ngFor="let one of values"
+    <div fhng-radio-option [formId]="formId"
+         *ngFor="let one of values;let i = index;"
          [(value)]="value"
          [name]="groupName ? groupName : name"
          [label]="one"
          [targetValue]="one"
+         (selectedRadio)="processRadioSelection($event, i)"
     ></div>
   </fieldset>
 </div>

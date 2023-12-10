@@ -49,6 +49,7 @@ export class RadioOptionComponent extends FhngReactiveInputC implements OnInit {
     @Optional() @SkipSelf() parentFhngComponent: FhngComponent
   ) {
     super(injector, parentFhngComponent);
+    this.onChange = "-" // Always fire action
   }
 
   override ngOnInit() {
@@ -63,14 +64,22 @@ export class RadioOptionComponent extends FhngReactiveInputC implements OnInit {
     this.disabled = String(this.disabled) === 'true';
   }
 
-  updateControlValue(event): void {
+  inputSelectEvent(event): void {
     // this.control.setValue(this.targetValue, {
     //   onlySelf: true,
     //   emitEvent: false,
     // });
     this.value = this.targetValue;
+    if (!this.disabled) {
+      this.changesQueue.queueValueChange(this.value);
+    }
     this.selectedRadio.emit(this);
+    this.onChangeEvent();
   }
+
+
+
+
 
   override ngOnChanges(changes: SimpleChanges) {
     super.ngOnChanges(changes);

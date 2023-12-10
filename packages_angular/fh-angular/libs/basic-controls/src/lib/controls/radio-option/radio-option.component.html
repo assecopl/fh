@@ -9,7 +9,7 @@
       class="form-check-input InputRadio fc"
       [value]="targetValue"
 
-      (change)="updateControlValue($event)"
+      (change)="inputSelectEvent($event)"
       [checked]="value == targetValue"
     />
     <label
@@ -35,7 +35,7 @@
     class="form-check-input"
     [value]="targetValue"
     [name]="name ? name : name"
-    (change)="updateControlValue($event)"
+    (change)="inputSelectEvent($event)"
   />
   <label
     *ngIf="label"

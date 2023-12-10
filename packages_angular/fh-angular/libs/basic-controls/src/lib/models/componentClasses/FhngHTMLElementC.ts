@@ -140,6 +140,9 @@ export class FhngHTMLElementC
   @Input()
   public hintTitle: any = null;
 
+  /**
+   * TODO We should pass array of strings or a string with space separated possible values
+   */
   @Input()
   public hintPlacement: HintPlacement = HintPlacement.TOP;
 
