@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component,
   Input,
   OnChanges,
@@ -40,6 +41,7 @@ export class ContainerComponent implements OnInit, OnChanges, OnDestroy {
       private formManager: FormsManager,
       private modalService: NgbModal,
       private componentManager: ComponentManager,
+      private changeDetectorRef:ChangeDetectorRef
   ) {
   }
 
@@ -69,6 +71,7 @@ export class ContainerComponent implements OnInit, OnChanges, OnDestroy {
           this.modalRef.componentInstance.hideHeader = form.hideHeader;
           this.modalRef.componentInstance.container = this;
         }
+        this.changeDetectorRef.detectChanges();
       }
       ;
     });
@@ -79,6 +82,7 @@ export class ContainerComponent implements OnInit, OnChanges, OnDestroy {
           this.modalRef.dismiss();
         }
         this.form = null;
+        this.changeDetectorRef.detectChanges();
       }
     });
   }
