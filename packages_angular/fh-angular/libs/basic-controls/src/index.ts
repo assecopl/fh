@@ -1,3 +1,4 @@
+export {CanvasComponent} from "./lib/controls/canvas/canvas.component";
 export { AccordionComponent } from './lib/controls/accordion/accordion.component';
 export { RowComponent } from './lib/controls/row/row.component';
 export { ButtonComponent } from './lib/controls/button/button.component';
@@ -43,6 +44,5 @@ export { FileUploadAccessorComponent } from './lib/components/file-upload-access
 export { DictionaryLookupComponent } from './lib/controls/dictionary-combo/dictionary-lookup.component';
 export { ButtonGroupComponent } from './lib/controls/button-group/button-group.component';
 export { HintComponent } from './lib/components/hint/hint.component';
-
 
 export * from './lib/basic-controls.module';

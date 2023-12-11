@@ -1,17 +1,6 @@
-import {
-  Component,
-  forwardRef,
-  HostBinding,
-  Injector,
-  Input,
-  OnInit,
-  Optional,
-  SimpleChanges,
-  SkipSelf,
-} from '@angular/core';
+import {Component, forwardRef, Injector, OnInit, Optional, SimpleChanges, SkipSelf,} from '@angular/core';
 import {FhngHTMLElementC} from '../../models/componentClasses/FhngHTMLElementC';
 import {BootstrapWidthEnum} from '../../models/enums/BootstrapWidthEnum';
-import {RepeaterComponent} from '../repeater/repeater.component';
 import {FhngComponent} from '@fh-ng/forms-handler';
 
 @Component({
@@ -35,9 +24,6 @@ export class CanvasComponent extends FhngHTMLElementC implements OnInit {
     super(injector, parentFhngComponent);
 
     this.width = BootstrapWidthEnum.MD12;
-    if (parentFhngComponent instanceof RepeaterComponent) {
-      this.mb2 = false;
-    }
   }
 
   override ngOnInit() {
