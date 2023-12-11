@@ -71,6 +71,7 @@ import { TextPL } from './controls/input-text/i18n/text.pl';
 import { TextEN } from './controls/input-text/i18n/text.en';
 import { TimestampPL } from './controls/input-timestamp/i18n/timestamp.pl';
 import { TimestampEN } from './controls/input-timestamp/i18n/timestamp.en';
+import {CanvasComponent} from "./controls/canvas/canvas.component";
 
 
 const maskConfigFunction: () => Partial<IConfig> = () => {
@@ -85,6 +86,7 @@ const maskConfigFunction: () => Partial<IConfig> = () => {
 
 const components = [
   AccordionComponent,
+  CanvasComponent,
   RowComponent,
   ButtonComponent,
   DropdownComponent,
@@ -185,6 +187,7 @@ export class FhNgBasicControlsModule extends FhNgModule {
   public override registerComponents(componentManager?: ComponentManager): void {
     componentManager.registerComponent(AccordionComponent);
     componentManager.registerComponent(ButtonComponent);
+    componentManager?.registerComponent(CanvasComponent);
     componentManager?.registerComponentWithName("CheckBox", CheckboxComponent);
     componentManager.registerComponent(ComboComponent);
     componentManager.registerComponent(DictionaryLookupComponent);
