@@ -126,15 +126,18 @@ export class TreeElementComponent extends FhngHTMLElementC implements OnInit, Af
 
   labelClicked(event) {
      event? event.stopPropagation():null;
-
-    if (this.expandableNode) {
-      this.changesQueue.queueAttributeChange('collapsed', this.collapsed);
-    } else {
-        this.changesQueue.queueAttributeChange('selected', this.selected);
+    if (!this.selectable || this.collapsed) {
+      this.processTreeElementClick();
     }
+
+    // if (this.expandableNode) {
+      this.changesQueue.queueAttributeChange('collapsed', this.collapsed);
+    // } else {
+        this.changesQueue.queueAttributeChange('selected', this.selected);
+    // }
     this.treeElement.emit({id: this.id, selected: this});
     if (this.onLabelClick) {
-    this.fireEventWithLock('onLabelClick', 'onLabelClick');
+      this.fireEventWithLock('onLabelClick', 'onLabelClick');
     }
     return false;
   }

@@ -9,43 +9,43 @@ export class ApplicationLockService {
 
     showUC() {
         this.currentUCValue = true;
-        // setTimeout(() => {
+        setTimeout(() => {
         if (this.currentUCValue) {
             this.backdropSubject.next(true);
         }
-        // }, 300)
+        }, 500)
         return true;
     }
 
     showForm() {
         this.currentFormValue = true;
-        // setTimeout(() => {
+        setTimeout(() => {
         if (this.currentFormValue) {
             this.backdropSubject.next(true);
         }
-        // }, 300)
+        }, 500)
         return true;
     }
 
 
     hideForm() {
         this.currentFormValue = false;
-        // setTimeout(() => {
+        setTimeout(() => {
         if (!this.currentFormValue && !this.currentUCValue) {
             this.backdropSubject.next(false)
         }
-        // }, 301)
+        }, 501)
         return true;
 
     }
 
     hideUC() {
         this.currentUCValue = false;
-        // setTimeout(() => {
+        setTimeout(() => {
         if (!this.currentFormValue && !this.currentUCValue) {
             this.backdropSubject.next(false)
         }
-        // }, 301)
+        }, 501)
         return true;
 
     }
