@@ -34,7 +34,7 @@
                     [required]="required"
                     [ngbTooltip]="getHintTooltip()" [ngbPopover]="getHintPopover()" [popoverTitle]="hintTitle"
                     [placement]="hintPlacement.toLowerCase()" [triggers]="hintTrigger.toLowerCase()"
-                    class="fc inputText form-control {{setPresentationStyle()}}"
+                    class="fc inputText form-control {{setPresentationStyle()}} {{styleClasses}}"
           ></textarea>
       </div>
     </ng-container>
@@ -62,7 +62,7 @@
                     [attr.aria-label]="ariaLabel || label || ('fh.text.label' | i18n)"
                     [ngbTooltip]="getHintTooltip()" [ngbPopover]="getHintPopover()" [popoverTitle]="hintTitle"
                     [placement]="hintPlacement.toLowerCase()" [triggers]="hintTrigger.toLowerCase()"
-                    class="fc inputText form-control {{setPresentationStyle()}}"
+                    class="fc inputText form-control {{setPresentationStyle()}} {{styleClasses}}"
           ></textarea>
       </div>
     </ng-container>
@@ -106,7 +106,7 @@
              [dropSpecialCharacters]="false"
              [attr.aria-label]="ariaLabel || label || ('fh.text.label' | i18n)"
              [required]="required"
-             class="fc inputText form-control {{setPresentationStyle()}}"
+             class="fc inputText form-control {{setPresentationStyle()}} {{styleClasses}}"
              [ngbTooltip]="getHintTooltip()" [ngbPopover]="getHintPopover()" [popoverTitle]="hintTitle"
              [placement]="hintPlacement.toLowerCase()" [triggers]="hintTrigger.toLowerCase()"
 
