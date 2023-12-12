@@ -39,7 +39,7 @@ export class PanelHeaderFhDPComponent extends FhngHTMLElementC implements OnInit
   public info: string = '';
 
   @Input()
-  public onClickNameEvent: string = '';
+  public onClick: string = '';
 
   constructor(
     public override injector: Injector,
@@ -67,9 +67,9 @@ export class PanelHeaderFhDPComponent extends FhngHTMLElementC implements OnInit
     $event.stopPropagation();
 
     if (this.formId === 'FormPreview') {
-      this.fireEvent('onClick', this.onClickNameEvent);
+      this.fireEvent('onClick', this.onClick);
     } else {
-      this.fireEventWithLock('onClick', this.onClickNameEvent)
+      this.fireEventWithLock('onClick', this.onClick)
     }
   }
 }

@@ -53,6 +53,9 @@ export class DropdownComponent
   @HostBinding('class.dropdown')
   public dropdown: boolean;
 
+  @HostBinding('class.form-group')
+  public formGroup: boolean = true;
+
   @HostBinding('class.btn-group')
   public btnGroupClass: boolean = false;
 
@@ -64,6 +67,7 @@ export class DropdownComponent
     @Optional() @SkipSelf() public parentButtonGroupComponent: FhngButtonGroupComponent
   ) {
     super(injector, parentFhngComponent);
+
 
     this.btnGroupClass = !!this.parentButtonGroupComponent;
   }

@@ -54,6 +54,9 @@ export class FormComponent extends FormComponentRef implements OnInit, OnChanges
     @Input()
     public override id: string = '';
 
+  @HostBinding('class')
+  @Input()
+  public styleClasses: string = null;
 
     @Input()
     public modal: boolean = false;
@@ -105,6 +108,7 @@ export class FormComponent extends FormComponentRef implements OnInit, OnChanges
             this.cssCard = false
         }
 
+
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -123,6 +127,10 @@ export class FormComponent extends FormComponentRef implements OnInit, OnChanges
     public override mapAttributes(data: IDataAttributes): void {
         super.mapAttributes(data);
         this.formType = data.formType;
+
+      if (this.styleClasses && this.styleClasses.includes(",")) {
+        this.styleClasses = this.styleClasses.replaceAll(',', ' ')
+      }
     }
 
     public override collectAllChanges() {
