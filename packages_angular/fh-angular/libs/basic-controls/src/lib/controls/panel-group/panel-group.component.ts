@@ -147,11 +147,10 @@ export class PanelGroupComponent extends FhngHTMLElementC implements OnInit {
     if (data.iconClosed) this.iconClosed = data.iconClosed;
     if (data.iconOpened) this.iconOpened = data.iconOpened;
 
-    this.accordion = typeof data.accordion === "boolean" ? data.accordion : false;
-    this.collapsed = typeof data.collapsed === "boolean" ? data.collapsed : false;
-    this.collapsible = typeof data.collapsible === "boolean" ? data.collapsible : false;
-    this.borderVisible = typeof data.collapsible === "boolean" ? data.borderVisible : false;
-
+    this.accordion = typeof data.accordion === "boolean" ? data.accordion : this.accordion;
+    this.collapsed = typeof data.collapsed === "boolean" ? data.collapsed : this.collapsed;
+    this.collapsible = typeof data.collapsible === "boolean" ? data.collapsible : this.collapsible;
+    this.borderVisible = typeof data.collapsible === "boolean" ? data.borderVisible : this.borderVisible;
 
     if (this.accordion) {
       let classList = ['panelGroup', 'card', 'card-default'];

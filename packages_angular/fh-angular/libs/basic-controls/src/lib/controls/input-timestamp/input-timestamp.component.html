@@ -12,15 +12,12 @@
 >
   <div fhng-input-group
     buttonAriaLabel="{{ label }}"
-    ngbTooltip="{{ hint }}"
     [class.fh-disabled]="disabled"
     [inputId]="id"
     [iconText]="iconText"
     [icon]="icon"
     [iconAlignment]="iconAlignment"
-    [placement]="hintPlacement?.toLowerCase()"
     [required]="required"
-    [triggers]="hintTrigger?.toLowerCase()"
     (onClick)="onClickButton(d)"
   >
     <input
@@ -44,13 +41,13 @@
       (change)="onChangeInputEvent($event)"
     />
     <ng-template #t>
-      <div class="text-center pl-1 ngb-footer">
+      <div class="text-center pl-1 ngb-footer" *ngIf="hasTime">
         <ngb-timepicker
           class="ngb-timepicker"
           size="small"
           [disabled]="disabled"
           [ngModel]="value"
-          [seconds]="false"
+          [seconds]="hasSeconds"
           (ngModelChange)="timeChangeEvent($event)"
         ></ngb-timepicker>
       </div>

@@ -16,6 +16,10 @@ import {FhngHTMLElementC} from '../../models/componentClasses/FhngHTMLElementC';
 import {BootstrapWidthEnum} from '../../models/enums/BootstrapWidthEnum';
 import {FhngComponent, IDataAttributes} from '@fh-ng/forms-handler';
 
+export interface IOutputLabelDataAttributes extends IDataAttributes {
+  onClick: string;
+}
+
 @Component({
   selector: '[fhng-output-label]',
   templateUrl: './output-label.component.html',
@@ -36,6 +40,9 @@ import {FhngComponent, IDataAttributes} from '@fh-ng/forms-handler';
 })
 export class OutputLabelComponent extends FhngHTMLElementC implements OnInit {
   public override width: string = BootstrapWidthEnum.MD2;
+
+  @Input()
+  public onClickNameEvent: string = null;
 
   @Input()
   public value: string = null;
@@ -65,6 +72,8 @@ export class OutputLabelComponent extends FhngHTMLElementC implements OnInit {
 
   @HostBinding('style')
   public override styles;
+
+  public hintDisplay = false;
 
   @HostListener('keydown.enter', ['$event']) onEnterHandler(
     event: KeyboardEvent
@@ -119,5 +128,12 @@ export class OutputLabelComponent extends FhngHTMLElementC implements OnInit {
   public override mapAttributes(data: IDataAttributes) {
     super.mapAttributes(data);
     this.value = data.value;
+    this.onClickNameEvent = data.onClick || this.onClickNameEvent;
+  }
+
+  public onClickEvent(): void {
+    if (this.onClickNameEvent) {
+      this.fireEventWithLock('onClick', this.onClickNameEvent);
+    }
   }
 }

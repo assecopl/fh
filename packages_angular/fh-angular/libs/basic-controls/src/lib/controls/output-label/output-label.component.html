@@ -2,9 +2,13 @@
   <h1>
     <ng-container *ngIf="hint; else outputLabel">
       <span
-        ngbTooltip="{{ hint }}"
-        [placement]="hintPlacement.toLowerCase()"
-        [triggers]="hintTrigger.toLowerCase()"
+        [fhng-hint]="hint"
+        [hintDisplay]="hintDisplay"
+        [hintTrigger]="hintTrigger"
+        [hintType]="hintType"
+        [hintPlacement]="hintPlacement"
+        [hintTitle]="hintTitle"
+        (click)="onClickEvent()"
       >
         <ng-container *ngTemplateOutlet="outputLabel"></ng-container>
       </span>
@@ -15,9 +19,13 @@
   <h2>
     <ng-container *ngIf="hint; else outputLabel">
       <span
-        ngbTooltip="{{ hint }}"
-        [placement]="hintPlacement.toLowerCase()"
-        [triggers]="hintTrigger.toLowerCase()"
+        [fhng-hint]="hint"
+        [hintDisplay]="hintDisplay"
+        [hintTrigger]="hintTrigger"
+        [hintType]="hintType"
+        [hintPlacement]="hintPlacement"
+        [hintTitle]="hintTitle"
+        (click)="onClickEvent()"
       >
         <ng-container *ngTemplateOutlet="outputLabel"></ng-container>
       </span>
@@ -28,9 +36,13 @@
   <h3>
     <ng-container *ngIf="hint; else outputLabel">
       <span
-        ngbTooltip="{{ hint }}"
-        [placement]="hintPlacement.toLowerCase()"
-        [triggers]="hintTrigger.toLowerCase()"
+        [fhng-hint]="hint"
+        [hintDisplay]="hintDisplay"
+        [hintTrigger]="hintTrigger"
+        [hintType]="hintType"
+        [hintPlacement]="hintPlacement"
+        [hintTitle]="hintTitle"
+        (click)="onClickEvent()"
       >
         <ng-container *ngTemplateOutlet="outputLabel"></ng-container>
       </span>
@@ -41,9 +53,13 @@
   <h4>
     <ng-container *ngIf="hint; else outputLabel">
       <span
-        ngbTooltip="{{ hint }}"
-        [placement]="hintPlacement.toLowerCase()"
-        [triggers]="hintTrigger.toLowerCase()"
+        [fhng-hint]="hint"
+        [hintDisplay]="hintDisplay"
+        [hintTrigger]="hintTrigger"
+        [hintType]="hintType"
+        [hintPlacement]="hintPlacement"
+        [hintTitle]="hintTitle"
+        (click)="onClickEvent()"
       >
         <ng-container *ngTemplateOutlet="outputLabel"></ng-container>
       </span>
@@ -54,9 +70,13 @@
   <h5>
     <ng-container *ngIf="hint; else outputLabel">
       <span
-        ngbTooltip="{{ hint }}"
-        [placement]="hintPlacement.toLowerCase()"
-        [triggers]="hintTrigger.toLowerCase()"
+        [fhng-hint]="hint"
+        [hintDisplay]="hintDisplay"
+        [hintTrigger]="hintTrigger"
+        [hintType]="hintType"
+        [hintPlacement]="hintPlacement"
+        [hintTitle]="hintTitle"
+        (click)="onClickEvent()"
       >
         <ng-container *ngTemplateOutlet="outputLabel"></ng-container>
       </span>
@@ -67,9 +87,13 @@
   <h6>
     <ng-container *ngIf="hint; else outputLabel">
       <span
-        ngbTooltip="{{ hint }}"
-        [placement]="hintPlacement.toLowerCase()"
-        [triggers]="hintTrigger.toLowerCase()"
+        [fhng-hint]="hint"
+        [hintDisplay]="hintDisplay"
+        [hintTrigger]="hintTrigger"
+        [hintType]="hintType"
+        [hintPlacement]="hintPlacement"
+        [hintTitle]="hintTitle"
+        (click)="onClickEvent()"
       >
         <ng-container *ngTemplateOutlet="outputLabel"></ng-container>
       </span>
@@ -80,9 +104,13 @@
 <!--  <div >-->
     <ng-container *ngIf="hint; else outputLabel">
       <span
-        ngbTooltip="{{ hint }}"
-        [placement]="hintPlacement.toLowerCase()"
-        [triggers]="hintTrigger.toLowerCase()"
+        [fhng-hint]="hint"
+        [hintDisplay]="hintDisplay"
+        [hintTrigger]="hintTrigger"
+        [hintType]="hintType"
+        [hintPlacement]="hintPlacement"
+        [hintTitle]="hintTitle"
+        (click)="onClickEvent()"
       >
         <ng-container *ngTemplateOutlet="outputLabel"></ng-container>
       </span>
@@ -96,7 +124,7 @@
     [id]="id"
     [availabilityHtmlElement]="availability"
     [hasHeight]="height"
-
+    (click)="onClickEvent()"
   >
     <i
       *ngIf="icon && (iconAlignment == 'BEFORE' || !iconAlignment)"
@@ -111,7 +139,7 @@
     <i *ngIf="icon && iconAlignment == 'AFTER'" class="ml-2 {{ icon }}"></i>
   </span>
 </ng-template>
-<!--<ng-container *ngIf="configuration.debug">-->
-<!--  <fh-component-debugger/>-->
-<!--</ng-container>-->
+<ng-container *ngIf="configuration.debug">
+  <fh-component-debugger/>
+</ng-container>
 

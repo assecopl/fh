@@ -86,6 +86,14 @@ export class InputTimestampComponent
    */
   public override icon: string = 'fa-calendar';
 
+  public get hasTime () {
+    return !!this.format.match(/HH?|mm?/gm);
+  }
+
+  public get hasSeconds() {
+    return !!this.format.match(/ss?/gmi);
+  }
+
   constructor(
     @Inject(LOCALE_ID) private _locale: string,
     public override injector: Injector,
@@ -145,7 +153,7 @@ export class InputTimestampComponent
   public override mapAttributes(data: IInputTimestampDataAttributes): void {
     super.mapAttributes(data);
 
-    this.onChange = data.onChange;
+    this.onChange = data.onChange || this.onChange;
     this.customNgbDatetimeService.frontendFormat = this.format?.replace('RRRR', 'YYYY');
   }
 

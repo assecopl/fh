@@ -17,7 +17,6 @@
            [class.fhng-disabled]="disabled"
            [icon]="icon"
            [iconAlignment]="iconAlignment"
-           [required]="required"
       >
           <textarea [availabilityInput]="availability" (input)="onInputEvent($event)" (change)="onChangeEvent()"
                     #focusElement
@@ -44,7 +43,6 @@
            [class.fhng-disabled]="disabled"
            [icon]="icon"
            [iconAlignment]="iconAlignment"
-           [required]="required"
       >
           <textarea [availabilityInput]="availability" (input)="onInputEvent($event)" (change)="onChangeEvent()"
                     #focusElement
@@ -93,23 +91,21 @@
          [required]="required"
     >
       <input [availabilityInput]="availability" (input)="onInputEvent($event)" (change)="onChangeEvent()"
-             #focusElement
-             [id]="id"
-
-             [(ngModel)]="rawValue"
-             [disabled]="disabled"
-             [type]="inputType"
-             [name]="name"
-             [placeholder]="placeholder"
-             [maxLength]="maxLength"
-             [mask]="formatter?.pattern"
-             [dropSpecialCharacters]="false"
-             [attr.aria-label]="ariaLabel || label || ('fh.text.label' | i18n)"
-             [required]="required"
-             class="fc inputText form-control {{setPresentationStyle()}} {{styleClasses}}"
-             [ngbTooltip]="getHintTooltip()" [ngbPopover]="getHintPopover()" [popoverTitle]="hintTitle"
-             [placement]="hintPlacement.toLowerCase()" [triggers]="hintTrigger.toLowerCase()"
-
+        #focusElement
+        class="fc inputText form-control {{setPresentationStyle()}} {{styleClasses}}"
+        [id]="id"
+        [(ngModel)]="rawValue"
+        [disabled]="disabled"
+        [type]="inputType"
+        [name]="name"
+        [placeholder]="placeholder"
+        [maxLength]="maxLength"
+        [mask]="formatter?.pattern"
+        [dropSpecialCharacters]="false"
+        [attr.aria-label]="ariaLabel || label || ('fh.text.label' | i18n)"
+        [required]="required"
+        [ngbTooltip]="getHintTooltip()" [ngbPopover]="getHintPopover()" [popoverTitle]="hintTitle"
+        [placement]="hintPlacement.toLowerCase()" [triggers]="hintTrigger.toLowerCase()"
       />
     </div>
   </ng-container>

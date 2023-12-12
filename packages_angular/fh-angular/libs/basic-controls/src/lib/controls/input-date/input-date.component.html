@@ -12,15 +12,12 @@
 >
   <div fhng-input-group
     buttonAriaLabel="{{ label }}"
-    ngbTooltip="{{ hint }}"
     [class.fh-disabled]="disabled"
     [inputId]="id"
     [iconText]="iconText"
     [icon]="icon"
     [iconAlignment]="iconAlignment"
-    [placement]="hintPlacement?.toLowerCase()"
     [required]="required"
-    [triggers]="hintTrigger?.toLowerCase()"
     (onClick)="onClickButton(d)"
   >
     <input

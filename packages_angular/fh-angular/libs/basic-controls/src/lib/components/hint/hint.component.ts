@@ -23,6 +23,9 @@ export class HintComponent implements OnInit {
   @Input()
   public hintTitle: string = null;
 
+  @Input()
+  public hintDisplay: boolean = true;
+
   @Input('fhng-hint')
   public hint: string = '';
 

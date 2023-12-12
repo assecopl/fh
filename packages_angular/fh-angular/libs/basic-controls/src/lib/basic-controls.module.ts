@@ -233,6 +233,7 @@ export class FhNgBasicControlsModule extends FhNgModule {
     componentManager?.registerComponentWithName("TreeFhDP", TreeComponent);
     componentManager?.registerComponentWithName("TabContainerFhDP", TabContainerComponent);
     componentManager?.registerComponentWithName("InputTimestampFhDP", InputTimestampComponent);
+    componentManager?.registerComponentWithName('CheckBoxFhDP', CheckboxComponent);
     //componentManager?.registerComponentWithName("DictionaryComboFhDP", DictionaryLookupComponent);
 
   }
