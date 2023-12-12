@@ -35,4 +35,12 @@ export class HtmlViewComponent extends FhngHTMLElementC {
 
         this.text = data.text;
     }
+
+    override processVerticalAlign() {
+      //ovverride to prevent style add
+    }
+
+    override processHorizontalAlign() {
+      //ovverride to prevent style add
+    }
 }
