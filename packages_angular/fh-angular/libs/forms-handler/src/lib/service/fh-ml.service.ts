@@ -220,7 +220,23 @@ export class FhMLService {
           return span.outerHTML;
         },
 
-        attr: '([a-zA-Z0-9-, ]+)',
+        attr: '([a-zA-Z0-9\-\, ]+)'
+      },
+      {
+        //Text with custom css class
+        tag: 'className',
+        tagConstructor: (component, match, classes: any, contents: any) => {
+          var span = document.createElement('span');
+          span.classList.add('fhml');
+          classes.split(',').forEach((cssClass) => {
+            span.classList.add(cssClass);
+          });
+          span.innerHTML = contents;
+
+          return span.outerHTML;
+        },
+
+        attr: '([a-zA-Z0-9\-\, ]+)'
       },
 
       {
@@ -622,7 +638,7 @@ export class FhMLService {
           return tag.name;
         })
         .join('|');
-    regexString += ")[=a-zA-Z0-9 #,;.()'-]*\\]";
+    regexString += ')[=a-zA-Z0-9 #,\.\(\)\'\-\_.*]*\\]';
     const res = (string || '').match(new RegExp(regexString));
 
     return res && typeof res === 'object' ? !!res.length : !!res;
