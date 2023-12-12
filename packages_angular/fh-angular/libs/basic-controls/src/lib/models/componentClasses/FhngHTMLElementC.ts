@@ -127,12 +127,15 @@ export class FhngHTMLElementC
   public verticalAlign: 'TOP' | 'MIDDLE' | 'BOTTOM';
 
   @HostBinding('class.align-self-start')
+  @HostBinding('class.valign-top')
   public valignTop: boolean;
 
   @HostBinding('class.align-self-middle')
+  @HostBinding('class.valign-middle')
   public valignMiddle: boolean;
 
   @HostBinding('class.align-self-end')
+  @HostBinding('class.valign-bottom')
   public valignBottom: boolean;
 
   @Input()

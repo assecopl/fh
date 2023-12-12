@@ -35,6 +35,7 @@ export class GroupComponent extends FhngHTMLElementC implements OnInit {
     super(injector, parentFhngComponent);
 
     this.width = BootstrapWidthEnum.MD12;
+    this.valignTop = true;
     if (parentFhngComponent instanceof RepeaterComponent) {
       this.mb2 = false;
     }
