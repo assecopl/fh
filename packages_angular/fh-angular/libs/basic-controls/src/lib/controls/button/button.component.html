@@ -7,7 +7,8 @@
     [class.active]="active"
     [innerHTML]="label | fhml"
     (click)="onClickEvent($event)"
-    [ngStyle]="styles" [ngbTooltip]="getHintTooltip()"
+    [ngStyle]="styles"
+    [ngbTooltip]="getHintTooltip()"
     [triggers]="hintTrigger.toLowerCase()"
   >
     <ng-container *ngTemplateOutlet="contentTemplate"></ng-container>

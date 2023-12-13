@@ -1,6 +1,17 @@
 <div class="fc buttonGroup btn-group mb-3 fc-editable {{styleClasses}}" role="group">
   <ng-container *ngFor="let b of subelements || []">
-    <button #d *ngIf="!isDropdown(b)"  fhng-button [availabilityHtmlElement]="b.accessibility" [data]="b" [formId]="formId" (click)="onButtonClick(d)"></button>
+    <button
+      #d
+      *ngIf="!isDropdown(b)"
+      fhng-button
+      [availabilityHtmlElement]="b.accessibility"
+      [data]="b"
+      [formId]="formId"
+      (click)="onButtonClick(d)"
+      [ngbTooltip]="getHintTooltip(b)"
+      [triggers]="b?.hintTrigger.toLowerCase()"
+      [hintPlacement]="b?.hintPlacement.toLowerCase()"
+    ></button>
     <div *ngIf="isDropdown(b)" fh-dropdown ngbDropdown [availabilityHtmlElement]="b.accessibility" [data]="b" [formId]="formId" ></div>
   </ng-container>
 </div>

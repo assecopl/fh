@@ -433,10 +433,15 @@ export class FhngHTMLElementC
     return _safeStyle;
   }
 
-  public getHintTooltip(): string {
+  public getHintTooltip(elementData?: any): string {
+    if (elementData) {
+      this.hint = elementData.hint;
+      this.hintType = elementData.hintType;
+    }
+
     return AvailabilityUtils.processOnEdit(this.availability,
       () => {
-        if (this.hint && this.hintType == 'STANDARD') {
+        if (this.hint && this.hintType === 'STANDARD') {
           return this.hint;
         }
       },
