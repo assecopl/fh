@@ -1,7 +1,7 @@
 import {Component, forwardRef, Host, Injector, Input, OnInit, Optional, SimpleChanges, SkipSelf,} from '@angular/core';
 import {FhngInputWithListC} from '../../models/componentClasses/FhngInputWithListC';
 import {BootstrapWidthEnum} from '../../models/enums/BootstrapWidthEnum';
-import {FhngComponent, IDataAttributes} from "@fh-ng/forms-handler";
+import {FhngComponent, FORM_VALUE_ATTRIBUTE_NAME, IDataAttributes} from "@fh-ng/forms-handler";
 
 interface ISelectOneMenuDataAttributes extends IDataAttributes {
   rawOptions: string[];
@@ -62,18 +62,46 @@ export class SelectOneMenuComponent
   public override mapAttributes(data: ISelectOneMenuDataAttributes): void {
     super.mapAttributes(data);
 
-    this.rawOptions = data.rawOptions;
+    console.log('map', data)
+
+    this.rawOptions = data.rawOptions || this.rawOptions;
     this.rawValue = data.rawValue;
-    this.require = data.require;
-    this.inputSize = data.inputSize;
-    this.selectedIndex = data.selectedIndex;
-    this.emptyValue = data.emptyValue;
-    this.emptyLabel = data.emptyLabel;
-    this.keepRemovedValue = data.keepRemovedValue;
+    this.require = data.require || this.require;
+    this.inputSize = data.inputSize || this.inputSize;
+    this.selectedIndex = data.selectedIndex || this.selectedIndex;
+    this.emptyValue = data.emptyValue || this.emptyLabel;
+    this.emptyLabel = data.emptyLabel || this.emptyLabel;
+    this.keepRemovedValue = data.keepRemovedValue || this.keepRemovedValue;
   }
+
+  public override extractChangedAttributes() {
+    let attrs = {};
+    if (this.valueChanged) {
+      attrs[FORM_VALUE_ATTRIBUTE_NAME] = this.rawValue;
+      this.valueChanged = false;
+    }
+
+    return attrs;
+  };
+
+  public override onChangeEvent() {
+    if (this.onChange && !this.disabled) {
+      this.fireEventWithLock('onChange', this.onChange);
+    }
+  }
+
+  public override updateModel(event) {
+    this.valueChanged = true;
+
+    if (!this.disabled) {
+      this.rawValue = event.target.value;
+    }
+  };
 
   public onSelectChangeEvent ($event: Event): void {
     $event.preventDefault();
+
+    console.log('działa', $event)
 
     this.updateModel($event);
     this.onChangeEvent();

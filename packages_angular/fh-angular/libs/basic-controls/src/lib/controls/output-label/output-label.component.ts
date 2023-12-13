@@ -127,7 +127,7 @@ export class OutputLabelComponent extends FhngHTMLElementC implements OnInit {
 
   public override mapAttributes(data: IDataAttributes) {
     super.mapAttributes(data);
-    this.value = data.value;
+    this.value = typeof data.value === 'undefined' ? this.value : data.value ;
     this.onClickNameEvent = data.onClick || this.onClickNameEvent;
   }
 
