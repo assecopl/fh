@@ -73,7 +73,6 @@ export class ContainerComponent implements OnInit, OnChanges, OnDestroy {
         }
         this.changeDetectorRef.detectChanges();
       }
-      ;
     });
 
     this.formManager.closeFormsSubject.subscribe((formId: string) => {

@@ -92,7 +92,7 @@ export class SelectOneMenuComponent
     this.valueChanged = true;
 
     if (!this.disabled) {
-      this.rawValue = event.target.value;
+      this.rawValue = this.rawOptions.findIndex(option => option === event.target.value);
     }
   };
 
