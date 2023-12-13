@@ -89,6 +89,11 @@
         </table>
         </div>
       </div>
+      <button
+        *ngIf="!disabled"
+        class="clear-button"
+        (click)="onClearEvent(myDrop)"
+      >x</button>
     </div>
   </div>
 </ng-template>

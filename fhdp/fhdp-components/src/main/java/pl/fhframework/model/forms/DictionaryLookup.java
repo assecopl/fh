@@ -153,8 +153,8 @@ public class DictionaryLookup extends BaseInputFieldWithKeySupport implements IG
     //************************************************************************************************************
 
     private void serviceOnSelectItem(ValueChange valueChange) {
-        final Integer selectedIndex = valueChange.getIntAttribute("select");
-        final Object selectedDictionaryElement = pageModel.getPage().getContent().get(selectedIndex);
+        final int selectedIndex = valueChange.getIntAttribute("select");
+        final Object selectedDictionaryElement = (selectedIndex >= 0) ? pageModel.getPage().getContent().get(selectedIndex) : null;
         this.getModelBinding().setValue(dictionaryLookupProvider.getModelValue(selectedDictionaryElement));
         //this.setRawValue(dictionaryLookupProvider.getDisplayValue(selectedDictionaryElement));
         log.warn("Selected item {}", getRawValue());

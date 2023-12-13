@@ -30,4 +30,8 @@
   &__row {
     cursor: pointer;
   }
+
+  &__row:hover {
+    background-color: #a6c5a5;
+  }
 }
