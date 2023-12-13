@@ -55,7 +55,7 @@ export class FhngHTMLElementC
   public tabindex: number = null;
 
 
-  public availability: AvailabilityEnum = AvailabilityEnum.EDIT;
+  public override availability: AvailabilityEnum = AvailabilityEnum.EDIT;
 
   @Input('availability')
   public set accessibility(value: AvailabilityEnum | string) {
@@ -140,6 +140,7 @@ export class FhngHTMLElementC
 
   @Input()
   public hint: any = null;
+
   @Input()
   public hintTitle: any = null;
 

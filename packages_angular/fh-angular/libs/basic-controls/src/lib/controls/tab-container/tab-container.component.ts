@@ -188,6 +188,8 @@ export class TabContainerComponent
       this.activeTabIndex = data.activeTabIndex;
     }
 
+    this.subelements = [...this.subelements];
+
     this._mapTabs();
   }
 

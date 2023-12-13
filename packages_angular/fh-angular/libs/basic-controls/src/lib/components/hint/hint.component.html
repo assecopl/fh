@@ -1,11 +1,10 @@
 <ng-container>
   <ng-content></ng-content>
-  <ng-container *ngIf="hintDisplay">
     <button
       class="btn hint-ico-help fa  ml-2 fh-tooltip"
-      *ngIf="hint && ['STATIC', 'STANDARD'].includes(hintType)"
+      *ngIf="getHintTooltip()"
       container="body"
-      [ngbTooltip]="hint"
+      [ngbTooltip]="getHintTooltip()"
       [attr.aria-label]="hintAriaLabel"
       [attr.aria-haspopup]="true"
       [ngClass]="classList"
@@ -13,13 +12,12 @@
 
     <button
       class="btn hint-ico-help fa  ml-2 fh-tooltip"
-      *ngIf="hint && hintType === 'STATIC_POPOVER'"
+      *ngIf="getHintPopover() && hintType === 'STATIC_POPOVER'"
       container="body"
-      [ngbPopover]="hint"
+      [ngbPopover]="getHintPopover()"
       [popoverTitle]="hintTitle"
       [attr.aria-label]="hintAriaLabel"
       [attr.aria-haspopup]="true"
       [ngClass]="classList"
     ></button>
-  </ng-container>
 </ng-container>

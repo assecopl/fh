@@ -1,6 +1,6 @@
 import {Component, ElementRef, Input, OnInit, Optional, SkipSelf} from "@angular/core";
 import {HintPlacement, HintType} from "../../models/componentClasses/FhngHTMLElementC";
-import {FhngComponent, FhngGroupComponent} from "@fh-ng/forms-handler";
+import {AvailabilityUtils, FhngComponent, FhngGroupComponent} from "@fh-ng/forms-handler";
 
 @Component({
   selector: '[fhng-hint]',
@@ -27,7 +27,7 @@ export class HintComponent implements OnInit {
   public hintDisplay: boolean = true;
 
   @Input('fhng-hint')
-  public hint: string = '';
+  public hint: string = null;
 
   public hintAriaLabel = '';
 
@@ -70,12 +70,38 @@ export class HintComponent implements OnInit {
 
   constructor(
     private _element: ElementRef,
-    @Optional() @SkipSelf() private _parentFhngComponent: FhngComponent,
+    @Optional() @SkipSelf() public _parentFhngComponent: FhngComponent,
   ) {
 
   }
 
   public ngOnInit() {
 
+  }
+
+  public getHintTooltip(): string {
+    return AvailabilityUtils.processOnEdit(this._parentFhngComponent.availability,
+      () => {
+        if (this.hint && ['STATIC', 'STANDARD'].includes(this.hintType)) {
+          return this.hint;
+        }
+
+        return null;
+      },
+      null
+    )
+  }
+
+  public getHintPopover(): string {
+    return AvailabilityUtils.processOnEdit(this._parentFhngComponent.availability,
+      () => {
+        if (this.hint && this.hintType === 'STANDARD_POPOVER') {
+          return this.hint;
+        }
+
+        return null;
+      },
+      null
+    )
   }
 }

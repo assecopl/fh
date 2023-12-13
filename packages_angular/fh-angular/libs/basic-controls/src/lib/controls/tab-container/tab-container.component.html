@@ -9,7 +9,8 @@
   >
     <ng-container *ngFor="let tab of subelements">
       <li class="nav-item">
-        <a [availabilityHtmlElement]="tab.accessibility"
+        <a
+          *ngIf="['VIEW', 'EDIT'].includes(tab.accessibility)"
           tabindex="0"
           class="nav-link"
           data-toggle="tab"
@@ -27,3 +28,6 @@
     <ng-container [fhDynamicComponents]="subelements" [fhNonVisualSubcomponents]="nonVisualComponents"></ng-container>
   </div>
 </div>
+<ng-container *ngIf="configuration.debug">
+  <fh-component-debugger/>
+</ng-container>
