@@ -125,12 +125,16 @@ export class FormComponent extends FormComponentRef implements OnInit, OnChanges
     }
 
     public override mapAttributes(data: IDataAttributes): void {
-        super.mapAttributes(data);
-        this.formType = data.formType;
+      let _container = this.container;
+
+      super.mapAttributes(data);
+      this.formType = data.formType;
 
       if (this.styleClasses && this.styleClasses.includes(",")) {
         this.styleClasses = this.styleClasses.replaceAll(',', ' ')
       }
+
+      this.container = _container;
     }
 
     public override collectAllChanges() {

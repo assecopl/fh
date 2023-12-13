@@ -22,6 +22,7 @@ import {HttpClient, HttpErrorResponse, HttpEvent, HttpEventType, HttpHeaders, Ht
 import {catchError, last, map, tap} from 'rxjs/operators';
 import {lastValueFrom, Observable, throwError} from "rxjs";
 import {FhmlPortalManager} from "../../service/fh-ml.service";
+import {AvailabilityEnum} from "../../availability/enums/AvailabilityEnum";
 
 /**
  * Klasa odpowiedzialna za budowę drzewa komponentów FHNG
@@ -34,10 +35,13 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
 
   @Input() nonVisualComponents: any[] = [];
 
+  public availability: AvailabilityEnum;
+
   /*
     FhPortal logic
    */
   public hasPortal: boolean = false;
+
   protected fhmlPortalManager: FhmlPortalManager = inject(FhmlPortalManager);
 
   public _data: any;

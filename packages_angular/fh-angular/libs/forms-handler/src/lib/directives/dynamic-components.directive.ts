@@ -82,7 +82,7 @@ export class DynamicComponentsDirective
           component.instance.data = data;
           component.instance.formId = this.formId;
           component.hostView.markForCheck();
-          // component.changeDetectorRef.detectChanges();
+          component.changeDetectorRef.detectChanges();
           this.viewContainerRef.insert(component.hostView, index);
           component.instance.focusOnInit();
         } else {
@@ -118,7 +118,7 @@ export class DynamicComponentsDirective
         componentRef.instance.data = data;
         componentRef.instance.formId = this.formId;
         // componentRef.hostView.markForCheck();
-        // componentRef.changeDetectorRef.detectChanges();
+        componentRef.changeDetectorRef.detectChanges();
       }
     } else {
       let componentType = this.componentManager.getComponentFactory("OutputLabel");
