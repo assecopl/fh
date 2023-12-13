@@ -62,8 +62,6 @@ export class SelectOneMenuComponent
   public override mapAttributes(data: ISelectOneMenuDataAttributes): void {
     super.mapAttributes(data);
 
-    console.log('map', data)
-
     this.rawOptions = data.rawOptions || this.rawOptions;
     this.rawValue = data.rawValue;
     this.require = data.require || this.require;
@@ -100,8 +98,6 @@ export class SelectOneMenuComponent
 
   public onSelectChangeEvent ($event: Event): void {
     $event.preventDefault();
-
-    console.log('działa', $event)
 
     this.updateModel($event);
     this.onChangeEvent();
