@@ -48,7 +48,9 @@ export class TreeElementComponent extends FhngHTMLElementC implements OnInit, Af
 
   public customHighlightColor:string = null;
 
-
+  @HostBinding('id')
+  @Input()
+  public override id: string = '';
 
   @HostBinding('class.pl-3')
   public pl3: boolean = true;
@@ -127,7 +129,9 @@ export class TreeElementComponent extends FhngHTMLElementC implements OnInit, Af
   labelClicked(event) {
      event? event.stopPropagation():null;
     if (!this.selectable || this.collapsed) {
-      this.processTreeElementClick();
+      if(!this.fhdp) {
+        this.processTreeElementClick();
+      }
     }
 
     // if (this.expandableNode) {

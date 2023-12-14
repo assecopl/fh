@@ -54,6 +54,7 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
     this.mapAttributes(value);
   }
 
+
   @Input()
   public id: string = '';
 
