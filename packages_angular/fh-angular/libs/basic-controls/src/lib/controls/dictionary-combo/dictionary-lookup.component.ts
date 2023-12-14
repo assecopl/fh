@@ -40,7 +40,6 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
   public rows: any[] = [];
   public page: number = null;
   public pagesCount: number = null;
-  public tableIsVisible : boolean = false;
   public orgRawValue: any;
   public guuid: string;
   public popperId: string;
@@ -98,7 +97,21 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
   private _writingDebaunceTimer: any;
   private pageChangeClicked: boolean = false;
   private clickInPopup: boolean = false;
+  private _tableIsVisible : boolean = false;
 
+  public set tableIsVisible (value: boolean) {
+    this._tableIsVisible = value;
+
+    if (this.myDrop && value) {
+      this.myDrop.open();
+    } else if (this.myDrop && !value && this.myDrop.isOpen()) {
+      this.myDrop.close();
+    }
+  }
+
+  public get tableIsVisible (): boolean {
+    return this._tableIsVisible;
+  }
 
   constructor(
     public override injector: Injector,
@@ -170,10 +183,7 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
     // }
   };
 
-  override onInputEvent(event, myDrop?: NgbDropdown) {
-    if(myDrop) {//TODO: Ten if nie jest skorelowany z logiką za tym ifem - grozi rozpójnieniem stanu kontrolki
-      myDrop.open();
-    }
+  override onInputEvent(event) {
     this.updateModel(event);
     this.onSearchValue = this.rawValue;
     this.tableIsVisible = true;
@@ -241,10 +251,6 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
 
 
   public onSelectedEvent(i: number, myDrop?: NgbDropdown): void {
-    if (myDrop) {//TODO: Ten if nie jest skorelowany z logiką za tym ifem - grozi rozpójnieniem stanu kontrolki
-      myDrop.close();
-    }
-
     this.onSelectValue = i;
     this.tableIsVisible = false;
     this.refreshPresentedValue();
@@ -260,9 +266,6 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
     if (this.tableIsVisible) {
       this.onCancelSearch(myDrop);
     } else {
-      if(myDrop) {//TODO: Ten if nie jest skorelowany z logiką za tym ifem - grozi rozpójnieniem stanu kontrolki
-        myDrop.open();
-      }
       this.tableIsVisible = true;
       this.onSearchValue = this.rawValue || "";
       this.refreshPresentedValue();
@@ -282,10 +285,6 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
   public onCancelSearch(myDrop?:NgbDropdown): void {
     this.tableIsVisible = false;
 
-    if (myDrop) {//TODO: Ten if nie jest skorelowany z logiką przed tym ifem - grozi rozpójnieniem stanu kontrolki
-      myDrop.close();
-    }
-
     if (this.valueHasBeenChanged){
       this.onRefreshValue = true;
       this.refreshPresentedValue();
@@ -295,6 +294,15 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
   public refreshPresentedValue(): void{
     this.fireEventWithLock('onChange', this.onChange);
     this._resetValueChanged();
+  }
+
+  /**
+   * @param event
+   * true - dla otwartego
+   * false - dla zamkniętego
+   */
+  public onOpenChange(event: boolean ): void {
+    if (!event) this.tableIsVisible = false;
   }
 
   private _resetValueChanged(): void {
