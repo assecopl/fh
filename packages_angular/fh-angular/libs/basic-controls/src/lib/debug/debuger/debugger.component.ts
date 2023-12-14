@@ -23,7 +23,7 @@ export class DebuggerComponent implements OnInit {
   }
 
   open(content) {
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'})
+    this.modalService.open(content, {size:"xxl", ariaLabelledBy: 'modal-basic-title'})
   }
 
   ngOnInit() {

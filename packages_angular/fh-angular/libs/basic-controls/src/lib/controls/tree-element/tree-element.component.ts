@@ -201,20 +201,4 @@ export class TreeElementComponent extends FhngHTMLElementC implements OnInit, Af
       (branchToSelect.children[0].children[0].children[0] as HTMLElement).click();
     }
   }
-
-  override processAddedComponents(addedComponents) {
-    if (addedComponents) {
-      let newSubelements = []
-      if (addedComponents['-']) {
-        newSubelements.push(...addedComponents['-'])
-      }
-      this.subelements.forEach((subelement, index) => {
-        newSubelements.push(subelement);
-        if (addedComponents[subelement.id]) { //checks if there are components to add after subelement
-          newSubelements.push(...addedComponents[subelement.id])
-        }
-      });
-      this.subelements = newSubelements;
-    }
-  }
 }

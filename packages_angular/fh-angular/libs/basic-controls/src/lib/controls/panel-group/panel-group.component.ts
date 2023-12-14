@@ -142,7 +142,7 @@ export class PanelGroupComponent extends FhngHTMLElementC implements OnInit {
   public override mapAttributes(data: any) {
     super.mapAttributes(data);
 
-    this.label = data.label;
+    this.label = data.label || this.label;
 
     if (data.iconClosed) this.iconClosed = data.iconClosed;
     if (data.iconOpened) this.iconOpened = data.iconOpened;

@@ -35,6 +35,8 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
   //List used wehen components are added and removed form subelements by socket communication.
   public processedSubelements: any[] = null;
 
+  @Output() subelementsChange:EventEmitter<any[]> = new EventEmitter<any[]>();
+
   @Input() nonVisualComponents: any[] = [];
 
   public availability: AvailabilityEnum;
@@ -312,7 +314,9 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
       this.subelements.length = 0;
       this.subelements.push(...newSubelements);
       //Update new list to show data imidietly.
-      this.processedSubelements = [...newSubelements];
+      this.subelements = [...newSubelements];
+      // this.processedSubelements = null;
+      // this.subelementsChange.emit(this.subelements);
       // this.subelementsChange.emit(this.subelements);
     }
   }
@@ -330,8 +334,9 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
       this.subelements.length = 0;
       this.subelements.push(...newSubelements);
       //Update new list to show data imidietly.
-      this.processedSubelements = [...newSubelements];
-
+      this.subelements = [...newSubelements];
+      // this.processedSubelements = null;
+      // this.subelementsChange.emit(this.subelements);
       // this.subelementsChange.emit(this.subelements);
     }
   }

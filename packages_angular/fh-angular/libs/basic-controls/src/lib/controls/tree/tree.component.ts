@@ -60,6 +60,9 @@ export class TreeComponent
   @Input()
   public selected: any;
 
+  @Input()
+  public expanded:boolean = false;
+
   @Output()
   public selectedChange: EventEmitter<any> = new EventEmitter<any>();
 
@@ -103,9 +106,6 @@ export class TreeComponent
   public override mapAttributes(data: any) {
     super.mapAttributes(data);
 
-    if (data.expanded == 'true' || data.expanded == 'false' || data.expanded == true) {
-      this.collapsedTree =  !(data.expanded == true || data.expanded == 'true');
-    }
   }
 
 

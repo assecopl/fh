@@ -79,6 +79,10 @@ export class DynamicComponentsDirective
         if (this.componentRefs[data.id]) {
           //Jezeli istnieje juz o takim ID to robie insert
           const component = this.componentRefs[data.id];
+          // if(component.processedSubelements != null){
+          //   data.subelements = component.processedSubelements;
+          // }
+          //TODO We can't pass initial data again
           component.instance.data = data;
           component.instance.formId = this.formId;
           component.hostView.markForCheck();
