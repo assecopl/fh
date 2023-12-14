@@ -1,11 +1,11 @@
 <div
   class="fc tabContainer {{styleClasses}}"
   [id]="id"
-
+  [availabilityHtmlElement]="availability"
 >
   <ul
     class="nav nav-tabs"
-
+    [availabilityHtmlElement]="availability"
   >
     <ng-container *ngFor="let tab of childFhngComponents">
       <li class="nav-item">
