@@ -199,7 +199,7 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
   }
 
   ngAfterViewInit(): void {
-    if (this.hasPortal) {
+    if (this.hasPortal ) {
       this.fhmlPortalManager.handleMutation();
     }
   }

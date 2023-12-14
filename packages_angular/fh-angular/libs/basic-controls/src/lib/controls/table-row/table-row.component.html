@@ -17,7 +17,7 @@
 
   <!--  <ng-container   [fhDynamicComponents]="processedSubelements || subelements" [fhNonVisualSubcomponents]="nonVisualComponents" ></ng-container>-->
   <ng-container *ngFor="let td of subelements;index as i;">
-    <td fhng-table-cell [data]="td" [formId]="formId"></td>
+    <td fhng-table-cell [data]="td" [availabilityHtmlElement]="cell.availability" #cell [formId]="formId"></td>
   </ng-container>
 </ng-container>
 
