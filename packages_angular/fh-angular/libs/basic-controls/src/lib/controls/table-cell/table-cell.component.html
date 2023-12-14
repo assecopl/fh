@@ -3,7 +3,7 @@
 <!--  [class.text-right]="horizontalAlign == 'RIGHT'"-->
 <!--&gt;-->
 <div class="row mx-0">
-  <ng-container *ngIf="!label" [fhDynamicComponents]="subelements" [fhNonVisualSubcomponents]="nonVisualComponents"></ng-container>
+  <ng-container *ngIf="!label" [fhDynamicComponents]="processedSubelements || subelements" [fhNonVisualSubcomponents]="nonVisualComponents"></ng-container>
   <ng-container *ngIf="label">
     <ng-container *ngIf="formatter == null">
       <div [innerHTML]="label | fhml">{{ label | fhml }}</div>

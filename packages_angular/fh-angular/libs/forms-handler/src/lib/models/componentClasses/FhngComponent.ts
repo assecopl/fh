@@ -11,7 +11,7 @@ import {
   Optional,
   SkipSelf,
   ViewChild,
-  inject
+  inject, Output
 } from '@angular/core';
 import * as $ from 'jquery';
 import {FormsManager} from "../../Socket/FormsManager";
@@ -32,6 +32,8 @@ import {AvailabilityEnum} from "../../availability/enums/AvailabilityEnum";
 export class FhngComponent extends FhngChangesComponent implements OnInit, AfterViewInit, AfterContentInit, OnDestroy {
 
   @Input() subelements: any[] = [];
+  //List used wehen components are added and removed form subelements by socket communication.
+  public processedSubelements: any[] = null;
 
   @Input() nonVisualComponents: any[] = [];
 
@@ -306,7 +308,12 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
           newSubelements.push(...addedComponents[subelement.id])
         }
       });
-      this.subelements = newSubelements;
+      //Update old list without reference change to prevent change mix of components when change detector fires and components are reattached.
+      this.subelements.length = 0;
+      this.subelements.push(...newSubelements);
+      //Update new list to show data imidietly.
+      this.processedSubelements = [...newSubelements];
+      // this.subelementsChange.emit(this.subelements);
     }
   }
 
@@ -318,7 +325,14 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
           newSubelements.push(subelement);
         }
       });
-      this.subelements = newSubelements;
+      //Update old list without reference change to prevent change mix of components when change detector fires and components are reattached.
+
+      this.subelements.length = 0;
+      this.subelements.push(...newSubelements);
+      //Update new list to show data imidietly.
+      this.processedSubelements = [...newSubelements];
+
+      // this.subelementsChange.emit(this.subelements);
     }
   }
 

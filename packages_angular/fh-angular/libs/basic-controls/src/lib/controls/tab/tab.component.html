@@ -1,5 +1,5 @@
 <div class="row">
-    <ng-container [fhDynamicComponents]="subelements" [fhNonVisualSubcomponents]="nonVisualComponents"></ng-container>
+    <ng-container [fhDynamicComponents]="processedSubelements || subelements" [fhNonVisualSubcomponents]="nonVisualComponents"></ng-container>
 </div>
 
 <!--<ng-container *ngIf="configuration.debug">-->

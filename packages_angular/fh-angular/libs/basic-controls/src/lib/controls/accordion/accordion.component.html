@@ -5,5 +5,5 @@
   [id]="id"
   [availabilityHtmlElement]="availability"
 >
-  <ng-container [fhDynamicComponents]="subelements" [fhNonVisualSubcomponents]="nonVisualComponents"></ng-container>
+  <ng-container [fhDynamicComponents]="processedSubelements || subelements" [fhNonVisualSubcomponents]="nonVisualComponents"></ng-container>
 </div>
