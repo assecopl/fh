@@ -304,7 +304,7 @@ export class FhngHTMLElementC
     let v = null;
 
     if (val) {
-      // v = isNumber(val) ? val : val.replace(/px|%|em|rem|pt/gi, '');
+
       // const unit = val.replace(v, "");
       this.styles[name] = val;
     }

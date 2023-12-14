@@ -1,8 +1,8 @@
 import {NgbDate, NgbDateAdapter, NgbDateStruct, NgbTimeStruct,} from '@ng-bootstrap/ng-bootstrap';
 import {Injectable} from '@angular/core';
 import moment from 'moment';
-import {isNumber} from 'util';
 import {FhngDateUtils} from "@fh-ng/forms-handler";
+import * as _ from "lodash";
 
 
 /**
@@ -143,7 +143,7 @@ export class FhngDateAdapter extends NgbDateAdapter<string> {
     if (date) {
       this.tmpDate = this._toFhngDateTimeStruct(date);
 
-      if (this.tmpDate && isNumber(this.tmpDate.year)) {
+      if (this.tmpDate && _.isNumber(this.tmpDate.year)) {
         result = moment([
           this.tmpDate.year,
           this.tmpDate.month - 1,

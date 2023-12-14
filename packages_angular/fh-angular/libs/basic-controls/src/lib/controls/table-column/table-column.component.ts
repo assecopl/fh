@@ -14,7 +14,7 @@ import {
 } from '@angular/core';
 import {TableComponentRef} from '../table/table.ref';
 import {TableCellComponent} from '../table-cell/table-cell.component';
-import {isNumber} from 'util';
+import * as _ from "lodash";
 import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
 import {Direction, FhngComponent} from "@fh-ng/forms-handler";
 
@@ -122,7 +122,7 @@ export class TableColumnComponent
       this.width = value;
       let v = null;
       if (value) {
-        v = isNumber(value) ? value : value.replace(/px|%|em|rem|pt/gi, '');
+        v = _.isNumber(value) ? value : value.replace(/px|%|em|rem|pt/gi, '');
         let unit = value.replace(v, "");
         unit = unit ? unit : '%';
         // this.hostStyle[key] = v;
