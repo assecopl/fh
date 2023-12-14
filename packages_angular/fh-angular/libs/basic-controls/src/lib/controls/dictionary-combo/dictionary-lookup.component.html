@@ -57,6 +57,17 @@
         (blur)="onBlurEvent()"
       />
 
+      <div class="input-group-append">
+        <button
+          *ngIf="!disabled"
+          class="input-group-text"
+          (click)="onClearEvent()"
+        >
+          <i class="fas fa-times mr-0"></i>
+          <span class="sr-only">{{ 'close' | i18n }}</span>
+        </button>
+      </div>
+
       <div ngbDropdownMenu class="combo-lookup__dropdown"> <!--*ngIf="tableIsVisible"-->
         <div class="combo-lookup__container">
           <div class="combo-lookup__navigation">
@@ -91,11 +102,6 @@
         </table>
         </div>
       </div>
-      <button
-        *ngIf="!disabled"
-        class="clear-button"
-        (click)="onClearEvent()"
-      >x</button>
     </div>
   </div>
 </ng-template>
