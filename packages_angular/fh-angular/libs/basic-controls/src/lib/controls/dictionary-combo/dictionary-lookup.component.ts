@@ -102,8 +102,6 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
   public set tableIsVisible (value: boolean) {
     this._tableIsVisible = value;
 
-    console.log('mydrop', this.myDrop)
-
     if (this.myDrop && value) {
       this.myDrop.open();
     } else if (this.myDrop && !value && this.myDrop.isOpen()) {
