@@ -124,7 +124,7 @@ export class FhngHTMLElementC
   public alignRight: boolean = false;
 
   @Input()
-  public verticalAlign: 'TOP' | 'MIDDLE' | 'BOTTOM';
+  public verticalAlign: 'TOP' | 'MIDDLE' | 'BOTTOM' = null;
 
   @HostBinding('class.align-self-start')
   @HostBinding('class.valign-top')
