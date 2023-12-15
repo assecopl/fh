@@ -22,6 +22,7 @@ import {FhngHTMLElementC} from '../../models/componentClasses/FhngHTMLElementC';
 import {BootstrapStyleEnum} from '../../models/enums/BootstrapStyleEnum';
 import {BehaviorSubject, Subject, Observable, of} from "rxjs";
 import {FhngButtonGroupComponent, FhngComponent, IDataAttributes} from "@fh-ng/forms-handler";
+import {style} from "@angular/animations";
 
 export interface IButtonDataAttributes extends IDataAttributes {
   active?: boolean;

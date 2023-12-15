@@ -306,7 +306,7 @@ export class FhngHTMLElementC
     if (val) {
 
       // const unit = val.replace(v, "");
-      this.styles[name] = val;
+      this.hostStyle[name] = val;
     }
     return val;
   }
