@@ -359,7 +359,7 @@ export class FhngHTMLElementC
       for (let inline of data.inlineStyle.split(';') || []) {
         let _style = inline.split(':');
 
-        if(_style[0]) {
+        if(_style[0] && _style[1]) {
           _tempStyles[_style[0].trim()] = _style[1].trim();
         }
       }
