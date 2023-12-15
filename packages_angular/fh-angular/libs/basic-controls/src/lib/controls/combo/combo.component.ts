@@ -84,7 +84,7 @@ export class ComboComponent extends FhngInputWithListC implements OnInit {
 
   public getValuesForCursor(): ComboListElement[] {
     let values: ComboListElement[] = [];
-    const keys = Object.keys(this.filteredValues);
+    const keys = Object.keys(this.filteredValues || {});
     keys.forEach((group, index) => {
       let vals = this.filteredValues[group]
       vals.forEach((value1, index1) => {
