@@ -413,7 +413,8 @@ export class FhngHTMLElementC
         this.hostWidth = '';
       } else {
         //Host works with bootstrap width classes.
-        const widths = value.replace(/ /g, '').split(',');
+        const widths = value.replace(/ /g, '').replace("xs", "").split(',');
+
         this.hostWidth += ' col-' + widths.join(' col-');
       }
     }

@@ -70,9 +70,6 @@ export class OutputLabelComponent extends FhngHTMLElementC implements OnInit {
   @HostBinding('attr.tabindex')
   public override tabindex: number = null;
 
-  @HostBinding('style')
-  public override styles;
-
   public hintDisplay = false;
 
   @HostListener('keydown.enter', ['$event']) onEnterHandler(

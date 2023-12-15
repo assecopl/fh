@@ -1,8 +1,8 @@
-{{getHintTooltip()}}
 <ng-container *ngIf="headingType == 'H1'">
   <h1>
     <ng-container *ngIf="hint; else outputLabel">
       <span
+        [ngStyle]="styles"
         [fhng-hint]="hint"
         [hintTrigger]="hintTrigger"
         [hintType]="hintType"
@@ -19,6 +19,7 @@
   <h2>
     <ng-container *ngIf="hint; else outputLabel">
       <span
+        [ngStyle]="styles"
         [fhng-hint]="hint"
         [hintTrigger]="hintTrigger"
         [hintType]="hintType"
@@ -35,6 +36,7 @@
   <h3>
     <ng-container *ngIf="hint; else outputLabel">
       <span
+        [ngStyle]="styles"
         [fhng-hint]="hint"
         [hintTrigger]="hintTrigger"
         [hintType]="hintType"
@@ -51,6 +53,7 @@
   <h4>
     <ng-container *ngIf="hint; else outputLabel">
       <span
+        [ngStyle]="styles"
         [fhng-hint]="hint"
         [hintTrigger]="hintTrigger"
         [hintType]="hintType"
@@ -67,6 +70,7 @@
   <h5>
     <ng-container *ngIf="hint; else outputLabel">
       <span
+        [ngStyle]="styles"
         [fhng-hint]="hint"
         [hintTrigger]="hintTrigger"
         [hintType]="hintType"
@@ -83,6 +87,7 @@
   <h6>
     <ng-container *ngIf="hint; else outputLabel">
       <span
+        [ngStyle]="styles"
         [fhng-hint]="hint"
         [hintDisplay]="hintDisplay"
         [hintTrigger]="hintTrigger"
@@ -100,6 +105,7 @@
 <!--  <div >-->
     <ng-container *ngIf="hint; else outputLabel">
       <span
+        [ngStyle]="styles"
         [fhng-hint]="hint"
         [hintDisplay]="hintDisplay"
         [hintTrigger]="hintTrigger"
@@ -120,6 +126,7 @@
     [id]="id"
     [availabilityHtmlElement]="availability"
     [hasHeight]="height"
+    [ngStyle]="styles"
     (click)="onClickEvent()"
   >
     <i
