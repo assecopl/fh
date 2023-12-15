@@ -38,7 +38,7 @@ export class SelectOneMenuComponent
   public require: boolean;
 
   @Input()
-  public selectedIndex: number;
+  public selectedIndex: number = -1;
 
   @Input()
   public keepRemovedValue: boolean;
