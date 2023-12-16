@@ -128,7 +128,10 @@ export class OutputLabelComponent extends FhngHTMLElementC implements OnInit {
     this.onClickNameEvent = data.onClick || this.onClickNameEvent;
   }
 
-  public onClickEvent(): void {
+  public onClickEvent($event: Event): void {
+    $event.stopPropagation();
+    $event.preventDefault();
+
     if (this.onClickNameEvent) {
       this.fireEventWithLock('onClick', this.onClickNameEvent);
     }

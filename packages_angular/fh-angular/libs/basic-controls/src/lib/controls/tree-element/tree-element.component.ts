@@ -38,15 +38,17 @@ export class TreeElementComponent extends FhngHTMLElementC implements OnInit, Af
   private techIconElement: HTMLSpanElement;
   private iconElement: HTMLSpanElement;
   private subTree: any;
+  public customHighlightColor:string = null;
+
+  @Input()
   public onLabelClick: any = null;
+
   private currentTechIconClasses: any;
   private currentIconClasses: any;
   private icons: any;
   private selectable: any;
   private spanWithLabel: any;
   private ul: any;
-
-  public customHighlightColor:string = null;
 
   @HostBinding('id')
   @Input()
@@ -137,9 +139,10 @@ export class TreeElementComponent extends FhngHTMLElementC implements OnInit, Af
     // if (this.expandableNode) {
       this.changesQueue.queueAttributeChange('collapsed', this.collapsed);
     // } else {
-        this.changesQueue.queueAttributeChange('selected', this.selected);
+        this.changesQueue.queueAttributeChange('selected', !this.selected);
     // }
     this.treeElement.emit({id: this.id, selected: this});
+
     if (this.onLabelClick) {
       this.fireEventWithLock('onLabelClick', 'onLabelClick');
     }

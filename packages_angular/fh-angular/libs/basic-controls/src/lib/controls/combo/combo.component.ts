@@ -56,8 +56,7 @@ export class ComboComponent extends FhngInputWithListC implements OnInit {
   }
 
   @Input()
-  public filteredValues: { [key: string]: [] } = null;
-
+  public filteredValues: { [key: string]: any[] } = null;
 
   public cursor: number = 0;
   //@Input()
@@ -84,7 +83,9 @@ export class ComboComponent extends FhngInputWithListC implements OnInit {
 
   public getValuesForCursor(): ComboListElement[] {
     let values: ComboListElement[] = [];
+
     const keys = Object.keys(this.filteredValues || {});
+
     keys.forEach((group, index) => {
       let vals = this.filteredValues[group]
       vals.forEach((value1, index1) => {
@@ -96,7 +97,6 @@ export class ComboComponent extends FhngInputWithListC implements OnInit {
         this.preselectValue(element);
       })
     })
-
 
     return values
   }
@@ -265,10 +265,26 @@ export class ComboComponent extends FhngInputWithListC implements OnInit {
     if (data.filteredValues) {
       this.values = this.getValuesForCursor();
     }
+
     if (data.multiselectRawValue) {
       this.multiselectRawValue = JSON.parse(data.multiselectRawValue);
       this.rawValue = [];
+
+      this._filteredDataValues();
+
       this.values = this.getValuesForCursor();
+    }
+  }
+
+  private _filteredDataValues(): void {
+    let _data: any[] = [];
+
+    if (!this.filteredValues && this.multiselectRawValue && this.multiselectRawValue.length) {
+      this.multiselectRawValue.forEach((item, index) => {
+        _data.push({displayAsTarget: true, targetValue: item, targetId: index});
+      })
+
+      this.filteredValues = { '': _data};
     }
   }
 

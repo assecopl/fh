@@ -1,8 +1,9 @@
 
   <label
-    *ngIf="labelPosition == 'LEFT'"
-    [for]="id"
     class="form-check-label mr-3"
+    *ngIf="labelPosition == 'LEFT'"
+    [availabilityHtmlElement]="availability"
+    [for]="id"
     [innerHTML]="label ? label : ''"
   >{{ label ? label : '' }}</label
   >
@@ -10,7 +11,7 @@
          #focusElement
          type="checkbox"
          class="fc InputCheckbox form-check-input {{setPresentationStyle()}} {{styleClasses}}"
-
+         [availabilityHtmlElement]="availability"
          [availabilityInput]="availability"
          [id]="id"
          [placeholder]="placeholder"
@@ -22,9 +23,10 @@
          (change)="inputCheckEvent(inp.checked);onChangeEvent()"
   />
   <label
-    *ngIf="labelPosition == 'RIGHT'"
-    [for]="innerId"
     class="form-check-label ml-3"
+    *ngIf="labelPosition == 'RIGHT'"
+    [availabilityHtmlElement]="availability"
+    [for]="innerId"
     [innerHTML]="label ? label : ''"
   >{{ label ? label : '' }}</label
   >

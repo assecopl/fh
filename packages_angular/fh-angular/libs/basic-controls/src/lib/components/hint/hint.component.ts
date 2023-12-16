@@ -1,6 +1,7 @@
-import {Component, ElementRef, Input, OnInit, Optional, SkipSelf} from "@angular/core";
+import {Component, ElementRef, HostListener, Input, OnInit, Optional, SkipSelf, ViewChild} from "@angular/core";
 import {HintPlacement, HintType} from "../../models/componentClasses/FhngHTMLElementC";
 import {AvailabilityUtils, FhngComponent, FhngGroupComponent} from "@fh-ng/forms-handler";
+import {NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: '[fhng-hint]',
@@ -28,6 +29,9 @@ export class HintComponent implements OnInit {
 
   @Input('fhng-hint')
   public hint: string = null;
+
+  @ViewChild('tooltip', {read: NgbTooltip})
+  public tooltipObject: NgbTooltip = null;
 
   public hintAriaLabel = '';
 
@@ -60,12 +64,17 @@ export class HintComponent implements OnInit {
     return [this.hintIcon, ...classList];
   }
 
-  private _tooltipOptions = {
-    placement: this.hintPlacement,
-    title: this.hintTitle,
-    trigger: this.hintTrigger,
-    html: true,
-    boundary: 'window'
+  public get placement(): string {
+    switch(this.hintPlacement) {
+      case HintPlacement.TOP:
+      case HintPlacement.BOTTOM:
+        return this.hintPlacement.toLowerCase();
+      case HintPlacement.RIGHT:
+        return 'end';
+      case HintPlacement.LEFT:
+      default:
+        return 'start';
+    }
   }
 
   constructor(
@@ -103,5 +112,19 @@ export class HintComponent implements OnInit {
       },
       null
     )
+  }
+
+  @HostListener('mouseenter', ['$event'])
+  public onHover () {
+    if (this.tooltipObject && !this.tooltipObject.isOpen()) {
+      this.tooltipObject.open('body');
+    }
+  }
+
+  @HostListener('mouseleave', ['$event'])
+  public onHoverLeave () {
+    if (this.tooltipObject && this.tooltipObject.isOpen()) {
+      this.tooltipObject.close();
+    }
   }
 }

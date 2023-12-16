@@ -8,7 +8,7 @@
         [hintType]="hintType"
         [hintPlacement]="hintPlacement"
         [hintTitle]="hintTitle"
-        (click)="onClickEvent()"
+        (click)="onClickEvent($event)"
       >
         <ng-container *ngTemplateOutlet="outputLabel"></ng-container>
       </span>
@@ -25,7 +25,7 @@
         [hintType]="hintType"
         [hintPlacement]="hintPlacement"
         [hintTitle]="hintTitle"
-        (click)="onClickEvent()"
+        (click)="onClickEvent($event)"
       >
         <ng-container *ngTemplateOutlet="outputLabel"></ng-container>
       </span>
@@ -42,7 +42,7 @@
         [hintType]="hintType"
         [hintPlacement]="hintPlacement"
         [hintTitle]="hintTitle"
-        (click)="onClickEvent()"
+        (click)="onClickEvent($event)"
       >
         <ng-container *ngTemplateOutlet="outputLabel"></ng-container>
       </span>
@@ -59,7 +59,7 @@
         [hintType]="hintType"
         [hintPlacement]="hintPlacement"
         [hintTitle]="hintTitle"
-        (click)="onClickEvent()"
+        (click)="onClickEvent($event)"
       >
         <ng-container *ngTemplateOutlet="outputLabel"></ng-container>
       </span>
@@ -76,7 +76,7 @@
         [hintType]="hintType"
         [hintPlacement]="hintPlacement"
         [hintTitle]="hintTitle"
-        (click)="onClickEvent()"
+        (click)="onClickEvent($event)"
       >
         <ng-container *ngTemplateOutlet="outputLabel"></ng-container>
       </span>
@@ -94,7 +94,7 @@
         [hintType]="hintType"
         [hintPlacement]="hintPlacement"
         [hintTitle]="hintTitle"
-        (click)="onClickEvent()"
+        (click)="onClickEvent($event)"
       >
         <ng-container *ngTemplateOutlet="outputLabel"></ng-container>
       </span>
@@ -112,7 +112,7 @@
         [hintType]="hintType"
         [hintPlacement]="hintPlacement"
         [hintTitle]="hintTitle"
-        (click)="onClickEvent()"
+        (click)="onClickEvent($event)"
       >
         <ng-container *ngTemplateOutlet="outputLabel"></ng-container>
       </span>
@@ -127,7 +127,7 @@
     [availabilityHtmlElement]="availability"
     [hasHeight]="height"
     [ngStyle]="styles"
-    (click)="onClickEvent()"
+    (click)="onClickEvent($event)"
   >
     <i
       *ngIf="icon && (iconAlignment == 'BEFORE' || !iconAlignment)"
