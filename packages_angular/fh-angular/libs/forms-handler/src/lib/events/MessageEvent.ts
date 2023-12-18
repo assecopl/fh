@@ -1,6 +1,7 @@
 import {BaseEvent} from "./BaseEvent";
 import {Injectable, inject} from '@angular/core';
-import {NotificationService} from "@fh-ng/forms-handler";
+import {NotificationService} from "../service/Notification";
+import {MessageData} from "../Base";
 
 @Injectable({providedIn: 'root'})
 class MessageEvent extends BaseEvent {
@@ -42,12 +43,6 @@ class MessageEvent extends BaseEvent {
     }
 }
 
-type MessageData = {
-  title:string,
-  message:string,
-  closeButtonLabel:string,
-  closeButtonClass:string,
-  closeCallback:string
-}
 
-export { MessageEvent, MessageData };
+
+export { MessageEvent };

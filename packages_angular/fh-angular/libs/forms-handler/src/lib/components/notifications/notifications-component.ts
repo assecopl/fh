@@ -2,7 +2,7 @@ import {Component, EventEmitter, Host, Injector, Input, OnInit, Optional, Output
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
 import {NotificationService} from '../../service/Notification';
 import {NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
-import {MessageData} from "../../events/MessageEvent";
+import {MessageData} from "../../Base";
 
 @Component({
   selector: 'fhng-notifications',

@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {ReplaySubject, Subject} from 'rxjs';
-import {MessageData} from "../events/MessageEvent";
+import {MessageData} from "../Base";
 
 @Injectable({providedIn: 'root'})
 export class NotificationService {

@@ -283,3 +283,11 @@ export class FhngFormatter {
   }
 
 }
+
+export type MessageData = {
+  title:string,
+  message:string,
+  closeButtonLabel:string,
+  closeButtonClass:string,
+  closeCallback:string
+}
