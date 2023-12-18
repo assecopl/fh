@@ -55,7 +55,7 @@ export class FhngHTMLElementC
   public tabindex: number = null;
 
 
-  public availability: AvailabilityEnum = AvailabilityEnum.EDIT;
+  public override availability: AvailabilityEnum = AvailabilityEnum.EDIT;
 
   @Input('availability')
   public set accessibility(value: AvailabilityEnum | string) {
@@ -124,7 +124,7 @@ export class FhngHTMLElementC
   public alignRight: boolean = false;
 
   @Input()
-  public verticalAlign: 'TOP' | 'MIDDLE' | 'BOTTOM';
+  public verticalAlign: 'TOP' | 'MIDDLE' | 'BOTTOM' = null;
 
   @HostBinding('class.align-self-start')
   @HostBinding('class.valign-top')
@@ -140,6 +140,7 @@ export class FhngHTMLElementC
 
   @Input()
   public hint: any = null;
+
   @Input()
   public hintTitle: any = null;
 
@@ -303,9 +304,9 @@ export class FhngHTMLElementC
     let v = null;
 
     if (val) {
-      // v = isNumber(val) ? val : val.replace(/px|%|em|rem|pt/gi, '');
+
       // const unit = val.replace(v, "");
-      this.styles[name] = val;
+      this.hostStyle[name] = val;
     }
     return val;
   }
@@ -358,7 +359,7 @@ export class FhngHTMLElementC
       for (let inline of data.inlineStyle.split(';') || []) {
         let _style = inline.split(':');
 
-        if(_style[0]) {
+        if(_style[0] && _style[1]) {
           _tempStyles[_style[0].trim()] = _style[1].trim();
         }
       }
@@ -403,7 +404,6 @@ export class FhngHTMLElementC
         this.hostWidth += 'col-auto exactWidth';
         //Set inner element styles to exact width;
         if (value != 'fit') {
-          console.log('here', value);
           this.processStyleWithUnit('width', value);
         }
       } else if (value === BootstrapWidthEnum.AUTO) {
@@ -412,7 +412,8 @@ export class FhngHTMLElementC
         this.hostWidth = '';
       } else {
         //Host works with bootstrap width classes.
-        const widths = value.replace(/ /g, '').split(',');
+        const widths = value.replace(/ /g, '').replace("xs", "").split(',');
+
         this.hostWidth += ' col-' + widths.join(' col-');
       }
     }
@@ -432,10 +433,15 @@ export class FhngHTMLElementC
     return _safeStyle;
   }
 
-  public getHintTooltip(): string {
+  public getHintTooltip(elementData?: any): string {
+    if (elementData) {
+      this.hint = elementData.hint;
+      this.hintType = elementData.hintType;
+    }
+
     return AvailabilityUtils.processOnEdit(this.availability,
       () => {
-        if (this.hint && this.hintType == 'STANDARD') {
+        if (this.hint && this.hintType === 'STANDARD') {
           return this.hint;
         }
       },

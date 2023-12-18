@@ -21,20 +21,25 @@
        [hintPlacement]="hintPlacement"
        [hintTitle]="hintTitle"
   >
-    <div fhng-input-group
-         ngbDropdown #myDrop="ngbDropdown"
+    <div fhng-input-group #group
+         ngbDropdown
+         #myDrop="ngbDropdown"
          container="body"
          display="dynamic"
          placement="bottom-left"
-         [iconText]="iconText"
-         [class.fh-disabled]="disabled"
-         [icon]="icon"
-         [iconAlignment]="iconAlignment"
+          [forceShowBefore]="true"
          [required]="required"
-         (onClick)="onSwitchSearchModeEvent(myDrop)"
+         (openChange)="onOpenChange($event)"
     >
+        <button ngbDropdownAnchor
+          class="input-group-text"
+          (click)="onSwitchSearchModeEvent()"
+          type="button"
+        >
+          <i *ngIf="icon" class="fas {{ icon }}"></i>
+          <span *ngIf="!icon && iconText">{{ iconText }}</span>
+        </button>
       <input
-        ngbDropdownAnchor
         class="fc inputText form-control {{setPresentationStyle()}}"
         #focusElement
         [id]="id"
@@ -51,12 +56,23 @@
         [triggers]="hintTrigger.toLowerCase()"
         [availabilityInput]="availability"
         [(ngModel)]="rawValue"
-        (input)="onInputEvent($event, myDrop)"
+        (input)="onInputEvent($event)"
         (blur)="onBlurEvent()"
       />
 
+      <div class="input-group-append">
+        <button
+          *ngIf="!disabled"
+          class="input-group-text"
+          (click)="onClearEvent()"
+        >
+          <i class="fas fa-times mr-0"></i>
+          <span class="sr-only">{{ 'close' | i18n }}</span>
+        </button>
+      </div>
+
       <div ngbDropdownMenu class="combo-lookup__dropdown"> <!--*ngIf="tableIsVisible"-->
-        <div class="combo-lookup__container">
+        <div class="combo-lookup__container" [ngStyle]="{'min-width': group.elementRef.nativeElement.offsetWidth+'px'}" >
           <div class="combo-lookup__navigation">
             <div class="combo-lookup__title" [innerHTML]="title | fhml"></div>
             <div class="combo-lookup__pagination">
@@ -69,7 +85,7 @@
               </button>
             </div>
             <div  class="combo-lookup__closebox">
-              <button class="combo-lookup__nav-buttons" (click)="onCancelSearch(myDrop)">
+              <button class="combo-lookup__nav-buttons" (click)="onCancelSearch()">
                 <i class="fas fa-times"></i>
                 <span class="sr-only">{{ 'close' | i18n }}</span>
               </button>
@@ -82,7 +98,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr class="combo-lookup__row" *ngFor="let r of rows;let i = index;" (click)="onSelectedEvent(i, myDrop)">
+            <tr class="combo-lookup__row" *ngFor="let r of rows;let i = index;" (click)="onSelectedEvent(i)">
               <td *ngFor="let c of columns"> {{ r[c.field] }}</td>
             </tr>
           </tbody>

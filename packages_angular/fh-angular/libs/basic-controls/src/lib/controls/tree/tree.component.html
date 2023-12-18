@@ -1,7 +1,7 @@
-<!--subelements.length: {{subelements.length}}-->
+
 <ng-container *ngIf="!child; then rootTemplate; else childTemplate"></ng-container>
 <ng-template #rootTemplate>
-  <div class="fc tree treeview {{styleClasses}}" [class.treelines]="lines">
+  <div [id]="id" class="fc tree treeview {{styleClasses}}" [class.treelines]="lines">
     <div class="eq-row">
       <ul class="list-group col-12 treeElementList">
         <ng-container *ngTemplateOutlet="listElementsTemplate"></ng-container>
@@ -16,7 +16,7 @@
 
 <ng-template #listElementsTemplate>
   <ng-container *ngFor="let e of subelements">
-    <li [availabilityHtmlElement]="e.accessibility" fh-tree-element [data]="e" [collapsed]="collapsedTree"
+    <li [availabilityHtmlElement]="t.availability" fh-tree-element [data]="e" #t [collapsed]="!expanded"
         [formId]="formId"
         [id]="e.id"
         [tree]="this"
@@ -31,3 +31,6 @@
   </ng-container>
 </ng-template>
 
+<ng-container *ngIf="configuration.debug">
+    <fh-component-debugger/>
+</ng-container>

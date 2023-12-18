@@ -54,3 +54,17 @@
   outline: rgba(0, 123, 255, 0.25) solid 0.2rem;
   /*box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);*/
 }
+
+.col--1,
+.col--2,
+.col--3,
+.col--4,
+.col--5,
+.col--6,
+.col--7,
+.col--8,
+.col--9,
+.col--10,
+.col--11 {
+  width: fit-content;
+}

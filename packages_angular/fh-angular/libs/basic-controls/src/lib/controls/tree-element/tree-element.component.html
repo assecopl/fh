@@ -10,13 +10,13 @@
         <span (click)="processTreeElementClick()" class="fa fa-fw  fa-caret-down"></span>
 <!--      </div>-->
     </ng-container>
-    <span (click)="labelClicked($event)" class="fc outputLabel" [innerHTML]="label | fhml" ></span>
+    <span (click)="labelClicked($event)" class="fc outputLabel" [innerHTML]="label | fhml"></span>
   </div>
 </div>
 <ng-container *ngIf="subelements?.length > 0">
   <ul class="list-group col-12 {{collapsed?'d-none':''}}">
     <ng-container *ngFor="let e of subelements">
-      <li [availabilityHtmlElement]="e.accessibility" fh-tree-element [data]="e" [collapsed]="tree.activeElements[e.id]"
+      <li [availabilityHtmlElement]="elem.accessibility" fh-tree-element [data]="e" #elem [collapsed]="tree.activeElements[e.id]"
           [formId]="formId"
           [id]="e.id"
           [tree]="tree"
@@ -31,6 +31,3 @@
     </ng-container>
   </ul>
 </ng-container>
-<!--<ng-container *ngIf="configuration.debug">-->
-<!--  <fh-component-debugger/>-->
-<!--</ng-container>-->

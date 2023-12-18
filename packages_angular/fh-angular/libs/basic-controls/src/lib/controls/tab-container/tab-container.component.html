@@ -7,9 +7,10 @@
     class="nav nav-tabs"
     [availabilityHtmlElement]="availability"
   >
-    <ng-container *ngFor="let tab of subelements">
+    <ng-container *ngFor="let tab of childFhngComponents">
       <li class="nav-item">
-        <a [availabilityHtmlElement]="tab.accessibility"
+        <a
+          *ngIf="tab.availability == 3 || tab.availability == 4"
           tabindex="0"
           class="nav-link"
           data-toggle="tab"
@@ -19,11 +20,13 @@
           [ngClass]="{active: tab.selected}"
           (keydown.enter)="selectTab(tab, $event)"
           (click)="selectTab(tab, $event)"
-        [innerHtml]="tab.label | fhml"></a>
+          [innerHtml]="tab.label | fhml"></a>
       </li>
     </ng-container>
   </ul>
-  <div class="tab-content row eq-row">
-    <ng-container [fhDynamicComponents]="subelements" [fhNonVisualSubcomponents]="nonVisualComponents"></ng-container>
+  <div class="tab-content row ">
+    <ng-container *ngFor="let tab of subelements;let i = index;">
+      <fhng-tab [data]="tab"/>
+    </ng-container>
   </div>
 </div>

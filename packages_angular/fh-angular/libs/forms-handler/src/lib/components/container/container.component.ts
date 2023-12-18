@@ -35,7 +35,7 @@ export class ContainerComponent implements OnInit, OnChanges, OnDestroy {
 
   public form: IForm = null;
 
-  protected modalRef: NgbModalRef = null;
+  protected modalRef: NgbModalRef[] = [];
 
   constructor(
       private formManager: FormsManager,
@@ -55,34 +55,42 @@ export class ContainerComponent implements OnInit, OnChanges, OnDestroy {
         this.form = this.resolveModal(form)
         if (form.modal) {
           let cType = this.componentManager.getComponentFactory("Form")
-          this.modalRef = this.modalService.open(cType, {
+          let modalRef = this.modalService.open(cType, {
             backdrop: 'static',
             keyboard: false,
             modalDialogClass: this.resolveModalSize()
           });
 
-          this.modalRef.componentInstance.formType = form.formType;
-          this.modalRef.componentInstance.subelements = form?.subelements || [];
-          this.modalRef.componentInstance.nonVisualComponents = form?.nonVisualSubcomponents || [];
-          this.modalRef.componentInstance.formId = form?.id;
-          this.modalRef.componentInstance.id = form?.id;
-          this.modalRef.componentInstance.label = form.label;
-          this.modalRef.componentInstance.modal = form.modal;
-          this.modalRef.componentInstance.hideHeader = form.hideHeader;
-          this.modalRef.componentInstance.container = this;
+          modalRef.componentInstance.formType = form.formType;
+          modalRef.componentInstance.subelements = form?.subelements || [];
+          modalRef.componentInstance.nonVisualComponents = form?.nonVisualSubcomponents || [];
+          modalRef.componentInstance.formId = form?.id;
+          modalRef.componentInstance.id = form?.id;
+          modalRef.componentInstance.label = form.label;
+          modalRef.componentInstance.modal = form.modal;
+          modalRef.componentInstance.hideHeader = form.hideHeader;
+          modalRef.componentInstance.container = this;
+          this.modalRef.push(modalRef);
         }
         this.changeDetectorRef.detectChanges();
       }
-      ;
     });
 
     this.formManager.closeFormsSubject.subscribe((formId: string) => {
+      //close main form
       if (this.form && this.form.id == formId) {
-        if (this.modalRef) {
-          this.modalRef.dismiss();
-        }
         this.form = null;
         this.changeDetectorRef.detectChanges();
+      }
+      let modalToDelete:number = -1;
+      this.modalRef.forEach((modal,index) => {
+        if(modal.componentInstance.id == formId){
+          modal.dismiss();
+          modalToDelete = index;
+        }
+      });
+      if(modalToDelete > -1){
+        this.modalRef.splice(modalToDelete, 1);
       }
     });
   }

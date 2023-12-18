@@ -70,9 +70,6 @@ export class OutputLabelComponent extends FhngHTMLElementC implements OnInit {
   @HostBinding('attr.tabindex')
   public override tabindex: number = null;
 
-  @HostBinding('style')
-  public override styles;
-
   public hintDisplay = false;
 
   @HostListener('keydown.enter', ['$event']) onEnterHandler(
@@ -127,11 +124,14 @@ export class OutputLabelComponent extends FhngHTMLElementC implements OnInit {
 
   public override mapAttributes(data: IDataAttributes) {
     super.mapAttributes(data);
-    this.value = data.value;
+    this.value = typeof data.value === 'undefined' ? this.value : data.value ;
     this.onClickNameEvent = data.onClick || this.onClickNameEvent;
   }
 
-  public onClickEvent(): void {
+  public onClickEvent($event: Event): void {
+    $event.stopPropagation();
+    $event.preventDefault();
+
     if (this.onClickNameEvent) {
       this.fireEventWithLock('onClick', this.onClickNameEvent);
     }

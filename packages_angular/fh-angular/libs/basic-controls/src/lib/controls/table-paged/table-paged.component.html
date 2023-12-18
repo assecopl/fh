@@ -31,7 +31,7 @@
 
     <ng-container *ngFor="let column of columns">
 
-      <th fhng-table-column [horizontalAlign]="horizontalAlign" [data]="column" [formId]="formId" [sortBy]="sortedBy">
+      <th fhng-table-column [horizontalAlign]="horizontalAlign" [data]="column" [availabilityHtmlElement]="col.availability" #col [formId]="formId" [sortBy]="sortedBy">
         &nbsp;{{column.id}}</th>
     </ng-container>
   </tr>
@@ -40,7 +40,7 @@
   <!--  <ng-content select="tbody"></ng-content>-->
   <tbody>
   <ng-container *ngFor="let tr of tableData;let i = index;">
-    <tr tabindex="0" fhng-table-row [data]="tr" [formId]="formId" [rowIndex]="i" [horizontalAlign]="horizontalAlign"
+    <tr tabindex="0" fhng-table-row [data]="tr" [formId]="formId" [rowIndex]="i" [availabilityHtmlElement]="row.availability" #row [horizontalAlign]="horizontalAlign"
         [highlight]="rawValue.includes(i)"></tr>
   </ng-container>
 

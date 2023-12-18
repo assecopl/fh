@@ -29,7 +29,7 @@
       <ng-container *ngTemplateOutlet="contentTemplate"></ng-container>
     </button>
     <div id="{{ id }}ngbDropdownMenu" ngbDropdownMenu >
-      <ng-container [fhDynamicComponents]="subelements" [fhNonVisualSubcomponents]="nonVisualComponents"></ng-container>
+      <ng-container [fhDynamicComponents]="processedSubelements || subelements" [fhNonVisualSubcomponents]="nonVisualComponents"></ng-container>
     </div>
   </div>
 </ng-template>
@@ -48,7 +48,7 @@
     <ng-container *ngTemplateOutlet="contentTemplate"></ng-container>
   </button>
   <div id="{{ id }}ngbDropdownMenu" ngbDropdownMenu>
-    <ng-container [fhDynamicComponents]="subelements" [fhNonVisualSubcomponents]="nonVisualComponents"></ng-container>
+    <ng-container [fhDynamicComponents]="processedSubelements || subelements" [fhNonVisualSubcomponents]="nonVisualComponents"></ng-container>
   </div>
 </ng-template>
 

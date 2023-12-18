@@ -86,6 +86,8 @@ export class TabComponent
 
   public override ngOnChanges(changes: SimpleChanges) {
     super.ngOnChanges(changes);
+    this.classFcEditable = this.availability === AvailabilityEnum.EDIT;
+    this.classDNone = this.availability === AvailabilityEnum.HIDDEN;
   }
 
   public override mapAttributes(data: IDataAttributes & { selected: boolean }) {
@@ -95,5 +97,7 @@ export class TabComponent
       this.selected = data.selected;
     }
     this._updateBehavior.next(data);
+    this.classFcEditable = this.availability === AvailabilityEnum.EDIT;
+    this.classDNone = this.availability === AvailabilityEnum.HIDDEN;
   }
 }

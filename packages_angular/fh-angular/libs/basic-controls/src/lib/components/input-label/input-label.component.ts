@@ -42,8 +42,6 @@ export class InputLabelComponent extends FhngHTMLElementC implements OnInit {
 
   public override mapAttributes(data: any) {
     super.mapAttributes(data);
-
-    console.log(data, this);
   }
 
 

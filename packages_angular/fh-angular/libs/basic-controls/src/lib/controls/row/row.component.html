@@ -5,5 +5,5 @@
   [ngClass]=""
   [ngStyle]="styles"
 >
-  <ng-container [fhDynamicComponents]="subelements" [fhNonVisualSubcomponents]="nonVisualComponents"/>
+  <ng-container [fhDynamicComponents]="processedSubelements || subelements" [fhNonVisualSubcomponents]="nonVisualComponents"/>
 </div>

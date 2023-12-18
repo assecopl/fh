@@ -646,7 +646,7 @@ export class FhMLService {
 
   // tslint:disable-next-line:no-unnecessary-initializer
   parse(source, skipHtmlEscape = undefined) {
-    let parsed = source;
+    let parsed = source.replaceAll(/(\r\n|\n|\r)/gm, "");
 
     if (!skipHtmlEscape) {
       parsed = this.escapeHtml(parsed);

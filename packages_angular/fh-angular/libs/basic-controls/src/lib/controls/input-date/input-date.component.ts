@@ -28,6 +28,7 @@ import {
   IconAligmentType,
   IDataAttributes
 } from '@fh-ng/forms-handler';
+import moment from "moment/moment";
 
 interface IInputDateDataAttributes extends IDataAttributes {
   format?: string;
@@ -126,11 +127,13 @@ export class InputDateComponent extends FhngReactiveInputC implements OnInit {
 
   public override updateModel(date: string) {
     this.valueChanged = true;
-    this.rawValue = date;
+    this.rawValue = moment.utc(date, this._customNgbDateService.backendFormat, true).format('YYYY-MM-DDTHH:mm:ss.SSS');
   };
 
   public override mapAttributes(data: IInputDateDataAttributes): void {
     super.mapAttributes(data);
+
+    this.value = data.rawValue;
 
     this.onChange = data.onChange;
     this._customNgbDateService.frontendFormat = this.format?.replace('RRRR', 'YYYY');

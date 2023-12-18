@@ -28,10 +28,11 @@ import {FhngReactiveInputC} from '../../models/componentClasses/FhngReactiveInpu
 import {BootstrapWidthEnum} from '../../models/enums/BootstrapWidthEnum';
 import {
   CustomNgbDatetimeService,
-  FhngComponent,
+  FhngComponent, FhngDateUtils,
   FORM_VALUE_ATTRIBUTE_NAME,
   IDataAttributes
 } from '@fh-ng/forms-handler';
+import moment from "moment";
 
 interface IInputTimestampDataAttributes extends IDataAttributes {
   format?: string;
@@ -71,7 +72,7 @@ export class InputTimestampComponent
   public highlightToday: boolean = false;
 
   @Input()
-  public format: string = 'DD-MM-YYYY HH:mm:ss';
+  public format: string = FhngDateUtils.FRONTEND_DATETIME_FORMAT;
 
   @ViewChild('d', {read: NgbInputDatepicker})
   public d: NgbInputDatepicker & any;
@@ -147,11 +148,13 @@ export class InputTimestampComponent
 
   public override updateModel(date: string) {
     this.valueChanged = true;
-    this.rawValue = date;
+    this.rawValue = moment.utc(date, this.customNgbDatetimeService.backendFormat, true).format('YYYY-MM-DDTHH:mm:ss.SSS');
   };
 
   public override mapAttributes(data: IInputTimestampDataAttributes): void {
     super.mapAttributes(data);
+
+    this.value = data.rawValue;
 
     this.onChange = data.onChange || this.onChange;
     this.customNgbDatetimeService.frontendFormat = this.format?.replace('RRRR', 'YYYY');
@@ -159,6 +162,7 @@ export class InputTimestampComponent
 
   public override extractChangedAttributes() {
     let attrs = {};
+
     if (this.valueChanged) {
       attrs[FORM_VALUE_ATTRIBUTE_NAME] = this.rawValue;
       this.valueChanged = false;

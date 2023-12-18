@@ -5,14 +5,14 @@
         </div>
         <div class="card-body">
             <div class="row">
-                <ng-container [fhDynamicComponents]="subelements" [fhNonVisualSubcomponents]="nonVisualComponents"/>
+                <ng-container [fhDynamicComponents]="processedSubelements || subelements" [fhNonVisualSubcomponents]="nonVisualComponents"/>
             </div>
         </div>
     </ng-container>
 
     <ng-container *ngIf="formType == 'HEADER'">
         <div id="navbar-main">
-            <ng-container [fhDynamicComponents]="subelements" [fhNonVisualSubcomponents]="nonVisualComponents"/>
+            <ng-container [fhDynamicComponents]="processedSubelements || subelements" [fhNonVisualSubcomponents]="nonVisualComponents"/>
         </div>
     </ng-container>
 </ng-container>
@@ -28,7 +28,7 @@
     </div>
     <div class="modal-body">
         <div class="row">
-            <ng-container [fhDynamicComponents]="subelements" [fhNonVisualSubcomponents]="nonVisualComponents"/>
+            <ng-container [fhDynamicComponents]="processedSubelements || subelements" [fhNonVisualSubcomponents]="nonVisualComponents"/>
         </div>
     </div>
 </ng-container>

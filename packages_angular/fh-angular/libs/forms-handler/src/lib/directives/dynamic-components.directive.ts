@@ -79,10 +79,14 @@ export class DynamicComponentsDirective
         if (this.componentRefs[data.id]) {
           //Jezeli istnieje juz o takim ID to robie insert
           const component = this.componentRefs[data.id];
+          // if(component.processedSubelements != null){
+          //   data.subelements = component.processedSubelements;
+          // }
+          //TODO We can't pass initial data again
           component.instance.data = data;
           component.instance.formId = this.formId;
           component.hostView.markForCheck();
-          // component.changeDetectorRef.detectChanges();
+          component.changeDetectorRef.detectChanges();
           this.viewContainerRef.insert(component.hostView, index);
           component.instance.focusOnInit();
         } else {
@@ -118,7 +122,7 @@ export class DynamicComponentsDirective
         componentRef.instance.data = data;
         componentRef.instance.formId = this.formId;
         // componentRef.hostView.markForCheck();
-        // componentRef.changeDetectorRef.detectChanges();
+        componentRef.changeDetectorRef.detectChanges();
       }
     } else {
       let componentType = this.componentManager.getComponentFactory("OutputLabel");

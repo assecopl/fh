@@ -1,13 +1,14 @@
-
 <ng-container *ngIf="!parentButtonGroupComponent; else contentTemplate">
-  <button [availabilityHtmlElement]="accessibility"
+  <button
+    [availabilityHtmlElement]="availability"
     #focusElement
     class="fc btn button btn-{{ bootstrapStyle }} {{styleClasses}}"
     [id]="innerId"
     [class.active]="active"
     [innerHTML]="label | fhml"
     (click)="onClickEvent($event)"
-    [ngStyle]="styles" [ngbTooltip]="getHintTooltip()"
+    [ngStyle]="styles"
+    [ngbTooltip]="getHintTooltip()"
     [triggers]="hintTrigger.toLowerCase()"
   >
     <ng-container *ngTemplateOutlet="contentTemplate"></ng-container>
@@ -23,7 +24,6 @@
     Dropdown?
   </ng-container>
 </ng-template>
-
 <ng-container *ngIf="configuration.debug">
   <fh-component-debugger/>
 </ng-container>

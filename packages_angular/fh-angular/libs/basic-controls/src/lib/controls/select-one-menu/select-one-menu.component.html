@@ -23,15 +23,9 @@
       [style.height]="styles.height"
       (change)="onSelectChangeEvent($event)"
     >
-      <option
-        *ngIf="placeholder && !emptyLabel"
-        [disabled]="true"
-      >
-        {{ placeholder }}
-      </option>
-      <option *ngIf="emptyLabel" value="" [selected]="rawValue === ''"></option>
-      <ng-container *ngFor="let option of rawOptions">
-        <option *ngIf="option || emptyValue" [selected]="rawValue === option" [value]="option">
+      <option [class.d-none]="!emptyValue" value="" [selected]="selectedIndex === -1"> {{ emptyLabel? "":placeholder }}</option>
+      <ng-container *ngFor="let option of rawOptions;let i = index;">
+        <option *ngIf="option || emptyValue" [selected]="selectedIndex === i" [value]="option">
           {{ resultFormatter(option) }}
         </option>
       </ng-container>

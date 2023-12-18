@@ -11,7 +11,7 @@ import {
   Optional,
   SkipSelf,
   ViewChild,
-  inject
+  inject, Output
 } from '@angular/core';
 import * as $ from 'jquery';
 import {FormsManager} from "../../Socket/FormsManager";
@@ -22,6 +22,7 @@ import {HttpClient, HttpErrorResponse, HttpEvent, HttpEventType, HttpHeaders, Ht
 import {catchError, last, map, tap} from 'rxjs/operators';
 import {lastValueFrom, Observable, throwError} from "rxjs";
 import {FhmlPortalManager} from "../../service/fh-ml.service";
+import {AvailabilityEnum} from "../../availability/enums/AvailabilityEnum";
 
 /**
  * Klasa odpowiedzialna za budowę drzewa komponentów FHNG
@@ -31,13 +32,20 @@ import {FhmlPortalManager} from "../../service/fh-ml.service";
 export class FhngComponent extends FhngChangesComponent implements OnInit, AfterViewInit, AfterContentInit, OnDestroy {
 
   @Input() subelements: any[] = [];
+  //List used wehen components are added and removed form subelements by socket communication.
+  public processedSubelements: any[] = null;
+
+  @Output() subelementsChange:EventEmitter<any[]> = new EventEmitter<any[]>();
 
   @Input() nonVisualComponents: any[] = [];
+
+  public availability: AvailabilityEnum;
 
   /*
     FhPortal logic
    */
   public hasPortal: boolean = false;
+
   protected fhmlPortalManager: FhmlPortalManager = inject(FhmlPortalManager);
 
   public _data: any;
@@ -45,6 +53,7 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
   public set data(value: any) {
     this.mapAttributes(value);
   }
+
 
   @Input()
   public id: string = '';
@@ -190,7 +199,7 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
   }
 
   ngAfterViewInit(): void {
-    if (this.hasPortal) {
+    if (this.hasPortal ) {
       this.fhmlPortalManager.handleMutation();
     }
   }
@@ -302,7 +311,14 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
           newSubelements.push(...addedComponents[subelement.id])
         }
       });
-      this.subelements = newSubelements;
+      //Update old list without reference change to prevent change mix of components when change detector fires and components are reattached.
+      this.subelements.length = 0;
+      this.subelements.push(...newSubelements);
+      //Update new list to show data imidietly.
+      this.subelements = [...newSubelements];
+      // this.processedSubelements = null;
+      // this.subelementsChange.emit(this.subelements);
+      // this.subelementsChange.emit(this.subelements);
     }
   }
 
@@ -314,7 +330,15 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
           newSubelements.push(subelement);
         }
       });
-      this.subelements = newSubelements;
+      //Update old list without reference change to prevent change mix of components when change detector fires and components are reattached.
+
+      this.subelements.length = 0;
+      this.subelements.push(...newSubelements);
+      //Update new list to show data imidietly.
+      this.subelements = [...newSubelements];
+      // this.processedSubelements = null;
+      // this.subelementsChange.emit(this.subelements);
+      // this.subelementsChange.emit(this.subelements);
     }
   }
 

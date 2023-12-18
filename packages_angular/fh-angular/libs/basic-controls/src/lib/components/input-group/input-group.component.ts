@@ -28,6 +28,9 @@ export class InputGroupComponent implements OnInit, OnDestroy {
   public iconText: string = null;
 
   @Input()
+  public forceShowBefore: boolean = false;
+
+  @Input()
   public required: boolean = false;
 
   @Input()

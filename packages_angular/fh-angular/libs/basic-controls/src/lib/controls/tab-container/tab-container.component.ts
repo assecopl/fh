@@ -69,6 +69,8 @@ export class TabContainerComponent
 
   private _subscriptions = [];
 
+  public override childFhngComponents: TabComponent[] = [];
+
   constructor(
     public override injector: Injector,
     @Optional() @SkipSelf() parentFhngComponent: FhngComponent
@@ -115,33 +117,33 @@ export class TabContainerComponent
   }
 
   public activateDefaultTab(): void {
-    if (this.subelements.length > 0) {
+    if (this.childFhngComponents.length > 0) {
       if (this.activeTabLabel) {
-        this.subelements.forEach((tab) => {
+        this.childFhngComponents.forEach((tab) => {
           if (tab.label === this.activeTabLabel) {
             tab.selected = true;
-            this.boundActiveTabIndex = this.subelements.findIndex(subElement => subElement.id === tab.id);
+            this.boundActiveTabIndex = this.childFhngComponents.findIndex(subElement => subElement.id === tab.id);
             this.activeTabIndex = this.boundActiveTabIndex;
           }
         });
       } else if (this.activeTabIndex) {
-        if (this.activeTabIndex < this.subelements.length) {
-          if (this.subelements[this.activeTabIndex]) {
-            this.subelements[this.activeTabIndex].selected = true;
+        if (this.activeTabIndex < this.childFhngComponents.length) {
+          if (this.childFhngComponents[this.activeTabIndex]) {
+            this.childFhngComponents[this.activeTabIndex].selected = true;
             this.boundActiveTabIndex = this.activeTabIndex;
           }
         }
       } else if (this.activeTabId) {
-        let tab = this.subelements.find(
+        let tab = this.childFhngComponents.find(
           (c) => c.id === this.activeTabId
         );
         if (tab) {
           tab.selected = true;
-          this.boundActiveTabIndex = this.subelements.findIndex(subElement => subElement.id === tab.id);
+          this.boundActiveTabIndex = this.childFhngComponents.findIndex(subElement => subElement.id === tab.id);
           this.activeTabIndex = this.boundActiveTabIndex;
         }
       } else {
-        this.subelements[0].selected = true;
+        this.childFhngComponents[0].selected = true;
         this.boundActiveTabIndex = 0;
         this.activeTabIndex = this.boundActiveTabIndex
       }
@@ -149,32 +151,32 @@ export class TabContainerComponent
   }
 
 
-  public selectTab(tab: TabElement, event: Event): void {
+  public selectTab(tab: TabComponent, event: Event): void {
     if (event) {
       event.preventDefault();
       event.stopPropagation();
     }
 
-    this.subelements.forEach((element) => {
+    this.childFhngComponents.forEach((element) => {
       element.selected = false;
     });
 
     tab.selected = true;
 
-    this.boundActiveTabIndex = this.subelements.findIndex(element => element.id === tab.id);
+    this.boundActiveTabIndex = this.childFhngComponents.findIndex(element => element.id === tab.id);
     this.activeTabIndex = this.boundActiveTabIndex
 
     if (this.tabChange) {
       this.activeTabIdChange.emit(tab.id);
       this.activeTabIndexChange.emit(this.boundActiveTabIndex);
-      this.tabChange.emit(this.subelements.find(subElement => subElement.id === tab.id));
+      this.tabChange.emit(this.childFhngComponents.find(subElement => subElement.id === tab.id));
     }
 
-    this.subelements = JSON.parse(JSON.stringify(this.subelements));
+    // this.subelements = [...this.subelements];
   }
 
   public deactivateTabs(): void {
-    this.subelements.forEach((element) => {
+    this.childFhngComponents.forEach((element) => {
       element.selected = false;
     });
 
@@ -188,11 +190,13 @@ export class TabContainerComponent
       this.activeTabIndex = data.activeTabIndex;
     }
 
+    // this.subelements = [...this.subelements];
+
     this._mapTabs();
   }
 
   private _mapTabs() {
-    this.subelements.map((element, index) => {
+    this.childFhngComponents.map((element, index) => {
       element.selected = (index === this.activeTabIndex);
     });
   }
@@ -214,6 +218,6 @@ export class TabContainerComponent
   private _updateSubscribeEvent(data: TabElement): void {
     let index = this.subelements.findIndex(element => element.id === data.id);
 
-    this.subelements[index] = {...this.subelements[index], label: data.label, selected: data.selected}
+    // this.subelements[index] = {...this.subelements[index], label: data.label, selected: data.selected}
   }
 }

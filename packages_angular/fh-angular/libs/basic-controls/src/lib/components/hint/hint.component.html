@@ -1,25 +1,35 @@
 <ng-container>
-  <ng-content></ng-content>
-  <ng-container *ngIf="hintDisplay">
-    <button
-      class="btn hint-ico-help fa  ml-2 fh-tooltip"
-      *ngIf="hint && ['STATIC', 'STANDARD'].includes(hintType)"
-      container="body"
-      [ngbTooltip]="hint"
-      [attr.aria-label]="hintAriaLabel"
-      [attr.aria-haspopup]="true"
-      [ngClass]="classList"
-    ></button>
+  <span
+    #tooltip="ngbTooltip"
+    *ngIf="['STANDARD'].includes(hintType) && getHintTooltip(); else contentBox"
+    [ngbTooltip]="getHintTooltip()"
+    [placement]="placement"
+    >
+    <ng-container *ngTemplateOutlet="contentBox"></ng-container>
+  </span>
 
-    <button
-      class="btn hint-ico-help fa  ml-2 fh-tooltip"
-      *ngIf="hint && hintType === 'STATIC_POPOVER'"
-      container="body"
-      [ngbPopover]="hint"
-      [popoverTitle]="hintTitle"
-      [attr.aria-label]="hintAriaLabel"
-      [attr.aria-haspopup]="true"
-      [ngClass]="classList"
-    ></button>
-  </ng-container>
+  <button
+    class="btn hint-ico-help fa  ml-2 fh-tooltip"
+    *ngIf="['STATIC'].includes(hintType) && getHintTooltip()"
+    container="body"
+    [ngbTooltip]="getHintTooltip()"
+    [attr.aria-label]="hintAriaLabel"
+    [attr.aria-haspopup]="true"
+    [ngClass]="classList"
+  ></button>
+
+  <button
+    class="btn hint-ico-help fa  ml-2 fh-tooltip"
+    *ngIf="getHintPopover() && hintType === 'STATIC_POPOVER'"
+    container="body"
+    [ngbPopover]="getHintPopover()"
+    [popoverTitle]="hintTitle"
+    [attr.aria-label]="hintAriaLabel"
+    [attr.aria-haspopup]="true"
+    [ngClass]="classList"
+  ></button>
 </ng-container>
+
+<ng-template #contentBox>
+  <ng-content></ng-content>
+</ng-template>

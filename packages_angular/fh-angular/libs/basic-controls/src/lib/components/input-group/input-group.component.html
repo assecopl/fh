@@ -9,7 +9,7 @@
 >
   <div
     class="input-group-prepend"
-    *ngIf="(icon || iconText) && iconAlignment == 'BEFORE'"
+    *ngIf="(icon || iconText || forceShowBefore) && iconAlignment == 'BEFORE'"
   >
     <button
       *ngIf="onClick?.observers?.length > 0"
@@ -22,7 +22,7 @@
       <i *ngIf="icon" class="fas {{ icon }}"></i>
       <span *ngIf="!icon && iconText">{{ iconText }}</span>
     </button>
-    <div *ngIf="onClick?.observers?.length == 0" class="input-group-text">
+    <div *ngIf="onClick?.observers?.length == 0 && (icon || iconText)" class="input-group-text">
       <i *ngIf="icon" class="fas {{ icon }}"></i>
       <span *ngIf="!icon && iconText">{{ iconText }}</span>
     </div>
