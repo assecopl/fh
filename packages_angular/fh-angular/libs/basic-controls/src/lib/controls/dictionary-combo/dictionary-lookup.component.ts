@@ -273,6 +273,7 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
   }
 
   onPreviousPageEvent(){
+
     this.onPageChange =  "previous";
     this.fireEventWithLock('onChange', this.onChange);
   }

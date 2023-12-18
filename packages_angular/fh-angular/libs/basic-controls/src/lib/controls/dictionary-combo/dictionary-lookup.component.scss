@@ -1,7 +1,6 @@
 .combo-lookup {
   &__container {
     width: 100%;
-    min-width: 400px;
   }
 
   &__dropdown {
@@ -35,3 +34,9 @@
     background-color: #a6c5a5;
   }
 }
+
+.dropdown-toggle { text-transform: uppercase;
+  &:after { display: none;}
+  .caret { display: none; }
+}
+
