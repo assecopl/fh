@@ -74,7 +74,7 @@
         <div class="combo-lookup__container" [ngStyle]="{'min-width': group.elementRef.nativeElement.offsetWidth+'px'}" >
           <div class="combo-lookup__navigation">
             <div class="combo-lookup__title" [innerHTML]="title | fhml"></div>
-            <div class="combo-lookup__pagination">
+            <div *ngIf="!disabled" class="combo-lookup__pagination">
               <button class="combo-lookup__nav-buttons" [disabled]="page<=1" (click)="onPreviousPageEvent()">
                 <i class="fas fa-chevron-left"></i>
               </button>
@@ -97,7 +97,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr class="combo-lookup__row" *ngFor="let r of rows;let i = index;" (click)="onSelectedEvent(i)">
+            <tr class="combo-lookup__row" *ngFor="let r of rows;let i = index;" [class.combo-lookup__disabled-row]="disabled" (click)="disabled ? null : onSelectedEvent(i)">
               <td *ngFor="let c of columns"> {{ r[c.field] }}</td>
             </tr>
           </tbody>

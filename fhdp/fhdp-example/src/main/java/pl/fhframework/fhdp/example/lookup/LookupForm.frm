@@ -13,6 +13,7 @@
 
     <Row>
         <DictionaryComboFhDP id="dcCountry1"
+                             availability="VIEW"
                               emptyValue="true"
                               width="md-4"
                               label="Country"
@@ -20,7 +21,6 @@
                               onChange="-"
                               hint="test hint" hintType="STATIC"
                               dispalyOnlyCode="false"
-                              displayOnlyCode="true"
                               value="{countryCode}"
                               provider="pl.fhframework.fhdp.example.lookup.provider.CountryLookupProvider"
                               icon="fas fa-search" >
@@ -45,6 +45,41 @@
 <!--            <DictionaryComboParameterFhDP name="regionFilter" value="{regionFilter}"/>-->
 <!--        </DictionaryComboFhDP_OLD>-->
     </Row>
+    <Row>
+        <DictionaryComboFhDP id="dcCountry2"
+                             emptyValue="true"
+                             width="md-4"
+                             label="Country"
+                             required="true"
+                             onChange="-"
+                             hint="test hint" hintType="STATIC"
+                             dispalyOnlyCode="true"
+                             value="{countryCode}"
+                             provider="pl.fhframework.fhdp.example.lookup.provider.CountryLookupProvider"
+                             icon="fas fa-search" >
+            <DictionaryComboParameterFhDP name="codeListId" value="356COM"/>
+            <!--            <DictionaryComboParameterFhDP name="referenceDate" value="{referenceDate}"/>-->
+            <DictionaryComboParameterFhDP name="regionFilter" value="{regionFilter}"/>
+        </DictionaryComboFhDP>
+
+        <!--        <DictionaryComboFhDP_OLD id="dcCountry2"-->
+        <!--                              emptyValue="true"-->
+        <!--                              width="md-4"-->
+        <!--                              label="Country"-->
+        <!--                              required="true"-->
+        <!--                              onChange="-"-->
+        <!--                              hint="test hint" hintType="STATIC"-->
+        <!--                             displayOnlyCode="true"-->
+        <!--                              value="{countryCode}"-->
+        <!--                              provider="pl.fhframework.fhdp.example.lookup.provider.CountryLookupProvider"-->
+        <!--                              icon="fas fa-search" >-->
+        <!--            <DictionaryComboParameterFhDP name="codeListId" value="356COM"/>-->
+        <!--            &lt;!&ndash;            <DictionaryComboParameterFhDP name="referenceDate" value="{referenceDate}"/>&ndash;&gt;-->
+        <!--            <DictionaryComboParameterFhDP name="regionFilter" value="{regionFilter}"/>-->
+        <!--        </DictionaryComboFhDP_OLD>-->
+    </Row>
+
+
 
 
 
@@ -110,5 +145,23 @@
 <!--            provider="pl.fhframework.fhdp.example.lookup.provider.CountryLookupSimpleProvider"-->
 <!--            icon="fas fa-search"/>-->
 
+
     <Spacer width="md-12" height="500px"/>
+
+    <Row>
+        <DictionaryComboFhDP id="dcCountry3"
+                             emptyValue="true"
+                             width="md-4"
+                             label="Country"
+                             required="true"
+                             onChange="-"
+                             hint="test hint" hintType="STATIC"
+                             dispalyOnlyCode="true"
+                             value="{countryCode}"
+                             provider="pl.fhframework.fhdp.example.lookup.provider.CountryLookupProvider"
+                             icon="fas fa-search" >
+            <DictionaryComboParameterFhDP name="codeListId" value="356COM"/>
+            <DictionaryComboParameterFhDP name="regionFilter" value="{regionFilter}"/>
+        </DictionaryComboFhDP>
+    </Row>
 </Form>
