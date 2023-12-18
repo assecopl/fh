@@ -1,18 +1,18 @@
 import {
   AfterViewInit,
   Component,
-  ElementRef,
   forwardRef,
   Injector,
   Input,
   OnInit,
   Optional,
   SimpleChanges,
-  SkipSelf, ViewChild,
+  SkipSelf,
+  ViewChild,
 } from '@angular/core';
 import {NgSelectConfig} from '@ng-select/ng-select';
 import {FhngInputWithListC} from '../../models/componentClasses/FhngInputWithListC';
-import {FhngComponent, IDataAttributes} from '@fh-ng/forms-handler';
+import {AvailabilityEnum, FhngComponent, IDataAttributes} from '@fh-ng/forms-handler';
 import {BootstrapWidthEnum} from "../../models/enums/BootstrapWidthEnum";
 import {NgbDropdown} from "@ng-bootstrap/ng-bootstrap";
 
@@ -251,9 +251,11 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
 
 
   public onSelectedEvent(i: number, myDrop?: NgbDropdown): void {
-    this.onSelectValue = i;
-    this.tableIsVisible = false;
-    this.refreshPresentedValue();
+    if (this.availability === AvailabilityEnum.EDIT) {
+      this.onSelectValue = i;
+      this.tableIsVisible = false;
+      this.refreshPresentedValue();
+    }
   }
 
   public onClearEvent(myDrop?: NgbDropdown){
