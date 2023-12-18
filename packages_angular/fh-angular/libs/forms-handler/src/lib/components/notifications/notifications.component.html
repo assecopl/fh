@@ -41,28 +41,14 @@
 
 <ng-template #dialogContent let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Profile update</h4>
-    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+    <h5 class="modal-title" >{{modalData.title }}</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"><i class="fa fa-times"></i></button>
   </div>
   <div class="modal-body">
-    <form>
-      <div class="mb-3">
-        <label for="dateOfBirth">Date of birth</label>
-        <div class="input-group">
-          <input
-            id="dateOfBirth"
-            class="form-control"
-            placeholder="yyyy-mm-dd"
-            name="dp"
-            ngbDatepicker
-            #dp="ngbDatepicker"
-          />
-          <button class="btn btn-outline-secondary bi bi-calendar3" (click)="dp.toggle()" type="button"></button>
-        </div>
-      </div>
-    </form>
+    {{modalData.message}}
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+    <button style="width: 40%; margin-left: 30%; margin-right: 30%;"
+            class="modal-body-button btn {{ modalData.closeButtonClass }}" type="button" (click)="modal.close()">{{modalData.closeButtonLabel}}</button>
   </div>
 </ng-template>

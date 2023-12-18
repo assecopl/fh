@@ -7,7 +7,7 @@ class MessageEvent extends BaseEvent {
 
     private notificationService: NotificationService = inject(NotificationService);
 
-    public fire(data) {
+    public fire(data:MessageData) {
         // this.util.showDialog(
         //     this.escapeHtml(data.title),
         //     this.escapeHtml(data.message),
@@ -42,4 +42,12 @@ class MessageEvent extends BaseEvent {
     }
 }
 
-export { MessageEvent };
+type MessageData = {
+  title:string,
+  message:string,
+  closeButtonLabel:string,
+  closeButtonClass:string,
+  closeCallback:string
+}
+
+export { MessageEvent, MessageData };

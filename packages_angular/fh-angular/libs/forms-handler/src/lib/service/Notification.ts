@@ -1,11 +1,12 @@
 import {Injectable} from '@angular/core';
 import {ReplaySubject, Subject} from 'rxjs';
+import {MessageData} from "../events/MessageEvent";
 
 @Injectable({providedIn: 'root'})
 export class NotificationService {
     toastsObserable: Subject<Toast> = new ReplaySubject<Toast>();
     filesObserable: Subject<Map<string, DownloadToast>> = new ReplaySubject<Map<string, DownloadToast>>();
-    dialogObservable: ReplaySubject<any> = new ReplaySubject<any>();
+    dialogObservable: ReplaySubject<MessageData> = new ReplaySubject<MessageData>();
 
     public downloadToasts: Map<string, any> = new Map<string, any>();
 

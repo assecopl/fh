@@ -1,7 +1,7 @@
 abstract class BaseEvent {
     protected i18n: any;
 
-    protected constructor() {
+    public constructor() {
     }
 
     public abstract fire(data: any);

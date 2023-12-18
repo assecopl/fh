@@ -2,6 +2,7 @@ import {Component, EventEmitter, Host, Injector, Input, OnInit, Optional, Output
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
 import {NotificationService} from '../../service/Notification';
 import {NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
+import {MessageData} from "../../events/MessageEvent";
 
 @Component({
   selector: 'fhng-notifications',
@@ -26,10 +27,10 @@ export class NotificationsComponent implements OnInit {
   @Input()
   public toasts: any[] = [];
 
-  public modal:any = null;
+  public modalData:MessageData = null;
 
-  @ViewChild("modalContent", {read: TemplateRef, static: true})
-  public modalContent: TemplateRef<void>;
+  @ViewChild("dialogContent", {read: TemplateRef, static: true})
+  public dialogContent: TemplateRef<void>;
 
   public removeToast(toast: any): void {
     this.toasts = this.toasts.filter(t => t !== toast);
@@ -48,9 +49,13 @@ export class NotificationsComponent implements OnInit {
       this.toasts.push(c);
     });
 
-    this.notification.toastsObserable.subscribe(c => {
-      this.modal = c;
-      this.modalService.open(this.modalContent);
+    this.notification.dialogObservable.subscribe(c => {
+      this.modalData = c;
+      this.modalService.open(this.dialogContent, {
+        backdrop: 'static',
+        keyboard: false,
+        modalDialogClass: 'modal-md'
+      });
     });
 
 
