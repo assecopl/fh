@@ -179,8 +179,9 @@ export class ComboComponent extends FhngInputWithListC implements OnInit {
     this.selectedIndex = -1;
     this.selectedIndexGroup = "";
     this.rawValue = null;
-    this.multiselectRawValue = null;
+    this.multiselectRawValue = [];
     this.forceSendSelectedIndex = true;
+    this.toggleElementOnList(null, false, false , true);
     this.onChangeEvent();
   }
 
@@ -192,7 +193,7 @@ export class ComboComponent extends FhngInputWithListC implements OnInit {
         if (this.multiselect && selectedValue instanceof Array) {
           let difference = selectedValue.filter(x => !this.multiselectRawValue.includes(x.targetValue));
           if (difference.length > 0) {
-            this.toggleElementOnList(difference[0])
+            this.toggleElementOnList(difference[0], true, true)
             this.rawValue = selectedValue
             this.selectedIndex = difference[0].index;
             this.selectedIndexGroup = difference[0].group;
@@ -290,14 +291,14 @@ export class ComboComponent extends FhngInputWithListC implements OnInit {
   }
 
   public ngSelectCompareFunction(a: ComboListElement, b: ComboListElement) {
-    return a.targetValue === b.targetValue;
+    return a && b ? a.targetValue === b.targetValue : false;
   }
 
-  public toggleElementOnList(element: ComboListElement) {
+  public toggleElementOnList(element: ComboListElement, forceDisabeld:boolean = null, forceSelected:boolean = null, changeAll:boolean = false) {
     this.values.forEach(value => {
-      if (this.ngSelectCompareFunction(element, value)) {
-        value.disabled = !value.disabled;
-        value.selected = !value.selected;
+      if (changeAll || this.ngSelectCompareFunction(element, value)) {
+        value.disabled = forceDisabeld != null ? forceDisabeld : !value.disabled;
+        value.selected = forceSelected != null ? forceSelected : !value.selected;
       }
     })
   }
