@@ -93,43 +93,43 @@ class Utils {
       closeButtonClass: any,
       closeCallback: any
   ) {
-    var modalDialogId = 'messageDialog-' + new Date().getTime();
-    var modalDialog = $.parseHTML(
-        `<div class="modal fade" id="${modalDialogId}" role="dialog">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title"></h5>
-                        </div>
-                        <div class="modal-body">
-                            <div class="modal-body-message"></div>
-                            <br>
-                            <button style="width: 40%; margin-left: 30%; margin-right: 30%;"
-                                    class="modal-body-button btn" type="button" data-dismiss="modal"></button>
-                        </div>
-                    </div>
-                </div>
-            </div>`
-    );
-    $('body').append(modalDialog);
-    $(modalDialog).find('.modal-title').html(title);
-    $(modalDialog).find('.modal-body-message').html(message);
-    $(modalDialog).find('.modal-body-button').text(closeButtonLabel);
-    if (closeButtonClass != null) {
-      $(modalDialog).find('.modal-body-button').addClass(closeButtonClass);
-    }
-
-    $(modalDialog).on('hidden.bs.modal', function () {
-      $(modalDialog).remove();
-      if (closeCallback != null) {
-        closeCallback();
-      }
-    });
-    $(modalDialog).on('shown.bs.modal', function () {
-      $(modalDialog).find('.modal-body-button').trigger('focus');
-    });
-
-    $('#' + modalDialogId).modal({backdrop: 'static', keyboard: false});
+    // var modalDialogId = 'messageDialog-' + new Date().getTime();
+    // var modalDialog = $.parseHTML(
+    //     `<div class="modal fade" id="${modalDialogId}" role="dialog">
+    //             <div class="modal-dialog">
+    //                 <div class="modal-content">
+    //                     <div class="modal-header">
+    //                         <h5 class="modal-title"></h5>
+    //                     </div>
+    //                     <div class="modal-body">
+    //                         <div class="modal-body-message"></div>
+    //                         <br>
+    //                         <button style="width: 40%; margin-left: 30%; margin-right: 30%;"
+    //                                 class="modal-body-button btn" type="button" data-dismiss="modal"></button>
+    //                     </div>
+    //                 </div>
+    //             </div>
+    //         </div>`
+    // );
+    // $('body').append(modalDialog);
+    // $(modalDialog).find('.modal-title').html(title);
+    // $(modalDialog).find('.modal-body-message').html(message);
+    // $(modalDialog).find('.modal-body-button').text(closeButtonLabel);
+    // if (closeButtonClass != null) {
+    //   $(modalDialog).find('.modal-body-button').addClass(closeButtonClass);
+    // }
+    //
+    // $(modalDialog).on('hidden.bs.modal', function () {
+    //   $(modalDialog).remove();
+    //   if (closeCallback != null) {
+    //     closeCallback();
+    //   }
+    // });
+    // $(modalDialog).on('shown.bs.modal', function () {
+    //   $(modalDialog).find('.modal-body-button').trigger('focus');
+    // });
+    //
+    // $('#' + modalDialogId).modal({backdrop: 'static', keyboard: false});
   }
 
   /**
