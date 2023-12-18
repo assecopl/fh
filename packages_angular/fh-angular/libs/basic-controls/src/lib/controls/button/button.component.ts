@@ -51,9 +51,6 @@ export class ButtonComponent
   extends FhngHTMLElementC
   implements OnInit, OnDestroy, OnChanges, AfterViewInit {
 
-  @HostBinding('style')
-  public override styles;
-
   @Input()
   @HostBinding('class.active')
   public active: boolean = false;

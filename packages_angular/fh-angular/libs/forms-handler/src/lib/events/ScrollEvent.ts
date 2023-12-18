@@ -1,6 +1,6 @@
 import {BaseEvent} from "./BaseEvent";
 import {inject, Injectable} from "@angular/core";
-import {Utils} from "@fh-ng/forms-handler";
+import {Utils} from "../service/Utils";
 
 
 @Injectable({providedIn: 'root'})
