@@ -1,6 +1,7 @@
-import {Component, EventEmitter, Host, Injector, Input, OnInit, Optional, Output, SkipSelf,} from '@angular/core';
+import {Component, EventEmitter, Host, Injector, Input, OnInit, Optional, Output, SkipSelf,TemplateRef,ViewChild } from '@angular/core';
 import {FhngComponent} from '../../models/componentClasses/FhngComponent';
 import {NotificationService} from '../../service/Notification';
+import {NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'fhng-notifications',
@@ -11,7 +12,9 @@ export class NotificationsComponent implements OnInit {
   constructor(
       public injector: Injector,
       @Optional() @SkipSelf() parentFhngComponent: FhngComponent,
-      public notification: NotificationService
+      public notification: NotificationService,
+      private modalService: NgbModal,
+
   ) {
   }
 
@@ -22,6 +25,11 @@ export class NotificationsComponent implements OnInit {
 
   @Input()
   public toasts: any[] = [];
+
+  public modal:any = null;
+
+  @ViewChild("modalContent", {read: TemplateRef, static: true})
+  public modalContent: TemplateRef<void>;
 
   public removeToast(toast: any): void {
     this.toasts = this.toasts.filter(t => t !== toast);
@@ -39,5 +47,12 @@ export class NotificationsComponent implements OnInit {
     this.notification.toastsObserable.subscribe(c => {
       this.toasts.push(c);
     });
+
+    this.notification.toastsObserable.subscribe(c => {
+      this.modal = c;
+      this.modalService.open(this.modalContent);
+    });
+
+
   }
 }

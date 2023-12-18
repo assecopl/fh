@@ -6,6 +6,7 @@ import {SessionTimeoutEvent} from "../events/SessionTimeoutEvent";
 import {CustomActionEvent} from '../events/CustomActionEvent';
 import {LanguageChangeEvent} from "../events/LanguageChangeEvent";
 import {RedirectEvent} from "../events/RedirectEvent";
+import {MessageEvent} from "../events/MessageEvent";
 
 declare var contextRoot: string;
 declare var fhBaseUrl: string;
@@ -27,12 +28,14 @@ class EventsManager {
               private notificationEvent: NotificationEvent,
               private customActionEvent: CustomActionEvent,
               private languageChangeEvent: LanguageChangeEvent,
-              private redirectEvent: RedirectEvent) {
+              private redirectEvent: RedirectEvent,
+              private messageEvent: MessageEvent) {
     this.registerEvent(sessionTimeoutEvent);
     this.registerEvent(notificationEvent);
     this.registerEvent(customActionEvent);
     this.registerEvent(languageChangeEvent);
     this.registerEvent(redirectEvent);
+    this.registerEvent(messageEvent);
   }
 
   public registerEvent(event: BaseEvent): void {
