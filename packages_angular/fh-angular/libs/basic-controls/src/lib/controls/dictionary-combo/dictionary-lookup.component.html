@@ -21,22 +21,24 @@
        [hintPlacement]="hintPlacement"
        [hintTitle]="hintTitle"
   >
-    <div fhng-input-group
+    <div fhng-input-group #group
          ngbDropdown
          #myDrop="ngbDropdown"
          container="body"
          display="dynamic"
-         placement="bottom-left"
-         [iconText]="iconText"
-         [class.fh-disabled]="disabled"
-         [icon]="icon"
-         [iconAlignment]="iconAlignment"
+         [forceShowBefore]="true"
          [required]="required"
-         (onClick)="onSwitchSearchModeEvent()"
          (openChange)="onOpenChange($event)"
     >
+        <button ngbDropdownAnchor
+          class="input-group-text"
+          (click)="onSwitchSearchModeEvent()"
+          type="button"
+        >
+          <i *ngIf="icon" class="fas {{ icon }}"></i>
+          <span *ngIf="!icon && iconText">{{ iconText }}</span>
+        </button>
       <input
-        ngbDropdownAnchor
         class="fc inputText form-control {{setPresentationStyle()}}"
         #focusElement
         [id]="id"
@@ -69,7 +71,7 @@
       </div>
 
       <div ngbDropdownMenu class="combo-lookup__dropdown"> <!--*ngIf="tableIsVisible"-->
-        <div class="combo-lookup__container">
+        <div class="combo-lookup__container" [ngStyle]="{'min-width': group.elementRef.nativeElement.offsetWidth+'px'}" >
           <div class="combo-lookup__navigation">
             <div class="combo-lookup__title" [innerHTML]="title | fhml"></div>
             <div *ngIf="!disabled" class="combo-lookup__pagination">

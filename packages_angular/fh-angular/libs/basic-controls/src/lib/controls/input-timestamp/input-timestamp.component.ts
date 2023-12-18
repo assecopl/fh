@@ -28,7 +28,7 @@ import {FhngReactiveInputC} from '../../models/componentClasses/FhngReactiveInpu
 import {BootstrapWidthEnum} from '../../models/enums/BootstrapWidthEnum';
 import {
   CustomNgbDatetimeService,
-  FhngComponent,
+  FhngComponent, FhngDateUtils,
   FORM_VALUE_ATTRIBUTE_NAME,
   IDataAttributes
 } from '@fh-ng/forms-handler';
@@ -72,7 +72,7 @@ export class InputTimestampComponent
   public highlightToday: boolean = false;
 
   @Input()
-  public format: string = 'DD-MM-YYYY HH:mm:ss';
+  public format: string = FhngDateUtils.FRONTEND_DATETIME_FORMAT;
 
   @ViewChild('d', {read: NgbInputDatepicker})
   public d: NgbInputDatepicker & any;

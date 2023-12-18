@@ -43,6 +43,7 @@ import {Component,} from '@angular/core';
         </div>
         <fhng-application-lock></fhng-application-lock>
         <fhng-notifications></fhng-notifications>
+        <fhng-container id="MODAL_VIRTUAL_CONTAINER"></fhng-container>
     `
 })
 export class FhFormsManagerNgComponent {

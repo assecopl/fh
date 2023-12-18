@@ -1,6 +1,6 @@
-
 <ng-container *ngIf="!parentButtonGroupComponent; else contentTemplate">
-  <button [availabilityHtmlElement]="availability"
+  <button
+    [availabilityHtmlElement]="availability"
     #focusElement
     class="fc btn button btn-{{ bootstrapStyle }} {{styleClasses}}"
     [id]="innerId"
@@ -24,7 +24,6 @@
     Dropdown?
   </ng-container>
 </ng-template>
-
 <ng-container *ngIf="configuration.debug">
   <fh-component-debugger/>
 </ng-container>

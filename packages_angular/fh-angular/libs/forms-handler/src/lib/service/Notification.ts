@@ -1,12 +1,27 @@
 import {Injectable} from '@angular/core';
 import {ReplaySubject, Subject} from 'rxjs';
+import {MessageData} from "../Base";
 
 @Injectable({providedIn: 'root'})
 export class NotificationService {
     toastsObserable: Subject<Toast> = new ReplaySubject<Toast>();
     filesObserable: Subject<Map<string, DownloadToast>> = new ReplaySubject<Map<string, DownloadToast>>();
+    dialogObservable: ReplaySubject<MessageData> = new ReplaySubject<MessageData>();
 
     public downloadToasts: Map<string, any> = new Map<string, any>();
+
+    constructor() {
+    }
+
+    showDialog(title, message, closeButtonLabel, closeButtonClass, closeCallback){
+      this.dialogObservable.next({
+        title:title,
+        message:message,
+        closeButtonLabel:closeButtonLabel,
+        closeButtonClass: closeButtonClass,
+        closeCallback: closeCallback
+      })
+    }
 
     showInfo(body: string, header: string = null, delay: number = null) {
         this.createToast(body, 'bg-info text-light', header, delay);
@@ -31,6 +46,7 @@ export class NotificationService {
     showDownload(id: number, header: string = null, body: string = null) {
         this.createDownloadToast(id, 'bg-dark text-light', header, body);
     }
+
 
     public removeDownload(id: any): void {
         this.downloadToasts.delete(id);

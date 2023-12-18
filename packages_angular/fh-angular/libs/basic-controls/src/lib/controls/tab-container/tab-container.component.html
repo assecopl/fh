@@ -1,11 +1,11 @@
 <div
   class="fc tabContainer {{styleClasses}}"
   [id]="id"
-
+  [availabilityHtmlElement]="availability"
 >
   <ul
     class="nav nav-tabs"
-
+    [availabilityHtmlElement]="availability"
   >
     <ng-container *ngFor="let tab of childFhngComponents">
       <li class="nav-item">
@@ -24,7 +24,7 @@
       </li>
     </ng-container>
   </ul>
-  <div class="tab-content row eq-row">
+  <div class="tab-content row ">
     <ng-container *ngFor="let tab of subelements;let i = index;">
       <fhng-tab [data]="tab"/>
     </ng-container>

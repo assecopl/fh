@@ -54,6 +54,7 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
     this.mapAttributes(value);
   }
 
+
   @Input()
   public id: string = '';
 
@@ -198,7 +199,7 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
   }
 
   ngAfterViewInit(): void {
-    if (this.hasPortal) {
+    if (this.hasPortal ) {
       this.fhmlPortalManager.handleMutation();
     }
   }

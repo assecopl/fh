@@ -1,7 +1,6 @@
 .combo-lookup {
   &__container {
     width: 100%;
-    min-width: 400px;
   }
 
   &__dropdown {
@@ -43,3 +42,9 @@
     pointer-events: none;
   }
 }
+
+.dropdown-toggle { text-transform: uppercase;
+  &:after { display: none;}
+  .caret { display: none; }
+}
+

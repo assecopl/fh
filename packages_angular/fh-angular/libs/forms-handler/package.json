@@ -1,6 +1,6 @@
 {
   "name": "@fh-ng/forms-handler",
-  "version": "4.20.0-SNAPSHOT-4",
+  "version": "4.20.0-SNAPSHOT-9",
   "peerDependencies": {
     "@types/pako": "2.0.1",
     "@angular/platform-browser": "^16.0.0",

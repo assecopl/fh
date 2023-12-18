@@ -124,7 +124,7 @@ export class FhngHTMLElementC
   public alignRight: boolean = false;
 
   @Input()
-  public verticalAlign: 'TOP' | 'MIDDLE' | 'BOTTOM';
+  public verticalAlign: 'TOP' | 'MIDDLE' | 'BOTTOM' = null;
 
   @HostBinding('class.align-self-start')
   @HostBinding('class.valign-top')
@@ -306,7 +306,7 @@ export class FhngHTMLElementC
     if (val) {
 
       // const unit = val.replace(v, "");
-      this.styles[name] = val;
+      this.hostStyle[name] = val;
     }
     return val;
   }
@@ -359,7 +359,7 @@ export class FhngHTMLElementC
       for (let inline of data.inlineStyle.split(';') || []) {
         let _style = inline.split(':');
 
-        if(_style[0]) {
+        if(_style[0] && _style[1]) {
           _tempStyles[_style[0].trim()] = _style[1].trim();
         }
       }
@@ -404,7 +404,6 @@ export class FhngHTMLElementC
         this.hostWidth += 'col-auto exactWidth';
         //Set inner element styles to exact width;
         if (value != 'fit') {
-          console.log('here', value);
           this.processStyleWithUnit('width', value);
         }
       } else if (value === BootstrapWidthEnum.AUTO) {
@@ -413,7 +412,8 @@ export class FhngHTMLElementC
         this.hostWidth = '';
       } else {
         //Host works with bootstrap width classes.
-        const widths = value.replace(/ /g, '').split(',');
+        const widths = value.replace(/ /g, '').replace("xs", "").split(',');
+
         this.hostWidth += ' col-' + widths.join(' col-');
       }
     }

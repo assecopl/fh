@@ -6,6 +6,10 @@ import {SessionTimeoutEvent} from "../events/SessionTimeoutEvent";
 import {CustomActionEvent} from '../events/CustomActionEvent';
 import {LanguageChangeEvent} from "../events/LanguageChangeEvent";
 import {RedirectEvent} from "../events/RedirectEvent";
+import {MessageEvent} from "../events/MessageEvent";
+import {ShutdownEvent} from "../events/ShutdownEvent";
+import {StylesheetChangeEvent} from "../events/StylesheetChangeEvent";
+import {ScrollEvent} from "../events/ScrollEvent";
 
 declare var contextRoot: string;
 declare var fhBaseUrl: string;
@@ -27,12 +31,20 @@ class EventsManager {
               private notificationEvent: NotificationEvent,
               private customActionEvent: CustomActionEvent,
               private languageChangeEvent: LanguageChangeEvent,
-              private redirectEvent: RedirectEvent) {
+              private redirectEvent: RedirectEvent,
+              private shutdownEvent: ShutdownEvent,
+              private stylesheetChangeEvent: StylesheetChangeEvent,
+              private scrollEvent: ScrollEvent,
+              private messageEvent: MessageEvent) {
     this.registerEvent(sessionTimeoutEvent);
     this.registerEvent(notificationEvent);
     this.registerEvent(customActionEvent);
     this.registerEvent(languageChangeEvent);
     this.registerEvent(redirectEvent);
+    this.registerEvent(shutdownEvent);
+    this.registerEvent(messageEvent);
+    this.registerEvent(stylesheetChangeEvent);
+    this.registerEvent(scrollEvent);
   }
 
   public registerEvent(event: BaseEvent): void {

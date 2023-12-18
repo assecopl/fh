@@ -117,7 +117,7 @@ export class InputTextComponent extends FhngReactiveInputC implements OnInit, Af
   override mapAttributes(data: IDataAttributes | any) {
     super.mapAttributes(data);
     this.mask = data.mask
-    this.rawValue = data.rawValue;
+    this.rawValue = data.rawValue || null;
   }
 
   override ngAfterViewInit(): void {

@@ -28,6 +28,11 @@ import {FhngComponent} from '@fh-ng/forms-handler';
   ],
 })
 export class GroupComponent extends FhngHTMLElementC implements OnInit {
+
+
+  // @Input()
+  // @HostBinding('id')
+  // public override id = ''
   constructor(
     public override injector: Injector,
     @Optional() @SkipSelf() parentFhngComponent: FhngComponent

@@ -27,7 +27,7 @@
         [iconAlignment]="iconAlignment"
         [required]="required"
       >
-      <ng-select [ngModel]="rawValue" (change)="updateModel($event)" (clear)="onClear($event)"
+      <ng-select appendTo="body" [ngModel]="rawValue" (change)="updateModel($event)" (clear)="onClear($event)"
           #focusElement
           [id]="innerId"
           availabilityControl

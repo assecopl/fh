@@ -1,7 +1,7 @@
 <ng-container *ngIf="!modal">
     <ng-container *ngIf="formType == 'STANDARD'">
         <div *ngIf="label && !hideHeader" class="card-header">
-            <span [innerHTML]="label"></span>
+            <span [innerHTML]="label | fhml"></span>
         </div>
         <div class="card-body">
             <div class="row">
@@ -20,7 +20,7 @@
 
     <div class="modal-header" *ngIf="label">
         <h4 class="modal-title">
-            <span [innerHTML]="label"></span>
+            <span [innerHTML]="label | fhml"></span>
         </h4>
         <!--        <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">-->
         <!--            <span aria-hidden="true">&times;</span>-->

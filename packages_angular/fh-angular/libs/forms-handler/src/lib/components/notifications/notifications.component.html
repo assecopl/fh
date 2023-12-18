@@ -38,3 +38,17 @@
         </ngb-toast>
     </ng-container>
 </div>
+
+<ng-template #dialogContent let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" >{{modalData.title }}</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"><i class="fa fa-times"></i></button>
+  </div>
+  <div class="modal-body">
+    {{modalData.message}}
+  </div>
+  <div class="modal-footer">
+    <button style="width: 40%; margin-left: 30%; margin-right: 30%;"
+            class="modal-body-button btn {{ modalData.closeButtonClass }}" type="button" (click)="modal.close()">{{modalData.closeButtonLabel}}</button>
+  </div>
+</ng-template>
