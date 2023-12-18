@@ -162,6 +162,7 @@ export class ComboComponent extends FhngInputWithListC implements OnInit {
     this.valueChanged = true;
     this.addedTag = true;
     this.values = [...this.values] //Force object reference change to update ng-select view.
+    this.toggleElementOnList(item);
     this.onChangeEvent();
   }
 
