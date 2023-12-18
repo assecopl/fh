@@ -1,25 +1,20 @@
-<ng-container *ngIf="hint; else combo">
-  <span
-    ngbTooltip="{{ hint }}"
-    [placement]="hintPlacement.toLowerCase()"
-    [triggers]="hintTrigger.toLowerCase()"
-  >
-    <ng-container *ngTemplateOutlet="combo"></ng-container>
-  </span>
-</ng-container>
-<h3>{{dicTitle}}</h3>
-<ng-template #combo>
+<!--<ng-container *ngIf="hint; else combo">-->
+<!--  <span-->
+<!--    ngbTooltip="{{ hint }}"-->
+<!--    [placement]="hintPlacement.toLowerCase()"-->
+<!--    [triggers]="hintTrigger.toLowerCase()"-->
+<!--  >-->
+<!--    <ng-container *ngTemplateOutlet="combo"></ng-container>-->
+<!--  </span>-->
+<!--</ng-container>-->
+<!--<h3>{{dicTitle}}</h3>-->
+<!--<ng-template #combo>-->
   <div fhng-input-label
        class="combo-lookup"
        [inputId]="id"
        [label]="label"
        [labelPosition]="labelPosition"
        [labelSize]="labelSize"
-       [hint]="hint"
-       [hintTrigger]="hintTrigger"
-       [hintType]="hintType"
-       [hintPlacement]="hintPlacement"
-       [hintTitle]="hintTitle"
   >
     <div fhng-input-group #group
          ngbDropdown
@@ -106,7 +101,7 @@
       </div>
     </div>
   </div>
-</ng-template>
+<!--</ng-template>-->
 <ng-container *ngIf="configuration.debug">
   <fh-component-debugger/>
 </ng-container>
