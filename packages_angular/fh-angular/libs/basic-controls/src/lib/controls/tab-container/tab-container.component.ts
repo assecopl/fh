@@ -63,6 +63,8 @@ export class TabContainerComponent
   @Output()
   public tabChange: EventEmitter<TabComponent> = new EventEmitter();
 
+  public onTabChange:string = null;
+
   public boundActiveTabIndex: number;
 
   public tabs: { id: string, label: string, selected: boolean }[] = [];
@@ -170,6 +172,10 @@ export class TabContainerComponent
       this.activeTabIdChange.emit(tab.id);
       this.activeTabIndexChange.emit(this.boundActiveTabIndex);
       this.tabChange.emit(this.childFhngComponents.find(subElement => subElement.id === tab.id));
+    }
+    this.changesQueue.queueValueChange(this.activeTabIndex);
+    if (this.onTabChange) {
+      this.fireEvent('onTabChange', this.onTabChange);
     }
 
     // this.subelements = [...this.subelements];

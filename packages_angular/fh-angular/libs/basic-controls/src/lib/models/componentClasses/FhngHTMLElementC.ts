@@ -252,7 +252,7 @@ export class FhngHTMLElementC
 
   }
 
-  private _sanitizer: DomSanitizer = inject(DomSanitizer);
+  public _sanitizer: DomSanitizer = inject(DomSanitizer);
 
   constructor(
     public override injector: Injector,
@@ -366,7 +366,16 @@ export class FhngHTMLElementC
 
       this.styles = _tempStyles;
     }
-    if (data.wrapperStyle) this.hostStyle = this._sanitizer.bypassSecurityTrustStyle(data.wrapperStyle);
+    if (data.wrapperStyle) {
+      let _tempStyles = {};
+      for (let inline of data.wrapperStyle.split(';') || []) {
+        let _style = inline.split(':');
+
+        if(_style[0] && _style[1]) {
+          this.hostStyle[_style[0].trim()] = _style[1].trim();
+        }
+      }
+    }
 
     if (data.accessibility) {
       this.accessibility = data.accessibility;
@@ -401,7 +410,7 @@ export class FhngHTMLElementC
         value == 'fit' //width Relative width of the viewport
       ) {
         //Set host element width to auto to fit its content.
-        this.hostWidth += 'col-auto exactWidth';
+        this.hostWidth += 'col-auto exactWidth ';
         //Set inner element styles to exact width;
         if (value != 'fit') {
           this.processStyleWithUnit('width', value);

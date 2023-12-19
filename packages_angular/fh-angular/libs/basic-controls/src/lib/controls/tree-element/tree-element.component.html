@@ -1,4 +1,4 @@
-<div class="row" [ngStyle]="styles" [style.color]="getTextColor()" >
+<div [availabilityHtmlElement]="availability" [availabilityElementRef]="elementRef" class="row" [ngStyle]="styles" [style.color]="getTextColor()" >
   <div tabindex="0" class="col-md-12 treeNodeBody  " >
     <ng-container *ngIf="expandableNode && collapsed">
 <!--      <div class="caretWrapper">-->
@@ -16,7 +16,7 @@
 <ng-container *ngIf="subelements?.length > 0">
   <ul class="list-group col-12 {{collapsed?'d-none':''}}">
     <ng-container *ngFor="let e of subelements">
-      <li [availabilityHtmlElement]="elem.accessibility" fh-tree-element [data]="e" #elem [collapsed]="tree.activeElements[e.id]"
+      <li fh-tree-element [data]="e"  [collapsed]="tree.activeElements[e.id]"
           [formId]="formId"
           [id]="e.id"
           [tree]="tree"

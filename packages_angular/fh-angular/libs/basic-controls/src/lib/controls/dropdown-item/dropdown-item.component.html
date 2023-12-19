@@ -12,7 +12,7 @@
       <i class="fa-fw {{ icon }}"> </i>
     </ng-container>
     <ng-container *ngIf="label">
-      <span [id]="id + '_label'" [attr.for]="id" [innerHTML]="label"> {{ label }}</span>
+      <span [id]="id + '_label'" [attr.for]="id" [innerHTML]="label | fhml"></span>
     </ng-container>
     <ng-container *ngIf="icon && iconAlignment === 'AFTER'">
       <i class="fa-fw {{ icon }}"> </i>

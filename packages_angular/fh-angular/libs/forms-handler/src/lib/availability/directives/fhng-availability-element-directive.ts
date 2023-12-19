@@ -12,10 +12,22 @@ import {AvailabilityUtils} from "../AvailabilityUtils";
 export class FhngAvailabilityElementDirective implements OnInit {
 
   public _availability: AvailabilityEnum = AvailabilityEnum.EDIT;
+  public _availabilityElementRef: ElementRef = null;
+
+  @Input('availabilityElementRef')
+  public set availabilityElementRef(el: ElementRef) {
+    if(el != this._availabilityElementRef) {
+      this._availabilityElementRef = el;
+      AvailabilityUtils.setHtmlElementAvailability(this._availabilityElementRef.nativeElement, this._availability)
+    }
+  }
   @Input('availabilityHtmlElement')
   public set availability(value: AvailabilityEnum | string) {
     this._availability = AvailabilityUtils.stringToEnum(value);
     AvailabilityUtils.setHtmlElementAvailability(this.htmlElement.nativeElement, this._availability)
+    if(this._availabilityElementRef){
+      AvailabilityUtils.setHtmlElementAvailability(this._availabilityElementRef.nativeElement , this._availability)
+    }
   }
 
   constructor(protected htmlElement: ElementRef,
@@ -26,6 +38,8 @@ export class FhngAvailabilityElementDirective implements OnInit {
   public ngOnInit(): void {
 
   }
+
+
 
 
 }

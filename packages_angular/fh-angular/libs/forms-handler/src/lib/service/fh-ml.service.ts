@@ -757,20 +757,20 @@ export class FhmlPortalManager {
     }
     portal.style.display = 'none';
     portal.setAttribute('used', 'true');
-    const observer = new MutationObserver((mutationList, observer) => {
-      if (!portal.parentElement.contains(sourceElement) && document.body.contains(portal)) {
-        console.log("yoy nasty bastard!");
-        portal.setAttribute('used', 'false');
-      } else if (!document.body.contains(portal) || !document.body.contains(sourceElement)) {
-        observer.disconnect();
-        FhmlPortalManager.OBSERVERS[sourceId] = undefined;
-      }
-    });
-    observer.observe(portal.parentElement, FhmlPortalManager.OBSERVER_CONFIG);
-    if (FhmlPortalManager.OBSERVERS[sourceId]) {
-      FhmlPortalManager.OBSERVERS[sourceId].disconnect();
-    }
-    FhmlPortalManager.OBSERVERS[sourceId] = observer;
+    // const observer = new MutationObserver((mutationList, observer) => {
+    //   if (!portal.parentElement.contains(sourceElement) && document.body.contains(portal)) {
+    //     console.log("yoy nasty bastard!");
+    //     portal.setAttribute('used', 'false');
+    //   } else if (!document.body.contains(portal) || !document.body.contains(sourceElement)) {
+    //     observer.disconnect();
+    //     FhmlPortalManager.OBSERVERS[sourceId] = undefined;
+    //   }
+    // });
+    // observer.observe(portal.parentElement, FhmlPortalManager.OBSERVER_CONFIG);
+    // if (FhmlPortalManager.OBSERVERS[sourceId]) {
+    //   FhmlPortalManager.OBSERVERS[sourceId].disconnect();
+    // }
+    // FhmlPortalManager.OBSERVERS[sourceId] = observer;
   }
 
   private processVersion(version: number, args: { [key: string]: any }) {

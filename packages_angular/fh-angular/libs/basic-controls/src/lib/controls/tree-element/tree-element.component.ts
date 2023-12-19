@@ -1,6 +1,6 @@
 import {
   AfterViewInit,
-  Component,
+  Component, ElementRef,
   EventEmitter,
   forwardRef,
   HostBinding,
@@ -100,7 +100,7 @@ export class TreeElementComponent extends FhngHTMLElementC implements OnInit, Af
 
   constructor(
     injector: Injector,
-    @Optional() @SkipSelf() parentFhngComponent: FhngComponent,
+    @Optional() @SkipSelf() parentFhngComponent: FhngComponent
   ) {
     super(injector, parentFhngComponent);
 
