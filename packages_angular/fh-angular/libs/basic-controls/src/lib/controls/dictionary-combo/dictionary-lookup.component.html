@@ -9,23 +9,22 @@
 <!--</ng-container>-->
 <!--<h3>{{dicTitle}}</h3>-->
 <!--<ng-template #combo>-->
-  <div fhng-input-label
+  <div fhng-input-label #group
        class="combo-lookup"
        [inputId]="id"
        [label]="label"
        [labelPosition]="labelPosition"
        [labelSize]="labelSize"
   >
-    <div fhng-input-group #group
-         ngbDropdown
+    <div fhng-input-group
+         ngbDropdown autoClose="false"
          #myDrop="ngbDropdown"
          container="body"
          display="dynamic"
          [forceShowBefore]="true"
          [required]="required"
-         (openChange)="onOpenChange($event)"
     >
-        <button ngbDropdownAnchor
+        <button ngbDropdownAnchor tabindex="-1"
           class="input-group-text"
           (click)="onSwitchSearchModeEvent()"
           type="button"
@@ -65,8 +64,8 @@
         </button>
       </div>
 
-      <div ngbDropdownMenu class="combo-lookup__dropdown"> <!--*ngIf="tableIsVisible"-->
-        <div class="combo-lookup__container" [ngStyle]="{'min-width': group.elementRef.nativeElement.offsetWidth+'px'}" >
+      <div ngbDropdownMenu  class="combo-lookup__dropdown"> <!--*ngIf="tableIsVisible"-->
+        <div class="combo-lookup__container" [ngStyle]="{'min-width':dropdownMinWidth+'px'}" >
           <div class="combo-lookup__navigation">
             <div class="combo-lookup__title" [innerHTML]="title | fhml"></div>
             <div *ngIf="!disabled" class="combo-lookup__pagination">

@@ -1,6 +1,6 @@
 import {
   AfterViewInit,
-  Component,
+  Component, ElementRef,
   forwardRef,
   Injector,
   Input,
@@ -50,6 +50,10 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
 
   @ViewChild('myDrop', { read: NgbDropdown })
   public myDrop: NgbDropdown = null;
+
+  @ViewChild('group', { read: ElementRef })
+  public inputGroup: ElementRef = null;
+  public dropdownMinWidth:any = "200px"
 
   @Input()
   public override displayFunction: any = null;
@@ -146,6 +150,7 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
 
   public override ngAfterViewInit() {
     super.ngAfterViewInit();
+    this.dropdownMinWidth = this.inputGroup.nativeElement.offsetWidth;
     console.log('ngAfterViewInit', this.myDrop);
   }
 
@@ -306,7 +311,11 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
    * false - dla zamkniętego
    */
   public onOpenChange(event: boolean ): void {
-    if (!event) this.tableIsVisible = false;
+    if (!event){
+      this.tableIsVisible = false;
+      this.dropdownMinWidth = this.inputGroup.nativeElement.offsetWidth;
+    }
+
   }
 
   private _resetValueChanged(): void {
