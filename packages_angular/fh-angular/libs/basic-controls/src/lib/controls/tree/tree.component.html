@@ -16,7 +16,7 @@
 
 <ng-template #listElementsTemplate>
   <ng-container *ngFor="let e of subelements">
-    <li [availabilityHtmlElement]="t.availability" fh-tree-element [data]="e" #t [collapsed]="!expanded"
+    <li fh-tree-element [data]="e"  [collapsed]="!expanded"
         [formId]="formId"
         [id]="e.id"
         [tree]="this"
