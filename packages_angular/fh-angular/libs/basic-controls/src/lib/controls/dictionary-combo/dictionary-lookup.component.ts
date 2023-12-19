@@ -104,6 +104,7 @@ export class DictionaryLookupComponent extends FhngInputWithListC implements OnI
 
     if (this.myDrop && value) {
       this.myDrop.open();
+      this.focus();
     } else if (this.myDrop && !value && this.myDrop.isOpen()) {
       this.myDrop.close();
     }
