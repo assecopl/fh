@@ -189,7 +189,7 @@ export class FileUploadComponent extends FhngReactiveInputC implements OnInit, O
     let request = this.fireHttpMultiPartEvent(
       'onUpload',
       this.onUpload,
-      '/fhdp-demo-app/fileUpload',
+      this.util.getPath('fileUpload'),
       formData
     ).pipe(
       map(event => this._getEventMessage(event, formData)),

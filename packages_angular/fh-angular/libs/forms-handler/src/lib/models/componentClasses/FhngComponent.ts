@@ -237,7 +237,7 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
 
     return this._http.request(req).pipe(
         map(event => this._handleEvent(event)),
-        catchError(this.handleError)
+        catchError(this.handleError.bind(this))
     );
   }
 
