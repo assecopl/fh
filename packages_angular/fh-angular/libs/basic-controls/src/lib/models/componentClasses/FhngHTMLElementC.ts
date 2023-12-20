@@ -448,7 +448,7 @@ export class FhngHTMLElementC
       this.hintType = elementData.hintType;
     }
 
-    return AvailabilityUtils.processOnEdit(this.availability,
+    return AvailabilityUtils.processOnEditAndView(this.availability,
       () => {
         if (this.hint && this.hintType === 'STANDARD') {
           return this.hint;
@@ -459,7 +459,7 @@ export class FhngHTMLElementC
   }
 
   public getHintPopover(): string {
-    return AvailabilityUtils.processOnEdit(this.availability,
+    return AvailabilityUtils.processOnEditAndView(this.availability,
       () => {
         if (this.hint && this.hintType == 'STANDARD_POPOVER') {
           return this.hint;
