@@ -1,4 +1,4 @@
-import {AbstractControl, NgControl} from '@angular/forms';
+import {NgControl} from '@angular/forms';
 import {AvailabilityEnum} from './enums/AvailabilityEnum';
 
 /**
@@ -11,6 +11,13 @@ export class AvailabilityUtils {
         if (AvailabilityUtils.stringToEnum(availability) === AvailabilityEnum.EDIT) return fn();
         return defaultReturn;
     }
+
+  public static processOnEditAndView(availability: AvailabilityEnum | string, fn: () => any, defaultReturn: any) {
+    if (!availability) return defaultReturn;
+    let av = AvailabilityUtils.stringToEnum(availability);
+    if (av === AvailabilityEnum.EDIT || av == AvailabilityEnum.VIEW) return fn();
+    return defaultReturn;
+  }
 
     public static isHidden(availability: AvailabilityEnum | string): boolean {
         if (!availability) return false;

@@ -89,7 +89,7 @@ export class HintComponent implements OnInit {
   }
 
   public getHintTooltip(): string {
-    return AvailabilityUtils.processOnEdit(this._parentFhngComponent.availability,
+    return AvailabilityUtils.processOnEditAndView(this._parentFhngComponent.availability,
       () => {
         if (this.hint && ['STATIC', 'STANDARD'].includes(this.hintType)) {
           return this.hint;
@@ -102,7 +102,7 @@ export class HintComponent implements OnInit {
   }
 
   public getHintPopover(): string {
-    return AvailabilityUtils.processOnEdit(this._parentFhngComponent.availability,
+    return AvailabilityUtils.processOnEditAndView(this._parentFhngComponent.availability,
       () => {
         if (this.hint && this.hintType === 'STANDARD_POPOVER') {
           return this.hint;
