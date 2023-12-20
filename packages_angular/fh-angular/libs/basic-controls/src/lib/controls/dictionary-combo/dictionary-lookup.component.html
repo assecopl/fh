@@ -15,16 +15,19 @@
        [label]="label"
        [labelPosition]="labelPosition"
        [labelSize]="labelSize"
+       ngbDropdown autoClose="false"
+       #myDrop="ngbDropdown"
+       container="body"
+       display="dynamic"
+       placement="bottom-left bottom-right"
   >
     <div fhng-input-group
-         ngbDropdown autoClose="false"
-         #myDrop="ngbDropdown"
-         container="body"
-         display="dynamic"
+         ngbDropdownAnchor
          [forceShowBefore]="true"
          [required]="required"
     >
-        <button ngbDropdownAnchor tabindex="-1"
+        <button
+
           class="input-group-text"
           (click)="onSwitchSearchModeEvent()"
           type="button"
