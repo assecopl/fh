@@ -10,6 +10,7 @@ import {MessageEvent} from "../events/MessageEvent";
 import {ShutdownEvent} from "../events/ShutdownEvent";
 import {StylesheetChangeEvent} from "../events/StylesheetChangeEvent";
 import {ScrollEvent} from "../events/ScrollEvent";
+import {FileDownloadEvent} from "../events/FileDownloadEvent";
 
 declare var contextRoot: string;
 declare var fhBaseUrl: string;
@@ -35,6 +36,7 @@ class EventsManager {
               private shutdownEvent: ShutdownEvent,
               private stylesheetChangeEvent: StylesheetChangeEvent,
               private scrollEvent: ScrollEvent,
+              private fileDownloadEvent: FileDownloadEvent,
               private messageEvent: MessageEvent) {
     this.registerEvent(sessionTimeoutEvent);
     this.registerEvent(notificationEvent);
@@ -45,6 +47,7 @@ class EventsManager {
     this.registerEvent(messageEvent);
     this.registerEvent(stylesheetChangeEvent);
     this.registerEvent(scrollEvent);
+    this.registerEvent(fileDownloadEvent);
   }
 
   public registerEvent(event: BaseEvent): void {
