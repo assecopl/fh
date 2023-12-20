@@ -18,6 +18,7 @@ import {IDataAttributes} from "../../models/interfaces/IDataAttributes";
 import {Subscription} from 'rxjs';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {FormComponentRef} from "./form.ref";
+import {EventsManager} from "../../service/events-manager.service";
 
 @Component({
     selector: '[fh-form]',
@@ -69,6 +70,7 @@ export class FormComponent extends FormComponentRef implements OnInit, OnChanges
     constructor(
         public override injector: Injector,
         private formManager: FormsManager,
+        private eventsManager: EventsManager,
         @Optional() public activeModal: NgbActiveModal
     ) {
         super(injector, null);
@@ -102,6 +104,12 @@ export class FormComponent extends FormComponentRef implements OnInit, OnChanges
                 })
             }
         })
+
+      this.eventsManager.focusEvent.focusSubject.subscribe(value => {
+        if(value.containerId == this.container.id){
+          this.focusComponent(value.formElementId);
+        }
+      })
 
         if (this.formType == 'HEADER') {
             // this.header = true;

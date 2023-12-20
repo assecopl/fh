@@ -11,11 +11,7 @@ import {ShutdownEvent} from "../events/ShutdownEvent";
 import {StylesheetChangeEvent} from "../events/StylesheetChangeEvent";
 import {ScrollEvent} from "../events/ScrollEvent";
 import {FileDownloadEvent} from "../events/FileDownloadEvent";
-
-declare var contextRoot: string;
-declare var fhBaseUrl: string;
-declare const $: any;
-
+import {FocusEvent} from "../events/FocusEvent";
 @Injectable({
   providedIn: 'root',
 })
@@ -24,20 +20,22 @@ class EventsManager {
   private notificationService: NotificationService = inject(NotificationService);
 
 
+
   protected events: {
     [index: string]: BaseEvent;
   } = {}
 
-  constructor(private sessionTimeoutEvent: SessionTimeoutEvent,
-              private notificationEvent: NotificationEvent,
-              private customActionEvent: CustomActionEvent,
-              private languageChangeEvent: LanguageChangeEvent,
-              private redirectEvent: RedirectEvent,
-              private shutdownEvent: ShutdownEvent,
-              private stylesheetChangeEvent: StylesheetChangeEvent,
-              private scrollEvent: ScrollEvent,
-              private fileDownloadEvent: FileDownloadEvent,
-              private messageEvent: MessageEvent) {
+  constructor(public sessionTimeoutEvent: SessionTimeoutEvent,
+              public notificationEvent: NotificationEvent,
+              public customActionEvent: CustomActionEvent,
+              public languageChangeEvent: LanguageChangeEvent,
+              public redirectEvent: RedirectEvent,
+              public shutdownEvent: ShutdownEvent,
+              public stylesheetChangeEvent: StylesheetChangeEvent,
+              public scrollEvent: ScrollEvent,
+              public fileDownloadEvent: FileDownloadEvent,
+              public focusEvent: FocusEvent,
+              public messageEvent: MessageEvent) {
     this.registerEvent(sessionTimeoutEvent);
     this.registerEvent(notificationEvent);
     this.registerEvent(customActionEvent);
