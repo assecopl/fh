@@ -10,7 +10,7 @@ export class FhngDateUtils {
     public static MOMENT_JS_STRICT_MODE: boolean = true;
 
     public static FRONTEND_DATETIME_FORMAT: string = 'YYYY-MM-DD HH:mm:ss';
-    public static BACKEND_DATETIME_FORMAT: string = "YYYY-MM-DDTHH:mm:ss";
+    public static BACKEND_DATETIME_FORMAT: string = "YYYY-MM-DDTHH:mm:ss.SSS";
 
     public static FRONTEND_DATE_FORMAT: string = 'YYYY-MM-DD';
     public static BACKEND_DATE_FORMAT: string = "YYYY-MM-DD";

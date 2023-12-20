@@ -140,7 +140,8 @@ export class InputTimestampComponent
   public onChangeInputEvent ($event: any): void {
     $event.preventDefault();
 
-    if (CustomNgbDatetimeService.isDateValid($event.target.value, this.customNgbDatetimeService.frontendFormat)) {
+    //Check if date is new date is Valid or if input vale was deleted
+    if (CustomNgbDatetimeService.isDateValid($event.target.value, this.customNgbDatetimeService.frontendFormat) || (!$event.target.value && this.value)) {
       this.updateModel($event.target.value);
       this.onChangeEvent();
     }
@@ -148,7 +149,8 @@ export class InputTimestampComponent
 
   public override updateModel(date: string) {
     this.valueChanged = true;
-    this.rawValue = moment.utc(date, this.customNgbDatetimeService.backendFormat, true).format('YYYY-MM-DDTHH:mm:ss.SSS');
+    // Here date should be always valid date or null;
+    this.rawValue = date ? date : "";
   };
 
   public override mapAttributes(data: IInputTimestampDataAttributes): void {

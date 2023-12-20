@@ -15,6 +15,8 @@ export class CustomNgbDatetimeService extends NgbDateParserFormatter {
 
     private _backendFormat = FhngDateUtils.BACKEND_DATETIME_FORMAT;
 
+    private static MOMENT_JS_STRICT_MODE: boolean = true;
+
     private _tmpDate: NgbDateStruct & NgbTimeStruct | null = null;
 
     get backendFormat(): string {
@@ -40,6 +42,14 @@ export class CustomNgbDatetimeService extends NgbDateParserFormatter {
     public static isDateValid(input: string, format: string): boolean {
         return moment(input, format).isValid();
     }
+
+  static toDateOrLeave(text, sourceFormat, targetFormat) {
+    return this.isDateValid(text, sourceFormat) ? moment.utc(text, [sourceFormat], CustomNgbDatetimeService.MOMENT_JS_STRICT_MODE).format(targetFormat) : text;
+  };
+
+  static toDateOrClear(text, sourceFormat, targetFormat) {
+    return this.isDateValid(text, sourceFormat) ? moment.utc(text, [sourceFormat], CustomNgbDatetimeService.MOMENT_JS_STRICT_MODE).format(targetFormat) : '';
+  };
 
     public parse(value: string): NgbDateStruct & NgbTimeStruct | null {
         return this.fromModel(value, this.backendFormat);

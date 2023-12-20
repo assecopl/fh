@@ -24,7 +24,7 @@ import {BootstrapWidthEnum} from './../../models/enums/BootstrapWidthEnum';
 import {
   CustomNgbDateService,
   CustomNgbDatetimeService,
-  FhngComponent, FORM_VALUE_ATTRIBUTE_NAME,
+  FhngComponent, FhngDateUtils, FORM_VALUE_ATTRIBUTE_NAME,
   IconAligmentType,
   IDataAttributes
 } from '@fh-ng/forms-handler';
@@ -59,7 +59,7 @@ export class InputDateComponent extends FhngReactiveInputC implements OnInit {
   public highlightToday: boolean = false;
 
   @Input()
-  public format: string = 'DD-MM-YYYY';
+  public format: string = 'YYYY-MM-DD';
 
   @Input()
   public maskEnabled: boolean = true;
@@ -119,7 +119,8 @@ export class InputDateComponent extends FhngReactiveInputC implements OnInit {
   public onChangeInputEvent ($event: any): void {
     $event.preventDefault();
 
-    if (CustomNgbDatetimeService.isDateValid($event.target.value, this._customNgbDateService.frontendFormat)) {
+    //Check if date is new date is Valid or if input vale was deleted
+    if (CustomNgbDatetimeService.isDateValid($event.target.value, this._customNgbDateService.frontendFormat) || (!$event.target.value && this.value)) {
       this.updateModel($event.target.value);
       this.onChangeEvent();
     }
@@ -127,7 +128,8 @@ export class InputDateComponent extends FhngReactiveInputC implements OnInit {
 
   public override updateModel(date: string) {
     this.valueChanged = true;
-    this.rawValue = moment.utc(date, this._customNgbDateService.backendFormat, true).format('YYYY-MM-DDTHH:mm:ss.SSS');
+    // Here date should be always valid date or null;
+    this.rawValue = date ? date : "";
   };
 
   public override mapAttributes(data: IInputDateDataAttributes): void {
