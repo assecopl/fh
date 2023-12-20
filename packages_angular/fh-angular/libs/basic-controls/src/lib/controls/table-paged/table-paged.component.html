@@ -5,7 +5,7 @@
   *ngIf="label">
   {{ label }}
 </label>
-<table
+<table [availabilityHtmlElement]="availability" [availabilityElementRef]="elementRef"
   tabindex="0"
   class="fc table tablePaged {{fixedHeader ? 'fixedHeader': ''}} fixedHeader "
   [id]="innerId"

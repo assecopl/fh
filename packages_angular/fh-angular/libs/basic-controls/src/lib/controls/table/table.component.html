@@ -5,7 +5,7 @@
   *ngIf="label">
   {{ label }}
 </label>
-<div
+<div [availabilityHtmlElement]="availability" [availabilityElementRef]="elementRef"
   #scrollable
   class="fc"
   [attr.aria-labelledby]="innerId + '_label'"
