@@ -12,6 +12,7 @@ import {StylesheetChangeEvent} from "../events/StylesheetChangeEvent";
 import {ScrollEvent} from "../events/ScrollEvent";
 import {FileDownloadEvent} from "../events/FileDownloadEvent";
 import {FocusEvent} from "../events/FocusEvent";
+import {ForcedLogoutEvent} from "../events/ForcedLogoutEvent";
 @Injectable({
   providedIn: 'root',
 })
@@ -35,6 +36,7 @@ class EventsManager {
               public scrollEvent: ScrollEvent,
               public fileDownloadEvent: FileDownloadEvent,
               public focusEvent: FocusEvent,
+              public forcedLogoutEvent: ForcedLogoutEvent,
               public messageEvent: MessageEvent) {
     this.registerEvent(sessionTimeoutEvent);
     this.registerEvent(notificationEvent);
@@ -46,6 +48,8 @@ class EventsManager {
     this.registerEvent(stylesheetChangeEvent);
     this.registerEvent(scrollEvent);
     this.registerEvent(fileDownloadEvent);
+    this.registerEvent(forcedLogoutEvent);
+    this.registerEvent(focusEvent);
   }
 
   public registerEvent(event: BaseEvent): void {
