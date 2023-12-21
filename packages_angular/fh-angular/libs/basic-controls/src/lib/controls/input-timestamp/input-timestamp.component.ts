@@ -87,7 +87,7 @@ export class InputTimestampComponent
    */
   public override icon: string = 'fa-calendar';
 
-  public get hasTime () {
+  public get hasTime() {
     return !!this.format.match(/HH?|mm?/gm);
   }
 
@@ -133,24 +133,36 @@ export class InputTimestampComponent
   }
 
   public onClosed(): void {
-    this.value = this.rawValue;
+    // this.value = this.rawValue;
     this.onChangeEvent();
   }
 
-  public onChangeInputEvent ($event: any): void {
-    $event.preventDefault();
+  public onChangeInputEvent($event: any): void {
+    // $event.preventDefault();
+    //
+    // //Check if date is new date is Valid or if input vale was deleted
+    // if (CustomNgbDatetimeService.isDateValid($event.target.value, this.customNgbDatetimeService.frontendFormat) || (!$event.target.value && this.value)) {
+    //   this.updateModel($event.target.value);
+    //   this.onChangeEvent();
+    // }
+  }
 
-    //Check if date is new date is Valid or if input vale was deleted
-    if (CustomNgbDatetimeService.isDateValid($event.target.value, this.customNgbDatetimeService.frontendFormat) || (!$event.target.value && this.value)) {
-      this.updateModel($event.target.value);
-      this.onChangeEvent();
+  public onBlurCheckDate() {
+    if (this.rawValue != this.value) {
+      this.value = this.rawValue;
     }
   }
 
   public override updateModel(date: string) {
     this.valueChanged = true;
     // Here date should be always valid date or null;
-    this.rawValue = date ? date : "";
+    if (CustomNgbDatetimeService.isDateValid(date, this.customNgbDatetimeService.backendFormat) || (!date)) {
+      // }
+      this.rawValue = date ? date : "";
+      this.value = this.rawValue;
+    } else {
+      this.rawValue = "";
+    }
   };
 
   public override mapAttributes(data: IInputTimestampDataAttributes): void {
