@@ -11,7 +11,7 @@ import {
   Optional,
   SkipSelf,
   ViewChild,
-  inject, Output
+  inject, Output, OnChanges, SimpleChanges
 } from '@angular/core';
 import * as $ from 'jquery';
 import {FormsManager} from "../../Socket/FormsManager";
@@ -29,17 +29,19 @@ import {AvailabilityEnum} from "../../availability/enums/AvailabilityEnum";
  * Każda kontrolka powinna mieć przyporzadkowany elemnt w sekcji providers.{provide: FhngComponent, useExisting: forwardRef(() => RowComponent)}
  */
 @Directive()
-export class FhngComponent extends FhngChangesComponent implements OnInit, AfterViewInit, AfterContentInit, OnDestroy {
+export class FhngComponent extends FhngChangesComponent implements OnInit, OnChanges, AfterViewInit, AfterContentInit, OnDestroy {
 
   @Input() subelements: any[] = [];
   //List used wehen components are added and removed form subelements by socket communication.
   public processedSubelements: any[] = null;
 
-  @Output() subelementsChange:EventEmitter<any[]> = new EventEmitter<any[]>();
+  @Output() subelementsChange: EventEmitter<any[]> = new EventEmitter<any[]>();
 
   @Input() nonVisualComponents: any[] = [];
 
   public availability: AvailabilityEnum;
+
+  public elementRef: ElementRef;
 
   /*
     FhPortal logic
@@ -111,8 +113,8 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
   private _http: HttpClient = null;
 
   constructor(
-      public injector: Injector,
-      @Optional() @SkipSelf() parentFhngComponent: FhngComponent
+    public injector: Injector,
+    @Optional() @SkipSelf() parentFhngComponent: FhngComponent
   ) {
     super();
     this.innerId = this.constructor.name + '_' + (Math.random() * 10000000000).toFixed();
@@ -121,9 +123,12 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
 
     this.formsManager = this.injector.get(FormsManager, null);
     this.configuration = this.injector.get(FHNG_CORE_CONFIG, null) as FhNgCoreConfig;
+    this.elementRef = this.injector.get(ElementRef, null);
 
     this._http = inject(HttpClient);
   }
+
+
 
   public findFhngComponent(id: string): FhngComponent {
     let c: FhngComponent = null;
@@ -200,7 +205,13 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, After
 
   ngAfterViewInit(): void {
     if (this.hasPortal ) {
-      this.fhmlPortalManager.handleMutation();
+      this.fhmlPortalManager.handleMutation(this.elementRef.nativeElement);
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.hasPortal ) {
+      this.fhmlPortalManager.handleMutation(this.elementRef.nativeElement);
     }
   }
 
