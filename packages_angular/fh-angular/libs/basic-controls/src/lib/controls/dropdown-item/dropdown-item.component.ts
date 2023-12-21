@@ -38,7 +38,7 @@ export class DropdownItemComponent extends FhngHTMLElementC implements OnInit {
   public selectedButton$: Observable<any> = of();
 
   @Input()
-  public url: string;
+  public url: string = null;
 
   @Input()
   public onClickEventName: string = null;
@@ -72,10 +72,8 @@ export class DropdownItemComponent extends FhngHTMLElementC implements OnInit {
       window.location.href = this.url;
     }
 
-    if (this.onClickEventName) {
       if (this.onClickEventName) {
         this.fireEventWithLock('onClick', this.onClickEventName);
-      }
     }
 
     this._selectedButton.next(this);
