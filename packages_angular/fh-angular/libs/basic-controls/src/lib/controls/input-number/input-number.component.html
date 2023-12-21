@@ -18,6 +18,7 @@
        [required]="required"
   >
     <input [availabilityInput]="availability" (input)="onInputEvent($event)" (change)="onChangeEvent()"
+           (keydown.enter)="onChangeEvent()"
            #focusElement
            [id]="innerId"
            type="text"

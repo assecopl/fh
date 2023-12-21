@@ -92,6 +92,7 @@
          [required]="required"
     >
       <input [availabilityInput]="availability" (input)="onInputEvent($event)" (change)="onChangeEvent()"
+             (keydown.enter)="onChangeEvent()"
         #focusElement
         class="fc inputText form-control {{setPresentationStyle()}} {{styleClasses}}"
         [id]="id"
