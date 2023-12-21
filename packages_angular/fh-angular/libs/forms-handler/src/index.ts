@@ -35,6 +35,7 @@ export * from "./lib/models/FhngDateUtils";
 export * from "./lib/models/interfaces/IDataAttributes";
 export * from "./lib/Base";
 export {DynamicComponentsDirective} from "./lib/directives/dynamic-components.directive";
+export {FhComponentKeySupport} from "./lib/directives/fh-component-key-support.directive";
 
 
 export * from './lib/forms-handler.module';
