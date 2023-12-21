@@ -117,19 +117,31 @@ export class InputDateComponent extends FhngReactiveInputC implements OnInit {
   }
 
   public onChangeInputEvent ($event: any): void {
-    $event.preventDefault();
+    // $event.preventDefault();
+    //
+    // //Check if date is new date is Valid or if input vale was deleted
+    // if (CustomNgbDatetimeService.isDateValid($event.target.value, this._customNgbDateService.frontendFormat) || (!$event.target.value && this.value)) {
+    //   this.updateModel($event.target.value);
+    //   this.onChangeEvent();
+    // }
+  }
 
-    //Check if date is new date is Valid or if input vale was deleted
-    if (CustomNgbDatetimeService.isDateValid($event.target.value, this._customNgbDateService.frontendFormat) || (!$event.target.value && this.value)) {
-      this.updateModel($event.target.value);
-      this.onChangeEvent();
+  public onBlurCheckDate() {
+    if (this.rawValue != this.value) {
+      this.value = this.rawValue;
     }
   }
 
   public override updateModel(date: string) {
     this.valueChanged = true;
     // Here date should be always valid date or null;
-    this.rawValue = date ? date : "";
+    if (CustomNgbDatetimeService.isDateValid(date, this._customNgbDateService.backendFormat) || (!date)) {
+      // }
+      this.rawValue = date ? date : "";
+      this.value = this.rawValue;
+    } else {
+      this.rawValue = "";
+    }
   };
 
   public override mapAttributes(data: IInputDateDataAttributes): void {
