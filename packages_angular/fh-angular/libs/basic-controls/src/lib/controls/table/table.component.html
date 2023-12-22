@@ -14,7 +14,7 @@
   [style.overflow-y]="horizontalScrolling?'auto':false">
   <table
     tabindex="0"
-    class="fc table {{fixedHeader ? 'fixedHeader': ''}} fixedHeader {{horizontalScrolling?'table-responsive':''}} {{tableStripes?'table-striped':''}}"
+    class="fc table {{fixedHeader ? 'fixedHeader': ''}} fixedHeader {{horizontalScrolling?'table-responsive':''}} {{tableStripes !='hide'?'table-striped':''}}"
     [id]="innerId"
     [style.table-layout]="horizontalScrolling?'initial':'fixed'"
   >

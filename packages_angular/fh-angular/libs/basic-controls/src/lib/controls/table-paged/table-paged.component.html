@@ -1,3 +1,4 @@
+tableStripes: {{tableStripes}}
 <label
   class="col-form-label"
   [id]="innerId + '_label'"
@@ -7,7 +8,7 @@
 </label>
 <table [availabilityHtmlElement]="availability" [availabilityElementRef]="elementRef"
   tabindex="0"
-  class="fc table tablePaged {{fixedHeader ? 'fixedHeader': ''}} fixedHeader  {{tableStripes?'table-striped':''}}"
+  class="fc table tablePaged {{fixedHeader ? 'fixedHeader': ''}} fixedHeader  {{tableStripes !='hide'?'table-striped':''}}"
   [id]="innerId"
   [style.table-layout]="horizontalScrolling?'initial':'fixed'">
   <!--  Simple HTEAD - one row-->
@@ -131,6 +132,6 @@
   (click)="onExportCsv()"
 >[icon='fas fa-download'] CSV
 </div>
-<!--<ng-container *ngIf="configuration.debug">-->
-<!--  <fh-component-debugger/>-->
-<!--</ng-container>-->
+<ng-container *ngIf="configuration.debug">
+  <fh-component-debugger/>
+</ng-container>

@@ -100,7 +100,7 @@ export class TableComponent
   private rowStylesMapping: any = null;
   private rowHeight: any = null;
   private tableGrid: any = null;
-  public tableStripes: any = null;
+  public tableStripes: string = 'hide';
   protected onRowClick: any = null;
   private onRowDoubleClick: any = null;
   private readonly synchronizeScrolling: string;
