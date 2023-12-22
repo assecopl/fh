@@ -7,7 +7,7 @@
 </label>
 <table [availabilityHtmlElement]="availability" [availabilityElementRef]="elementRef"
   tabindex="0"
-  class="fc table tablePaged {{fixedHeader ? 'fixedHeader': ''}} fixedHeader "
+  class="fc table tablePaged {{fixedHeader ? 'fixedHeader': ''}} fixedHeader  {{tableStripes?'table-striped':''}}"
   [id]="innerId"
   [style.table-layout]="horizontalScrolling?'initial':'fixed'">
   <!--  Simple HTEAD - one row-->

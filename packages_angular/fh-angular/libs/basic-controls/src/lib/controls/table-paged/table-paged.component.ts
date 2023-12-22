@@ -82,6 +82,8 @@ export class TablePagedComponent
   public pageSizes: Number[] = [5, 10, 15, 25];
   public pageSizeAsButtons: boolean = false;
 
+
+
   constructor(
     public override injector: Injector,
     @Optional() @SkipSelf() parentFhngComponent: FhngComponent
