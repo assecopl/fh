@@ -38,21 +38,25 @@ public class DictionaryLookupLegacyProvider<DIC_ELEMENT_TYPE, FORM_MODEL_BINDING
     @Override
     @SuppressWarnings("unchecked")
     public PageModel<DIC_ELEMENT_TYPE> getDictionaryElementsPaged(String searchText, Pageable pageable, Function<String, Object> externalAttributesValuesProvider) {
-        boolean searchByCode = searchText.length() > 1 && searchText.toUpperCase().equals(searchText);
-        if (searchByCode) {//search by code
+        //search by code
+        boolean searchFirstByCode = searchText.toUpperCase().equals(searchText);
+        if (searchFirstByCode) {
             FORM_MODEL_BINDING_TYPE modelValue = (FORM_MODEL_BINDING_TYPE) searchText; //TODO: Tutaj trzeba zrobić coś bardziej inteligentnego
             final DIC_ELEMENT_TYPE foundObject = this.getElementByModelValue(modelValue, externalAttributesValuesProvider);
-            return new PageModel<>(pg -> getPageWithOneElement(foundObject));
-        } else {//Search by content
-            Object[] attributes = getAttributesValues(attributeNamesForGetValuesPaged, externalAttributesValuesProvider, searchText, pageable);
-            return (PageModel<DIC_ELEMENT_TYPE>) ReflectionUtils.run(this.getValuesPaged, this.legacyComboDataProviderFhDP, attributes);
+            if (foundObject != null) {
+                return new PageModel<>(pg -> getPageWithOneElement(foundObject));
+            }
         }
+
+        //Search by content
+        Object[] attributes = getAttributesValues(attributeNamesForGetValuesPaged, externalAttributesValuesProvider, searchText, pageable);
+        return (PageModel<DIC_ELEMENT_TYPE>) ReflectionUtils.run(this.getValuesPaged, this.legacyComboDataProviderFhDP, attributes);
     }
 
     @Override
     public String getDisplayValue(DIC_ELEMENT_TYPE dictionaryElement) {
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
-        System.out.println("getDisplayValue(DIC_ELEMENT_TYPE) used by: "+stackTraceElements[2].toString());
+        System.out.println("getDisplayValue(DIC_ELEMENT_TYPE) used by: " + stackTraceElements[2].toString());
         if (dictionaryElement != null) {//Used by serviceOnSelectItem, getPresentText
             return legacyComboDataProviderFhDP.getDisplayValue(dictionaryElement);
         } else {
