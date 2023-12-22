@@ -89,6 +89,14 @@ export class ButtonComponent
 
   private _clickButtonBehavior: Subject<any> = new Subject<any>();
 
+  /**
+   * Override text position for horizontal align
+   * TODO Maybe 'text-right'  should be deleted in FhngHTMLElementC
+   */
+  @HostBinding('class.text-right')
+  public  textalign: boolean = false;
+
+
   constructor(
     public override injector: Injector,
     @Optional() @SkipSelf() parentFhngComponent: FhngComponent,

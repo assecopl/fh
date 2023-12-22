@@ -37,9 +37,11 @@ import {ContainerComponent} from "./components/container/container.component";
 import {FhFormsManagerNgComponent} from "./fh-forms-manager-ng.component";
 import {FormComponent} from "./components/form/form.component";
 import {DynamicComponentsDirective} from "./directives/dynamic-components.directive";
+import {FhComponentKeySupport} from "./directives/fh-component-key-support.directive";
 
 
 const components = [
+  FhComponentKeySupport,
   DynamicComponentsDirective,
   NotificationsComponent,
   ApplicationLockComponent,

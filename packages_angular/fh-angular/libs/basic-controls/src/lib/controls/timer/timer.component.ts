@@ -47,9 +47,9 @@ export class TimerComponent extends FhngComponent implements OnInit, OnDestroy {
   public override mapAttributes(data: ITimerDataAttributes): void {
     super.mapAttributes(data);
 
-    this.interval = data.interval;
-    this.active = data.active;
-    this.onTimer = data.onTimer;
+    this.interval = data.interval || data.interval == 0 ? data.interval : this.interval;
+    this.active = data.active ? data.active : this.active;
+    this.onTimer = data.onTimer ? data.onTimer : this.onTimer;
 
     this._setupTimer();
   }

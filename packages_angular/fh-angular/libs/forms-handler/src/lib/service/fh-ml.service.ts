@@ -741,10 +741,10 @@ export class FhmlPortalManager {
     portal.setAttribute('used', 'true');
   }
 
-  private version_2({sourceElement, portal, sourceId}) {
+  private version_2({sourceElement, portal, sourceId, sourceContainer}) {
     const replaceParentId = portal.getAttribute('replaceParentId')
     if (!!replaceParentId) {
-      const oldParent = document.getElementsByClassName(replaceParentId)[0];
+      const oldParent = sourceContainer.getElementsByClassName(replaceParentId)[0];
       if (!!oldParent) {
         oldParent.parentElement.appendChild(portal)
         oldParent.remove();
@@ -752,8 +752,8 @@ export class FhmlPortalManager {
     }
 
     portal.parentElement.appendChild(sourceElement);
-    if (document.getElementById(sourceId) && document.getElementById(sourceId).blur) {
-      document.getElementById(sourceId).blur();
+    if (sourceContainer.getElementById(sourceId) && sourceContainer.getElementById(sourceId).blur) {
+      sourceContainer.getElementById(sourceId).blur();
     }
     portal.style.display = 'none';
     portal.setAttribute('used', 'true');
@@ -782,8 +782,8 @@ export class FhmlPortalManager {
   }
 
 
-  public handleMutation = () => {
-    const portals = document.querySelectorAll('fh-portal[used="false"]');
+  public handleMutation = (sourceContainer:HTMLElement) => {
+    const portals = sourceContainer.querySelectorAll('fh-portal[used="false"]');
     portals.forEach(portal => {
       try {
         const broken = portal.getAttribute('broken');
@@ -856,7 +856,7 @@ export class FhmlPortalManager {
           }
           if (sourceElement) {
             console.log(version, {sourceElement, portal, sourceId, properClasses});
-            this.processVersion(version, {sourceElement, portal, sourceId, properClasses})
+            this.processVersion(version, {sourceElement, portal, sourceId, sourceContainer})
           } else {
             console.error(`There is no element (id: ${sourceId}) that can be portalled`);
           }

@@ -7,12 +7,12 @@ import {NgSelectModule} from "@ng-select/ng-select";
 import {HttpClientModule} from "@angular/common/http";
 import {AutosizeModule} from '@techiediaries/ngx-textarea-autosize';
 import {
-  ComponentManager,
-  CustomActionsManager,
-  EventsManager,
-  FhNgFormsHandlerModule,
-  FhNgModule,
-  I18nService
+    ComponentManager,
+    CustomActionsManager,
+    EventsManager,
+    FhNgFormsHandlerModule,
+    FhNgModule,
+    I18nService
 } from "@fh-ng/forms-handler";
 import { AccordionComponent } from './controls/accordion/accordion.component';
 import { RowComponent } from './controls/row/row.component';
@@ -137,7 +137,9 @@ const components = [
 
 
 @NgModule({
-  declarations: components,
+    declarations: [
+        components,
+    ],
   schemas:[CUSTOM_ELEMENTS_SCHEMA],
   providers:[provideNgxMask(maskConfigFunction),{provide: NgbTooltipConfig}],
   imports: [FhNgFormsHandlerModule,CommonModule,

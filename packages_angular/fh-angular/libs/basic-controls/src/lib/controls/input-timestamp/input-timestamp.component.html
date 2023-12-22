@@ -39,6 +39,7 @@
       (ngModelChange)="onDateSelect($event)"
       (closed)="onClosed()"
       (change)="onChangeInputEvent($event)"
+      (blur)="onBlurCheckDate()"
     />
     <ng-template #t>
       <div class="text-center pl-1 ngb-footer" *ngIf="hasTime">

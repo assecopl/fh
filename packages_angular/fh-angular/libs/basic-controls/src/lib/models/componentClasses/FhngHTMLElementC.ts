@@ -101,8 +101,6 @@ export class FhngHTMLElementC
   @Input()
   public iconAlignment: IconAligmentType = null;
 
-  public elementRef: ElementRef;
-
   @Input()
   public label: string = null;
 
@@ -259,7 +257,6 @@ export class FhngHTMLElementC
     @Optional() @SkipSelf() parentFhngComponent: FhngComponent
   ) {
     super(injector, parentFhngComponent);
-    this.elementRef = this.injector.get(ElementRef, null);
   }
 
   public override ngAfterContentInit(): void {
@@ -274,7 +271,8 @@ export class FhngHTMLElementC
 
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  override ngOnChanges(changes: SimpleChanges): void {
+    super.ngOnChanges(changes);
     this.processWidth(this.width);
 
   }

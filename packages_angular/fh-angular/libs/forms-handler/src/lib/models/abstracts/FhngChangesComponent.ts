@@ -11,6 +11,10 @@ export abstract class FhngChangesComponent {
     abstract id: string;
     abstract formId: string;
 
+    public onKeyEvent:string = null;
+    public keyEvent:string = null;
+
+
     protected changesQueue: FormComponentChangesQueue = new FormComponentChangesQueue();
     protected util: Utils = inject(Utils);
 

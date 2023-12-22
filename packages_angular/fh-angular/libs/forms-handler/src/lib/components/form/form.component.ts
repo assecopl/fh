@@ -119,7 +119,8 @@ export class FormComponent extends FormComponentRef implements OnInit, OnChanges
 
     }
 
-    ngOnChanges(changes: SimpleChanges): void {
+    override ngOnChanges(changes: SimpleChanges): void {
+      super.ngOnChanges(changes);
         // if(changes['id'] && !changes['id'].firstChange){
         this.formManager.registerForm(this);
         // }

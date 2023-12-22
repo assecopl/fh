@@ -93,6 +93,7 @@
     >
       <input [availabilityInput]="availability" (input)="onInputEvent($event)" (change)="onChangeEvent()"
         #focusElement
+             fhComponentKeySupport
         class="fc inputText form-control {{setPresentationStyle()}} {{styleClasses}}"
         [id]="id"
         [(ngModel)]="rawValue"
@@ -111,6 +112,6 @@
     </div>
   </ng-container>
 </div>
-<!--<ng-container *ngIf="configuration.debug">-->
-<!--  <fh-component-debugger/>-->
-<!--</ng-container>-->
+<ng-container *ngIf="configuration.debug">
+  <fh-component-debugger/>
+</ng-container>
