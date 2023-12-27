@@ -54,6 +54,9 @@ export class TabContainerComponent
   @Input()
   public activeTabId: string;
 
+  @Input()
+  public onTabChange: string = null;
+
   @Output()
   public activeTabIndexChange: EventEmitter<number> = new EventEmitter<number>();
 
@@ -62,8 +65,6 @@ export class TabContainerComponent
 
   @Output()
   public tabChange: EventEmitter<TabComponent> = new EventEmitter();
-
-  public onTabChange:string = null;
 
   public boundActiveTabIndex: number;
 
@@ -178,7 +179,9 @@ export class TabContainerComponent
       this.fireEvent('onTabChange', this.onTabChange);
     }
 
-    // this.subelements = [...this.subelements];
+    if (this.onTabChange) {
+      this.fireEventWithLock('onTabChange', this.onTabChange);
+    }
   }
 
   public deactivateTabs(): void {
@@ -189,7 +192,7 @@ export class TabContainerComponent
     this.boundActiveTabIndex = null;
   }
 
-  public override mapAttributes(data: IDataAttributes) {
+  public override mapAttributes(data: IDataAttributes & {onTabChange?: string}) {
     super.mapAttributes(data);
 
     if(data.activeTabIndex) {
@@ -197,6 +200,8 @@ export class TabContainerComponent
     }
 
     // this.subelements = [...this.subelements];
+
+    this.onTabChange = data.onTabChange || this.onTabChange;
 
     this._mapTabs();
   }

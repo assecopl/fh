@@ -17,7 +17,7 @@ import {
   NgbCalendar,
   NgbDateAdapter,
   NgbDateParserFormatter,
-  NgbDatepickerConfig, NgbInputDatepicker,
+  NgbDatepickerConfig, NgbDatepickerI18n, NgbInputDatepicker,
   NgbInputDatepickerConfig,
 } from '@ng-bootstrap/ng-bootstrap';
 import {BootstrapWidthEnum} from './../../models/enums/BootstrapWidthEnum';
@@ -29,6 +29,7 @@ import {
   IDataAttributes
 } from '@fh-ng/forms-handler';
 import moment from "moment/moment";
+import {DatepickerI18nService} from "../../models/datepicker-i18n.service";
 
 interface IInputDateDataAttributes extends IDataAttributes {
   format?: string;
@@ -47,8 +48,10 @@ interface IInputDateDataAttributes extends IDataAttributes {
     NgbInputDatepickerConfig,
     NgbDatepickerConfig,
     CustomNgbDateService,
+    DatepickerI18nService,
     {provide: NgbDateAdapter, useExisting: CustomNgbDateService},
     {provide: NgbDateParserFormatter, useExisting: CustomNgbDateService},
+    {provide: NgbDatepickerI18n, useExisting: DatepickerI18nService}
   ], // add config to the component providers
 })
 export class InputDateComponent extends FhngReactiveInputC implements OnInit {

@@ -89,14 +89,14 @@
 
         </select>
       </div>
-      <div class="col small">Rekordów na stronie</div>
+      <div class="col small">{{'fh.table.paged.records.at.page' | i18n}}</div>
     </div>
   </div>
   <div class="col-auto">
     <div class="row align-items-center justify-content-end">
       <div class="col-auto small">
         <!--        TODO TRANSLATE Library -->
-        Rekordy
+        {{'fh.table.paged.records' | i18n}}
         {{
         pageNumber > 0
           ? pageSize * pageNumber
@@ -104,7 +104,7 @@
         }}
         -
         {{(pageSize * pageNumber) + pageSize < totalRows ? (pageSize * pageNumber) + pageSize : totalRows}}
-        z {{ totalRows  }}
+        {{'fh.table.paged.from' | i18n}} {{ totalRows  }}
       </div>
       <div class="col-auto">
         <ngb-pagination
@@ -129,7 +129,7 @@
   width="md-2"
   horizontalAlign="RIGHT"
   (click)="onExportCsv()"
->[icon='fas fa-download'] CSV
+>{{'fh.table.paged.csv.label' | i18n}}
 </div>
 <!--<ng-container *ngIf="configuration.debug">-->
 <!--  <fh-component-debugger/>-->

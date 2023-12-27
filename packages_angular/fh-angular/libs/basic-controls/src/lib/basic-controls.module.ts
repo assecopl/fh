@@ -69,9 +69,21 @@ import { NumberPL } from './controls/input-number/i18n/number.pl';
 import { NumberEN } from './controls/input-number/i18n/number.en';
 import { TextPL } from './controls/input-text/i18n/text.pl';
 import { TextEN } from './controls/input-text/i18n/text.en';
-import { TimestampPL } from './controls/input-timestamp/i18n/timestamp.pl';
-import { TimestampEN } from './controls/input-timestamp/i18n/timestamp.en';
+import {TimestampPl} from './controls/input-timestamp/i18n/timestamp.pl';
+import {TimestampEn} from './controls/input-timestamp/i18n/timestamp.en';
 import {CanvasComponent} from "./controls/canvas/canvas.component";
+import {DictionaryLookupPl} from "./controls/dictionary-combo/i18n/dictionary-lookup.pl";
+import {DictionaryLookupEn} from "./controls/dictionary-combo/i18n/dictionary-lookup.en";
+import {DictionaryLookupLt} from "./controls/dictionary-combo/i18n/dictionary-lookup.lt";
+import {TablePagedPl} from "./controls/table-paged/i18n/table-paged.pl";
+import {TablePagedEn} from "./controls/table-paged/i18n/table-paged.en";
+import {TimestampLt} from "./controls/input-timestamp/i18n/timestamp.lt";
+import {TablePagedLt} from "./controls/table-paged/i18n/table-paged.lt";
+import {ComboLt} from "./controls/combo/i18n/combo.lt";
+import {UploadLt} from "./controls/file-upload/i18n/upload.lt";
+import {InputDateLt} from "./controls/input-date/i18n/input-date.lt";
+import {NumberLt} from "./controls/input-number/i18n/number.lt";
+import {TextLt} from "./controls/input-text/i18n/text.lt";
 
 
 const maskConfigFunction: () => Partial<IConfig> = () => {
@@ -167,23 +179,36 @@ export class FhNgBasicControlsModule extends FhNgModule {
      */
     i18n.registerStrings('pl', ComboPL);
     i18n.registerStrings('en', ComboEN);
+    i18n.registerStrings('lt', ComboLt);
     // FileUpload
     i18n.registerStrings('pl', UploadPL);
     i18n.registerStrings('en', UploadEN);
+    i18n.registerStrings('lt', UploadLt);
     // InputDate
     i18n.registerStrings('pl', InputDatePL);
     i18n.registerStrings('en', InputDateEN);
+    i18n.registerStrings('lt', InputDateLt);
     // InputNumber
     i18n.registerStrings('pl', NumberPL);
     i18n.registerStrings('en', NumberEN);
+    i18n.registerStrings('lt', NumberLt);
     // InputText
     i18n.registerStrings('pl', TextPL);
     i18n.registerStrings('en', TextEN);
+    i18n.registerStrings('lt', TextLt);
     // InputTimestamp
-    i18n.registerStrings('pl', TimestampPL);
-    i18n.registerStrings('en', TimestampEN);
-
-
+    i18n.registerStrings('pl', TimestampPl);
+    i18n.registerStrings('en', TimestampEn);
+    i18n.registerStrings('lt', TimestampLt);
+    //DictionaryLookup
+    i18n.registerStrings('pl', DictionaryLookupPl);
+    i18n.registerStrings('en', DictionaryLookupEn);
+    i18n.registerStrings('lt', DictionaryLookupLt);
+    //TablePaged
+    i18n.registerStrings('pl', TablePagedPl);
+    i18n.registerStrings('en', TablePagedEn);
+    i18n.registerStrings('lt', TablePagedLt);
+    console.log('registerStrings', i18n)
   }
 
   public override registerComponents(componentManager?: ComponentManager): void {

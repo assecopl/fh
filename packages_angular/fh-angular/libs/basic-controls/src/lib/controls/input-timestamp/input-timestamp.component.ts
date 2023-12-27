@@ -19,7 +19,7 @@ import {
   NgbCalendar,
   NgbDate,
   NgbDateAdapter,
-  NgbDateParserFormatter, NgbDatepickerConfig,
+  NgbDateParserFormatter, NgbDatepickerConfig, NgbDatepickerI18n,
   NgbInputDatepicker,
   NgbInputDatepickerConfig,
   NgbTimeAdapter,
@@ -33,6 +33,7 @@ import {
   IDataAttributes
 } from '@fh-ng/forms-handler';
 import moment from "moment";
+import {DatepickerI18nService} from "../../models/datepicker-i18n.service";
 
 interface IInputTimestampDataAttributes extends IDataAttributes {
   format?: string;
@@ -54,9 +55,11 @@ interface IInputTimestampDataAttributes extends IDataAttributes {
       useExisting: forwardRef(() => InputTimestampComponent),
     },
     NgbInputDatepickerConfig,
+    DatepickerI18nService,
     {provide: NgbDateAdapter, useExisting: CustomNgbDatetimeService},
     {provide: NgbTimeAdapter, useExisting: CustomNgbDatetimeService},
-    {provide: NgbDateParserFormatter, useExisting: CustomNgbDatetimeService}
+    {provide: NgbDateParserFormatter, useExisting: CustomNgbDatetimeService},
+    {provide: NgbDatepickerI18n, useExisting: DatepickerI18nService}
   ],
 })
 export class InputTimestampComponent
@@ -96,7 +99,6 @@ export class InputTimestampComponent
   }
 
   constructor(
-    @Inject(LOCALE_ID) private _locale: string,
     public override injector: Injector,
     public calendar: NgbCalendar,
     private customNgbDatetimeService: CustomNgbDatetimeService,

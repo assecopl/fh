@@ -14,7 +14,7 @@ import {FhngComponent, IDataAttributes} from "@fh-ng/forms-handler";
 })
 export class XMLViewerFhDPComponent extends FhngHTMLElementC {
     @Input()
-    public content: string;
+    public content: string = null;
 
     public override width = BootstrapWidthEnum.MD12;
 
@@ -37,6 +37,7 @@ export class XMLViewerFhDPComponent extends FhngHTMLElementC {
     override mapAttributes(data: IDataAttributes & {content: string}) {
         super.mapAttributes(data);
 
-        this.content = data.content;
+        this.content = data.content || this.content;
+        console.log('XML:map', data, this)
     }
 }

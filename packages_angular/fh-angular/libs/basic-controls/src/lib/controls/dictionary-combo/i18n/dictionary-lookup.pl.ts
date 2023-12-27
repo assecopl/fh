@@ -1,5 +1,5 @@
 export let DictionaryLookupPl = {
-    "fh.combo.clear": "Zamknij formularz",
-    "fh.combo.element.delete": "Usuń element",
+    "fh.lookup.of": "z",
+    "fh.lookup.close": "Zamknij"
 };
 

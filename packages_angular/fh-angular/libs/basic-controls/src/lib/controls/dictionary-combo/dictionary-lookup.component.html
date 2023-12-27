@@ -63,7 +63,7 @@
           (click)="onClearEvent()"
         >
           <i class="fas fa-times mr-0"></i>
-          <span class="sr-only">{{ 'close' | i18n }}</span>
+          <span class="sr-only">{{ 'fh.lookup.close' | i18n }}</span>
         </button>
       </div>
 
@@ -75,7 +75,7 @@
               <button class="combo-lookup__nav-buttons" [disabled]="page<=1" (click)="onPreviousPageEvent()">
                 <i class="fas fa-chevron-left"></i>
               </button>
-              {{ page }} of {{ pagesCount }}
+              {{ page }} {{'fh.lookup.of' | i18n}} {{ pagesCount }}
               <button class="combo-lookup__nav-buttons" [disabled]="page>=pagesCount" (click)="onNextPageEvent()">
                 <i class="fas fa-chevron-right"></i>
               </button>
@@ -83,7 +83,7 @@
             <div  class="combo-lookup__closebox">
               <button class="combo-lookup__nav-buttons" (click)="onCancelSearch()">
                 <i class="fas fa-times"></i>
-                <span class="sr-only">{{ 'close' | i18n }}</span>
+                <span class="sr-only">{{ 'fh.lookup.close' | i18n }}</span>
               </button>
             </div>
           </div>
