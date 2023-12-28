@@ -100,7 +100,7 @@ export class TableComponent
   private rowStylesMapping: any = null;
   private rowHeight: any = null;
   private tableGrid: any = null;
-  private tableStripes: any = null;
+  public tableStripes: string = 'hide';
   protected onRowClick: any = null;
   private onRowDoubleClick: any = null;
   private readonly synchronizeScrolling: string;
@@ -315,7 +315,7 @@ export class TableComponent
     }
     // this.rowHeight = data.rowHeight || 'normal';
     // this.tableGrid = data.tableGrid || 'hide';
-    // this.tableStripes = data.tableStripes || 'hide';
+    this.tableStripes = data.tableStripes || 'hide';
     // this.ieFocusFixEnabled = data.ieFocusFixEnabled || false;
     // this.synchronizeScrolling = data.synchronizeScrolling || null;
     // this._dataWrapper = null;

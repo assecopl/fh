@@ -111,6 +111,8 @@ export class OutputLabelComponent extends FhngHTMLElementC implements OnInit {
         this.justifyContentRight = false;
         break;
       case 'LEFT':
+        this.alignLeft = true;
+        break;
       default:
         this.justifyContentRight = false;
         this.justifyContentCenter = false;
