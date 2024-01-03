@@ -35,6 +35,8 @@ public class FacadeRestClient {
     private String token = "TOKEN";
     @Autowired
     EventRegistry eventRegistry;
+    @Autowired(required = false)
+    IUserAuditService userAuditService;
 
 
     public List<Object> list(Object query, Class listDtoClass) {
@@ -124,15 +126,23 @@ public class FacadeRestClient {
                 .pathSegment("performOperation")
                 .encode()
                 .toUriString();
+        Long start = System.currentTimeMillis();
         ResponseEntity<OperationRestResponse> ret = FacadeRestTemplateConfig.
                 restTemplate.postForEntity(uri, request, OperationRestResponse.class);
+        Long end = System.currentTimeMillis();
         OperationRestResponse response = ret.getBody();
         if(response.isValid()) {
+            if(userAuditService != null) {
+                userAuditService.registerOperationSuccess(operationDtoServiceClass.getSimpleName(),operation, response.getOperationResultDto(), end - start);
+            }
             return response.getOperationResultDto();
         } else {
             OperationResultBaseDto errorResponse = new OperationResultBaseDto();
             errorResponse.setOk(false);
             errorResponse.setResultMessage(response.getMessage());
+            if(userAuditService != null) {
+                userAuditService.registerOperationFailure(operationDtoServiceClass.getSimpleName(),operation, errorResponse, end - start);
+            }
             return errorResponse;
         }
     }
