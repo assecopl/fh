@@ -63,10 +63,10 @@ export class SelectOneMenuComponent
     super.mapAttributes(data);
 
     this.rawOptions = data.rawOptions || this.rawOptions;
-    this.rawValue = data.rawValue;
+    this.rawValue = data.rawValue || '';
     this.require = data.require || this.require;
     this.inputSize = data.inputSize || this.inputSize;
-    this.selectedIndex = data.selectedIndex || this.selectedIndex;
+    this.selectedIndex = typeof data.selectedIndex !== 'undefined' ? data.selectedIndex : this.selectedIndex;
     this.emptyValue = data.emptyValue || this.emptyLabel;
     this.emptyLabel = data.emptyLabel || this.emptyLabel;
     this.keepRemovedValue = data.keepRemovedValue || this.keepRemovedValue;

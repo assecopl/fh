@@ -84,6 +84,7 @@ import {UploadLt} from "./controls/file-upload/i18n/upload.lt";
 import {InputDateLt} from "./controls/input-date/i18n/input-date.lt";
 import {NumberLt} from "./controls/input-number/i18n/number.lt";
 import {TextLt} from "./controls/input-text/i18n/text.lt";
+import Cookies from "js-cookie";
 
 
 const maskConfigFunction: () => Partial<IConfig> = () => {
@@ -208,7 +209,10 @@ export class FhNgBasicControlsModule extends FhNgModule {
     i18n.registerStrings('pl', TablePagedPl);
     i18n.registerStrings('en', TablePagedEn);
     i18n.registerStrings('lt', TablePagedLt);
-    console.log('registerStrings', i18n)
+
+    if (Cookies.get('USERLANG')) {
+      i18n.selectLanguage(Cookies.get('USERLANG'));
+    }
   }
 
   public override registerComponents(componentManager?: ComponentManager): void {

@@ -15,6 +15,7 @@
     [iconAlignment]="iconAlignment"
     [required]="required"
   >
+
     <select
       #focusElement
       class="form-control fc SelectOneMenu"
@@ -23,8 +24,8 @@
       [style.height]="styles.height"
       (change)="onSelectChangeEvent($event)"
     >
-      <option [class.d-none]="!emptyValue" value="" [selected]="selectedIndex === -1"> {{ emptyLabel? "":placeholder }}</option>
-      <ng-container *ngFor="let option of rawOptions;let i = index;">
+      <option value="" [selected]="selectedIndex === -1"> {{ emptyLabel? "":placeholder }}</option>
+      <ng-container *ngFor="let option of rawOptions; let i = index;">
         <option *ngIf="option || emptyValue" [selected]="selectedIndex === i" [value]="option">
           {{ resultFormatter(option) }}
         </option>

@@ -26,13 +26,13 @@
     <span class="custom-control custom-checkbox" *ngIf="selectAllChceckbox">
       <input [id]="id+'selectAll'"
              (click)="toggleSelectAll($event)"
-             aria-label="Zaznacz/odznacz wszystkie rekordy"
+             [attr.aria-label]="'fh.table.paged.arial.label' | i18n"
              class="custom-control-input"
              type="checkbox"
              [checked]="checkAllValue"
       />
       <label class="hidden custom-control-label ml-3" [for]="id+'selectAll'">
-        <span class="d-none">Zaznacz/odznacz wszystkie rekordy</span>
+        <span class="d-none">{{'fh.table.paged.arial.label' | i18n}}</span>
       </label>
     </span>
       </th>
