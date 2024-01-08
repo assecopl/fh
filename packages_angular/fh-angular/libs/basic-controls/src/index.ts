@@ -1,3 +1,5 @@
+export {CookieInfoComponent} from "./lib/controls/cookie-info/cookie-info.component";
+
 export {CanvasComponent} from "./lib/controls/canvas/canvas.component";
 export { AccordionComponent } from './lib/controls/accordion/accordion.component';
 export { RowComponent } from './lib/controls/row/row.component';
