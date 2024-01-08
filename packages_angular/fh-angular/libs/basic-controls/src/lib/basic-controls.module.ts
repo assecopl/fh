@@ -85,6 +85,10 @@ import {InputDateLt} from "./controls/input-date/i18n/input-date.lt";
 import {NumberLt} from "./controls/input-number/i18n/number.lt";
 import {TextLt} from "./controls/input-text/i18n/text.lt";
 import Cookies from "js-cookie";
+import {CookieInfoComponent} from "./controls/cookie-info/cookie-info.component";
+import {CookieInfoPl} from "./controls/cookie-info/i18n/cookie-info.pl";
+import {CookieInfoEn} from "./controls/cookie-info/i18n/cookie-info.en";
+import {CookieInfoLt} from "./controls/cookie-info/i18n/cookie-info.lt";
 
 
 const maskConfigFunction: () => Partial<IConfig> = () => {
@@ -143,7 +147,8 @@ const components = [
   FileUploadAccessorComponent,
   DictionaryLookupComponent,
   ButtonGroupComponent,
-  HintComponent
+  HintComponent,
+  CookieInfoComponent
 ]
 
 
@@ -209,6 +214,10 @@ export class FhNgBasicControlsModule extends FhNgModule {
     i18n.registerStrings('pl', TablePagedPl);
     i18n.registerStrings('en', TablePagedEn);
     i18n.registerStrings('lt', TablePagedLt);
+    //CookieInfo
+    i18n.registerStrings('pl', CookieInfoPl);
+    i18n.registerStrings('en', CookieInfoEn);
+    i18n.registerStrings('lt', CookieInfoLt);
 
     if (Cookies.get('USERLANG')) {
       i18n.selectLanguage(Cookies.get('USERLANG'));
