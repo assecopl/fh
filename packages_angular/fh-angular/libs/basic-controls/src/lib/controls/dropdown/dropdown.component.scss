@@ -3,16 +3,16 @@
     margin-bottom: 1em;
   }
 
-  .dropdown-menu {
-    margin: 2px 15px;
-  }
+  //.dropdown-menu {
+  //  margin: 2px 15px;
+  //}
 
-  ::ng-deep {
-    button:hover {
-      .fhml,
-      .fhml:before {
-        color: white !important;
-      }
-    }
-  }
+  //::ng-deep {
+  //  button:hover {
+  //    .fhml,
+  //    .fhml:before {
+  //      color: white !important;
+  //    }
+  //  }
+  //}
 }
