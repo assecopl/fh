@@ -167,6 +167,9 @@ export class TreeElementComponent extends FhngHTMLElementC implements OnInit, Af
    */
   public override ngAfterViewInit(): void {
     this.processFhdDPinit();
+    if(this.clickOnStart){
+      this.labelClicked(null);
+    }
   }
 
 
@@ -208,4 +211,41 @@ export class TreeElementComponent extends FhngHTMLElementC implements OnInit, Af
       (branchToSelect.children[0].children[0].children[0] as HTMLElement).click();
     }
   }
+
+  //Logic to click first element when added dynamically
+
+  private clickOnStart:boolean = false;
+
+  override processAddedComponents(addedComponents) {
+    let addedFirstClick:boolean = false;
+    if (addedComponents) {
+      let newSubelements = []
+      if (addedComponents['-']) {
+        if(this.fhdp) {
+          addedComponents['-'][0]['clickOnStart'] = true;
+          addedFirstClick = true;
+        }
+        newSubelements.push(...addedComponents['-'])
+      }
+      this.subelements.forEach((subelement, index) => {
+        newSubelements.push(subelement);
+        if (addedComponents[subelement.id]) { //checks if there are components to add after subelement
+          if(this.fhdp && !addedFirstClick) {
+            addedComponents[subelement.id][0]['clickOnStart'] = true;
+            addedFirstClick = true;
+          }
+          newSubelements.push(...addedComponents[subelement.id])
+        }
+      });
+      //Update old list without reference change to prevent change mix of components when change detector fires and components are reattached.
+      this.subelements.length = 0;
+      this.subelements.push(...newSubelements);
+      //Update new list to show data imidietly.
+      this.subelements = [...newSubelements];
+      // this.processedSubelements = null;
+      // this.subelementsChange.emit(this.subelements);
+      // this.subelementsChange.emit(this.subelements);
+    }
+  }
+
 }

@@ -443,7 +443,7 @@ export class FhMLService {
               searchParent?: string,
               searchClosestLike?: string
             } => {
-              console.log(attr);
+              // console.log(attr);
               const res = {};
               const variables = attr.split(';');
               for (const variable of variables) {
@@ -752,8 +752,9 @@ export class FhmlPortalManager {
     }
 
     portal.parentElement.appendChild(sourceElement);
-    if (sourceContainer.getElementById(sourceId) && sourceContainer.getElementById(sourceId).blur) {
-      sourceContainer.getElementById(sourceId).blur();
+    const s = document.getElementById(sourceId);
+    if (s && s.blur) {
+      s.blur();
     }
     portal.style.display = 'none';
     portal.setAttribute('used', 'true');
@@ -775,7 +776,7 @@ export class FhmlPortalManager {
 
   private processVersion(version: number, args: { [key: string]: any }) {
     const f = this.VERSION_STORE[`${version}`];
-    console.log(version, args, f)
+    // console.log(version, args, f)
     if (f) {
       f(args)
     }
@@ -855,7 +856,7 @@ export class FhmlPortalManager {
             });
           }
           if (sourceElement) {
-            console.log(version, {sourceElement, portal, sourceId, properClasses});
+            // console.log(version, {sourceElement, portal, sourceId, properClasses});
             this.processVersion(version, {sourceElement, portal, sourceId, sourceContainer})
           } else {
             console.error(`There is no element (id: ${sourceId}) that can be portalled`);
