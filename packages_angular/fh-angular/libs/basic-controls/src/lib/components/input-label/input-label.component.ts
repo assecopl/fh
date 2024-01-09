@@ -17,6 +17,9 @@ export class InputLabelComponent extends FhngHTMLElementC implements OnInit {
   @Input()
   public labelSize: string = '40';
 
+  @Input()
+  public required = false;
+
   get isFixedSize(): boolean {
     return this.labelSize.includes('px');
   }

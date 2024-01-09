@@ -20,9 +20,10 @@
     [hintType]="hintType"
     [hintPlacement]="hintPlacement"
     [hintTitle]="hintTitle"
-    class=" label col-form-label"
+    class="label col-form-label"
   >
     <span [innerHTML]="labelHtml">{{label}}</span>
+    <span *ngIf="required" class="fas fa-star-of-life input-label__require"></span>
   </label>
   <div
     [ngStyle]="
@@ -58,6 +59,7 @@
     class="label col-form-label"
   >
     <span [innerHTML]="labelHtml">{{label}}</span>
+    <span *ngIf="required" class="fas fa-star-of-life input-label__require"></span>
   </label>
 </div>
 
@@ -74,6 +76,7 @@
     class="col-form-label align-items-end"
   >
     <span [innerHTML]="labelHtml">{{label}}</span>
+    <span *ngIf="required" class="fas fa-star-of-life input-label__require"></span>
   </label>
   <ng-container *ngTemplateOutlet="content"></ng-container>
   <label
@@ -89,6 +92,7 @@
     class="col-form-label align-items-end"
   >
     <span [innerHTML]="labelHtml">{{label}}</span>
+    <span *ngIf="required" class="fas fa-star-of-life input-label__require"></span>
   </label>
 </ng-container>
 
