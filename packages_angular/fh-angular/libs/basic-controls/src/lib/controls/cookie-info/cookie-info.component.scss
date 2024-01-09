@@ -1,0 +1,25 @@
+.gdpr-outer {
+  display: block;
+  position: fixed;
+  background: white;
+  padding: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+  width: 100%;
+  border-top: 0.5rem solid #4c8c4a;
+  padding-bottom: 1rem !important;
+  padding-top: 1rem !important;
+
+  .gdpr-inner {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .gdpr-inner .gdpr-text {
+    font-size: 1rem;
+  }
+
+}
+

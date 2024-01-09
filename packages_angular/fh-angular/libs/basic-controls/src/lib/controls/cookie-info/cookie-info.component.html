@@ -1,0 +1,14 @@
+<div class="gdpr-outer" *ngIf="showCookieInfo">
+  <div class="gdpr-inner align-items-center col-12">
+    <div class="row">
+      <div class="col-12 col-sm-8 col-md-9 col-lg-10 pb-2">
+        <span class="cookie-info-text">
+            <b>{{'fh.cookieInfo.warning' | i18n}}</b>
+          {{'fh.cookieInfo.message' | i18n}}
+        </span></div>
+      <div class="col-12 col-sm-4 col-md-3 col-lg-2 align-items-center d-flex">
+        <button class="btn btn-primary w-100" (click)="closeClick()"> {{'fh.cookieInfo.close' | i18n}}</button>
+      </div>
+    </div>
+  </div>
+</div>

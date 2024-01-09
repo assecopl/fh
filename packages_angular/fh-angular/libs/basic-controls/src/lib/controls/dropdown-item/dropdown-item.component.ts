@@ -14,9 +14,10 @@ import {
 import {FhngHTMLElementC} from '../../models/componentClasses/FhngHTMLElementC';
 import {BehaviorSubject, Observable, of} from "rxjs";
 import {AvailabilityEnum, FhngComponent, IDataAttributes} from "@fh-ng/forms-handler";
+import {BootstrapWidthEnum} from "../../models/enums/BootstrapWidthEnum";
 
 @Component({
-  selector: 'fh-dropdown-item',
+  selector: '[fh-dropdown-item]',
   templateUrl: './dropdown-item.component.html',
   styleUrls: ['./dropdown-item.component.scss'],
   providers: [
@@ -61,6 +62,9 @@ export class DropdownItemComponent extends FhngHTMLElementC implements OnInit {
   ) {
     super(injector, parentFhngComponent);
     this.selectedButton$ = this._selectedButton.asObservable();
+    this.width = "100%";
+    this.paddingLeft = "0px"
+    this.paddingRight = "0px"
   }
 
   override ngOnInit() {
