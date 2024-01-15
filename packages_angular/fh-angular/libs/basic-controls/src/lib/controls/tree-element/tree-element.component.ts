@@ -73,7 +73,6 @@ export class TreeElementComponent extends FhngHTMLElementC implements OnInit, Af
   children: any;
 
   @HostBinding('class.isLeaf')
-  @HostBinding('class.text-underline')
   @Input()
   expandableNode: boolean = false;
 
