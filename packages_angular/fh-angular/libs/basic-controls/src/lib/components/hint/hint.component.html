@@ -9,7 +9,7 @@
   </span>
 
   <button
-    class="btn hint-ico-help fa  ml-2 fh-tooltip"
+    class="btn hint-ico-help fa ml-2 fh-tooltip"
     *ngIf="['STATIC'].includes(hintType) && getHintTooltip()"
     container="body"
     [ngbTooltip]="getHintTooltip()"
@@ -19,7 +19,7 @@
   ></button>
 
   <button
-    class="btn hint-ico-help fa  ml-2 fh-tooltip"
+    class="btn hint-ico-help fa ml-2 fh-tooltip"
     *ngIf="getHintPopover() && hintType === 'STATIC_POPOVER'"
     container="body"
     [ngbPopover]="getHintPopover()"

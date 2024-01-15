@@ -21,6 +21,11 @@
        display="dynamic"
        placement="bottom-left bottom-right"
        [required]="required"
+       [hint]="hint"
+       [hintTrigger]="hintTrigger"
+       [hintType]="hintType"
+       [hintPlacement]="hintPlacement"
+       [hintTitle]="hintTitle"
   >
     <div fhng-input-group
          ngbDropdownAnchor
@@ -46,11 +51,6 @@
         [placeholder]="placeholder"
         [attr.aria-label]="ariaLabel"
         [required]="required"
-        [ngbTooltip]="getHintTooltip()"
-        [ngbPopover]="getHintPopover()"
-        [popoverTitle]="hintTitle"
-        [placement]="hintPlacement.toLowerCase()"
-        [triggers]="hintTrigger.toLowerCase()"
         [availabilityInput]="availability"
         [(ngModel)]="rawValue"
         (input)="onInputEvent($event)"
