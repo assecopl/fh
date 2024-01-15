@@ -43,6 +43,9 @@ export class SelectOneMenuComponent
   @Input()
   public keepRemovedValue: boolean;
 
+  @Input()
+  public emptyLabelText: string = '';
+
   constructor(
     public override injector: Injector,
     @Optional() @SkipSelf() parentFhngComponent: FhngComponent
@@ -63,11 +66,11 @@ export class SelectOneMenuComponent
     super.mapAttributes(data);
 
     this.rawOptions = data.rawOptions || this.rawOptions;
-    this.rawValue = data.rawValue || '';
+    this.rawValue = data.rawValue || this.rawValue;
     this.require = data.require || this.require;
     this.inputSize = data.inputSize || this.inputSize;
     this.selectedIndex = typeof data.selectedIndex !== 'undefined' ? data.selectedIndex : this.selectedIndex;
-    this.emptyValue = data.emptyValue || this.emptyLabel;
+    this.emptyValue = data.emptyValue || this.emptyValue;
     this.emptyLabel = data.emptyLabel || this.emptyLabel;
     this.keepRemovedValue = data.keepRemovedValue || this.keepRemovedValue;
   }
@@ -93,13 +96,27 @@ export class SelectOneMenuComponent
 
     if (!this.disabled) {
       this.rawValue = this.rawOptions.findIndex(option => option === event.target.value);
+      this.selectedIndex = this.rawValue;
     }
   };
 
-  public onSelectChangeEvent ($event: Event): void {
+  public onSelectChangeEvent($event: Event): void {
     $event.preventDefault();
 
     this.updateModel($event);
     this.onChangeEvent();
   }
+
+  emptyValueClickEvent() {
+    if (this.emptyValue) {
+      this.selectedIndex = -1;
+      this.rawValue = -1;
+      this.changesQueue.queueValueChange(this.rawValue);
+      if (this.onChange) {
+        this.fireEventWithLock('onChange', this.onChange);
+      }
+    }
+  }
+
+
 }

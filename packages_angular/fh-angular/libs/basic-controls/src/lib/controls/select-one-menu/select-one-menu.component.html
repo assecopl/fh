@@ -1,20 +1,21 @@
 <div fhng-input-label
-  [inputId]="id"
-  [label]="label"
-  [labelPosition]="labelPosition"
-  [labelSize]="labelSize"
-  [hint]="hint"
-  [hintTrigger]="hintTrigger"
-  [hintType]="hintType"
-  [hintPlacement]="hintPlacement"
-  [hintTitle]="hintTitle"
-  [required]="required"
+     [inputId]="id"
+     [label]="label"
+     [labelPosition]="labelPosition"
+     [labelSize]="labelSize"
+     [hint]="hint"
+     [hintTrigger]="hintTrigger"
+     [hintType]="hintType"
+     [hintPlacement]="hintPlacement"
+     [hintTitle]="hintTitle"
+     [required]="required"
 >
   <div fhng-input-group
-    [iconText]="iconText"
-    [icon]="icon"
-    [iconAlignment]="iconAlignment"
-    [required]="required"
+       [iconText]="iconText"
+       [icon]="emptyValue?'fa fa-times':icon"
+       [iconAlignment]="emptyValue?'AFTER':iconAlignment"
+       [required]="required"
+       (onClick)="emptyValueClickEvent()"
   >
 
     <select
@@ -25,9 +26,9 @@
       [style.height]="styles.height"
       (change)="onSelectChangeEvent($event)"
     >
-      <option value="" [selected]="selectedIndex === -1"> {{ emptyLabel? "":placeholder }}</option>
+      <option [class.d-none]="!emptyLabel" value="-1" [selected]="selectedIndex == -1">{{emptyLabelText}}</option>
       <ng-container *ngFor="let option of rawOptions; let i = index;">
-        <option *ngIf="option || emptyValue" [selected]="selectedIndex === i" [value]="option">
+        <option *ngIf="option" [selected]="selectedIndex === i" [value]="option">
           {{ resultFormatter(option) }}
         </option>
       </ng-container>
