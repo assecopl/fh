@@ -99,7 +99,9 @@ export class SelectOneMenuComponent
   public onSelectChangeEvent ($event: Event): void {
     $event.preventDefault();
 
-    this.updateModel($event);
-    this.onChangeEvent();
+    if (($event as Event & {target: {value: any}}).target.value) {
+      this.updateModel($event);
+      this.onChangeEvent();
+    }
   }
 }

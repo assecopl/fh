@@ -9,6 +9,7 @@
   [hintPlacement]="hintPlacement"
   [hintTitle]="hintTitle"
   [required]="required"
+  [availabilityHtmlElement]="availability"
 >
   <div fhng-input-group
     [iconText]="iconText"
@@ -25,7 +26,7 @@
       [style.height]="styles.height"
       (change)="onSelectChangeEvent($event)"
     >
-      <option value="" [selected]="selectedIndex === -1"> {{ emptyLabel? "":placeholder }}</option>
+      <option *ngIf="emptyValue || selectedIndex === -1" value="" [selected]="selectedIndex === -1"> {{ emptyLabel? "":placeholder }}</option>
       <ng-container *ngFor="let option of rawOptions; let i = index;">
         <option *ngIf="option || emptyValue" [selected]="selectedIndex === i" [value]="option">
           {{ resultFormatter(option) }}
