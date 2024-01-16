@@ -27,6 +27,7 @@ export class FhngInputWithListC extends FhngReactiveInputC {
   @Input()
   public emptyLabel: boolean = false;
 
+
   //Defines an attribute of a single value object to be used for display. If not set, converter will be used.
   @Input()
   public displayExpression: string = 'name';
