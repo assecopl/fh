@@ -1,5 +1,5 @@
 import {
-  Component,
+  Component, ElementRef,
   EventEmitter,
   forwardRef,
   Host,
@@ -90,6 +90,9 @@ export class InputTimestampComponent
    */
   public override icon: string = 'fa-calendar';
 
+  @ViewChild('focusElement')
+  private dateHtmlField: ElementRef = null;
+
   public get hasTime() {
     return !!this.format.match(/HH?|mm?/gm);
   }
@@ -140,13 +143,12 @@ export class InputTimestampComponent
   }
 
   public onChangeInputEvent($event: any): void {
-    // $event.preventDefault();
-    //
-    // //Check if date is new date is Valid or if input vale was deleted
-    // if (CustomNgbDatetimeService.isDateValid($event.target.value, this.customNgbDatetimeService.frontendFormat) || (!$event.target.value && this.value)) {
-    //   this.updateModel($event.target.value);
-    //   this.onChangeEvent();
-    // }
+    let data = moment($event.target.value, this.format);
+
+    if (!data.isValid()) {
+      this.dateHtmlField.nativeElement.value = '';
+      this.rawValue = '';
+    }
   }
 
   public onBlurCheckDate() {

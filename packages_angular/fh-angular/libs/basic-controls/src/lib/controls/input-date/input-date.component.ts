@@ -84,6 +84,9 @@ export class InputDateComponent extends FhngReactiveInputC implements OnInit {
 
   public override icon: string = 'fa-calendar';
 
+  @ViewChild('focusElement')
+  private dateHtmlField: ElementRef = null;
+
   constructor(
     public override injector: Injector,
     public calendar: NgbCalendar,
@@ -119,14 +122,13 @@ export class InputDateComponent extends FhngReactiveInputC implements OnInit {
     this.onChangeEvent();
   }
 
-  public onChangeInputEvent ($event: any): void {
-    // $event.preventDefault();
-    //
-    // //Check if date is new date is Valid or if input vale was deleted
-    // if (CustomNgbDatetimeService.isDateValid($event.target.value, this._customNgbDateService.frontendFormat) || (!$event.target.value && this.value)) {
-    //   this.updateModel($event.target.value);
-    //   this.onChangeEvent();
-    // }
+  public onChangeInputEvent($event: any): void {
+    let data = moment($event.target.value, this.format);
+
+    if (!data.isValid()) {
+      this.dateHtmlField.nativeElement.value = '';
+      this.rawValue = '';
+    }
   }
 
   public onBlurCheckDate() {
