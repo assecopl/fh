@@ -27,7 +27,7 @@
       [style.height]="styles.height"
       (change)="onSelectChangeEvent($event)"
     >
-      <option *ngIf="emptyValue || selectedIndex === -1" [class.d-none]="!emptyLabel" value="-1" [selected]="selectedIndex == -1">{{emptyLabelText}}</option>
+      <option [class.d-none]="!emptyLabel" value="-1" [selected]="selectedIndex == -1">{{emptyLabelText}}</option>
       <ng-container *ngFor="let option of rawOptions; let i = index;">
         <option *ngIf="option" [selected]="selectedIndex === i" [value]="option">
           {{ resultFormatter(option) }}
