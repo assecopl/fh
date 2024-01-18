@@ -22,12 +22,20 @@
     (onClick)="onClickButton(d)"
   >
     <input
-      #focusElement
-      #element
       #d="ngbDatepicker"
-      class="form-control InputDate fc"
       type="text"
       ngbDatepicker
+      style="display: block; width: 0; padding: 0; margin: 0; border: 0"
+      [disabled]="disabled"
+      [ngModel]="value"
+      (ngModelChange)="onDateSelect($event)"
+      (closed)="onClosed()"
+    />
+    <input
+      #focusElement
+      #element
+      class="form-control InputDate fc"
+      type="text"
       [attr.aria-label]="!label && ariaLabel ? ariaLabel : ( 'fh.input_date.label' | i18n)"
       [availabilityHtmlElement]="availability"
       [disabled]="disabled"
@@ -37,9 +45,10 @@
       [placeholder]="format"
       [name]="name"
       (ngModelChange)="onDateSelect($event)"
-      (closed)="onClosed()"
       (change)="onChangeInputEvent($event)"
       (blur)="onBlurCheckDate()"
+      (click)="onClickButton(d)"
+      [mask]="mask"
     />
   </div>
 </div>

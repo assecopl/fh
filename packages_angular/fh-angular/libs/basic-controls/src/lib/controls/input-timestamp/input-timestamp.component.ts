@@ -101,10 +101,20 @@ export class InputTimestampComponent
     return !!this.format.match(/ss?/gmi);
   }
 
+  public get dateValue (): string {
+    return this._customNgbDatetimeService.format(this._customNgbDatetimeService.parse(this.value));
+  }
+
+  public get mask (): string {
+    return this._customNgbDatetimeService.frontendFormat
+      .replaceAll(/Y/gi, '9')
+      .replaceAll(/[hmsMD]/gi, '0');
+  }
+
   constructor(
     public override injector: Injector,
     public calendar: NgbCalendar,
-    private customNgbDatetimeService: CustomNgbDatetimeService,
+    private _customNgbDatetimeService: CustomNgbDatetimeService,
     private _dateConfig: NgbDatepickerConfig,
     private _inputDateConfig: NgbInputDatepickerConfig,
     @Optional() @SkipSelf() parentFhngComponent: FhngComponent
@@ -146,8 +156,9 @@ export class InputTimestampComponent
     let data = moment($event.target.value, this.format);
 
     if (!data.isValid()) {
-      this.dateHtmlField.nativeElement.value = '';
       this.rawValue = '';
+    } else {
+      this.updateModel($event.target.value);
     }
   }
 
@@ -155,12 +166,14 @@ export class InputTimestampComponent
     if (this.rawValue != this.value) {
       this.value = this.rawValue;
     }
+
+    this.onChangeEvent();
   }
 
   public override updateModel(date: string) {
     this.valueChanged = true;
     // Here date should be always valid date or null;
-    if (CustomNgbDatetimeService.isDateValid(date, this.customNgbDatetimeService.backendFormat) || (!date)) {
+    if (CustomNgbDatetimeService.isDateValid(date, this._customNgbDatetimeService.backendFormat) || (!date)) {
       // }
       this.rawValue = date ? date : "";
       this.value = this.rawValue;
@@ -175,7 +188,7 @@ export class InputTimestampComponent
     this.value = data.rawValue;
 
     this.onChange = data.onChange || this.onChange;
-    this.customNgbDatetimeService.frontendFormat = this.format?.replace('RRRR', 'YYYY');
+    this._customNgbDatetimeService.frontendFormat = this.format?.replace('RRRR', 'YYYY');
   }
 
   public override extractChangedAttributes() {

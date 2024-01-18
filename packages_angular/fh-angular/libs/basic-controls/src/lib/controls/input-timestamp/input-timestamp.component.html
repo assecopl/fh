@@ -22,26 +22,33 @@
     (onClick)="onClickButton(d)"
   >
     <input
-      #focusElement
       #d="ngbDatepicker"
-      class="form-control fc InputTimestamp"
       type="text"
-      ngbTooltip="{{ hint }}"
       ngbDatepicker
+      style="display: block; width: 0; padding: 0; margin: 0; border: 0"
+      [disabled]="disabled"
+      [ngModel]="value"
+      [footerTemplate]="t"
+      (ngModelChange)="onDateSelect($event)"
+      (closed)="onClosed()"
+    />
+    <input
+      #focusElement
+      type="text"
+      class="form-control fc InputTimestamp"
       [attr.aria-label]="!label && ariaLabel ? ariaLabel : ('fh.timestamp.label' | i18n)"
       [availabilityHtmlElement]="availability"
       [disabled]="disabled"
       [id]="innerId"
-      [ngModel]="value"
       [ngStyle]="styles"
       [placeholder]="format"
       [name]="name"
-      [footerTemplate]="t"
-      (ngModelChange)="onDateSelect($event)"
-      (closed)="onClosed()"
+      [ngModel]="dateValue"
       (change)="onChangeInputEvent($event)"
       (blur)="onBlurCheckDate()"
-    />
+      (click)="onClickButton(d)"
+      [mask]="mask"
+    >
     <ng-template #t>
       <div class="text-center pl-1 ngb-footer" *ngIf="hasTime">
         <ngb-timepicker

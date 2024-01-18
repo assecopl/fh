@@ -87,6 +87,16 @@ export class InputDateComponent extends FhngReactiveInputC implements OnInit {
   @ViewChild('focusElement')
   private dateHtmlField: ElementRef = null;
 
+  public get dateValue (): string {
+    return this._customNgbDateService.format(this._customNgbDateService.parse(this.value));
+  }
+
+  public get mask (): string {
+    return this._customNgbDateService.frontendFormat
+      .replaceAll(/Y/gi, '9')
+      .replaceAll(/[hmsMD]/gi, '0');
+  }
+
   constructor(
     public override injector: Injector,
     public calendar: NgbCalendar,
@@ -126,8 +136,9 @@ export class InputDateComponent extends FhngReactiveInputC implements OnInit {
     let data = moment($event.target.value, this.format);
 
     if (!data.isValid()) {
-      this.dateHtmlField.nativeElement.value = '';
       this.rawValue = '';
+    } else {
+      this.updateModel($event.target.value);
     }
   }
 
@@ -135,6 +146,8 @@ export class InputDateComponent extends FhngReactiveInputC implements OnInit {
     if (this.rawValue != this.value) {
       this.value = this.rawValue;
     }
+
+    this.onChangeEvent();
   }
 
   public override updateModel(date: string) {
