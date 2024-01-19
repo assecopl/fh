@@ -157,8 +157,11 @@ export class InputTimestampComponent
 
     if (!data.isValid()) {
       this.rawValue = '';
+      this.value = '';
+      this.focusElement.nativeElement.value = '';
+      this.updateModel("");
     } else {
-      this.updateModel($event.target.value);
+      this.updateModel(this._customNgbDatetimeService.toBackendFormatOrClear($event.target.value));
     }
   }
 
@@ -166,19 +169,15 @@ export class InputTimestampComponent
     if (this.rawValue != this.value) {
       this.value = this.rawValue;
     }
-
     this.onChangeEvent();
   }
 
   public override updateModel(date: string) {
     this.valueChanged = true;
     // Here date should be always valid date or null;
-    if (CustomNgbDatetimeService.isDateValid(date, this._customNgbDatetimeService.backendFormat) || (!date)) {
-      // }
+    if (this._customNgbDatetimeService.isDateValid(date, this._customNgbDatetimeService.backendFormat) || (!date)) {
       this.rawValue = date ? date : "";
       this.value = this.rawValue;
-    } else {
-      this.rawValue = "";
     }
   };
 
@@ -186,6 +185,7 @@ export class InputTimestampComponent
     super.mapAttributes(data);
 
     this.value = data.rawValue;
+    this.rawValue = data.rawValue;
 
     this.onChange = data.onChange || this.onChange;
     this._customNgbDatetimeService.frontendFormat = this.format?.replace('RRRR', 'YYYY');

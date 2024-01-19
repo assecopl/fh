@@ -137,9 +137,13 @@ export class InputDateComponent extends FhngReactiveInputC implements OnInit {
 
     if (!data.isValid()) {
       this.rawValue = '';
+      this.value = '';
+      this.focusElement.nativeElement.value = '';
+      this.updateModel("");
     } else {
-      this.updateModel($event.target.value);
+      this.updateModel(this._customNgbDateService.toBackendFormatOrClear($event.target.value));
     }
+
   }
 
   public onBlurCheckDate() {
@@ -153,12 +157,13 @@ export class InputDateComponent extends FhngReactiveInputC implements OnInit {
   public override updateModel(date: string) {
     this.valueChanged = true;
     // Here date should be always valid date or null;
-    if (CustomNgbDatetimeService.isDateValid(date, this._customNgbDateService.backendFormat) || (!date)) {
+    if (this._customNgbDateService.isDateValid(date, this._customNgbDateService.backendFormat) || (!date)) {
       // }
       this.rawValue = date ? date : "";
       this.value = this.rawValue;
     } else {
       this.rawValue = "";
+      this
     }
   };
 

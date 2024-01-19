@@ -1,3 +1,6 @@
+RawValue: {{rawValue}}<br/>
+InternalValue: {{value}}<br/>
+DateValue: {{dateValue}}<br/>
 <div fhng-input-label
   [inputId]="id"
   [label]="label"
@@ -21,6 +24,7 @@
     [required]="required"
     (onClick)="onClickButton(d)"
   >
+
     <input
       #d="ngbDatepicker"
       type="text"
@@ -46,7 +50,7 @@
       [ngModel]="dateValue"
       (change)="onChangeInputEvent($event)"
       (blur)="onBlurCheckDate()"
-      (click)="onClickButton(d)"
+
       [mask]="mask"
     >
     <ng-template #t>
