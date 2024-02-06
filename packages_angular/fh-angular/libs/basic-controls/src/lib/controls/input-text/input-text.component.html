@@ -19,12 +19,10 @@
            [class.fhng-disabled]="disabled"
            [icon]="icon"
            [iconAlignment]="iconAlignment"
-           [height]="height"
       >
           <textarea [availabilityInput]="availability" (input)="onInputEvent($event)" (change)="onChangeEvent()"
                     #focusElement
                     [id]="id"
-                    [style.height]="styles.height"
                     [rows]="rowsCount"
                     [name]="name"
                     [disabled]="disabled"
@@ -35,6 +33,8 @@
                     [required]="required"
                     [ngbTooltip]="getHintTooltip()" [ngbPopover]="getHintPopover()" [popoverTitle]="hintTitle"
                     [placement]="hintPlacement.toLowerCase()" [triggers]="hintTrigger.toLowerCase()"
+                    [style.height]="height"
+                    [style.height]="styles.height"
                     class="fc inputText form-control {{setPresentationStyle()}} {{styleClasses}}"
           ></textarea>
       </div>
@@ -61,6 +61,7 @@
                     [attr.aria-label]="ariaLabel || label || ('fh.text.label' | i18n)"
                     [ngbTooltip]="getHintTooltip()" [ngbPopover]="getHintPopover()" [popoverTitle]="hintTitle"
                     [placement]="hintPlacement.toLowerCase()" [triggers]="hintTrigger.toLowerCase()"
+                    [style.height]="height"
                     class="fc inputText form-control {{setPresentationStyle()}} {{styleClasses}}"
           ></textarea>
       </div>

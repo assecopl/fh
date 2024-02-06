@@ -3,7 +3,6 @@ import {
   Component,
   ElementRef,
   forwardRef,
-  Host,
   Injector,
   Input,
   OnInit,
@@ -74,8 +73,6 @@ export class InputTextComponent extends FhngReactiveInputC implements OnInit, Af
   protected maskInsertMode: boolean;
   public input: any;
 
-
-
   @ViewChild('inputRef', {static: false}) inputRef: ElementRef = null;
 
   constructor(
@@ -92,6 +89,12 @@ export class InputTextComponent extends FhngReactiveInputC implements OnInit, Af
       this.inputType = InputTypeEnum.textarea;
     }
 
+    this.fixHeight();
+  }
+  public fixHeight () {
+    if (this.height && this.inputType === InputTypeEnum.textarea) {
+      this.hostStyle.height = null;
+    }
   }
 
   override ngOnChanges(changes: SimpleChanges) {
@@ -116,6 +119,7 @@ export class InputTextComponent extends FhngReactiveInputC implements OnInit, Af
 
   override mapAttributes(data: IDataAttributes | any) {
     super.mapAttributes(data);
+
     this.mask = data.mask
     this.rawValue = data.rawValue || null;
   }
