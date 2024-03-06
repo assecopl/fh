@@ -1,33 +1,65 @@
+<!--<ul-->
+<!--  [ngClass]="ulStyleClasses"-->
+<!--  availabilityHtmlElement-->
+<!--  class="border-bottom border-light d-flex justify-content-{{-->
+<!--    (horizontalAlign == 'RIGHT' ? 'END' : horizontalAlign) | lowercase-->
+<!--  }}"-->
+<!--&gt;-->
+<!--  <li-->
+<!--    *ngFor="let tab of subcomponents.toArray(); let i = index"-->
+<!--    [ngClass]="listStyleClasses"-->
+<!--    (click)="selectTab(tab)"-->
+<!--  >-->
+<!--    <ng-container *ngIf="tab.active">-->
+<!--      <a-->
+<!--        [attr.data-tabId]="getTabId(tab)"-->
+<!--        [attr.data-tab-index]="i + 1"-->
+<!--        [ngClass]="activeLinkStyleClasses"-->
+<!--      >{{ tab.label }}</a-->
+<!--      >-->
+<!--    </ng-container>-->
+<!--    <ng-container *ngIf="!tab.active">-->
+<!--      <a-->
+<!--        [attr.data-tabId]="getTabId(tab)"-->
+<!--        [attr.data-tab-index]="i + 1"-->
+<!--        class="nav-link"-->
+<!--      >{{ tab.label }}</a-->
+<!--      >-->
+<!--    </ng-container>-->
+<!--  </li>-->
+<!--</ul>-->
+<!--<div class="mt-3 mb-3">-->
+<!--  <ng-content></ng-content>-->
+<!--</div>-->
+
 <ul
-  [ngClass]="ulStyleClasses"
-  availabilityHtmlElement
-  class="border-bottom border-light d-flex justify-content-{{
-    (horizontalAlign == 'RIGHT' ? 'END' : horizontalAlign) | lowercase
-  }}"
+  class="nav nav-tabs nav-pills nav-wizard wizard-tabs"
+  [availabilityHtmlElement]="availability"
 >
-  <li
-    *ngFor="let tab of subcomponents.toArray(); let i = index"
-    [ngClass]="listStyleClasses"
-    (click)="selectTab(tab)"
-  >
-    <ng-container *ngIf="tab.active">
+  <ng-container *ngFor="let tab of childFhngComponents">
+    <li class="nav-item" [class.d-none]="tab.availability != 3 && tab.availability != 4">
       <a
-        [attr.data-tabId]="getTabId(tab)"
-        [attr.data-tab-index]="i + 1"
-        [ngClass]="activeLinkStyleClasses"
-      >{{ tab.label }}</a
-      >
-    </ng-container>
-    <ng-container *ngIf="!tab.active">
-      <a
-        [attr.data-tabId]="getTabId(tab)"
-        [attr.data-tab-index]="i + 1"
+        *ngIf="tab.availability == 3 || tab.availability == 4"
+        tabindex="0"
         class="nav-link"
-      >{{ tab.label }}</a
-      >
-    </ng-container>
-  </li>
+        data-toggle="tab"
+        role="tab"
+        [attr.aria-selected]="tab.selected"
+        [attr.data-tab-id]="tab.id"
+        [ngClass]="{active: tab.selected}"
+        (keydown.enter)="selectTab(tab, $event)"
+        (click)="selectTab(tab, $event)"
+        [innerHtml]="tab.label | fhml"></a>
+    </li>
+  </ng-container>
 </ul>
-<div class="mt-3 mb-3">
-  <ng-content></ng-content>
+
+<div class="tab-content row ">
+  <ng-container *ngFor="let tab of subelements;let i = index;">
+    <fhng-tab [data]="tab"/>
+  </ng-container>
 </div>
+
+<ng-container *ngIf="configuration.debug">
+  <fh-component-debugger/>
+</ng-container>

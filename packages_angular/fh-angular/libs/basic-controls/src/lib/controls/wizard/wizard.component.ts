@@ -4,6 +4,7 @@ import {
   ContentChildren,
   forwardRef,
   Host,
+  HostBinding,
   Injector,
   Input,
   OnInit,
@@ -16,9 +17,10 @@ import {GroupingComponentC} from '../../models/componentClasses/GroupingComponen
 import {TabComponent} from '../tab/tab.component';
 import {BootstrapWidthEnum} from '../../models/enums/BootstrapWidthEnum';
 import {AvailabilityEnum, FhngComponent} from "@fh-ng/forms-handler";
+import {TabContainerComponent} from "@fh-ng/basic-controls";
 
 @Component({
-  selector: 'fhng-wizard',
+  selector: 'fh-wizard',
   templateUrl: './wizard.component.html',
   styleUrls: ['./wizard.component.scss'],
   providers: [
@@ -30,85 +32,44 @@ import {AvailabilityEnum, FhngComponent} from "@fh-ng/forms-handler";
   ],
 })
 export class WizardComponent
-  extends GroupingComponentC<TabComponent>
+  extends TabContainerComponent
   implements OnInit, AfterContentInit {
-  @Input() width: string = BootstrapWidthEnum.MD12;
-  @Input() activeTabLabel: string;
-  @Input() activeTabIndex: any;
 
-  boundActiveTabIndex: number;
+  @Input()
+  public override width: string = BootstrapWidthEnum.MD12;
 
-  @ContentChildren(TabComponent) public subcomponents: QueryList<TabComponent> =
-    new QueryList<TabComponent>();
-  public subcomponentsArray: TabComponent[] = [];
+  public ulStyleClasses: string[] = ['nav', 'nav-tabs', 'wizard-tabs'];
 
-  public ulStyleClasses: String[] = ['nav', 'nav-tabs', 'wizard-tabs'];
-  public listStyleClasses: String[] = ['nav-item'];
-  public activeLinkStyleClasses: String[] = ['nav-link', 'active'];
+  public listStyleClasses: string[] = ['nav-item'];
+
+  public activeLinkStyleClasses: string[] = ['nav-link', 'active'];
+
+  @HostBinding('class.wizard')
+  public wizardClass: boolean = true;
 
   constructor(
-    public injector: Injector,
+    public override injector: Injector,
     @Optional() @SkipSelf() parentFhngComponent: FhngComponent
   ) {
     super(injector, parentFhngComponent);
     this.horizontalAlign = 'CENTER';
   }
 
-  public updateSubcomponent: (
-    subcomponent: TabComponent,
-    index: number
-  ) => null;
-
-  public getSubcomponentInstance(): new (...args: any[]) => TabComponent {
-    return TabComponent;
-  }
-
-  ngOnInit() {
+  public override ngOnInit() {
     super.ngOnInit();
   }
 
-  ngAfterContentInit(): void {
-    this.subcomponentsArray = this.subcomponents.toArray();
+  public override ngOnChanges(changes: SimpleChanges) {
+    super.ngOnChanges(changes);
+  }
+
+  public override ngAfterContentInit(): void {
+    // this.subcomponentsArray = this.subcomponents.toArray();
     this.activateDefaultTab();
   }
 
-  activateDefaultTab(): void {
-    if (this.subcomponents.length > 0) {
-      if (this.activeTabLabel) {
-        this.subcomponents.forEach((tab) => {
-          if (tab.label === this.activeTabLabel) {
-            tab.active = true;
-            this.boundActiveTabIndex = this.subcomponents
-              .toArray()
-              .indexOf(tab);
-          }
-        });
-      } else if (this.activeTabIndex) {
-        this.subcomponents.toArray()[this.activeTabIndex].active = true;
-        this.boundActiveTabIndex = this.activeTabIndex;
-      } else {
-        this.subcomponents.toArray()[0].active = true; // activate first Tab by default if none was selected by user
-        this.boundActiveTabIndex = 0;
-      }
-    }
-  }
-
-  getTabId(tab: TabComponent): string {
+  public getTabId(tab: TabComponent): string {
     return tab.tabId;
   }
 
-  selectTab(tab: TabComponent): void {
-    if (this.availabilityDirective._availability != AvailabilityEnum.EDIT) {
-      return;
-    }
-    this.subcomponents.forEach((element) => {
-      element.active = false;
-    });
-    tab.active = true;
-    this.boundActiveTabIndex = this.subcomponents.toArray().indexOf(tab);
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    super.ngOnChanges(changes);
-  }
 }
