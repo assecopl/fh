@@ -59,6 +59,7 @@ import { FileUploadAccessorComponent } from './components/file-upload-accessor/f
 import { DictionaryLookupComponent } from './controls/dictionary-combo/dictionary-lookup.component';
 import { ButtonGroupComponent } from './controls/button-group/button-group.component';
 import { HintComponent } from './components/hint/hint.component';
+import { WizardComponent} from "./controls/wizard/wizard.component";
 import { ComboPL } from './controls/combo/i18n/combo.pl';
 import { UploadPL } from './controls/file-upload/i18n/upload.pl';
 import { ComboEN } from './controls/combo/i18n/combo.en';
@@ -148,7 +149,8 @@ const components = [
   DictionaryLookupComponent,
   ButtonGroupComponent,
   HintComponent,
-  CookieInfoComponent
+  CookieInfoComponent,
+  WizardComponent
 ]
 
 
@@ -266,6 +268,7 @@ export class FhNgBasicControlsModule extends FhNgModule {
     componentManager.registerComponent(XMLViewerFhDPComponent);
     componentManager.registerComponent(FileUploadComponent);
     componentManager.registerComponent(ButtonGroupComponent);
+    componentManager.registerComponent(WizardComponent)
 
     //FHDP Specific
     componentManager?.registerComponentWithName("InputTextFhDP", InputTextComponent);
