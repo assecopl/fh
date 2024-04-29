@@ -7,7 +7,7 @@ import {FhngComponent, IDataAttributes} from "@fh-ng/forms-handler";
 @Component({
     selector: '[fhng-xml-view]',
     templateUrl: './xml-viewer.component.html',
-    styleUrls: ['./xml-viewer.component.sass'],
+    styleUrls: ['./xml-viewer.component.scss'],
     providers: [
         {provide: FhngComponent, useExisting: forwardRef(() => XMLViewerFhDPComponent)},
     ]

@@ -16,6 +16,7 @@ class XMLViewerFhDP extends HTMLFormComponent {
     create() {
 
         let mainElement = document.createElement('div');
+        mainElement.classList.add('xml-viewer');
         mainElement = this.styleMainElement(mainElement);
         mainElement.innerHTML = this.content;
 
