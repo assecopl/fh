@@ -20,7 +20,7 @@
     <parent>
         <artifactId>fhbr-bom</artifactId>
         <groupId>pl.fhframework.fhbr</groupId>
-        <version>4.10.6-SNAPSHOT</version>
+        <version>4.10.7</version>
         <relativePath>../fhbr-bom/pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
