@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package pl.fhframework.dp.transport.dto.commons;
 
 
@@ -18,7 +13,7 @@ import java.util.List;
  * @author ZbiTet
  */
 @Getter @Setter
-public class BaseDtoQuery implements Serializable{
+public class BaseDtoQuery implements Serializable {
 
     private String textSearch;
     private boolean wholeWordsOnly = false;
@@ -32,5 +27,8 @@ public class BaseDtoQuery implements Serializable{
 
     //Obiekt do konstrukcji zapytania na podstawie szablonu
     private List<SearchTemplateForQuery> searchTemplateForQuery;
+
+    private String includedFields;
+    private String excludedFields;
 
 }

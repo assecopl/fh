@@ -105,7 +105,7 @@ class ImageGrid extends HTMLFormComponent {
                 }
 
                 this.updateModel();
-                this.fireEvent('onChange', this.onChange, event);
+                this.fireEvent('onChange', this.onChange);
             }.bind(this));
 
             this.grid.appendChild(wrapper);

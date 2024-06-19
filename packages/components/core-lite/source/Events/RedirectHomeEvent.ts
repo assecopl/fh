@@ -20,7 +20,7 @@ class RedirectHomeEvent extends BaseEvent {
     public fire() {
         this.fh.changeHash('#');
         this.socketHandler.activeConnector.close();
-        window.location.reload(false);
+        window.location.reload();
     }
 }
 

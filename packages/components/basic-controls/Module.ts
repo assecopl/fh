@@ -70,6 +70,9 @@ import {Anchor} from "./source/controls/Anchor";
 import {DropdownDivider} from "./source/controls/Dropdown/DropdownDivider";
 import {EmbedPage} from "./source/controls/EmbedPage";
 import {PanelGroupWrapper} from "./source/controls/PanelGroupWrapper";
+import {HighContrastButtons} from "./source/controls/HighContrastButtons";
+import {FontSizeButtons} from "./source/controls/FontSizeButtons";
+import {ImagesSwitchButtons} from './source/controls/ImagesSwitchButtons';
 
 class BasicControls extends FhModule {
     protected registerComponents() {
@@ -487,7 +490,26 @@ class BasicControls extends FhModule {
                     return new EmbedPage(componentObj, parent);
                 };
             });
+        FhContainer.bind<(componentObj: any, parent: any) => HighContrastButtons>("HighContrastButtons")
+            .toFactory<HighContrastButtons>(() => {
+                return (componentObj: any, parent: any) => {
+                    return new HighContrastButtons(componentObj, parent);
+                };
+            });
 
+        FhContainer.bind<(componentObj: any, parent: any) => FontSizeButtons>("FontSizeButtons")
+            .toFactory<FontSizeButtons>(() => {
+                return (componentObj: any, parent: any) => {
+                    return new FontSizeButtons(componentObj, parent);
+                };
+            });
+
+        FhContainer.bind<(componentObj: any, parent: any) => ImagesSwitchButtons>("ImagesSwitchButtons")
+            .toFactory<ImagesSwitchButtons>(() => {
+                return (componentObj: any, parent: any) => {
+                    return new ImagesSwitchButtons(componentObj, parent);
+                };
+            });
     }
 }
 

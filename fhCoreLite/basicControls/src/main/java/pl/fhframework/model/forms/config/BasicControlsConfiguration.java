@@ -1,8 +1,11 @@
 package pl.fhframework.model.forms.config;
 
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
+import pl.fhframework.core.i18n.MessageService;
 import pl.fhframework.model.forms.attribute.HintType;
 
 import javax.annotation.PostConstruct;
@@ -26,6 +29,22 @@ public class BasicControlsConfiguration {
     @Value("${fh.web.formElement.hintTpe:STANDARD}")
     @Getter
     private HintType formElementHintType;
+
+    @Value("${fh.web.secure.caprcha.sitekey:null}")
+    @Getter
+    private String captchaSiteKey;
+
+    @Value("${fh.web.secure.caprcha.serverkey:null}")
+    @Getter
+    private String captchaServerKey;
+
+    @Autowired
+    @Getter
+    private RestTemplate restTemplate;
+
+    @Autowired
+    @Getter
+    private MessageService messageService;
 
     @PostConstruct
     void init () {

@@ -36,3 +36,5 @@ yarn-error.log*
 **/rebel.xml
 **/.project
 **/.settings
+**/webpack_size.txt
+**/webpack_stats.json

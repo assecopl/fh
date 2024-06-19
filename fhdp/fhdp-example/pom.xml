@@ -5,7 +5,7 @@
     <parent>
         <groupId>pl.fhframework</groupId>
         <artifactId>fh-boot-bom</artifactId>
-        <version>4.10.5</version>
+        <version>4.10.7</version>
         <relativePath>../../bom-project-lite/fh-boot-bom</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -13,7 +13,7 @@
     <artifactId>fhdp-example</artifactId>
 
     <properties>
-        <fh.version>4.10.5</fh.version>
+        <fh.version>4.10.6-SNAPSHOT</fh.version>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
@@ -31,14 +31,19 @@
     </dependencyManagement>
     <dependencies>
         <dependency>
+            <groupId>pl.fhframework</groupId>
+            <artifactId>fh-docs</artifactId>
+            <version>${fh.version}</version>
+        </dependency>
+        <dependency>
             <groupId>pl.fhframework.dp</groupId>
             <artifactId>fhdp-commons-fh-lite</artifactId>
-            <version>${project.version}</version>
+            <version>${fh.version}</version>
         </dependency>
         <dependency>
             <groupId>pl.fhframework.dp</groupId>
             <artifactId>fhdp-components</artifactId>
-            <version>${project.version}</version>
+            <version>${fh.version}</version>
         </dependency>
         <dependency>
             <groupId>pl.fhframework</groupId>
@@ -122,8 +127,8 @@
                             <goal>install-node-and-yarn</goal>
                         </goals>
                         <configuration>
-                            <nodeVersion>v12.22.0</nodeVersion>
-                            <yarnVersion>v1.22.10</yarnVersion>
+                            <nodeVersion>v18.16.0</nodeVersion>
+                            <yarnVersion>v1.22.19</yarnVersion>
                         </configuration>
                     </execution>
                     <execution>
@@ -190,7 +195,7 @@
                             <goal>yarn</goal>
                         </goals>
                         <configuration>
-                            <arguments>run build --env.testReg=tak --env.envMode=${NODE_ENV}</arguments>
+                            <arguments>run build --env envMode=${NODE_ENV}</arguments>
                         </configuration>
                     </execution>
                 </executions>

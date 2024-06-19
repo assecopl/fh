@@ -4,11 +4,12 @@ import {TableOptimized} from "./Optimized/TableOptimized";
 
 class TableRow extends HTMLFormComponent {
     protected readonly mainId: string;
-    public readonly parent: TableOptimized;
     protected isEmpty: any;
     protected onRowClickEvent: () => void = null;
 
     public isHighlighted: boolean = false;
+
+    public checkbox = null;
 
     constructor(componentObj: any, parent: Table) {
         super(componentObj, parent);
@@ -96,6 +97,10 @@ class TableRow extends HTMLFormComponent {
         if (this.parent["selectionCheckboxes"]) {
             this.component.querySelector('input[type="checkbox"]').checked = false;
         }
+    }
+
+    public get parent(): TableOptimized {
+        return <TableOptimized>this._parent;
     }
 }
 

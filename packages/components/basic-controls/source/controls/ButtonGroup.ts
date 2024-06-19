@@ -94,7 +94,7 @@ class ButtonGroup extends HTMLFormComponent {
                 }
                 this.changesQueue.queueValueChange(this.activeButton);
                 if (!component.onClick) {
-                    this.fireEvent('onButtonChange', this.onButtonChange, event);
+                    this.fireEvent('onButtonChange', this.onButtonChange);
                 }
             }.bind(this));
 

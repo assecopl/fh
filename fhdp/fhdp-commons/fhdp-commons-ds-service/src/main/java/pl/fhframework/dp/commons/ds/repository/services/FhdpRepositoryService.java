@@ -573,6 +573,11 @@ public class FhdpRepositoryService implements IRepositoryService {
 
 	@Override
 	public GetDocumentVersionResponse getDocumentVersion(GetDocumentVersionRequest request) {
+
+		if(request.getDbId() != null) {
+			return getDocumentVersionByDbId(request.getDbId());
+		}
+
 		GetDocumentVersionResponse response = new GetDocumentVersionResponse();
 		Result result = new Result();
 		result.setResultCode(-99);
@@ -605,7 +610,31 @@ public class FhdpRepositoryService implements IRepositoryService {
 		
 		return response;
 	}
-	
+
+	private GetDocumentVersionResponse getDocumentVersionByDbId(Long dbId) {
+		GetDocumentVersionResponse response = new GetDocumentVersionResponse();
+		Result result = new Result();
+		result.setResultCode(-99);
+		result.setResultDescription("Unknown Error");
+		response.setResult(result);
+		try {
+			RepositoryDocument rd = getDocumentDAO().getByDbId(dbId);
+			if(rd != null) {
+				response.setVersion(rd.getVersion());
+				result.setResultCode(1);
+				result.setResultDescription("OK");
+			} else {
+				result.setResultCode(-2);
+				result.setResultDescription("There is no document with ID: " + dbId);
+			}
+		} catch (Exception e) {
+			logException(e);
+			result.setResultCode(-99);
+			result.setResultDescription(e.getMessage());
+		}
+		return response;
+	}
+
 	protected String getMD5(byte[] content) {
 		return DigestUtils.md5Hex(content);
 	}

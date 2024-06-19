@@ -31,7 +31,13 @@ class Column extends HTMLFormComponent {
             column.style.width = this.width[0].includes("px")? this.width[0]: this.width[0]  + '%';
         }
         // HTMLComponent recognized and updated label
-        this.labelElement = document.createElement('span');
+        if (this.isSortable) {
+            this.labelElement = document.createElement('button');
+            this.labelElement.classList.add("btn");
+            this.labelElement.classList.add("btn-th");
+        } else {
+            this.labelElement = document.createElement('span');
+        }
         column.appendChild(this.labelElement);
         this.labelElement.innerHTML = this.fhml.resolveValueTextOrEmpty(this.componentObj.label);
 
@@ -192,15 +198,18 @@ class Column extends HTMLFormComponent {
         if (icon.classList.contains('fa-sort')) {
             icon.classList.remove('fa-sort');
             icon.classList.add('fa-sort-amount-down');
+            this.component.setAttribute("aria-sort", "ascending")
             sortDirection = 'ASC';
         } else if (icon.classList.contains('fa-sort-amount-up')) {
             icon.classList.remove('fa-sort-amount-up');
             icon.classList.add('fa-sort-amount-down');
+            this.component.setAttribute("aria-sort", "ascending")
             sortDirection = 'ASC';
         } else if (icon.classList.contains('fa-sort-amount-down')) {
             icon.classList.remove('fa-sort-amount-down');
             icon.classList.add('fa-sort-amount-up');
             sortDirection = 'DESC';
+            this.component.setAttribute("aria-sort", "descending")
         }
 
         // @ts-ignore

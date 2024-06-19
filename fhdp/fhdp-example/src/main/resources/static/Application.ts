@@ -20,6 +20,7 @@ $(function () {
         registerChartsControls: true,
         registerFHDPControls: true,
         extensionsConfig: {
+
             extendFHML: true,
             enableErrorBelowField: false,
             enableFHMLinTooltips: false,

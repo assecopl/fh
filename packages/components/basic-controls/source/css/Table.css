@@ -152,6 +152,21 @@ thead.tableFloatingHeaderOriginal > tr th {
     text-align: left;
 }
 
+.fc.table thead .table-heading th.sortable {
+    position: relative;
+    padding: 0;
+}
+
+.fc.table thead .table-heading th.sortable .btn-th {
+    position: relative;
+    padding: 0.75rem;
+    background: transparent;
+    display: inline-block;
+    width: 100%;
+    text-align: inherit;
+    border: 0;
+}
+
 .fc-table-disabled td * {
     pointer-events: none;
 }
@@ -206,3 +221,5 @@ thead.tableFloatingHeaderOriginal > tr th {
     position: relative;
     z-index: 1001;
 }
+
+

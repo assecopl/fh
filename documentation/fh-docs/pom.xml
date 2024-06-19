@@ -1,0 +1,144 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>documentation</artifactId>
+        <groupId>pl.fhframework</groupId>
+        <version>4.10.7</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>fh-docs</artifactId>
+    <packaging>jar</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>pl.fhframework</groupId>
+            <artifactId>basicControls</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>pl.fhframework.persistence</groupId>
+            <artifactId>fhPersistenceLite</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>pl.fhframework.core.security.provider</groupId>
+            <artifactId>securityDataProvider</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>pl.fhframework</groupId>
+            <artifactId>fh-compiler</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <phase>process-resources</phase>
+                        <configuration>
+                            <tasks>
+                                <copy todir="${project.build.directory}/dynamics" preservelastmodified="true">
+                                    <fileset dir="src/main/java">
+                                        <include name="**/*.frm"/>
+                                        <include name="**/*.duc"/>
+                                        <include name="**/*.dmo"/>
+                                        <include name="**/*.dru"/>
+                                        <include name="menu.xml"/>
+                                        <include name="module.xml"/>
+                                    </fileset>
+                                </copy>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.3.2</version>
+                <executions>
+                    <execution>
+                        <id>generate-java-forms</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>pl.fhframework.compiler.core.dynamic.MavenDynamicClassCompiler</mainClass>
+                    <arguments>
+                        <argument>--sources=${project.build.directory}/dynamics</argument>
+                        <argument>--output=${project.build.directory}/generated-form-sources</argument>
+                        <argument>--classes=${project.build.outputDirectory}</argument>
+                        <argument>--failOnError=true</argument>
+                        <argument>--verbose=true</argument>
+                        <argument>--coreLiteTarget=true</argument>
+                    </arguments>
+                    <sourceRoot>${project.build.directory}/generated-form-sources</sourceRoot>
+                    <includePluginDependencies>true</includePluginDependencies>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>pl.fhframework</groupId>
+                        <artifactId>fh-compiler</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>pl.fhframework.dp</groupId>
+                        <artifactId>fhdp-components</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.build.directory}/generated-form-sources</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+    </build>
+</project>

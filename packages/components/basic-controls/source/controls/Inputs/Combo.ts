@@ -99,7 +99,7 @@ class Combo extends InputText {
             }
             this.updateModel();
             if (this.onChange && (this.rawValue !== this.oldValue || this.multiselectRawValue !== this.multiselectOldValue)) {
-                this.fireEventWithLock('onChange', this.onChange, event);
+                this.fireEventWithLock('onChange', this.onChange);
                 this.changeToFired = false
             }
         }.bind(this));
@@ -132,7 +132,7 @@ class Combo extends InputText {
                 }
                 this.updateModel();
                 if (this.onChange && (this.rawValue !== this.oldValue || this.multiselectRawValue !== this.multiselectOldValue || this.changeToFired)) {
-                    this.fireEventWithLock('onChange', this.onChange, event);
+                    this.fireEventWithLock('onChange', this.onChange);
                     this.changeToFired = false;
                 }
                 if (shouldBlur) {
@@ -141,10 +141,10 @@ class Combo extends InputText {
                 }
                 this.input.focus();
                 // @ts-ignore
-                $(this.input).trigger({
-                    type: 'keydown',
-                    which: 9
-                });
+                // $(this.input).trigger({
+                //     type: 'keydown',
+                //     which: 9
+                // });
             }else if (keyCode == 27) {
 
             } else {
@@ -269,7 +269,7 @@ class Combo extends InputText {
             $(input).on('blur', function (event) {
                 if (this.accessibility === 'EDIT' && !this.blurEventWithoutChange && (this.changeToFired || this.rawValue !== this.oldValue || this.multiselectRawValue !== this.multiselectOldValue || this.forceSendSelectedIndex)) {
                     this.blurEvent = true;
-                    this.fireEventWithLock('onChange', this.onChange, event.originalEvent);
+                    this.fireEventWithLock('onChange', this.onChange);
                     this.changeToFired = false;
                 }
                 this.blurEventWithoutChange = false;
@@ -461,6 +461,12 @@ class Combo extends InputText {
             let icon = document.createElement('i');
             icon.classList.add('fa');
             icon.classList.add('fa-times');
+            button.ariaLabel = this.i18n.__("fh.clear.input");
+            let sronly = document.createElement('span');
+            sronly.classList.add('sr-only');
+            sronly.innerText = this.i18n.__("fh.clear.input")
+
+            button.appendChild(sronly);
 
             button.addEventListener('click', function (event) {
                 if (this.accessibility === 'EDIT') {
@@ -479,14 +485,14 @@ class Combo extends InputText {
                     }
                     this.updateModel();
                     if (this.onChange && (this.rawValue !== this.oldValue || this.multiselectRawValue !== this.multiselectOldValue)) {
-                        this.fireEventWithLock('onChange', this.onChange, event);
+                        this.fireEventWithLock('onChange', this.onChange);
                         this.changeToFired = false
                     }
                     if (this.onEmptyValue) {
                         if (this._formId === 'FormPreview') {
                             this.fireEvent('onEmptyValue', this.onEmptyValue);
                         } else {
-                            this.fireEventWithLock('onEmptyValue', this.onEmptyValue, event);
+                            this.fireEventWithLock('onEmptyValue', this.onEmptyValue);
                         }
                     }
                 }
@@ -665,7 +671,7 @@ class Combo extends InputText {
 
                     this.updateModel();
                     if (this.onChange && (this.rawValue !== this.oldValue || this.multiselectRawValue !== this.multiselectOldValue)) {
-                        this.fireEventWithLock('onChange', this.onChange, event);
+                        this.fireEventWithLock('onChange', this.onChange);
                         this.changeToFired = false
                     }
                     if (shouldBlur) {
@@ -773,9 +779,15 @@ class Combo extends InputText {
 
         if (value.length > 0 && tagslist.indexOf(value) == -1) {
             if (options.noCheck || this.freeTyping || this.containsValue(value)) {
+                let b = $('<button>', {class: 'tag-remove', title: this.i18n.__("fh.delete") + " " + value});
+                let sronly = document.createElement('span');
+
+                b.click(() => this.removeTag(encodeURI(value), {}))
+
+
                 $('<span>', {class: 'tag btn btn-outline-secondary'}).append(
                     $('<span>', {class: 'tag-text'}).text(value),
-                    $('<button>', {class: 'tag-remove'}).click(() => this.removeTag(encodeURI(value), {}))
+                    b
                 ).insertBefore('#' + id);
 
                 tagslist.push(value);

@@ -5,6 +5,7 @@ import {FH} from "../Socket/FH";
 import {Util} from "../Util";
 import {Form} from "./Form";
 import {FhContainer} from "../FhContainer";
+import {WCAGUtil} from "../WCAGUtil";
 
 let { lazyInject } = getDecorators(FhContainer);
 
@@ -18,6 +19,9 @@ abstract class FormComponent {
     @lazyInject("Util")
     protected util: Util;
 
+    @lazyInject("WCAGUtil")
+    protected wcagUtil: WCAGUtil;
+
     @lazyInject("FormComponentChangesQueue")
     protected changesQueue: FormComponentChangesQueue;
 
@@ -25,8 +29,8 @@ abstract class FormComponent {
 
     private _id: string;
     protected _formId: string;
-    private _parent: FormComponent = null;
-    private _componentObj: any;
+    protected _parent: FormComponent = null;
+    protected _componentObj: any;
 
     protected components: FormComponent[];
     protected nonVisualComponents: FormComponent[];
@@ -138,19 +142,19 @@ abstract class FormComponent {
 
     /* Fire event to backend */
 
-    public fireEvent(eventType, actionName) {
-        this.fireEventImpl(eventType, actionName, false);
+    public fireEvent(eventType, actionName, params = undefined) {
+        this.fireEventImpl(eventType, actionName, false, params);
     };
 
     /* Fire event to backend and lock application */
 
-    protected fireEventWithLock(eventType, actionName) {
-        this.fireEventImpl(eventType, actionName, true);
+    protected fireEventWithLock(eventType, actionName, params = undefined) {
+        this.fireEventImpl(eventType, actionName, true, params);
     };
 
     /* Fire event to backend */
 
-    protected fireEventImpl(eventType, actionName, doLock) {
+    protected fireEventImpl(eventType, actionName, doLock, params = undefined) {
         if (this.destroyed) {
             return;
         }
@@ -167,7 +171,7 @@ abstract class FormComponent {
             deferedEvent.deferred.resolve();
         }
 
-        var success = this.formsManager.fireEvent(eventType, actionName, this.formId, this.id, deferedEvent, doLock);
+        var success = this.formsManager.fireEvent(eventType, actionName, this.formId, this.id, deferedEvent, doLock, params);
         if (!success) {
             this.formsManager.eventQueue.pop();
         }
@@ -389,7 +393,7 @@ abstract class FormComponent {
      * Returns form that component is display on
      * @returns {any}
      */
-    private getForm() : Form {
+    protected getForm(): Form {
         let form: any = this;
         while (form.parent != null) {
             form = form.parent;
@@ -404,6 +408,15 @@ abstract class FormComponent {
 
     protected getFormType(): string {
         return this.getForm().formType;
+    }
+
+    protected getFormFocusTrapElement(): HTMLElement | null {
+        const form = this.getForm();
+        return form.focusTrap ? form.htmlElement : null;
+    }
+
+    protected isFormFocusTrap(): boolean {
+        return this.getForm().blockFocusForModal != null;
     }
 
     protected isFormActive(): boolean {

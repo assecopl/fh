@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>fhFramework</artifactId>
-	<version>4.10.5</version>
+	<version>4.10.7</version>
 	<packaging>pom</packaging>
 	
 	<name>FH</name>
@@ -13,7 +13,7 @@
 	<parent>
 		<groupId>pl.fhframework</groupId>
 		<artifactId>fh-compile-bom</artifactId>
-		<version>4.10.5</version>
+        <version>4.10.7</version>
 		<relativePath>./bom-project-lite/fh-compile-bom</relativePath>
 	</parent>
 
@@ -31,6 +31,7 @@
         <module>example</module>
         <module>fh-compiler</module>
         <module>fhbr</module>
+		<module>documentation</module>
     </modules>
 	
 	<licenses>
@@ -136,7 +137,7 @@
 					<plugin>
 						<groupId>org.sonatype.plugins</groupId>
 						<artifactId>nexus-staging-maven-plugin</artifactId>
-						<version>1.6.7</version>
+						<version>1.6.14</version>
 						<extensions>true</extensions>
 						<configuration>
 							<serverId>ossrh</serverId>

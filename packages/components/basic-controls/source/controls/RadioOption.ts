@@ -30,7 +30,7 @@ class RadioOption extends HTMLFormComponent {
         }.bind(this));
 
         input.addEventListener('click', function (event) {
-            this.fireEventWithLock('onChange', this.onChange, event);
+            this.fireEventWithLock('onChange', this.onChange);
         }.bind(this));
 
 
@@ -47,8 +47,7 @@ class RadioOption extends HTMLFormComponent {
         this.addStyles();
         this.display();
 
-        this.focusableComponent = this.htmlElement;
-        this.htmlElement.tabIndex = 0;
+        this.focusableComponent = this.input;
         this.htmlElement.insertBefore(input, this.htmlElement.firstChild);
     }
 

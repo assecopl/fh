@@ -3,9 +3,11 @@ package pl.fhframework.fhdp.example.buttons;
 import pl.fhframework.annotations.Action;
 import pl.fhframework.core.uc.IInitialUseCase;
 import pl.fhframework.core.uc.UseCase;
+import pl.fhframework.core.uc.url.UseCaseWithUrl;
 import pl.fhframework.model.forms.messages.Messages;
 
 @UseCase
+@UseCaseWithUrl(alias = "buttons")
 public class ExampleButtonsUC implements IInitialUseCase {
 
     private ExampleButtonsForm.Model model;

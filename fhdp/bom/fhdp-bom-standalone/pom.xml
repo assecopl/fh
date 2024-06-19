@@ -3,12 +3,12 @@
     <parent>
         <artifactId>bom</artifactId>
         <groupId>pl.fhframework.dp</groupId>
-        <version>4.10.5</version>
+        <version>4.10.7</version>
    </parent>
     <modelVersion>4.0.0</modelVersion>
 <!--    <groupId>pl.fhframework.dp</groupId>-->
     <artifactId>fhdp-bom-standalone</artifactId>
-<!--    <version>4.10.5</version>-->
+    <!--    <version>4.10.7</version>-->
     <packaging>pom</packaging>
 
     <dependencyManagement>
@@ -441,7 +441,7 @@
                     <plugin>
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.7</version>
+                        <version>1.6.14</version>
                         <extensions>true</extensions>
                         <configuration>
                             <serverId>ossrh</serverId>

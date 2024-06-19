@@ -35,7 +35,6 @@ public class OperationStepDto  implements Comparable<OperationStepDto>, IPersist
     private String masterProcessId;
     private String processId;
     private String stepId;
-    @Transient
     private float duration;
 
     @Override

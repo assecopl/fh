@@ -35,7 +35,7 @@ class Image extends HTMLFormComponent {
         }
 
         function mapAreaClick(event) {
-            this.fireEvent('onAreaClick#' + event.target.dataset.id, this.onAreaClick, event);
+            this.fireEvent('onAreaClick#' + event.target.dataset.id, this.onAreaClick);
         }
 
         if (this.componentObj.imageAreas) {
@@ -65,7 +65,7 @@ class Image extends HTMLFormComponent {
         if (this.accessibility === 'EDIT' && this.onClick) {
             image.addEventListener('click', function (event) {
                 event.stopPropagation();
-                this.fireEventWithLock('onClick', this.onClick, event);
+                this.fireEventWithLock('onClick', this.onClick);
             }.bind(this));
         }
 

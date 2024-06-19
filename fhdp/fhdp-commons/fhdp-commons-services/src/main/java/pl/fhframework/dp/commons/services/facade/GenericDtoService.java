@@ -15,6 +15,7 @@ import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
+import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
@@ -29,6 +30,7 @@ import pl.fhframework.dp.transport.service.IDtoService;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
+
 
 /**
  * @author <a href="mailto:jacek.borowiec@asseco.pl">Jacek Borowiec</a>
@@ -76,6 +78,11 @@ public abstract class GenericDtoService<ID,
             else pageable = PageRequest.of(query.getFirstRow()/query.getSize(), query.getSize(), sort);
             searchQueryBuilder = searchQueryBuilder.withPageable(pageable);
         }
+        if(query.getIncludedFields() != null || query.getExcludedFields() != null) {
+            String[] includeFields = (query.getIncludedFields() == null)? null:query.getIncludedFields().split(",");
+            String[] excludeFields = (query.getExcludedFields() == null)? null:query.getExcludedFields().split(",");
+            searchQueryBuilder = searchQueryBuilder.withSourceFilter(new FetchSourceFilter(includeFields, excludeFields));
+        }
         NativeSearchQuery searchQuery = searchQueryBuilder.build();
         List<LIST> list = new ArrayList<>();
         try {
@@ -86,6 +93,11 @@ public abstract class GenericDtoService<ID,
             log.warn("{}", ExceptionUtils.getStackTrace(e));
         }
         return list;
+    }
+
+    private String[] stringToArray(String includedFields) {
+        String[] list = includedFields.split(",");
+        return new String[0];
     }
 
     protected BoolQueryBuilder createQueryBuilderInternal(QUERY query) {

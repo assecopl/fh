@@ -262,12 +262,19 @@ class InputNumber extends HTMLFormComponent {
             }
         }
 
-        return "^([-]?"+integerMark+""+separatorMark+""+fractionMark+")$";
+        return "^([-]?" + integerMark + "" + separatorMark + "" + fractionMark + ")$";
 
     }
 
     public getDefaultWidth(): string {
         return 'md-3';
+    }
+
+    setRequiredField(isRequired) {
+        super.setRequiredField(isRequired);
+        if (this.input) {
+            this.input.setAttribute("aria-required", "" + isRequired);
+        }
     }
 }
 

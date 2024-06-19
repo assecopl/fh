@@ -1,7 +1,7 @@
-const Merge = require('webpack-merge');
+const {merge} = require('webpack-merge');
 
 module.exports = function (baseConfig) {
-        return Merge(baseConfig, {
-                devtool: 'eval-source-map'
-        });
+    return merge(baseConfig, {
+        devtool: 'source-map'
+    });
 };

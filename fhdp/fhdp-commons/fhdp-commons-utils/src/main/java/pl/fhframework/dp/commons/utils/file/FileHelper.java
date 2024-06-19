@@ -1,5 +1,6 @@
 package pl.fhframework.dp.commons.utils.file;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,14 +8,31 @@ import pl.fhframework.dp.commons.utils.xml.ParserHelper;
 
 import java.io.*;
 import java.net.URL;
+import java.text.CharacterIterator;
+import java.text.StringCharacterIterator;
 import java.util.Arrays;
 import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+@Slf4j
 public class FileHelper {
 
-    private static final Logger log = LoggerFactory.getLogger(FileHelper.class);
+
+    public static String getHumanReadableFileSize(long bytes) {
+        long absB = bytes == Long.MIN_VALUE ? Long.MAX_VALUE : Math.abs(bytes);
+        if (absB < 1024) {
+            return bytes + " B";
+        }
+        long value = absB;
+        CharacterIterator ci = new StringCharacterIterator("KMGTPE");
+        for (int i = 40; i >= 0 && absB > 0xfffccccccccccccL >> i; i -= 10) {
+            value >>= 10;
+            ci.next();
+        }
+        value *= Long.signum(bytes);
+        return String.format("%.1f %cB", value / 1024.0, ci.current());
+    }
 
     public static void saveXml(String filename, String xml) {
 
@@ -29,7 +47,7 @@ public class FileHelper {
 
         } catch (Exception ex) {
             log.error(ex.getMessage(), ex);
-            throw new RuntimeException("Błąd zapisu pliku: " + filename, ex);
+            throw new RuntimeException("Error saving file: " + filename, ex);
         } finally {
             if (fos != null) {
                 try {
@@ -218,7 +236,7 @@ public class FileHelper {
             out.close();
         } catch (IOException ex) {
             log.error(ex.getMessage(), ex);
-            throw new RuntimeException("Eror saving file: " + filename, ex);
+            throw new RuntimeException("Error saving file: " + filename, ex);
         } finally {
             if (fos != null) {
                 try {

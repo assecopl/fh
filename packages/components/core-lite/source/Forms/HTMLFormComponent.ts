@@ -53,7 +53,7 @@ abstract class HTMLFormComponent extends FormComponent {
     protected oldValue: any;
     protected components: HTMLFormComponent[];
     private readonly push: boolean;
-    private static bootstrapColRegexp: RegExp = /^(xs|sm|md|lg|xl)-([1-9]|1[0-2])$/i;
+    private static bootstrapColRegexp: RegExp = /^((auto)|(xs|sm|md|lg|xl)|(xs|sm|md|lg|xl)(-([1-9]|1[0-2]|(auto))))$/i;
     private static bootstrapColWidthRegexp: RegExp = /^\d+(px|%)$/i;
     private static bootstrapColSeparateCahrsRegexp: RegExp = /(,|;|\|\/|\|)/g;
     protected focusableComponent: HTMLElement;
@@ -398,6 +398,11 @@ abstract class HTMLFormComponent extends FormComponent {
 
             if (this.hintType == 'STANDARD' || this.hintType == 'STATIC' || this.hintType == 'STATIC_LEFT') {
                 $(this.hintElement).tooltip(tooltipOptions);
+                if (this.hintAriaLabel) {
+                    this.hintElement.setAttribute('aria-label', this.hintAriaLabel);
+                } else {
+                    this.hintElement.setAttribute('aria-label', hintParsed);
+                }
                 this.hintElement.classList.add("fh-tooltip");
                 this.hintInitialized = true;
             }
@@ -938,7 +943,7 @@ abstract class HTMLFormComponent extends FormComponent {
             oldWidth.forEach(function (width) {
                 if (HTMLFormComponent.bootstrapColRegexp.test(width)) {
                     //In bootstrap 4 "co-xs-12" was replaced with "col-12" so we need to delete it from string.
-                    wrapper.classList.remove('col-' + width.replace('xs-', '-'));
+                    wrapper.classList.remove('col-' + width.replace('xs-', ''));
                 } else if (HTMLFormComponent.bootstrapColWidthRegexp.test(width)) {
                     wrapper.classList.remove('exactWidth');
                     wrapper.style.width = undefined;
@@ -951,7 +956,7 @@ abstract class HTMLFormComponent extends FormComponent {
         newWidth.forEach(function (width) {
             if (HTMLFormComponent.bootstrapColRegexp.test(width)) {
                 //In bootstrap 4 "co-xs-12" was replaced with "col-12" so we need to delete it from string.
-                wrapper.classList.add('col-' + width.replace('xs-', '-'));
+                wrapper.classList.add('col-' + width.replace('xs-', ''));
             } else if (HTMLFormComponent.bootstrapColWidthRegexp.test(width)) {
                 wrapper.classList.add('exactWidth');
                 wrapper.style.width = width;

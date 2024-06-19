@@ -212,6 +212,7 @@ public class MessageService {
                     return message;
                 }
             }
+            //Log key not found.
             FhLogger.warn(defaultMessage);
             return defaultMessage;
         }

@@ -20,6 +20,10 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
 
     private loopDown: boolean = false; //key event loop turn on/off
 
+    protected silent: boolean = false;
+
+    protected selectionCheckboxes: any;
+
     constructor(componentObj: any, parent: HTMLFormComponent) {
         super(componentObj, parent);
 
@@ -35,6 +39,8 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
         if (this.selectable && this.onRowClick) {
             this.table.addEventListener('keydown', this.tableKeydownEvent.bind(this));
             this.table.addEventListener('keyup', this.tableKeyupEvent.bind(this));
+            this.table.setAttribute('role', "grid");
+
         }
         this.bindKeyboardEvents();
         this.table.addEventListener('mousedown', this.tableMousedownEvent.bind(this));
@@ -56,7 +62,7 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
     public tableKeyupEvent(e) {
         this.ctrlIsPressed = false;
         this.shiftIsPressed = false;
-        if (e.which == 9 && $(document.activeElement).is(":input")) {
+        if (e.which == 9 && $(document.activeElement).is("input:not([type='checkbox'])")) {
             let parent = $(document.activeElement).parents('tbody tr:not(.emptyRow)');
             if (parent && parent.length > 0) {
                 // @ts-ignore
@@ -97,13 +103,18 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
                         next.addClass('table-primary');
                         this.scrolToRow(next);
                         this.scrolIntoView(next);
+
                         this.keyEventTimer = setTimeout(function (elem) {
+                            this.silent = true
                             elem ? elem.trigger('click') : false;
-                        }, this.doneEventInterval, next);
+                            this.silent = false
+                        }.bind(this), this.doneEventInterval, next);
                     } else {
                         this.keyEventTimer = setTimeout(function (elem) {
+                            this.silent = true
                             elem ? elem.trigger('click') : false;
-                        }, this.doneEventInterval, current);
+                            this.silent = false
+                        }.bind(this), this.doneEventInterval, current);
                     }
                 } else if (e.which == 38) { // strzalka w gore
                     e.preventDefault();
@@ -119,16 +130,22 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
                     if (prev && prev.length == 0) {
                         $(this.component).scrollTop(0);
                         this.keyEventTimer = setTimeout(function (elem) {
+                            if (this.onRowClick) {
+                                this.silent = true
+                            }
                             elem ? elem.trigger('click') : false;
-                        }, this.doneEventInterval, current);
+                            this.silent = false
+                        }.bind(this), this.doneEventInterval, current);
                     } else if (prev && prev.length > 0) {
                         current.removeClass('table-primary');
                         prev.addClass('table-primary');
                         this.scrolToRow(prev);
                         this.scrolIntoView(prev);
                         this.keyEventTimer = setTimeout(function (elem) {
+                            this.silent = true
                             elem ? elem.trigger('click') : false;
-                        }, this.doneEventInterval, prev);
+                            this.silent = false
+                        }.bind(this), this.doneEventInterval, prev);
                     }
 
 
@@ -139,8 +156,10 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
 
                     if (first && first.length > 0) {
                         $(this.component).scrollTop(0);
+                        this.silent = true;
                         first.trigger('click');
                         this.scrolIntoView(first);
+                        this.silent = false;
                     }
                 } else if (e.which == 34 || e.which == 35) { // pgdown i end
                     e.preventDefault();
@@ -149,7 +168,9 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
 
                     if (last && last.length > 0) {
                         $(this.component).scrollTop($(last).position().top);
+                        this.silent = true;
                         last.trigger('click');
+                        this.silent = false;
                         this.scrolIntoView(last);
 
                     }
@@ -158,7 +179,13 @@ abstract class TableWithKeyboardEvents extends TableFixedHeaderAndHorizontalScro
 
                     let current = $(this.htmlElement).find('tbody tr.table-primary');
                     if (current.length) {
-                        this.onRowDblClick(e, current[0]);
+                        if (this.onRowClick) {
+                            current.trigger('click');
+                        } else {
+                            if (this.onRowDblClick) {
+                                this.onRowDblClick(e, current[0]);
+                            }
+                        }
                     }
                 }
             }

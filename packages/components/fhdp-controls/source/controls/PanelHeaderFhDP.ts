@@ -71,6 +71,7 @@ class PanelHeaderFhDP extends HTMLFormComponent{
 
         let button = document.createElement('button');
         button.classList.add('panel-option');
+        button.ariaLabel = this.i18n.__("fh.close") + ":" + this.title;
 
         if (this.onClick) {
             console.log('add event listener');
@@ -80,8 +81,13 @@ class PanelHeaderFhDP extends HTMLFormComponent{
         let i = document.createElement('i');
         i.classList.add('fas');
         i.classList.add('fa-times');
+        let sronly = document.createElement('span');
+        sronly.classList.add('sr-only');
+        sronly.innerText = this.i18n.__("fh.close") + ":" + this.title
+
 
         button.appendChild(i);
+        button.appendChild(sronly);
         div_panel_options.appendChild(button);
 
         header_div.appendChild(div_panel_options);

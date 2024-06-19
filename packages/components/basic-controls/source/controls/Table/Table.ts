@@ -13,7 +13,6 @@ class Table extends TableWithKeyboardEvents {
     private readonly tableStripes: any;
     protected readonly onRowClick: any;
     private readonly onRowDoubleClick: any;
-    private selectionCheckboxes: any;
     private readonly selectAllChceckbox: boolean;
     private readonly synchronizeScrolling: string;
     private selectionChanged: any;
@@ -267,8 +266,9 @@ class Table extends TableWithKeyboardEvents {
         if (this.selectable && this.onRowClick) {
             // @ts-ignore
             row.component.style.cursor = 'pointer';
+            row.htmlElement.tabIndex = "0";
             row.htmlElement.addEventListener('click', function (e) {
-                this.onRowClickEvent(e, row.mainId)
+                this.onRowClickEvent(e, row.mainId, this.silent)
             }.bind(this));
         }
         if (this.onRowDoubleClick) {
@@ -293,34 +293,49 @@ class Table extends TableWithKeyboardEvents {
 
             cell.addEventListener('click', function (event) {
                 event.stopPropagation();
-                if (this.accessibility != 'EDIT') return;
-
-                let element = event.target;
-                if (event.currentTarget != null) {
-                    element = event.currentTarget;
-                }
-                element.firstChild.checked = !element.firstChild.checked;
-
-                if (event.shiftKey) {
-                    this.selectRows(element.parentElement.dataset.mainId);
-                } else {
-                    this.selectRow(element.parentElement.dataset.mainId);
-
-                }
-                this.changesQueue.queueValueChange(this.rawValue);
-                if (!this.onRowClick || this.onRowClick === '-') {
-                    this.highlightSelectedRows();
-                }
-
-                if (this._formId === 'FormPreview') {
-                    this.fireEvent('onRowClick', this.onRowClick);
-                } else {
-                    this.fireEventWithLock('onRowClick', this.onRowClick, event);
-                }
+                this.onCheckboxClick(event, row.mainId, checkbox);
             }.bind(this));
             row.contentWrapper.insertBefore(cell, row.contentWrapper.firstChild);
+            row.checkbox = checkbox;
         }
+
+        if (this.selectable) {
+            row.htmlElement.addEventListener('keydown', function (e) {
+                if (e.which == 13) {
+                    if (this.selectionCheckboxes) {
+                        this.onCheckboxClick(e, row.mainId, row.checkbox)
+                    } else if (!this.selectionCheckboxes && this.onRowClick) {
+                        this.onRowClickEvent(e, row.mainId, this.silent);
+                    }
+                }
+            }.bind(this));
+        }
+
     };
+
+    onCheckboxClick(event, trId, input) {
+
+        if (this.accessibility != 'EDIT') return;
+
+        input.checked = !input.checked;
+
+        if (this.shiftIsPressed || event.shiftKey) {
+            this.selectRows(trId);
+        } else {
+            this.selectRow(trId);
+
+        }
+        this.changesQueue.queueValueChange(this.rawValue);
+        if (!this.onRowClick || this.onRowClick === '-') {
+            this.highlightSelectedRows();
+        }
+
+        if (this._formId === 'FormPreview') {
+            this.fireEvent('onRowClick', this.onRowClick);
+        } else {
+            this.fireEventWithLock('onRowClick', this.onRowClick);
+        }
+    }
 
     onRowDblClick(event, target) {
         if (this.accessibility != 'EDIT') return;
@@ -361,7 +376,7 @@ class Table extends TableWithKeyboardEvents {
         row.contentWrapper = null;
         row.container = null;
         row.htmlElement.removeEventListener('click', function (e) {
-            this.onRowClickEvent(e, row.mainId)
+            this.onRowClickEvent(e, row.mainId, this.silent)
         }.bind(this));
 
         $(row.htmlElement).unbind().remove();
@@ -674,7 +689,32 @@ class Table extends TableWithKeyboardEvents {
                 if (this._formId === 'FormPreview') {
                     this.fireEvent('onRowClick', this.onRowClick);
                 } else {
-                    this.fireEventWithLock('onRowClick', this.onRowClick, event);
+                    this.fireEventWithLock('onRowClick', this.onRowClick);
+                }
+            }.bind(this));
+            cell.addEventListener('keydown', function (event) {
+                if (event.which == 13) {
+                    event.stopPropagation();
+                    if (this.accessibility != 'EDIT') return;
+
+                    let element = event.target;
+                    if (event.currentTarget != null) {
+                        element = event.currentTarget;
+                    }
+                    element.firstChild.checked = !element.firstChild.checked;
+
+                    this.selectAllRows(element.firstChild.checked);
+
+                    this.changesQueue.queueValueChange(this.rawValue);
+                    if (!this.onRowClick || this.onRowClick === '-') {
+                        this.highlightSelectedRows();
+                    }
+
+                    if (this._formId === 'FormPreview') {
+                        this.fireEvent('onRowClick', this.onRowClick);
+                    } else {
+                        this.fireEventWithLock('onRowClick', this.onRowClick);
+                    }
                 }
             }.bind(this));
         }

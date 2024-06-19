@@ -184,7 +184,7 @@ class InputText extends HTMLFormComponent {
                     this.input.value = '';
                     this.updateModel();
                     if (this.onChange) {
-                        this.fireEventWithLock('onChange', this.onChange, event);
+                        this.fireEventWithLock('onChange', this.onChange);
                     }
                     this.input.focus();
                 }
@@ -339,6 +339,8 @@ class InputText extends HTMLFormComponent {
 
             //create custom definitions
             let customDefs = this.createCustomDefinitionSymbols();
+
+            //@ts-ignore TODO error TS2839: This condition will always return 'true' since JavaScript compares objects by reference, not value.
             if (customDefs != {}) {
                 options.definitions = customDefs;
             }
@@ -555,6 +557,15 @@ class InputText extends HTMLFormComponent {
 
         super.render();
     }
+
+    setRequiredField(isRequired) {
+        super.setRequiredField(isRequired);
+        if (this.input) {
+            this.input.setAttribute("aria-required", "" + isRequired);
+        }
+    }
+
+
 }
 
 export {InputText};

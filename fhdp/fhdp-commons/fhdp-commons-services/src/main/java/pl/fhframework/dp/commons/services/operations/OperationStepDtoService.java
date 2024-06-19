@@ -12,6 +12,7 @@ import pl.fhframework.dp.transport.dto.operations.OperationStepDtoQuery;
 import pl.fhframework.dp.transport.service.IOperationStepDtoService;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
 
@@ -66,6 +67,10 @@ public class OperationStepDtoService extends GenericDtoService<String, Operation
             log.error("Can not find operation step for OpGuid: {}, processId :{}, stepId: {}", operationGUID, processID, stepID);
         } else {
             dto.setFinished(LocalDateTime.now());
+            if(dto.getStarted() != null && dto.getFinished() != null) {
+                long diff = ChronoUnit.MILLIS.between(dto.getStarted(), dto.getFinished());
+                dto.setDuration((float) diff /1000);
+            }
             persistDto(dto);
         }
     }

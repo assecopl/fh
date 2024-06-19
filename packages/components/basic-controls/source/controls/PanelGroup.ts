@@ -74,9 +74,15 @@ class PanelGroup extends HTMLFormComponent {
         toolbox.classList.add('align-self-center');
 
         if (this.isCollapsible) {
-            let collapseToggle = document.createElement('span');
+            let collapseToggle: HTMLSpanElement = document.createElement('span');
 
             collapseToggle.classList.add('collapseToggle');
+            collapseToggle.tabIndex = 0;
+            collapseToggle.ariaExpanded = this.collapsed;
+            // collapseToggle. = this.collapsed;
+            collapseToggle.setAttribute('aria-controls', this.id);
+            collapseToggle.role = "button";
+
 
             let icon = document.createElement('i');
             icon.classList.add('fa');
@@ -98,7 +104,14 @@ class PanelGroup extends HTMLFormComponent {
             heading.addEventListener('click', function (event) {
                 this.toggleCollapse();
                 if (this.onToggle) {
-                    this.fireEvent('onToggle', this.onToggle, event);
+                    this.fireEvent('onToggle', this.onToggle);
+                }
+            }.bind(this));
+
+            heading.addEventListener('keyup', function (ev) {
+                let code = ev.keycode || ev.which;
+                if (code == 13) {
+                    heading.click();
                 }
             }.bind(this));
         }
@@ -221,6 +234,7 @@ class PanelGroup extends HTMLFormComponent {
         this.component.classList.add('collapsed');
         this.collapsed = true;
         this.collapseChanged = true;
+        if (this.collapseToggler) this.collapseToggler.ariaExpanded = this.collapsed;
     };
 
     uncollapse() {
@@ -233,6 +247,7 @@ class PanelGroup extends HTMLFormComponent {
         this.component.classList.remove('collapsed');
         this.collapsed = false;
         this.collapseChanged = true;
+        if (this.collapseToggler) this.collapseToggler.ariaExpanded = this.collapsed;
     };
 
     extractChangedAttributes() {
