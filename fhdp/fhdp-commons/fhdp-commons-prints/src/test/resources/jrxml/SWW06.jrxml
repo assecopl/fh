@@ -1,0 +1,860 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SWW06v.2.10" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c14e964b-e7b6-479e-b2fa-326feb756a19">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="startup\adapters\SWW06_DataAdapter.xml"/>
+	<property name="net.sf.jasperreports.export.pdf.display.metadata.title" value="true"/>
+	<property name="net.sf.jasperreports.export.pdf.metadata.title" value="SWW06v.2.00"/>
+	<property name="net.sf.jasperreports.export.pptx.metadata.title" value="SWW06v.2.00"/>
+	<property name="net.sf.jasperreports.export.xls.metadata.title" value="SWW06v.2.00"/>
+	<property name="com.jaspersoft.studio.report.title" value="SWW06v.2.00"/>
+	<property name="com.jaspersoft.studio.report.display.title" value="true"/>
+	<property name="net.sf.jasperreports.export.docx.metadata.title" value="SWW06v.2.00"/>
+	<property name="net.sf.jasperreports.title" value="SWW06v.2.00"/>
+	<property name="com.jaspersoft.studio.report.name" value="SWW06v.2.00"/>
+	<property name="com.jaspersoft.studio.report.description" value="SWW06v.2.00"/>
+	<property name="com.jaspersoft.studio.report.language" value="pl"/>
+	<property name="com.jaspersoft.studio.report.lang" value="pl"/>
+	<property name="net.sf.jasperreports.export.pdf.tagged" value="true"/>
+	<property name="net.sf.jasperreports.export.pdf.tag.language" value="PL"/>
+	<property name="net.sf.jasperreports.default.pdf.embedded" value="true"/>
+	<property name="net.sf.jasperreports.print.create.bookmarks" value="true"/>
+	<subDataset name="listaTowarow" uuid="80841997-423e-43e7-8980-f3da4a609ef4">
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="startup\adapters\SWW06_DataAdapter.xml"/>
+		<queryString language="XPath">
+			<![CDATA[/*[local-name()='SWW06']/*[local-name()='naglowek']/*[local-name()='towar']]]>
+		</queryString>
+		<field name="deklarowanaNorma" class="java.lang.String">
+			<property name="net.sf.jasperreports.xpath.field.expression" value="@norma"/>
+			<fieldDescription><![CDATA[@deklarowanaNorma]]></fieldDescription>
+		</field>
+		<field name="klasaJakosci" class="java.lang.String">
+			<property name="net.sf.jasperreports.xpath.field.expression" value="@klasaJakosci"/>
+			<fieldDescription><![CDATA[@klasaJakosci]]></fieldDescription>
+		</field>
+		<field name="kodTowarowy" class="java.lang.Integer">
+			<property name="net.sf.jasperreports.xpath.field.expression">
+				<![CDATA[*[local-name()='kodTowarowyKod']/@kod]]>
+			</property>
+			<fieldDescription><![CDATA[@kodTowarowy]]></fieldDescription>
+		</field>
+		<field name="krajPochodzenia" class="java.lang.String">
+			<property name="net.sf.jasperreports.xpath.field.expression">
+				<![CDATA[*[local-name()='krajPochodzeniaKod']/@opis]]>
+			</property>
+			<fieldDescription><![CDATA[@krajPochodzenia]]></fieldDescription>
+		</field>
+		<field name="krajPrzeznaczenia" class="java.lang.String">
+			<property name="net.sf.jasperreports.xpath.field.expression">
+				<![CDATA[*[local-name()='krajPrzeznaczeniaKod']/@opis]]>
+			</property>
+			<fieldDescription><![CDATA[@krajPrzeznaczenia]]></fieldDescription>
+		</field>
+		<field name="liczbaOpakowan" class="java.lang.Integer">
+			<property name="net.sf.jasperreports.xpath.field.expression" value="@liczbaOpakowan"/>
+			<fieldDescription><![CDATA[@liczbaOpakowan]]></fieldDescription>
+		</field>
+		<field name="masaNetto" class="java.lang.String">
+			<property name="net.sf.jasperreports.xpath.field.expression" value="@wagaNetto"/>
+			<fieldDescription><![CDATA[@masaNetto]]></fieldDescription>
+		</field>
+		<field name="nazwa" class="java.lang.String">
+			<property name="net.sf.jasperreports.xpath.field.expression" value="@opis"/>
+			<fieldDescription><![CDATA[@nazwa]]></fieldDescription>
+		</field>
+		<field name="numerSrodkaTransportu" class="java.lang.String">
+			<property name="net.sf.jasperreports.xpath.field.expression" value="@numerSrodkaTransportu"/>
+			<fieldDescription><![CDATA[@numerSrodkaTransportu]]></fieldDescription>
+		</field>
+		<field name="rodzajOpakowan" class="java.lang.String">
+			<property name="net.sf.jasperreports.xpath.field.expression">
+				<![CDATA[*[local-name()='rodzajOpakowanKod']/@opis]]>
+			</property>
+			<fieldDescription><![CDATA[@rodzajOpakowan]]></fieldDescription>
+		</field>
+		<field name="rodzajTransportu" class="java.lang.String">
+			<property name="net.sf.jasperreports.xpath.field.expression">
+				<![CDATA[*[local-name()='transport']/*[local-name()='rodzajKod']/@opis]]>
+			</property>
+			<fieldDescription><![CDATA[@rodzajTransportu]]></fieldDescription>
+		</field>
+		<field name="nrPozycji" class="java.lang.String">
+			<property name="net.sf.jasperreports.xpath.field.expression" value="@nrPozycji"/>
+			<fieldDescription><![CDATA[@nrPozycji]]></fieldDescription>
+		</field>
+		<field name="znaki" class="java.lang.String">
+			<property name="net.sf.jasperreports.xpath.field.expression">
+				<![CDATA[*[local-name()='transport']/@znaki]]>
+			</property>
+			<fieldDescription><![CDATA[sw:transport/@znaki]]></fieldDescription>
+		</field>
+	</subDataset>
+	<queryString language="xPath">
+		<![CDATA[/*[local-name()='SWW06']/*[local-name()='naglowek']]]>
+	</queryString>
+	<field name="data" class="java.sql.Date">
+		<property name="net.sf.jasperreports.xpath.field.expression" value="@data"/>
+		<fieldDescription><![CDATA[@data]]></fieldDescription>
+	</field>
+	<field name="dataKontroli" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression" value="@proponowanaDataKontroli"/>
+		<fieldDescription><![CDATA[@dataKontroli]]></fieldDescription>
+	</field>
+	<field name="kontrolujacy" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression" value="@kontrolujacy"/>
+		<fieldDescription><![CDATA[@kontrolujacy]]></fieldDescription>
+	</field>
+	<field name="miejsce" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression" value="@miejscowosc"/>
+		<fieldDescription><![CDATA[@miejsce]]></fieldDescription>
+	</field>
+	<field name="miejsceKontroli" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='SWW06']/*[local-name()='naglowek']/*[local-name()='proponowaneMiejsceKontroliKod']/@opis]]>
+		</property>
+		<fieldDescription><![CDATA[@miejsceKontroli]]></fieldDescription>
+	</field>
+	<field name="nrWlasny" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression" value="@nrWlasny"/>
+		<fieldDescription><![CDATA[@nrWlasny]]></fieldDescription>
+	</field>
+	<field name="numerDecyzji" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression" value="@numerDecyzji"/>
+		<fieldDescription><![CDATA[@numerDecyzji]]></fieldDescription>
+	</field>
+	<field name="partner" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='SWW06']/*[local-name()='naglowek']/*[local-name()='partnerKod']/@kod]]>
+		</property>
+		<fieldDescription><![CDATA[@partner]]></fieldDescription>
+	</field>
+	<field name="ucOdprawy" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='SWW06']/*[local-name()='naglowek']/*[local-name()='oddzialCelnyKod']/@opis]]>
+		</property>
+		<fieldDescription><![CDATA[@ucOdprawy]]></fieldDescription>
+	</field>
+	<field name="nazwaHandlowiec" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='SWW06']/*[local-name()='naglowek']/*[local-name()='handlowiec']/@nazwa]]>
+		</property>
+		<fieldDescription><![CDATA[/SWW06/handlowiec/@nazwa]]></fieldDescription>
+	</field>
+	<field name="regonHandlowiec" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='SWW06']/*[local-name()='naglowek']/*[local-name()='handlowiec']/@regon]]>
+		</property>
+		<fieldDescription><![CDATA[/SWW06/handlowiec/@regon]]></fieldDescription>
+	</field>
+	<field name="tinHandlowiec" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='SWW06']/*[local-name()='naglowek']/*[local-name()='handlowiec']/@tin]]>
+		</property>
+		<fieldDescription><![CDATA[/SWW06/handlowiec/@tin]]></fieldDescription>
+	</field>
+	<field name="kodKrajuHandlowiec" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='SWW06']/*[local-name()='naglowek']/*[local-name()='handlowiec']/*[local-name()='adres']/*[local-name()='krajKod']/@opis]]>
+		</property>
+		<fieldDescription><![CDATA[/SWW06/handlowiec/sw:adres/@kodKraju]]></fieldDescription>
+	</field>
+	<field name="kodPocztowyHandlowiec" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='SWW06']/*[local-name()='naglowek']/*[local-name()='handlowiec']/*[local-name()='adres']/@kodPocztowy]]>
+		</property>
+		<fieldDescription><![CDATA[/SWW06/handlowiec/sw:adres/@kodPocztowy]]></fieldDescription>
+	</field>
+	<field name="miejscowoscHandlowiec" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='SWW06']/*[local-name()='naglowek']/*[local-name()='handlowiec']/*[local-name()='adres']/@miejscowosc]]>
+		</property>
+		<fieldDescription><![CDATA[/SWW06/handlowiec/sw:adres/@miejscowosc]]></fieldDescription>
+	</field>
+	<field name="ulicaNumerHandlowiec" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='SWW06']/*[local-name()='naglowek']/*[local-name()='handlowiec']/*[local-name()='adres']/@ulicaNumer]]>
+		</property>
+		<fieldDescription><![CDATA[/SWW06/handlowiec/sw:adres/@ulicaNumer]]></fieldDescription>
+	</field>
+	<field name="nazwaZgl" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='SWW06']/*[local-name()='naglowek']/*[local-name()='zglaszajacy']/@nazwa]]>
+		</property>
+		<fieldDescription><![CDATA[/SWW06/zglaszajacy/@nazwa]]></fieldDescription>
+	</field>
+	<field name="regonZgl" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='SWW06']/*[local-name()='naglowek']/*[local-name()='zglaszajacy']/@regon]]>
+		</property>
+		<fieldDescription><![CDATA[/SWW06/zglaszajacy/@regon]]></fieldDescription>
+	</field>
+	<field name="tinZgl" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='SWW06']/*[local-name()='naglowek']/*[local-name()='zglaszajacy']/@tin]]>
+		</property>
+		<fieldDescription><![CDATA[/SWW06/zglaszajacy/@tin]]></fieldDescription>
+	</field>
+	<field name="kodKrajuZgl" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='SWW06']/*[local-name()='naglowek']/*[local-name()='zglaszajacy']/*[local-name()='adres']/*[local-name()='krajKod']/@opis]]>
+		</property>
+		<fieldDescription><![CDATA[/SWW06/zglaszajacy/sw:adres/@kodKraju]]></fieldDescription>
+	</field>
+	<field name="kodPocztowyZgl" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='SWW06']/*[local-name()='naglowek']/*[local-name()='zglaszajacy']/*[local-name()='adres']/@kodPocztowy]]>
+		</property>
+		<fieldDescription><![CDATA[/SWW06/zglaszajacy/sw:adres/@kodPocztowy]]></fieldDescription>
+	</field>
+	<field name="miejscowoscZgl" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='SWW06']/*[local-name()='naglowek']/*[local-name()='zglaszajacy']/*[local-name()='adres']/@miejscowosc]]>
+		</property>
+		<fieldDescription><![CDATA[/SWW06/zglaszajacy/sw:adres/@miejscowosc]]></fieldDescription>
+	</field>
+	<field name="ulicaNumerZgl" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='SWW06']/*[local-name()='naglowek']/*[local-name()='zglaszajacy']/*[local-name()='adres']/@ulicaNumer]]>
+		</property>
+		<fieldDescription><![CDATA[/SWW06/zglaszajacy/sw:adres/@ulicaNumer]]></fieldDescription>
+	</field>
+	<field name="imieNazwiskoOsZgl" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='SWW06']/*[local-name()='naglowek']/*[local-name()='osobaZglaszajaca']/@imieNazwisko]]>
+		</property>
+		<fieldDescription><![CDATA[/SWW06/osobaZglaszajaca/@imieNazwisko]]></fieldDescription>
+	</field>
+	<field name="emailOsZgl" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='SWW06']/*[local-name()='naglowek']/*[local-name()='osobaZglaszajaca']/@email]]>
+		</property>
+		<fieldDescription><![CDATA[/SWW06/osobaZglaszajaca/@email]]></fieldDescription>
+	</field>
+	<field name="email" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='SWW06']/*[local-name()='naglowek']/*[local-name()='osobaUpowazniona']/@email]]>
+		</property>
+		<fieldDescription><![CDATA[osobaUpowazniona/@email]]></fieldDescription>
+	</field>
+	<field name="imieNazwisko" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='SWW06']/*[local-name()='naglowek']/*[local-name()='osobaUpowazniona']/@imieNazwisko]]>
+		</property>
+		<fieldDescription><![CDATA[osobaUpowazniona/@imieNazwisko]]></fieldDescription>
+	</field>
+	<field name="partneropis" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='SWW06']/*[local-name()='naglowek']/*[local-name()='partnerKod']/@opis]]>
+		</property>
+		<fieldDescription><![CDATA[partnerKod/@opis]]></fieldDescription>
+	</field>
+	<field name="UCkod" class="java.lang.String">
+		<property name="net.sf.jasperreports.xpath.field.expression">
+			<![CDATA[/*[local-name()='SWW06']/*[local-name()='naglowek']/*[local-name()='oddzialCelnyKod']/@kod]]>
+		</property>
+		<fieldDescription><![CDATA[oddzialCelnyKod/@kod]]></fieldDescription>
+	</field>
+	<variable name="Rozmiar10" class="java.lang.String"/>
+	<variable name="PDK" class="java.lang.String">
+		<variableExpression><![CDATA[new java.text.SimpleDateFormat("dd.MM.yyyy HH:mm").format(new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX").parse($F{dataKontroli}))]]></variableExpression>
+	</variable>
+	<variable name="data" class="java.lang.String"/>
+	<group name="test">
+		<groupExpression><![CDATA[]]></groupExpression>
+		<groupHeader>
+			<band/>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="180" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="20" width="200" height="35" uuid="1fe102aa-372e-44a6-8510-e650d13ad0f4">
+					<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="8" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[...................................................
+(pieczęć zgłaszającego / applicant stamp)]]></text>
+			</staticText>
+			<frame>
+				<reportElement mode="Opaque" x="0" y="70" width="557" height="40" backcolor="#CCCCCC" uuid="f34b473c-f93b-40b2-84b9-516d2f40d36a">
+					<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+				</reportElement>
+				<box topPadding="0" leftPadding="0">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textField>
+					<reportElement x="1" y="0" width="555" height="20" uuid="58e822de-c0a8-4c84-856d-09be5569166e">
+						<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+					</reportElement>
+					<box topPadding="3" leftPadding="5"/>
+					<textElement textAlignment="Left">
+						<font fontName="Times New Roman" pdfEncoding="Identity-H"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{nrWlasny}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="1" y="20" width="555" height="20" uuid="a18fa021-1f85-4acb-9a46-c6f6f4fb4f2d">
+						<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+					</reportElement>
+					<box topPadding="3" leftPadding="5"/>
+					<textElement>
+						<font fontName="Times New Roman" size="8" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[(znak sprawy nadany przez WIJHARS / Voivodeship Inspectore of Agricultural and Food Quality sign)]]></text>
+				</staticText>
+			</frame>
+			<textField bookmarkLevel="1">
+				<reportElement x="80" y="123" width="400" height="22" uuid="401fa573-5ca3-4d09-8720-f3472eb6a066">
+					<property name="net.sf.jasperreports.export.pdf.tag.h1" value="full"/>
+					<property name="net.sf.jasperreports.export.pdf.tag.language" value="pl"/>
+					<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="12" isBold="true" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Zgłoszenie wywozu świeżych owoców i warzyw do krajów trzecich"]]></textFieldExpression>
+				<anchorNameExpression><![CDATA["Naglowek"]]></anchorNameExpression>
+			</textField>
+			<staticText>
+				<reportElement x="80" y="145" width="400" height="20" uuid="22d4b503-21ca-4bbd-b45d-4b1eef82a12a">
+					<property name="net.sf.jasperreports.export.pdf.tag.h2" value="full"/>
+					<property name="net.sf.jasperreports.export.pdf.tag.language" value="en-us"/>
+					<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Fresh fruit and vegetables export notification]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="256" y="0" width="200" height="20" uuid="9b36b527-4bab-4dc3-ad1c-cfb95798c296">
+					<property name="net.sf.jasperreports.export.pdf.tag.language" value="pl"/>
+					<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font fontName="Times New Roman" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{miejsce}!=null?$F{miejsce}:"")+", "]]></textFieldExpression>
+			</textField>
+			<textField pattern="&apos; &apos;d MMMM yyyy&apos; r.&apos;">
+				<reportElement x="456" y="0" width="110" height="20" uuid="6e01ef1c-1f8b-46a3-834f-9e8c3900c9fe">
+					<property name="net.sf.jasperreports.export.pdf.tag.language" value="pl"/>
+					<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{data}!=null?$F{data}:"")]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<detail>
+		<band height="140" splitType="Stretch">
+			<textField>
+				<reportElement x="1" y="0" width="555" height="30" uuid="6b7aeab6-7238-4519-a940-eadf10dbb660">
+					<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+				</reportElement>
+				<textElement markup="html">
+					<font fontName="Times New Roman" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["1. Handlowiec /" + "<font size=\"1\" style=\"font-size: 8pt\"> Trader</font>" +" : " + ($F{nazwaHandlowiec}!=null?$F{nazwaHandlowiec} + ", " + $F{kodPocztowyHandlowiec} +" " + $F{miejscowoscHandlowiec} + ", " + ($F{ulicaNumerHandlowiec}!=null?$F{ulicaNumerHandlowiec}+" ":"") + ($F{kodKrajuHandlowiec}!=null?$F{kodKrajuHandlowiec}:"")+($F{tinHandlowiec}!=null?", NIP: " + $F{tinHandlowiec}:"") + ($F{regonHandlowiec}!=null?", REGON: " + $F{regonHandlowiec}:""):"")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1" y="30" width="555" height="30" uuid="363a23c3-ab8b-4d39-a2df-15867e78b6e4">
+					<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+				</reportElement>
+				<textElement markup="html">
+					<font fontName="Times New Roman" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["2. Zgłaszający /" + "<font size=\"1\" style=\"font-size: 8pt\"> Applicant </font>" +" : " + ($F{nazwaZgl}!=null?$F{nazwaZgl} + ", " + $F{kodPocztowyZgl} +" " + $F{miejscowoscZgl} + ", " + ($F{ulicaNumerZgl}!=null?$F{ulicaNumerZgl}+" ":"") +($F{kodKrajuZgl}!=null?$F{kodKrajuZgl}:"")  + ($F{tinZgl}!=null?", NIP: " + $F{tinZgl}:"") + ($F{regonZgl}!=null?", REGON: " + $F{regonZgl}:""):"")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1" y="60" width="555" height="20" uuid="5c892e54-50d1-41a9-b4ec-97b78232eada">
+					<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+				</reportElement>
+				<textElement markup="html">
+					<font fontName="Times New Roman" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["3. Informacje na temat partii wywożonych do krajów trzecich /" + "<font size=\"1\" style=\"font-size: 8pt\"> Information about exported lots </font>" +" : "]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="80" width="20" height="60" uuid="cfbc1aed-87ce-4455-b962-9af591dbde77">
+					<property name="net.sf.jasperreports.export.pdf.tag.language" value="pl"/>
+					<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+				</reportElement>
+				<box topPadding="3" leftPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement markup="html">
+					<font fontName="Times New Roman" size="8" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[<b>Lp</b>]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="80" width="70" height="60" uuid="6dcd4a0c-61ac-40cb-b187-af2d0acb0d07">
+					<property name="net.sf.jasperreports.export.pdf.tag.language" value="pl"/>
+					<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+				</reportElement>
+				<box topPadding="3" leftPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement markup="html">
+					<font fontName="Times New Roman" size="8" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[<b>Nazwa Owocu lub warzywa</b> &#13;/ Name of fruit or vegetables]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="90" y="80" width="60" height="60" uuid="f3dfa5e5-cb78-4880-bd33-7bdeaa229e49">
+					<property name="net.sf.jasperreports.export.pdf.tag.language" value="pl"/>
+					<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+				</reportElement>
+				<box topPadding="3" leftPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement markup="html">
+					<font fontName="Times New Roman" size="8" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[<b>Kraj pochodzenia</b> &#13;/ Country of origin]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="150" y="80" width="60" height="60" uuid="11ee1d04-fdb2-4a08-8028-9ca139288ff8">
+					<property name="net.sf.jasperreports.export.pdf.tag.language" value="pl"/>
+					<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+				</reportElement>
+				<box topPadding="3" leftPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement markup="html">
+					<font fontName="Times New Roman" size="8" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[<b>Kraj przeznaczenia</b> &#13;/ Country of destination]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="210" y="80" width="40" height="60" uuid="88396bbb-3c89-4ab1-92b3-cff781c9a4b0">
+					<property name="net.sf.jasperreports.export.pdf.tag.language" value="pl"/>
+					<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+				</reportElement>
+				<box topPadding="3" leftPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement markup="html">
+					<font fontName="Times New Roman" size="8" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[<b>Klasa Jakości</b> &#13;/ Quality class]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="250" y="80" width="70" height="60" uuid="0961aab9-3050-4701-82b6-509acb54565d">
+					<property name="net.sf.jasperreports.export.pdf.tag.language" value="pl"/>
+					<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+				</reportElement>
+				<box topPadding="3" leftPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement markup="html">
+					<font fontName="Times New Roman" size="8" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[<b>Numer deklarowanej normy EKG/ONZ</b> &#13;/ Number of EKG/ONZ standart]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="320" y="80" width="50" height="60" uuid="db264172-021e-408e-bf0e-7528d6a57d83">
+					<property name="net.sf.jasperreports.export.pdf.tag.language" value="pl"/>
+					<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+				</reportElement>
+				<box topPadding="3" leftPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement markup="html">
+					<font fontName="Times New Roman" size="8" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[<b>Kod CN</b> &#13;/ CN code]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="370" y="80" width="60" height="60" uuid="64f84bf1-4664-45cd-a342-6aeb943a5a43">
+					<property name="net.sf.jasperreports.export.pdf.tag.language" value="pl"/>
+					<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+				</reportElement>
+				<box topPadding="3" leftPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement markup="html">
+					<font fontName="Times New Roman" size="8" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[<b>Ilość i rodzaj Opakowań</b> &#13;/ Number and type of packages]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="430" y="80" width="50" height="60" uuid="308e1379-0f26-4d38-b7a5-05a7650b499e">
+					<property name="net.sf.jasperreports.export.pdf.tag.language" value="pl"/>
+					<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+				</reportElement>
+				<box topPadding="3" leftPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement markup="html">
+					<font fontName="Times New Roman" size="8" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[<b>Masa netto (kg)</b> &#13;/ Total weight (kg)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="480" y="80" width="76" height="60" uuid="44d73a82-f632-4abd-8fd1-b7c38083f99a">
+					<property name="net.sf.jasperreports.export.pdf.tag.language" value="pl"/>
+					<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+				</reportElement>
+				<box topPadding="3" leftPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement markup="html">
+					<font fontName="Times New Roman" size="8" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[<b>Rodzaj i numer środka transportu</b> &#13;/ Means and number of transport]]></text>
+			</staticText>
+		</band>
+		<band height="20" splitType="Immediate">
+			<frame>
+				<reportElement positionType="Float" stretchType="ElementGroupHeight" x="0" y="0" width="556" height="20" uuid="2f208623-25f3-4c93-8d86-dc06990eeb1c"/>
+				<componentElement>
+					<reportElement positionType="Float" stretchType="ElementGroupHeight" x="0" y="0" width="556" height="20" uuid="6db6a440-da8b-471a-bebd-058d0cb29244">
+						<property name="net.sf.jasperreports.export.pdf.tag.td" value="full"/>
+						<property name="net.sf.jasperreports.export.pdf.tag.language" value="pl"/>
+						<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+					</reportElement>
+					<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+						<datasetRun subDataset="listaTowarow" uuid="910741dc-18fa-47ba-8373-df28fc2b9bbf">
+							<datasetParameter name="XML_DATA_DOCUMENT">
+								<datasetParameterExpression><![CDATA[$P{XML_DATA_DOCUMENT}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="XML_NUMBER_PATTERN">
+								<datasetParameterExpression><![CDATA[$P{XML_NUMBER_PATTERN}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+						<jr:listContents height="20" width="556">
+							<frame>
+								<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="556" height="20" uuid="18952cf5-ab1c-4ef2-98c5-b28d8beec2bc">
+									<property name="ShowOutOfBoundContent" value="false"/>
+									<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+								</reportElement>
+								<textField isBlankWhenNull="true">
+									<reportElement positionType="Float" stretchType="ElementGroupHeight" x="0" y="0" width="20" height="20" uuid="b5ebe660-7cad-415f-9640-3356c59815aa">
+										<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+									</reportElement>
+									<box topPadding="1" leftPadding="3">
+										<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+										<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+										<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+										<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+									</box>
+									<textElement>
+										<font fontName="Times New Roman" size="8" pdfEncoding="Identity-H"/>
+									</textElement>
+									<textFieldExpression><![CDATA[($F{nrPozycji}!=null?$F{nrPozycji}:"")]]></textFieldExpression>
+								</textField>
+								<textField isBlankWhenNull="true">
+									<reportElement positionType="Float" stretchType="ElementGroupHeight" x="20" y="0" width="70" height="20" uuid="b3bcd57f-41e3-438e-a6f6-cd0497154a72">
+										<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+									</reportElement>
+									<box topPadding="1" leftPadding="3">
+										<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+										<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+										<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+										<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+									</box>
+									<textElement>
+										<font fontName="Times New Roman" size="8" pdfEncoding="Identity-H"/>
+									</textElement>
+									<textFieldExpression><![CDATA[($F{nazwa}!=null?$F{nazwa}:"")]]></textFieldExpression>
+								</textField>
+								<textField isBlankWhenNull="true">
+									<reportElement positionType="Float" stretchType="ElementGroupHeight" x="90" y="0" width="60" height="20" uuid="dd50428d-3af4-4575-9858-4d491cfcd578">
+										<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+									</reportElement>
+									<box topPadding="1" leftPadding="3">
+										<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+										<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+										<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+										<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+									</box>
+									<textElement>
+										<font fontName="Times New Roman" size="8" pdfEncoding="Identity-H"/>
+									</textElement>
+									<textFieldExpression><![CDATA[($F{krajPochodzenia}!=null?$F{krajPochodzenia}:"")]]></textFieldExpression>
+								</textField>
+								<textField isBlankWhenNull="true">
+									<reportElement positionType="Float" stretchType="ElementGroupHeight" x="150" y="0" width="60" height="20" uuid="d2a919ef-df8d-4e4c-ada0-06db01421cfb">
+										<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+									</reportElement>
+									<box topPadding="1" leftPadding="3">
+										<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+										<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+										<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+										<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+									</box>
+									<textElement>
+										<font fontName="Times New Roman" size="8" pdfEncoding="Identity-H"/>
+									</textElement>
+									<textFieldExpression><![CDATA[($F{krajPrzeznaczenia}!=null?$F{krajPrzeznaczenia}:"")]]></textFieldExpression>
+								</textField>
+								<textField isBlankWhenNull="true">
+									<reportElement positionType="Float" stretchType="ElementGroupHeight" x="210" y="0" width="40" height="20" uuid="70ce4da3-2f08-4d28-b61f-4b4319fab87f">
+										<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+									</reportElement>
+									<box topPadding="1" leftPadding="3">
+										<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+										<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+										<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+										<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+									</box>
+									<textElement>
+										<font fontName="Times New Roman" size="8" pdfEncoding="Identity-H"/>
+									</textElement>
+									<textFieldExpression><![CDATA[($F{klasaJakosci}!=null?$F{klasaJakosci}:"")]]></textFieldExpression>
+								</textField>
+								<textField isBlankWhenNull="true">
+									<reportElement positionType="Float" stretchType="ElementGroupHeight" x="250" y="0" width="70" height="20" uuid="a775a99f-3c2a-4edc-8f15-e3adf02133f6">
+										<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+									</reportElement>
+									<box topPadding="1" leftPadding="3">
+										<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+										<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+										<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+										<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+									</box>
+									<textElement>
+										<font fontName="Times New Roman" size="8" pdfEncoding="Identity-H"/>
+									</textElement>
+									<textFieldExpression><![CDATA[($F{deklarowanaNorma}!=null?$F{deklarowanaNorma}:"")]]></textFieldExpression>
+								</textField>
+								<textField isBlankWhenNull="true">
+									<reportElement positionType="Float" stretchType="ElementGroupHeight" x="320" y="0" width="50" height="20" uuid="dcf10ed4-02b9-42ee-85cd-9f93ccc30bf2">
+										<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+									</reportElement>
+									<box topPadding="1" leftPadding="3">
+										<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+										<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+										<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+										<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+									</box>
+									<textElement>
+										<font fontName="Times New Roman" size="8" pdfEncoding="Identity-H"/>
+									</textElement>
+									<textFieldExpression><![CDATA[($F{kodTowarowy}!=null?$F{kodTowarowy}:"")]]></textFieldExpression>
+								</textField>
+								<textField isBlankWhenNull="true">
+									<reportElement positionType="Float" stretchType="ElementGroupHeight" x="370" y="0" width="60" height="20" uuid="2844b476-ae81-463c-b4b6-dfde77e3d3d1">
+										<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+									</reportElement>
+									<box topPadding="1" leftPadding="3">
+										<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+										<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+										<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+										<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+									</box>
+									<textElement>
+										<font fontName="Times New Roman" size="8" pdfEncoding="Identity-H"/>
+									</textElement>
+									<textFieldExpression><![CDATA[($F{liczbaOpakowan}!=null?$F{liczbaOpakowan}:"") + " " +($F{rodzajOpakowan}!=null?$F{rodzajOpakowan}:"")]]></textFieldExpression>
+								</textField>
+								<textField isBlankWhenNull="true">
+									<reportElement positionType="Float" stretchType="ElementGroupHeight" x="430" y="0" width="50" height="20" uuid="2d9ad3b7-b9cb-454d-b0ad-e523875d8a1f">
+										<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+									</reportElement>
+									<box topPadding="1" leftPadding="3">
+										<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+										<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+										<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+										<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+									</box>
+									<textElement>
+										<font fontName="Times New Roman" size="8" pdfEncoding="Identity-H"/>
+									</textElement>
+									<textFieldExpression><![CDATA[($F{masaNetto}!=null?$F{masaNetto}:"")]]></textFieldExpression>
+								</textField>
+								<textField isBlankWhenNull="true">
+									<reportElement positionType="Float" stretchType="ElementGroupHeight" x="480" y="0" width="76" height="20" uuid="bd458d9d-77e1-4b84-9567-a9a91b35bc4c">
+										<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+									</reportElement>
+									<box topPadding="1" leftPadding="3">
+										<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+										<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+										<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+										<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+									</box>
+									<textElement>
+										<font fontName="Times New Roman" size="8" pdfEncoding="Identity-H"/>
+									</textElement>
+									<textFieldExpression><![CDATA[($F{rodzajTransportu}!=null?$F{rodzajTransportu}:"") + " " + ($F{znaki}!=null?$F{znaki}:"")]]></textFieldExpression>
+								</textField>
+							</frame>
+						</jr:listContents>
+					</jr:list>
+				</componentElement>
+			</frame>
+		</band>
+		<band height="210">
+			<textField>
+				<reportElement x="0" y="2" width="555" height="30" uuid="3122c129-7b45-4cc4-acf4-1c6073a640c3">
+					<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+				</reportElement>
+				<textElement markup="html">
+					<font fontName="Times New Roman" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["4. WIJHARS, do którego skierowano zgłoszenie /" + "<font size=\"1\" style=\"font-size: 8pt\"> Voivodeship Inspectors of Agricultural and Food Quality - receiver of notification </font>" +" : " + ($F{partner}!=null?"("+$F{partner}+") ":"") + ($F{partneropis}!=null?$F{partneropis}:"")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="32" width="555" height="18" uuid="f05ea9f5-0650-4b13-a74f-01c33020725f">
+					<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+				</reportElement>
+				<textElement markup="html">
+					<font fontName="Times New Roman" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["5. Miejsce kontroli /" + "<font size=\"1\" style=\"font-size: 8pt\"> Place of inspection </font>" +" : " + ($F{miejsceKontroli}!=null?$F{miejsceKontroli}:"")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="50" width="555" height="18" uuid="a41cc127-da40-493a-937f-410741aa3786">
+					<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+				</reportElement>
+				<textElement markup="html">
+					<font fontName="Times New Roman" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["6. Proponowana data kontroli /" + "<font size=\"1\" style=\"font-size: 8pt\"> Suggested date of inspection </font>" +" : " + ($V{PDK}!=null?$V{PDK}:"")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="68" width="555" height="18" uuid="8275fb9e-f902-432c-93e7-074ac294ca31">
+					<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+				</reportElement>
+				<textElement markup="html">
+					<font fontName="Times New Roman" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["7. Osoba upoważniona do uczestnictwa w kontroli /" + "<font size=\"1\" style=\"font-size: 8pt\"> Person authorized to participate in control </font>" +" : " + ($F{imieNazwisko}!=null?$F{imieNazwisko}:"")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="86" width="555" height="18" uuid="6bc96795-da22-4455-b55f-13cce2d2f105">
+					<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+				</reportElement>
+				<textElement markup="html">
+					<font fontName="Times New Roman" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["8. Urząd Celny odprawy /" + "<font size=\"1\" style=\"font-size: 8pt\"> Custom services of clearance </font>" +" : " + ($F{UCkod}!=null?"("+$F{UCkod}+") ":"")+($F{ucOdprawy}!=null?$F{ucOdprawy}:"")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="104" width="555" height="18" uuid="29810881-6e24-45df-9d3c-4b2c4910abb9">
+					<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+				</reportElement>
+				<textElement markup="html">
+					<font fontName="Times New Roman" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["9. Numer decyzji zezwalającej na korzystanie ze specjalnego wzoru oznakowania owoców i warzyw /" + "<font size=\"1\" style=\"font-size: 8pt\"> Number of permission for approved trader to use the special specimen in the labeling of each package at the stage of dispatch </font>" +" : " + ($F{numerDecyzji}!=null?$F{numerDecyzji}: "")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="300" y="160" width="254" height="21" uuid="3ce3f8a6-0b98-4ed7-ac3e-5bb6b468feb2">
+					<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{imieNazwiskoOsZgl}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="300" y="179" width="256" height="17" uuid="c3fa7cc6-1ac4-462a-a05c-b282e91cd49d">
+					<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+				</reportElement>
+				<textElement textAlignment="Center" markup="html">
+					<font fontName="Times New Roman" size="8" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA["(Imię i nazwisko zgłaszającego / applicant name and surname)"]]></text>
+			</staticText>
+		</band>
+		<band height="70">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="0" width="557" height="70" backcolor="#CCCCCC" uuid="70180c33-fa11-4bd1-921c-cfab8f1ffccd">
+					<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+				</reportElement>
+				<box topPadding="0" leftPadding="0">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textField>
+					<reportElement x="1" y="0" width="555" height="30" uuid="2109d470-ced7-4507-aa1c-61e36dd9bad4">
+						<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+					</reportElement>
+					<box topPadding="3" leftPadding="5"/>
+					<textElement textAlignment="Left">
+						<font fontName="Times New Roman" size="8" pdfEncoding="Identity-H"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Wpłynelo do Wojewódzkiego Inspektoratu JHARS w/we " + "................................" +" w dniu " + "................." + " o godzinie " +"...................\n" + "Delivered to Voivodeship Inspectorate of Agrricultural and Food Quality in / date / time "]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="120" y="40" width="437" height="28" uuid="2a7c14f1-dd50-4d2e-8ef9-4e78de27e4fe">
+						<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+					</reportElement>
+					<box topPadding="3" leftPadding="5"/>
+					<textElement textAlignment="Center">
+						<font fontName="Times New Roman" size="8" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[..............................................................................................................................
+podpis pracownika WiJHARS / signature of receiver from Voivodeship Inspectorate of Agricultural and Food Quality]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement x="247" y="10" width="307" height="20" uuid="ca7315b0-0e9c-4420-9520-5002377be732">
+					<property name="net.sf.jasperreports.export.pdf.tag.P" value="full"/>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font fontName="Times New Roman" size="8" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Wzór: F-6/BKJ-01-IR-04 Wydanie 2 z dnia 11.07.2013 r., str. 1/2]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>
