@@ -16,19 +16,18 @@ import java.time.LocalDateTime;
  * @version :  $, :  $
  * @created 28/05/2020
  */
-@Document(indexName = "#{@indexNamePrefix}_operation_step")
-@Setting(settingPath = "/settings/settings.json")
+//@Document(indexName = "#{@indexNamePrefix}_operation_step")
+//@Setting(settingPath = "/settings/settings.json")
 @Getter @Setter
 public class OperationStepDto  implements Comparable<OperationStepDto>, IPersistentObject<String> {
-    @Id
+//    @Id
     private String id;
     private String description;
-    private SeverityEnum type;
-    @Field(type = FieldType.Date, format = DateFormat.custom, pattern = "uuuu-MM-dd'T'HH:mm:ss.SSSX")
-    @ValueConverter(CustomZonedDateTimeConverter.class)
+//    @Field(type = FieldType.Date, format = DateFormat.custom, pattern = "uuuu-MM-dd'T'HH:mm:ss.SSSX")
+//    @ValueConverter(CustomZonedDateTimeConverter.class)
     private LocalDateTime started;
-    @Field(type = FieldType.Date, format = DateFormat.custom, pattern = "uuuu-MM-dd'T'HH:mm:ss.SSSX")
-    @ValueConverter(CustomZonedDateTimeConverter.class)
+//    @Field(type = FieldType.Date, format = DateFormat.custom, pattern = "uuuu-MM-dd'T'HH:mm:ss.SSSX")
+//    @ValueConverter(CustomZonedDateTimeConverter.class)
     private LocalDateTime finished;
     private Long docID;
     private String operationGUID;

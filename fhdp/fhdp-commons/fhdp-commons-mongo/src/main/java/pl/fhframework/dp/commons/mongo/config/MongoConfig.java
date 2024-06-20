@@ -11,12 +11,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.data.mongodb.MongoTransactionManager;
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
 @Configuration
+@EnableMongoRepositories("pl.fhframework.dp.commons.mongo.repositories")
 @Slf4j
 public class MongoConfig extends AbstractMongoClientConfiguration {
 
@@ -28,7 +30,7 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
     private int minSize;
     @Value("${mongo.client.pool.maxSize:30}")
     private int maxSize;
-    @Value("${mongo.autoindex:false}")
+    @Value("${mongo.autoindex:true}")
     private Boolean autoIndex;
 
     
@@ -75,7 +77,7 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
     
     @Override
     protected boolean autoIndexCreation() {
-    	System.out.println("autoIndexCreation: "+autoIndex);
+    	log.info("autoIndexCreation: {}", autoIndex);
         return autoIndex;
     }    
     
