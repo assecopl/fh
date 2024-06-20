@@ -14,7 +14,7 @@
     <artifactId>example</artifactId>
 
     <properties>
-        <fh.version>4.10.6-SNAPSHOT</fh.version>
+        <fh.version>4.10.8-SNAPSHOT</fh.version>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
