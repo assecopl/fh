@@ -23,6 +23,7 @@ public class OperationStepDto  implements Comparable<OperationStepDto>, IPersist
 //    @Id
     private String id;
     private String description;
+    private SeverityEnum type;
 //    @Field(type = FieldType.Date, format = DateFormat.custom, pattern = "uuuu-MM-dd'T'HH:mm:ss.SSSX")
 //    @ValueConverter(CustomZonedDateTimeConverter.class)
     private LocalDateTime started;

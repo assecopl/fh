@@ -14,6 +14,7 @@ public class OperationStep implements Comparable<OperationStep>, IPersistentObje
     @Id
     private String id;
     private String description;
+    private SeverityEnum type;
     private LocalDateTime started;
     private LocalDateTime finished;
     @Indexed
