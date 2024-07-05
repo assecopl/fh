@@ -161,7 +161,7 @@ public class FacadeRestClient {
         ResponseEntity<OperationDataRestResponse> ret = FacadeRestTemplateConfig.
                 restTemplate.postForEntity(uri, request, OperationDataRestResponse.class);
         OperationDataRestResponse response = ret.getBody();
-        return response.getObject();
+        return response.getOperationDataDto();
     }
 
     public OperationStateResponseDto getOperationState(OperationStateRequestDto data, Class operationDtoServiceClass) {
