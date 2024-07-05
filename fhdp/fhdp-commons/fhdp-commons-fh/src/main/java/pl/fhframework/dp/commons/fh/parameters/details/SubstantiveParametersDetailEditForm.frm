@@ -19,7 +19,7 @@
     <Group id="basicDataAndCommonCommandsParametersEditForm" styleClasses="group-header box-shadow__unset">
         <Row width="md-12" elementsHorizontalAlign="AROUND" styleClasses="row-panel panel-header">
             <Group
-                    width="xs-1"
+                    width="xs-13"
                     styleClasses="mb-0 w-100"
                     wrapperStyle="
                                 padding: var(--padding-bigger);
@@ -50,7 +50,7 @@
 
             <ButtonGroup id="buttonGroupEditParameters" horizontalAlign="right"
                          wrapperStyle="padding: var(--padding-bigger);"
-                         styleClasses="button-icon-group justify-content-end panel-options-base" width="xs-1">
+                         styleClasses="button-icon-group justify-content-end panel-options-base" width="xs-13">
                 <Button id="cancelButtonEditParameters" style="default" styleClasses="panel-option margin__unset" horizontalAlign="right"
                         label="[b][icon='fas fa-times'][/b]"
                         hint="{$.fhdp.common.close}" hintTrigger="HOVER"
@@ -106,14 +106,14 @@
                     <InputText id="addTag" width="md-4" value="{name}" rowsCountAuto="true" styleClasses="font-weight-bold"
                                availability="{checkControlVisibility()}"/>
                     <Button id="btnSaveTag"
-                            width="xs-1"
+                            width="xs-13"
                             onClick="saveTag" label="{$.fhdp.parameters.property.save}"
                             hintPlacement="BOTTOM"
                             inlineStyle="line-height: unset;"
                             wrapperStyle="margin-bottom: unset; margin-right: 5px;"
                             availability="{checkControlVisibility()}"/>
                     <Button id="btnCancelAddTag"
-                            width="xs-1"
+                            width="xs-13"
                             onClick="cancelAddTag" label="{$.fhdp.parameters.property.cancel}"
                             hintPlacement="BOTTOM" style="default"
                             inlineStyle="line-height: unset;"
@@ -127,13 +127,13 @@
 
     <Row elementsHorizontalAlign="LEFT" styleClasses="panel-footer mb-n3">
         <Button id="btnSave"
-                width="xs-1"
+                width="xs-13"
                 onClick="save" label="{$.fhdp.parameters.property.save}"
                 hintPlacement="BOTTOM"
                 inlineStyle="line-height: unset;"
                 wrapperStyle="margin-bottom: unset; margin-right: 5px;"/>
         <Button id="btnCancel"
-                width="xs-1" availability="EDIT"
+                width="xs-13" availability="EDIT"
                 onClick="cancel" label="{$.fhdp.parameters.property.cancel}"
                 hintPlacement="BOTTOM" style="default"
                 inlineStyle="line-height: unset;"

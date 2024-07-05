@@ -17,7 +17,7 @@
             <Table collection="{roles}" iterator="role" selected="{selectedRole}" onRowClick="roleSelected" minRows="3" id="rolesTable">
                 <Column label="{$.fhdp.adm.permissions.list.roles.name}" width="70" value="{role.roleName}" id="roleNameColumn"/>
                 <Column id="roleButtonsColumn" width="30" label="[className='d-flex,align-items-center'] [portal='addRoleButton'][/className]">
-                    <Button horizontalAlign="left" style="default" width="xs-1" verticalAlign="middle"
+                    <Button horizontalAlign="left" style="default" width="xs-13" verticalAlign="middle"
                             onClick="deleteRole({role})" label="[icon='fa fa-trash']" availability="{FORM.isAdminRole(role)}"
                             confirmationMsg="{$.fhdp.adm.roles.list.role.delete.message}" confirmOnEvent="onClick"
                             styleClasses="button-in-operations"/>
@@ -37,7 +37,7 @@
                     <OutputLabel width="md-12" value="{permission.denied ? '[color=''#C80000''][icon=''fa fa-times''][/color]' : '[color=''green''][icon=''fa fa-check''][/color]'}" id="allowDisallowOutputLabel"/>
                 </ColumnPaged>
                 <ColumnPaged id="buttonsColumn" width="4" label="[className='d-flex,align-items-center'] [portal='addPermissionButton'][/className]">
-                    <Button horizontalAlign="left" style="default" width="xs-1" verticalAlign="middle"
+                    <Button horizontalAlign="left" style="default" width="xs-13" verticalAlign="middle"
                             onClick="deletePermission({permission})" label="[icon='fa fa-trash']"
                             confirmationMsg="{$.fhdp.adm.permissions.list.permission.delete.message}" confirmOnEvent="onClick"
                             styleClasses="button-in-operations"/>
