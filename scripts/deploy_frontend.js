@@ -9,7 +9,7 @@ const validURL = (str) => {
 }
 
 const nodeV = process.version.match(/^v(\d+)/)[1];
-if (nodeV !== '12') {
+if (nodeV !== '18') {
   console.error('Please use node js in version 12!');
   return;
 }
@@ -55,8 +55,8 @@ let FH_DIRS = [
   '../packages/components/basic-controls/', 
   '../packages/components/charts-controls/',
   '../packages/applications/default-application/',
-  '../packages/components/fhdp-charts/',
   '../packages/components/fhdp-controls/',
+  '../packages/components/fhdp-charts/',
   '../packages/components/fhdp-extenders/',
   '../packages/components/fhdp-fh-starter/'
 ];
