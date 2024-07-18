@@ -30,6 +30,7 @@ public class BeanClearUtilTest {
     Assert.assertNull(mockObject.getNestedObject().getItemEmptyCollection());
     Assert.assertNull(mockObject.getNestedObject().getItemEmptyList());
     Assert.assertNull(mockObject.getNestedObject().getItemEmptyMap());
+    Assert.assertNull(mockObject.getEmptyNestedObjectSet());
 
     /**
      * The below objects are set with content,
@@ -39,5 +40,6 @@ public class BeanClearUtilTest {
     Assert.assertNotNull(mockObject.getNestedObjects());
     Assert.assertNotNull(mockObject.getContent());
     Assert.assertNotNull(mockObject.getNestedObjects().get(0).getContent());
+    Assert.assertFalse(mockObject.getNestedObjectSet().isEmpty());
   }
 }
