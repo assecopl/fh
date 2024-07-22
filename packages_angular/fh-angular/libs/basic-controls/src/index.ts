@@ -46,5 +46,6 @@ export { FileUploadAccessorComponent } from './lib/components/file-upload-access
 export { DictionaryLookupComponent } from './lib/controls/dictionary-combo/dictionary-lookup.component';
 export { ButtonGroupComponent } from './lib/controls/button-group/button-group.component';
 export { HintComponent } from './lib/components/hint/hint.component';
+export {WizardComponent} from "./lib/controls/wizard/wizard.component";
 
 export * from './lib/basic-controls.module';
