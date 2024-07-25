@@ -1,23 +1,19 @@
 import {
   AfterContentInit,
   Component,
-  ContentChildren,
   forwardRef,
-  Host,
   HostBinding,
   Injector,
   Input,
   OnInit,
   Optional,
-  QueryList,
   SimpleChanges,
   SkipSelf,
 } from '@angular/core';
-import {GroupingComponentC} from '../../models/componentClasses/GroupingComponentC';
 import {TabComponent} from '../tab/tab.component';
 import {BootstrapWidthEnum} from '../../models/enums/BootstrapWidthEnum';
-import {AvailabilityEnum, FhngComponent} from "@fh-ng/forms-handler";
-import {TabContainerComponent} from "@fh-ng/basic-controls";
+import {FhngComponent} from "@fh-ng/forms-handler";
+import {TabContainerComponent} from "../tab-container/tab-container.component";
 
 @Component({
   selector: 'fh-wizard',

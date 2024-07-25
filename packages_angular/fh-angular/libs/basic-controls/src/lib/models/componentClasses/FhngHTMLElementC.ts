@@ -385,8 +385,8 @@ export class FhngHTMLElementC
 
     // if (data.value) this.label = data.value; //Label zostawiamy w spokoju, pozmieniamy w komponentach jak trzeba - z value na label
     if (data.style) this.bootstrapStyle = data.style
-    this.setWidth = data.width;
-    this.setHeight = data.height;
+    if (data.width !== undefined) this.setWidth = data.width;
+    if (data.height !== undefined) this.setHeight = data.height;
 
     this.hint = data.hint || this.hint;
   }
