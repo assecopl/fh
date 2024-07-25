@@ -102,7 +102,16 @@ public class TabContainer extends GroupingComponent<Tab> implements IChangeableB
             if (!getForm().isDesignMode()) {
                 updateActiveTab();
             }
+        } else if(activeTabIndex > 0) {
+            //Prevent index out of bounds.
+            if(activeTabIndex > (getSubcomponents().size() -1)){
+                activeTabIndex = (getSubcomponents().size() -1);
+                if (!getForm().isDesignMode()) {
+                    updateActiveTab();
+                }
+            }
         }
+
 
         if (!getForm().isDesignMode()) {
             this.validateActiveTabIndexVisibility();

@@ -80,6 +80,17 @@ public class BeanConversionUtil {
         return null;
     }
 
+    public static String toPrettyJsonWithoutNulls(Object bean) {
+        ObjectMapper mapper = new FhdpObjectMapper();
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        try {
+            return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(bean);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     public static String getSenderId(String messageSender, Object msg) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         String fullSenderIdPath = messageSender.replace("/", ".").substring(1);
