@@ -9,8 +9,10 @@ import org.springframework.core.io.FileUrlResource;
 import org.springframework.core.io.Resource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+import pl.fhframework.dp.commons.utils.file.DirectoryHelper;
 import pl.fhframework.dp.commons.utils.file.FileHelper;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -27,6 +29,7 @@ public class ImageUploadServiceTest {
     public void compactIfPossible() throws IOException {
         InputStream is = ImageUploadServiceTest.class.getResourceAsStream("/img/P2280010.jpeg");
         byte[] content = FileHelper.readInputStreamtoBytes(is);
+        DirectoryHelper.checkDirectory(new File("/tmp/")); //Create directory if doesn't exist
         FileHelper.writeFile("/tmp/src.jpeg", content);
 
         Resource file = new FileUrlResource("/tmp/src.jpeg");
