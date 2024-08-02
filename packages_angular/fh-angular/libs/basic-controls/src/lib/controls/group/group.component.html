@@ -1,7 +1,11 @@
-
-<div [id]="id" [ngStyle]="styles" class="group row {{styleClasses}}" [availabilityHtmlElement]="availability">
+<div
+  [id]="id"
+  [ngStyle]="styles"
+  (click)="onClickEvent($event)"
+  class="group row {{styleClasses}}" [availabilityHtmlElement]="availability"
+>
         <ng-container [fhDynamicComponents]="processedSubelements || subelements" [fhNonVisualSubcomponents]="nonVisualComponents"/>
 </div>
-<!--<ng-container *ngIf="configuration.debug">-->
-<!--  <fh-component-debugger/>-->
-<!--</ng-container>-->
+<ng-container *ngIf="configuration.debug">
+  <fh-component-debugger/>
+</ng-container>

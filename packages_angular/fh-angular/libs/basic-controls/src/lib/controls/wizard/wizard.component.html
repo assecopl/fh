@@ -36,7 +36,7 @@
   class="nav nav-tabs nav-pills nav-wizard wizard-tabs"
   [availabilityHtmlElement]="availability"
 >
-  <ng-container *ngFor="let tab of childFhngComponents">
+  <ng-container *ngFor="let tab of childFhngComponents; let i = index">
     <li class="nav-item" [class.d-none]="tab.availability != 3 && tab.availability != 4">
       <a
         *ngIf="tab.availability == 3 || tab.availability == 4"
@@ -49,7 +49,9 @@
         [ngClass]="{active: tab.selected}"
         (keydown.enter)="selectTab(tab, $event)"
         (click)="selectTab(tab, $event)"
-        [innerHtml]="tab.label | fhml"></a>
+        [innerHtml]="i+1"
+        ></a>
+      <span class="nav-link__label" [innerHtml]="tab.label | fhml"></span>
     </li>
   </ng-container>
 </ul>

@@ -12,7 +12,7 @@ import {
 import {FhngHTMLElementC} from '../../models/componentClasses/FhngHTMLElementC';
 import {BootstrapWidthEnum} from '../../models/enums/BootstrapWidthEnum';
 import {RepeaterComponent} from '../repeater/repeater.component';
-import {FhngComponent} from '@fh-ng/forms-handler';
+import {FhngComponent, IDataAttributes} from '@fh-ng/forms-handler';
 
 @Component({
   selector: '[fhng-group]',
@@ -28,11 +28,9 @@ import {FhngComponent} from '@fh-ng/forms-handler';
   ],
 })
 export class GroupComponent extends FhngHTMLElementC implements OnInit {
+  @Input()
+  public onClickNameEvent: string = null;
 
-
-  // @Input()
-  // @HostBinding('id')
-  // public override id = ''
   constructor(
     public override injector: Injector,
     @Optional() @SkipSelf() parentFhngComponent: FhngComponent
@@ -71,5 +69,20 @@ export class GroupComponent extends FhngHTMLElementC implements OnInit {
 
   override ngOnChanges(changes: SimpleChanges) {
     super.ngOnChanges(changes);
+  }
+
+  public override mapAttributes(data: IDataAttributes) {
+    super.mapAttributes(data);
+    this.onClickNameEvent = data.onClick || this.onClickNameEvent;
+  }
+
+  public onClickEvent($event: Event): void {
+
+
+    if (this.onClickNameEvent) {
+      $event.stopPropagation();
+      $event.preventDefault();
+      this.fireEventWithLock('onClick', this.onClickNameEvent);
+    }
   }
 }

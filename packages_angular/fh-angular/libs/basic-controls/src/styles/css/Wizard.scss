@@ -1,4 +1,6 @@
 .fc.wizard {
+  padding: 0;
+
   .nav-wizard {
     border: 0;
 
@@ -28,7 +30,7 @@
     }
 
     & > li:first-child {
-      border-left: 0;
+      //border-left: 0;
     }
 
     & > li:last-child a {
@@ -100,6 +102,15 @@
       a {
         background-color: #aaa;
         color: #fff;
+      }
+    }
+
+    .nav-link {
+      &__label {
+        max-width: 52px;
+        display: inline-block;
+        text-align: center;
+        overflow-wrap: break-word;
       }
     }
   }
