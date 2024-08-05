@@ -195,7 +195,7 @@ export class TabContainerComponent
   public override mapAttributes(data: IDataAttributes & {onTabChange?: string}) {
     super.mapAttributes(data);
 
-    if(data.activeTabIndex) {
+    if(data.activeTabIndex != undefined) {
       this.activeTabIndex = data.activeTabIndex;
     }
 
