@@ -3,7 +3,7 @@ import {
   Component,
   forwardRef,
   HostBinding,
-  Injector,
+  Injector, Input,
   OnChanges,
   OnInit,
   Optional,
@@ -52,19 +52,22 @@ export class TabComponent
   @HostBinding('class.active')
   public selected: boolean = false;
 
-  @Output()
-  public update$: Observable<any> = of();
+  @Input()
+  public tabIdx: number = 0;
+
+  // @Output()
+  // public update$: Observable<any> = of();
 
   public override width: BootstrapWidthEnum = BootstrapWidthEnum.MD12;
 
-  private _updateBehavior: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+  // private _updateBehavior: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
   constructor(
     public override injector: Injector,
     @Optional() @SkipSelf() parentFhngComponent: FhngComponent
   ) {
     super(injector, parentFhngComponent);
-    this.update$ = this._updateBehavior.asObservable();
+    // this.update$ = this._updateBehavior.asObservable();
   }
 
   public override ngOnInit() {
@@ -96,7 +99,7 @@ export class TabComponent
     if(data.selected) {
       this.selected = data.selected;
     }
-    this._updateBehavior.next(data);
+    // this._updateBehavior.next(data);
     this.classFcEditable = this.availability === AvailabilityEnum.EDIT;
     this.classDNone = this.availability === AvailabilityEnum.HIDDEN;
   }

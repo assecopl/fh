@@ -27,9 +27,7 @@ import {TabContainerComponent} from "../tab-container/tab-container.component";
     {provide: FhngComponent, useExisting: forwardRef(() => WizardComponent)},
   ],
 })
-export class WizardComponent
-  extends TabContainerComponent
-  implements OnInit, AfterContentInit {
+export class WizardComponent extends TabContainerComponent implements OnInit, AfterContentInit {
 
   @Input()
   public override width: string = BootstrapWidthEnum.MD12;
@@ -40,12 +38,23 @@ export class WizardComponent
 
   public activeLinkStyleClasses: string[] = ['nav-link', 'active'];
 
+  public isSubWizard:boolean = false;
+
+  public subWizards:Map<number, WizardComponent> = new Map<number, WizardComponent>();
+
+  @Input()
+  protected subWizardSteps : number = null;
+
+
+
   @HostBinding('class.wizard')
   public wizardClass: boolean = true;
 
   constructor(
     public override injector: Injector,
-    @Optional() @SkipSelf() parentFhngComponent: FhngComponent
+    @Optional() @SkipSelf() parentFhngComponent: FhngComponent,
+    @Optional() @SkipSelf() protected parentWizardComponent: WizardComponent,
+    @Optional() @SkipSelf() protected parentWizardTabComponent: TabComponent
   ) {
     super(injector, parentFhngComponent);
     this.horizontalAlign = 'CENTER';
@@ -53,6 +62,7 @@ export class WizardComponent
 
   public override ngOnInit() {
     super.ngOnInit();
+    this.processSubWizard();
   }
 
   public override ngOnChanges(changes: SimpleChanges) {
@@ -62,10 +72,25 @@ export class WizardComponent
   public override ngAfterContentInit(): void {
     // this.subcomponentsArray = this.subcomponents.toArray();
     this.activateDefaultTab();
+
   }
 
   public getTabId(tab: TabComponent): string {
     return tab.tabId;
+  }
+
+  /**
+   * Wizard can also be a sub wizard. In that case nav links of this wizard won't be shown.
+   * It will act as sub steps of his parent Wizard and Tab.
+   * @protected
+   */
+  protected processSubWizard():void {
+
+    if(this.parentWizardComponent){
+      this.isSubWizard = true;
+      console.log("WIzard register", this.parentWizardTabComponent.tabIdx)
+      this.parentWizardComponent.subWizards.set(this.parentWizardTabComponent.tabIdx, this);
+    }
   }
 
 }

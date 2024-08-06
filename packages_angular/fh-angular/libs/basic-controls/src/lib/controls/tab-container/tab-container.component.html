@@ -26,7 +26,7 @@
   </ul>
   <div class="tab-content row ">
     <ng-container *ngFor="let tab of subelements;let i = index;">
-      <fhng-tab [data]="tab"/>
+      <fhng-tab [data]="tab" [tabIdx]="i"/>
     </ng-container>
   </div>
 </div>

@@ -33,9 +33,9 @@
       //border-left: 0;
     }
 
-    & > li:last-child a {
-      border-right: 0;
-    }
+    //& > li:last-child a {
+    //  border-right: 0;
+    //}
 
     & > li:last-child a {
       border-radius: 0 5px 5px 0;
@@ -45,6 +45,9 @@
       border-radius: 0;
       border: 0;
       background-color: #eee;
+      &.bg-used {
+        background-color: #eee;
+      }
     }
 
     & > li:not(:last-child) a:after {
@@ -58,6 +61,7 @@
       border-width: 20px 0 20px 20px;
       border-color: transparent transparent transparent #eee;
       z-index: 150;
+      margin-top: 50% !important;
     }
 
     & > li:not(:last-child) {
@@ -93,6 +97,7 @@
     & > li:hover {
       &:not(:last-child) a:after {
         border-color: transparent transparent transparent #aaa;
+        margin-top: 50%;
       }
 
       &:not(:first-child) a:before {

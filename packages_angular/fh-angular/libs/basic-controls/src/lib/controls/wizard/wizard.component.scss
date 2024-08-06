@@ -1,0 +1,21 @@
+.subwizard {
+  a {
+    z-index: 151;
+    background-color: transparent;
+    width: 52px;
+    position: absolute;
+    height: 52px;
+
+  }
+  a:after {
+    margin-left: 4px;
+  }
+  span {
+    padding-top: 52px;
+    width: 52px;
+    display: inline-block;
+    text-align: center;
+    overflow-wrap: break-word;
+  }
+}
+

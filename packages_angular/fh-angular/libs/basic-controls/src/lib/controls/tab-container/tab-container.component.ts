@@ -36,8 +36,7 @@ type TabElement = IDataAttributes & Tab;
     },
   ],
 })
-export class TabContainerComponent
-  extends GroupingComponentC<TabComponent>
+export class TabContainerComponent extends GroupingComponentC<TabComponent>
   implements OnInit, AfterContentInit, AfterViewInit, OnDestroy {
 
   public override mb2 = false;
@@ -57,11 +56,11 @@ export class TabContainerComponent
   @Input()
   public onTabChange: string = null;
 
-  @Output()
-  public activeTabIndexChange: EventEmitter<number> = new EventEmitter<number>();
-
-  @Output()
-  public activeTabIdChange: EventEmitter<string> = new EventEmitter<string>();
+  // @Output()
+  // public activeTabIndexChange: EventEmitter<number> = new EventEmitter<number>();
+  //
+  // @Output()
+  // public activeTabIdChange: EventEmitter<string> = new EventEmitter<string>();
 
   @Output()
   public tabChange: EventEmitter<TabComponent> = new EventEmitter();
@@ -112,11 +111,11 @@ export class TabContainerComponent
 
   public override ngAfterViewInit(): void {
     super.ngAfterViewInit();
-    this._mapSubscriptions();
+    // this._mapSubscriptions();
   }
 
   public override ngOnDestroy(): void {
-    this._unsubscribe();
+    // this._unsubscribe();
   }
 
   public activateDefaultTab(): void {
@@ -170,8 +169,8 @@ export class TabContainerComponent
     this.activeTabIndex = this.boundActiveTabIndex
 
     if (this.tabChange) {
-      this.activeTabIdChange.emit(tab.id);
-      this.activeTabIndexChange.emit(this.boundActiveTabIndex);
+      // this.activeTabIdChange.emit(tab.id);
+      // this.activeTabIndexChange.emit(this.boundActiveTabIndex);
       this.tabChange.emit(this.childFhngComponents.find(subElement => subElement.id === tab.id));
     }
     this.changesQueue.queueValueChange(this.activeTabIndex);
@@ -212,23 +211,23 @@ export class TabContainerComponent
     });
   }
 
-  private _mapSubscriptions(): void {
-    this._unsubscribe();
-    this.childFhngComponents.forEach((element: any, index: number) => {
-      if (element.update$) {
-        this._subscriptions.push(element.update$.subscribe((data: TabElement) => this._updateSubscribeEvent(data)));
-      }
-    });
-  }
+  // private _mapSubscriptions(): void {
+  //   this._unsubscribe();
+  //   this.childFhngComponents.forEach((element: any, index: number) => {
+  //     if (element.update$) {
+  //       this._subscriptions.push(element.update$.subscribe((data: TabElement) => this._updateSubscribeEvent(data)));
+  //     }
+  //   });
+  // }
 
-  private _unsubscribe(): void {
-    this._subscriptions.forEach(element => element.unsubscribe());
-    this._subscriptions = [];
-  }
+  // private _unsubscribe(): void {
+  //   this._subscriptions.forEach(element => element.unsubscribe());
+  //   this._subscriptions = [];
+  // }
 
-  private _updateSubscribeEvent(data: TabElement): void {
-    let index = this.subelements.findIndex(element => element.id === data.id);
-
-    // this.subelements[index] = {...this.subelements[index], label: data.label, selected: data.selected}
-  }
+  // private _updateSubscribeEvent(data: TabElement): void {
+  //   let index = this.subelements.findIndex(element => element.id === data.id);
+  //
+  //   // this.subelements[index] = {...this.subelements[index], label: data.label, selected: data.selected}
+  // }
 }
