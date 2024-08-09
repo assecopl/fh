@@ -289,13 +289,15 @@ export class FhngComponent extends FhngChangesComponent implements OnInit, OnCha
     let dataKeys = Object.keys(data);
     let notFindAttributes: string[] = []
     dataKeys.forEach(key => {
-      if (Object.hasOwn(this, key)) {
+      // @ts-ignore
+      if (Object.hasOwn(this, key) || this.__lookupSetter__(key)) { //@@!! sprawdzamy także już po stronie JS w __lookupSetter__ czy istnieje setter dla danego klucza.
         if (typeof this[key] == "boolean") {
           this[key] = data[key] == true || data[key] == 'true';
         } else {
           this[key] = data[key] || this[key];
         }
       } else {
+        // @ts-ignore
         if (this.configuration.debug) {
           notFindAttributes.push(key);
         }
