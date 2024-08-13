@@ -57,7 +57,6 @@ export class WizardComponent extends TabContainerComponent implements OnInit, Af
     @Optional() @SkipSelf() protected parentWizardTabComponent: TabComponent
   ) {
     super(injector, parentFhngComponent);
-    this.horizontalAlign = 'CENTER';
   }
 
   public override ngOnInit() {

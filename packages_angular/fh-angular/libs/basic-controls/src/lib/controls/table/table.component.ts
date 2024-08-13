@@ -73,8 +73,6 @@ export class TableComponent
    */
   private firstRow: TableRowComponent = null;
 
-  public rowsArray: TableRowComponent[] = [];
-
   // @ViewChild('tbody', {static: true, read: ViewContainerRef})
   // public tbody: ViewContainerRef = null;
   //
@@ -145,11 +143,6 @@ export class TableComponent
 
   override ngOnChanges(changes: SimpleChanges): void {
     super.ngOnChanges(changes);
-    // if (changes['selected'] && changes['selected'].currentValue == null) {
-    //   this.rowsArray.forEach((row) => {
-    //     row.toggleHighlight(null);
-    //   });
-    // }
   }
 
   override ngOnDestroy(): void {
@@ -161,27 +154,7 @@ export class TableComponent
   }
 
   onExportCsv(): void {
-    // let content = '';
-    // if (this.rowsArray && this.rowsArray.length > 0) {
-    //   this.rowsArray[0].childFhngComponents.forEach((component) => {
-    //     if (component instanceof TableCellComponent) {
-    //       content = content.concat(component.label ? component.label : '', ';');
-    //     }
-    //   });
-    // }
-    // content = content.concat('\n');
-    //
-    // this.rowsArray.forEach((row) => {
-    //   row.childFhngComponents.forEach((component) => {
-    //     if (component instanceof TableCellComponent) {
-    //       content = content.concat(component.label ? component.label : '', ';');
-    //     }
-    //   });
-    //   content = content.concat('\n');
-    // });
-    //
-    // let filename = (this.label ? this.label : 'table_export') + '.csv';
-    // this.downloadFile(filename, content);
+
   }
 
   /** Downloads file with given content */
@@ -211,8 +184,7 @@ export class TableComponent
   public select(event, row: any) {
     event.stopPropagation();
     if (this.availability != AvailabilityEnum.EDIT) return;
-    // this.onRowClickEvent(event, this.rowsArray.indexOf(selected), false);
-    this.selectRow(this.rowsArray.indexOf(row));
+    this.selectRow(row);
     this.changesQueue.queueValueChange(this.rawValue);
     this.fireEventWithLock('onRowClick', this.onRowClick);
   }
@@ -230,7 +202,7 @@ export class TableComponent
   public selectAllRows(selectOrClear) {
     if (selectOrClear) {
       this.rawValue = [];
-      this.rowsArray.forEach((value, index) => {
+      this.tableData.forEach((value, index) => {
         this.rawValue.push(index);
       })
     } else {
@@ -292,14 +264,13 @@ export class TableComponent
       this.visibleRows = data.displayedRowsCount || 0;
     }
     if (data.tableRows) {
-      this.rowsArray = []
       this.tableData = data.tableRows;
 
     }
     this.selectable = data.selectable || true;
     if (data.selectedRowNumber) {
       this.rawValue = data.selectedRowNumber;
-      if (this.rowsArray.length == this.rawValue.length) {
+      if (this.tableData.length == this.rawValue.length) {
         this.checkAllValue = true;
       } else {
         this.checkAllValue = false;
@@ -307,7 +278,7 @@ export class TableComponent
     }
     if (data.selectedRowsNumbers) {
       this.rawValue = data.selectedRowsNumbers;
-      if (this.rowsArray.length == this.rawValue.length) {
+      if (this.tableData.length == this.rawValue.length) {
         this.checkAllValue = true;
       } else {
         this.checkAllValue = false;

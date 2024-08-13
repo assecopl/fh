@@ -10,7 +10,7 @@ import {Page} from "@fh-ng/forms-handler";
 
 @Directive()
 export abstract class TableComponentRef extends FhngHTMLElementC {
-  abstract rowsArray: TableRowComponent[];
+  // abstract rowsArray: TableRowComponent[];
   // public selected: any;
   // public selectedChange: EventEmitter<any>;
   public collection: Page<any> | Array<any>;

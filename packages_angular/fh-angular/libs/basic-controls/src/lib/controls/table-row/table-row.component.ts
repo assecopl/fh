@@ -66,9 +66,7 @@ export class TableRowComponent
   ) {
     super(injector, parentFhngComponent);
     this.wrapperClass = false;
-    if (tableRef) {
-      tableRef.rowsArray.push(this);
-    }
+
   }
 
   @ViewChild('tr', {static: true, read: ViewContainerRef})
@@ -76,6 +74,7 @@ export class TableRowComponent
 
   override ngOnInit() {
     super.ngOnInit();
+
     // if (
     //   this.tableRef &&
     //   (this.tableRef.selectable ||
