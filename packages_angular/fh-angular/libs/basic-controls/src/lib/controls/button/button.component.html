@@ -1,6 +1,6 @@
 <ng-container *ngIf="!parentButtonGroupComponent; else contentTemplate">
   <button
-    [availabilityHtmlElement]="availability"
+    [availabilityHtmlElement]="availability" [availabilityElementRef]="elementRef"
     #focusElement
     class="fc btn button btn-{{ bootstrapStyle }} {{styleClasses}}"
     [id]="innerId"
