@@ -1,6 +1,7 @@
-<ng-container *ngIf="headingType == 'H1'">
-  <h1>
-    <ng-container *ngIf="hint; else outputLabel">
+<ng-container>
+  <ng-container *ngIf="headingType == 'H1'">
+    <h1>
+      <ng-container *ngIf="hint; else outputLabel">
       <span
         [ngStyle]="styles"
         [fhng-hint]="hint"
@@ -12,12 +13,12 @@
       >
         <ng-container *ngTemplateOutlet="outputLabel"></ng-container>
       </span>
-    </ng-container>
-  </h1>
-</ng-container>
-<ng-container *ngIf="headingType == 'H2'">
-  <h2>
-    <ng-container *ngIf="hint; else outputLabel">
+      </ng-container>
+    </h1>
+  </ng-container>
+  <ng-container *ngIf="headingType == 'H2'">
+    <h2>
+      <ng-container *ngIf="hint; else outputLabel">
       <span
         [ngStyle]="styles"
         [fhng-hint]="hint"
@@ -29,12 +30,12 @@
       >
         <ng-container *ngTemplateOutlet="outputLabel"></ng-container>
       </span>
-    </ng-container>
-  </h2>
-</ng-container>
-<ng-container *ngIf="headingType == 'H3'">
-  <h3>
-    <ng-container *ngIf="hint; else outputLabel">
+      </ng-container>
+    </h2>
+  </ng-container>
+  <ng-container *ngIf="headingType == 'H3'">
+    <h3>
+      <ng-container *ngIf="hint; else outputLabel">
       <span
         [ngStyle]="styles"
         [fhng-hint]="hint"
@@ -46,12 +47,12 @@
       >
         <ng-container *ngTemplateOutlet="outputLabel"></ng-container>
       </span>
-    </ng-container>
-  </h3>
-</ng-container>
-<ng-container *ngIf="headingType == 'H4'">
-  <h4>
-    <ng-container *ngIf="hint; else outputLabel">
+      </ng-container>
+    </h3>
+  </ng-container>
+  <ng-container *ngIf="headingType == 'H4'">
+    <h4>
+      <ng-container *ngIf="hint; else outputLabel">
       <span
         [ngStyle]="styles"
         [fhng-hint]="hint"
@@ -63,12 +64,12 @@
       >
         <ng-container *ngTemplateOutlet="outputLabel"></ng-container>
       </span>
-    </ng-container>
-  </h4>
-</ng-container>
-<ng-container *ngIf="headingType == 'H5'">
-  <h5>
-    <ng-container *ngIf="hint; else outputLabel">
+      </ng-container>
+    </h4>
+  </ng-container>
+  <ng-container *ngIf="headingType == 'H5'">
+    <h5>
+      <ng-container *ngIf="hint; else outputLabel">
       <span
         [ngStyle]="styles"
         [fhng-hint]="hint"
@@ -80,11 +81,29 @@
       >
         <ng-container *ngTemplateOutlet="outputLabel"></ng-container>
       </span>
-    </ng-container>
-  </h5>
-</ng-container>
-<ng-container *ngIf="headingType == 'H6'">
-  <h6>
+      </ng-container>
+    </h5>
+  </ng-container>
+  <ng-container *ngIf="headingType == 'H6'">
+    <h6>
+      <ng-container *ngIf="hint; else outputLabel">
+      <span
+        [ngStyle]="styles"
+        [fhng-hint]="hint"
+        [hintDisplay]="hintDisplay"
+        [hintTrigger]="hintTrigger"
+        [hintType]="hintType"
+        [hintPlacement]="hintPlacement"
+        [hintTitle]="hintTitle"
+        (click)="onClickEvent($event)"
+      >
+        <ng-container *ngTemplateOutlet="outputLabel"></ng-container>
+      </span>
+      </ng-container>
+    </h6>
+  </ng-container>
+  <ng-container *ngIf="headingType == 'Default' || headingType == 'Auto'">
+    <!--  <div >-->
     <ng-container *ngIf="hint; else outputLabel">
       <span
         [ngStyle]="styles"
@@ -99,32 +118,15 @@
         <ng-container *ngTemplateOutlet="outputLabel"></ng-container>
       </span>
     </ng-container>
-  </h6>
-</ng-container>
-<ng-container *ngIf="headingType == 'Default' || headingType == 'Auto'">
-<!--  <div >-->
-    <ng-container *ngIf="hint; else outputLabel">
-      <span
-        [ngStyle]="styles"
-        [fhng-hint]="hint"
-        [hintDisplay]="hintDisplay"
-        [hintTrigger]="hintTrigger"
-        [hintType]="hintType"
-        [hintPlacement]="hintPlacement"
-        [hintTitle]="hintTitle"
-        (click)="onClickEvent($event)"
-      >
-        <ng-container *ngTemplateOutlet="outputLabel"></ng-container>
-      </span>
-    </ng-container>
-<!--  </div>-->
-</ng-container>
+    <!--  </div>-->
+  </ng-container>
 
-<ng-template #outputLabel>
+  <ng-template #outputLabel>
   <span
     class="fc outputLabel {{styleClasses}}"
     [id]="id"
     [availabilityHtmlElement]="availability"
+    [availabilityElementRef]="elementRef"
     [hasHeight]="height"
     [ngStyle]="styles"
     (click)="onClickEvent($event)"
@@ -141,4 +143,5 @@
     </ng-container>
     <i *ngIf="icon && iconAlignment == 'AFTER'" class="ml-2 {{ icon }}"></i>
   </span>
-</ng-template>
+  </ng-template>
+</ng-container>

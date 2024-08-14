@@ -1,7 +1,6 @@
 import {Directive, ElementRef, Input, OnInit} from '@angular/core';
 import {AvailabilityUtils} from "../AvailabilityUtils";
 import {AvailabilityEnum} from "../enums/AvailabilityEnum";
-import {NgControl} from '@angular/forms';
 
 
 /**
