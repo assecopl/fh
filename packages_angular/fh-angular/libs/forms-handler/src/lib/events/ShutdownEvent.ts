@@ -2,11 +2,12 @@ import {BaseEvent} from "./BaseEvent";
 // import {Connector} from "../Socket/Connector";
 import {inject, Injectable} from "@angular/core";
 import {NotificationService} from "../service/Notification";
+import {I18nService} from "@fh-ng/forms-handler";
 
 
 @Injectable({providedIn: 'root'})
 class ShutdownEvent extends BaseEvent {
-
+  protected override i18n: I18nService = inject(I18nService);
 
     protected notificationService: NotificationService = inject(NotificationService);
 
