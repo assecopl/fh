@@ -50,5 +50,9 @@ export class ApplicationLockService {
 
     }
 
+  public isActive(): boolean {
+    return this.currentUCValue || this.currentFormValue;
+  }
+
 
 }

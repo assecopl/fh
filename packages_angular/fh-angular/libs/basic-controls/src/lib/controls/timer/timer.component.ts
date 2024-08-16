@@ -1,5 +1,5 @@
-import {Component, forwardRef, Injector, Input, OnDestroy, OnInit, Optional, SkipSelf,} from '@angular/core';
-import {FhngComponent, IDataAttributes} from "@fh-ng/forms-handler";
+import {Component, forwardRef, inject, Injector, Input, OnDestroy, OnInit, Optional, SkipSelf,} from '@angular/core';
+import {ApplicationLockService, Connector, FhngComponent, FormComponent, IDataAttributes} from "@fh-ng/forms-handler";
 
 interface ITimerDataAttributes extends IDataAttributes {
   interval: number;
@@ -19,6 +19,9 @@ export class TimerComponent extends FhngComponent implements OnInit, OnDestroy {
   @Input()
   public interval: number;
 
+  private applicationLock: ApplicationLockService = inject(ApplicationLockService);
+  private connector: Connector = inject(Connector);
+
   @Input()
   public active: boolean;
 
@@ -29,7 +32,8 @@ export class TimerComponent extends FhngComponent implements OnInit, OnDestroy {
 
   constructor(
     public override injector: Injector,
-    @Optional() @SkipSelf() parentFhngComponent: FhngComponent
+    @Optional() @SkipSelf() parentFhngComponent: FhngComponent,
+    @SkipSelf() public iForm: FormComponent,
   ) {
     super(injector, parentFhngComponent);
   }
@@ -73,8 +77,13 @@ export class TimerComponent extends FhngComponent implements OnInit, OnDestroy {
 
   private _timeout(): void {
     if (!this.destroyed) {
-      this._setupTimer();
-      this.fireEventWithLock('onTimer', this.onTimer);
+      if (this.applicationLock.isActive() || !this.connector.isOpen() || !this.iForm.isFormActive()) {
+        // delay until application lock is taken down or form if activated
+        this._timer = setTimeout(this._timeout.bind(this), 200);
+      } else {
+        this._setupTimer();
+        this.fireEventWithLock('onTimer', this.onTimer);
+      }
     }
   }
 }
