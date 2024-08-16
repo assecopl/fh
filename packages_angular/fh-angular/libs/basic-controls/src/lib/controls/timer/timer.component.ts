@@ -78,11 +78,12 @@ export class TimerComponent extends FhngComponent implements OnInit, OnDestroy {
   private _timeout(): void {
     if (!this.destroyed) {
       if (this.applicationLock.isActive() || !this.connector.isOpen() || !this.iForm.isFormActive()) {
+        this._destroy();
         // delay until application lock is taken down or form if activated
         this._timer = setTimeout(this._timeout.bind(this), 200);
       } else {
-        this._setupTimer();
-        this.fireEventWithLock('onTimer', this.onTimer);
+      this._setupTimer();
+      this.fireEventWithLock('onTimer', this.onTimer);
       }
     }
   }

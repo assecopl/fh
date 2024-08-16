@@ -2,7 +2,7 @@ import {BaseEvent} from "./BaseEvent";
 // import {Connector} from "../Socket/Connector";
 import {inject, Injectable} from "@angular/core";
 import {NotificationService} from "../service/Notification";
-import {I18nService} from "@fh-ng/forms-handler";
+import {I18nService} from "../service/i18n.service";
 
 
 @Injectable({providedIn: 'root'})

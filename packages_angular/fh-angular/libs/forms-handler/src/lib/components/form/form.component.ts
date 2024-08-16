@@ -93,7 +93,7 @@ export class FormComponent extends FormComponentRef implements OnInit, OnChanges
   modalSize: 'REGULAR' | 'SMALL' | 'LARGE' | 'XLARGE' | 'XXLARGE' | 'FULL';
   push: false;
   @Input()
-  state: 'ACTIVE' | 'INACTIVE_PENDING' | 'INACTIVE' | 'SHADOWED' | 'HIDDEN' | 'CLOSED';
+  public state: 'ACTIVE' | 'INACTIVE_PENDING' | 'INACTIVE' | 'SHADOWED' | 'HIDDEN' | 'CLOSED';
   nonVisualSubcomponents?: any[];
 
   override ngOnDestroy(): void {
@@ -159,6 +159,10 @@ export class FormComponent extends FormComponentRef implements OnInit, OnChanges
     super.mapAttributes(data);
     // @ts-ignore
     this.formType = data.formType;
+
+    // @ts-ignore
+    this.state = data.state ? data.state : this.state;
+
 
     if (this.styleClasses && this.styleClasses.includes(",")) {
       this.styleClasses = this.styleClasses.replaceAll(',', ' ')
