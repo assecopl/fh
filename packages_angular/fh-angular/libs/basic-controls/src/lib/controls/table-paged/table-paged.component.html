@@ -5,9 +5,16 @@
   *ngIf="label">
   {{ label }}
 </label>
-<table [availabilityHtmlElement]="availability" [availabilityElementRef]="elementRef"
+<div [availabilityHtmlElement]="availability" [availabilityElementRef]="elementRef"
+     #scrollable
+     class="{{styleClasses}}}"
+     [attr.aria-labelledby]="innerId + '_label'"
+     [hasHeight]="height"
+     [style.height]="height"
+     [style.overflow-y]="horizontalScrolling?'auto':false">
+<table
   tabindex="0"
-  class="fc table tablePaged {{fixedHeader ? 'fixedHeader': ''}} fixedHeader  {{tableStripes !='hide'?'table-striped':''}}"
+  class="fc table tablePaged {{fixedHeader ? 'fixedHeader': ''}} fixedHeader {{horizontalScrolling?'table-responsive':''}}  {{tableStripes !='hide'?'table-striped':''}}"
   [id]="innerId"
   [style.table-layout]="horizontalScrolling?'initial':'fixed'">
   <!--  Simple HTEAD - one row-->

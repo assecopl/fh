@@ -7,7 +7,7 @@
 </label>
 <div [availabilityHtmlElement]="availability" [availabilityElementRef]="elementRef"
   #scrollable
-  class="fc"
+  class="{{styleClasses}}}"
   [attr.aria-labelledby]="innerId + '_label'"
   [hasHeight]="height"
   [style.height]="height"
