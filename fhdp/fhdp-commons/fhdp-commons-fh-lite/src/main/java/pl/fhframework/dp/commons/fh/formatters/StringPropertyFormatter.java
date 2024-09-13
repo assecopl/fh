@@ -47,7 +47,10 @@ public class StringPropertyFormatter implements Formatter<String> {
                         finalParams.toArray(new String[0]), locale, "?:" + msgKey);
             }
             return msg;
-        } else {
+        } else if(key.startsWith("enum.")) {
+            return messageService.getAllBundles().getMessage(key);
+        }
+        else {
             return LngDescriptionUtil.getDescription(key, SessionManager.getUserSession().getLanguage().toLanguageTag());
         }
     }
