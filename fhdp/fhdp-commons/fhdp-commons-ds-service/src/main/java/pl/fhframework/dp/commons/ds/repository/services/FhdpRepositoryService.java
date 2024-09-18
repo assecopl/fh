@@ -1,6 +1,8 @@
 package pl.fhframework.dp.commons.ds.repository.services;
 
 import org.springframework.dao.DuplicateKeyException;
+
+import com.mongodb.client.ClientSession;
 import com.mongodb.client.TransactionBody;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -67,18 +69,23 @@ public class FhdpRepositoryService implements IRepositoryService {
 			return response;
 		}
 		
-		if(getDocumentDAO().checkIfExists(request.getDocument().getId())) {
+		if(documentDAO.checkIfExists(request.getDocument().getId())) {
 			result.setResultCode(-2);
 			result.setResultDescription("ID already exists: " + request.getDocument().getId());
 			return response;
 		}
 		
-		
+		ClientSession session = null;
 		try {
 			DocumentContent content = new DocumentContent();
 			content.setId(request.getDocument().getId());
 			content.setContent(request.getDocument().getContent());
-
+			session = documentDAO.getNewSession();
+			DocumentDAO sessionDocumentDAO = documentDAO.getSessionInstance(session);	
+			DokumentContentDAO sessionDocumentContentDAO = dokumentContentDAO.getSessionInstance(session);	
+			HistoryDokumentContentDAO sessionHistoryDokumentContentDAO = hDokumentContentDAO.getSessionInstance(session);
+			HistoryDocumentDAO sessionHistoryDocumentDAO = hDocumentDAO.getSessionInstance(session);
+			
 			TransactionBody<String> txnBody = new TransactionBody<String>() {
 			    public String execute() {
 			    	
@@ -96,7 +103,7 @@ public class FhdpRepositoryService implements IRepositoryService {
 							doc.setHistoryContentId(hdcId);
 							HistoryRepositoryDocument hDoc = new HistoryRepositoryDocument(doc, hId);
 							hDoc.setChangedContent(true);
-//							BasicDBObject rdoc = getDocumentDAO().getDBObject(doc.getId());
+//							BasicDBObject rdoc = documentDAO.getDBObject(doc.getId());
 //							String hdcId = rdoc.getString("historyContentId");
 //							rdoc.put("_id", hId);
 //							rdoc.put("documentId", doc.getId());
@@ -107,18 +114,18 @@ public class FhdpRepositoryService implements IRepositoryService {
 							hdContent.setDocumentId(request.getDocument().getId());
 							hdContent.setDocumentVersion(1);
 							hdContent.setId(hdcId);
-							hDokumentContentDAO.storeItem(hdContent);
+							sessionHistoryDokumentContentDAO.storeItem(hdContent);
 //							hDocumentDAO.storeDBObject(rdoc);
-							hDocumentDAO.storeItem(hDoc);
+							sessionHistoryDocumentDAO.storeItem(hDoc);
 						} 
 						
-						dokumentContentDAO.storeItem(content);
-						getDocumentDAO().storeItem(doc);
+						sessionDocumentContentDAO.storeItem(content);
+						sessionDocumentDAO.storeItem(doc);
 						
 						if(request.getDocument().getOperation()!=null && request.getDocument().getOperation().isTrackChanges()) {
-							getDocumentDAO().updateObjectProperty(request.getDocument().getId(), "changedContent", false);
+							sessionDocumentDAO.updateObjectProperty(request.getDocument().getId(), "changedContent", false);
 						} else {
-							getDocumentDAO().updateObjectProperty(request.getDocument().getId(), "changedContent", true);
+							sessionDocumentDAO.updateObjectProperty(request.getDocument().getId(), "changedContent", true);
 						}
 						
 					} catch (DuplicateKeyException ex) {
@@ -131,11 +138,11 @@ public class FhdpRepositoryService implements IRepositoryService {
 			    }
 			};
 			
-			getDocumentDAO().withTransaction(txnBody);
+			sessionDocumentDAO.withTransaction(txnBody);
 			result.setResultCode(1);
 			result.setResultDescription("OK");
 			
-			RepositoryDocument rd = getDocumentDAO().getObject(request.getDocument().getId());
+			RepositoryDocument rd = documentDAO.getObject(request.getDocument().getId());
 //			response.setMetadata(rd.getMetadata());
 //			response.setOperation(rd.getOperation());
 //			response.setId(rd.getId());
@@ -153,7 +160,15 @@ public class FhdpRepositoryService implements IRepositoryService {
 			logException(e);
 			result.setResultCode(-99);
 			result.setResultDescription(e.getMessage());
-		}		
+		} finally {
+			if(session!=null) {
+				try {
+					session.close();
+				} catch (Exception e) {
+					log.error(e.getMessage());
+				}
+			}
+		}
 		
 		return response;
 	}
@@ -176,14 +191,14 @@ public class FhdpRepositoryService implements IRepositoryService {
 			}
 		}
 		
-		if(!getDocumentDAO().checkIfExists(request.getId())) {
+		if(!documentDAO.checkIfExists(request.getId())) {
 			result.setResultCode(-2);
 			result.setResultDescription("There is no document with ID: " + request.getId());
 			return response;
 		}
 
 		try {
-			RepositoryDocument rd = getDocumentDAO().getObject(request.getId());
+			RepositoryDocument rd = documentDAO.getObject(request.getId());
 			Document doc = repositoryDocumentToDocument(rd);
 			DocumentContent content = dokumentContentDAO.getObject(request.getId());
 			doc.setContent(content.getContent());
@@ -205,7 +220,7 @@ public class FhdpRepositoryService implements IRepositoryService {
 		result.setResultDescription("Unknown Error");
 		response.setResult(result);
 		try {
-			RepositoryDocument document = getDocumentDAO().getByDbId(dbId);
+			RepositoryDocument document = documentDAO.getByDbId(dbId);
 			if (document != null) {
 				Document doc = repositoryDocumentToDocument(document);
 				DocumentContent content = dokumentContentDAO.getObject(document.getId());
@@ -240,44 +255,48 @@ public class FhdpRepositoryService implements IRepositoryService {
 			return response;
 		}
 		
-		if(!getDocumentDAO().checkIfExists(request.getId())) {
+		if(!documentDAO.checkIfExists(request.getId())) {
 			result.setResultCode(-2);
 			result.setResultDescription("There is no document with ID: " + request.getId());
 			return response;
 		}
-		if(!getDocumentDAO().checkIfExists(request.getId(), request.getVersion())) {
+		if(!documentDAO.checkIfExists(request.getId(), request.getVersion())) {
 			result.setResultCode(-3);
 			result.setResultDescription("Document version is not " + request.getVersion());
 			return response;
 		}
-		
+		ClientSession session = null;
 		try {
 			
 			byte[] nContent = request.getContent();
 			//TODO: sprawdzanie content size i MD5, ignorowanie identycznego contentu
-
+			session = documentDAO.getNewSession();
+			DocumentDAO sessionDocumentDAO = documentDAO.getSessionInstance(session);	
+			DokumentContentDAO sessionDocumentContentDAO = dokumentContentDAO.getSessionInstance(session);	
+			HistoryDokumentContentDAO sessionHistoryDokumentContentDAO = hDokumentContentDAO.getSessionInstance(session);
+			HistoryDocumentDAO sessionHistoryDocumentDAO = hDocumentDAO.getSessionInstance(session);
 
 			TransactionBody<String> txnBody = new TransactionBody<String>() {
 			    public String execute() {
 			    	
 					try {
-						getDocumentDAO().updateVersion(request.getId(), request.getVersion());
+						sessionDocumentDAO.updateVersion(request.getId(), request.getVersion());
 						if(nContent!=null) {
 							DocumentContent content = new DocumentContent();
 							content.setId(request.getId());
 							content.setContent(request.getContent());
-							dokumentContentDAO.replaceObject(content);
-							getDocumentDAO().updateObjectProperty(request.getId(), "changedContent", true);
+							sessionDocumentContentDAO.replaceObject(content);
+							sessionDocumentDAO.updateObjectProperty(request.getId(), "changedContent", true);
 						} else {
-//							getDocumentDAO().updateObjectProperty(request.getId(), "changedContent", false);
+//							documentDAO.updateObjectProperty(request.getId(), "changedContent", false);
 						}
-						getDocumentDAO().updateDocument(request);
+						sessionDocumentDAO.updateDocument(request);
 						
 						if(request.getOperation()!=null && request.getOperation().isTrackChanges()) {
 							
 							String hId = UUID.randomUUID().toString();
 							HistoryDocumentContent historyDocumentContent = null;
-							RepositoryDocument doc = getDocumentDAO().getObject(request.getId());
+							RepositoryDocument doc = sessionDocumentDAO.getObject(request.getId());
 							HistoryRepositoryDocument hDoc = new HistoryRepositoryDocument(doc, hId);
 							//when content is updated
 							if(request.getContent()!=null) {
@@ -293,20 +312,20 @@ public class FhdpRepositoryService implements IRepositoryService {
 								hdcId = UUID.randomUUID().toString();
 								hDoc.setHistoryContentId(hdcId);
 //								doc.put("historyContentId", hdcId);
-								DocumentContent docContent = dokumentContentDAO.getObject(request.getId());
+								DocumentContent docContent = sessionDocumentContentDAO.getObject(request.getId());
 								HistoryDocumentContent hdContent = new HistoryDocumentContent();
 								hdContent.setContent(docContent.getContent());
 								hdContent.setDocumentId(request.getId());
 								hdContent.setDocumentVersion(request.getVersion());
 								hdContent.setId(hdcId);
-								hDokumentContentDAO.storeItem(hdContent);
+								sessionHistoryDokumentContentDAO.storeItem(hdContent);
 								if(request.getContent()==null) {
-									getDocumentDAO().updateObjectProperty(request.getId(), "historyContentId", hdcId);
+									sessionDocumentDAO.updateObjectProperty(request.getId(), "historyContentId", hdcId);
 								}
 							}
-							hDocumentDAO.storeItem(hDoc);
+							sessionHistoryDocumentDAO.storeItem(hDoc);
 							
-							getDocumentDAO().updateObjectProperty(request.getId(), "changedContent", false);
+							sessionDocumentDAO.updateObjectProperty(request.getId(), "changedContent", false);
 							
 						}						
 						
@@ -318,9 +337,9 @@ public class FhdpRepositoryService implements IRepositoryService {
 			    }
 			};
 			
-			getDocumentDAO().withTransaction(txnBody);
+			sessionDocumentDAO.withTransaction(txnBody);
 			
-			RepositoryDocument rd = getDocumentDAO().getObject(request.getId());
+			RepositoryDocument rd = documentDAO.getObject(request.getId());
 //			response.setMetadata(rd.getMetadata());
 //			response.setOperation(rd.getOperation());
 //			response.setId(rd.getId());
@@ -337,6 +356,14 @@ public class FhdpRepositoryService implements IRepositoryService {
 			logException(e);
 			result.setResultCode(-99);
 			result.setResultDescription(e.getMessage());
+		} finally {
+			if(session!=null) {
+				try {
+					session.close();
+				} catch (Exception e) {
+					log.error(e.getMessage());
+				}
+			}
 		}
 		
 		
@@ -357,7 +384,7 @@ public class FhdpRepositoryService implements IRepositoryService {
 			return response;
 		}
 		
-		if(!getDocumentDAO().checkIfExists(request.getId())) {
+		if(!documentDAO.checkIfExists(request.getId())) {
 			result.setResultCode(-2);
 			result.setResultDescription("There is no document with ID: " + request.getId());
 			return response;
@@ -380,10 +407,10 @@ public class FhdpRepositoryService implements IRepositoryService {
 							RepositoryDocument rd = sResult.get(0);
 							DocumentContent content = hDokumentContentDAO.getObject(rd.getHistoryContentId());
 							dokumentContentDAO.replaceObject(content, true);
-							getDocumentDAO().replaceObject(rd, true);							
+							documentDAO.replaceObject(rd, true);							
 						} else {
 							dokumentContentDAO.deleteObject(request.getId());
-							getDocumentDAO().deleteObject(request.getId());
+							documentDAO.deleteObject(request.getId());
 						}
 						
 					} catch (Exception e) {
@@ -394,9 +421,9 @@ public class FhdpRepositoryService implements IRepositoryService {
 			    }
 			};
 			
-			getDocumentDAO().withTransaction(txnBody);
+			documentDAO.withTransaction(txnBody);
 			
-			RepositoryDocument rd = getDocumentDAO().getObject(request.getId());
+			RepositoryDocument rd = documentDAO.getObject(request.getId());
 //			response.setMetadata(rd.getMetadata());
 //			response.setOperation(rd.getOperation());
 //			response.setId(rd.getId());
@@ -461,7 +488,7 @@ public class FhdpRepositoryService implements IRepositoryService {
 //			
 //			Bson sort = new BasicDBObject("created", -1);
 //			Bson filter = Filters.and(filters);
-			List<RepositoryDocument> sResult = getDocumentDAO().find(request);
+			List<RepositoryDocument> sResult = documentDAO.find(request);
 			
 			for(RepositoryDocument rd : sResult) {
 				Document doc = new Document();
@@ -590,14 +617,14 @@ public class FhdpRepositoryService implements IRepositoryService {
 			return response;
 		}
 		
-		if(!getDocumentDAO().checkIfExists(request.getId())) {
+		if(!documentDAO.checkIfExists(request.getId())) {
 			result.setResultCode(-2);
 			result.setResultDescription("There is no document with ID: " + request.getId());
 			return response;
 		}
 		
 		try {
-			RepositoryDocument rd = getDocumentDAO().getObject(request.getId());
+			RepositoryDocument rd = documentDAO.getObject(request.getId());
 			response.setVersion(rd.getVersion());
 			result.setResultCode(1);
 			result.setResultDescription("OK");
@@ -618,7 +645,7 @@ public class FhdpRepositoryService implements IRepositoryService {
 		result.setResultDescription("Unknown Error");
 		response.setResult(result);
 		try {
-			RepositoryDocument rd = getDocumentDAO().getByDbId(dbId);
+			RepositoryDocument rd = documentDAO.getByDbId(dbId);
 			if(rd != null) {
 				response.setVersion(rd.getVersion());
 				result.setResultCode(1);
@@ -655,9 +682,7 @@ public class FhdpRepositoryService implements IRepositoryService {
 		return doc;
 	}
 
-	protected DocumentDAO getDocumentDAO() {
-		return documentDAO;
-	}
+
 
 	protected RepositoryDocument getRepositoryDocument(StoreDocumentRequest request, DocumentContent content) {
 		RepositoryDocument doc = new RepositoryDocument();

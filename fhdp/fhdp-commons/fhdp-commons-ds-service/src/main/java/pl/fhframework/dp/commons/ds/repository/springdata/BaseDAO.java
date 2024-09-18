@@ -30,10 +30,20 @@ public abstract class BaseDAO<T> {
 	@Autowired
     protected MongoTemplate mongoTemplate;
 
+	public BaseDAO(MongoTemplate mongoTemplate, ClientSession session) {
+		this.mongoTemplate = mongoTemplate.withSession(session);
+		this.session = session;
+	}    
+	
+	public BaseDAO() {
+		
+	}
     
     
     protected abstract String getCollectionName();
     protected abstract Class<T> getObjectClass();
+    protected ClientSession session = null;
+    public abstract BaseDAO<T> getSessionInstance(ClientSession session);
   
     public void storeItem(T item) throws JsonProcessingException {
     	mongoTemplate.save(item, getCollectionName());
@@ -95,10 +105,12 @@ public abstract class BaseDAO<T> {
     }         
     
 
-    
+   protected ClientSession getSession() {
+	   return session;
+   }
 
 
-    protected ClientSession getSession() {
+    public ClientSession getNewSession() {
     	return mongoClient.startSession();
     }
     
@@ -113,9 +125,8 @@ public abstract class BaseDAO<T> {
     }
     
 	public void withTransaction(TransactionBody<String> txnBody) {
-		ClientSession session = getSession();
 		try {
-			getSession().withTransaction(txnBody, getTXOptions());
+			session.withTransaction(txnBody, getTXOptions());
 		} finally {
 			if(session!=null) {
 				session.close();

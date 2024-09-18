@@ -9,6 +9,9 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.data.mongodb.core.query.UpdateDefinition;
 import org.springframework.stereotype.Component;
+
+import com.mongodb.client.ClientSession;
+
 import pl.fhframework.dp.commons.ds.repository.mongo.model.RepositoryDocument;
 import pl.fhframework.dp.transport.drs.repository.FindDocumentRequest;
 import pl.fhframework.dp.transport.drs.repository.Metadata;
@@ -28,9 +31,19 @@ public class DocumentDAO extends BaseDAO<RepositoryDocument> {
 	@Value("${drs.document.collection.name:fhdp_document}")
 	private String collectionName;
 
-    @Autowired
-    protected MongoTemplate mongoTemplate;
-    
+	public DocumentDAO() {
+		super();
+	}
+
+	public DocumentDAO(MongoTemplate mongoTemplate, ClientSession session, String collectionName) {
+		super(mongoTemplate, session);
+		this.collectionName = collectionName;
+	}
+	
+	public DocumentDAO getSessionInstance(ClientSession session) {
+		return new DocumentDAO(mongoTemplate, session, collectionName);
+	}	
+
 	protected String getCollectionName() {
 		return collectionName;
 	}
