@@ -394,7 +394,15 @@ public class FhdpRepositoryService implements IRepositoryService {
 			return response;
 		}
 		
+		ClientSession session = null;
 		try {
+			
+			session = getDocumentDAO().getNewSession();
+			DocumentDAO sessionDocumentDAO = getDocumentDAO().getSessionInstance(session);	
+			DokumentContentDAO sessionDocumentContentDAO = dokumentContentDAO.getSessionInstance(session);	
+			HistoryDokumentContentDAO sessionHistoryDokumentContentDAO = hDokumentContentDAO.getSessionInstance(session);
+			HistoryDocumentDAO sessionHistoryDocumentDAO = hDocumentDAO.getSessionInstance(session);			
+			
 			
 			TransactionBody<String> txnBody = new TransactionBody<String>() {
 			    public String execute() {
@@ -406,15 +414,15 @@ public class FhdpRepositoryService implements IRepositoryService {
 						query = query.addCriteria(where("documentId").is(request.getId()));
 						query = query.with(Sort.by(Sort.Direction.DESC, "version"));
 //						List<HistoryRepositoryDocument> sResult = hDocumentDAO.find(filter, 0, 0, sort);
-						List<HistoryRepositoryDocument> sResult = hDocumentDAO.find(query);
+						List<HistoryRepositoryDocument> sResult = sessionHistoryDocumentDAO.find(query);
 						if(sResult.size()>0) {
 							RepositoryDocument rd = sResult.get(0);
-							DocumentContent content = hDokumentContentDAO.getObject(rd.getHistoryContentId());
-							dokumentContentDAO.replaceObject(content, true);
-							getDocumentDAO().replaceObject(rd, true);							
+							DocumentContent content = sessionHistoryDokumentContentDAO.getObject(rd.getHistoryContentId());
+							sessionDocumentContentDAO.replaceObject(content, true);
+							sessionDocumentDAO.replaceObject(rd, true);							
 						} else {
-							dokumentContentDAO.deleteObject(request.getId());
-							getDocumentDAO().deleteObject(request.getId());
+							sessionDocumentContentDAO.deleteObject(request.getId());
+							sessionDocumentDAO.deleteObject(request.getId());
 						}
 						
 					} catch (Exception e) {
@@ -425,7 +433,7 @@ public class FhdpRepositoryService implements IRepositoryService {
 			    }
 			};
 			
-			getDocumentDAO().withTransaction(txnBody);
+			sessionDocumentDAO.withTransaction(txnBody);
 			
 			RepositoryDocument rd = getDocumentDAO().getObject(request.getId());
 //			response.setMetadata(rd.getMetadata());
@@ -445,8 +453,15 @@ public class FhdpRepositoryService implements IRepositoryService {
 			logException(e);
 			result.setResultCode(-99);
 			result.setResultDescription(e.getMessage());
-		}
-		
+		} finally {
+			if(session!=null) {
+				try {
+					session.close();
+				} catch (Exception e) {
+					log.error(e.getMessage());
+				}
+			}
+		}		
 		
 		return response;
 	}
