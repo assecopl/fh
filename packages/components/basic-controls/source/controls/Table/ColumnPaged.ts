@@ -5,6 +5,7 @@ import {fn} from "moment";
 declare const ENV_IS_DEVELOPMENT: boolean;
 
 class ColumnPaged extends HTMLFormComponent {
+    private buttonElement: any;
     private isSortable: boolean;
     private rowspan: any;
     private sorter: any;
@@ -30,14 +31,15 @@ class ColumnPaged extends HTMLFormComponent {
             column.style.width = this.width[0].includes("px")? this.width[0]: this.width[0]  + '%';
         }
         // HTMLComponent recognized and updated label
+        this.buttonElement = document.createElement('button');
+        this.labelElement = document.createElement('span');
+
         if (this.isSortable) {
-            this.labelElement = document.createElement('button');
-            this.labelElement.classList.add("btn");
-            this.labelElement.classList.add("btn-th");
-        } else {
-            this.labelElement = document.createElement('span');
+            this.buttonElement.classList.add("btn");
+            this.buttonElement.classList.add("btn-th");
         }
-        column.appendChild(this.labelElement);
+        this.buttonElement.append(this.labelElement);
+        column.appendChild(this.buttonElement);
         this.labelElement.innerHTML = this.fhml.resolveValueTextOrEmpty(this.componentObj.label);
 
         this.component = column;
