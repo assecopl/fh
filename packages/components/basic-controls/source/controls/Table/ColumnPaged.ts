@@ -1,6 +1,5 @@
 import {HTMLFormComponent} from "fh-forms-handler";
 import {AdditionalButton} from "fh-forms-handler";
-import {fn} from "moment";
 
 declare const ENV_IS_DEVELOPMENT: boolean;
 
