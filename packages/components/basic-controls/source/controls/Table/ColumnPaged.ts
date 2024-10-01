@@ -31,13 +31,15 @@ class ColumnPaged extends HTMLFormComponent {
             column.style.width = this.width[0].includes("px")? this.width[0]: this.width[0]  + '%';
         }
         // HTMLComponent recognized and updated label
-        this.buttonElement = document.createElement('button');
+        this.buttonElement = document.createElement('span');
         this.labelElement = document.createElement('span');
 
         if (this.isSortable) {
+            this.buttonElement = document.createElement('button');
             this.buttonElement.classList.add("btn");
             this.buttonElement.classList.add("btn-th");
         }
+
         this.buttonElement.append(this.labelElement);
         column.appendChild(this.buttonElement);
         this.labelElement.innerHTML = this.fhml.resolveValueTextOrEmpty(this.componentObj.label);
@@ -72,7 +74,7 @@ class ColumnPaged extends HTMLFormComponent {
         icon.classList.add('fa-sort');
 
         sorter.appendChild(icon);
-        this.labelElement.append(sorter);
+        this.buttonElement.append(sorter);
 
         parentObject.sorter = sorter;
 
