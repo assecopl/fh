@@ -207,7 +207,5 @@ export class RepeaterComponent extends FhngHTMLElementC implements OnInit {
 
   public override mapAttributes(data: IDataAttributes) {
     super.mapAttributes(data);
-
-    console.log('R:mapAttributes', data);
   }
 }

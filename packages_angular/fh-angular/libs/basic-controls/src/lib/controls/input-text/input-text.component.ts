@@ -118,6 +118,10 @@ export class InputTextComponent extends FhngReactiveInputC implements OnInit, Af
   };
 
   override mapAttributes(data: IDataAttributes | any) {
+    if (typeof data.rawValue === 'undefined' ) {
+      data.rawValue = this.rawValue;
+    }
+
     super.mapAttributes(data);
 
     this.mask = data.mask
