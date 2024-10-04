@@ -5,14 +5,7 @@
   *ngIf="label">
   {{ label }}
 </label>
-<div [availabilityHtmlElement]="availability" [availabilityElementRef]="elementRef"
-     #scrollable
-     class="{{styleClasses}} {{horizontalScrolling?'table-responsive':''}}"
-     [attr.aria-labelledby]="innerId + '_label'"
-     [hasHeight]="height"
-     [style.height]="height"
-     [style.overflow-y]="horizontalScrolling?'auto':false">
-<table
+<table [availabilityHtmlElement]="availability" [availabilityElementRef]="elementRef"
   tabindex="0"
   class="fc table tablePaged {{fixedHeader ? 'fixedHeader': ''}}  {{tableStripes !='hide'?'table-striped':''}}"
   [id]="innerId"
@@ -65,7 +58,7 @@
   </tbody>
 
   <ng-container *ngIf="footer">
-    <tfoot>
+    <tfoot *ngIf="totalRows > 0">
     <tr>
       <td [colSpan]="columns.length + (selectionCheckboxes? 1 : 0)">
         <div class="fc footer card-footer  {{footer.id}}">
@@ -81,7 +74,7 @@
 
 </table>
 
-<div *ngIf="totalRows > 0" class="row mt-3">
+<div class="row mt-3">
   <div class="col-auto mr-auto">
     <div class="row align-items-center justify-content-start">
       <div class="col-auto">
@@ -91,7 +84,7 @@
           style="width: auto"
         >
           <ng-container *ngFor="let ps of pageSizes">
-            <option [value]="ps">{{ps}}</option>
+            <option [value]="ps" [selected]="pageSize == ps">{{ps}}</option>
           </ng-container>
 
         </select>

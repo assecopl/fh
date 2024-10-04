@@ -55,8 +55,8 @@ export class TablePagedComponent
   @Input()
   public pageSize: number = 0;
 
-  public pageNumber: number = 1;
-  public nextPageNumber: number = 1;
+  public pageNumber: number = 0;
+  public nextPageNumber: number = 0;
 
   // private pageSizeSelect: any;
   // private pageSizeSelect_clone: any;
@@ -75,7 +75,7 @@ export class TablePagedComponent
   public defaultSortByAsc: string = null;
   public totalPages: number = null;
   public totalRows: number = null;
-  public currentPage: number = 1;
+  public currentPage: number = 0;
   // public readonly paginatorOffset: any;
   public pageChangeListeners: HTMLElement[];
 
@@ -154,10 +154,10 @@ export class TablePagedComponent
   }
 
   public pageSizeSelectEvent(size: any) {
-    this.pageSize = size;
-    this.pageNumber = 0;
-    this.nextPageNumber = 0;
-    this.currentPage = 0;
+    this.pageSize = Number(size);
+    this.pageNumber = 1;
+    this.nextPageNumber = 2;
+    this.currentPage = 1;
     this.changesQueue.queueAttributeChange('pageSize', Number(size));
     this.fireEventWithLock('onPageSizeChange', null);
   }

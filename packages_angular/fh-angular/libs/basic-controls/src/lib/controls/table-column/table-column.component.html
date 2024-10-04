@@ -3,8 +3,8 @@
 </ng-container>
 <ng-container *ngIf="sortable">
   <button (click)="sort()" class="btn btn-sortable btn-link btn-block text-body" [class.text-left]="!horizontalAlign">
-    <span [innerHTML]="label | fhml"></span>
-    <i
+    <span [innerHTML]="label | fhml"></span>{{" "}}
+     <i
 
       class="{{
       direction == null
