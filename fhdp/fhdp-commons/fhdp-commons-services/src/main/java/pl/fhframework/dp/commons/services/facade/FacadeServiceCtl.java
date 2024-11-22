@@ -210,7 +210,7 @@ public class FacadeServiceCtl implements IFacadeService {
             if (request != null && request.getOperationDtoServiceName() != null) {
                 IOperationDtoService operationDtoService = this.getOperationDtoServiceFromDto(request.getOperationDtoServiceName());
                 if (operationDtoService != null) {
-                    OperationDto key = operationDtoService.getOperationData(request.getRequestData(), request.getParamsMap());
+                    Object key = operationDtoService.getOperationData(request.getRequestData(), request.getParamsMap());
                     retList.setObject(key);
                 } else {
                     retList.setValid(false);

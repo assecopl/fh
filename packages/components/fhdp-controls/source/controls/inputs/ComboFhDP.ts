@@ -38,9 +38,6 @@ class ComboFhDP extends InputTextFhDP {
 
     private cursorPositionOnLastSpecialKey: any;
 
-    //Is focus on dropdown element. For IE11 click on srcoll problem.
-    private autocompleterFocus:boolean = false;
-
     constructor(componentObj: any, parent: HTMLFormComponent) {
         super(componentObj, parent);
 
@@ -227,25 +224,15 @@ class ComboFhDP extends InputTextFhDP {
                 if (this.openOnFocus) {
                     this.openAutocomplete();
                 }
-                this.autocompleterFocus = false;
-
             }
         }.bind(this));
         input.addEventListener('blur', function (event) {
 
-            //For IE11. Check if event was fired by action on dropdown element.
-            if(!this.autocompleterFocus) {
                 this.closeAutocomplete();
 
                 if (this.multiselect) {
                     this.addTag(this.input.value);
                 }
-            } else {
-                //IE11 Put back focus on input.
-                // this.input.focus();
-                this.autocompleterFocus = false;
-                return false;
-            }
 
 
         }.bind(this));
@@ -401,11 +388,6 @@ class ComboFhDP extends InputTextFhDP {
             this.autocompleter.style.setProperty('right', '0px', "important");
             this.autocompleter.style.setProperty('left', 'auto', "important");
         }
-
-        //IE11 Set true for autocompleter actions. We need to prevent focusout on input then.
-        this.autocompleter.addEventListener('mousedown', function (event) {
-            this.autocompleterFocus = true;
-        }.bind(this));
 
         let parent = null;
 

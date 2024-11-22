@@ -4,8 +4,8 @@
     "fh-basic-controls",
     "fh-charts-controls",
     "fh-forms-handler",
-    "fhdp-charts",
     "fhdp-controls",
+    "fhdp-charts",
     "fhdp-extenders",
     "fhdp-fh-starter"
   ],

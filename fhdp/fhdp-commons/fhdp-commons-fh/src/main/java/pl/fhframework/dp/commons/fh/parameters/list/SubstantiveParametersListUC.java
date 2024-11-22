@@ -126,6 +126,10 @@ public class SubstantiveParametersListUC extends GenericListUC<SubstantiveParame
         super.search();
     }
 
+    public void searchWithDetailsOpen() {
+        super.search();
+    }
+
     @Override
     @Action(validate = false)
     public void clearQuery() {
@@ -201,12 +205,13 @@ public class SubstantiveParametersListUC extends GenericListUC<SubstantiveParame
             public void save(SubstantiveParametersDetailEditForm.Model one) {
                 substantiveParametersService.persistDto(one.getDto());
                 final SubstantiveParametersDto modifiedDto = one.getDto().clone();
-                SubstantiveParametersListUC.super.init();
-                appSiderDetails(true);
+//                SubstantiveParametersListUC.super.init();
+//                appSiderDetails(true);
                 // required to handle not hiding the details form
                 substantiveParametersListModel.setSelectedSubstantiveParametersDto(modifiedDto);
                 substantiveParametersListModel.setLastStoredSubstantiveParametersDto(modifiedDto);
-                showParameterDetails();
+                searchWithDetailsOpen();
+//                showParameterDetails();
             }
 
             @Override

@@ -15,13 +15,13 @@
 
     <Row elementsHorizontalAlign="LEFT" styleClasses="panel-footer mb-n3">
         <Button id="btnSave"
-                width="xs-1"
+                width="xs-13"
                 onClick="save" label="Save"
                 hintPlacement="BOTTOM"
                 inlineStyle="line-height: unset;"
                 wrapperStyle="margin-bottom: unset; margin-right: 5px;"/>
         <Button id="btnCancel"
-                width="xs-1" availability="EDIT"
+                width="xs-13" availability="EDIT"
                 onClick="close" label="Cancel"
                 hintPlacement="BOTTOM" style="default"
                 inlineStyle="line-height: unset;"

@@ -13,7 +13,7 @@
     <Group id="basicDataAndCommonCommandsModal" styleClasses="group-header box-shadow__unset">
         <Row width="md-12" elementsHorizontalAlign="AROUND" styleClasses="row-panel panel-header">
             <Group
-                    width="xs-1"
+                    width="xs-13"
                     styleClasses="panel-header-group-base"
                     wrapperStyle="
                                 padding: var(--padding-bigger);
@@ -32,7 +32,7 @@
 
             <ButtonGroup id="buttonGroupModal" horizontalAlign="right"
                          wrapperStyle="padding: var(--padding-bigger);"
-                         styleClasses="button-icon-group justify-content-end panel-options-base" width="xs-1">
+                         styleClasses="button-icon-group justify-content-end panel-options-base" width="xs-13">
                 <Button id="cancelButton" style="default" styleClasses="panel-option margin__unset" horizontalAlign="right"
                         label="[b][icon='fas fa-times'][/b]"
                         hint="{$.fhdp.common.close}" hintTrigger="HOVER"
@@ -64,7 +64,7 @@
 
     <Row elementsHorizontalAlign="LEFT" id="modalButtonsContainer" styleClasses="panel-footer mb-n3">
         <Button id="btnCancel"
-                availability="EDIT" width="xs-1"
+                availability="EDIT" width="xs-13"
                 onClick="cancel" label="{$.fhdp.operation.progress.check.button.cancel}"
                 hintPlacement="BOTTOM" style="default"
                 inlineStyle="line-height: unset;"

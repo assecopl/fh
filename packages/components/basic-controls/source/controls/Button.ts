@@ -229,13 +229,6 @@ class Button extends HTMLFormComponent {
         super.destroy(removeFromParent);
     }
 
-    /**
-     * @Override
-     */
-    public getDefaultWidth():string {
-        return null;
-    }
-
 }
 
 export {Button};

@@ -3,6 +3,7 @@ import {Table} from "./Table";
 import {AdditionalButton} from "fh-forms-handler";
 
 class Column extends HTMLFormComponent {
+    private buttonElement: any;
     private isSortable: any;
     private sorter: any;
     private readonly rowspan: any;
@@ -31,14 +32,17 @@ class Column extends HTMLFormComponent {
             column.style.width = this.width[0].includes("px")? this.width[0]: this.width[0]  + '%';
         }
         // HTMLComponent recognized and updated label
+        this.buttonElement = document.createElement('span');
+        this.labelElement = document.createElement('span');
+
         if (this.isSortable) {
-            this.labelElement = document.createElement('button');
-            this.labelElement.classList.add("btn");
-            this.labelElement.classList.add("btn-th");
-        } else {
-            this.labelElement = document.createElement('span');
+            this.buttonElement = document.createElement('button');
+            this.buttonElement.classList.add("btn");
+            this.buttonElement.classList.add("btn-th");
         }
-        column.appendChild(this.labelElement);
+
+        this.buttonElement.append(this.labelElement);
+        column.appendChild(this.buttonElement);
         this.labelElement.innerHTML = this.fhml.resolveValueTextOrEmpty(this.componentObj.label);
 
         if (this.isSortable) {
@@ -52,7 +56,7 @@ class Column extends HTMLFormComponent {
             icon.classList.add('fa-sort');
 
             sorter.appendChild(icon);
-            column.appendChild(sorter);
+            this.buttonElement.appendChild(sorter);
 
             this.sorter = sorter;
 

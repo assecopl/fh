@@ -12,7 +12,7 @@
             <Column width="4" label="Description" value="{row.description}"/>
             <Column width="1" verticalAlign="top"
                     label="[className='d-flex,align-items-center'][portal='btnAddBase2'][/className]">
-                <Button horizontalAlign="right" style="default" width="xs-1" verticalAlign="middle"
+                <Button horizontalAlign="right" style="default" width="xs-13" verticalAlign="middle"
                         onClick="removeBaseList({row})" label="[icon='fa fa-trash']"
                         styleClasses="button-in-operations"/>
             </Column>
@@ -29,7 +29,7 @@
             <Column width="4" label="Description" value="{row.description}"/>
             <Column width="1" verticalAlign="top"
                     label="[className='d-flex,align-items-center'][portal='btnAddBase3'][/className]">
-                <Button horizontalAlign="right" style="default" width="xs-1" verticalAlign="middle"
+                <Button horizontalAlign="right" style="default" width="xs-13" verticalAlign="middle"
                         onClick="viewBaseListByRow({row})" label="[icon='fas fa-search']"
                         styleClasses="button-in-operations"/>
             </Column>
@@ -47,10 +47,10 @@
                 <Column width="4" label="Description" value="{row.description}"/>
                 <Column width="1" verticalAlign="top"
                         label="[className='d-flex,align-items-center'][portal='btnAddBase4'][/className]">
-                    <Button horizontalAlign="right" style="default" width="xs-1" verticalAlign="middle"
+                    <Button horizontalAlign="right" style="default" width="xs-13" verticalAlign="middle"
                             onClick="viewBaseListByRow({row})" label="[icon='fas fa-pencil-alt']"
                             styleClasses="button-in-operations"/>
-                    <Button horizontalAlign="right" style="default" width="xs-1" verticalAlign="middle"
+                    <Button horizontalAlign="right" style="default" width="xs-13" verticalAlign="middle"
                             onClick="removeBaseList({row})" label="[icon='fa fa-trash']"
                             styleClasses="button-in-operations" wrapperStyle="margin-left: unset;"/>
                 </Column>
@@ -65,10 +65,10 @@
                 <Column width="15" label="Name" value="{row.name}"/>
                 <Column width="15" label="Description" value="{row.description}"/>
                 <Column width="5">
-                    <Button horizontalAlign="left" style="default" width="xs-1" verticalAlign="middle"
+                    <Button horizontalAlign="left" style="default" width="xs-13" verticalAlign="middle"
                             onClick="viewBaseListByRow({row})" label="[icon='fas fa-pencil-alt']"
                             styleClasses="button-in-operations"/>
-                    <Button horizontalAlign="left" style="default" width="xs-1" verticalAlign="middle"
+                    <Button horizontalAlign="left" style="default" width="xs-13" verticalAlign="middle"
                             onClick="removeBaseList({row})" label="[icon='fa fa-trash']"
                             styleClasses="button-in-operations" wrapperStyle="margin-left: unset;"/>
                 </Column>
@@ -84,11 +84,11 @@
                             <Column width="7" label="name" value="{row2.name}"/>
                             <Column id="colPortalNestedBtn2" width="2"
                                     label="[className='col-xs-1'][fhportal='id=btnAddNested2_row_{row$index};wrapped=false;removeWrapper=true'][/className]">
-                                <Button horizontalAlign="right" style="default" width="xs-1" verticalAlign="middle"
+                                <Button horizontalAlign="right" style="default" width="xs-13" verticalAlign="middle"
                                         onClick="viewAttributesListByRow({row2}, {row})" label="[icon='fas fa-pencil-alt']"
                                         styleClasses="button-in-operations"/>
                                 <Button horizontalAlign="right" style="default" styleClasses="button-in-operations"
-                                        width="xs-1" verticalAlign="middle"
+                                        width="xs-13" verticalAlign="middle"
                                         onClick="removeAttributes({row2}, {row})"
                                         label="[icon='fa fa-trash']" wrapperStyle="margin-left: unset;"/>
                             </Column>
@@ -107,7 +107,7 @@
                 <Column width="4" label="Description" value="{row.description}"/>
                 <Column width="1" verticalAlign="top"
                         label=" ">
-                    <Button horizontalAlign="right" style="default" width="xs-1" verticalAlign="middle"
+                    <Button horizontalAlign="right" style="default" width="xs-13" verticalAlign="middle"
                             onClick="viewBaseListByRowAccessibility({row}, 'VIEW')" label="[icon='fas fa-eye']"
                             styleClasses="button-in-operations"/>
                 </Column>
@@ -119,7 +119,7 @@
                 <Column width="15" label="Name" value="{row.name}"/>
                 <Column width="15" label="Description" value="{row.description}"/>
                 <Column width="5">
-                    <Button horizontalAlign="left" style="default" width="xs-1" verticalAlign="middle"
+                    <Button horizontalAlign="left" style="default" width="xs-13" verticalAlign="middle"
                             onClick="viewBaseListByRowAccessibility({row}, 'VIEW')" label="[icon='fas fa-eye']"
                             styleClasses="button-in-operations"/>
                 </Column>
@@ -132,7 +132,7 @@
                             <Column width="7" label="name" value="{row2.name}"/>
                             <Column id="colPortalNestedBtn3" width="2"
                                     label="[className='col-xs-1'][/className]">
-                                <Button horizontalAlign="right" style="default" width="xs-1" verticalAlign="middle"
+                                <Button horizontalAlign="right" style="default" width="xs-13" verticalAlign="middle"
                                         onClick="viewAttributesListByRowAccessibility({row2}, {row}, 'VIEW')" label="[icon='fas fa-eye']"
                                         styleClasses="button-in-operations"/>
                             </Column>

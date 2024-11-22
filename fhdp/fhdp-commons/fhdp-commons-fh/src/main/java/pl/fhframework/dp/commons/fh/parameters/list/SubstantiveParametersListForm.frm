@@ -6,7 +6,7 @@
         <Group styleClasses="group-header shadow-none" wrapperStyle="flex: unset; margin-left: 10px;">
             <Group styleClasses="header-group mb-0">
                 <Row width="md-12" elementsHorizontalAlign="AROUND" styleClasses="row-panel panel-header">-->
-                    <Group width="xs-1" wrapperStyle="
+                    <Group width="xs-13" wrapperStyle="
                         padding: var(--padding-bigger);
                         justify-self: start;
                         flex-grow: 1;
@@ -39,9 +39,9 @@
                     <OutputLabel width="md-12" value="{row.parameterNames[0].name}"
                                  styleClasses="h6 text-wrap font-weight-bold"/>
                     <OutputLabel width="md-12" value="{row.key}" styleClasses="text-wrap"/>
-                    <OutputLabel id="parameterSuccessScope" width="xs-1" value="{row.scope}" styleClasses="text-wrap status status--success mt-10"
+                    <OutputLabel id="parameterSuccessScope" width="xs-13" value="{row.scope}" styleClasses="text-wrap status status--success mt-10"
                                  inlineStyle="padding: 6px 10px;" availability="{checkScopeVisibility(row, 'success')}"/>
-                    <OutputLabel id="parameterWarningScope" width="xs-1" value="{row.scope}" styleClasses="text-wrap status status--warning mt-10"
+                    <OutputLabel id="parameterWarningScope" width="xs-13" value="{row.scope}" styleClasses="text-wrap status status--warning mt-10"
                                  inlineStyle="padding: 6px 10px;" availability="{checkScopeVisibility(row, 'warning')}"/>
                 </ColumnPaged>
                 <ColumnPaged label="{$.fhdp.parameters.property.value}" width="30" styleClasses="text-wrap" sortBy="value.keyword">
