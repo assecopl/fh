@@ -46,7 +46,7 @@
     "webpack-stats-plugin": "1.1.1"
   },
   "dependencies": {
-    "fhdp-charts": "4.10.801",
-    "fhdp-fh-starter": "4.10.801"
+    "fhdp-charts": "4.10.9-SNAPSHOT-1732279669759",
+    "fhdp-fh-starter": "4.10.9-SNAPSHOT-1732279669759"
   }
 }
