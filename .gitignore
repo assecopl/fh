@@ -1,7 +1,8 @@
 .svn
 **/target
 **/.idea/
-
+**/.classpath
+**/.factorypath
 # dependencies
 **/node_modules
 /.pnp
