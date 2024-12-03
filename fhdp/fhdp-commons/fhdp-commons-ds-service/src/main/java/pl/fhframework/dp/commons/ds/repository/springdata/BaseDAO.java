@@ -25,102 +25,113 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 public abstract class BaseDAO<T> {
 	@Autowired
-    protected MongoClient mongoClient;
-    
+	protected MongoClient mongoClient;
+
 	@Autowired
-    protected MongoTemplate mongoTemplate;
+	protected MongoTemplate mongoTemplate;
 
-    
-    
-    protected abstract String getCollectionName();
-    protected abstract Class<T> getObjectClass();
-  
-    public void storeItem(T item) throws JsonProcessingException {
-    	mongoTemplate.save(item, getCollectionName());
-    }
+	public BaseDAO(MongoTemplate mongoTemplate, ClientSession session) {
+		this.mongoTemplate = mongoTemplate.withSession(session);
+		this.session = session;
+	}
 
-    public boolean checkIfExists(String id) {
-    	T result = mongoTemplate.findById(id, getObjectClass(), getCollectionName());
-    	if(result!=null) {
-    		return true;
-    	} else {
-    		return false;
-    	}
-    }   
-    
+	public BaseDAO() {
+
+	}
 
 
-    public void updateObject(T item) throws JsonProcessingException {
-    	mongoTemplate.save(item, getCollectionName());
-    } 
-    public void replaceObject(T item) throws JsonProcessingException {
-    	mongoTemplate.save(item, getCollectionName());
-    }
-    public void replaceObject(T item, boolean upsert) throws JsonProcessingException {
-    	mongoTemplate.save(item, getCollectionName());  
-    } 
-    
+	protected abstract String getCollectionName();
+	protected abstract Class<T> getObjectClass();
+	protected ClientSession session = null;
+	public abstract BaseDAO<T> getSessionInstance(ClientSession session);
 
-    public void updateObjectProperty(String objectId, String name, Object value) {
-    	
+	public void storeItem(T item) throws JsonProcessingException {
+		mongoTemplate.save(item, getCollectionName());
+	}
+
+	public boolean checkIfExists(String id) {
+		T result = mongoTemplate.findById(id, getObjectClass(), getCollectionName());
+		if(result!=null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+
+
+	public void updateObject(T item) throws JsonProcessingException {
+		mongoTemplate.save(item, getCollectionName());
+	}
+	public void replaceObject(T item) throws JsonProcessingException {
+		mongoTemplate.save(item, getCollectionName());
+	}
+	public void replaceObject(T item, boolean upsert) throws JsonProcessingException {
+		mongoTemplate.save(item, getCollectionName());
+	}
+
+
+	public void updateObjectProperty(String objectId, String name, Object value) {
+
 		Query query = new Query();
 		query.addCriteria(where("_id").is(objectId));
 		Update update = new Update();
-    	update = update.set(name, value);
-    	
+		update = update.set(name, value);
+
 		T result = mongoTemplate.update(getObjectClass())
 				.inCollection(getCollectionName())
-                .matching(query)
-                .apply(update)
-                .withOptions(FindAndModifyOptions.options().returnNew(true)) // Now return the newly updated document when updating
-                .findAndModifyValue();     	
-    }          
-    
-    
-    public void deleteObject(String objectID) throws JsonParseException, JsonMappingException, IOException {
-        Query query = new Query();
-        query.addCriteria(Criteria.where("_id").is(objectID));
-        T result = mongoTemplate.findAndRemove(query, getObjectClass(), getCollectionName());
-    }      
-    
-    public List<T> find(Query query){
-    	List<T> result = null;
-    	result = mongoTemplate.find(query, getObjectClass(), getCollectionName());
-    	
-    	return result;
-    }
-    
-    public T getObject(String objectID) throws JsonParseException, JsonMappingException, IOException {
-    	return mongoTemplate.findById(objectID, getObjectClass(), getCollectionName());
-    }         
-    
-
-    
+				.matching(query)
+				.apply(update)
+				.withOptions(FindAndModifyOptions.options().returnNew(true)) // Now return the newly updated document when updating
+				.findAndModifyValue();
+	}
 
 
-    protected ClientSession getSession() {
-    	return mongoClient.startSession();
-    }
-    
-    protected TransactionOptions getTXOptions() {
+	public void deleteObject(String objectID) throws JsonParseException, JsonMappingException, IOException {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("_id").is(objectID));
+		T result = mongoTemplate.findAndRemove(query, getObjectClass(), getCollectionName());
+	}
+
+	public List<T> find(Query query){
+		List<T> result = null;
+		result = mongoTemplate.find(query, getObjectClass(), getCollectionName());
+
+		return result;
+	}
+
+	public T getObject(String objectID) throws JsonParseException, JsonMappingException, IOException {
+		return mongoTemplate.findById(objectID, getObjectClass(), getCollectionName());
+	}
+
+
+	protected ClientSession getSession() {
+		return session;
+	}
+
+
+	public ClientSession getNewSession() {
+		return mongoClient.startSession();
+	}
+
+	protected TransactionOptions getTXOptions() {
 		TransactionOptions txnOptions = TransactionOptions.builder()
-		        .readPreference(ReadPreference.primary())
-		        .readConcern(ReadConcern.LOCAL)
-		        .writeConcern(WriteConcern.ACKNOWLEDGED)
-		        .build();
-		
+				.readPreference(ReadPreference.primary())
+				.readConcern(ReadConcern.LOCAL)
+				.writeConcern(WriteConcern.ACKNOWLEDGED)
+				.build();
+
 		return txnOptions;
-    }
-    
+	}
+
 	public void withTransaction(TransactionBody<String> txnBody) {
-		ClientSession session = getSession();
 		try {
-			getSession().withTransaction(txnBody, getTXOptions());
+			session.withTransaction(txnBody, getTXOptions());
 		} finally {
 			if(session!=null) {
 				session.close();
 			}
 		}
-	}	
-    
+	}
+
 }
