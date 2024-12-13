@@ -416,7 +416,7 @@ abstract class FormComponent {
     }
 
     protected isFormFocusTrap(): boolean {
-        return this.getForm().blockFocusForModal != null;
+        return this.getForm().focusTrap != null && this.getForm().focusTrap.active;
     }
 
     protected isFormActive(): boolean {

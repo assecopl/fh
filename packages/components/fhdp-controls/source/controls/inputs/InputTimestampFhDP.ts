@@ -106,14 +106,7 @@ class InputTimestampFhDP extends InputDateFhDP implements LanguageChangeObserver
         let data = component.data("DateTimePicker");
         if (data != null) data.destroy();
         // this.initTimestampDefaults();
-        (<any>$(this.inputGroupElement)).datetimepicker({
-            locale: this.i18n.selectedLanguage,
-            useStrict: true,
-            format: this.format,
-            // allowInputToggle: true,
-            defaultDate: InputDateFhDP.isDateValid(this.rawValue, this.format) ? this.rawValue : '',
-            keepInvalid: true
-        });
+        (<any>$(this.inputGroupElement)).datetimepicker(this.dateTimePickerConfig);
 
         $(this.inputGroupElement).data("DateTimePicker").date(
             InputDateFhDP.toDateOrLeave(this.rawValue, this.backendFormat, this.format));
