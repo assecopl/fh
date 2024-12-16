@@ -1,5 +1,6 @@
 package pl.fhframework.accounts;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -16,6 +17,7 @@ import java.io.IOException;
 /**
  * @author Paweł Ruta
  */
+@Slf4j
 public class SecurityFilter extends UsernamePasswordAuthenticationFilter {
     @Autowired
     SingleLoginLockManager singleLoginLockManager;
@@ -23,8 +25,12 @@ public class SecurityFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     public void doFilter(final ServletRequest req, final ServletResponse res, final FilterChain chain)
             throws IOException, ServletException {
+
         if (req instanceof HttpServletRequest &&
                 super.requiresAuthentication((HttpServletRequest) req, (HttpServletResponse) res)) {
+
+            long startTime = System.currentTimeMillis();
+
             ((HttpServletRequest) req).getSession().setAttribute("baseUrl", getBaseUrl(
                     (HttpServletRequest) req));
             if (singleLoginLockManager.isLoggedIn(obtainUsername((HttpServletRequest) req))) {
@@ -33,6 +39,11 @@ public class SecurityFilter extends UsernamePasswordAuthenticationFilter {
             else {
                 super.doFilter(req, res, chain);
             }
+
+            // logging authenticate time
+            long stopTime = System.currentTimeMillis();
+
+            log.info("FHSecurityFilter.doFilter, authenticate time: " + (stopTime - startTime) / 1000.0 + " s");
         } else {
             super.doFilter(req, res, chain);
         }
