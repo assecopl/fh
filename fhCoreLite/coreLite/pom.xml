@@ -20,6 +20,8 @@
         <dependency>
             <groupId>org.infinispan</groupId>
             <artifactId>infinispan-core</artifactId>
+            <version>${infinispan.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>pl.fhframework.aspects</groupId>
