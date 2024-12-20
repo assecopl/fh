@@ -42,6 +42,7 @@
                         <xs:element type="TimerFhDPType" name="TimerFhDP"/>
                         <xs:element type="TreeFhDPType" name="TreeFhDP"/>
                         <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
+                        <xs:element type="EMLViewerFhDPType" name="EMLViewerFhDP"/>
                         <xs:element type="InputNumberFhDPType" name="InputNumberFhDP"/>
                     </xs:choice>
                 </xs:extension>
@@ -72,6 +73,7 @@
                         <xs:element type="TimerFhDPType" name="TimerFhDP"/>
                         <xs:element type="TreeFhDPType" name="TreeFhDP"/>
                         <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
+                        <xs:element type="EMLViewerFhDPType" name="EMLViewerFhDP"/>
                         <xs:element type="InputNumberFhDPType" name="InputNumberFhDP"/>
                     </xs:choice>
                 </xs:restriction>
@@ -102,6 +104,7 @@
                         <xs:element type="TimerFhDPType" name="TimerFhDP"/>
                         <xs:element type="TreeFhDPType" name="TreeFhDP"/>
                         <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
+                        <xs:element type="EMLViewerFhDPType" name="EMLViewerFhDP"/>
                         <xs:element type="InputNumberFhDPType" name="InputNumberFhDP"/>
                     </xs:choice>
                 </xs:restriction>
@@ -125,6 +128,7 @@
                         <xs:element type="TabContainerFhDPType" name="TabContainerFhDP"/>
                         <xs:element type="TreeFhDPType" name="TreeFhDP"/>
                         <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
+                        <xs:element type="EMLViewerFhDPType" name="EMLViewerFhDP"/>
                         <xs:element type="RowType" name="Row"/>
                         <xs:element type="InputNumberFhDPType" name="InputNumberFhDP"/>
                     </xs:choice>
@@ -156,6 +160,7 @@
                         <xs:element type="TimerFhDPType" name="TimerFhDP"/>
                         <xs:element type="TreeFhDPType" name="TreeFhDP"/>
                         <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
+                        <xs:element type="EMLViewerFhDPType" name="EMLViewerFhDP"/>
                         <xs:element type="RowType" name="Row"/>
                         <xs:element type="RowType" name="Row"/>
                         <xs:element type="InputNumberFhDPType" name="InputNumberFhDP"/>
@@ -187,6 +192,7 @@
                         <xs:element type="TabContainerFhDPType" name="TabContainerFhDP"/>
                         <xs:element type="TreeFhDPType" name="TreeFhDP"/>
                         <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
+                        <xs:element type="EMLViewerFhDPType" name="EMLViewerFhDP"/>
                         <xs:element type="RowType" name="Row"/>
                         <xs:element type="InputNumberFhDPType" name="InputNumberFhDP"/>
                     </xs:choice>
@@ -211,6 +217,7 @@
                         <xs:element type="TabContainerFhDPType" name="TabContainerFhDP"/>
                         <xs:element type="TreeFhDPType" name="TreeFhDP"/>
                         <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
+                        <xs:element type="EMLViewerFhDPType" name="EMLViewerFhDP"/>
                         <xs:element type="RowType" name="Row"/>
                         <xs:element type="InputNumberFhDPType" name="InputNumberFhDP"/>
                     </xs:choice>
@@ -223,6 +230,7 @@
                     <xs:choice maxOccurs="unbounded" minOccurs="0">
                         <xs:element type="TimerFhDPType" name="TimerFhDP"/>
                         <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
+                        <xs:element type="EMLViewerFhDPType" name="EMLViewerFhDP"/>
                     </xs:choice>
                 </xs:extension>
             </xs:complexContent>
@@ -600,6 +608,7 @@
             <xs:element type="FHMLStandaloneType" name="FHMLStandalone"/>
             <xs:element type="HTMLRawViewFhDPType" name="HTMLRawViewFhDP"/>
             <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
+            <xs:element type="EMLViewerFhDPType" name="EMLViewerFhDP"/>
         </xs:choice>
         <!-- TODO PanelFhDP attrs-->
         <xs:attributeGroup ref="FormElementTypeGroup"/>
@@ -615,6 +624,7 @@
             <xs:element type="FHMLStandaloneType" name="FHMLStandalone"/>
             <xs:element type="HTMLRawViewFhDPType" name="HTMLRawViewFhDP"/>
             <xs:element type="XMLViewerFhDPType" name="XMLViewerFhDP"/>
+            <xs:element type="EMLViewerFhDPType" name="EMLViewerFhDP"/>
         </xs:choice>
         <!-- TODO PanelHeaderFhDP attrs-->
         <xs:attributeGroup ref="FormElementTypeGroup"/>
@@ -742,6 +752,13 @@
     <xs:element name="XMLViewerFhDP" type="XMLViewerFhDPType"/>
     <xs:complexType name="XMLViewerFhDPType">
         <!-- TODO XMLViewerFhDP attrs-->
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="content" use="required"/>
+    </xs:complexType>
+
+    <xs:element name="EMLViewerFhDP" type="XMLViewerFhDPType"/>
+    <xs:complexType name="EMLViewerFhDPType">
+        <!-- TODO EMLViewerFhDP attrs-->
         <xs:attributeGroup ref="FormElementTypeGroup"/>
         <xs:attribute type="xs:string" name="content" use="required"/>
     </xs:complexType>

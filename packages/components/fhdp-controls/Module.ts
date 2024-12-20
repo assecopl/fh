@@ -30,6 +30,7 @@ import * as pack from './package.json';
 import {MSReportsView} from './source/controls/MSReportsView';
 import {InputTimeFhDP} from './source/controls/inputs/InputTimeFhDP';
 import {TimerFhDP} from './source/controls/TimerFhDP';
+import {EMLViewerFhDP} from "./source/controls/EMLViewerFhDP";
 
 class FhDPControls extends FhModule {
 
@@ -230,10 +231,17 @@ class FhDPControls extends FhModule {
                         return new TimerFhDP(componentObj, parent);
                     };
                 });
+
+        FhContainer.bind<(componentObj: any, parent: any) => EMLViewerFhDP>("EMLViewerFhDP")
+            .toFactory<EMLViewerFhDP>(() => {
+                return (componentObj: any, parent: any) => {
+                    return new EMLViewerFhDP(componentObj, parent);
+                };
+            });
         
         FhContainer.rebind<BaseEvent>('Events.NotificationEvent').to(NotificationEventFhDP).inRequestScope();
 
-        console.log(`FhDP-controlls version: ${pack.version}`)
+        console.log(`FhDP-controlls version: ${pack.version} test`)
     }
 }
 
