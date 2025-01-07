@@ -27,6 +27,8 @@ import pl.fhframework.validation.IValidationResults;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -276,6 +278,8 @@ public class UserSession extends Session {
     private long lastUsageMoment = System.currentTimeMillis();
     private void refreshLastUsageTime() {
         lastUsageMoment = System.currentTimeMillis();
+        getHttpSession().setAttribute("lastUsageTime", lastUsageMoment);
+        getHttpSession().setAttribute("lastUsageTimeStr", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
     }
 
     public boolean hasNotBeenUsedIn(long amountOfTimeSinceLastUsageInMillis) {

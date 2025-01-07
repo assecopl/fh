@@ -115,6 +115,7 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
 
     public boolean removeUserSession(String httpSessionId) {
         UserSession userSession = userSessions.remove(httpSessionId);
+        userSession.getHttpSession().invalidate();
         userSessionsHash.remove(System.identityHashCode(userSession.getHttpSession()));
         userSessionsByConversationId.remove(userSession.getConversationUniqueId());
         removeSessionInfo(httpSessionId);
