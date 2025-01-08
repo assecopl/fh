@@ -2,6 +2,8 @@ package pl.fhframework.core.session;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -27,6 +29,7 @@ import java.util.function.Consumer;
 @RequiredArgsConstructor
 public class UserSessionRepository implements HttpSessionListener, ApplicationListener<ContextRefreshedEvent> {
 
+    private static final Logger log = LoggerFactory.getLogger(UserSessionRepository.class);
     @Getter
     private Map<String, UserSession> userSessions = new ConcurrentHashMap<>();
     @Getter
@@ -115,7 +118,11 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
 
     public boolean removeUserSession(String httpSessionId) {
         UserSession userSession = userSessions.remove(httpSessionId);
-        userSession.getHttpSession().invalidate();
+        try {
+            userSession.getHttpSession().invalidate();
+        } catch (Exception e) {
+            log.warn("{}", e.getMessage());
+        }
         userSessionsHash.remove(System.identityHashCode(userSession.getHttpSession()));
         userSessionsByConversationId.remove(userSession.getConversationUniqueId());
         removeSessionInfo(httpSessionId);
