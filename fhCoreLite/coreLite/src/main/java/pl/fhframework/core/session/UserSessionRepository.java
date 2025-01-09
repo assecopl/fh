@@ -29,7 +29,7 @@ import java.util.function.Consumer;
 @RequiredArgsConstructor
 public class UserSessionRepository implements HttpSessionListener, ApplicationListener<ContextRefreshedEvent> {
 
-    private static final Logger log = LoggerFactory.getLogger(UserSessionRepository.class);
+//    private static final Logger log = LoggerFactory.getLogger(UserSessionRepository.class);
     @Getter
     private Map<String, UserSession> userSessions = new ConcurrentHashMap<>();
     @Getter
@@ -118,11 +118,12 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
 
     public boolean removeUserSession(String httpSessionId) {
         UserSession userSession = userSessions.remove(httpSessionId);
-        try {
-            userSession.getHttpSession().invalidate();
-        } catch (Exception e) {
-            log.warn("{}", e.getMessage());
-        }
+        //TODO: find other solution for cleaning orphaned HTTP sessions
+//        try {
+//            userSession.getHttpSession().invalidate();
+//        } catch (Exception e) {
+//            log.warn("{}", e.getMessage());
+//        }
         userSessionsHash.remove(System.identityHashCode(userSession.getHttpSession()));
         userSessionsByConversationId.remove(userSession.getConversationUniqueId());
         removeSessionInfo(httpSessionId);
