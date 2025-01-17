@@ -134,6 +134,7 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
     private synchronized void putSessionInfo(String httpSessionId, UserSession userSession) {
         SessionInfo sessionInfo = new SessionInfo();
         sessionInfo.setSessionId(userSession.getConversationUniqueId());
+        sessionInfo.setHttpSessionId(httpSessionId);
         sessionInfo.setLogonTime(new Date(userSession.getCreationTimestamp().toEpochMilli()));
         sessionInfo.setUserName(userSession.getSystemUser().getLogin());
         sessionInfo.setNodeUrl(nodeUrl);
