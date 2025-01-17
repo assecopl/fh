@@ -33,6 +33,8 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
     @Getter
     private Map<String, UserSession> userSessions = new ConcurrentHashMap<>();
     @Getter
+    private Map<String, HttpSession> orphanSessions = new ConcurrentHashMap<>();
+    @Getter
     private Map<String, UserSession> userSessionsByConversationId = new ConcurrentHashMap<>();
     private Map<Integer, UserSession> userSessionsHash = new ConcurrentHashMap<>();
     private Set<Consumer<UserSession>> userSessionDestroyedListeners = new HashSet<>();
@@ -113,17 +115,13 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
         userSessionsHash.put(httpSessionHash, userSession);
         userSessions.put(httpSessionId, userSession);
         userSessionsByConversationId.put(userSession.getConversationUniqueId(), userSession);
+        orphanSessions.remove(httpSessionId);
         putSessionInfo(httpSessionId, userSession);
     }
 
     public boolean removeUserSession(String httpSessionId) {
         UserSession userSession = userSessions.remove(httpSessionId);
-        //TODO: find other solution for cleaning orphaned HTTP sessions
-//        try {
-//            userSession.getHttpSession().invalidate();
-//        } catch (Exception e) {
-//            log.warn("{}", e.getMessage());
-//        }
+        orphanSessions.put(httpSessionId, userSession.getHttpSession());
         userSessionsHash.remove(System.identityHashCode(userSession.getHttpSession()));
         userSessionsByConversationId.remove(userSession.getConversationUniqueId());
         removeSessionInfo(httpSessionId);
@@ -229,8 +227,30 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
                     FhLogger.error("Unsuccessful attempt to delete the session for {}", getUserLogin(session));
                 }
             }
+        } else {
+            FhLogger.info("Removed orphan HTTP session {}.", httpSession.getId());
+            orphanSessions.remove(httpSession);
         }
         leakedSessionRemoverCron.cleanupLeakedSessions();
+    }
+    public List<HttpSession> invalidateExpiredOrphanSessions(int emergencyRemovalTimeUnusedSessionInSeconds) {
+        List<HttpSession> ret = new ArrayList<>();
+        for(String key : orphanSessions.keySet()) {
+            HttpSession httpSession = orphanSessions.get(key);
+            try {
+                Long lastUsageTime = (Long) httpSession.getAttribute("lastUsageTime");
+                Long currentTime = System.currentTimeMillis();
+                if(currentTime - lastUsageTime > emergencyRemovalTimeUnusedSessionInSeconds) {
+                    String lastUsageTimeStr = (String) httpSession.getAttribute("lastUsageTime");
+                    httpSession.invalidate();
+                    orphanSessions.remove(key);
+                    FhLogger.info("Invalidated orphan HTTP session {}. Last used at {}.", key, lastUsageTimeStr);
+                }
+            } catch (Exception ex) {
+                FhLogger.warn("Invalidated session {} left in orphans.", httpSession.getId());
+            }
+        }
+        return ret;
     }
 
     public Set<UserSession> getAllUserSessions(){
