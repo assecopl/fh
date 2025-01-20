@@ -29,7 +29,8 @@ import java.util.function.Consumer;
 @RequiredArgsConstructor
 public class UserSessionRepository implements HttpSessionListener, ApplicationListener<ContextRefreshedEvent> {
 
-//    private static final Logger log = LoggerFactory.getLogger(UserSessionRepository.class);
+    private static final Logger log = LoggerFactory.getLogger(UserSessionRepository.class);
+    //    private static final Logger log = LoggerFactory.getLogger(UserSessionRepository.class);
     @Getter
     private Map<String, UserSession> userSessions = new ConcurrentHashMap<>();
     @Getter
@@ -234,24 +235,26 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
         }
         leakedSessionRemoverCron.cleanupLeakedSessions();
     }
-    public List<HttpSession> invalidateExpiredOrphanSessions(int emergencyRemovalTimeUnusedSessionInSeconds) {
-        List<HttpSession> ret = new ArrayList<>();
+    public void invalidateExpiredOrphanSessions(int emergencyRemovalTimeUnusedSessionInSeconds) {
+        log.info("Invalidating expired orphan sessions not active for {} seconds...", emergencyRemovalTimeUnusedSessionInSeconds);
         for(String key : orphanSessions.keySet()) {
             HttpSession httpSession = orphanSessions.get(key);
             try {
                 Long lastUsageTime = (Long) httpSession.getAttribute("lastUsageTime");
+                String lastUsageTimeStr = (String) httpSession.getAttribute("lastUsageTime");
                 Long currentTime = System.currentTimeMillis();
                 if(currentTime - lastUsageTime > emergencyRemovalTimeUnusedSessionInSeconds) {
-                    String lastUsageTimeStr = (String) httpSession.getAttribute("lastUsageTime");
+                    FhLogger.info("Invalidating orphan HTTP session {}. Last used at {}.", key, lastUsageTimeStr);
                     httpSession.invalidate();
                     orphanSessions.remove(key);
-                    FhLogger.info("Invalidated orphan HTTP session {}. Last used at {}.", key, lastUsageTimeStr);
+                } else {
+                    FhLogger.info("Orphan HTTP session {} left active. Last used at {}.", key, lastUsageTimeStr);
                 }
             } catch (Exception ex) {
-                FhLogger.warn("Invalidated session {} left in orphans.", httpSession.getId());
+                FhLogger.warn("Invalidated session {} found in orphans. Removing...", httpSession.getId());
+                orphanSessions.remove(key);
             }
         }
-        return ret;
     }
 
     public Set<UserSession> getAllUserSessions(){
