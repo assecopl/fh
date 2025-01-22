@@ -405,6 +405,10 @@ public abstract class Form<T> extends GroupingComponentWithHeadingHierarchy<Comp
         elementChanges.setFormId(getForm().getId());
         elementChanges.setFormElementId(this.getId());
 
+        if (ariaLabelBinding != null) {
+            ariaLabel = ariaLabelBinding.resolveValueAndAddChanges(this, elementChanges, ariaLabel, ATTR_ARIA_LABEL);
+        }
+
         // calculate form's own availability
         calculateAvailability();
 

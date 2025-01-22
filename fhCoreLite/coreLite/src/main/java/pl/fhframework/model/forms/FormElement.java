@@ -39,7 +39,18 @@ public abstract class FormElement extends Component {
     private static final String HINT_ARIA_LABEL_ATTR = "hintAriaLabel";
     private static final String HINT_TRIGGER_ATTR = "hintTrigger";
     private static final String HINT_TYPE_ATTR = "hintType";
+    public static final String ATTR_ARIA_LABEL = "ariaLabel";
 
+    @Getter
+    protected String ariaLabel;
+
+    @JsonIgnore
+    @Getter
+    @Setter
+    @XMLProperty(value = ATTR_ARIA_LABEL)
+    @DesignerXMLProperty(priority = 2, functionalArea = WCAG)
+    @DocumentedComponentAttribute(boundable = true, value = "Use aria-label to provide an invisible label where a visible label cannot be used. Value will be read by screen reader.")
+    protected ModelBinding<String> ariaLabelBinding;
 
     @Getter
     @Setter
@@ -405,6 +416,10 @@ public abstract class FormElement extends Component {
             hintAriaLabel = hintAriaLabelBinding.resolveValueAndAddChanges(this, elementChanges, hintAriaLabel, HINT_ARIA_LABEL_ATTR);
         }
 
+        if (ariaLabelBinding != null) {
+            ariaLabel = ariaLabelBinding.resolveValueAndAddChanges(this, elementChanges, ariaLabel, ATTR_ARIA_LABEL);
+        }
+
         IGroupingComponent parent = getGroupingParentComponent();
         boolean stopProcessingUpdateView = isStopProcessingUpdateView();
         while (!stopProcessingUpdateView && parent != null) {
@@ -437,6 +452,9 @@ public abstract class FormElement extends Component {
 
         return changedElement;
     }
+
+
+
 
     /**
      * TODO: In future, this method should avoid all combinations causing element refreshing Logic

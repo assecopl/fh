@@ -138,6 +138,9 @@ class Form extends HTMLFormComponent {
         this.display();
         this.createComponents();
 
+        super.processHtmlAccessibilityRole(this.htmlAccessibilityRole);
+        super.processAriaLabel(this.ariaLabel);
+
         function isDescendant(parent, child) {
             var node = child.parentNode;
             while (node != null) {

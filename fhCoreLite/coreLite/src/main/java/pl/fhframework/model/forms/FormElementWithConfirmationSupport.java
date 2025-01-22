@@ -17,7 +17,7 @@ import static pl.fhframework.annotations.DesignerXMLProperty.PropertyFunctionalA
 /**
  *  Base component with confirmation action support.
  */
-public abstract class FormElementWithConfirmationSupport extends FormElementWithAriaSupport implements IChangeableByClient, Boundable {
+public abstract class FormElementWithConfirmationSupport extends FormElement implements IChangeableByClient, Boundable {
 
     protected static final String CONFIRATION_MSG_ATTR = "confirmationMsg";
 
