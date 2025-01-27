@@ -2,6 +2,7 @@ package pl.fhframework.core.session;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +56,9 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
      */
     @Value("${fh.session.force_clear_session_data_after_session_removal:false}")
     private boolean forceClearSessionDataAfterSessionRemoval;
+
+    @Value("${fh.session.orphans.manage:false}")
+    private boolean manageOrphans;
 
     private String nodeUrl;
 
@@ -116,13 +120,17 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
         userSessionsHash.put(httpSessionHash, userSession);
         userSessions.put(httpSessionId, userSession);
         userSessionsByConversationId.put(userSession.getConversationUniqueId(), userSession);
-        orphanSessions.remove(httpSessionId);
+        if(manageOrphans) {
+            orphanSessions.remove(httpSessionId);
+        }
         putSessionInfo(httpSessionId, userSession);
     }
 
     public boolean removeUserSession(String httpSessionId) {
         UserSession userSession = userSessions.remove(httpSessionId);
-        orphanSessions.put(httpSessionId, userSession.getHttpSession());
+        if(manageOrphans) {
+            orphanSessions.put(httpSessionId, userSession.getHttpSession());
+        }
         userSessionsHash.remove(System.identityHashCode(userSession.getHttpSession()));
         userSessionsByConversationId.remove(userSession.getConversationUniqueId());
         removeSessionInfo(httpSessionId);
@@ -229,13 +237,15 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
                     FhLogger.error("Unsuccessful attempt to delete the session for {}", getUserLogin(session));
                 }
             }
-        } else {
-            FhLogger.info("Removed orphan HTTP session {}.", httpSession.getId());
-            orphanSessions.remove(httpSession);
         }
+//        else {
+//            FhLogger.info("Removed orphan HTTP session {}.", httpSession.getId());
+//            orphanSessions.remove(httpSession);
+//        }
         leakedSessionRemoverCron.cleanupLeakedSessions();
     }
     public void invalidateExpiredOrphanSessions(int emergencyRemovalTimeUnusedSessionInSeconds) {
+        if(!manageOrphans) return;
         log.info("Invalidating expired orphan sessions not active for {} seconds...", emergencyRemovalTimeUnusedSessionInSeconds);
         for(String key : orphanSessions.keySet()) {
             HttpSession httpSession = orphanSessions.get(key);
@@ -251,8 +261,9 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
                     FhLogger.info("Orphan HTTP session {} left active. Last used at {}.", key, lastUsageTimeStr);
                 }
             } catch (Exception ex) {
-                FhLogger.warn("Invalidated session {} found in orphans. Removing...", httpSession.getId());
+                FhLogger.warn("Exception caught during orphans invalidation for session {}:\n{}", httpSession.getId(), ExceptionUtils.getStackTrace(ex));
                 orphanSessions.remove(key);
+                httpSession.invalidate();
             }
         }
     }
