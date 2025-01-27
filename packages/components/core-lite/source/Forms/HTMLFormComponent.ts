@@ -981,7 +981,9 @@ abstract class HTMLFormComponent extends FormComponent {
                 this.labelElement = label;
 
                 if (!isInputElement) {
-                    this.component.setAttribute("aria-labelledby", label.id)   
+                    if(!this.ariaLabel) {
+                        this.component.setAttribute("aria-labelledby", label.id)
+                    }
                 } else {
                     label.htmlFor = this.id;
                 }
@@ -1453,7 +1455,7 @@ abstract class HTMLFormComponent extends FormComponent {
      */
     protected processAriaLabel(value: string = this.ariaLabel) {
         //Add attribute only when there is no label on component.
-        if (this.ariaLabel && !this.labelElement) {
+        if (this.ariaLabel) {
             if (this.input) {
                 this.input.setAttribute('aria-label', value);
             } else {
