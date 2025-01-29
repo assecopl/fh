@@ -59,6 +59,8 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
 
     @Value("${fh.session.orphans.manage:false}")
     private boolean manageOrphans;
+    @Value("${fh.session.scopedBeans.manage:false}")
+    private boolean manageScopedBeans;
 
     private String nodeUrl;
 
@@ -131,6 +133,9 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
         if(manageOrphans) {
             orphanSessions.put(httpSessionId, userSession.getHttpSession());
         }
+        if(manageScopedBeans) {
+            clearScopedBeans(userSession.getHttpSession());
+        }
         userSessionsHash.remove(System.identityHashCode(userSession.getHttpSession()));
         userSessionsByConversationId.remove(userSession.getConversationUniqueId());
         removeSessionInfo(httpSessionId);
@@ -138,6 +143,18 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
             userSession.removeAllValuesBeforeSessionRemove();
         }
         return userSession!=null;
+    }
+
+    private void clearScopedBeans(HttpSession httpSession) {
+        Enumeration<String> names = httpSession.getAttributeNames();
+        while (names.hasMoreElements()) {
+            String name = names.nextElement();
+            if(name.startsWith("scopedTarget.")) {
+                Object value = httpSession.getAttribute(name);
+                value = null;
+                httpSession.removeAttribute(name);
+            }
+        }
     }
 
     private synchronized void putSessionInfo(String httpSessionId, UserSession userSession) {
