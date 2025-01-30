@@ -154,6 +154,9 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
                 value = null;
                 httpSession.removeAttribute(name);
             }
+            if(name.equals("fh_session_id")) {
+                httpSession.removeAttribute(name);
+            }
         }
     }
 
