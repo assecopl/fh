@@ -153,9 +153,11 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
                 Object value = httpSession.getAttribute(name);
                 value = null;
                 httpSession.removeAttribute(name);
+                log.debug("Removed attribute {} from HTTP session {}", name, httpSession);
             }
             if(name.equals("fh_session_id")) {
                 httpSession.removeAttribute(name);
+                log.debug("Removed attribute {} from HTTP session {}", name, httpSession);
             }
         }
     }
