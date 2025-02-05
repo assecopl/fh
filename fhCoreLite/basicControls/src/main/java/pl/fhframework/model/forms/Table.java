@@ -331,7 +331,9 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
             csvButton.setStyleClasses("btn-csv");
             csvButton.setHorizontalAlign(HorizontalAlign.RIGHT);
             csvButton.setInvisible(false);
-            csvButton.setOnClick(() -> csvService.exportTableToCsv(this));
+            CallbackActionBinding csvAction = new CallbackActionBinding(() -> csvService.exportTableToCsv(this));
+            csvAction.getContext().validate(false);
+            csvButton.setOnClick(csvAction);
             csvButton.setGroupingParentComponent(csvExportComponent);
             csvExportComponent.addSubcomponent(csvButton);
         }
