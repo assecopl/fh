@@ -25,6 +25,7 @@ class TabContainer extends HTMLFormComponent {
         ['fc', 'tabContainer'].forEach(function (cssClass) {
             tabContainer.classList.add(cssClass);
         });
+        tabContainer.setAttribute('role', 'tablist');
 
         let nav = document.createElement('ul');
         ['nav', 'nav-tabs'].forEach(function (cssClass) {

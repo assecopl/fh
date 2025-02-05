@@ -137,7 +137,7 @@ class Util {
             /**
              * Set temporary id for calculation
              */
-            if(parent[0].id == ""){
+            if(!parent[0].hasAttribute("id") || parent[0].id == ""){
                 parent[0].id = btoa("scrollToComponentTempId");
                 tempId = true
             }
@@ -148,7 +148,7 @@ class Util {
             offset = this.getOffsetTop(component[0], parent[0].id);
 
             if(tempId){
-                parent[0].id = "";
+                parent[0].removeAttribute("id");
                 tempId = false
             }
 

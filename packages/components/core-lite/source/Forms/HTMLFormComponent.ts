@@ -987,6 +987,7 @@ abstract class HTMLFormComponent extends FormComponent {
                 } else {
                     label.htmlFor = this.id;
                 }
+                this.processAriaLabel();
 
             } else {
                 this.processAriaLabel();

@@ -28,7 +28,7 @@ class Column extends HTMLFormComponent {
         column.id = this.id;
         column.classList.add(this.id);
         if (this.width && this.width.length > 0) {
-            column.style.width = this.width[0].includes("px")? this.width[0]: this.width[0]  + '%';
+            column.style.width = this.width[0].includes("px") ? this.width[0] : this.width[0] + '%';
         }
         // HTMLComponent recognized and updated label
         if (this.isSortable) {
@@ -156,8 +156,9 @@ class Column extends HTMLFormComponent {
             this.component.removeAttribute('colspan');
             return;
         }
-
-        this.component.setAttribute('colspan', colspan);
+        if (colspan > 0) {
+            this.component.setAttribute('colspan', colspan);
+        }
     };
 
     update(change) {
