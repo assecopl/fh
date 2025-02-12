@@ -111,7 +111,7 @@ public class WebSocketFormsHandler extends FormsHandler {
         } else {
             try {
                 SystemUser systemUser = securityManager.buildSystemUser(session.getPrincipal());
-                boundSession = applicationContext.getBean(UserSession.class, systemUser, createDescription(session), WebSocketSessionManager.getHttpSession());//new UserSession(this, systemUser, description);
+                boundSession = applicationContext.getBean(UserSession.class, systemUser, createDescription(session), WebSocketSessionManager.getHttpSession(), session.getId());//new UserSession(this, systemUser, description);
                 updateSessionAttributes(boundSession);
                 WebSocketSessionManager.setUserSession(boundSession);
                 sessionLogger.logUserSessionCreation(boundSession);
@@ -121,7 +121,7 @@ public class WebSocketFormsHandler extends FormsHandler {
                 FhLogger.error("Error creating session", e);
                 SystemUser systemUser = new SystemUser(session.getPrincipal());
                 systemUser.getBusinessRoles().add(new NoneBusinessRole());
-                boundSession = applicationContext.getBean(UserSession.class, systemUser, createDescription(session), WebSocketSessionManager.getHttpSession());//new UserSession(this, systemUser, description);
+                boundSession = applicationContext.getBean(UserSession.class, systemUser, createDescription(session), WebSocketSessionManager.getHttpSession(), session.getId());//new UserSession(this, systemUser, description);
                 WebSocketSessionManager.setUserSession(boundSession);
                 wssRepository.onConnectionEstabilished(boundSession, session);
                 boundSession.setException(e);
@@ -294,8 +294,10 @@ public class WebSocketFormsHandler extends FormsHandler {
             }
             try {
                 HttpSession httpSession = WebSocketSessionManager.getHttpSession();
+                UserSession userSession = WebSocketSessionManager.getUserSessionForWebSocketSession(session);
                 if (removeSessionImmediately) {
-                    removeSessionNow(httpSession);
+                    //removeSessionNow(httpSession);
+                    removeSessionNow(userSession);
                 }else{
                     String sessionId = httpSession.getId();
                     String userName = sessionId; // for guests take sessionId as name, it provides proper function of windows session overtake
@@ -318,17 +320,35 @@ public class WebSocketFormsHandler extends FormsHandler {
             }
         }
 
-        private void removeSessionNow(HttpSession httpSession) {
-            userSessionRepository.removeUserSession(httpSession);
-            SessionInformation si = sessionRegistry.getSessionInformation(httpSession.getId());
-            if (si != null) {
-                si.expireNow();
-            }
-            try {
-                httpSession.invalidate();
-            } catch (IllegalStateException ise) {
-                // it can be simultanously invalidated from browser with logout timer
-                FhLogger.warn("Session " + httpSession.getId() + " was already invalidated");
+//        private void removeSessionNow(HttpSession httpSession) {
+//            userSessionRepository.removeUserSession(httpSession);
+//            SessionInformation si = sessionRegistry.getSessionInformation(httpSession.getId());
+//            if (si != null) {
+//                si.expireNow();
+//            }
+//            try {
+//                httpSession.invalidate();
+//            } catch (IllegalStateException ise) {
+//                // it can be simultanously invalidated from browser with logout timer
+//                FhLogger.warn("Session " + httpSession.getId() + " was already invalidated");
+//            }
+//        }
+
+        private void removeSessionNow(UserSession userSession) {
+            userSessionRepository.removeUserSession(userSession);
+            HttpSession httpSession = WebSocketSessionManager.getHttpSession();
+            //If there is no active conversations in current session then session should be expired
+            if (!userSessionRepository.areActiveConversationsInHttpSession(httpSession)) {
+                SessionInformation si = sessionRegistry.getSessionInformation(httpSession.getId());
+                if (si != null) {
+                    si.expireNow();
+                }
+                try {
+                    httpSession.invalidate();
+                } catch (IllegalStateException ise) {
+                    // it can be simultanously invalidated from browser with logout timer
+                    FhLogger.warn("Session " + httpSession.getId() + " was already invalidated");
+                }
             }
         }
     }

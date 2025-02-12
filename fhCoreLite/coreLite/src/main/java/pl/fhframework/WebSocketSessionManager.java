@@ -21,6 +21,10 @@ import java.util.Locale;
  */
 public class WebSocketSessionManager implements ISessionManagerImpl {
 
+    public static UserSession getUserSessionForWebSocketSession(WebSocketSession session) {
+        return getUserSessionRepository().getUserSession(session);
+    }
+
     @Setter
     @Getter
     public static class WebSocketRequestContext implements Serializable {
@@ -113,17 +117,19 @@ public class WebSocketSessionManager implements ISessionManagerImpl {
      */
     public static void setUserSession(UserSession userSession) {
         HttpSession sessionHttp = getHttpSession();
-        UserSession pUserSession = getUserSessionRepository().getUserSession(sessionHttp.getId());
-        if (pUserSession == null || pUserSession.getSystemUser().isGuest()) {
-            getUserSessionRepository().setUserSession(sessionHttp.getId(), userSession);
-        }
+//        UserSession pUserSession = getUserSessionRepository().getUserSession(sessionHttp.getId());
+//        if (pUserSession == null || pUserSession.getSystemUser().isGuest()) {
+//            getUserSessionRepository().setUserSession(sessionHttp.getId(), userSession);
+//        }
+        getUserSessionRepository().setUserSession(sessionHttp.getId(), userSession);
     }
 
     /**
      * Checks if an UserSession is already bound to current HTTP session
      */
     public static boolean hasUserSession() {
-        return getUserSessionRepository().getUserSession(getHttpSession().getId()) != null;
+        //return getUserSessionRepository().getUserSession(getHttpSession().getId()) != null;
+        return false;
     }
 
     public static void prepareSessionScope() {
@@ -162,8 +168,8 @@ public class WebSocketSessionManager implements ISessionManagerImpl {
     }
 
     public UserSession getSession() {
-        HttpSession sessionHttp = getHttpSession();
-        return getUserSessionRepository().getUserSession(sessionHttp);
+//        HttpSession sessionHttp = getHttpSession();//TUTAJ trzeba zmienić logikę - oprzeć się trzeba na getWebSocketSession, który jest per połączenie
+        return getUserSessionRepository().getUserSession(getWebSocketSession());
     }
 
     public static WebSocketSession getWebSocketSession() {

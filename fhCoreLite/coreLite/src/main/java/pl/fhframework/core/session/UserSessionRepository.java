@@ -12,6 +12,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.socket.WebSocketSession;
 import pl.fhframework.UserSession;
 import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.core.security.model.SessionInfo;
@@ -32,13 +33,20 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
 
     private static final Logger log = LoggerFactory.getLogger(UserSessionRepository.class);
     //    private static final Logger log = LoggerFactory.getLogger(UserSessionRepository.class);
-    @Getter
-    private Map<String, UserSession> userSessions = new ConcurrentHashMap<>();
+
+    /**
+     * UserSessions is deprecated because there could be more than one user session for one fhId - there should be a list of usersSessions for one fhId
+     */
+//    @Getter
+//    @Deprecated
+    private Map<String, UserSession> userSessionsByFhId = new ConcurrentHashMap<>();
+    private Map<String, Set<UserSession>> userConversationsByHttpSessions = new ConcurrentHashMap<>();
     @Getter
     private Map<String, HttpSession> orphanSessions = new ConcurrentHashMap<>();
     @Getter
     private Map<String, UserSession> userSessionsByConversationId = new ConcurrentHashMap<>();
-    private Map<Integer, UserSession> userSessionsHash = new ConcurrentHashMap<>();
+    //private Map<Integer, UserSession> userSessionsHash = new ConcurrentHashMap<>();
+    private Map<String, UserSession> userConversations = new ConcurrentHashMap<>();
     private Set<Consumer<UserSession>> userSessionDestroyedListeners = new HashSet<>();
     private Set<Consumer<UserSession>> userSessionKeepAliveListeners = new HashSet<>();
 
@@ -101,7 +109,7 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
     }
 
     public int getUserSessionCount() {
-        return userSessions.size();
+        return userConversations.size();
     }
 
     public void addUserSessionDestroyedListener(Consumer<UserSession> listener) {
@@ -114,35 +122,54 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
 
     public void setUserSession(String httpSessionId, UserSession userSession) {
         // ChangeSessionIdAuthenticationStrategy silently modify session id after security filter, remove old userSession
-        int httpSessionHash = System.identityHashCode(userSession.getHttpSession());
-        UserSession oldUserSession = userSessionsHash.get(httpSessionHash);
-        if (oldUserSession != null) {
-            removeUserSession(oldUserSession.getHttpSessionOrgId());
-        }
-        userSessionsHash.put(httpSessionHash, userSession);
-        userSessions.put(httpSessionId, userSession);
+//        int httpSessionHash = System.identityHashCode(userSession.getHttpSession());
+//        UserSession oldUserSession = userSessionsHash.get(httpSessionHash);
+//        if (oldUserSession != null) {
+//            removeUserSession(oldUserSession.getHttpSessionOrgId());
+//        }
+//        userSessionsHash.put(httpSessionHash, userSession);
+
+//        userSessions.put(httpSessionId, userSession);
+        Set<UserSession> userSessionsInHttpSession = userConversationsByHttpSessions.computeIfAbsent(httpSessionId, k -> new HashSet<>());
+        userSessionsInHttpSession.add(userSession);
+
         userSessionsByConversationId.put(userSession.getConversationUniqueId(), userSession);
+        userConversations.put(userSession.getConversationId(), userSession);
         if(manageOrphans) {
             orphanSessions.remove(httpSessionId);
         }
         putSessionInfo(httpSessionId, userSession);
     }
 
-    public boolean removeUserSession(String httpSessionId) {
-        UserSession userSession = userSessions.remove(httpSessionId);
-        if(manageOrphans) {
-            orphanSessions.put(httpSessionId, userSession.getHttpSession());
-        }
-        if(manageScopedBeans) {
-            clearScopedBeans(userSession.getHttpSession());
-        }
-        userSessionsHash.remove(System.identityHashCode(userSession.getHttpSession()));
+    public boolean removeUserSession(UserSession userSession) {
         userSessionsByConversationId.remove(userSession.getConversationUniqueId());
-        removeSessionInfo(httpSessionId);
+        userSessionsByConversationId.remove(userSession.getConversationUniqueId());
+        userConversations.remove(userSession.getConversationId());
+        userConversationsByHttpSessions.get(userSession.getHttpSession().getId()).remove(userSession);
+        //removeSessionInfo(httpSessionId);
         if (forceClearSessionDataAfterSessionRemoval) {
             userSession.removeAllValuesBeforeSessionRemove();
         }
-        return userSession!=null;
+        return true;
+    }
+
+    public boolean removeUserSessionTOREMOVE(String httpSessionId) {
+        return true;
+//        UserSession userSession = userSessions.remove(httpSessionId);
+//        if(manageOrphans) {
+//            orphanSessions.put(httpSessionId, userSession.getHttpSession());
+//        }
+//        if(manageScopedBeans) {
+//            clearScopedBeans(userSession.getHttpSession());
+//        }
+////        userSessionsHash.remove(System.identityHashCode(userSession.getHttpSession()));
+//        userSessionsByConversationId.remove(userSession.getConversationUniqueId());
+//        userConversations.remove(userSession.getConversationId());
+//        removeSessionInfo(httpSessionId);
+//        if (forceClearSessionDataAfterSessionRemoval) {
+//            userSession.removeAllValuesBeforeSessionRemove();
+//        }
+//        return userSession!=null;
     }
 
     private void clearScopedBeans(HttpSession httpSession) {
@@ -215,9 +242,19 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
         sessionInfoCache.evictSessionsInfoForNode(node);
     }
 
-    public UserSession getUserSession(HttpSession httpSession) {
-        return userSessions.get(httpSession.getId());
-    }
+//    /**
+//     * This method is deprecated because there could be more than one user session for one http session
+//     * @param httpSession
+//     * @return
+//     */
+//    @Deprecated
+//    public UserSession getUserSession(HttpSession httpSession) {
+//        return userSessions.get(httpSession.getId());
+//    }
+
+//    public UserSession getUserSession(HttpSession httpSession){
+//        return getUserSession(httpSession.getId());
+//    }
 
     @Override
     public void sessionCreated(HttpSessionEvent httpSessionEvent) {
@@ -231,7 +268,7 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
 
     @Override
     public void sessionDestroyed(HttpSessionEvent httpSessionEvent) {
-        onSessionExpired(httpSessionEvent.getSession());
+        onHttpSessionExpired(httpSessionEvent.getSession());
     }
 
     public void onSessionKeepAlive(String conversationId) {
@@ -243,20 +280,22 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
         }
     }
 
-    private void onSessionExpired(HttpSession httpSession) {
-        UserSession session = getUserSession(httpSession);
-        if (session != null) {
-            try {
-                for (Consumer<UserSession> listener : userSessionDestroyedListeners) {
-                    listener.accept(session);
-                }
-            } finally {
-                boolean response = removeUserSession(httpSession.getId());
+    private void onHttpSessionExpired(HttpSession httpSession) {
+        Set<UserSession> sessions = getUserSessionsInHttpSession(httpSession);
+        for (UserSession userSession : sessions) {
+            if (userSession != null) {
+                try {
+                    for (Consumer<UserSession> listener : userSessionDestroyedListeners) {
+                        listener.accept(userSession);
+                    }
+                } finally {
+                    boolean response = removeUserSession(userSession);
 
-                if (response) {
-                    FhLogger.info("Removed expired session for {}.", getUserLogin(session), session.getFhSessionId(), httpSession.getId());
-                }else{
-                    FhLogger.error("Unsuccessful attempt to delete the session for {}", getUserLogin(session));
+                    if (response) {
+                        FhLogger.info("Removed expired session for {}.", getUserLogin(userSession), userSession.getFhSessionId(), httpSession.getId());
+                    } else {
+                        FhLogger.error("Unsuccessful attempt to delete the session for {}", getUserLogin(userSession));
+                    }
                 }
             }
         }
@@ -266,6 +305,7 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
 //        }
         leakedSessionRemoverCron.cleanupLeakedSessions();
     }
+
     public void invalidateExpiredOrphanSessions(int emergencyRemovalTimeUnusedSessionInSeconds) {
         if(!manageOrphans) return;
         log.info("Invalidating expired orphan sessions not active for {} seconds...", emergencyRemovalTimeUnusedSessionInSeconds);
@@ -291,36 +331,53 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
     }
 
     public Set<UserSession> getAllUserSessions(){
-        return new HashSet<>(userSessions.values());
+        return new HashSet<>(userConversations.values());
     }
 
     protected Map<String, UserSession> getUserSessionsByFhId(){
-        return Collections.unmodifiableMap(this.userSessions);
+        return Collections.unmodifiableMap(this.userSessionsByFhId);
     }
 
 
+    /**
+     * This method is deprecated, because there could be more than one user session for one fhId
+     * @param fhId
+     * @return
+     */
+    @Deprecated
     protected UserSession getUserSessionByFhId(String fhId) {
-        return this.userSessions.get(fhId);
+        return this.userSessionsByFhId.get(fhId);
     }
 
     protected int getNoOfSessions(){
-        return userSessions.size();
+        return userConversations.size();
     }
 
     public static String getUserLogin(UserSession userSession){
         try{
             return userSession.getSystemUser().getLogin();
         }catch (Exception ex){
-            return "unkwnon user";
+            return "unknown user";
         }
     }
 
-    public UserSession getUserSession(String httpSessionId) {
-        return userSessions.get(httpSessionId);
+//    public UserSession getUserSession(String httpSessionId) {
+//        return userSessionsByHttpSessions.get(httpSessionId);
+//    }
+
+//    public void removeUserSession(HttpSession httpSession){
+//        onHttpSessionExpired(httpSession);
+//    }
+
+    public boolean areActiveConversationsInHttpSession(HttpSession httpSession) {
+        return getUserSessionsInHttpSession(httpSession).isEmpty();
     }
 
-    public void removeUserSession(HttpSession httpSession){
-        onSessionExpired(httpSession);
+    public Set<UserSession> getUserSessionsInHttpSession(HttpSession httpSession) {
+        return Collections.unmodifiableSet(userConversationsByHttpSessions.get(httpSession.getId()));
     }
 
+    public UserSession getUserSession(WebSocketSession webSocketSession) {
+        return userConversations.get(webSocketSession.getId());
+    }
 }

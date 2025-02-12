@@ -39,6 +39,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class UserSession extends Session {
 
     public static final String FH_SESSION_ID = "fh_session_id";
+    public static final String WEB_SOCKET_SESSION_ID = "web_socket_session_id";
 
     private static final int ERROR_INFORMATION_LIMIT = 10;
 
@@ -79,6 +80,9 @@ public class UserSession extends Session {
     // fh session id - ChangeSessionIdAuthenticationStrategy is called after logging in
     private String fhSessionId;
 
+    // Unique conversation id, which determines single conversation (related to browser window) within a http session. It provides capability to maintain many conversations within one http session
+    private String conversationId;
+
     /**
      * Optional authentication propagated from a remote cloud server.
      */
@@ -107,7 +111,7 @@ public class UserSession extends Session {
      */
     private final String clientAddress;
 
-    public UserSession(SystemUser systemUser, UserSessionDescription description, HttpSession httpSession) {
+    public UserSession(SystemUser systemUser, UserSessionDescription description, HttpSession httpSession, String conversationId) {
         super(description);
         setSystemUser(systemUser);
         setHttpSession(httpSession);
@@ -116,6 +120,7 @@ public class UserSession extends Session {
             fhSessionId = httpSession.getId();
         }
         setFhSessionId(fhSessionId);
+        setConversationId(conversationId);
         clientAddress = ClientAddressProvider.getClientAddress(httpSession, description);
     }
 

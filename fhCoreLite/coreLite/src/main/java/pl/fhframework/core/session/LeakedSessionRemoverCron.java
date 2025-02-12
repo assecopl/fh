@@ -121,7 +121,7 @@ public class LeakedSessionRemoverCron {
         sessionKeysToRemove.forEach(key -> {
             UserSession session = userSessionRepository.getUserSessionByFhId(key);
             FhLogger.warn(UserSessionRepository.class, "Emergency removal of unnecessary session {}", key, UserSessionRepository.getUserLogin(session) );
-            userSessionRepository.removeUserSession(key); //TODMaybe better is call method userSessionRepository.removeUserSession(userSessionRepository.getUserSession(key).getHttpSession());
+            userSessionRepository.removeUserSession(session); //TODMaybe better is call method userSessionRepository.removeUserSession(userSessionRepository.getUserSession(key).getHttpSession());
         });
     }
 
