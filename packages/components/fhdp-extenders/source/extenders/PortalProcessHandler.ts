@@ -65,8 +65,15 @@ export class Portal {
     portal.setAttribute('used', 'true');
     const observer = new MutationObserver((mutationList, observer) => {
       if (!portal.parentElement.contains(sourceElement) && document.body.contains(portal)) {
-        console.log("yoy nasty bastard!");
-        portal.setAttribute('used', 'false');
+        try {
+          // console.log("yoy nasty bastard!", sourceId, replaceParentId, {sourceElement, portal});
+          //Check if attribute has value to prevent unwanted mutation to fire.
+          if( portal.getAttribute('used') != 'false') {
+            portal.setAttribute('used', 'false');
+          }
+        } catch (e) {
+          console.warn("yoy PortalTest error: " , e)
+        }
       } else if (!document.body.contains(portal) || !document.body.contains(sourceElement)) {
         observer.disconnect();
         Portal.OBSERVERS[sourceId] = undefined;
