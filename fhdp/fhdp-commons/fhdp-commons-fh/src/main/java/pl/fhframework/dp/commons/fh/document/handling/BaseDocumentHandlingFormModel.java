@@ -32,6 +32,7 @@ public abstract class BaseDocumentHandlingFormModel<DTO, DOC, SUBMODEL extends B
     }
 
     private List<TreeElement<ElementCT>> docLeftMenu;
+    private List<TreeElement<ElementCT>> activeLeftMenuElement;
     private String searchParam;
     private Map<String, String> searchMap;
     private List<String> searchPointers;

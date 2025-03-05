@@ -256,9 +256,10 @@ public  abstract class BaseDocumentHandlingUC<MODEL extends BaseDocumentHandling
         //Variant
         getModel().getSpecificDocFormModel().setVariant(documentHandler.resolveVariant(model.getSpecificDocFormModel()));
 
+        initLeftMenu();
         initDocumentHandlingForm();
         initOperationPendingState();
-        initLeftMenu();
+
         setOperationPagedModel();
         eventRegistry.fireNotificationEvent(NotificationEvent.Level.INFO, info);
     }
