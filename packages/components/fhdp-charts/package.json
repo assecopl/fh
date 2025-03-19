@@ -29,7 +29,7 @@
     "typescript": "5.0.4"
   },
   "dependencies": {
-    "canvas": "2.11.2",
+    "canvas": "3.1.0",
     "fh-basic-controls": "4.10.8-SNAPSHOT-1720177198990",
     "fh-forms-handler": "4.10.8-SNAPSHOT-1720177198990",
     "konva": "8.4.2"
