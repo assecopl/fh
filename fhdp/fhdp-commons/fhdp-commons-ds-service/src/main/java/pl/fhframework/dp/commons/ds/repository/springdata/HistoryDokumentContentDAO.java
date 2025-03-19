@@ -3,28 +3,34 @@ package pl.fhframework.dp.commons.ds.repository.springdata;
 import org.bson.Document;
 import org.bson.types.Binary;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.mongodb.core.BulkOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.BulkOperations.BulkMode;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.ClientSession;
 
+import lombok.extern.slf4j.Slf4j;
 import pl.fhframework.dp.commons.ds.repository.mongo.model.DocumentContent;
 import pl.fhframework.dp.commons.ds.repository.mongo.model.HistoryDocumentContent;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import javax.enterprise.context.ApplicationScoped;
 
 
-@ApplicationScoped
 @Component
+@Slf4j
 public class HistoryDokumentContentDAO extends BaseDAO<HistoryDocumentContent> {
 
+//	protected int CHUNK_SIZE = 15000000;
 	protected int CHUNK_SIZE = 15000000;
 	
 	@Value("${drs.history.document.content.collection.name:fhdp_history_document_content}")
@@ -81,6 +87,7 @@ public class HistoryDokumentContentDAO extends BaseDAO<HistoryDocumentContent> {
 			
 		    int start = 0;
 		    int chunkNr = 1;
+		    List<BasicDBObject> chunksToInsert = new ArrayList<BasicDBObject>();
 		    while (start < content.length) {
 		        int end = Math.min(content.length, start + chunksize);
 		        byte[] chunkContent = Arrays.copyOfRange(content, start, end);
@@ -92,14 +99,20 @@ public class HistoryDokumentContentDAO extends BaseDAO<HistoryDocumentContent> {
 		        chunk.put("contentId", dbObject.getString("_id"));
 				Binary cbinary = new Binary(chunkContent);
 		        chunk.put("content", cbinary);
-		        
 		        chunks.put("c"+chunkNr, chunkID);
-		    	mongoTemplate.save(chunk, getChunkedCollectionName());
+//		    	mongoTemplate.save(chunk, getChunkedCollectionName());
+//		    	mongoTemplate.insert(chunk, getChunkedCollectionName());
+		    	chunksToInsert.add(chunk);
 		        
 		        start += chunksize;
 		        chunkNr++;
 		        
 		    }
+		    BulkOperations bulkOperations =
+	                mongoTemplate.bulkOps(BulkMode.UNORDERED, getChunkedCollectionName()).insert(chunksToInsert);
+		    
+		    bulkOperations.execute();
+		    
 	        dbObject.put("chunks", chunks);
 			
 		} else {
