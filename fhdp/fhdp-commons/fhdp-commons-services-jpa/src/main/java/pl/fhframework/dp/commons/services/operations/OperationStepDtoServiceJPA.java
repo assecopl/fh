@@ -1,22 +1,5 @@
 package pl.fhframework.dp.commons.services.operations;
 
-import lombok.extern.slf4j.Slf4j;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.stereotype.Service;
-import pl.fhframework.dp.commons.els.repositories.OperationStepESRepository;
-import pl.fhframework.dp.commons.mongo.entities.OperationStep;
-import pl.fhframework.dp.commons.mongo.repositories.OperationStepRepository;
-import pl.fhframework.dp.commons.services.facade.GenericDtoService;
-import pl.fhframework.dp.commons.utils.conversion.BeanConversionUtil;
-import pl.fhframework.dp.transport.dto.commons.OperationStepDto;
-import pl.fhframework.dp.transport.dto.operations.OperationStepDtoQuery;
-import pl.fhframework.dp.transport.service.IOperationStepDtoService;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
@@ -26,6 +9,17 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import lombok.extern.slf4j.Slf4j;
+import pl.fhframework.dp.commons.model.dao.OperationStepDAO;
+import pl.fhframework.dp.commons.model.entities.OperationStep;
+import pl.fhframework.dp.commons.model.repositories.OperationStepJPARepository;
+import pl.fhframework.dp.commons.utils.conversion.BeanConversionUtil;
+import pl.fhframework.dp.transport.dto.commons.OperationStepDto;
+import pl.fhframework.dp.transport.dto.operations.OperationStepDtoQuery;
+
 /**
  * @author <a href="mailto:jacek.borowiec@asseco.pl">Jacek Borowiec</a>
  * @version :  $, :  $
@@ -33,11 +27,12 @@ import java.util.stream.Collectors;
  */
 @Service
 @Slf4j
-public class OperationStepDtoService implements IOperationStepDtoService {
+public class OperationStepDtoServiceJPA extends OperationStepDtoServiceBase {
     @Autowired
-    OperationStepRepository operationStepRepository;
+    OperationStepJPARepository operationStepRepository;
+
     @Autowired
-    private MongoTemplate mongoTemplate;
+    OperationStepDAO operationStepDAO;
 
 
     public void logOperationStepStart(String msgKey, String processID, String masterProcessId, String operationGUID, String stepID, Long docId) {
@@ -91,46 +86,16 @@ public class OperationStepDtoService implements IOperationStepDtoService {
 
     @Override
     public List<OperationStepDto> listDto(OperationStepDtoQuery query) {
-        Query mongoQuery = createQuery(query);
-        List<OperationStep> list = mongoTemplate.find(mongoQuery, OperationStep.class);
+        List<OperationStep> list = operationStepDAO.findByQuery(query);
         return list.stream().map(x -> BeanConversionUtil.mapObject(x, true, OperationStepDto.class)).collect(Collectors.toList());
     }
 
     @Override
     public Long listCount(OperationStepDtoQuery query) {
-        Query mongoQuery = createQuery(query);
-        return mongoTemplate.count(mongoQuery, OperationStep.class);
+    	return operationStepDAO.countByQuery(query);
     }
 
-    private Query createQuery(OperationStepDtoQuery query) {
-        Query mongoQuery = new Query();
-        List<Criteria> criteria = new ArrayList<>();
 
-        if (query.getOperationGUID() != null) {
-            criteria.add(Criteria.where("operationGUID").is(query.getOperationGUID()));
-        }
-
-        if (query.getDocID() != null) {
-            criteria.add(Criteria.where("docID").is(query.getDocID()));
-        }
-
-        if(query.getMasterProcessId() != null) {
-            criteria.add(Criteria.where("masterProcessId").is(query.getMasterProcessId()));
-        }
-
-        if(query.getProcessId() != null) {
-            criteria.add(Criteria.where("processId").is(query.getProcessId()));
-        }
-
-        if(query.getStepId() != null) {
-            criteria.add(Criteria.where("stepId").is(query.getStepId()));
-        }
-
-        if (!criteria.isEmpty()) {
-            mongoQuery.addCriteria(new Criteria().andOperator(criteria.toArray(new Criteria[0])));
-        }
-        return mongoQuery;
-    }
 
     @Override
     public OperationStepDto getDto(String key) {

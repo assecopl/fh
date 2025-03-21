@@ -19,6 +19,8 @@
         <module>fhdp-commons-fh</module>
         <module>fhdp-commons-mongo</module>
         <module>fhdp-commons-services</module>
+        <module>fhdp-commons-services-jpa</module>
+        <module>fhdp-commons-services-mongo</module>
         <module>fhdp-commons-model</module>
         <module>fhdp-commons-rest</module>
         <module>fhdp-camunda</module>

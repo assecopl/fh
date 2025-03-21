@@ -7,7 +7,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>fhdp-commons-services</artifactId>
+    <artifactId>fhdp-commons-services-mongo</artifactId>
 
     <dependencyManagement>
         <dependencies>
@@ -22,16 +22,16 @@
     </dependencyManagement>
 
     <dependencies>
-<!--        <dependency>-->
-<!--            <groupId>pl.fhframework.dp</groupId>-->
-<!--            <artifactId>fhdp-commons-ds-service</artifactId>-->
-<!--            <version>${project.version}</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>pl.fhframework.dp</groupId>-->
-<!--            <artifactId>fhdp-commons-mongo</artifactId>-->
-<!--            <version>${project.version}</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>pl.fhframework.dp</groupId>
+            <artifactId>fhdp-commons-services</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>pl.fhframework.dp</groupId>
+            <artifactId>fhdp-commons-mongo</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>pl.fhframework.dp</groupId>
             <artifactId>fhdp-commons-rest</artifactId>

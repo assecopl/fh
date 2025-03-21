@@ -1,10 +1,6 @@
 package pl.fhframework.dp.commons.services.semaphore.mongo;
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -14,11 +10,11 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import lombok.extern.slf4j.Slf4j;
 import pl.fhframework.dp.commons.base.semafor.ISemaphoreService;
 import pl.fhframework.dp.commons.base.semafor.SemaphoreStatusEnum;
-import pl.fhframework.dp.commons.model.dao.SemaphoreDAO;
 
 /**
  * @author <a href="mailto:jacek.borowiec@asseco.pl">Jacek Borowiec</a>
