@@ -273,7 +273,7 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
             HttpSession httpSession = orphanSessions.get(key);
             try {
                 Long lastUsageTime = (Long) httpSession.getAttribute("lastUsageTime");
-                String lastUsageTimeStr = (String) httpSession.getAttribute("lastUsageTime");
+                String lastUsageTimeStr = (String) httpSession.getAttribute("lastUsageTimeStr");
                 Long currentTime = System.currentTimeMillis();
                 if(currentTime - lastUsageTime > emergencyRemovalTimeUnusedSessionInSeconds) {
                     FhLogger.info("Invalidating orphan HTTP session {}. Last used at {}.", key, lastUsageTimeStr);
