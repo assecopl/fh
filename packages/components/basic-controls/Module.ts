@@ -73,6 +73,7 @@ import {PanelGroupWrapper} from "./source/controls/PanelGroupWrapper";
 import {HighContrastButtons} from "./source/controls/HighContrastButtons";
 import {FontSizeButtons} from "./source/controls/FontSizeButtons";
 import {ImagesSwitchButtons} from './source/controls/ImagesSwitchButtons';
+import { AceEditor } from './source/controls/Inputs/AceEditor';
 
 class BasicControls extends FhModule {
     protected registerComponents() {
@@ -510,6 +511,12 @@ class BasicControls extends FhModule {
                     return new ImagesSwitchButtons(componentObj, parent);
                 };
             });
+        FhContainer.bind<(componentObj: any, parent: any) => AceEditor>("AceEditor")
+            .toFactory<AceEditor>(() => {
+                return (componentObj: any, parent: any) => {
+                    return new AceEditor(componentObj, parent);
+                };
+            });
     }
 }
 
@@ -572,5 +579,6 @@ export {
     FhModule,
     MarkdownGrid,
     HtmlView,
-    DropdownDivider
+    DropdownDivider,
+    AceEditor
 };

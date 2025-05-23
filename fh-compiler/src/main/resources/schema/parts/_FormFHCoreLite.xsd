@@ -56,6 +56,7 @@
             <xs:element type="HtmlEditorType" name="HtmlEditor" maxOccurs="unbounded" minOccurs="0"/>
             <xs:element type="HtmlViewType" name="HtmlView" maxOccurs="unbounded" minOccurs="0"/>
             <xs:element type="EmbedPageType" name="EmbedPage" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="AceEditorType" name="AceEditor"  maxOccurs="unbounded" minOccurs="0"/>
             <xs:element type="SelectOneMenuType" name="SelectOneMenu" maxOccurs="unbounded" minOccurs="0"/>
             <xs:element type="SelectComboMenuType" name="SelectComboMenu" maxOccurs="unbounded" minOccurs="0"/>
             <xs:element type="SelectComboMenuType" name="SelectComboMenuOptimized" maxOccurs="unbounded" minOccurs="0"/>
@@ -693,6 +694,13 @@
         <xs:attributeGroup ref="FormElementTypeGroup"/>
         <xs:attribute type="xs:string" name="src"/>
         <xs:attribute type="xs:string" name="label"/>
+    </xs:complexType>
+
+    <xs:complexType name="AceEditorType" mixed="true">
+        <xs:attributeGroup ref="FormElementTypeGroup"/>
+        <xs:attribute type="xs:string" name="src"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="AceEditorModeTypes" name="mode"/>
     </xs:complexType>
 
     <xs:complexType name="DashboardType" mixed="true">
@@ -1902,6 +1910,7 @@
             <xs:element type="HtmlEditorType" name="HtmlEditor"/>
             <xs:element type="HtmlViewType" name="HtmlView"/>
             <xs:element type="EmbedPageType" name="EmbedPage"/>
+            <xs:element type="AceEditorType" name="AceEditor"/>
             <xs:element type="SpacerType" name="Spacer"/>
             <xs:element type="InputDateType" name="InputDate"/>
             <xs:element type="InputDateOptimizedType" name="InputDateOptimized"/>
@@ -2010,6 +2019,14 @@
             <xs:enumeration value="FLOATING"/>
             <xs:enumeration value="HEADER"/>
             <xs:enumeration value="MINIMAL"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="AceEditorModeTypes">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="JSON"/>
+            <xs:enumeration value="XML"/>
+            <xs:enumeration value="TEXT"/>
         </xs:restriction>
     </xs:simpleType>
 
