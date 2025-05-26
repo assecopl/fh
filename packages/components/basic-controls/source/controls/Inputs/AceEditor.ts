@@ -62,9 +62,10 @@ class AceEditor extends HTMLFormComponent {
     };
 
     private initAce() {
-        this.ace = AceLib.edit(this.component);
+        this.ace = AceLib.edit(this.component, { useWorker: false });
         // this.ace.setTheme("ace/theme/github_light_default");
         this.ace.setReadOnly(true);
+
         // this.ace.fullWidth = true;
         // this.ace.height = "300px";
 
