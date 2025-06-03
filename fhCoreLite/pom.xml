@@ -36,6 +36,7 @@
         <module>permissionProvider-rest</module>
         <module>permissionProvider-standalone</module>
         <module>pubsub-standalone</module>
+        <module>pubsub-cluster</module>
         <module>reportsLite</module>
         <module>chartsControls</module>
         <module>coreApplication</module>
