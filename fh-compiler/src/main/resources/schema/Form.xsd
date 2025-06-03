@@ -1,0 +1,22 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:cs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://fh.asseco.com/form/1.0"
+           xmlns="http://fh.asseco.com/form/1.0"
+           elementFormDefault="qualified">
+    <xs:annotation>
+        <xs:documentation>
+            <![CDATA[
+              <p>The XML Schema for the FH Form configuration file</p>
+
+              <p>All FH Forms configuration files must indicate
+              the FH Form schema by indicating the FH namespace:</p>
+
+              <p>http://fh.asseco.com/form/1.0</p>
+        ]]>
+        </xs:documentation>
+    </xs:annotation>
+
+    <!-- =====================================================================================================
+    Form configuration
+    ===================================================================================================== -->
+    <xs:include  schemaLocation="./parts/_FormFHCoreLite.xsd"/>
+</xs:schema>

@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://fh.asseco.com/rule/1.0"
+           xmlns="http://fh.asseco.com/rule/1.0"
+           attributeFormDefault="unqualified"
+           elementFormDefault="qualified">
+    <xs:annotation>
+        <xs:documentation>
+            <![CDATA[
+              <p>The XML Schema for the FH Rule configuration file</p>
+
+              <p>All FH Rules configuration files must indicate
+              the FH Rule schema by indicating the FH namespace:</p>
+
+              <p>http://fh.asseco.com/rule/1.0</p>
+        ]]>
+        </xs:documentation>
+    </xs:annotation>
+
+    <!-- =====================================================================================================
+    Form configuration
+    ===================================================================================================== -->
+    <xs:element name="Rule" type="RuleType"/>
+
+    <xs:complexType name="RuleType">
+        <xs:sequence>
+            <xs:element type="InputType" name="Input"/>
+            <xs:element type="OutputType" name="Output"/>
+            <xs:element type="StatementsListType" name="RuleDefinition" maxOccurs="unbounded" minOccurs="1"/>
+            <xs:element type="PermissionsType" name="Permissions" maxOccurs="unbounded" minOccurs="1"/>
+            <xs:element type="CategoriesType" name="Categories" maxOccurs="unbounded" minOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="id" use="required"/>
+        <xs:attribute type="xs:string" name="label" use="required"/>
+        <xs:attribute type="xs:string" name="description"/>
+        <xs:attribute type="xs:boolean" name="plpgsql"/>
+        <xs:attribute type="RuleTypes" name="ruleType" use="required"/>
+        <xs:attribute type="TransactionTypes" name="transactionType"/>
+    </xs:complexType>
+
+    <xs:complexType name="InputType">
+        <xs:sequence>
+            <xs:element type="ParameterDefinitionType" name="ParameterDefinition" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="OutputType">
+        <xs:sequence>
+            <xs:element type="ParameterDefinitionType" name="ParameterDefinition" maxOccurs="1" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="SimpleElementType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="id" use="optional"/>
+                <xs:attribute type="xs:double" name="x" use="optional"/>
+                <xs:attribute type="xs:double" name="y" use="optional"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="ComplexElementType">
+        <xs:attribute type="xs:string" name="id" use="optional"/>
+        <xs:attribute type="xs:double" name="x" use="optional"/>
+        <xs:attribute type="xs:double" name="y" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="StatementsListType">
+        <xs:complexContent>
+            <xs:extension base="ComplexElementType">
+                <xs:choice maxOccurs="unbounded" minOccurs="0">
+                    <xs:element type="ConstType" name="Const"/>
+                    <xs:element type="VarType" name="Var"/>
+                    <xs:element type="InitType" name="Init"/>
+                    <xs:element type="ExpressionType" name="Expression"/>
+                    <xs:element type="IfType" name="If"/>
+                    <xs:element type="ForType" name="For"/>
+                    <xs:element type="ForEachType" name="ForEach"/>
+                    <xs:element type="WhileType" name="While"/>
+                    <xs:element type="DoWhileType" name="DoWhile"/>
+                    <xs:element type="ReturnType" name="Return"/>
+                    <xs:element type="BreakType" name="Break"/>
+                    <xs:element type="ContinueType" name="Continue"/>
+                    <xs:element type="FromType" name="From"/>
+                    <xs:element type="FilterType" name="Filter"/>
+                    <xs:element type="SortByType" name="SortBy"/>
+                    <xs:element type="SortFieldType" name="SortField"/>
+                    <xs:element type="OffsetType" name="Offset"/>
+                    <xs:element type="LimitType" name="Limit"/>
+                    <xs:element type="BooleanExpressionType" name="BooleanExpression"/>
+                    <xs:element type="AndType" name="And"/>
+                    <xs:element type="OrType" name="Or"/>
+                    <xs:element type="NotType" name="Not"/>
+                    <xs:element type="CompareType" name="Compare"/>
+                </xs:choice>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="CategoriesType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="Category" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="PermissionsType">
+        <xs:sequence>
+            <xs:element type="PermissionType" name="Permission" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="PermissionType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="name" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="ParameterDefinitionType">
+        <xs:attribute type="xs:string" name="type" use="required"/>
+        <xs:attribute type="xs:string" name="name" use="required"/>
+        <xs:attribute type="MultiplicityTypes" name="multiplicity" use="required"/>
+        <xs:attribute type="xs:string" name="comment" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="VarType">
+        <xs:simpleContent>
+            <xs:extension base="SimpleElementType">
+                <xs:attribute type="xs:string" name="type" use="required"/>
+                <xs:attribute type="xs:string" name="name" use="required"/>
+                <xs:attribute type="MultiplicityTypes" name="multiplicity" use="required"/>
+                <xs:attribute type="xs:boolean" name="init"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="ConstType">
+        <xs:complexContent>
+            <xs:extension base="VarType"/>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="InitType">
+        <xs:simpleContent>
+            <xs:extension base="SimpleElementType"/>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="IfType">
+        <xs:complexContent>
+            <xs:extension base="ComplexElementType">
+                <xs:sequence>
+                    <xs:element type="ConditionType" name="Condition"/>
+                    <xs:element type="StatementsListType" name="Then"/>
+                    <xs:element type="ElseType" name="Else" maxOccurs="unbounded" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="ElseType">
+        <xs:complexContent>
+            <xs:extension base="ComplexElementType">
+                <xs:sequence>
+                    <xs:element type="ConditionType" name="Condition" minOccurs="0"/>
+                    <xs:element type="StatementsListType" name="Then"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="WhileType">
+        <xs:complexContent>
+            <xs:extension base="ComplexElementType">
+                <xs:sequence>
+                    <xs:element type="ConditionType" name="Condition"/>
+                    <xs:element type="StatementsListType" name="Then"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="DoWhileType">
+        <xs:complexContent>
+            <xs:extension base="WhileType"/>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="ForType">
+        <xs:complexContent>
+            <xs:extension base="StatementsListType">
+                <xs:attribute type="xs:string" name="iter" use="required"/>
+                <xs:attribute type="xs:string" name="start"/>
+                <xs:attribute type="xs:string" name="end" use="required"/>
+                <xs:attribute type="xs:string" name="incr"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="ForEachType">
+        <xs:complexContent>
+            <xs:extension base="StatementsListType">
+                <xs:attribute type="xs:string" name="iter" use="required"/>
+                <xs:attribute type="xs:string" name="collection" use="required"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="ExpressionType">
+        <xs:simpleContent>
+            <xs:extension base="SimpleElementType"/>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="BooleanExpressionType">
+        <xs:complexContent>
+            <xs:extension base="ExpressionType"/>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="ConditionType">
+        <xs:complexContent>
+            <xs:extension base="StatementsListType"/>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="AndType">
+        <xs:complexContent>
+            <xs:extension base="StatementsListType"/>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="OrType">
+        <xs:complexContent>
+            <xs:extension base="StatementsListType"/>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="NotType">
+        <xs:complexContent>
+            <xs:extension base="StatementsListType"/>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="CompareType">
+        <xs:complexContent>
+            <xs:extension base="ComplexElementType">
+                <xs:sequence>
+                    <xs:element type="ExpressionType" name="Left"/>
+                    <xs:element type="ExpressionType" name="Right"/>
+                </xs:sequence>
+                <xs:attribute type="xs:string" name="operator" use="required"/>
+                <xs:attribute type="xs:string" name="distance" use="optional"/>
+                <xs:attribute type="xs:boolean" name="ignoreCase" use="optional"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="ReturnType">
+        <xs:simpleContent>
+            <xs:extension base="SimpleElementType"/>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="BreakType">
+        <xs:simpleContent>
+            <xs:extension base="SimpleElementType"/>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="ContinueType">
+        <xs:simpleContent>
+            <xs:extension base="SimpleElementType"/>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="FromType">
+        <xs:complexContent>
+            <xs:extension base="StatementsListType">
+                <xs:attribute type="xs:string" name="type" use="optional"/>
+                <xs:attribute type="xs:string" name="collection" use="optional"/>
+                <xs:attribute type="xs:string" name="iter" use="required"/>
+                <xs:attribute type="xs:string" name="holder" use="optional"/>
+                <xs:attribute type="xs:boolean" name="pageable" use="optional"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="FilterType">
+        <xs:complexContent>
+            <xs:extension base="StatementsListType">
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="SortByType">
+        <xs:complexContent>
+            <xs:extension base="StatementsListType">
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="SortFieldType">
+        <xs:simpleContent>
+            <xs:extension base="SimpleElementType">
+                <xs:attribute type="xs:string" name="direction" use="required"/>
+                <xs:attribute type="xs:string" name="value" use="optional"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="OffsetType">
+        <xs:simpleContent>
+            <xs:extension base="SimpleElementType"/>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="LimitType">
+        <xs:simpleContent>
+            <xs:extension base="SimpleElementType"/>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:simpleType name="RuleTypes">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="ValidationRule"/>
+            <xs:enumeration value="BusinessRule"/>
+            <xs:enumeration value="AccessibilityRule"/>
+            <xs:enumeration value="FilteringRule"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="TransactionTypes">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="None"/>
+            <xs:enumeration value="Current"/>
+            <xs:enumeration value="New"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="MultiplicityTypes">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Element"/>
+            <xs:enumeration value="Collection"/>
+            <xs:enumeration value="MultiplePageable"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

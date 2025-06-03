@@ -1,0 +1,5 @@
+<subsystem name="integration" label="Luna Integration" productLabel="Integration" productUUID="1f198982-bb3b-4dd2-89c8-ecd209d973cc" basePackage="pl.asseco.luna.integration.core">
+    <lifecycleListener class="pl.fhframework.compiler.core.integration.IntegrationElementsRegister"/>
+    <lifecycleListener class="pl.fhframework.compiler.core.services.dynamic.generator.CoreElementsRegister"/>
+    <systemFunctionsMapper ref="pl.fhframework.core.SystemFunctionsMapper"/>
+</subsystem>
