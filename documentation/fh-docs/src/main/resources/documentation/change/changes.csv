@@ -1,0 +1,28 @@
+#############################################################################################################################################################################################
+#############################################################################################################################################################################################
+### Pattern for this file is as follows:
+###
+### title|description|version|type|ticketUrl|authors|functionalArea
+###
+###     - type has to be BUG or IMPROVEMENT
+###     - authors are comma separated values - name and surname
+###     - version - date in format YYYY-MM-DD
+#############################################################################################################################################################################################
+#############################################################################################################################################################################################
+
+Body for OutputLabel and InputText|In Outputlabel and InputText developer can provide body as value for component|2017-02-14|IMPROVEMENT|https://jira.pro.asseco.pl/browse/FH-1588|Piotr Marciniak|Core
+Custom colors for table rows|Added new attribute called 'rowStylesMap' for table definition in XML that allows to set rows colors displayed in Table|2017-02-08|IMPROVEMENT|https://jira.pro.asseco.pl/browse/FH-1341|Adam Zaręba, Kamil Trusiak|Core
+Multi selection in table|Implemented multi selection of table rows. By using CTRL key for rows selection it is possible to select multiple rows|2017-02-07|IMPROVEMENT|https://jira.pro.asseco.pl/browse/FH-1196|Krzysztof Czajkowski, Adam Kasabuła|Core
+Internationalization|Configured support for internationalization (i18n). Support for translating validation messages|2017-02-06|IMPROVEMENT|https://jira.pro.asseco.pl/browse/FH-1192|Amadeusz Szkiłądź|Core
+Double click protection|Implemented events queueing and application blockade|2017-02-06|IMPROVEMENT|https://jira.pro.asseco.pl/browse/FH-1203|Kamil Trusiak|Core
+E-mail mask doesn't work|Handled and prepared suitable mask for e-mail validation|2017-02-08|BUG|https://jira.pro.asseco.pl/browse/FH-1426|Krzysztof Czajkowski|Core
+Reduced login and registration window size|Reduced login and registration window size to be correctly displayed on low resolution screens|2017-02-08|BUG|https://jira.pro.asseco.pl/browse/FH-1307|Adam Kasabuła|Core
+Calender with unselectable dates|Provided ability to define dates collection and date range disabled for selection from calendar|2017-02-03|IMPROVEMENT|https://jira.pro.asseco.pl/browse/FH-1207|Adam Zaręba, Adam Kasabuła|Form components
+Application information|Prepared display window containing application version - like repository's branch URL, svn checkout version and build timestamp|2017-02-03|IMPROVEMENT|https://jira.pro.asseco.pl/browse/FH-1236|Adam Zaręba, Kamil Trusiak|Core
+Widget|Implemented widget form component|2017-02-03|IMPROVEMENT|https://jira.pro.asseco.pl/browse/FH-1314|Adam Zaręba, Adam Kasabuła|Form components
+Calendar form component|Calendar handling displaying several types of collections|2017-01-30|IMPROVEMENT|https://jira.pro.asseco.pl/browse/FH-898|Adam Zaręba, Adam Kasabuła|Form components
+Meter Gauge Chart|Meter Gauge Chart form component|2017-01-27|IMPROVEMENT|https://jira.pro.asseco.pl/browse/FH-899|Krzysztof Czajkowski, Kamil Trusiak|Form components
+Bar Chart|Bar chart form component|2017-01-30|IMPROVEMENT|https://jira.pro.asseco.pl/browse/FH-900|Krzysztof Czajkowski, Kamil Trusiak|Form components
+Grouping tables|Table that allows for grouping data|2017-01-26|IMPROVEMENT|https://jira.pro.asseco.pl/browse/FH-1040|Adam Zaręba, Piotr Gmyz, Kamil Trusiak|Core
+Steering of menu tree elements visibility|Mechanism that allows during application startup define application mode. Based on that application mode it is possible to define which left menu tree elements are visible or hidden|2017-01-29|IMPROVEMENT|https://jira.pro.asseco.pl/browse/FH-1133|Adam Zaręba|Core
+Floating group|Floating group|2017-01-31|IMPROVEMENT|https://jira.pro.asseco.pl/browse/FH-1147|Amadeusz Szkiłądź, Kamil Trusiak|Form components

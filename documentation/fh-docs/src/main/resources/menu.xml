@@ -1,0 +1,46 @@
+<menu>
+
+    <group label="$.fh.docs.menudocumentation_documentation">
+        <!--useCase ref="pl.fhframework.docs.change.ChangeLogUC" label="$.fh.docs.menudocumentation_change_log"/>-->
+        <useCase ref="pl.fhframework.docs.running.RunningDocumentationUC" label="$.fh.docs.menudocumentation_running_fh"/>
+        <useCase ref="pl.fhframework.docs.uc.FormComponentsDocumentationUC" label="$.fh.docs.menudocumentation_form_components"/>
+        <useCase ref="pl.fhframework.docs.layouting.elementsLayout.LayoutingElementsUC" label="$.fh.docs.layouting.layouting_elements"/>
+        <useCase ref="pl.fhframework.docs.layouting.pageLayout.PageLayoutUC" label="$.fh.docs.layouting.application_layout"/>
+        <useCase ref="pl.fhframework.docs.creating_project.uc.CreatingNewModuleUC" label="$.fh.docs.create_new_module_menu"/>
+        <useCase ref="pl.fhframework.docs.core.forms.FormsDocsUC" label="$.fh.docs.menudocumentation_working_with_forms"/>
+        <useCase ref="pl.fhframework.docs.core.keyboard.KeyboardEventsUC" label="$.fh.docs.menudocumentation_keyboard_events"/>
+        <useCase ref="pl.fhframework.docs.core.security.SecurityDocsUC" label="$.fh.docs.menudocumentation_core_security"/>
+        <group label="$.fh.docs.menudocumentation_fh_concepts">
+            <useCase ref="pl.fhframework.docs.converter.ConverterDocumentationUC" label="$.fh.docs.menudocumentation_type_conversion" />
+            <useCase ref="pl.fhframework.docs.scheduler.PeriodicJobsDocumentationUC" label="$.fh.docs.menudocumentation_periodic_jobs" />
+            <useCase ref="pl.fhframework.docs.dynamic_model.DynamicModelUC" label="$.fh.docs.menudocumentation_dynamic_model" />
+            <useCase ref="pl.fhframework.docs.dynamic_content.DynamicContentUC" label="$.fh.docs.menudocumentation_dynamic_content" />
+            <useCase ref="pl.fhframework.docs.validation.ValidationDocumentationUC" label="$.fh.docs.menudocumentation_validation" />
+            <useCase ref="pl.fhframework.docs.availability.AvailabilityConfigurationUC" label="$.fh.docs.menudocumentation_availability_configuration" />
+            <useCase ref="pl.fhframework.docs.pml.PMLDocumentationUC" label="$.fh.docs.menudocumentation_fh_markup_language" />
+            <useCase ref="pl.fhframework.docs.application.management.ApplicationModesUC" label="$.fh.docs.menudocumentation_application_modes" />
+            <useCase ref="pl.fhframework.docs.application.url.UseCaseUrlsUC" label="$.fh.docs.menudocumentation_urls_to_use_cases"/>
+            <useCase ref="pl.fhframework.docs.application.url.ExternalReturnUC" label="$.fh.docs.menudocumentation_external_return_to_fh"/>
+            <useCase ref="pl.fhframework.docs.exception.uc.FhDocumentedExceptionUC" label="$.fh.docs.menudocumentation_fh_exceptions"/>
+            <useCase ref="pl.fhframework.docs.application.cache.ApplicationCacheUC" label="$.fh.docs.menudocumentation_application_cache"/>
+            <useCase ref="pl.fhframework.docs.i18n.InternationalizationUC" label="$.fh.docs.menudocumentation_internationalization"/>
+            <useCase ref="pl.fhframework.docs.menu.DefaultAppMenuUC" label="$.fh.docs.menudocumentation_appmenu"/>
+            <useCase ref="pl.fhframework.docs.core.publisher.PublisherDocUC" label="$.fh.docs.core.publisher.menu"/>
+            <group label="$.fh.docs.menudocumentation_fh_composites">
+                <useCase ref="pl.fhframework.docs.forms.component.picklist.PickListExampleUC" label="$.fh.docs.menudocumentation_picklist" />
+                <useCase ref="pl.fhframework.docs.forms.component.searchlist.SearchListExampleUC" label="$.fh.docs.menudocumentation_searchlist" />
+            </group>
+            <group label="$.fh.docs.menudocumentation_fh_events">
+                    <useCase ref="pl.fhframework.docs.event.FileDownloadEventDocumentationUC" label="$.fh.docs.menudocumentation_file_download_event" />
+                    <useCase ref="pl.fhframework.docs.event.FocusEventDocumentationUC" label="$.fh.docs.menudocumentation_focus_event" />
+                    <useCase ref="pl.fhframework.docs.event.ScollEventDocumentationUC" label="$.fh.docs.menudocumentation_scroll_event" />
+                    <useCase ref="pl.fhframework.docs.event.NotificationEventDocumentationUC" label="$.fh.docs.menudocumentation_notification_event" />
+                    <useCase ref="pl.fhframework.docs.event.RedirectEventDocumentationUC" label="$.fh.docs.menudocumentation_redirect_event" />
+                    <useCase ref="pl.fhframework.docs.event.RedirectHomeEventDocumentationUC" label="$.fh.docs.menudocumentation_redirect_home_event" />
+                    <useCase ref="pl.fhframework.docs.event.CustomActionEventDocumentationUC" label="$.fh.docs.menudocumentation_custom_action_event" />
+            </group>
+        </group>
+        <!--<useCase ref="pl.fhframework.docs.widgets.WidgetStatisticsUC" label="Widgets statistics" />-->
+    </group>
+
+</menu>

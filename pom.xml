@@ -29,6 +29,8 @@
 		<module>bom-project-lite</module>
 		<module>fhCoreLite</module>
 		<module>fh-compiler</module>
+		<module>documentation</module>
+		<module>example</module>
 	</modules>
 
 	<licenses>
