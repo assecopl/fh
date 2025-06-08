@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.security.core.session.SessionInformation;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 import pl.fhframework.UserSession;
@@ -77,6 +79,9 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
     @Autowired
     private LeakedSessionRemoverCron leakedSessionRemoverCron;
 
+    @Autowired
+    private SessionRegistry sessionRegistry;
+
     @Override
     public synchronized void onApplicationEvent(ContextRefreshedEvent event) {
         // register node in cache
@@ -133,9 +138,7 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
         if(manageOrphans) {
             orphanSessions.put(httpSessionId, userSession.getHttpSession());
         }
-        if(manageScopedBeans) {
-            clearScopedBeans(userSession.getHttpSession());
-        }
+        clearScopedBeans(userSession.getHttpSession());
         userSessionsHash.remove(System.identityHashCode(userSession.getHttpSession()));
         userSessionsByConversationId.remove(userSession.getConversationUniqueId());
         removeSessionInfo(httpSessionId);
@@ -146,6 +149,9 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
     }
 
     private void clearScopedBeans(HttpSession httpSession) {
+        if (!manageScopedBeans) {
+            return;
+        }
         Enumeration<String> names = httpSession.getAttributeNames();
         while (names.hasMoreElements()) {
             String name = names.nextElement();
@@ -277,15 +283,24 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
                 Long currentTime = System.currentTimeMillis();
                 if(currentTime - lastUsageTime > emergencyRemovalTimeUnusedSessionInSeconds) {
                     FhLogger.info("Invalidating orphan HTTP session {}. Last used at {}.", key, lastUsageTimeStr);
-                    httpSession.invalidate();
+                    clearScopedBeans(httpSession);
+                    try {
+                        httpSession.invalidate();
+                    }  catch (Exception e) {
+                        FhLogger.error("Error while invalidating orphan HTTP session {}", key, e);
+                    }
                     orphanSessions.remove(key);
                 } else {
                     FhLogger.info("Orphan HTTP session {} left active. Last used at {}.", key, lastUsageTimeStr);
                 }
-            } catch (Exception ex) {
-                FhLogger.warn("Exception caught during orphans invalidation for session {}:\n{}", httpSession.getId(), ExceptionUtils.getStackTrace(ex));
-                orphanSessions.remove(key);
-                httpSession.invalidate();
+            } catch (IllegalStateException e) {
+                if(e.getMessage().contains("Session is invalid")) {
+                    FhLogger.error("Session {} is invalid. Removing from orphans", key);
+                    orphanSessions.remove(key);
+                }
+            }
+            catch (Exception ex) {
+                FhLogger.error("Exception caught during orphans invalidation for session {}:\n{}", httpSession.getId(), ExceptionUtils.getStackTrace(ex));
             }
         }
     }
