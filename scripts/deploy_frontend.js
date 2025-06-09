@@ -28,8 +28,8 @@ for (const arg of process.argv) {
   }
 }
 
-// const snapId = +new Date();
-const snapId = +"1738587435196";
+const snapId = +new Date();
+// const snapId = +"1738587435196";
 
 // if (!Object.keys(store).includes('--fhVer')) {
 //   console.error('Arguments --fhVer are obligatory!');
@@ -51,7 +51,7 @@ let FH_PACKAGES = ["fh-basic-controls", "fh-charts-controls", "fh-designer",
 
 
 let FH_DIRS = [
-  // '../packages/components/core-lite/',
+  '../packages/components/core-lite/',
   '../packages/components/basic-controls/', 
   '../packages/components/charts-controls/',
   '../packages/applications/default-application/'
