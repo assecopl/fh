@@ -39,6 +39,7 @@ class BarChart extends HTMLFormComponent {
     };
 
     update(change) {
+        super.update(change);
         let xAxis = this.chart.options.scales.xAxes[0];
         let yAxis = this.chart.options.scales.yAxes[0];
         $.each(change.changedAttributes, function (name, newValue) {
