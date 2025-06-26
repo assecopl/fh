@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import pl.fhframework.aspects.conversation.IUseCaseConversation;
+import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.core.session.scope.SessionScope;
 import pl.fhframework.fhPersistence.anotation.Approve;
 import pl.fhframework.fhPersistence.anotation.Cancel;
@@ -23,7 +24,6 @@ import java.util.Map;
 public class UseCaseConversationImpl implements IUseCaseConversation {
     @Autowired
     ConversationManager conversationManager;
-
     Map<Object, ConversationParams> conversationParams = new HashMap<>();
 
     public void saveChnages(Object owner) {
@@ -58,12 +58,20 @@ public class UseCaseConversationImpl implements IUseCaseConversation {
 
     @Override
     public void usecaseEnded(Object owner) {
-        ConversationParams cp = getOrCreate(owner);
-        conversationParams.remove(owner);
+        ConversationParams cp = getOrCreate(owner, true);
+        removeConversationParam(owner);
         if (cp.isCancel()) {
             conversationManager.withdraw(owner);
         } else {
             conversationManager.complete(owner);
+        }
+    }
+
+    private void removeConversationParam(Object owner) {
+        FhLogger.debug("Removing conversation params for owner {}. {} left.", owner, conversationParams.size());
+        ConversationParams ret = conversationParams.remove(owner);
+        if(ret == null) {
+            FhLogger.warn("***** *** usecaseEnded Object {} not removed from conversationParams!", owner);
         }
     }
 
@@ -76,32 +84,36 @@ public class UseCaseConversationImpl implements IUseCaseConversation {
     @Override
     public void processAnnotationsBeforeAction(final Method transition, final Object owner) {
         if (transition.getDeclaredAnnotation(Cancel.class) != null) {
-            ConversationParams cp = getOrCreate(owner);
+            ConversationParams cp = getOrCreate(owner, true);
             cp.setCancel(true);
         }
         else if (transition.getDeclaredAnnotation(Approve.class) != null) {
-            ConversationParams cp = getOrCreate(owner);
+            ConversationParams cp = getOrCreate(owner, true);
             cp.setApprove(true);
         }
     }
 
     @Override
     public void processAnnotationsAfterAction(final Method transition, final Object owner) {
-        if (getOrCreate(owner).isCancel()) {
+        if (getOrCreate(owner, false).isCancel()) {
             conversationParams.remove(owner);
             cancelChanges(owner);
         }
-        else if (getOrCreate(owner).isApprove()) {
+        else if (getOrCreate(owner, false).isApprove()) {
             conversationParams.remove(owner);
             saveChnages(owner);
         }
     }
 
-    private ConversationParams getOrCreate(final Object owner) {
+    private ConversationParams getOrCreate(final Object owner, boolean put) {
         ConversationParams cp = conversationParams.get(owner);
         if (cp == null) {
             cp = new ConversationParams();
-            conversationParams.put(owner, cp);
+            FhLogger.debug("Creating conversationParams for owner {}", owner);
+
+            if (put == true) {
+                conversationParams.put(owner, cp);
+            }
         }
 
         return cp;

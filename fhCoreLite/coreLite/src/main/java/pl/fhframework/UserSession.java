@@ -1,5 +1,6 @@
 package pl.fhframework;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 @Getter
 @Setter
@@ -71,6 +73,10 @@ public class UserSession extends Session {
     @Autowired
     private EventRegistry eventRegistry;
 
+    /**
+     * @deprecated  Attributes should be moved to UserSession.attributes.
+     */
+    @Deprecated
     private HttpSession httpSession;
 
     // original session id - ChangeSessionIdAuthenticationStrategy is called after logging in
