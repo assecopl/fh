@@ -174,9 +174,9 @@
                         <extensions>true</extensions>
                         <configuration>
                             <serverId>ossrh</serverId>
-                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                            <autoReleaseAfterClose>false</autoReleaseAfterClose>
-                            <stagingProgressTimeoutMinutes>7</stagingProgressTimeoutMinutes>
+                            <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+<!--                            <stagingProgressTimeoutMinutes>7</stagingProgressTimeoutMinutes>-->
                         </configuration>
                     </plugin>
                     <plugin>
