@@ -253,7 +253,7 @@ public class RefDataValidator {
                             }
                         }
                     }
-                    break;
+                    return "";
                 case Node.ATTRIBUTE_NODE:
                     return node.getNodeValue();
                 case Node.TEXT_NODE:
