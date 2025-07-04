@@ -135,17 +135,28 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
 
     public boolean removeUserSession(String httpSessionId) {
         UserSession userSession = userSessions.remove(httpSessionId);
-        if(manageOrphans) {
-            orphanSessions.put(httpSessionId, userSession.getHttpSession());
+        if(userSession != null) {
+            if(manageOrphans) {
+                orphanSessions.put(httpSessionId, userSession.getHttpSession());
+            }
+            clearScopedBeans(userSession);
+            clearScopedBeans(userSession.getHttpSession());
+            userSessionsHash.remove(System.identityHashCode(userSession.getHttpSession()));
+            userSessionsByConversationId.remove(userSession.getConversationUniqueId());
+            removeSessionInfo(httpSessionId);
+            if (forceClearSessionDataAfterSessionRemoval) {
+                userSession.removeAllValuesBeforeSessionRemove();
+            }
+            return true;
+        } else {
+            return false;
         }
-        clearScopedBeans(userSession.getHttpSession());
-        userSessionsHash.remove(System.identityHashCode(userSession.getHttpSession()));
-        userSessionsByConversationId.remove(userSession.getConversationUniqueId());
-        removeSessionInfo(httpSessionId);
-        if (forceClearSessionDataAfterSessionRemoval) {
-            userSession.removeAllValuesBeforeSessionRemove();
-        }
-        return userSession!=null;
+    }
+
+    private void clearScopedBeans(UserSession userSession) {
+        userSession.getScopeBeanContainer().getDestructionCallbacks().clear();
+        userSession.getScopeBeanContainer().getScopedObjects().clear();
+        userSession.setScopeBeanContainer(null);
     }
 
     private void clearScopedBeans(HttpSession httpSession) {
@@ -260,7 +271,7 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
                 boolean response = removeUserSession(httpSession.getId());
 
                 if (response) {
-                    FhLogger.info("Removed expired session for {}.", getUserLogin(session), session.getFhSessionId(), httpSession.getId());
+                    FhLogger.info("Removed expired session {} for {}. FhSessionId: {}, HTTPSessionID: {}",session, getUserLogin(session), session.getFhSessionId(), httpSession.getId());
                 }else{
                     FhLogger.error("Unsuccessful attempt to delete the session for {}", getUserLogin(session));
                 }

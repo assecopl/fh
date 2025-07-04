@@ -43,6 +43,9 @@ public class WebSocketFormsHandler extends FormsHandler {
     @Value("${fh.session.remove_session_immediately_after_websocket_close:false}")
     private boolean removeSessionImmediately;
 
+    @Value("${fh.session.trace:false}")
+    private boolean fhSessionTrace;
+
     @Autowired
     private SingleLoginLockManager loginLockManager;
 
@@ -102,12 +105,16 @@ public class WebSocketFormsHandler extends FormsHandler {
 
     public void connect(WebSocketSession session) {
         UserSession boundSession;
-        FhLogger.info(this.getClass(), "Connected: " + this.getConnectionId());
+        if(fhSessionTrace) {
+            FhLogger.info(this.getClass(), "Connected: connectionId: {}. Principal: {}", this.getConnectionId(), session.getPrincipal());
+        }
         if (WebSocketSessionManager.hasUserSession()) {
             boundSession = SessionManager.getUserSession();
             logoutOtherBrowserWindows(boundSession, session);
             UserSession finalBoundSession = boundSession;
-            FhLogger.debug(this.getClass(), logger -> logger.log("User session bound: " + finalBoundSession));
+            if (fhSessionTrace) {
+                FhLogger.info(this.getClass(), "User session bound: {}; HttpSessionId: {}", finalBoundSession, finalBoundSession.getHttpSession().getId());
+            }
         } else {
             try {
                 SystemUser systemUser = securityManager.buildSystemUser(session.getPrincipal());
@@ -116,7 +123,9 @@ public class WebSocketFormsHandler extends FormsHandler {
                 WebSocketSessionManager.setUserSession(boundSession);
                 sessionLogger.logUserSessionCreation(boundSession);
                 UserSession finalBoundSession1 = boundSession;
-                FhLogger.debug(this.getClass(), logger -> logger.log("User session created: " + finalBoundSession1));
+                if(fhSessionTrace) {
+                    FhLogger.info(this.getClass(), "User session created: {}; HttpSessionId: {}", finalBoundSession1, finalBoundSession1.getHttpSession().getId());
+                }
             } catch (RuntimeException e) {
                 FhLogger.error("Error creating session", e);
                 SystemUser systemUser = new SystemUser(session.getPrincipal());
@@ -154,6 +163,9 @@ public class WebSocketFormsHandler extends FormsHandler {
 
     private void transportError(WebSocketSession session, Throwable exception) throws IOException {
         serviceTransportError(exception);
+        if(fhSessionTrace) {
+            FhLogger.info(this.getClass(), "Transport error: {}; HttpSessionId: {}", exception, session.getId());
+        }
         session.close(CloseStatus.SERVER_ERROR);
     }
 

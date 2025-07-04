@@ -99,9 +99,9 @@ public class WebSocketSessionManager implements ISessionManagerImpl {
             // include current inactive time - FH-7448
             int currentInactiveTime = (int) ((System.currentTimeMillis() - sessionHttp.getLastAccessedTime()) / 1000);
             sessionHttp.setMaxInactiveInterval(currentInactiveTime + SUSTAIN_TIMEOUT);
-            FhLogger.info( "HttpSession marked for sustain timeout");
+            FhLogger.info( "HttpSession {} marked for sustain timeout. WebSocketSession {}", sessionHttp.getId(), webSocketSession.getId() );
         } catch (IllegalStateException ise) {
-            // session allready invalidated
+            // session already invalidated
             FhLogger.log(LogLevel.DEBUG, "HttpSession for web socket '{}' is already invalid", webSocketSession.getId());
         }
     }
