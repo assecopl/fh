@@ -37,8 +37,6 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
     @Getter
     private Map<String, UserSession> userSessions = new ConcurrentHashMap<>();
     @Getter
-    private Map<String, HttpSession> orphanSessions = new ConcurrentHashMap<>();
-    @Getter
     private Map<String, UserSession> userSessionsByConversationId = new ConcurrentHashMap<>();
     private Map<Integer, UserSession> userSessionsHash = new ConcurrentHashMap<>();
     private Set<Consumer<UserSession>> userSessionDestroyedListeners = new HashSet<>();
@@ -58,11 +56,6 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
      */
     @Value("${fh.session.force_clear_session_data_after_session_removal:false}")
     private boolean forceClearSessionDataAfterSessionRemoval;
-
-    @Value("${fh.session.orphans.manage:false}")
-    private boolean manageOrphans;
-    @Value("${fh.session.scopedBeans.manage:false}")
-    private boolean manageScopedBeans;
 
     private String nodeUrl;
 
@@ -127,22 +120,21 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
         userSessionsHash.put(httpSessionHash, userSession);
         userSessions.put(httpSessionId, userSession);
         userSessionsByConversationId.put(userSession.getConversationUniqueId(), userSession);
-        if(manageOrphans) {
-            orphanSessions.remove(httpSessionId);
-        }
         putSessionInfo(httpSessionId, userSession);
     }
 
     public boolean removeUserSession(String httpSessionId) {
         UserSession userSession = userSessions.remove(httpSessionId);
         if(userSession != null) {
-            if(manageOrphans) {
-                orphanSessions.put(httpSessionId, userSession.getHttpSession());
-            }
             clearScopedBeans(userSession);
-            clearScopedBeans(userSession.getHttpSession());
-            userSessionsHash.remove(System.identityHashCode(userSession.getHttpSession()));
-            userSessionsByConversationId.remove(userSession.getConversationUniqueId());
+            UserSession removedHash = userSessionsHash.remove(System.identityHashCode(userSession.getHttpSession()));
+            if(removedHash == null) {
+                FhLogger.warn("User session {} not removed from userSessionsHash!  HTTPSessionId: {}", userSession, httpSessionId);
+            }
+            UserSession removedConversation = userSessionsByConversationId.remove(userSession.getConversationUniqueId());
+            if(removedConversation == null) {
+                FhLogger.warn("User session {} not removed from userSessionsByConversationId!  HTTPSessionId: {}", userSession, httpSessionId);
+            }
             removeSessionInfo(httpSessionId);
             if (forceClearSessionDataAfterSessionRemoval) {
                 userSession.removeAllValuesBeforeSessionRemove();
@@ -159,25 +151,6 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
         userSession.setScopeBeanContainer(null);
     }
 
-    private void clearScopedBeans(HttpSession httpSession) {
-        if (!manageScopedBeans) {
-            return;
-        }
-        Enumeration<String> names = httpSession.getAttributeNames();
-        while (names.hasMoreElements()) {
-            String name = names.nextElement();
-            if(name.startsWith("scopedTarget.")) {
-                Object value = httpSession.getAttribute(name);
-                value = null;
-                httpSession.removeAttribute(name);
-                log.debug("Removed attribute {} from HTTP session {}", name, httpSession.getId());
-            }
-            if(name.equals("fh_session_id")) {
-                httpSession.removeAttribute(name);
-                log.debug("Removed attribute {} from HTTP session {}", name, httpSession.getId());
-            }
-        }
-    }
 
     private synchronized void putSessionInfo(String httpSessionId, UserSession userSession) {
         SessionInfo sessionInfo = new SessionInfo();
@@ -282,38 +255,6 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
 //            orphanSessions.remove(httpSession);
 //        }
         leakedSessionRemoverCron.cleanupLeakedSessions();
-    }
-    public void invalidateExpiredOrphanSessions(int emergencyRemovalTimeUnusedSessionInSeconds) {
-        if(!manageOrphans) return;
-        log.info("Invalidating expired orphan sessions not active for {} seconds...", emergencyRemovalTimeUnusedSessionInSeconds);
-        for(String key : orphanSessions.keySet()) {
-            HttpSession httpSession = orphanSessions.get(key);
-            try {
-                Long lastUsageTime = (Long) httpSession.getAttribute("lastUsageTime");
-                String lastUsageTimeStr = (String) httpSession.getAttribute("lastUsageTimeStr");
-                Long currentTime = System.currentTimeMillis();
-                if(currentTime - lastUsageTime > emergencyRemovalTimeUnusedSessionInSeconds) {
-                    FhLogger.info("Invalidating orphan HTTP session {}. Last used at {}.", key, lastUsageTimeStr);
-                    clearScopedBeans(httpSession);
-                    try {
-                        httpSession.invalidate();
-                    }  catch (Exception e) {
-                        FhLogger.error("Error while invalidating orphan HTTP session {}", key, e);
-                    }
-                    orphanSessions.remove(key);
-                } else {
-                    FhLogger.info("Orphan HTTP session {} left active. Last used at {}.", key, lastUsageTimeStr);
-                }
-            } catch (IllegalStateException e) {
-                if(e.getMessage().contains("Session is invalid")) {
-                    FhLogger.error("Session {} is invalid. Removing from orphans", key);
-                    orphanSessions.remove(key);
-                }
-            }
-            catch (Exception ex) {
-                FhLogger.error("Exception caught during orphans invalidation for session {}:\n{}", httpSession.getId(), ExceptionUtils.getStackTrace(ex));
-            }
-        }
     }
 
     public Set<UserSession> getAllUserSessions(){
