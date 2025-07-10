@@ -19,7 +19,6 @@ import pl.fhframework.accounts.SingleLoginLockManager;
 import pl.fhframework.core.FhFrameworkException;
 import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.core.security.UserAttributesTempCache;
-import pl.fhframework.core.security.model.NoneBusinessRole;
 import pl.fhframework.core.session.UserSessionRepository;
 import pl.fhframework.core.websocket.HeartbeatWebSocketHandlerDecorator;
 import pl.fhframework.event.dto.RedirectEvent;
@@ -42,6 +41,9 @@ public class WebSocketFormsHandler extends FormsHandler {
      */
     @Value("${fh.session.remove_session_immediately_after_websocket_close:false}")
     private boolean removeSessionImmediately;
+
+    @Value("${fh.session.attributes.restore:true}")
+    private boolean restoreSessionAttributes;
 
     @Value("${fh.session.trace:false}")
     private boolean fhSessionTrace;
@@ -105,15 +107,19 @@ public class WebSocketFormsHandler extends FormsHandler {
 
     public void connect(WebSocketSession session) {
         UserSession boundSession;
-        if(fhSessionTrace) {
+        if(isFhSessionTraceOn()) {
             FhLogger.info(this.getClass(), "Connected: connectionId: {}. Principal: {}", this.getConnectionId(), session.getPrincipal());
         }
         if (WebSocketSessionManager.hasUserSession()) {
             boundSession = SessionManager.getUserSession();
             logoutOtherBrowserWindows(boundSession, session);
             UserSession finalBoundSession = boundSession;
-            if (fhSessionTrace) {
-                FhLogger.info(this.getClass(), "User session bound: {}; HttpSessionId: {}", finalBoundSession, finalBoundSession.getHttpSession().getId());
+            if (isFhSessionTraceOn()) {
+                FhLogger.info(this.getClass(), "User session bound: {}; Login: {}; HttpSessionId: {}; Attributes {}"
+                        , finalBoundSession
+                        , finalBoundSession.getSystemUser().getLogin()
+                        , finalBoundSession.getHttpSession().getId()
+                        , logAttributes(finalBoundSession.getAttributes()));
             }
         } else {
             try {
@@ -123,17 +129,22 @@ public class WebSocketFormsHandler extends FormsHandler {
                 WebSocketSessionManager.setUserSession(boundSession);
                 sessionLogger.logUserSessionCreation(boundSession);
                 UserSession finalBoundSession1 = boundSession;
-                if(fhSessionTrace) {
-                    FhLogger.info(this.getClass(), "User session created: {}; HttpSessionId: {}", finalBoundSession1, finalBoundSession1.getHttpSession().getId());
+                if(isFhSessionTraceOn()) {
+                    FhLogger.info(this.getClass(), "User session created: {}; Login: {}; HttpSessionId: {}; Attributes {}"
+                            , finalBoundSession1
+                            ,  finalBoundSession1.getSystemUser().getLogin()
+                            , finalBoundSession1.getHttpSession().getId()
+                            , logAttributes(finalBoundSession1.getAttributes()));
                 }
             } catch (RuntimeException e) {
                 FhLogger.error("Error creating session", e);
-                SystemUser systemUser = new SystemUser(session.getPrincipal());
-                systemUser.getBusinessRoles().add(new NoneBusinessRole());
-                boundSession = applicationContext.getBean(UserSession.class, systemUser, createDescription(session), WebSocketSessionManager.getHttpSession());//new UserSession(this, systemUser, description);
-                WebSocketSessionManager.setUserSession(boundSession);
-                wssRepository.onConnectionEstabilished(boundSession, session);
-                boundSession.setException(e);
+                throw new RuntimeException(e);
+//                SystemUser systemUser = new SystemUser(session.getPrincipal());
+//                systemUser.getBusinessRoles().add(new NoneBusinessRole());
+//                boundSession = applicationContext.getBean(UserSession.class, systemUser, createDescription(session), WebSocketSessionManager.getHttpSession());//new UserSession(this, systemUser, description);
+//                WebSocketSessionManager.setUserSession(boundSession);
+//                wssRepository.onConnectionEstabilished(boundSession, session);
+//                boundSession.setException(e);
             } finally {
                 if (session.getPrincipal() != null) {
                     userAttributesTempCache.evictForUser(session.getPrincipal().getName());
@@ -143,10 +154,21 @@ public class WebSocketFormsHandler extends FormsHandler {
         wssRepository.onConnectionEstabilished(boundSession, session);
     }
 
+    private String logAttributes(Map<String, Object> attributes) {
+        if (attributes == null || attributes.isEmpty()) {
+            return "Attributes map is null or empty.";
+        }
+        StringBuilder sb = new StringBuilder();
+        attributes.forEach((key, value) -> sb.append(key).append(" = ").append(value));
+        return sb.toString();
+    }
+
     private void updateSessionAttributes(UserSession userSession) {
-        Map<String, Object> attributes = userAttributesTempCache.getAttributesForUser(userSession.getSystemUser().getLogin());
-        if (!CollectionUtils.isEmpty(attributes)) {
-            userSession.getAttributes().putAll(attributes);
+        if(restoreSessionAttributes) {
+            Map<String, Object> attributes = userAttributesTempCache.getAttributesForUser(userSession.getSystemUser().getLogin());
+            if (!CollectionUtils.isEmpty(attributes)) {
+                userSession.getAttributes().putAll(attributes);
+            }
         }
     }
 
@@ -163,7 +185,7 @@ public class WebSocketFormsHandler extends FormsHandler {
 
     private void transportError(WebSocketSession session, Throwable exception) throws IOException {
         serviceTransportError(exception);
-        if(fhSessionTrace) {
+        if(isFhSessionTraceOn()) {
             FhLogger.info(this.getClass(), "Transport error: {}; HttpSessionId: {}", exception, session.getId());
         }
         session.close(CloseStatus.SERVER_ERROR);
@@ -367,6 +389,10 @@ public class WebSocketFormsHandler extends FormsHandler {
         } catch (Exception ex) {
             FhLogger.error("Error during sending response, command: {}", Commands.OUT_SET, ex);
         }
+    }
+
+    protected boolean isFhSessionTraceOn() {
+        return System.getProperty("fh.session.trace", fhSessionTrace?"true":"false").equalsIgnoreCase("true");
     }
 }
 
