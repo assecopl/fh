@@ -64,7 +64,7 @@ public abstract class BaseDocumentHandlingFormModel<DTO, DOC, SUBMODEL extends B
             ret = documentHandler.getOperationAccessibility(opCode);
         }
         if(System.getProperty("fhdp.operation.accessibility.log", "false").equalsIgnoreCase("true")) {
-            FhLogger.info("Operation accessibility for code {}: {}", opCode, ret.name(), new Throwable("Trace"));
+            FhLogger.info("Operation accessibility for code {}: {}", opCode, ret.name());
         }
         return ret;
 
