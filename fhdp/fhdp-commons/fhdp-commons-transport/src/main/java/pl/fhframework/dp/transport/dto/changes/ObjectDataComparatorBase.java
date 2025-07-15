@@ -141,7 +141,7 @@ public abstract class ObjectDataComparatorBase<CHANGE, DTO> {
 		String rootName = obInfo.rootName;
 		String xPath = obInfo.xPath;
 		String xPathPrefix = getRootXpathPrefix() + xPath;
-		System.out.println(xPath);
+		log.debug(xPath);
 
 		List<CHANGE> changes = new LinkedList<>();
 
