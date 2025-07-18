@@ -31,14 +31,17 @@ public class ExampleTableUC implements IInitialUseCase {
         attributeElementList.add(new ExampleTableModel.AttributeElement(1, "Test 1"));
         attributeElementList.add(new ExampleTableModel.AttributeElement(2, "Test 2"));
 
+
+
+
         List<ExampleTableModel.AttributeElement> attributeElementList2 = new ArrayList<>();
         attributeElementList2.add(new ExampleTableModel.AttributeElement(1, "Test 1"));
 
         List<ExampleTableModel.ListElements> listElementsList = new ArrayList<>();
         listElementsList.add(
-                new ExampleTableModel.ListElements(1, "Element 1", "Description element 1", attributeElementList));
+                new ExampleTableModel.ListElements(1, "Element 1", "Description element 1", attributeElementList, attributeElementList.get(0)));
         listElementsList.add(new ExampleTableModel.ListElements(2, "Element 2", "Description element 2",
-                attributeElementList2));
+                attributeElementList2, attributeElementList.get(1)));
 
         this.model.setListElements(listElementsList);
     }

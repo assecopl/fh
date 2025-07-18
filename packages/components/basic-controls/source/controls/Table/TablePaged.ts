@@ -6,14 +6,13 @@ import {HTMLFormComponent} from "fh-forms-handler";
 class TablePaged extends Table {
     private pageSizeSelect: any;
     private pageSizeSelect_clone: any;
-    private sortedBy: any;
+
     private paginator: HTMLElement;
     private paginator_second: HTMLElement;
     private pageInfo: HTMLElement;
     private pageInfo_second: HTMLElement;
     private paginationAboveTable: boolean = false;
     private pageSize: number;
-    private sortDirection: any;
 
     private readonly onPageChange: any;
     private totalPages: number;
@@ -43,9 +42,6 @@ class TablePaged extends Table {
         this.paginatorOffset = 2;
         this.onPageChange = this.componentObj.onPageChange;
         this.pageChangeListeners = [];
-
-        this.sortedBy = null;
-        this.sortDirection = null;
 
         this.pageSize = this.componentObj.pageable.pageSize || 10;
         this.pageSizeAsButtons = this.componentObj.pageSizeAsButtons || false;
@@ -419,19 +415,6 @@ class TablePaged extends Table {
         paginator.appendChild(list);
 
         return paginator;
-    };
-
-    changeSort(newSortedBy, newSortDirection) {
-        this.sortedBy = newSortedBy;
-        this.changesQueue.queueAttributeChange('sortBy', newSortedBy);
-        if (newSortDirection !== undefined) { // undefined -> not changed
-            this.sortDirection = newSortDirection;
-        }
-        // always send sortDirection with sortedBy change
-        this.changesQueue.queueAttributeChange('direction', this.sortDirection);
-        this.cleanUpSortableComponents();
-
-        this.fireEventWithLock('onSortChange', null);
     };
 
     toInt = function (stringOrInt) {
