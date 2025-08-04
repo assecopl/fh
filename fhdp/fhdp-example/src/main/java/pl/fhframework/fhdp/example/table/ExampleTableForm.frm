@@ -6,9 +6,10 @@
         <Button id="btnAddBase2" inlineStyle="margin-left: auto;" horizontalAlign="right" style="default"
                 styleClasses="button-in-operations" verticalAlign="middle" onClick="addBaseList()"
                 label="[icon='fas fa-plus']" paddingRight="10"/>
-        <Table collection="{listElements}" selected="{selectedListElement}" iterator="row" onRowClick="editBaseList()">
-            <Column width="1" label="Id" value="{row.id}"/>
-            <Column width="4" label="Name" value="{row.name}"/>
+        <Table collection="{listElements}" selected="{selectedListElement}"  iterator="row" onRowClick="editBaseList()">
+            <Column sortBy="id" width="1" label="Id" value="{row.id}"/>
+            <Column sortBy="name" width="4" label="Name" value="{row.name}"/>
+            <Column width="4" sortBy="element.name" label="Attribute" value="{row.element.name}"/>
             <Column width="4" label="Description" value="{row.description}"/>
             <Column width="1" verticalAlign="top"
                     label="[className='d-flex,align-items-center'][portal='btnAddBase2'][/className]">

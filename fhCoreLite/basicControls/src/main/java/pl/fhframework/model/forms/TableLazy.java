@@ -359,20 +359,4 @@ public class TableLazy extends Table {
         }
     }
 
-    private Column getSortingColumn(String sortBy, List<? extends Component> components) {
-        for (Component component : components) {
-            if (component instanceof Column) {
-                Column column = (Column) component;
-                if (sortBy.equals(column.getId())) {
-                    return column;
-                } else if (column.getSubcomponents() != null) {
-                    Column nestedColumn = getSortingColumn(sortBy, column.getSubcomponents());
-                    if (nestedColumn != null) {
-                        return nestedColumn;
-                    }
-                }
-            }
-        }
-        return null;
-    }
 }

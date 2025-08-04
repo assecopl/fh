@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import pl.fhframework.BindingResult;
 import pl.fhframework.annotations.*;
 import pl.fhframework.binding.*;
@@ -28,6 +29,9 @@ import pl.fhframework.model.forms.designer.IDesignerEventListener;
 import pl.fhframework.model.forms.table.LowLevelRowMetadata;
 import pl.fhframework.model.forms.table.RowIteratorMetadata;
 
+import java.lang.reflect.Field;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.lang.reflect.Array;
 import java.util.*;
 import java.util.concurrent.Callable;
@@ -66,6 +70,9 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
     protected static final String LABEL_ATTR = "label";
     protected static final String MULTISELECT_ATTR = "multiselect";
     protected static final String SELECTIONCHECKBOXES_ATTR = "selectionCheckboxes";
+
+    private static final String SORT_BY_ATTRIBUTE = "sortBy";
+    private static final String DIRECTION_ATTRIBUTE = "direction";
 
     @Autowired
     @JsonIgnore
@@ -275,6 +282,20 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
     @DocumentedComponentAttribute(boundable = true, value = "Represents label for created component. Supports FHML - Fh Markup Language.")
     private ModelBinding labelModelBinding;
 
+    @Getter
+    @Setter
+    @DesignerXMLProperty(functionalArea = BEHAVIOR)
+    @XMLProperty
+    @DocumentedComponentAttribute(value = "Property name by default passed in the Pageable object to be interpreted in a data source (eg. DAO)")
+    protected String defaultSortBy;
+
+    @Getter
+    @Setter
+    @DesignerXMLProperty(functionalArea = BEHAVIOR)
+    @XMLProperty(defaultValue = "true")
+    @DocumentedComponentAttribute(value = "If defaultSortBy is set this property decides if default order is ascending ", defaultValue = "true")
+    protected boolean defaultSortByAsc = true;
+
     private static final String ON_ROW_CLICK = "onRowClick";
 
     private static final String ON_ROW_DOUBLE_CLICK = "onRowDoubleClick";
@@ -296,6 +317,11 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
     private static final String ROW_STYLES_MAP = "rowStylesMap";
 
     private static final String ROW_STYLES_MAPPING = "rowStylesMapping";
+
+
+
+    private String sortBy;
+    private Sort.Direction direction;
 
     public Table(Form form) {
         super(form);
@@ -745,7 +771,7 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
 
     @Override
     public void updateModel(ValueChange valueChange) {
-        if (selectedElementBinding != null) {
+        if (selectedElementBinding != null && valueChange.hasMainValueChanged()) {
 
             String newTextValue = valueChange.getMainValue();
             //TODO: remove this part
@@ -767,6 +793,16 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
                 }
                 this.updateBindingForValue(newSelectedElement, selectedElementBinding, selectedElementBinding.getBindingExpression(), Optional.empty());
             }
+        }
+
+        if(valueChange.hasAttributeChanged(SORT_BY_ATTRIBUTE) || valueChange.hasAttributeChanged(DIRECTION_ATTRIBUTE)){
+            sortBy = valueChange.getStringAttribute(SORT_BY_ATTRIBUTE);
+            String directionString = valueChange.getStringAttribute(DIRECTION_ATTRIBUTE);
+            Column column = this.getSortingColumn(sortBy, getColumns());
+            direction = directionString != null ? Sort.Direction.valueOf(directionString) : null;
+
+            sortByFieldName(this.mainCollection, column.sortBy, direction );
+            this.processComponents();
         }
     }
 
@@ -966,5 +1002,105 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
             this.compareFunction = (value1, value2) -> Objects.equals(value1, value2);
         }
     }
+
+    public static <T> void sortByFieldName(Collection<T> collection, String fieldName, Sort.Direction direction) {
+        if (collection == null || collection.isEmpty() || fieldName == null || fieldName.isEmpty()) {
+            return;
+        }
+
+        if (!(collection instanceof List)) {
+            return; // lub rzutuj na nową listę
+        }
+
+        List<T> list = (List<T>) collection;
+        boolean ascending = direction.name().equalsIgnoreCase("ASC");
+
+        Comparator<T> comparator = (o1, o2) -> {
+            try {
+                Object val1 = getNestedFieldValue(o1, fieldName);
+                Object val2 = getNestedFieldValue(o2, fieldName);
+
+                if (val1 == null && val2 == null) return 0;
+                if (val1 == null) return -1;
+                if (val2 == null) return 1;
+
+                // Obsługa typów prymitywnych i porównywalnych
+                if (val1 instanceof Integer && val2 instanceof Integer) {
+                    return ascending ? Integer.compare((Integer) val1, (Integer) val2) : Integer.compare((Integer) val2, (Integer) val1);
+                } else if (val1 instanceof Double && val2 instanceof Double) {
+                    return ascending ? Double.compare((Double) val1, (Double) val2) : Double.compare((Double) val2, (Double) val1);
+                } else if (val1 instanceof Long && val2 instanceof Long) {
+                    return ascending ? Long.compare((Long) val1, (Long) val2) : Long.compare((Long) val2, (Long) val1);
+                } else if (val1 instanceof Float && val2 instanceof Float) {
+                    return ascending ? Float.compare((Float) val1, (Float) val2) : Float.compare((Float) val2, (Float) val1);
+                } else if (val1 instanceof Boolean && val2 instanceof Boolean) {
+                    return ascending ? Boolean.compare((Boolean) val1, (Boolean) val2) : Boolean.compare((Boolean) val2, (Boolean) val1);
+                } else if (val1 instanceof Character && val2 instanceof Character) {
+                    return ascending ? Character.compare((Character) val1, (Character) val2) : Character.compare((Character) val2, (Character) val1);
+                } else if (val1 instanceof Short && val2 instanceof Short) {
+                    return ascending ? Short.compare((Short) val1, (Short) val2) : Short.compare((Short) val2, (Short) val1);
+                } else if (val1 instanceof Byte && val2 instanceof Byte) {
+                    return ascending ? Byte.compare((Byte) val1, (Byte) val2) : Byte.compare((Byte) val2, (Byte) val1);
+                } else if (val1 instanceof LocalDate && val2 instanceof LocalDate) {
+                    return ascending ? ((LocalDate) val1).compareTo((LocalDate) val2) : ((LocalDate) val2).compareTo((LocalDate) val1);
+                } else if (val1 instanceof LocalDateTime && val2 instanceof LocalDateTime) {
+                    return ascending ? ((LocalDateTime) val1).compareTo((LocalDateTime) val2) : ((LocalDateTime) val2).compareTo((LocalDateTime) val1);
+                } else if (val1 instanceof Comparable && val2 instanceof Comparable) {
+                    return ascending ? ((Comparable) val1).compareTo(val2) : ((Comparable) val2).compareTo(val1);
+                }
+
+                return ascending ? val1.toString().compareTo(val2.toString()) : val2.toString().compareTo(val1.toString());
+
+            } catch (Exception e) {
+                throw new RuntimeException("Błąd przy sortowaniu po polu: " + fieldName, e);
+            }
+        };
+
+        Collections.sort(list, comparator);
+    }
+
+    private static Object getNestedFieldValue(Object obj, String fieldPath) throws Exception {
+        String[] fields = fieldPath.split("\\.");
+        Object currentObj = obj;
+
+        for (String fieldName : fields) {
+            if (currentObj == null) return null;
+
+            Field field = getFieldRecursive(currentObj.getClass(), fieldName);
+            field.setAccessible(true);
+            currentObj = field.get(currentObj);
+        }
+
+        return currentObj;
+    }
+
+    private static Field getFieldRecursive(Class<?> clazz, String fieldName) throws NoSuchFieldException {
+        while (clazz != null) {
+            try {
+                return clazz.getDeclaredField(fieldName);
+            } catch (NoSuchFieldException e) {
+                clazz = clazz.getSuperclass(); // wspiera dziedziczenie
+            }
+        }
+        throw new NoSuchFieldException("Nie znaleziono pola: " + fieldName);
+    }
+
+    protected Column getSortingColumn(String sortBy, List<? extends Component> components) {
+        for (Component component : components) {
+            if (component instanceof Column) {
+                Column column = (Column) component;
+                if (sortBy.equals(column.getId())) {
+                    return column;
+                } else if (column.getSubcomponents() != null) {
+                    Column nestedColumn = getSortingColumn(sortBy, column.getSubcomponents());
+                    if (nestedColumn != null) {
+                        return nestedColumn;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
 
 }

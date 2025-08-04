@@ -29,7 +29,7 @@ import pl.fhframework.model.forms.messages.Messages;
 public class SubstantiveParametersListUC extends GenericListUC<SubstantiveParametersListModel, SubstantiveParametersListUC.Params, SubstantiveParametersDto> {
 
     @Autowired
-    ApplicationContext context;
+    private ApplicationContext context;
 
     @Autowired
     private EventRegistry eventRegistry;
@@ -38,7 +38,7 @@ public class SubstantiveParametersListUC extends GenericListUC<SubstantiveParame
     private SubstantiveParametersService substantiveParametersService;
 
     @Autowired
-    MessageService messageService;
+    private MessageService messageService;
 
     @Value("${fhdp.parameters.search.box.buttons:false}")
     private boolean isSearchBoxButtons;
@@ -203,6 +203,7 @@ public class SubstantiveParametersListUC extends GenericListUC<SubstantiveParame
             @SneakyThrows
             @Override
             public void save(SubstantiveParametersDetailEditForm.Model one) {
+                registerChanges(substantiveParametersListModel.getSelectedSubstantiveParametersDto(), one.getDto());
                 substantiveParametersService.persistDto(one.getDto());
                 final SubstantiveParametersDto modifiedDto = one.getDto().clone();
 //                SubstantiveParametersListUC.super.init();
@@ -218,6 +219,15 @@ public class SubstantiveParametersListUC extends GenericListUC<SubstantiveParame
             public void cancel() {
             }
         });
+    }
+
+    /**
+     * Empty method. Ancestors can use it for auditing parameter changes
+     * @param before
+     * @param after
+     */
+    protected void registerChanges(SubstantiveParametersDto before, SubstantiveParametersDto after) {
+
     }
 
     @Action(validate = false)

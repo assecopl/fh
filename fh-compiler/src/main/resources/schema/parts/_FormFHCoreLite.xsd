@@ -419,6 +419,7 @@
         <xs:attribute type="xs:string" name="iterationRef"/>
         <xs:attribute type="xs:string" name="label"/>
         <xs:attribute type="xs:string" name="value"/>
+        <xs:attribute type="xs:string" name="sortBy"/>
     </xs:complexType>
 
     <xs:complexType name="ColumnPagedType" mixed="true">

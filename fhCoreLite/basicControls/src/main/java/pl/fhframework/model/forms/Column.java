@@ -12,6 +12,7 @@ import pl.fhframework.core.forms.iterators.IRepeatableIteratorInfo;
 import pl.fhframework.BindingResult;
 import pl.fhframework.annotations.*;
 import pl.fhframework.binding.ModelBinding;
+import pl.fhframework.core.util.StringUtils;
 import pl.fhframework.forms.ICompilerAwareComponent;
 import pl.fhframework.model.dto.ElementChanges;
 import pl.fhframework.model.forms.designer.BindingExpressionDesignerPreviewProvider;
@@ -123,6 +124,18 @@ public class Column extends GroupingComponent<FormElement> implements CompactLay
     @Setter
     private IMultipleIteratorComponentFactory<Table> interatorComponentFactory;
 
+    @Getter
+    @Setter
+    private boolean sortable = false;
+
+    @JsonIgnore
+    @Getter
+    @Setter
+    @DocumentedComponentAttribute(value = "Property name passed in the Pageable object to be interpreted in a data source (eg. DAO)")
+    @XMLProperty
+    @DesignerXMLProperty(commonUse = true)
+    public String sortBy;
+
     @JsonIgnore
     private OutputLabel implicitOutputLabel;
 
@@ -165,6 +178,8 @@ public class Column extends GroupingComponent<FormElement> implements CompactLay
         }
         prototype.init();
         prototype.doActionForEverySubcomponent(c -> c.init());
+
+        sortable = !StringUtils.isNullOrEmpty(sortBy) && !isSubColumnsExists();
     }
 
     @Override
@@ -218,6 +233,14 @@ public class Column extends GroupingComponent<FormElement> implements CompactLay
                 this.label = newLabelValue;
                 elementChanges.addChange(ATTR_LABEL, this.label);
             }
+        }
+
+        boolean sortable = sortBy != null && !sortBy.isEmpty();
+
+        if (!areValuesTheSame(this.sortable, sortable)) {
+            this.refreshView();
+            this.sortable = sortable;
+            elementChanges.addChange("sortable", this.sortable);
         }
 
         return elementChanges;
