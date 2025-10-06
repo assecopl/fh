@@ -109,7 +109,16 @@ class TreeElementFhDP extends TreeElement {
       }
     }
 
-    this.setIsCustomHighlight(change.changedAttributes.isHighlight)
+    if (change.changedAttributes) {
+      $.each(change.changedAttributes, function (name, newValue) {
+        switch (name) {
+          case 'isHighlight':
+            this.isCustomHighlight = newValue;
+            this.changeCustomHighlight();
+            break;
+        }
+      }.bind(this));
+    }
   }
 
   private setIsCustomHighlight(value?:boolean){
