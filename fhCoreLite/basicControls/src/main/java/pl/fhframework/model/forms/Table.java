@@ -801,7 +801,7 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
             Column column = this.getSortingColumn(sortBy, getColumns());
             direction = directionString != null ? Sort.Direction.valueOf(directionString) : null;
 
-            sortByFieldName(this.mainCollection, column.sortBy, direction );
+            sortByFieldName(this.mainCollection, column.sortBy, direction, column );
             this.processComponents();
         }
     }
@@ -1003,7 +1003,7 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
         }
     }
 
-    public static <T> void sortByFieldName(Collection<T> collection, String fieldName, Sort.Direction direction) {
+    public <T> void sortByFieldName(Collection<T> collection, String fieldName, Sort.Direction direction, Column column) {
         if (collection == null || collection.isEmpty() || fieldName == null || fieldName.isEmpty()) {
             return;
         }
@@ -1013,44 +1013,84 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
         }
 
         List<T> list = (List<T>) collection;
+
+        Object valCheck = null;
+        HashMap<Object, String> staticMappingForSorting = new HashMap<>();
+        try {
+            valCheck = getNestedFieldValue(list.indexOf(0), fieldName);
+        } catch (Exception e) {
+            //sneakyThrow
+        }
+        if (valCheck == null) {
+            int index = this.columns.indexOf(column);
+
+            this.tableRows.forEach(tableRow -> {
+                int rowIndex = this.tableRows.indexOf(tableRow);
+                TableCell tableCell = (TableCell) tableRow.getTableCells().get(index);
+                FormElement element = tableCell.getSubcomponents().get(0);
+                String outputLabelValue = "";
+                if(element instanceof OutputLabel) {
+                    outputLabelValue = ((OutputLabel) element).getValue();
+                }
+                staticMappingForSorting.put(list.get(rowIndex), outputLabelValue);
+            });
+
+
+        };
+
         boolean ascending = direction.name().equalsIgnoreCase("ASC");
 
+        Object finalValCheck = valCheck;
         Comparator<T> comparator = (o1, o2) -> {
             try {
-                Object val1 = getNestedFieldValue(o1, fieldName);
-                Object val2 = getNestedFieldValue(o2, fieldName);
+                Object val1;
+                Object val2;
+                if(finalValCheck != null) {
+                     val1 = getNestedFieldValue(o1, fieldName);
+                     val2 = getNestedFieldValue(o2, fieldName);
+                } else {
+                    //Pobieramy dane z statycznej mapy opartej o wartości OutputLabel.
+                    val1 = staticMappingForSorting.get(o1);
+                    val2 = staticMappingForSorting.get(o2);
 
-                if (val1 == null && val2 == null) return 0;
-                if (val1 == null) return -1;
-                if (val2 == null) return 1;
+                    if(fieldName == "stringasnumeric") {
 
-                // Obsługa typów prymitywnych i porównywalnych
-                if (val1 instanceof Integer && val2 instanceof Integer) {
-                    return ascending ? Integer.compare((Integer) val1, (Integer) val2) : Integer.compare((Integer) val2, (Integer) val1);
-                } else if (val1 instanceof Double && val2 instanceof Double) {
-                    return ascending ? Double.compare((Double) val1, (Double) val2) : Double.compare((Double) val2, (Double) val1);
-                } else if (val1 instanceof Long && val2 instanceof Long) {
-                    return ascending ? Long.compare((Long) val1, (Long) val2) : Long.compare((Long) val2, (Long) val1);
-                } else if (val1 instanceof Float && val2 instanceof Float) {
-                    return ascending ? Float.compare((Float) val1, (Float) val2) : Float.compare((Float) val2, (Float) val1);
-                } else if (val1 instanceof Boolean && val2 instanceof Boolean) {
-                    return ascending ? Boolean.compare((Boolean) val1, (Boolean) val2) : Boolean.compare((Boolean) val2, (Boolean) val1);
-                } else if (val1 instanceof Character && val2 instanceof Character) {
-                    return ascending ? Character.compare((Character) val1, (Character) val2) : Character.compare((Character) val2, (Character) val1);
-                } else if (val1 instanceof Short && val2 instanceof Short) {
-                    return ascending ? Short.compare((Short) val1, (Short) val2) : Short.compare((Short) val2, (Short) val1);
-                } else if (val1 instanceof Byte && val2 instanceof Byte) {
-                    return ascending ? Byte.compare((Byte) val1, (Byte) val2) : Byte.compare((Byte) val2, (Byte) val1);
-                } else if (val1 instanceof LocalDate && val2 instanceof LocalDate) {
-                    return ascending ? ((LocalDate) val1).compareTo((LocalDate) val2) : ((LocalDate) val2).compareTo((LocalDate) val1);
-                } else if (val1 instanceof LocalDateTime && val2 instanceof LocalDateTime) {
-                    return ascending ? ((LocalDateTime) val1).compareTo((LocalDateTime) val2) : ((LocalDateTime) val2).compareTo((LocalDateTime) val1);
-                } else if (val1 instanceof Comparable && val2 instanceof Comparable) {
-                    return ascending ? ((Comparable) val1).compareTo(val2) : ((Comparable) val2).compareTo(val1);
+                        String num = ((String) val1).replaceAll("\\D+", "");
+                        val1 = num.isEmpty() ? 0 : Long.parseLong(num);
+
+                        String num2 = ((String) val2).replaceAll("\\D+", "");
+                        val2 = num2.isEmpty() ? 0 : Long.parseLong(num2);
+
+                    }
                 }
 
-                return ascending ? val1.toString().compareTo(val2.toString()) : val2.toString().compareTo(val1.toString());
 
+                    // Obsługa typów prymitywnych i porównywalnych
+                    if (val1 instanceof Integer && val2 instanceof Integer) {
+                        return ascending ? Integer.compare((Integer) val1, (Integer) val2) : Integer.compare((Integer) val2, (Integer) val1);
+                    } else if (val1 instanceof Double && val2 instanceof Double) {
+                        return ascending ? Double.compare((Double) val1, (Double) val2) : Double.compare((Double) val2, (Double) val1);
+                    } else if (val1 instanceof Long && val2 instanceof Long) {
+                        return ascending ? Long.compare((Long) val1, (Long) val2) : Long.compare((Long) val2, (Long) val1);
+                    } else if (val1 instanceof Float && val2 instanceof Float) {
+                        return ascending ? Float.compare((Float) val1, (Float) val2) : Float.compare((Float) val2, (Float) val1);
+                    } else if (val1 instanceof Boolean && val2 instanceof Boolean) {
+                        return ascending ? Boolean.compare((Boolean) val1, (Boolean) val2) : Boolean.compare((Boolean) val2, (Boolean) val1);
+                    } else if (val1 instanceof Character && val2 instanceof Character) {
+                        return ascending ? Character.compare((Character) val1, (Character) val2) : Character.compare((Character) val2, (Character) val1);
+                    } else if (val1 instanceof Short && val2 instanceof Short) {
+                        return ascending ? Short.compare((Short) val1, (Short) val2) : Short.compare((Short) val2, (Short) val1);
+                    } else if (val1 instanceof Byte && val2 instanceof Byte) {
+                        return ascending ? Byte.compare((Byte) val1, (Byte) val2) : Byte.compare((Byte) val2, (Byte) val1);
+                    } else if (val1 instanceof LocalDate && val2 instanceof LocalDate) {
+                        return ascending ? ((LocalDate) val1).compareTo((LocalDate) val2) : ((LocalDate) val2).compareTo((LocalDate) val1);
+                    } else if (val1 instanceof LocalDateTime && val2 instanceof LocalDateTime) {
+                        return ascending ? ((LocalDateTime) val1).compareTo((LocalDateTime) val2) : ((LocalDateTime) val2).compareTo((LocalDateTime) val1);
+                    } else if (val1 instanceof Comparable && val2 instanceof Comparable) {
+                        return ascending ? ((Comparable) val1).compareTo(val2) : ((Comparable) val2).compareTo(val1);
+                    }
+
+                    return ascending ? val1.toString().compareTo(val2.toString()) : val2.toString().compareTo(val1.toString());
             } catch (Exception e) {
                 throw new RuntimeException("Błąd przy sortowaniu po polu: " + fieldName, e);
             }

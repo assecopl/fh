@@ -165,6 +165,7 @@ thead.tableFloatingHeaderOriginal > tr th {
     width: 100%;
     text-align: inherit;
     border: 0;
+    text-wrap:auto;
 }
 
 .fc-table-disabled td * {
