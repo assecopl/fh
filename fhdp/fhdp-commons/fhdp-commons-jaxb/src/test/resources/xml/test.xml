@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testXML xmlns="http://acme.com/xxv/v1_0"
+         uniqPrefix="AX" xsdVersion="5.1">
+    <aa>sdfsdfs</aa>
+    <bb>vvvvv</bb>
+</testXML>

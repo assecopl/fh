@@ -206,7 +206,7 @@ public class RawMessageHelper {
         } catch (IOException e) {
 //            e.printStackTrace();
         }
-        if(namespace.contains("/")) {
+        if(namespace.contains("/") && namespace.contains(".") && namespace.lastIndexOf("/") + 1 < namespace.lastIndexOf(".")) {
             return namespace.substring(namespace.lastIndexOf("/") + 1, namespace.lastIndexOf("."));
         } else {
             return "unknown";
