@@ -1,6 +1,6 @@
 {
   "name": "fh-forms-handler",
-  "version": "4.10.9-SNAPSHOT-1759738233890",
+  "version": "4.10.901",
   "main": "dist/Module.js",
   "types": "dist/Module.d.ts",
   "description": "fh framework core for frontend",
@@ -9,7 +9,8 @@
     {
       "name": "Jacek Borowiec",
       "email": "jacek.borowiec@asseco.pl"
-    },{
+    },
+    {
       "name": "Paweł Domański",
       "email": "pawel.domanski@asseco.pl"
     }
