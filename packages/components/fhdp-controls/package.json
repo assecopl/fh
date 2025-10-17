@@ -1,14 +1,14 @@
 {
   "name": "fhdp-controls",
   "version": "4.10.9-SNAPSHOT-1759738233890",
-  "author": {
-    "name": "Jakub Kosecki",
-    "email": "j.kosecki@doittechnology.pl"
-  },
+  "author": "AssecoPL",
   "contributors": [
     {
       "name": "Jacek Borowiec",
       "email": "jacek.borowiec@asseco.pl"
+    },{
+      "name": "Paweł Domański",
+      "email": "pawel.domanski@asseco.pl"
     }
   ],
   "main": "dist/Module.js",
