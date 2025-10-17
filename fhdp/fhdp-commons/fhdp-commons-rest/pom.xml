@@ -8,6 +8,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>fhdp-commons-rest</artifactId>
+    <name>fhdp-commons-rest</name>
+
     <packaging>jar</packaging>
 
     <dependencyManagement>

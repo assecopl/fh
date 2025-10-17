@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>fh-docs</artifactId>
+    <name>fh-docs</name>
     <packaging>jar</packaging>
 
     <dependencies>

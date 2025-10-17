@@ -9,6 +9,7 @@
     </parent>
 
     <artifactId>fhdp-commons-transport</artifactId>
+    <name>fhdp-commons-transport</name>
 
     <packaging>jar</packaging>
 
