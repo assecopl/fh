@@ -17,7 +17,7 @@ class ApplicationLock {
     rids: string[] = [];
     lockElement: HTMLElement;
     reconnectInfo: HTMLElement;
-    opacityTimer: number;
+    opacityTimer: any;
 
     constructor() {
         this.i18n.registerStrings('en', ApplicationLockEN);

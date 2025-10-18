@@ -24,5 +24,9 @@
             <OutputLabel width="md-12" value="Selected contry code {pickedCountryCode}" />
             <RegionPickerFhDP map="europe" code="{pickedCountryCode}" />
         </Tab>
+        <Tab label="EMLViewerFhDP">
+            <OutputLabel width="md-12" value="&lt;EMLViewerFhDP content=&#34;exampleEML&#34; styleClass=&#34;MuiPaper-root&#34; /&gt;" />
+            <EMLViewerFhDP content="{exampleEML}" styleClasses="MuiPaper-root" />
+        </Tab>
     </TabContainer>
 </Form>

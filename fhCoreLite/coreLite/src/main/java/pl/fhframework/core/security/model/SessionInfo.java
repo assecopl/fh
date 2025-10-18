@@ -20,6 +20,7 @@ import java.util.function.Function;
 public class SessionInfo implements Serializable {
 
     private String sessionId;
+    private String httpSessionId;
     private String userName;
     private Date logonTime;
     private String nodeUrl;

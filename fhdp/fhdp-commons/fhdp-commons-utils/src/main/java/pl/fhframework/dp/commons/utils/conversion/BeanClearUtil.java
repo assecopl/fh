@@ -47,7 +47,6 @@ public class BeanClearUtil {
     Field[] fields =  object.getClass().getDeclaredFields();
     for (Field field: fields) {
       field.setAccessible(true);
-      if(field.getType().isEnum()) continue;
       if(field.getType().isArray()) continue;
       /**
        * Checks a type of the field as well as its value, returns true on the right is the field has a value as fallows:
@@ -120,6 +119,9 @@ public class BeanClearUtil {
          */
         isEmpty = false;
       }
+    } else if (object instanceof Enum) {
+        //if enum different then null always not empty
+        isEmpty = false;
     } else {
       if (!clear(object)) {
         /**

@@ -8,7 +8,7 @@
   <parent>
     <groupId>pl.fhframework</groupId>
     <artifactId>fhCoreLite</artifactId>
-    <version>4.10.8</version>
+    <version>4.10.9</version>
   </parent>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -38,14 +38,14 @@
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
     </dependency>
-    <dependency>
-      <groupId>com.sun</groupId>
-      <artifactId>tools</artifactId>
-      <version>${java.version}</version>
-      <scope>system</scope>
-      <optional>true</optional>
-      <systemPath>${java.home}/../lib/tools.jar</systemPath>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>com.sun</groupId>-->
+<!--      <artifactId>tools</artifactId>-->
+<!--      <version>${java.version}</version>-->
+<!--      <scope>system</scope>-->
+<!--      <optional>true</optional>-->
+<!--      <systemPath>${java.home}/../lib/tools.jar</systemPath>-->
+<!--    </dependency>-->
   </dependencies>
   <build>
     <plugins>
@@ -157,15 +157,12 @@
             </executions>
           </plugin>
           <plugin>
-            <groupId>org.sonatype.plugins</groupId>
-            <artifactId>nexus-staging-maven-plugin</artifactId>
-            <version>1.6.14</version>
+            <groupId>org.sonatype.central</groupId>
+            <artifactId>central-publishing-maven-plugin</artifactId>
+            <version>0.9.0</version>
             <extensions>true</extensions>
             <configuration>
-              <serverId>ossrh</serverId>
-              <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-              <autoReleaseAfterClose>false</autoReleaseAfterClose>
-                            <stagingProgressTimeoutMinutes>7</stagingProgressTimeoutMinutes>
+              <publishingServerId>central</publishingServerId>
             </configuration>
           </plugin>
           <plugin>

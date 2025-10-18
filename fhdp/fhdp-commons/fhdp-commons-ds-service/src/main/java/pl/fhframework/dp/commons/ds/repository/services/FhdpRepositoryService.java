@@ -59,6 +59,18 @@ public class FhdpRepositoryService implements IRepositoryService {
 		return documentDAO;
 	}
 	
+	protected DokumentContentDAO getDokumentContentDAO() {
+		return dokumentContentDAO;
+	}
+	
+	protected HistoryDokumentContentDAO getHistoryDokumentContentDAO() {
+		return hDokumentContentDAO;
+	}
+	
+	protected HistoryDocumentDAO getHistoryDocumentDAO() {
+		return hDocumentDAO;
+	}
+	
 	@Override
 	public StoreDocumentResponse storeDocument(StoreDocumentRequest request) {
 		StoreDocumentResponse response = new StoreDocumentResponse();
@@ -86,9 +98,9 @@ public class FhdpRepositoryService implements IRepositoryService {
 			content.setContent(request.getDocument().getContent());
 			session = getDocumentDAO().getNewSession();
 			DocumentDAO sessionDocumentDAO = getDocumentDAO().getSessionInstance(session);	
-			DokumentContentDAO sessionDocumentContentDAO = dokumentContentDAO.getSessionInstance(session);	
-			HistoryDokumentContentDAO sessionHistoryDokumentContentDAO = hDokumentContentDAO.getSessionInstance(session);
-			HistoryDocumentDAO sessionHistoryDocumentDAO = hDocumentDAO.getSessionInstance(session);
+			DokumentContentDAO sessionDocumentContentDAO = getDokumentContentDAO().getSessionInstance(session);	
+			HistoryDokumentContentDAO sessionHistoryDokumentContentDAO = getHistoryDokumentContentDAO().getSessionInstance(session);
+			HistoryDocumentDAO sessionHistoryDocumentDAO = getHistoryDocumentDAO().getSessionInstance(session);
 			
 			TransactionBody<String> txnBody = new TransactionBody<String>() {
 			    public String execute() {
@@ -204,7 +216,7 @@ public class FhdpRepositoryService implements IRepositoryService {
 		try {
 			RepositoryDocument rd = getDocumentDAO().getObject(request.getId());
 			Document doc = repositoryDocumentToDocument(rd);
-			DocumentContent content = dokumentContentDAO.getObject(request.getId());
+			DocumentContent content = getDokumentContentDAO().getObject(request.getId());
 			doc.setContent(content.getContent());
 			response.setDocument(doc);
 			result.setResultCode(1);
@@ -227,7 +239,7 @@ public class FhdpRepositoryService implements IRepositoryService {
 			RepositoryDocument document = getDocumentDAO().getByDbId(dbId);
 			if (document != null) {
 				Document doc = repositoryDocumentToDocument(document);
-				DocumentContent content = dokumentContentDAO.getObject(document.getId());
+				DocumentContent content = getDokumentContentDAO().getObject(document.getId());
 				doc.setContent(content.getContent());
 				response.setDocument(doc);
 				result.setResultCode(1);
@@ -276,9 +288,9 @@ public class FhdpRepositoryService implements IRepositoryService {
 			//TODO: sprawdzanie content size i MD5, ignorowanie identycznego contentu
 			session = getDocumentDAO().getNewSession();
 			DocumentDAO sessionDocumentDAO = getDocumentDAO().getSessionInstance(session);	
-			DokumentContentDAO sessionDocumentContentDAO = dokumentContentDAO.getSessionInstance(session);	
-			HistoryDokumentContentDAO sessionHistoryDokumentContentDAO = hDokumentContentDAO.getSessionInstance(session);
-			HistoryDocumentDAO sessionHistoryDocumentDAO = hDocumentDAO.getSessionInstance(session);
+			DokumentContentDAO sessionDocumentContentDAO = getDokumentContentDAO().getSessionInstance(session);	
+			HistoryDokumentContentDAO sessionHistoryDokumentContentDAO = getHistoryDokumentContentDAO().getSessionInstance(session);
+			HistoryDocumentDAO sessionHistoryDocumentDAO = getHistoryDocumentDAO().getSessionInstance(session);
 
 			TransactionBody<String> txnBody = new TransactionBody<String>() {
 			    public String execute() {
@@ -312,7 +324,7 @@ public class FhdpRepositoryService implements IRepositoryService {
 //							doc.put("documentId", request.getId());							
 							
 							
-							if(hdcId==null) {
+							if(hdcId==null||request.getContent()!=null) {
 								hdcId = UUID.randomUUID().toString();
 								hDoc.setHistoryContentId(hdcId);
 //								doc.put("historyContentId", hdcId);
@@ -399,9 +411,9 @@ public class FhdpRepositoryService implements IRepositoryService {
 			
 			session = getDocumentDAO().getNewSession();
 			DocumentDAO sessionDocumentDAO = getDocumentDAO().getSessionInstance(session);	
-			DokumentContentDAO sessionDocumentContentDAO = dokumentContentDAO.getSessionInstance(session);	
-			HistoryDokumentContentDAO sessionHistoryDokumentContentDAO = hDokumentContentDAO.getSessionInstance(session);
-			HistoryDocumentDAO sessionHistoryDocumentDAO = hDocumentDAO.getSessionInstance(session);			
+			DokumentContentDAO sessionDocumentContentDAO = getDokumentContentDAO().getSessionInstance(session);	
+			HistoryDokumentContentDAO sessionHistoryDokumentContentDAO = getHistoryDokumentContentDAO().getSessionInstance(session);
+			HistoryDocumentDAO sessionHistoryDocumentDAO = getHistoryDocumentDAO().getSessionInstance(session);			
 			
 			
 			TransactionBody<String> txnBody = new TransactionBody<String>() {
@@ -573,7 +585,7 @@ public class FhdpRepositoryService implements IRepositoryService {
 			Query query = new Query();
 			query = query.addCriteria(criteria);
 			query = query.with(Sort.by(Sort.Direction.DESC, "version"));
-			List<HistoryRepositoryDocument> sResult = hDocumentDAO.find(query);			
+			List<HistoryRepositoryDocument> sResult = getHistoryDocumentDAO().find(query);			
 			
 			
 			
@@ -588,7 +600,7 @@ public class FhdpRepositoryService implements IRepositoryService {
 				doc.setChangedContent(rd.isChangedContent());
 				
 				if(request.isWithContent() && (rd.isChangedContent()||request.isLatest())) {
-					DocumentContent content = hDokumentContentDAO.getObject(rd.getHistoryContentId());
+					DocumentContent content = getHistoryDokumentContentDAO().getObject(rd.getHistoryContentId());
 					doc.setContent(content.getContent());
 				}
 				documents.add(doc);

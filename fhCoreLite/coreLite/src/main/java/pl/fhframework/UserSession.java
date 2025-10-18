@@ -1,5 +1,6 @@
 package pl.fhframework;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,11 @@ import pl.fhframework.validation.IValidationResults;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 @Getter
 @Setter
@@ -69,6 +73,10 @@ public class UserSession extends Session {
     @Autowired
     private EventRegistry eventRegistry;
 
+    /**
+     * @deprecated  Attributes should be moved to UserSession.attributes.
+     */
+    @Deprecated
     private HttpSession httpSession;
 
     // original session id - ChangeSessionIdAuthenticationStrategy is called after logging in
@@ -276,6 +284,8 @@ public class UserSession extends Session {
     private long lastUsageMoment = System.currentTimeMillis();
     private void refreshLastUsageTime() {
         lastUsageMoment = System.currentTimeMillis();
+        getHttpSession().setAttribute("lastUsageTime", lastUsageMoment);
+        getHttpSession().setAttribute("lastUsageTimeStr", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
     }
 
     public boolean hasNotBeenUsedIn(long amountOfTimeSinceLastUsageInMillis) {

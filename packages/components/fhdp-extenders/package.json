@@ -1,10 +1,18 @@
 {
   "name": "fhdp-extenders",
-  "version": "4.10.801",
-  "author": {
-    "name": "Jakub Kosecki",
-    "email": "j.kosecki@doittechnology.pl"
-  },
+  "version": "4.10.901",
+  "author": "AssecoPL",
+  "contributors": [
+    {
+      "name": "Jacek Borowiec",
+      "email": "jacek.borowiec@asseco.pl"
+    },
+    {
+      "name": "Paweł Domański",
+      "email": "pawel.domanski@asseco.pl"
+    }
+  ],
+  "license": "Apache License 2.0",
   "main": "dist/Module.js",
   "types": "dist/Module.d.ts",
   "scripts": {
@@ -22,8 +30,8 @@
     "typescript": "5.0.4"
   },
   "dependencies": {
-    "fh-basic-controls": "4.10.801",
-    "fh-forms-handler": "4.10.801",
+    "fh-basic-controls": "4.10.901",
+    "fh-forms-handler": "4.10.901",
     "lodash": "4.17.21",
     "moment": "2.29.4",
     "moment-timezone": "0.5.34"

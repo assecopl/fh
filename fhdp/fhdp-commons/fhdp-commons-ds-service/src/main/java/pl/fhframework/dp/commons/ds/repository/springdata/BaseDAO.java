@@ -118,7 +118,7 @@ public abstract class BaseDAO<T> {
 		TransactionOptions txnOptions = TransactionOptions.builder()
 		        .readPreference(ReadPreference.primary())
 		        .readConcern(ReadConcern.LOCAL)
-		        .writeConcern(WriteConcern.ACKNOWLEDGED)
+		        .writeConcern(WriteConcern.JOURNALED)
 		        .build();
 		
 		return txnOptions;

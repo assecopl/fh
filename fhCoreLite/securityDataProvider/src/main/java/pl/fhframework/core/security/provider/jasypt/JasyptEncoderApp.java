@@ -1,5 +1,6 @@
 package pl.fhframework.core.security.provider.jasypt;
 
+import lombok.extern.slf4j.Slf4j;
 import org.jasypt.encryption.StringEncryptor;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.jasypt.encryption.pbe.config.SimpleStringPBEConfig;
@@ -11,6 +12,7 @@ import java.io.InputStream;
 /**
  * @author Tomasz.Kozlowski (created on 14.02.2019)
  */
+@Slf4j
 public class JasyptEncoderApp {
 
     public static void main(String[] args) throws IOException {
@@ -23,9 +25,9 @@ public class JasyptEncoderApp {
         // encrypt text passed as a first argument
         if (args != null && args.length > 0) {
             String encrypted = encryptor.encrypt(args[0]);
-            log(encrypted);
+            log.debug(encrypted);
         } else {
-            log("There is no any text to encrypt");
+            log.debug("There is no any text to encrypt");
         }
     }
 
@@ -52,8 +54,5 @@ public class JasyptEncoderApp {
         return encryptor;
     }
 
-    private static void log(String message) {
-        System.out.println("\n" + message + "\n");
-    }
 
 }

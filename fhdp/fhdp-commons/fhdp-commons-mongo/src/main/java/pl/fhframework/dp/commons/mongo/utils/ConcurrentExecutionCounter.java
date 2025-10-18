@@ -1,9 +1,11 @@
 package pl.fhframework.dp.commons.mongo.utils;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
-
+@Slf4j
 public class ConcurrentExecutionCounter {
 	
 	protected static ReentrantLock lock = new ReentrantLock();
@@ -36,7 +38,7 @@ public class ConcurrentExecutionCounter {
 			if(counter>=max) {
 				
 				long diff = current.getTime() - dates.get(id).getTime();
-				System.out.println("######## Counter " + id + ": " + counter + " - " + diff + "ms (" + (counter*1000/diff)+"/s)");
+				log.debug("######## Counter " + id + ": " + counter + " - " + diff + "ms (" + (counter*1000/diff)+"/s)");
 				
 				counter = 0L;
 				dates.put(id, new Date());
@@ -46,8 +48,7 @@ public class ConcurrentExecutionCounter {
 			
 //			long diffSeconds = diff / 1000; 
 //			if(diffSeconds>=60) {
-//				
-//				System.out.println("######## Speed: " + counter + "/min");
+//
 //				
 //				date = current;
 //				counter = 0;

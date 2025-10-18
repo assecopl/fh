@@ -2,11 +2,16 @@ package pl.fhframework.core.session;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.security.core.session.SessionInformation;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 import pl.fhframework.UserSession;
@@ -27,6 +32,8 @@ import java.util.function.Consumer;
 @RequiredArgsConstructor
 public class UserSessionRepository implements HttpSessionListener, ApplicationListener<ContextRefreshedEvent> {
 
+    private static final Logger log = LoggerFactory.getLogger(UserSessionRepository.class);
+    //    private static final Logger log = LoggerFactory.getLogger(UserSessionRepository.class);
     @Getter
     private Map<String, UserSession> userSessions = new ConcurrentHashMap<>();
     @Getter
@@ -64,6 +71,9 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
 
     @Autowired
     private LeakedSessionRemoverCron leakedSessionRemoverCron;
+
+    @Autowired
+    private SessionRegistry sessionRegistry;
 
     @Override
     public synchronized void onApplicationEvent(ContextRefreshedEvent event) {
@@ -115,18 +125,37 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
 
     public boolean removeUserSession(String httpSessionId) {
         UserSession userSession = userSessions.remove(httpSessionId);
-        userSessionsHash.remove(System.identityHashCode(userSession.getHttpSession()));
-        userSessionsByConversationId.remove(userSession.getConversationUniqueId());
-        removeSessionInfo(httpSessionId);
-        if (forceClearSessionDataAfterSessionRemoval) {
-            userSession.removeAllValuesBeforeSessionRemove();
+        if(userSession != null) {
+            clearScopedBeans(userSession);
+            UserSession removedHash = userSessionsHash.remove(System.identityHashCode(userSession.getHttpSession()));
+            if(removedHash == null) {
+                FhLogger.warn("User session {} not removed from userSessionsHash!  HTTPSessionId: {}", userSession, httpSessionId);
+            }
+            UserSession removedConversation = userSessionsByConversationId.remove(userSession.getConversationUniqueId());
+            if(removedConversation == null) {
+                FhLogger.warn("User session {} not removed from userSessionsByConversationId!  HTTPSessionId: {}", userSession, httpSessionId);
+            }
+            removeSessionInfo(httpSessionId);
+            if (forceClearSessionDataAfterSessionRemoval) {
+                userSession.removeAllValuesBeforeSessionRemove();
+            }
+            return true;
+        } else {
+            return false;
         }
-        return userSession!=null;
     }
+
+    private void clearScopedBeans(UserSession userSession) {
+        userSession.getScopeBeanContainer().getDestructionCallbacks().clear();
+        userSession.getScopeBeanContainer().getScopedObjects().clear();
+        userSession.setScopeBeanContainer(null);
+    }
+
 
     private synchronized void putSessionInfo(String httpSessionId, UserSession userSession) {
         SessionInfo sessionInfo = new SessionInfo();
         sessionInfo.setSessionId(userSession.getConversationUniqueId());
+        sessionInfo.setHttpSessionId(httpSessionId);
         sessionInfo.setLogonTime(new Date(userSession.getCreationTimestamp().toEpochMilli()));
         sessionInfo.setUserName(userSession.getSystemUser().getLogin());
         sessionInfo.setNodeUrl(nodeUrl);
@@ -215,12 +244,16 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
                 boolean response = removeUserSession(httpSession.getId());
 
                 if (response) {
-                    FhLogger.info("Removed expired session for {}.", getUserLogin(session), session.getFhSessionId(), httpSession.getId());
+                    FhLogger.info("Removed expired session {} for {}. FhSessionId: {}, HTTPSessionID: {}",session, getUserLogin(session), session.getFhSessionId(), httpSession.getId());
                 }else{
                     FhLogger.error("Unsuccessful attempt to delete the session for {}", getUserLogin(session));
                 }
             }
         }
+//        else {
+//            FhLogger.info("Removed orphan HTTP session {}.", httpSession.getId());
+//            orphanSessions.remove(httpSession);
+//        }
         leakedSessionRemoverCron.cleanupLeakedSessions();
     }
 

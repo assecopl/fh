@@ -28,7 +28,10 @@ class Table extends TableWithKeyboardEvents {
 
     public lastRowClicked: number = null;
 
-    private checkAllArray: Array<any> = []
+    private checkAllArray: Array<any> = [];
+
+    protected sortedBy: any;
+    protected sortDirection: any;
 
     constructor(componentObj: any, parent: HTMLFormComponent) {
         super(componentObj, parent);
@@ -53,6 +56,10 @@ class Table extends TableWithKeyboardEvents {
         this.totalColumns = 0;
 
         this.table = null;
+
+        this.sortedBy = null;
+        this.sortDirection = null;
+
     }
 
     create() {
@@ -737,6 +744,45 @@ class Table extends TableWithKeyboardEvents {
             }
         }
     }
+
+    changeSort(newSortedBy, newSortDirection) {
+        this.sortedBy = newSortedBy;
+        this.changesQueue.queueAttributeChange('sortBy', newSortedBy);
+        if (newSortDirection !== undefined) { // undefined -> not changed
+            this.sortDirection = newSortDirection;
+        }
+        // always send sortDirection with sortedBy change
+        this.changesQueue.queueAttributeChange('direction', this.sortDirection);
+        this.cleanUpSortableComponents();
+
+        this.fireEventWithLock('onSortChange', null);
+    };
+
+    cleanUpSortableComponents() {
+        this.components.forEach(function (component) {
+            if (component.isSortable && component.id != this.sortedBy) {
+                let icon = component.sorter.firstChild;
+                icon.classList.remove('fa-sort-amount-down');
+                icon.classList.remove('fa-sort-amount-up');
+                icon.classList.add('fa-sort');
+                if (component.subColumnsExists && component.subColumnsExists == true) {
+                }
+            } else if (component.isSortable == false && component.subColumnsExists
+                && component.subColumnsExists == true) {
+                let sortedBy = this.sortedBy;
+                $('.parent-' + component.id).each(function () {
+                    let element = $(this);
+                    if (element.attr('data-sorter') != sortedBy) {
+                        let icon = element.children();
+                        icon.removeClass('fa-sort-amount-down');
+                        icon.removeClass('sort-amount-down');
+                        icon.addClass('fa-sort');
+                    }
+                });
+            }
+
+        }.bind(this));
+    };
 
 }
 

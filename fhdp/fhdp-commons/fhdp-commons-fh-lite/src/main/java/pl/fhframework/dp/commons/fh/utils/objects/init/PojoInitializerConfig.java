@@ -33,6 +33,7 @@ public class PojoInitializerConfig {
         addToSkipByType(Map.class);
         addToSkipByType(LocalDateTime.class);
         addToSkipByType(LocalDate.class);
+        skipByType.add("byte[]");
     }
     public void addToSkipByType(Class type) {
         skipByType.add(type.getCanonicalName());

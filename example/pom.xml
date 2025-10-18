@@ -6,15 +6,17 @@
     <parent>
         <groupId>pl.fhframework</groupId>
         <artifactId>fh-boot-bom</artifactId>
-        <version>4.10.8</version>
+        <version>4.10.9</version>
         <relativePath>../bom-project-lite/fh-boot-bom</relativePath>
     </parent>
 
     <groupId>pl.fhframework.example</groupId>
     <artifactId>example</artifactId>
+    <name>example</name>
 
     <properties>
-        <fh.version>4.10.8</fh.version>
+        <fh.version>4.10.9</fh.version>
+        <central.skip>true</central.skip>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>

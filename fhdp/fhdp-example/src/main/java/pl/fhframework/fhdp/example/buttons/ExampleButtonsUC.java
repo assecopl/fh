@@ -26,6 +26,22 @@ public class ExampleButtonsUC implements IInitialUseCase {
 
     @Action
     public void test() {
+
+        if(model.getTestMode().equals("TEXT")) {
+            model.setTestMode("JSON");
+            model.setTestContent(model.getTestJSON());
+        } else
+        if(model.getTestMode().equals("JSON")) {
+            model.setTestMode("XML");
+            model.setTestContent(model.getTestXML());
+        } else
+        if(model.getTestMode().equals("XML")) {
+            model.setTestMode("TEXT");
+            model.setTestContent("text content");
+        }
+
+
+
         Messages.showInfoMessage(getUserSession(), "test");
     }
 

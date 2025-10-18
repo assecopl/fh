@@ -398,7 +398,7 @@ public class DictionaryComboFhDP extends ComboFhDP implements IGroupingComponent
 
     @Override
     protected boolean processValueBinding(ElementChanges elementChanges) {
-//        System.out.println("processValueBinding... elementId: "
+//        log.debug("processValueBinding... elementId: "
 //                + elementChanges.getFormElementId()
 //                + "; MyID: " + this.getId());
 
@@ -410,17 +410,17 @@ public class DictionaryComboFhDP extends ComboFhDP implements IGroupingComponent
                     value = null;
                 }
                 if(currentValue == null && value == null) return false;
-//                System.out.println("processValueBinding... value: " + value);
+//                log.debug("processValueBinding... value: " + value);
                 if((currentValue == null) || !currentValue.equals(value)) {
-                    System.out.println("processValueBinding... change from: " + currentValue + " to " + value);
+                    log.debug("processValueBinding... change from: " + currentValue + " to " + value);
                     currentValue = value;
                     if (displayOnlyCode) {
-                        System.out.println("processValueBinding. displayOnlyCode = true");
+                        log.debug("processValueBinding. displayOnlyCode = true");
                         rawValue = (value == null)? null :  String.valueOf(value);
                         filterText = rawValue;
                         selectedItem = filterText;
                     } else {
-                        System.out.println("processValueBinding. displayOnlyCode = false");
+                        log.debug("processValueBinding. displayOnlyCode = false");
                         if(value != null) {
                             filterText = String.valueOf(value);
                             selectedItem = getValueFromProvider(filterText);
@@ -437,9 +437,9 @@ public class DictionaryComboFhDP extends ComboFhDP implements IGroupingComponent
                         }
                     }
                     if(!this.searchPerformed) {
-                        System.out.println("processValueBinding. New rawValue: " + ((rawValue == null) ? "real null" : rawValue));
+                        log.debug("processValueBinding. New rawValue: " + ((rawValue == null) ? "real null" : rawValue));
                         elementChanges.addChange(VALUE_FOR_CHANGED_BINDING_ATTR, (rawValue == null) ? "" : rawValue);
-                        System.out.println("After processValueBinding. dirty: " + dirty);
+                        log.debug("After processValueBinding. dirty: " + dirty);
                     }
                     return true;
                 }
@@ -509,14 +509,14 @@ public class DictionaryComboFhDP extends ComboFhDP implements IGroupingComponent
 
     @Override
     public void updateModel(ValueChange valueChange){
-//        System.out.println("updateModel... valueSelected: " + valueSelected);
+//        log.debug("updateModel... valueSelected: " + valueSelected);
         if(valueChange.hasAttributeChanged("text")){
             String newValue = valueChange.getStringAttribute("text");
             if("null".equals(newValue)) {
                 newValue = null;
             }
             String refValue = filterText;
-            System.out.println("updateModel... new value: " + ((newValue == null)?"real null":"string null"));
+            log.debug("updateModel... new value: " + ((newValue == null)?"real null":"string null"));
             if(newValue == null) {
                 dirty = true;
                 rawValue = null;
@@ -533,7 +533,7 @@ public class DictionaryComboFhDP extends ComboFhDP implements IGroupingComponent
                 if (!newValue.equals(refValue)) {
                     dirty = true;
                     rawValue = newValue;
-                    System.out.println("updateModel... changed rawValue: " + rawValue);
+                    log.debug("updateModel... changed rawValue: " + rawValue);
                     filterText = rawValue;
                     boolean singleSearch = this.rawValue!=null && (!dirty || !getAvailability().equals(AccessibilityEnum.EDIT));
                     search(singleSearch, true);
@@ -542,7 +542,7 @@ public class DictionaryComboFhDP extends ComboFhDP implements IGroupingComponent
 //            refreshView();
         }
         if(valueSelected) {
-            System.out.println("updateModel... value selected: " + rawValue);
+            log.debug("updateModel... value selected: " + rawValue);
             valueSelected = false;
             Object result = null;
             if(filterText != null) {
@@ -568,7 +568,7 @@ public class DictionaryComboFhDP extends ComboFhDP implements IGroupingComponent
         }
         if(valueChange.hasAttributeChanged("dirty")){
             dirty = valueChange.getBooleanAttribute("dirty");
-            System.out.println("updateModel. Changed dirty to: " + dirty);
+            log.debug("updateModel. Changed dirty to: " + dirty);
         }
     }
 
@@ -656,13 +656,13 @@ public class DictionaryComboFhDP extends ComboFhDP implements IGroupingComponent
 
     @Override
     public Optional<ActionBinding> getEventHandler(InMessageEventData eventData) {
-        System.out.println("getEventHandler: " + eventData.getEventType() + "; " + ((eventData.getActionName() == null) ? "real null" : eventData.getActionName()));
+        log.debug("getEventHandler: " + eventData.getEventType() + "; " + ((eventData.getActionName() == null) ? "real null" : eventData.getActionName()));
         if(isCountableEvent(eventData.getEventType())) {
             if (!eventData.getEventType().equals(lastEvent)) {
                 counter = 0;
                 switch (eventData.getEventType()) {
                     case "onClickSearchIcon":
-                        System.out.println("onClickSearchIcon. dirty: " + dirty);
+                        log.debug("onClickSearchIcon. dirty: " + dirty);
                         boolean singleSearch = this.rawValue!=null && (!dirty || !getAvailability().equals(AccessibilityEnum.EDIT));
                         search(singleSearch, true);
                         break;

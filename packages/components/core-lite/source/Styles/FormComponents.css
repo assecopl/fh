@@ -133,8 +133,8 @@ span.required {
 
 .requiredField {
     font-size: .5em;
-    position: absolute;
-    top: 0;
+    position: relative;
+    top: -5px;
 }
 .tooltip {
     pointer-events: none;
