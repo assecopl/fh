@@ -8,6 +8,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>fhdp-commons-poi</artifactId>
+    <name>fhdp-commons-poi</name>
     <dependencyManagement>
         <dependencies>
             <dependency>

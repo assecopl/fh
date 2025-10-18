@@ -5,7 +5,9 @@ import lombok.Setter;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -56,4 +58,6 @@ public class MockObject {
   private NestedObject emptyNestedObject;
   private List<NestedObject> emptyNestedObjects = new ArrayList();
   private List<NestedObject> nestedObjects = new ArrayList();
+  private Set<NestedObject> emptyNestedObjectSet = new HashSet();
+  private Set<NestedObject> nestedObjectSet = new HashSet();
 }

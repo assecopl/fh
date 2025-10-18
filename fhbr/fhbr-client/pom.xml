@@ -26,6 +26,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>fhbr-client</artifactId>
+    <name>fhbr-client</name>
+
     <packaging>pom</packaging>
     <modules>
         <module>fhbr-client-direct</module>

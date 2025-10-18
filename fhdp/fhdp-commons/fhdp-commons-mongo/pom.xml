@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>fhdp-commons-mongo</artifactId>
+    <name>fhdp-commons-mongo</name>
 
     <packaging>jar</packaging>
 

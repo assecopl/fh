@@ -15,6 +15,7 @@ public class TestConfig {
         MockObject mockObject = new MockObject();
         mockObject.setStringTest("test");
         mockObject.getNestedObjects().add(createNestedObject());
+        mockObject.getNestedObjectSet().add(createNestedObject());
         mockObject.setNestedObject(createNestedObject());
         mockObject.setEmptyNestedObject(new NestedObject());
         byte[] bytes = new byte[100];

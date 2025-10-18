@@ -25,10 +25,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>fhbr-test-mock</artifactId>
+    <name>fhbr-test-mock</name>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
+        <central.skip>true</central.skip>
     </properties>
 
     <dependencies>

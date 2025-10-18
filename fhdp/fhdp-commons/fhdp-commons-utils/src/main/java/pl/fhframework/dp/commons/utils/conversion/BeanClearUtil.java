@@ -25,7 +25,7 @@ public class BeanClearUtil {
      */
     if (object == null) {
       throw new NullPointerException();
-    } else if (isSimpleObjectType(object) || isArray(object) || isMap(object)) {
+    } else if (isSimpleObjectType(object) || isArray(object) || isMap(object) || isSet(object)) {
       throw new Error("Object type is not supported");
     }
 
@@ -47,7 +47,6 @@ public class BeanClearUtil {
     Field[] fields =  object.getClass().getDeclaredFields();
     for (Field field: fields) {
       field.setAccessible(true);
-      if(field.getType().isEnum()) continue;
       if(field.getType().isArray()) continue;
       /**
        * Checks a type of the field as well as its value, returns true on the right is the field has a value as fallows:
@@ -104,6 +103,14 @@ public class BeanClearUtil {
          */
         isEmpty = false;
       }
+    } else if(isSet(object)) {
+      Set set = (Set) object;
+      if (!handleSet(set)) {
+        /**
+         * At least one property of the array, is not null, so the array cannot be null too
+         */
+        isEmpty = false;
+      }
     } else if (isMap(object)) {
       HashMap map = (HashMap) object;
       if (!handleMap(map)) {
@@ -112,6 +119,9 @@ public class BeanClearUtil {
          */
         isEmpty = false;
       }
+    } else if (object instanceof Enum) {
+        //if enum different then null always not empty
+        isEmpty = false;
     } else {
       if (!clear(object)) {
         /**
@@ -188,6 +198,35 @@ public class BeanClearUtil {
     }
   }
 
+  /**
+   * Handles Set objects
+   * @param set
+   * @throws IllegalAccessException
+   */
+  private static boolean handleSet(Set set) throws IllegalAccessException {
+    boolean isEmpty = true;
+    Iterator iterator = set.iterator();
+    while (iterator.hasNext()) {
+      Object element = iterator.next();
+      if(element != null && isSimpleObjectType(element)) {
+        /**
+         * At least one property of the set, is not null, so the set cannot be null too
+         */
+        isEmpty = false;
+      } else {
+        if (!handleObject(element)) {
+          /**
+           * At least one property of the set, is not null, so the set cannot be null too
+           */
+          isEmpty = false;
+        } else {
+          set.remove(element);
+        }
+      }
+    }
+    return isEmpty;
+  }
+
 
   /**
    * Handles array objects
@@ -210,7 +249,7 @@ public class BeanClearUtil {
            */
           isEmpty = false;
         } else {
-          arrayElement = null;
+          array.remove(arrayElement);
         }
       }
     }
@@ -241,7 +280,7 @@ public class BeanClearUtil {
            */
           isEmpty = false;
         } else {
-          mapElementEntry = null;
+         map.remove(mapElementEntry);
         }
       }
     }
@@ -306,9 +345,20 @@ public class BeanClearUtil {
    * @param object
    * @return
    */
+  private static boolean isSet(Object object) {
+    if(object instanceof Set) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Checks all kind of ArrayList types and returns true/false accordingly
+   * @param object
+   * @return
+   */
   private static boolean isArray(Object object) {
-    if(object instanceof Array || object instanceof ArrayList || object instanceof List ||
-       object instanceof Collection) {
+    if(object instanceof Array || object instanceof List) {
       return true;
     }
     return false;

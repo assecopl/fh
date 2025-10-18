@@ -1,5 +1,7 @@
 package pl.fhframework.dp.commons.utils.net.ssl;
 
+import lombok.extern.slf4j.Slf4j;
+
 import javax.net.ssl.*;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -16,6 +18,7 @@ import java.security.KeyStore;
  * @version :  $, :  $
  * @created 07/10/2019
  */
+@Slf4j
 public class MutualSSLSocketFactoryBuilderFiles {
 
     private String alias = null;
@@ -45,11 +48,11 @@ public class MutualSSLSocketFactoryBuilderFiles {
 
         //For each key manager, check if it is a X509KeyManager (because we will override its       //functionality
         for (int i = 0; i < keyManagers.length; i++) {
-            System.out.println("###### keyManager: " + keyManagers[i].getClass().getCanonicalName());
+            log.debug("###### keyManager: " + keyManagers[i].getClass().getCanonicalName());
             if (keyManagers[i] instanceof X509KeyManager) {
                 AliasSelectorKeyManager nkm = new AliasSelectorKeyManager((X509KeyManager) keyManagers[i], alias);
                 keyManagers[i] = nkm;
-                System.out.println("###### replacing keyManager");
+                log.debug("###### replacing keyManager");
             }
         }
 
@@ -67,7 +70,7 @@ public class MutualSSLSocketFactoryBuilderFiles {
         //Init a key store with the given file.
 
         String alg = KeyManagerFactory.getDefaultAlgorithm();
-        System.out.println("#####KeyManagerFactory.getDefaultAlgorithm: " + alg);
+        log.debug("#####KeyManagerFactory.getDefaultAlgorithm: " + alg);
         KeyManagerFactory kmFact = KeyManagerFactory.getInstance(alg);
 
         InputStream isKeyStore = new FileInputStream(keyStore);

@@ -1,10 +1,20 @@
 {
   "name": "fh-forms-handler",
-  "version": "4.10.8-SNAPSHOT-1720177198990",
+  "version": "4.10.901",
   "main": "dist/Module.js",
   "types": "dist/Module.d.ts",
   "description": "fh framework core for frontend",
   "author": "AssecoPL",
+  "contributors": [
+    {
+      "name": "Jacek Borowiec",
+      "email": "jacek.borowiec@asseco.pl"
+    },
+    {
+      "name": "Paweł Domański",
+      "email": "pawel.domanski@asseco.pl"
+    }
+  ],
   "license": "Apache License 2.0",
   "scripts": {
     "prepublishOnly": "node prepublish",

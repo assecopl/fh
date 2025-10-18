@@ -89,20 +89,6 @@ public class TablePaged extends Table {
 
     @Getter
     @Setter
-    @DesignerXMLProperty(functionalArea = BEHAVIOR)
-    @XMLProperty
-    @DocumentedComponentAttribute(value = "Property name by default passed in the Pageable object to be interpreted in a data source (eg. DAO)")
-    private String defaultSortBy;
-
-    @Getter
-    @Setter
-    @DesignerXMLProperty(functionalArea = BEHAVIOR)
-    @XMLProperty(defaultValue = "true")
-    @DocumentedComponentAttribute(value = "If defaultSortBy is set this property decides if default order is ascending ", defaultValue = "true")
-    private boolean defaultSortByAsc = true;
-
-    @Getter
-    @Setter
     @XMLProperty(defaultValue = "false")
     @DocumentedComponentAttribute(value = "Add additional pagination and page size select above the table")
     @DesignerXMLProperty(functionalArea = SPECIFIC, priority = 16)
@@ -267,7 +253,7 @@ public class TablePaged extends Table {
             String sortBy = valueChange.getStringAttribute(SORT_BY_ATTRIBUTE);
             String directionString = valueChange.getStringAttribute(DIRECTION_ATTRIBUTE);
             Direction direction = directionString != null ? Direction.valueOf(directionString) : null;
-            ColumnPaged column = (ColumnPaged) getSortingColumn(sortBy, getColumns());
+            ColumnPaged column = (ColumnPaged) this.getSortingColumn(sortBy, getColumns());
             // change sort direction or property
             this.pageable = PageRequest.of(pageNumber, this.pageable.getPageSize(), direction, column.getSortBy());
 //            this.pageable = new PageRequest(pageNumber, this.pageable.getPageSize(), direction, column.getSortBy());
@@ -453,20 +439,5 @@ public class TablePaged extends Table {
         }
     }
 
-    private Column getSortingColumn(String sortBy, List<? extends Component> components) {
-        for (Component component : components) {
-            if (component instanceof Column) {
-                Column column = (Column) component;
-                if (sortBy.equals(column.getId())) {
-                    return column;
-                } else if (column.getSubcomponents() != null) {
-                    Column nestedColumn = getSortingColumn(sortBy, column.getSubcomponents());
-                    if (nestedColumn != null) {
-                        return nestedColumn;
-                    }
-                }
-            }
-        }
-        return null;
-    }
+
 }

@@ -105,17 +105,28 @@ public abstract class GenericDtoService<ID,
         if(query.getTextSearch() != null) {
             String txt = escapeSpecialCharacters(query.getTextSearch() +
                             (query.isWholeWordsOnly()? "": "*"));
-            ret.must(QueryBuilders.queryStringQuery(txt)
-                    .analyzeWildcard(true)
-                    .allowLeadingWildcard(false));
+            if(txt.startsWith("*")) {
+                txt = removeLeadingAsterisks(txt).trim();
+            }
+            if(StringUtils.isEmpty(txt)) {
+                ret.must(QueryBuilders.matchAllQuery());
+            } else {
+                ret.must(QueryBuilders.queryStringQuery(txt)
+                        .analyzeWildcard(true)
+                        .allowLeadingWildcard(false));
+            }
         }
         ret = extendQueryBuilder(ret, query);
         return ret;
     }
-    //TODO: English
+
+    public String removeLeadingAsterisks(String input) {
+        return input.replaceFirst("^\\*+", "");
+    }
+
     /**
      *
-     * Metoda rozszerzająca podstawowy queryBuilder, zapewniający wyszukiwanie pełnotekstowe.
+     * Method extending base queryBuilder, for specific services.
      * @param builder
      * @param query
      * @return

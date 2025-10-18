@@ -31,10 +31,12 @@
         <module>securityDataProvider-remote</module>
         <module>securityDataProvider-rest</module>
         <module>securityDataProvider-cached</module>
+        <module>securityDataProvider-ad</module>
         <module>permissionProvider-jdbc</module>
         <module>permissionProvider-rest</module>
         <module>permissionProvider-standalone</module>
         <module>pubsub-standalone</module>
+        <module>pubsub-cluster</module>
         <module>reportsLite</module>
         <module>chartsControls</module>
         <module>coreApplication</module>

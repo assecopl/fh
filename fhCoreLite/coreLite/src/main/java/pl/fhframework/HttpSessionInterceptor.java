@@ -21,7 +21,7 @@ public class HttpSessionInterceptor extends HttpSessionHandshakeInterceptor {
         boolean res = super.beforeHandshake(request, response, wsHandler, attributes);
         HttpSession httpSession = getSession(request);
         WebSocketSessionManager.prepareHttpSession(httpSession);
-        FhLogger.info("HttpSession prepared");
+        FhLogger.info("HttpSession {} prepared", httpSession == null? "null":httpSession.getId());
         attributes.put(WebSocketSessionManager.HTTP_SESSION_KEY, httpSession);
         return res;
     }

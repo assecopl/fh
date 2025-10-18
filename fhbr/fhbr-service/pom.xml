@@ -25,6 +25,7 @@
         <relativePath>../fhbr-bom/pom.xml</relativePath>
     </parent>
     <artifactId>fhbr-service</artifactId>
+    <name>fhbr-service</name>
 
     <packaging>pom</packaging>
 

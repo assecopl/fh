@@ -27,6 +27,7 @@ public abstract class Session {
 
     protected SystemUser systemUser;
 
+    @Setter
     private SessionScopeBeanContainer scopeBeanContainer = new SessionScopeBeanContainer();
 
     @Setter(AccessLevel.NONE)

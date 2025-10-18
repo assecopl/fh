@@ -12,6 +12,7 @@
 
     <groupId>pl.fhframework.example</groupId>
     <artifactId>example</artifactId>
+    <name>example</name>
 
     <properties>
         <fh.version>4.20.0-SNAPSHOT</fh.version>

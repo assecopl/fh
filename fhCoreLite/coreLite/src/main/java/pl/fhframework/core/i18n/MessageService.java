@@ -213,7 +213,11 @@ public class MessageService {
                 }
             }
             //Log key not found.
-            FhLogger.warn(defaultMessage);
+            if(defaultMessage != null) {
+                FhLogger.debug("key not found: " + key+" defaultMessage: " + defaultMessage);
+            } else {
+                FhLogger.warn("key not found: " + key);
+            }
             return defaultMessage;
         }
 

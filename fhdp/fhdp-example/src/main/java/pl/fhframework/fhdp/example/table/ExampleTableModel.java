@@ -21,6 +21,7 @@ public class ExampleTableModel {
         private long id;
         private String name;
         private String description;
+        private AttributeElement element;
         private List<AttributeElement> attributeElementList;
 
         public ListElements(){
@@ -32,6 +33,14 @@ public class ExampleTableModel {
             this.name = name;
             this.description = description;
             this.attributeElementList = attributeElementList;
+        }
+
+        public ListElements(long id, String name, String description, List<AttributeElement> attributeElementList, AttributeElement element) {
+            this.id = id;
+            this.name = name;
+            this.description = description;
+            this.attributeElementList = attributeElementList;
+            this.element = element;
         }
     }
 

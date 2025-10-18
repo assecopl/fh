@@ -25,6 +25,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>fhbr-refdata-validator</artifactId>
+    <name>fhbr-refdata-validator</name>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

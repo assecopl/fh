@@ -25,6 +25,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>fhbr-rule-clazzchecker</artifactId>
+    <name>fhbr-rule-clazzchecker</name>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

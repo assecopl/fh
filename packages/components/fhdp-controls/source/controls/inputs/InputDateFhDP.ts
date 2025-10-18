@@ -132,7 +132,7 @@ class InputDateFhDP extends InputTextFhDP implements LanguageChangeObserver {
         this.createAddon();
 
         this.inputGroupElement.classList.add('date');
-        if (!this.isFormFocusTrap()) {
+        if (!this.getForm().blockFocusForModal) {
             //Move Widget presentation to body for standard forms.
             this.dateTimePickerConfig["widgetParent"] = 'body';
         }

@@ -5,6 +5,7 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import pl.fhframework.core.i18n.MessageService;
+import pl.fhframework.core.logging.FhLogger;
 import pl.fhframework.dp.commons.fh.outline.ElementCT;
 import pl.fhframework.dp.commons.fh.outline.TreeElement;
 import pl.fhframework.dp.transport.dto.operations.OperationDtoQuery;
@@ -32,6 +33,7 @@ public abstract class BaseDocumentHandlingFormModel<DTO, DOC, SUBMODEL extends B
     }
 
     private List<TreeElement<ElementCT>> docLeftMenu;
+    private TreeElement<ElementCT> activeLeftMenuElement;
     private String searchParam;
     private Map<String, String> searchMap;
     private List<String> searchPointers;
@@ -57,11 +59,15 @@ public abstract class BaseDocumentHandlingFormModel<DTO, DOC, SUBMODEL extends B
     private IDocumentHandler documentHandler;
 
     public AccessibilityEnum getOperationAccessibility(String opCode) {
+        AccessibilityEnum ret = AccessibilityEnum.EDIT;
         if(documentHandler != null) {
-            return documentHandler.getOperationAccessibility(opCode);
-        } else {
-            return AccessibilityEnum.EDIT;
+            ret = documentHandler.getOperationAccessibility(opCode);
         }
+        if(System.getProperty("fhdp.operation.accessibility.log", "false").equalsIgnoreCase("true")) {
+            FhLogger.info("Operation accessibility for code {}: {}", opCode, ret.name());
+        }
+        return ret;
+
     }
 
     public abstract Long getDocId();

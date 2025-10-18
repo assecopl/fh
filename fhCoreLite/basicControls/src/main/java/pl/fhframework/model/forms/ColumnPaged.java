@@ -15,17 +15,6 @@ import pl.fhframework.model.dto.ElementChanges;
 @Control(parents = {TablePaged.class, ColumnPaged.class})
 public class ColumnPaged extends Column {
 
-    @Getter
-    @Setter
-    private boolean sortable = false;
-
-    @JsonIgnore
-    @Getter
-    @Setter
-    @DocumentedComponentAttribute(value = "Property name passed in the Pageable object to be interpreted in a data source (eg. DAO)")
-    @XMLProperty
-    @DesignerXMLProperty(commonUse = true)
-    private String sortBy;
 
     public ColumnPaged(Form form) {
         super(form);
@@ -33,21 +22,5 @@ public class ColumnPaged extends Column {
 
     public void init() {
         super.init();
-        sortable = !StringUtils.isNullOrEmpty(sortBy) && !isSubColumnsExists();
-    }
-
-    @Override
-    public ElementChanges updateView() {
-        ElementChanges elementChanges = super.updateView();
-
-        boolean sortable = sortBy != null && !sortBy.isEmpty();
-
-        if (!areValuesTheSame(this.sortable, sortable)) {
-            this.refreshView();
-            this.sortable = sortable;
-            elementChanges.addChange("sortable", this.sortable);
-        }
-
-        return elementChanges;
     }
 }

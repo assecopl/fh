@@ -223,7 +223,6 @@ public class FormReader extends XMLReader<Component, Form<?>> {
                                    XMLReaderWorkContext<Form<?>> XMLReaderWorkContext) {
 
 //        if (!"Form".equals(tagName)) for (int i = 0; i < readObjectsStack.size(); i++) System.out.print("   ");
-        //System.out.println(tagName);
         if (readObjectsStack.peek() instanceof AvailabilityConfiguration) {
             AvailabilityEnum tag = AvailabilityEnum.getTag(tagName);
             AvailabilityConfiguration availabilityConfiguration = (AvailabilityConfiguration) readObjectsStack.peek();

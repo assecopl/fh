@@ -201,13 +201,12 @@ public class RefDataValidator {
                           //sTime = System.currentTimeMillis();
                       NodeList nodeList = selectNodeList(node, "preceding-sibling::" + getNodeName(node) );
                       //eTime = System.currentTimeMillis();
-                      //System.out.println("selectNodeList time: " + (eTime - sTime)/1000.0 + " [s]" );
+
                       if (nodeList != null) pos += nodeList.getLength();
 
                       //sTime = System.currentTimeMillis();
                       //XPathAPI.eval(node, "count(preceding-sibling::" + getNodeName(node) +")");
                       //eTime = System.currentTimeMillis();
-                      //System.out.println("selectNodeList time2: " + (eTime - sTime)/1000.0 + " [s]" );
 
 
                   } catch (XPathExpressionException ex) {
@@ -253,7 +252,7 @@ public class RefDataValidator {
                             }
                         }
                     }
-                    break;
+                    return "";
                 case Node.ATTRIBUTE_NODE:
                     return node.getNodeValue();
                 case Node.TEXT_NODE:

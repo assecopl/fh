@@ -8,6 +8,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>fhdp-commons-ds-service</artifactId>
+    <name>fhdp-commons-ds-service</name>
 
     <dependencyManagement>
         <dependencies>
