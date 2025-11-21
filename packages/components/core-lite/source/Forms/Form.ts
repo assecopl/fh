@@ -156,8 +156,6 @@ class Form extends HTMLFormComponent {
         if (this.formType === 'STANDARD') {
             this.container.innerHTML = '';
         }
-        this.display();
-        this.createComponents();
 
         function isDescendant(parent, child) {
             var node = child.parentNode;
