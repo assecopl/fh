@@ -178,8 +178,10 @@ class Form extends HTMLFormComponent {
 
             $(this.htmlElement).one('shown.bs.modal', function () {
                 while (this.contentWrapper != null && this.contentWrapper.firstChild) this.contentWrapper.removeChild(this.contentWrapper.firstChild);
-                this.renderSubcomponents();
                 this.modalDeferred.resolve();
+                this.display();
+                this.createComponents();
+                this.renderSubcomponents();
                 this.focusFirstActiveInputElement(true);
 
                 /**
@@ -222,6 +224,8 @@ class Form extends HTMLFormComponent {
                 this.wcagUtil.fireFocusOnReturn = true;
             }.bind(this))
         } else {
+            this.display();
+            this.createComponents();
             this.renderSubcomponents();
             this.focusFirstActiveInputElement();
         }
