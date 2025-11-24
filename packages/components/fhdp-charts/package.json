@@ -1,6 +1,6 @@
 {
   "name": "fhdp-charts",
-  "version": "4.10.901",
+  "version": "4.10.10-SNAPSHOT-1763720458337",
   "author": "AssecoPL",
   "contributors": [
     {
@@ -38,8 +38,8 @@
   },
   "dependencies": {
     "canvas": "3.1.0",
-    "fh-basic-controls": "4.10.901",
-    "fh-forms-handler": "4.10.901",
+    "fh-basic-controls": "4.10.10-SNAPSHOT-1763720458337",
+    "fh-forms-handler": "4.10.10-SNAPSHOT-1763720458337",
     "konva": "8.4.2"
   }
 }
