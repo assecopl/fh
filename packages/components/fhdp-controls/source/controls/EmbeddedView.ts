@@ -220,8 +220,10 @@ class EmbeddedView extends HTMLFormComponent {
         /**
          * Uruchamiamy prezentacje kontrolki , funkcja zapewnia obsługę accesibalitys, podłącza klasy css które przyszły z backendu oraz
          * wstawia kontrolkę w odpowiednie miejsce na stronie(podstawia odpowiedniemu rodzicowi)
+         * FIX - jeżeli zrobimy tutaj display zawartość okna ładuje się dwa razu - 1 raz przy tym dieplay-u i 2 raz gdy From wykona funkcje renderComponents.
+         * Ograniczamy prezentacji tylko do rugiego wywołania.
          */
-        this.display();
+        // this.display();
     };
 
     /**
