@@ -81,6 +81,8 @@ public class LeakedSessionRemoverCron {
             if (sessionKeysToRemove.size()>0) {
                 unkomonEmergencySessionRemovalInUserSessionsByConversationId(sessionKeysToRemove);
             }
+            //Orphans cleanup
+            userSessionRepository.invalidateExpiredOrphanSessions(emergencyRemovalTimeUnusedSessionInSeconds);
         }
     }
 
