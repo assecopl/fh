@@ -3193,23 +3193,23 @@ fastq@^1.6.0:
     reusify "^1.0.4"
 
 "fh-application@file:D:\\fh\\packages\\applications\\default-application":
-  version "4.10.10-SNAPSHOT-1763720458337"
+  version "4.10.10-SNAPSHOT-1764236059368"
   resolved "file:applications/default-application"
   dependencies:
-    fh-basic-controls "4.10.10-SNAPSHOT-1763720458337"
-    fh-charts-controls "4.10.10-SNAPSHOT-1763720458337"
-    fh-forms-handler "4.10.10-SNAPSHOT-1763720458337"
-    fhdp-controls "4.10.10-SNAPSHOT-1763720458337"
+    fh-basic-controls "4.10.10-SNAPSHOT-1764236059368"
+    fh-charts-controls "4.10.10-SNAPSHOT-1764236059368"
+    fh-forms-handler "4.10.10-SNAPSHOT-1764236059368"
+    fhdp-controls "4.10.10-SNAPSHOT-1764236059368"
 
-fh-basic-controls@4.10.10-SNAPSHOT-1763719264532:
-  version "4.10.10-SNAPSHOT-1763719264532"
-  resolved "https://registry.npmjs.org/fh-basic-controls/-/fh-basic-controls-4.10.10-SNAPSHOT-1763719264532.tgz"
-  integrity sha512-g/opsJptO+DgiOlGBPVUxaUD0NhQKtJemZqP1u2jYDBqzNNssrUbVEl2DiZKBxc5aID6mVspsOlWEwmGYhlzUQ==
+fh-basic-controls@4.10.10-SNAPSHOT-1763720458337:
+  version "4.10.10-SNAPSHOT-1763720458337"
+  resolved "https://registry.npmjs.org/fh-basic-controls/-/fh-basic-controls-4.10.10-SNAPSHOT-1763720458337.tgz"
+  integrity sha512-l6h6+Gg6lS+3aY+450OFUlfKDXOLFqzEgwNtzbud+srUxdIVCWZOSOk+nUFWhrkcBWb24nov+UBw0G/6w8713Q==
   dependencies:
     ace-builds "1.41.0"
     bootstrap "4.4.1"
     copyfiles "2.4.1"
-    fh-forms-handler "4.10.10-SNAPSHOT-1763719264532"
+    fh-forms-handler "4.10.10-SNAPSHOT-1763720458337"
     highlightjs "9.12.0"
     hotkeys-js "3.6.14"
     jquery "3.5.1"
@@ -3223,14 +3223,14 @@ fh-basic-controls@4.10.10-SNAPSHOT-1763719264532:
     select2-theme-bootstrap4 "1.0.2"
     summernote "0.8.12"
 
-fh-basic-controls@4.10.10-SNAPSHOT-1763720458337, "fh-basic-controls@file:D:\\fh\\packages\\components\\basic-controls":
-  version "4.10.10-SNAPSHOT-1763720458337"
+fh-basic-controls@4.10.10-SNAPSHOT-1764236059368, "fh-basic-controls@file:D:\\fh\\packages\\components\\basic-controls":
+  version "4.10.10-SNAPSHOT-1764236059368"
   resolved "file:components/basic-controls"
   dependencies:
     ace-builds "1.41.0"
     bootstrap "4.4.1"
     copyfiles "2.4.1"
-    fh-forms-handler "4.10.10-SNAPSHOT-1763720458337"
+    fh-forms-handler "4.10.10-SNAPSHOT-1764236059368"
     highlightjs "9.12.0"
     hotkeys-js "3.6.14"
     jquery "3.5.1"
@@ -3244,18 +3244,18 @@ fh-basic-controls@4.10.10-SNAPSHOT-1763720458337, "fh-basic-controls@file:D:\\fh
     select2-theme-bootstrap4 "1.0.2"
     summernote "0.8.12"
 
-fh-charts-controls@4.10.10-SNAPSHOT-1763720458337, "fh-charts-controls@file:D:\\fh\\packages\\components\\charts-controls":
-  version "4.10.10-SNAPSHOT-1763720458337"
+fh-charts-controls@4.10.10-SNAPSHOT-1764236059368, "fh-charts-controls@file:D:\\fh\\packages\\components\\charts-controls":
+  version "4.10.10-SNAPSHOT-1764236059368"
   resolved "file:components/charts-controls"
   dependencies:
     chart.js "2.9.4"
     copyfiles "2.4.1"
-    fh-forms-handler "4.10.10-SNAPSHOT-1763720458337"
+    fh-forms-handler "4.10.10-SNAPSHOT-1764236059368"
 
-fh-forms-handler@4.10.10-SNAPSHOT-1763719264532:
-  version "4.10.10-SNAPSHOT-1763719264532"
-  resolved "https://registry.npmjs.org/fh-forms-handler/-/fh-forms-handler-4.10.10-SNAPSHOT-1763719264532.tgz"
-  integrity sha512-FV2Vkng1zauJUydvE8lhTXvNxap1n9XJEIs/K5h+KF7mMCWO/srqX2T7MG9Wo+OcIHwgib7ZHUcoxD4sAnH8QQ==
+fh-forms-handler@4.10.10-SNAPSHOT-1763720458337:
+  version "4.10.10-SNAPSHOT-1763720458337"
+  resolved "https://registry.npmjs.org/fh-forms-handler/-/fh-forms-handler-4.10.10-SNAPSHOT-1763720458337.tgz"
+  integrity sha512-uQipKPJKP1k2J3uygm/8vBNQM8A6xMgFauPvIOUHedYKyHpEQdkybhkWoG5MuWfjHCIeE/1QVJ0f/oHOJZLv5A==
   dependencies:
     "@fortawesome/fontawesome-free" "5.15.3"
     bootstrap "4.4.1"
@@ -3269,8 +3269,8 @@ fh-forms-handler@4.10.10-SNAPSHOT-1763719264532:
     popper.js "1.16.0"
     reflect-metadata "0.1.13"
 
-fh-forms-handler@4.10.10-SNAPSHOT-1763720458337, "fh-forms-handler@file:D:\\fh\\packages\\components\\core-lite":
-  version "4.10.10-SNAPSHOT-1763720458337"
+fh-forms-handler@4.10.10-SNAPSHOT-1764236059368, "fh-forms-handler@file:D:\\fh\\packages\\components\\core-lite":
+  version "4.10.10-SNAPSHOT-1764236059368"
   resolved "file:components/core-lite"
   dependencies:
     "@fortawesome/fontawesome-free" "5.15.3"
@@ -3286,23 +3286,23 @@ fh-forms-handler@4.10.10-SNAPSHOT-1763720458337, "fh-forms-handler@file:D:\\fh\\
     reflect-metadata "0.1.13"
 
 "fhdp-charts@file:D:\\fh\\packages\\components\\fhdp-charts":
-  version "4.10.10-SNAPSHOT-1763720458337"
+  version "4.10.10-SNAPSHOT-1764236059368"
   resolved "file:components/fhdp-charts"
   dependencies:
     canvas "3.1.0"
-    fh-basic-controls "4.10.10-SNAPSHOT-1763720458337"
-    fh-forms-handler "4.10.10-SNAPSHOT-1763720458337"
+    fh-basic-controls "4.10.10-SNAPSHOT-1764236059368"
+    fh-forms-handler "4.10.10-SNAPSHOT-1764236059368"
     konva "8.4.2"
 
-fhdp-controls@4.10.10-SNAPSHOT-1763720458337, "fhdp-controls@file:D:\\fh\\packages\\components\\fhdp-controls":
-  version "4.10.10-SNAPSHOT-1763720458337"
+fhdp-controls@4.10.10-SNAPSHOT-1764236059368, "fhdp-controls@file:D:\\fh\\packages\\components\\fhdp-controls":
+  version "4.10.10-SNAPSHOT-1764236059368"
   resolved "file:components/fhdp-controls"
   dependencies:
     "@popperjs/core" "2.5.3"
     bootstrap-table "1.21.4"
     eml-parse-js "1.1.15"
-    fh-basic-controls "4.10.10-SNAPSHOT-1763720458337"
-    fh-forms-handler "4.10.10-SNAPSHOT-1763720458337"
+    fh-basic-controls "4.10.10-SNAPSHOT-1764236059368"
+    fh-forms-handler "4.10.10-SNAPSHOT-1764236059368"
     iso-639-1 "2.1.15"
     jquery-mousewheel "3.1.13"
     jvectormap-next "3.1.1"
@@ -3314,20 +3314,10 @@ fhdp-controls@4.10.10-SNAPSHOT-1763720458337, "fhdp-controls@file:D:\\fh\\packag
     react-popper "2.3.0"
     react-xml-viewer "1.1.0"
 
-fhdp-extenders@4.10.10-SNAPSHOT-1763720458337:
-  version "4.10.10-SNAPSHOT-1763719264532"
-  resolved "https://registry.npmjs.org/fhdp-extenders/-/fhdp-extenders-4.10.10-SNAPSHOT-1763719264532.tgz"
-  integrity sha512-zRCs3SyFuMrgftcXm0hTFgQfPy3rOi4BqkBqk70iPHR7nXoDQkFfhycMlU21vy0zRp2C+kVHNY5ENk90UWs7Xw==
-  dependencies:
-    fh-basic-controls "4.10.10-SNAPSHOT-1763719264532"
-    fh-forms-handler "4.10.10-SNAPSHOT-1763719264532"
-    lodash "4.17.21"
-    moment "2.29.4"
-    moment-timezone "0.5.34"
-
-"fhdp-extenders@file:D:\\fh\\packages\\components\\fhdp-extenders":
+fhdp-extenders@4.10.10-SNAPSHOT-1764236059368:
   version "4.10.10-SNAPSHOT-1763720458337"
-  resolved "file:components/fhdp-extenders"
+  resolved "https://registry.npmjs.org/fhdp-extenders/-/fhdp-extenders-4.10.10-SNAPSHOT-1763720458337.tgz"
+  integrity sha512-+Vjj97z8fEJfHi4CXkljKaGD2xFVEPFMBvK1Dr7Zjejn0/YVQx3d+0tKpcupWWwP0PYEFTNppczmUvgJvZc8FA==
   dependencies:
     fh-basic-controls "4.10.10-SNAPSHOT-1763720458337"
     fh-forms-handler "4.10.10-SNAPSHOT-1763720458337"
@@ -3335,15 +3325,25 @@ fhdp-extenders@4.10.10-SNAPSHOT-1763720458337:
     moment "2.29.4"
     moment-timezone "0.5.34"
 
+"fhdp-extenders@file:D:\\fh\\packages\\components\\fhdp-extenders":
+  version "4.10.10-SNAPSHOT-1764236059368"
+  resolved "file:components/fhdp-extenders"
+  dependencies:
+    fh-basic-controls "4.10.10-SNAPSHOT-1764236059368"
+    fh-forms-handler "4.10.10-SNAPSHOT-1764236059368"
+    lodash "4.17.21"
+    moment "2.29.4"
+    moment-timezone "0.5.34"
+
 "fhdp-fh-starter@file:D:\\fh\\packages\\components\\fhdp-fh-starter":
-  version "4.10.10-SNAPSHOT-1763720458337"
+  version "4.10.10-SNAPSHOT-1764236059368"
   resolved "file:components/fhdp-fh-starter"
   dependencies:
-    fh-basic-controls "4.10.10-SNAPSHOT-1763719264532"
-    fh-charts-controls "4.10.10-SNAPSHOT-1763719264532"
-    fh-forms-handler "4.10.10-SNAPSHOT-1763719264532"
-    fhdp-controls "4.10.10-SNAPSHOT-1763719264532"
-    fhdp-extenders "4.10.10-SNAPSHOT-1763719264532"
+    fh-basic-controls "4.10.10-SNAPSHOT-1763720458337"
+    fh-charts-controls "4.10.10-SNAPSHOT-1763720458337"
+    fh-forms-handler "4.10.10-SNAPSHOT-1763720458337"
+    fhdp-controls "4.10.10-SNAPSHOT-1763720458337"
+    fhdp-extenders "4.10.10-SNAPSHOT-1763720458337"
 
 figures@^3.0.0, figures@3.2.0:
   version "3.2.0"

@@ -1,6 +1,6 @@
 {
   "name": "fhdp-controls",
-  "version": "4.10.10-SNAPSHOT-1763720458337",
+  "version": "4.10.10-SNAPSHOT-1764236059368",
   "author": "AssecoPL",
   "contributors": [
     {
@@ -39,8 +39,8 @@
     "@popperjs/core": "2.5.3",
     "bootstrap-table": "1.21.4",
     "eml-parse-js": "1.1.15",
-    "fh-basic-controls": "4.10.10-SNAPSHOT-1763720458337",
-    "fh-forms-handler": "4.10.10-SNAPSHOT-1763720458337",
+    "fh-basic-controls": "4.10.10-SNAPSHOT-1764236059368",
+    "fh-forms-handler": "4.10.10-SNAPSHOT-1764236059368",
     "iso-639-1": "2.1.15",
     "jquery-mousewheel": "3.1.13",
     "jvectormap-next": "3.1.1",
