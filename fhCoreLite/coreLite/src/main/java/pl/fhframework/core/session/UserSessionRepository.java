@@ -287,7 +287,7 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
                 }
                 String lastUsageTimeStr = (String) httpSession.getAttribute("lastUsageTimeStr");
                 Long currentTime = System.currentTimeMillis();
-                if(currentTime - lastUsageTime > emergencyRemovalTimeUnusedSessionInSeconds) {
+                if(currentTime - lastUsageTime > emergencyRemovalTimeUnusedSessionInSeconds * 1000L) {
                     FhLogger.info("Invalidating orphan HTTP session {}. Last used at {}.", key, lastUsageTimeStr);
 //                    clearScopedBeans(httpSession);
                     SessionInformation si = sessionRegistry.getSessionInformation(httpSession.getId());
