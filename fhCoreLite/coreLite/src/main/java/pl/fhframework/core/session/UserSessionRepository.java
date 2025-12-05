@@ -304,7 +304,7 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
                     FhLogger.info("Orphan HTTP session {} left active. Last used at {}.", key, lastUsageTimeStr);
                 }
             } catch (IllegalStateException e) {
-                if(e.getMessage().contains("Session is invalid")) {
+                if(e.getMessage().contains("Session is invalid") || e.getMessage().contains("Session already invalidated")) {
                     FhLogger.error("Session {} is invalid. Removing from orphans", key);
                     orphanSessions.remove(key);
                 }
