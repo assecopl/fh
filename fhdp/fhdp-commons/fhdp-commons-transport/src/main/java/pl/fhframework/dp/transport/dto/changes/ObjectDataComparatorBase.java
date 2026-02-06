@@ -765,11 +765,11 @@ public abstract class ObjectDataComparatorBase<CHANGE, DTO> {
 	}
 
 	protected static String getDateFormat() {
-		return "dd.MM.yyyy";
+		return System.getProperty("fh.comparator.date.format","dd.MM.yyyy");
 	}
 
 	protected static String getDateTimeFormat() {
-		return "dd.MM.yyyy HH:mm:ss";
+		return System.getProperty("fh.comparator.datetime.format","dd.MM.yyyy HH:mm:ss");
 	}
 
 	private String beautify(Object o, String fieldName){

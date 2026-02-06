@@ -24,6 +24,8 @@ import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
@@ -36,6 +38,8 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
     //    private static final Logger log = LoggerFactory.getLogger(UserSessionRepository.class);
     @Getter
     private Map<String, UserSession> userSessions = new ConcurrentHashMap<>();
+    @Getter
+    private Map<String, HttpSession> orphanSessions = new ConcurrentHashMap<>();
     @Getter
     private Map<String, UserSession> userSessionsByConversationId = new ConcurrentHashMap<>();
     private Map<Integer, UserSession> userSessionsHash = new ConcurrentHashMap<>();
@@ -56,6 +60,8 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
      */
     @Value("${fh.session.force_clear_session_data_after_session_removal:false}")
     private boolean forceClearSessionDataAfterSessionRemoval;
+    @Value("${fh.session.orphans.manage:false}")
+    private boolean manageOrphans;
 
     private String nodeUrl;
 
@@ -120,12 +126,18 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
         userSessionsHash.put(httpSessionHash, userSession);
         userSessions.put(httpSessionId, userSession);
         userSessionsByConversationId.put(userSession.getConversationUniqueId(), userSession);
+        if(manageOrphans) {
+            orphanSessions.remove(httpSessionId);
+        }
         putSessionInfo(httpSessionId, userSession);
     }
 
     public boolean removeUserSession(String httpSessionId) {
         UserSession userSession = userSessions.remove(httpSessionId);
         if(userSession != null) {
+            if(manageOrphans) {
+                orphanSessions.put(httpSessionId, userSession.getHttpSession());
+            }
             clearScopedBeans(userSession);
             UserSession removedHash = userSessionsHash.remove(System.identityHashCode(userSession.getHttpSession()));
             if(removedHash == null) {
@@ -150,7 +162,6 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
         userSession.getScopeBeanContainer().getScopedObjects().clear();
         userSession.setScopeBeanContainer(null);
     }
-
 
     private synchronized void putSessionInfo(String httpSessionId, UserSession userSession) {
         SessionInfo sessionInfo = new SessionInfo();
@@ -215,6 +226,12 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
         HttpSession session = httpSessionEvent.getSession();
         if (session.getAttribute(UserSession.FH_SESSION_ID) == null) {
             session.setAttribute(UserSession.FH_SESSION_ID, session.getId());
+            long lastUsageMoment = System.currentTimeMillis();
+            session.setAttribute("lastUsageTime", lastUsageMoment);
+            session.setAttribute("lastUsageTimeStr", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+        }
+        if(manageOrphans) {
+            orphanSessions.put(session.getId(), session);
         }
         leakedSessionRemoverCron.startManualScheduler();
     }
@@ -255,6 +272,47 @@ public class UserSessionRepository implements HttpSessionListener, ApplicationLi
 //            orphanSessions.remove(httpSession);
 //        }
         leakedSessionRemoverCron.cleanupLeakedSessions();
+    }
+
+    public void invalidateExpiredOrphanSessions(int emergencyRemovalTimeUnusedSessionInSeconds) {
+        if(!manageOrphans) return;
+        log.info("Invalidating expired orphan sessions not active for {} seconds...", emergencyRemovalTimeUnusedSessionInSeconds);
+        for(String key : orphanSessions.keySet()) {
+            HttpSession httpSession = orphanSessions.get(key);
+            try {
+                Long lastUsageTime = (Long) httpSession.getAttribute("lastUsageTime");
+                if(lastUsageTime == null) {
+                    FhLogger.warn("Orphan session {} has no last usage time", key);
+                    continue;
+                }
+                String lastUsageTimeStr = (String) httpSession.getAttribute("lastUsageTimeStr");
+                Long currentTime = System.currentTimeMillis();
+                if(currentTime - lastUsageTime > emergencyRemovalTimeUnusedSessionInSeconds * 1000L) {
+                    FhLogger.info("Invalidating orphan HTTP session {}. Last used at {}.", key, lastUsageTimeStr);
+//                    clearScopedBeans(httpSession);
+                    SessionInformation si = sessionRegistry.getSessionInformation(httpSession.getId());
+                    if (si != null) {
+                        si.expireNow();
+                    }
+                    try {
+                        httpSession.invalidate();
+                    }  catch (Exception e) {
+                        FhLogger.error("Error while invalidating orphan HTTP session {}", key, e);
+                    }
+                    orphanSessions.remove(key);
+                } else {
+                    FhLogger.info("Orphan HTTP session {} left active. Last used at {}.", key, lastUsageTimeStr);
+                }
+            } catch (IllegalStateException e) {
+                if(e.getMessage().contains("Session is invalid") || e.getMessage().contains("Session already invalidated")) {
+                    FhLogger.error("Session {} is invalid. Removing from orphans", key);
+                    orphanSessions.remove(key);
+                }
+            }
+            catch (Exception ex) {
+                FhLogger.error("Exception caught during orphans invalidation for session {}:\n{}", httpSession.getId(), ExceptionUtils.getStackTrace(ex));
+            }
+        }
     }
 
     public Set<UserSession> getAllUserSessions(){
