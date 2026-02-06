@@ -1031,7 +1031,10 @@ public class Table extends Repeater implements ITabular, IChangeableByClient, IE
                 String outputLabelValue = "";
                 if(element instanceof OutputLabel) {
                     outputLabelValue = ((OutputLabel) element).getValue();
+                } else if(element instanceof BaseInputField) {
+                    outputLabelValue = ((BaseInputField) element).getRawValue();
                 }
+
                 staticMappingForSorting.put(list.get(rowIndex), outputLabelValue);
             });
 
