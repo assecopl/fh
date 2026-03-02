@@ -1,0 +1,23 @@
+<jboss-deployment-structure>
+    <deployment>
+        <dependencies>
+            <module name="org.infinispan"/>
+            <module name="org.infinispan.commons"/>
+            <module name="org.jgroups"/>
+            <module name="org.hibernate" slot="5.3" export="true" />
+            <module name="org.hibernate.validator" export="true"/>
+            <module name="com.google.guava" export="true"/>
+            <module name="org.jboss.ws.cxf.jbossws-cxf-client"/>
+            <module name="org.apache.cxf"/>
+            <module name="org.apache.cxf.impl"/>
+            <module name="org.codehaus.groovy.groovy-all"/>
+            <!--            <module name="org.slf4j" export="true"/>-->
+            <!--            <module name="org.apache.log4j" export="true"/>-->
+            <system export="true">
+                <paths>
+                    <path name="jdk/net"/>
+                </paths>
+            </system>
+        </dependencies>
+    </deployment>
+</jboss-deployment-structure>

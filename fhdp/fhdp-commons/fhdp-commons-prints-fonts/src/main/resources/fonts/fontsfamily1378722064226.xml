@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fontFamilies>
+    <fontFamily name="Arial">
+        <normal><![CDATA[fonts/Arial.ttf]]></normal>
+        <bold><![CDATA[fonts/Arial_Bold.ttf]]></bold>
+        <italic><![CDATA[fonts/Arial_Italic.ttf]]></italic>
+        <boldItalic><![CDATA[fonts/Arial_Bold_Italic.ttf]]></boldItalic>
+    </fontFamily>
+    <pdfEncoding>Identity-H</pdfEncoding>
+    <pdfEmbedded>true</pdfEmbedded>
+    <exportFonts>
+        <export key="net.sf.jasperreports.html">Arial, sans-serif</export>
+    </exportFonts>
+    <locales>
+      <locale>en_US</locale>
+      <locale>pl_PL</locale>
+      <locale>lt_LT</locale>
+    </locales>
+</fontFamilies>

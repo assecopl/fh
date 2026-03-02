@@ -1,0 +1,13 @@
+<configuration>
+    <appender name="SOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%-5level| %d{HH:mm:ss.SSS} |%-18logger{0}: %msg%n</pattern>
+        </encoder>
+    </appender>
+    <logger name="japis.printservice" level="info" />
+    <logger name="com.lowagie.text" level="all" />
+    
+    <root level="warn">
+        <appender-ref ref="SOUT"/>
+    </root>
+</configuration>
