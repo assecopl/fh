@@ -55,7 +55,6 @@ public class PermissionProvider {
 
     @Transactional(readOnly = true)
     @WithoutConversation
-    @Cacheable(key = "#businessRole.roleName.toUpperCase()")
     public List<IPermission> findPermissionsForRole(IBusinessRole businessRole) {
         return permissionRepository.findForBusinessRole(businessRole.getRoleName());
     }
