@@ -23,7 +23,7 @@
 	</description>
 
     <properties>
-        <version.org.apache.cxf>3.3.2</version.org.apache.cxf>
+        <version.org.apache.cxf>3.4.10</version.org.apache.cxf>
 		<version.org.apache.wss4j>2.2.3</version.org.apache.wss4j>
 
 		<maven.compiler.source>1.8</maven.compiler.source>
