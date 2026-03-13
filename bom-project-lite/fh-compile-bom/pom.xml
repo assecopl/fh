@@ -26,7 +26,6 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <cxf.version>3.1.6</cxf.version>
-        <version.infinispan.starter>2.0.0.Final</version.infinispan.starter>
         <version.roaster>2.20.0.Final</version.roaster>
         <fh.version>${project.version}</fh.version>
         <springboot.version>2.6.4</springboot.version>
@@ -84,14 +83,14 @@
 
             <dependency>
                 <groupId>org.infinispan</groupId>
-                <artifactId>spring-boot-starter-infinispan</artifactId>
-                <version>${version.infinispan.starter}</version>
+                <artifactId>infinispan-spring-boot-starter</artifactId>
             </dependency>
 
             <dependency>
                 <groupId>org.infinispan</groupId>
                 <artifactId>infinispan-core</artifactId>
                 <version>${infinispan.version}</version>
+                <scope>provided</scope>
                 <exclusions>
                     <exclusion>
                         <groupId>com.google.guava</groupId>
