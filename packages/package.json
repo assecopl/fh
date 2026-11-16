@@ -7,5 +7,8 @@
   ],
   "devDependencies": {
     "lerna": "^6.6.1"
+  },
+  "resolutions": {
+    "encoding": "0.1.13"
   }
 }

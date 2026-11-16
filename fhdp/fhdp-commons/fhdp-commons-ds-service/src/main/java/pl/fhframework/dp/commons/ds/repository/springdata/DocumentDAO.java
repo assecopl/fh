@@ -12,12 +12,14 @@ import org.springframework.stereotype.Component;
 
 import com.mongodb.client.ClientSession;
 
+import pl.fhframework.dp.commons.ds.repository.exception.VersionMismatchRuntimeException;
 import pl.fhframework.dp.commons.ds.repository.mongo.model.RepositoryDocument;
 import pl.fhframework.dp.transport.drs.repository.FindDocumentRequest;
 import pl.fhframework.dp.transport.drs.repository.Metadata;
 import pl.fhframework.dp.transport.drs.repository.OtherMetadata;
 import pl.fhframework.dp.transport.drs.repository.UpdateDocumentRequest;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -90,7 +92,7 @@ public class DocumentDAO extends BaseDAO<RepositoryDocument> {
 				.findAndModifyValue();
 
 		if(result==null) {
-			throw new RuntimeException("version mismatch");
+			throw new VersionMismatchRuntimeException(id, version);
 		}
 
 	}
@@ -98,18 +100,21 @@ public class DocumentDAO extends BaseDAO<RepositoryDocument> {
 	public void updateDocument(UpdateDocumentRequest request) {
 		Query query = new Query();
 		query.addCriteria(where("_id").is(request.getId()));
-		if(request.getOtherMetadata()!=null) {
-			for(OtherMetadata omd : request.getOtherMetadata()) {
-				//updateOtherMetadata(collection, request.getId(), omd.getName(), omd.getValue());
-				Update updateOMD = new Update();
-				updateOMD = updateOMD.pull("metadata.otherMetadata", Query.query(Criteria.where("name").is(omd.getName())));
-				mongoTemplate.updateFirst(query, updateOMD, getCollectionName());
-				Update updatePush = new Update();
-				updatePush = updatePush.push("metadata.otherMetadata", omd);
-				mongoTemplate.updateFirst(query, updatePush, getCollectionName());
+		List<OtherMetadata> otherMetadata = request.getOtherMetadata();
+		if(otherMetadata!=null && !otherMetadata.isEmpty()) {
+			// Jedno $pull dla wszystkich nazw zamiast dwóch zapisów na każde pole - transakcja jest krótsza,
+			// więc rzadziej wchodzi w WriteConflict.
+			List<String> names = new ArrayList<>();
+			for(OtherMetadata omd : otherMetadata) {
+				names.add(omd.getName());
 			}
+			Update pullUpdate = new Update().pull("metadata.otherMetadata", Query.query(where("name").in(names)));
+			mongoTemplate.updateFirst(query, pullUpdate, getCollectionName());
 		}
 		Update update = new Update();
+		if(otherMetadata!=null && !otherMetadata.isEmpty()) {
+			update = update.push("metadata.otherMetadata").each(otherMetadata.toArray());
+		}
 		if(request.getContentType()!=null) {
 			update = update.set("metadata.contentType", request.getContentType());
 		}
@@ -122,12 +127,7 @@ public class DocumentDAO extends BaseDAO<RepositoryDocument> {
 			update = update.set("operation.description", request.getOperation().getDescription());
 		}
 		additionalUpdates(update, request);
-		RepositoryDocument result = mongoTemplate.update(RepositoryDocument.class)
-				.inCollection(getCollectionName())
-				.matching(query)
-				.apply(update)
-				.withOptions(FindAndModifyOptions.options().returnNew(true)) // Now return the newly updated document when updating
-				.findAndModifyValue();
+		mongoTemplate.updateFirst(query, update, getCollectionName());
 	}
 
 	protected void additionalUpdates(Update update, UpdateDocumentRequest request) {

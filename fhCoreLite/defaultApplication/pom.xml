@@ -90,6 +90,9 @@
                         <goals>
                             <goal>yarn</goal>
                         </goals>
+                        <configuration>
+                            <arguments>install --frozen-lockfile --ignore-scripts</arguments>
+                        </configuration>
                     </execution>
                     <execution>
                         <id>yarn lerna run build</id>

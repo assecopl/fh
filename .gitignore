@@ -27,7 +27,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-*.lock
 *.iml
 
 **/log
@@ -39,3 +38,4 @@ yarn-error.log*
 **/.settings
 **/webpack_size.txt
 **/webpack_stats.json
+/.opencode/

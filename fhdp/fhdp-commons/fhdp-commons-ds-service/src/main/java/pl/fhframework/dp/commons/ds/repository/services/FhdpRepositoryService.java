@@ -2,6 +2,7 @@ package pl.fhframework.dp.commons.ds.repository.services;
 
 import org.springframework.dao.DuplicateKeyException;
 
+import com.mongodb.MongoException;
 import com.mongodb.client.ClientSession;
 import com.mongodb.client.TransactionBody;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -16,6 +17,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
 import pl.fhframework.dp.commons.ds.repository.exception.DuplicateKeyRuntimeException;
+import pl.fhframework.dp.commons.ds.repository.exception.VersionMismatchRuntimeException;
 import pl.fhframework.dp.commons.ds.repository.mongo.model.DocumentContent;
 import pl.fhframework.dp.commons.ds.repository.mongo.model.HistoryDocumentContent;
 import pl.fhframework.dp.commons.ds.repository.mongo.model.HistoryRepositoryDocument;
@@ -147,6 +149,10 @@ public class FhdpRepositoryService implements IRepositoryService {
 					} catch (DuplicateKeyException ex) {
 						throw new DuplicateKeyRuntimeException(ex);
 					} catch (Exception e) {
+						MongoException transientTransactionException = getTransientTransactionException(e);
+						if (transientTransactionException != null) {
+							throw transientTransactionException;
+						}
 						throw new RuntimeException(e);
 					}				    	
 			    	
@@ -346,6 +352,10 @@ public class FhdpRepositoryService implements IRepositoryService {
 						}						
 						
 					} catch (Exception e) {
+						MongoException transientTransactionException = getTransientTransactionException(e);
+						if (transientTransactionException != null) {
+							throw transientTransactionException;
+						}
 						throw new RuntimeException(e);
 					}				    	
 			    	
@@ -369,9 +379,17 @@ public class FhdpRepositoryService implements IRepositoryService {
 
 
 		} catch (Exception e) {
-			logException(e);
-			result.setResultCode(-99);
-			result.setResultDescription(e.getMessage());
+			VersionMismatchRuntimeException versionMismatch = getVersionMismatchException(e);
+			if (versionMismatch != null) {
+				// Dokument został zmieniony przez inną operację - to konflikt wersji, nie błąd techniczny.
+				log.info("Document {} was modified concurrently, expected version {}", versionMismatch.getId(), versionMismatch.getExpectedVersion());
+				result.setResultCode(-3);
+				result.setResultDescription(versionMismatch.getMessage());
+			} else {
+				logException(e);
+				result.setResultCode(-99);
+				result.setResultDescription(e.getMessage());
+			}
 		} finally {
 			if(session!=null) {
 				try {
@@ -438,6 +456,10 @@ public class FhdpRepositoryService implements IRepositoryService {
 						}
 						
 					} catch (Exception e) {
+						MongoException transientTransactionException = getTransientTransactionException(e);
+						if (transientTransactionException != null) {
+							throw transientTransactionException;
+						}
 						throw new RuntimeException(e);
 					}				    	
 			    	
@@ -728,4 +750,37 @@ public class FhdpRepositoryService implements IRepositoryService {
 		return doc;
 	}
 	
+	/**
+	 * Zwraca pierwszy wyjątek Mongo w łańcuchu przyczyn, który niesie etykietę TransientTransactionError,
+	 * albo null. Spring Data opakowuje wyjątki sterownika w DataAccessException, a ClientSession.withTransaction
+	 * ponawia transakcję tylko wtedy, gdy otrzyma MongoException z tą etykietą - bez tego opakowanie gubi
+	 * informację o błędzie przejściowym i konflikt zapisu kończy się błędem trwałym.
+	 */
+	private static MongoException getTransientTransactionException(Throwable throwable) {
+		Throwable current = throwable;
+		while (current != null) {
+			if (current instanceof MongoException) {
+				MongoException mongoException = (MongoException) current;
+				if (mongoException.hasErrorLabel(MongoException.TRANSIENT_TRANSACTION_ERROR_LABEL)) {
+					return mongoException;
+				}
+			}
+			current = current.getCause();
+		}
+		return null;
+	}
+
+	/**
+	 * Zwraca wyjątek braku zgodności wersji z łańcucha przyczyn albo null.
+	 */
+	private static VersionMismatchRuntimeException getVersionMismatchException(Throwable throwable) {
+		Throwable current = throwable;
+		while (current != null) {
+			if (current instanceof VersionMismatchRuntimeException) {
+				return (VersionMismatchRuntimeException) current;
+			}
+			current = current.getCause();
+		}
+		return null;
+	}
 }
